@@ -1,0 +1,197 @@
+## STTNet
+
+## Lightweight High-Performance C++ Network Framework
+
+STTNet is a lightweight, high-performance server framework written in **C++11**, featuring comprehensive **high-performance network communication capabilities**. It supports **TCP/UDP/HTTP/WebSocket and their encrypted variants (TLS+TCP, HTTPS, WSS)**. It also includes file operations, time operations, logging, common data processing, JSON handling, encryption/decryption, signal management, and process management. Built-in features include a logging system, an epoll-based high-concurrency event-driven model, multithreaded processing, thread safety, heartbeat monitoring, and exception/signal handling.
+
+> Author: StephenTaam ([1356597983@qq.com](mailto:1356597983@qq.com))
+> Language: C++11
+> Platform: Linux
+> Dependencies: OpenSSL, JsonCpp, pthread
+
+---
+
+## 📦 Core Framework Features
+
+* ✅ Based on modern C++11 standard
+* ✅ Simple and easy to use, clear API
+
+# 🔌 Communication Features
+
+* ✅ Epoll + multithreaded consumer model for high-concurrency processing
+* ✅ TCP, UDP, HTTP, WebSocket support
+* ✅ Supports encrypted communication (TLS+TCP, HTTPS, WSS)
+* ✅ Supports custom callback registration for flexible request handling
+
+# 🔧 Tools and Service Modules
+
+* ✅ Logging system encapsulation (multi-thread write support, log rotation)
+* ✅ File I/O encapsulation (thread-safe, lock mechanisms)
+* ✅ Time utility wrappers
+* ✅ Numeric utilities, string utilities, JSON data handling
+* ✅ Encryption and decryption utilities
+
+# 🧿 System Enhancements
+
+* ✅ Thread pool support
+* ✅ Exception and signal management
+* ✅ Process management and heartbeat monitoring
+* ✅ User-friendly interface and modular structure
+
+---
+
+## 🧱 Framework Module Structure
+
+```
+├── file
+│   ├── FileTool / File / LogFile
+│   └── File operation tool + file read and write encapsulation + log module
+├── time
+│   ├── DateTime / Duration
+│   └── Time tools
+├── data
+│   ├── CryptoUtil / BitUtil / RandomUtil / NetworkOrderUtil / PrecisionUtil / HttpStringUtil / WebsocketStringUtil / NumberStringConvertUtil / 
+│       NumberStringConvertUtil / JsonHelper
+│   └── Data processing tools (encryption and decryption, numerical values, strings, Json)
+├── network
+│   ├── TcpServer / UdpServer / HttpServer / WebSocketServer / TcpClient / UdpClient / HttpClient / WebSocketClient
+│   └── Multithreaded epoll network server encapsulation Client communication encapsulation
+├── system
+│   ├── ServerSetting / HBSystem /Process
+│   └── Framework initialization, signal/process/heartbeat management
+```
+
+---
+
+## 🚀 Quick Start
+
+# Sample Project `main`
+
+The sample project uses various system and third-party libraries: `jsoncpp`, `OpenSSL`, and `pthread`, and includes the framework module `sttnet.h/.cpp`.
+
+## 🧹 Installing Dependencies
+
+Before compiling the project, ensure the following libraries are installed:
+
+* [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
+* OpenSSL (`libssl`, `libcrypto`)
+* POSIX Threads (`pthread`)
+* g++ compiler (supporting C++11 or higher)
+
+Install these dependencies using the following commands for different Linux distributions:
+
+# 🐧 Ubuntu / Debian (APT-based)
+
+```bash
+sudo apt-get update
+sudo apt-get install libjsoncpp-dev libssl-dev build-essential
+```
+
+# 🐧 Fedora / RHEL / CentOS (DNF/YUM-based)
+
+```bash
+sudo yum update
+sudo yum install -y gcc-c++ jsoncpp-devel openssl-devel
+```
+
+# 🐧 Arch / Manjaro
+
+```bash
+sudo pacman update
+sudo pacman -S --noconfirm jsoncpp openssl base-devel
+```
+
+### 🛠️ Compile
+
+```bash
+g++ -std=c++11 -o main main.cpp src/sttnet.cpp -ljsoncpp -lssl -lcrypto -lpthread
+
+# Or use `make` to manage the build.
+```
+
+(`main.cpp` is the sample entry demonstrating use of this framework)
+
+---
+
+## 🧪 Sample Code: Starting an HTTP Server
+
+```cpp
+#include"include/sttnet.h"
+using namespace std;
+using namespace stt::file;
+using namespace stt::time;
+using namespace stt::data;
+using namespace stt::network;
+using namespace stt::system;
+//set global variables
+LogFile lf;
+HttpServer *httpserver;
+int main(int argc,char *argv[])
+{
+	//init logfile and use logfile system and ignore all signal but 15. And all error signals or unknown exception will transmit signal 15.
+	//remember to set the second parameter to "Chinese" if you want your logfile write in Chinese (default in English)
+	ServerSetting::init(&lf);
+
+	//new a HttpServer Objection
+	httpserver=new HttpServer;
+
+	//set a callbacl function after signal 15 to quit decently.
+	signal(15,[](int signal){
+		lf.writeLog("have received signal 15... Now ready to quit. ");
+		delete httpserver;
+		/*
+			...
+			*********You can write the necessary exit process here*************
+			...
+		*/
+	});
+
+	//set a callback function to handle http request
+	httpserver->setFunction([](const HttpRequestInformation &info, HttpServerFDHandler &conn) -> bool {
+        if (info.loc == "/ping") {
+            conn.sendBack("pong");
+        } else {
+            conn.sendBack("404 Not Found", "", "404");
+        }
+        return true;
+    });
+
+	//start listen port 8080 and add logfile to this server objection.
+	httpserver->startListen(8080,&lf);
+
+	//block the main thread
+	pause();
+	return 0;
+}
+```
+
+---
+
+## 📖 Documentation
+
+- `docs/api/html_Chinese/index.html` 👉 Class and method documentation(Chinese)
+- `docs/api/html_English/index.html` 👉 Class and method documentation(English)
+
+---
+
+## 📁 Recommended Project Structure
+
+```
+.
+├── src/                 # Source files
+│   ├── sttnet.cpp
+├── include/             # Header files
+│   ├── sttnet.h
+├── main.cpp             # Sample project entry
+├── server_log           # Log folder generated after successful run
+├── docs/                # Documentation directory
+│   ├── api              #api documentation
+│   ├── include_file     #Copy of the English and Chinese versions in the header file
+├── README_English.md            # Project description
+├── Makefile             # Build configuration
+```
+
+## 📄 License
+
+This project is licensed under the MIT License. You are free to use, modify, and distribute it commercially, but please retain the author attribution.
+
