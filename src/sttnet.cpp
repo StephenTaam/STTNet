@@ -3926,6 +3926,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             {
                 fdQueue.push(cclientfd);
                 solvingFD_lock.unlock();
+                ul1.unlock();
                 continue;
             }
             solvingFD[cclientfd]=true;
@@ -4190,6 +4191,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             {
                 fdQueue.push(cclientfd);
                 solvingFD_lock.unlock();
+                ul1.unlock();
                 continue;
             }
             solvingFD[cclientfd]=true;
@@ -5019,6 +5021,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             {
                 fdQueue.push(cclientfd);
                 solvingFD_lock.unlock();
+                ul1.unlock();
                 continue;
             }
             solvingFD[cclientfd]=true;
