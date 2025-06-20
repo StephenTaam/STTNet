@@ -182,11 +182,11 @@ int main(int argc,char *argv[])
 │   ├── sttnet.cpp
 ├── include/             # Header files
 │   ├── sttnet.h
+│   ├── sttnet_English.h  # the Header file in English Version
 ├── main.cpp             # Sample project entry
 ├── server_log           # Log folder generated after successful run
 ├── docs/                # Documentation directory
 │   ├── api              #api documentation
-│   ├── include_file     #Copy of the English and Chinese versions in the header file
 ├── README_English.md            # Project description
 ├── Makefile             # Build configuration
 ```
