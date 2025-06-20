@@ -170,11 +170,11 @@ int main(int argc,char *argv[])
     ├── sttnet.cpp
 ├── include/             # 头文件 public.h
     ├── sttnet.h
+    ├── sttnet_English.h  #英文版头文件
 ├── main.cpp             # 示例项目
 ├── server_log           # 假设启用日志文件系统而且运行成功后会自动生成一个日志文件文件夹
 ├── docs/                # 文档目录
 │   ├── api              #api说明文档
-│   ├── include_file     #头文件中英文版本副本
 ├── README_Chinese.md            #项目说明
 ├── Makefile             #makefile管理项目构建
 ```
