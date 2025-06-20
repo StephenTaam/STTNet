@@ -3920,14 +3920,17 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
             
             int cclientfd=fdQueue.front();
+            fdQueue.pop();
             solvingFD_lock.lock();
             if(solvingFD[cclientfd]==true)//正在被执行中
             {
+                fdQueue.push(cclientfd);
                 solvingFD_lock.unlock();
                 continue;
             }
             solvingFD[cclientfd]=true;
             solvingFD_lock.unlock();
+            ul1.unlock();
             if(stt::system::ServerSetting::logfile!=nullptr)
             {
                 if(stt::system::ServerSetting::language=="Chinese")
@@ -3935,8 +3938,6 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 else
                     stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" :now handleing fd= "+to_string(cclientfd));
             }
-            fdQueue.pop();
-            ul1.unlock();
             unique_lock<mutex> lock1(ltl1);
             auto ii=tlsfd.find(cclientfd);
             if(ii==tlsfd.end())
@@ -4183,14 +4184,17 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 break;
             }
             int cclientfd=fdQueue.front();
+            fdQueue.pop();
             solvingFD_lock.lock();
             if(solvingFD[cclientfd]==true)
             {
+                fdQueue.push(cclientfd);
                 solvingFD_lock.unlock();
                 continue;
             }
             solvingFD[cclientfd]=true;
             solvingFD_lock.unlock();
+            ul1.unlock();
              if(stt::system::ServerSetting::logfile!=nullptr)
              {
                 if(stt::system::ServerSetting::language=="Chinese")
@@ -4198,8 +4202,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 else
                     stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : now solveing fd= "+to_string(cclientfd));
              }
-            fdQueue.pop();
-            ul1.unlock();
+            
             unique_lock<mutex> lock1(ltl1);
             auto ii=tlsfd.find(cclientfd);
             if(ii==tlsfd.end())
@@ -5010,15 +5013,16 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 break;
             }
             int cclientfd=fdQueue.front();
+            fdQueue.pop();
             solvingFD_lock.lock();
             if(solvingFD[cclientfd]==true)
             {
+                fdQueue.push(cclientfd);
                 solvingFD_lock.unlock();
                 continue;
             }
             solvingFD[cclientfd]=true;
             solvingFD_lock.unlock();
-            fdQueue.pop();
             ul1.unlock();
             cout<<"websocket fd="<<cclientfd<<endl;
             if(stt::system::ServerSetting::logfile!=nullptr)
