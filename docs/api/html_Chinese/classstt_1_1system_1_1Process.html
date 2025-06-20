@@ -1,0 +1,266 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.5"/>
+<title>STTNet: stt::system::Process类 参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { searchBox.OnSelectItem(0); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">STTNet
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.5 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>首页</span></a></li>
+      <li><a href="pages.html"><span>相关页面</span></a></li>
+      <li><a href="namespaces.html"><span>命名空间</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="annotated.html"><span>类列表</span></a></li>
+      <li><a href="classes.html"><span>类索引</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>类成员</span></a></li>
+    </ul>
+  </div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>页</a></div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespacestt.html">stt</a></li><li class="navelem"><a class="el" href="namespacestt_1_1system.html">system</a></li><li class="navelem"><a class="el" href="classstt_1_1system_1_1Process.html">Process</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-static-methods">静态 Public 成员函数</a> &#124;
+<a href="classstt_1_1system_1_1Process-members.html">所有成员列表</a>  </div>
+  <div class="headertitle">
+<div class="title">stt::system::Process类 参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>进程管理的静态工具类  
+ <a href="classstt_1_1system_1_1Process.html#details">更多...</a></p>
+
+<p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+静态 Public 成员函数</h2></td></tr>
+<tr class="memitem:a0f63fb33d461ee4a2c5709a66269854e"><td class="memTemplParams" colspan="2">template&lt;class... Args&gt; </td></tr>
+<tr class="memitem:a0f63fb33d461ee4a2c5709a66269854e"><td class="memTemplItemLeft" align="right" valign="top">static bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1Process.html#a0f63fb33d461ee4a2c5709a66269854e">startProcess</a> (const std::string &amp;name, const int &amp;sec=-1, Args...args)</td></tr>
+<tr class="memdesc:a0f63fb33d461ee4a2c5709a66269854e"><td class="mdescLeft">&#160;</td><td class="mdescRight">启动一个新进程（可选择是否定时重启）  <a href="#a0f63fb33d461ee4a2c5709a66269854e">更多...</a><br/></td></tr>
+<tr class="separator:a0f63fb33d461ee4a2c5709a66269854e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ddc807b5ed422744b21ad6ea805734c"><td class="memTemplParams" colspan="2">template&lt;class Fn , class... Args&gt; </td></tr>
+<tr class="memitem:a7ddc807b5ed422744b21ad6ea805734c"><td class="memTemplItemLeft" align="right" valign="top">static std::enable_if<br class="typebreak"/>
+&lt;!std::is_convertible&lt; Fn, <br class="typebreak"/>
+std::string &gt;::value, bool &gt;<br class="typebreak"/>
+::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1Process.html#a7ddc807b5ed422744b21ad6ea805734c">startProcess</a> (Fn &amp;&amp;fn, const int &amp;sec=-1, Args &amp;&amp;...args)</td></tr>
+<tr class="memdesc:a7ddc807b5ed422744b21ad6ea805734c"><td class="mdescLeft">&#160;</td><td class="mdescRight">通过函数创建子进程（可选择是否定时重启）  <a href="#a7ddc807b5ed422744b21ad6ea805734c">更多...</a><br/></td></tr>
+<tr class="separator:a7ddc807b5ed422744b21ad6ea805734c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<div class="textblock"><p>进程管理的静态工具类 </p>
+</div><h2 class="groupheader">成员函数说明</h2>
+<a class="anchor" id="a0f63fb33d461ee4a2c5709a66269854e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class... Args&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool stt::system::Process::startProcess </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>sec</em> = <code>-1</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Args...&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>启动一个新进程（可选择是否定时重启） </p>
+<p>当 <code>sec == -1</code> 时，仅启动一次子进程；否则，会创建一个辅助子进程，定期重启该目标进程。</p>
+<ul>
+<li>定时启动时，辅助进程会屏蔽所有信号。</li>
+<li>启动的目标进程会屏蔽除 SIGCHLD 和 SIGTERM 的所有信号。</li>
+</ul>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Args</td><td>可变参数类型（用于传递给目标程序的 argv） </td></tr>
+    <tr><td class="paramname">name</td><td>要执行的程序路径（如 <code>/usr/bin/myapp</code>） </td></tr>
+    <tr><td class="paramname">sec</td><td>定时间隔（单位：秒）。若为 -1，则表示只启动一次，不定时。 </td></tr>
+    <tr><td class="paramname">args</td><td>启动参数（第一个参数必须是程序名称，即 argv[0]，末尾不需要添加 nullptr） </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>true 父进程返回 true 表示启动（或调度）成功 </dd>
+<dd>
+false fork 或 execv 出错时返回 false</dd></dl>
+<dl class="section note"><dt>注解</dt><dd><ul>
+<li>参数中不需要手动添加 nullptr；内部自动添加。</li>
+<li>执行失败后不会抛出异常；返回 false。</li>
+<li>execv 会在子进程中替换当前进程镜像，不返回。 </li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a7ddc807b5ed422744b21ad6ea805734c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Fn , class... Args&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::enable_if&lt;!std::is_convertible&lt;Fn, std::string&gt;::value, bool&gt;::type stt::system::Process::startProcess </td>
+          <td>(</td>
+          <td class="paramtype">Fn &amp;&amp;&#160;</td>
+          <td class="paramname"><em>fn</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>sec</em> = <code>-1</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Args &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>通过函数创建子进程（可选择是否定时重启） </p>
+<p>使用一个可调用对象（如 Lambda、函数指针、std::function）作为新子进程的主体逻辑。</p>
+<ul>
+<li>当 <code>sec == -1</code>，函数仅执行一次；</li>
+<li>否则，会创建一个辅助进程定期重新 fork 并执行该函数。</li>
+</ul>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Fn</td><td>可调用对象类型（如函数、Lambda） </td></tr>
+    <tr><td class="paramname">Args</td><td>可调用对象的参数类型 </td></tr>
+    <tr><td class="paramname">fn</td><td>要执行的函数或可调用对象 </td></tr>
+    <tr><td class="paramname">sec</td><td>定时间隔（单位：秒）。若为 -1，则表示只执行一次，不定时。 </td></tr>
+    <tr><td class="paramname">args</td><td>要传递给函数的参数 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>true 父进程返回 true 表示启动成功；子进程内部也会返回 true（用于链式调用等） </dd>
+<dd>
+false 创建进程失败</dd></dl>
+<dl class="section note"><dt>注解</dt><dd><ul>
+<li>函数的实际执行是在新 fork 出的子进程中。</li>
+<li>函数 fn 必须是可调用的；参数类型需能完美转发。</li>
+<li>子进程执行完毕后会退出；辅助进程将周期性地重新创建它。 </li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成:<ul>
+<li>include/<a class="el" href="sttnet_8h_source.html">sttnet.h</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.5
+</small></address>
+</body>
+</html>

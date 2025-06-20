@@ -1,0 +1,277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.5"/>
+<title>STTNet: stt::network::UdpClient类 参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { searchBox.OnSelectItem(0); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">STTNet
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.5 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>首页</span></a></li>
+      <li><a href="pages.html"><span>相关页面</span></a></li>
+      <li><a href="namespaces.html"><span>命名空间</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="annotated.html"><span>类列表</span></a></li>
+      <li><a href="classes.html"><span>类索引</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>类成员</span></a></li>
+    </ul>
+  </div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>页</a></div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespacestt.html">stt</a></li><li class="navelem"><a class="el" href="namespacestt_1_1network.html">network</a></li><li class="navelem"><a class="el" href="classstt_1_1network_1_1UdpClient.html">UdpClient</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public 成员函数</a> &#124;
+<a href="classstt_1_1network_1_1UdpClient-members.html">所有成员列表</a>  </div>
+  <div class="headertitle">
+<div class="title">stt::network::UdpClient类 参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>udp客户端的操作类  
+ <a href="classstt_1_1network_1_1UdpClient.html#details">更多...</a></p>
+
+<p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
+<div class="dynheader">
+类 stt::network::UdpClient 继承关系图:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classstt_1_1network_1_1UdpClient.png" usemap="#stt::network::UdpClient_map" alt=""/>
+  <map id="stt::network::UdpClient_map" name="stt::network::UdpClient_map">
+<area href="classstt_1_1network_1_1UdpFDHandler.html" title="UDP操作的类 传入套接字进行UDP协议的操作 " alt="stt::network::UdpFDHandler" shape="rect" coords="0,0,164,24"/>
+</map>
+ </div></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public 成员函数</h2></td></tr>
+<tr class="memitem:ae177a67e8f5cefad870caef44025068f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpClient.html#ae177a67e8f5cefad870caef44025068f">UdpClient</a> (const bool &amp;<a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#aafa193a4cb288f5dbbd5a78c36ec0eec">flag1</a>=false, const int &amp;<a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#a0dceee0ae41c5c58de3c7178f4c53237">sec</a>=-1)</td></tr>
+<tr class="memdesc:ae177a67e8f5cefad870caef44025068f"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数  <a href="#ae177a67e8f5cefad870caef44025068f">更多...</a><br/></td></tr>
+<tr class="separator:ae177a67e8f5cefad870caef44025068f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d7aa6d8d3f7c4843173a29c7cd64980"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpClient.html#a1d7aa6d8d3f7c4843173a29c7cd64980">createFD</a> (const bool &amp;<a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#aafa193a4cb288f5dbbd5a78c36ec0eec">flag1</a>=false, const int &amp;<a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#a0dceee0ae41c5c58de3c7178f4c53237">sec</a>=-1)</td></tr>
+<tr class="memdesc:a1d7aa6d8d3f7c4843173a29c7cd64980"><td class="mdescLeft">&#160;</td><td class="mdescRight">销毁原来的套接字，重新创建一个客户端  <a href="#a1d7aa6d8d3f7c4843173a29c7cd64980">更多...</a><br/></td></tr>
+<tr class="separator:a1d7aa6d8d3f7c4843173a29c7cd64980"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45615f93668e1e41e19e5ca469ffa37f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpClient.html#a45615f93668e1e41e19e5ca469ffa37f">~UdpClient</a> ()</td></tr>
+<tr class="memdesc:a45615f93668e1e41e19e5ca469ffa37f"><td class="mdescLeft">&#160;</td><td class="mdescRight">析构函数，对象生命结束会会关闭套接字  <a href="#a45615f93668e1e41e19e5ca469ffa37f">更多...</a><br/></td></tr>
+<tr class="separator:a45615f93668e1e41e19e5ca469ffa37f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classstt_1_1network_1_1UdpFDHandler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classstt_1_1network_1_1UdpFDHandler')"><img src="closed.png" alt="-"/>&#160;Public 成员函数 继承自 <a class="el" href="classstt_1_1network_1_1UdpFDHandler.html">stt::network::UdpFDHandler</a></td></tr>
+<tr class="memitem:ae5dba261e943699ef1815c040e11bd66 inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#ae5dba261e943699ef1815c040e11bd66">setFD</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#a45404110bb7d0639abeec65dfb44ffa5">fd</a>, const bool &amp;<a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#aafa193a4cb288f5dbbd5a78c36ec0eec">flag1</a>=false, const int &amp;<a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#a0dceee0ae41c5c58de3c7178f4c53237">sec</a>=-1, const bool &amp;<a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#aa2a923d69f4c7aeefbcc5916c6e3cafc">flag2</a>=false)</td></tr>
+<tr class="memdesc:ae5dba261e943699ef1815c040e11bd66 inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置fd  <a href="#ae5dba261e943699ef1815c040e11bd66">更多...</a><br/></td></tr>
+<tr class="separator:ae5dba261e943699ef1815c040e11bd66 inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4eabbd88d94996d60d764a027f9b720 inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#ad4eabbd88d94996d60d764a027f9b720">blockSet</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#a0dceee0ae41c5c58de3c7178f4c53237">sec</a>=-1)</td></tr>
+<tr class="memdesc:ad4eabbd88d94996d60d764a027f9b720 inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置为阻塞模式  <a href="#ad4eabbd88d94996d60d764a027f9b720">更多...</a><br/></td></tr>
+<tr class="separator:ad4eabbd88d94996d60d764a027f9b720 inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b8fe53c8470061456837590f7f510fd inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#a6b8fe53c8470061456837590f7f510fd">unblockSet</a> ()</td></tr>
+<tr class="memdesc:a6b8fe53c8470061456837590f7f510fd inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置为非阻塞模式  <a href="#a6b8fe53c8470061456837590f7f510fd">更多...</a><br/></td></tr>
+<tr class="separator:a6b8fe53c8470061456837590f7f510fd inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59a2ba32aa8fd95b8dd51d06db60407d inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#a59a2ba32aa8fd95b8dd51d06db60407d">multiUseSet</a> ()</td></tr>
+<tr class="memdesc:a59a2ba32aa8fd95b8dd51d06db60407d inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置SO_REUSEADDR模式  <a href="#a59a2ba32aa8fd95b8dd51d06db60407d">更多...</a><br/></td></tr>
+<tr class="separator:a59a2ba32aa8fd95b8dd51d06db60407d inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6ea346dfe37fbf84e30726fa483d645 inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#aa6ea346dfe37fbf84e30726fa483d645">getFD</a> ()</td></tr>
+<tr class="memdesc:aa6ea346dfe37fbf84e30726fa483d645 inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">返回fd  <a href="#aa6ea346dfe37fbf84e30726fa483d645">更多...</a><br/></td></tr>
+<tr class="separator:aa6ea346dfe37fbf84e30726fa483d645 inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86b03106236c5716a89be48c1415e929 inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#a86b03106236c5716a89be48c1415e929">close</a> (const bool &amp;cle=true)</td></tr>
+<tr class="memdesc:a86b03106236c5716a89be48c1415e929 inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">置空对象，关闭套接字  <a href="#a86b03106236c5716a89be48c1415e929">更多...</a><br/></td></tr>
+<tr class="separator:a86b03106236c5716a89be48c1415e929 inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94995e1fe4062bf1825f052ab5bc69cb inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#a94995e1fe4062bf1825f052ab5bc69cb">sendData</a> (const std::string &amp;data, const std::string &amp;ip, const int &amp;port, const bool &amp;block=true)</td></tr>
+<tr class="memdesc:a94995e1fe4062bf1825f052ab5bc69cb inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">向目标发送字符串数据。  <a href="#a94995e1fe4062bf1825f052ab5bc69cb">更多...</a><br/></td></tr>
+<tr class="separator:a94995e1fe4062bf1825f052ab5bc69cb inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b8509f968e2af49b3cfccee9d53c88a inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#a2b8509f968e2af49b3cfccee9d53c88a">sendData</a> (const char *data, const uint64_t &amp;length, const std::string &amp;ip, const int &amp;port, const bool &amp;block=true)</td></tr>
+<tr class="memdesc:a2b8509f968e2af49b3cfccee9d53c88a inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">向目标发送指定长度的二进制数据。  <a href="#a2b8509f968e2af49b3cfccee9d53c88a">更多...</a><br/></td></tr>
+<tr class="separator:a2b8509f968e2af49b3cfccee9d53c88a inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a286c2af9fa01db9e9365c5453d97d7eb inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#a286c2af9fa01db9e9365c5453d97d7eb">recvData</a> (std::string &amp;data, const uint64_t &amp;length, std::string &amp;ip, int &amp;port)</td></tr>
+<tr class="memdesc:a286c2af9fa01db9e9365c5453d97d7eb inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">接收一次数据到string字符串容器  <a href="#a286c2af9fa01db9e9365c5453d97d7eb">更多...</a><br/></td></tr>
+<tr class="separator:a286c2af9fa01db9e9365c5453d97d7eb inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5c9c913ae4b8510abdc5f620fdf0b56 inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#ad5c9c913ae4b8510abdc5f620fdf0b56">recvData</a> (char *data, const uint64_t &amp;length, std::string &amp;ip, int &amp;port)</td></tr>
+<tr class="memdesc:ad5c9c913ae4b8510abdc5f620fdf0b56 inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">接收一次数据到char*容器  <a href="#ad5c9c913ae4b8510abdc5f620fdf0b56">更多...</a><br/></td></tr>
+<tr class="separator:ad5c9c913ae4b8510abdc5f620fdf0b56 inherit pub_methods_classstt_1_1network_1_1UdpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+额外继承的成员函数</h2></td></tr>
+<tr class="inherit_header pro_attribs_classstt_1_1network_1_1UdpFDHandler"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classstt_1_1network_1_1UdpFDHandler')"><img src="closed.png" alt="-"/>&#160;Protected 属性 继承自 <a class="el" href="classstt_1_1network_1_1UdpFDHandler.html">stt::network::UdpFDHandler</a></td></tr>
+<tr class="memitem:a45404110bb7d0639abeec65dfb44ffa5 inherit pro_attribs_classstt_1_1network_1_1UdpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#a45404110bb7d0639abeec65dfb44ffa5">fd</a> =-1</td></tr>
+<tr class="separator:a45404110bb7d0639abeec65dfb44ffa5 inherit pro_attribs_classstt_1_1network_1_1UdpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafa193a4cb288f5dbbd5a78c36ec0eec inherit pro_attribs_classstt_1_1network_1_1UdpFDHandler"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#aafa193a4cb288f5dbbd5a78c36ec0eec">flag1</a> =false</td></tr>
+<tr class="separator:aafa193a4cb288f5dbbd5a78c36ec0eec inherit pro_attribs_classstt_1_1network_1_1UdpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2a923d69f4c7aeefbcc5916c6e3cafc inherit pro_attribs_classstt_1_1network_1_1UdpFDHandler"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#aa2a923d69f4c7aeefbcc5916c6e3cafc">flag2</a> =false</td></tr>
+<tr class="separator:aa2a923d69f4c7aeefbcc5916c6e3cafc inherit pro_attribs_classstt_1_1network_1_1UdpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0dceee0ae41c5c58de3c7178f4c53237 inherit pro_attribs_classstt_1_1network_1_1UdpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#a0dceee0ae41c5c58de3c7178f4c53237">sec</a> =-1</td></tr>
+<tr class="separator:a0dceee0ae41c5c58de3c7178f4c53237 inherit pro_attribs_classstt_1_1network_1_1UdpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<div class="textblock"><p>udp客户端的操作类 </p>
+</div><h2 class="groupheader">构造及析构函数说明</h2>
+<a class="anchor" id="ae177a67e8f5cefad870caef44025068f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">stt::network::UdpClient::UdpClient </td>
+          <td>(</td>
+          <td class="paramtype">const bool &amp;&#160;</td>
+          <td class="paramname"><em>flag1</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>sec</em> = <code>-1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>构造函数 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">flag1</td><td>true：非阻塞模式 false：阻塞模式 （默认阻塞模式） </td></tr>
+    <tr><td class="paramname">sec</td><td>设置阻塞超时时间（秒） （默认为无限等待） </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a45615f93668e1e41e19e5ca469ffa37f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">stt::network::UdpClient::~UdpClient </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>析构函数，对象生命结束会会关闭套接字 </p>
+
+</div>
+</div>
+<h2 class="groupheader">成员函数说明</h2>
+<a class="anchor" id="a1d7aa6d8d3f7c4843173a29c7cd64980"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool stt::network::UdpClient::createFD </td>
+          <td>(</td>
+          <td class="paramtype">const bool &amp;&#160;</td>
+          <td class="paramname"><em>flag1</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>sec</em> = <code>-1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>销毁原来的套接字，重新创建一个客户端 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">flag1</td><td>true：非阻塞模式 false：阻塞模式 （默认阻塞模式） </td></tr>
+    <tr><td class="paramname">sec</td><td>设置阻塞超时时间（秒） （默认为无限等待） </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成:<ul>
+<li>include/<a class="el" href="sttnet_8h_source.html">sttnet.h</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.5
+</small></address>
+</body>
+</html>

@@ -1,0 +1,420 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.5"/>
+<title>STTNet: stt::network::EpollSingle类 参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { searchBox.OnSelectItem(0); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">STTNet
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.5 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>首页</span></a></li>
+      <li><a href="pages.html"><span>相关页面</span></a></li>
+      <li><a href="namespaces.html"><span>命名空间</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="annotated.html"><span>类列表</span></a></li>
+      <li><a href="classes.html"><span>类索引</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>类成员</span></a></li>
+    </ul>
+  </div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>页</a></div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespacestt.html">stt</a></li><li class="navelem"><a class="el" href="namespacestt_1_1network.html">network</a></li><li class="navelem"><a class="el" href="classstt_1_1network_1_1EpollSingle.html">EpollSingle</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public 成员函数</a> &#124;
+<a href="classstt_1_1network_1_1EpollSingle-members.html">所有成员列表</a>  </div>
+  <div class="headertitle">
+<div class="title">stt::network::EpollSingle类 参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>用epoll监听单个句柄  
+ <a href="classstt_1_1network_1_1EpollSingle.html#details">更多...</a></p>
+
+<p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public 成员函数</h2></td></tr>
+<tr class="memitem:a5235682b174e84afff24be8132707f6b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1EpollSingle.html#a5235682b174e84afff24be8132707f6b">startListen</a> (const int &amp;fd, const bool &amp;flag=true, const <a class="el" href="structstt_1_1time_1_1Duration.html">time::Duration</a> &amp;dt=<a class="el" href="structstt_1_1time_1_1Duration.html">time::Duration</a>{0, 0, 20, 0, 0})</td></tr>
+<tr class="memdesc:a5235682b174e84afff24be8132707f6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">开始监听  <a href="#a5235682b174e84afff24be8132707f6b">更多...</a><br/></td></tr>
+<tr class="separator:a5235682b174e84afff24be8132707f6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86bfc234117e6b7c2ccd36949b4283d0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1EpollSingle.html#a86bfc234117e6b7c2ccd36949b4283d0">isListen</a> ()</td></tr>
+<tr class="memdesc:a86bfc234117e6b7c2ccd36949b4283d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">返回epoll监听状态  <a href="#a86bfc234117e6b7c2ccd36949b4283d0">更多...</a><br/></td></tr>
+<tr class="separator:a86bfc234117e6b7c2ccd36949b4283d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0419489babcfadf088178a8916d178b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1EpollSingle.html#a0419489babcfadf088178a8916d178b0">setFunction</a> (std::function&lt; bool(const int &amp;fd)&gt; fc)</td></tr>
+<tr class="memdesc:a0419489babcfadf088178a8916d178b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置epoll触发后的处理函数 注册一个回调函数  <a href="#a0419489babcfadf088178a8916d178b0">更多...</a><br/></td></tr>
+<tr class="separator:a0419489babcfadf088178a8916d178b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e5e8bdf41465c66d85605bb2f6d8838"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1EpollSingle.html#a4e5e8bdf41465c66d85605bb2f6d8838">setEndFunction</a> (std::function&lt; void(const int &amp;fd)&gt; fcEnd)</td></tr>
+<tr class="memdesc:a4e5e8bdf41465c66d85605bb2f6d8838"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置epoll退出前的回调函数 注册一个回调函数  <a href="#a4e5e8bdf41465c66d85605bb2f6d8838">更多...</a><br/></td></tr>
+<tr class="separator:a4e5e8bdf41465c66d85605bb2f6d8838"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af70b5058c307921c91b2935c4ba1c588"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1EpollSingle.html#af70b5058c307921c91b2935c4ba1c588">setTimeOutFunction</a> (std::function&lt; bool(const int &amp;fd)&gt; fcTimeOut)</td></tr>
+<tr class="memdesc:af70b5058c307921c91b2935c4ba1c588"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置epoll超时后出发的回调函数 注册一个回调函数  <a href="#af70b5058c307921c91b2935c4ba1c588">更多...</a><br/></td></tr>
+<tr class="separator:af70b5058c307921c91b2935c4ba1c588"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab22f25cc21265ea805593dbcd7cc315e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1EpollSingle.html#ab22f25cc21265ea805593dbcd7cc315e">endListen</a> ()</td></tr>
+<tr class="memdesc:ab22f25cc21265ea805593dbcd7cc315e"><td class="mdescLeft">&#160;</td><td class="mdescRight">结束epoll监听 会阻塞直到epoll退出完成  <a href="#ab22f25cc21265ea805593dbcd7cc315e">更多...</a><br/></td></tr>
+<tr class="separator:ab22f25cc21265ea805593dbcd7cc315e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a412c24b0ba349febd1a21a898733e69a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1EpollSingle.html#a412c24b0ba349febd1a21a898733e69a">endListenWithSignal</a> ()</td></tr>
+<tr class="memdesc:a412c24b0ba349febd1a21a898733e69a"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送结束epoll的信号  <a href="#a412c24b0ba349febd1a21a898733e69a">更多...</a><br/></td></tr>
+<tr class="separator:a412c24b0ba349febd1a21a898733e69a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14fc3ddff2a046c76ae1090a1f254781"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1EpollSingle.html#a14fc3ddff2a046c76ae1090a1f254781">waitAndQuit</a> (const <a class="el" href="structstt_1_1time_1_1Duration.html">time::Duration</a> &amp;t=<a class="el" href="structstt_1_1time_1_1Duration.html">time::Duration</a>{0, 0, 0, 10, 10})</td></tr>
+<tr class="memdesc:a14fc3ddff2a046c76ae1090a1f254781"><td class="mdescLeft">&#160;</td><td class="mdescRight">开始退出epoll倒计时，直到套接字有新的消息 如果套接字倒计时结束还没有新的消息，那么退出epoll  <a href="#a14fc3ddff2a046c76ae1090a1f254781">更多...</a><br/></td></tr>
+<tr class="separator:a14fc3ddff2a046c76ae1090a1f254781"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3ed060cd26cc56aced2535d6346c90d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1EpollSingle.html#ac3ed060cd26cc56aced2535d6346c90d">~EpollSingle</a> ()</td></tr>
+<tr class="memdesc:ac3ed060cd26cc56aced2535d6346c90d"><td class="mdescLeft">&#160;</td><td class="mdescRight">EpollSingle的析构函数 调用eldListen阻塞退出epoll.  <a href="#ac3ed060cd26cc56aced2535d6346c90d">更多...</a><br/></td></tr>
+<tr class="separator:ac3ed060cd26cc56aced2535d6346c90d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<div class="textblock"><p>用epoll监听单个句柄 </p>
+</div><h2 class="groupheader">构造及析构函数说明</h2>
+<a class="anchor" id="ac3ed060cd26cc56aced2535d6346c90d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">stt::network::EpollSingle::~EpollSingle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>EpollSingle的析构函数 调用eldListen阻塞退出epoll. </p>
+
+</div>
+</div>
+<h2 class="groupheader">成员函数说明</h2>
+<a class="anchor" id="ab22f25cc21265ea805593dbcd7cc315e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool stt::network::EpollSingle::endListen </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>结束epoll监听 会阻塞直到epoll退出完成 </p>
+<dl class="section return"><dt>返回</dt><dd>true：处理结束 false：结束失败 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a412c24b0ba349febd1a21a898733e69a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::network::EpollSingle::endListenWithSignal </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>发送结束epoll的信号 </p>
+<dl class="section note"><dt>注解</dt><dd>仅仅发送信号，不跟进后续逻辑 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a86bfc234117e6b7c2ccd36949b4283d0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool stt::network::EpollSingle::isListen </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>返回epoll监听状态 </p>
+<dl class="section return"><dt>返回</dt><dd>true：正在监听 false：没有监听 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a4e5e8bdf41465c66d85605bb2f6d8838"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::network::EpollSingle::setEndFunction </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; void(const int &amp;fd)&gt;&#160;</td>
+          <td class="paramname"><em>fcEnd</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>设置epoll退出前的回调函数 注册一个回调函数 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fcEnd</td><td>一个函数或函数对象，用于处理epoll退出前的流程 -参数：const int &amp;fd - 要处理的套接字 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>注解</dt><dd>传入的函数应该有如下签名 void func(const int &amp;fd) </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a0419489babcfadf088178a8916d178b0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::network::EpollSingle::setFunction </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; bool(const int &amp;fd)&gt;&#160;</td>
+          <td class="paramname"><em>fc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>设置epoll触发后的处理函数 注册一个回调函数 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fc</td><td>一个函数或函数对象，用于当有数据时上来的时候回调处理套接字fd -参数：const int &amp;fd - 要处理的套接字 -返回： bool - 返回true成功成功，返回false处理失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>注解</dt><dd>传入的函数应该有如下签名 bool func(const int &amp;fd) </dd>
+<dd>
+如果处理失败了 会退出epoll监听（没有关闭套接字） </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af70b5058c307921c91b2935c4ba1c588"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::network::EpollSingle::setTimeOutFunction </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; bool(const int &amp;fd)&gt;&#160;</td>
+          <td class="paramname"><em>fcTimeOut</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>设置epoll超时后出发的回调函数 注册一个回调函数 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fc</td><td>一个函数或函数对象，用于当epoll超时的时候回调处理套接字fd -参数：const int &amp;fd - 要处理的套接字 -返回： bool - 返回true成功成功，返回false处理失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>注解</dt><dd>传入的函数应该有如下签名 bool func(const int &amp;fd) </dd>
+<dd>
+如果处理失败了 会退出epoll监听（没有关闭套接字） </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a5235682b174e84afff24be8132707f6b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::network::EpollSingle::startListen </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>fd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool &amp;&#160;</td>
+          <td class="paramname"><em>flag</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structstt_1_1time_1_1Duration.html">time::Duration</a> &amp;&#160;</td>
+          <td class="paramname"><em>dt</em> = <code><a class="el" href="structstt_1_1time_1_1Duration.html">time::Duration</a>{0,&#160;0,&#160;20,&#160;0,&#160;0}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>开始监听 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fd</td><td>需要监听的句柄 </td></tr>
+    <tr><td class="paramname">flag</td><td>true：水平触发 false：边缘触发 </td></tr>
+    <tr><td class="paramname">dt</td><td>填入监听超时时间 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a14fc3ddff2a046c76ae1090a1f254781"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::network::EpollSingle::waitAndQuit </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structstt_1_1time_1_1Duration.html">time::Duration</a> &amp;&#160;</td>
+          <td class="paramname"><em>t</em> = <code><a class="el" href="structstt_1_1time_1_1Duration.html">time::Duration</a>{0,0,0,10,10}</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>开始退出epoll倒计时，直到套接字有新的消息 如果套接字倒计时结束还没有新的消息，那么退出epoll </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">t</td><td>一个Duration对象 填入倒计时时长 （默认为10秒） </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成:<ul>
+<li>include/<a class="el" href="sttnet_8h_source.html">sttnet.h</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.5
+</small></address>
+</body>
+</html>

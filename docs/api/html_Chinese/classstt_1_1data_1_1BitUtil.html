@@ -1,0 +1,457 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.5"/>
+<title>STTNet: stt::data::BitUtil类 参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { searchBox.OnSelectItem(0); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">STTNet
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.5 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>首页</span></a></li>
+      <li><a href="pages.html"><span>相关页面</span></a></li>
+      <li><a href="namespaces.html"><span>命名空间</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="annotated.html"><span>类列表</span></a></li>
+      <li><a href="classes.html"><span>类索引</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>类成员</span></a></li>
+    </ul>
+  </div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>页</a></div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespacestt.html">stt</a></li><li class="navelem"><a class="el" href="namespacestt_1_1data.html">data</a></li><li class="navelem"><a class="el" href="classstt_1_1data_1_1BitUtil.html">BitUtil</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-static-methods">静态 Public 成员函数</a> &#124;
+<a href="classstt_1_1data_1_1BitUtil-members.html">所有成员列表</a>  </div>
+  <div class="headertitle">
+<div class="title">stt::data::BitUtil类 参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>负责二进制数据，字符串之间的转化  
+ <a href="classstt_1_1data_1_1BitUtil.html#details">更多...</a></p>
+
+<p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+静态 Public 成员函数</h2></td></tr>
+<tr class="memitem:a2648aba62ba0916a9765c8d6f3d5d8e6"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1BitUtil.html#a2648aba62ba0916a9765c8d6f3d5d8e6">bitOutput</a> (char input, std::string &amp;result)</td></tr>
+<tr class="memdesc:a2648aba62ba0916a9765c8d6f3d5d8e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">将单个字符转换为其对应的 8 位二进制字符串。  <a href="#a2648aba62ba0916a9765c8d6f3d5d8e6">更多...</a><br/></td></tr>
+<tr class="separator:a2648aba62ba0916a9765c8d6f3d5d8e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9914e321d56b413725068696447663a"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1BitUtil.html#ae9914e321d56b413725068696447663a">bitOutput</a> (const std::string &amp;input, std::string &amp;result)</td></tr>
+<tr class="memdesc:ae9914e321d56b413725068696447663a"><td class="mdescLeft">&#160;</td><td class="mdescRight">将字符串中的每个字符依次转换为二进制位，并拼接为一个整体字符串。  <a href="#ae9914e321d56b413725068696447663a">更多...</a><br/></td></tr>
+<tr class="separator:ae9914e321d56b413725068696447663a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfca71305fe514fe2a7a1ef5a118ada4"><td class="memItemLeft" align="right" valign="top">static char &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1BitUtil.html#acfca71305fe514fe2a7a1ef5a118ada4">bitOutput_bit</a> (char input, const int pos, char &amp;result)</td></tr>
+<tr class="memdesc:acfca71305fe514fe2a7a1ef5a118ada4"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取字符 input 的从左向右第 pos 位（二进制）并返回 '1' 或 '0'。  <a href="#acfca71305fe514fe2a7a1ef5a118ada4">更多...</a><br/></td></tr>
+<tr class="separator:acfca71305fe514fe2a7a1ef5a118ada4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03066525be670553c137428134b7b461"><td class="memItemLeft" align="right" valign="top">static unsigned long &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1BitUtil.html#a03066525be670553c137428134b7b461">bitStrToNumber</a> (const std::string &amp;input, unsigned long &amp;result)</td></tr>
+<tr class="memdesc:a03066525be670553c137428134b7b461"><td class="mdescLeft">&#160;</td><td class="mdescRight">将 "01" 字符串（二进制字符串）转换为无符号整数。  <a href="#a03066525be670553c137428134b7b461">更多...</a><br/></td></tr>
+<tr class="separator:a03066525be670553c137428134b7b461"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad98208bfd78217250627d61e84e9c34"><td class="memItemLeft" align="right" valign="top">static unsigned long &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1BitUtil.html#aad98208bfd78217250627d61e84e9c34">bitToNumber</a> (const std::string &amp;input, unsigned long &amp;result)</td></tr>
+<tr class="memdesc:aad98208bfd78217250627d61e84e9c34"><td class="mdescLeft">&#160;</td><td class="mdescRight">将字符串转换为二进制，再转换为对应数值。  <a href="#aad98208bfd78217250627d61e84e9c34">更多...</a><br/></td></tr>
+<tr class="separator:aad98208bfd78217250627d61e84e9c34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacf5e390259a13c73a0013e54d52d0fd"><td class="memItemLeft" align="right" valign="top">static char &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1BitUtil.html#aacf5e390259a13c73a0013e54d52d0fd">toBit</a> (const std::string &amp;input, char &amp;result)</td></tr>
+<tr class="memdesc:aacf5e390259a13c73a0013e54d52d0fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">将最多 8 位的 "01" 字符串压缩成 1 个字节（char）。  <a href="#aacf5e390259a13c73a0013e54d52d0fd">更多...</a><br/></td></tr>
+<tr class="separator:aacf5e390259a13c73a0013e54d52d0fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85d6f7ef16305e9b9ada82784cfadf0e"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1BitUtil.html#a85d6f7ef16305e9b9ada82784cfadf0e">toBit</a> (const std::string &amp;input, std::string &amp;result)</td></tr>
+<tr class="memdesc:a85d6f7ef16305e9b9ada82784cfadf0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">将任意长度的 "01" 字符串压缩为二进制数据，每 8 位为一个字节。  <a href="#a85d6f7ef16305e9b9ada82784cfadf0e">更多...</a><br/></td></tr>
+<tr class="separator:a85d6f7ef16305e9b9ada82784cfadf0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<div class="textblock"><p>负责二进制数据，字符串之间的转化 </p>
+</div><h2 class="groupheader">成员函数说明</h2>
+<a class="anchor" id="a2648aba62ba0916a9765c8d6f3d5d8e6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string&amp; stt::data::BitUtil::bitOutput </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>result</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>将单个字符转换为其对应的 8 位二进制字符串。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>输入的字符。 </td></tr>
+    <tr><td class="paramname">result</td><td>用于保存输出的二进制字符串（例如 'A' -&gt; "01000001"）。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>返回 result 的引用。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae9914e321d56b413725068696447663a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string&amp; stt::data::BitUtil::bitOutput </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>result</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>将字符串中的每个字符依次转换为二进制位，并拼接为一个整体字符串。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>输入字符串。 </td></tr>
+    <tr><td class="paramname">result</td><td>保存输出的连续位字符串（长度为 input.size() * 8）。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>返回 result 的引用。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="acfca71305fe514fe2a7a1ef5a118ada4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char&amp; stt::data::BitUtil::bitOutput_bit </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char &amp;&#160;</td>
+          <td class="paramname"><em>result</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>获取字符 input 的从左向右第 pos 位（二进制）并返回 '1' 或 '0'。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>输入字符。 </td></tr>
+    <tr><td class="paramname">pos</td><td>位位置（1~8，1 是最高位）。 </td></tr>
+    <tr><td class="paramname">result</td><td>返回的位字符：'1' 或 '0'。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>返回 result 的引用。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a03066525be670553c137428134b7b461"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static unsigned long&amp; stt::data::BitUtil::bitStrToNumber </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned long &amp;&#160;</td>
+          <td class="paramname"><em>result</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>将 "01" 字符串（二进制字符串）转换为无符号整数。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>输入二进制字符串（如 "1011"）。 </td></tr>
+    <tr><td class="paramname">result</td><td>输出结果数值。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>返回 result 的引用。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aad98208bfd78217250627d61e84e9c34"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static unsigned long&amp; stt::data::BitUtil::bitToNumber </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned long &amp;&#160;</td>
+          <td class="paramname"><em>result</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>将字符串转换为二进制，再转换为对应数值。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>任意原始数据字符串。 </td></tr>
+    <tr><td class="paramname">result</td><td>返回转换后的数值。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>返回 result 的引用。</dd></dl>
+<dl class="section note"><dt>注解</dt><dd>实际先调用 bitOutput 得到位串，再通过 bitStrToNumber 转换成整数。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aacf5e390259a13c73a0013e54d52d0fd"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char&amp; stt::data::BitUtil::toBit </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char &amp;&#160;</td>
+          <td class="paramname"><em>result</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>将最多 8 位的 "01" 字符串压缩成 1 个字节（char）。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>二进制字符串，最多 8 位。 </td></tr>
+    <tr><td class="paramname">result</td><td>输出压缩后的字节。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>返回 result 的引用。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a85d6f7ef16305e9b9ada82784cfadf0e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string&amp; stt::data::BitUtil::toBit </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>result</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>将任意长度的 "01" 字符串压缩为二进制数据，每 8 位为一个字节。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>输入位串（长度应为 8 的倍数）。 </td></tr>
+    <tr><td class="paramname">result</td><td>返回压缩后的二进制数据（每个字符代表 1 个字节）。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>返回 result 的引用。 </dd></dl>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成:<ul>
+<li>include/<a class="el" href="sttnet_8h_source.html">sttnet.h</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.5
+</small></address>
+</body>
+</html>

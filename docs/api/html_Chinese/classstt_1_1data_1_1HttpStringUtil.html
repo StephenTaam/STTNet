@@ -1,0 +1,652 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.5"/>
+<title>STTNet: stt::data::HttpStringUtil类 参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { searchBox.OnSelectItem(0); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">STTNet
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.5 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>首页</span></a></li>
+      <li><a href="pages.html"><span>相关页面</span></a></li>
+      <li><a href="namespaces.html"><span>命名空间</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="annotated.html"><span>类列表</span></a></li>
+      <li><a href="classes.html"><span>类索引</span></a></li>
+      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>类成员</span></a></li>
+    </ul>
+  </div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>页</a></div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespacestt.html">stt</a></li><li class="navelem"><a class="el" href="namespacestt_1_1data.html">data</a></li><li class="navelem"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html">HttpStringUtil</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-static-methods">静态 Public 成员函数</a> &#124;
+<a href="classstt_1_1data_1_1HttpStringUtil-members.html">所有成员列表</a>  </div>
+  <div class="headertitle">
+<div class="title">stt::data::HttpStringUtil类 参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>负责Http字符串和URL解析 包括从 URL 或请求报文中提取参数、IP、端口、请求头字段等功能。  
+ <a href="classstt_1_1data_1_1HttpStringUtil.html#details">更多...</a></p>
+
+<p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+静态 Public 成员函数</h2></td></tr>
+<tr class="memitem:a399758b7cd03d7d4952fa7ee8cd7c59d"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a399758b7cd03d7d4952fa7ee8cd7c59d">get_split_str</a> (const std::string &amp;ori_str, std::string &amp;str, const std::string &amp;a, const std::string &amp;b, const size_t &amp;pos=0)</td></tr>
+<tr class="memdesc:a399758b7cd03d7d4952fa7ee8cd7c59d"><td class="mdescLeft">&#160;</td><td class="mdescRight">从原始字符串中提取两个标记之间的子串。  <a href="#a399758b7cd03d7d4952fa7ee8cd7c59d">更多...</a><br/></td></tr>
+<tr class="separator:a399758b7cd03d7d4952fa7ee8cd7c59d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a904906ac8010ece1c306d4338809b49f"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a904906ac8010ece1c306d4338809b49f">get_value_str</a> (const std::string &amp;ori_str, std::string &amp;str, const std::string &amp;name)</td></tr>
+<tr class="memdesc:a904906ac8010ece1c306d4338809b49f"><td class="mdescLeft">&#160;</td><td class="mdescRight">从 URL 查询参数中提取指定 key 的值。  <a href="#a904906ac8010ece1c306d4338809b49f">更多...</a><br/></td></tr>
+<tr class="separator:a904906ac8010ece1c306d4338809b49f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a500a4e33d6ad797d915bb42291d5dca4"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a500a4e33d6ad797d915bb42291d5dca4">get_value_header</a> (const std::string &amp;ori_str, std::string &amp;str, const std::string &amp;name)</td></tr>
+<tr class="memdesc:a500a4e33d6ad797d915bb42291d5dca4"><td class="mdescLeft">&#160;</td><td class="mdescRight">从 HTTP 请求头中提取指定字段的值。  <a href="#a500a4e33d6ad797d915bb42291d5dca4">更多...</a><br/></td></tr>
+<tr class="separator:a500a4e33d6ad797d915bb42291d5dca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3e71e9b5662949f0069127660588bcd"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#ae3e71e9b5662949f0069127660588bcd">get_location_str</a> (const std::string &amp;ori_str, std::string &amp;str)</td></tr>
+<tr class="memdesc:ae3e71e9b5662949f0069127660588bcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">提取 URL 中 path 和 query 部分。  <a href="#ae3e71e9b5662949f0069127660588bcd">更多...</a><br/></td></tr>
+<tr class="separator:ae3e71e9b5662949f0069127660588bcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a693fcfba7f7df1295d245389d2528695"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a693fcfba7f7df1295d245389d2528695">getLocPara</a> (const std::string &amp;url, std::string &amp;locPara)</td></tr>
+<tr class="memdesc:a693fcfba7f7df1295d245389d2528695"><td class="mdescLeft">&#160;</td><td class="mdescRight">提取 URL 的 path 部分（不含 query）。  <a href="#a693fcfba7f7df1295d245389d2528695">更多...</a><br/></td></tr>
+<tr class="separator:a693fcfba7f7df1295d245389d2528695"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ca0971f2dfdf015c8cdd20177424ff4"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a7ca0971f2dfdf015c8cdd20177424ff4">getPara</a> (const std::string &amp;url, std::string &amp;para)</td></tr>
+<tr class="memdesc:a7ca0971f2dfdf015c8cdd20177424ff4"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取 URL 中的查询参数字符串（包括 ?）。  <a href="#a7ca0971f2dfdf015c8cdd20177424ff4">更多...</a><br/></td></tr>
+<tr class="separator:a7ca0971f2dfdf015c8cdd20177424ff4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23d8fe01488654d7889a9bf4478c6aab"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a23d8fe01488654d7889a9bf4478c6aab">getIP</a> (const std::string &amp;url, std::string &amp;IP)</td></tr>
+<tr class="memdesc:a23d8fe01488654d7889a9bf4478c6aab"><td class="mdescLeft">&#160;</td><td class="mdescRight">从 URL 中提取主机 IP 或域名。  <a href="#a23d8fe01488654d7889a9bf4478c6aab">更多...</a><br/></td></tr>
+<tr class="separator:a23d8fe01488654d7889a9bf4478c6aab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d9894e4283bbd3acdfbcf65dc318b76"><td class="memItemLeft" align="right" valign="top">static int &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a5d9894e4283bbd3acdfbcf65dc318b76">getPort</a> (const std::string &amp;url, int &amp;port)</td></tr>
+<tr class="memdesc:a5d9894e4283bbd3acdfbcf65dc318b76"><td class="mdescLeft">&#160;</td><td class="mdescRight">从 URL 中提取端口号。  <a href="#a5d9894e4283bbd3acdfbcf65dc318b76">更多...</a><br/></td></tr>
+<tr class="separator:a5d9894e4283bbd3acdfbcf65dc318b76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8256f33455b1299cfc1ccf46a7d9ea5"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#ad8256f33455b1299cfc1ccf46a7d9ea5">createHeader</a> (const std::string &amp;first, const std::string &amp;second)</td></tr>
+<tr class="memdesc:ad8256f33455b1299cfc1ccf46a7d9ea5"><td class="mdescLeft">&#160;</td><td class="mdescRight">创建一个 HTTP 请求头字段字符串。  <a href="#ad8256f33455b1299cfc1ccf46a7d9ea5">更多...</a><br/></td></tr>
+<tr class="separator:ad8256f33455b1299cfc1ccf46a7d9ea5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b6431edf84792cbd2a9134b219747ea"><td class="memTemplParams" colspan="2">template&lt;class... Args&gt; </td></tr>
+<tr class="memitem:a5b6431edf84792cbd2a9134b219747ea"><td class="memTemplItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a5b6431edf84792cbd2a9134b219747ea">createHeader</a> (const std::string &amp;first, const std::string &amp;second, Args...args)</td></tr>
+<tr class="memdesc:a5b6431edf84792cbd2a9134b219747ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">递归构造多个 HTTP 请求头字段。  <a href="#a5b6431edf84792cbd2a9134b219747ea">更多...</a><br/></td></tr>
+<tr class="separator:a5b6431edf84792cbd2a9134b219747ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<div class="textblock"><p>负责Http字符串和URL解析 包括从 URL 或请求报文中提取参数、IP、端口、请求头字段等功能。 </p>
+</div><h2 class="groupheader">成员函数说明</h2>
+<a class="anchor" id="ad8256f33455b1299cfc1ccf46a7d9ea5"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string stt::data::HttpStringUtil::createHeader </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>second</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>创建一个 HTTP 请求头字段字符串。 </p>
+<p>该函数构造格式为 <code>字段名: 字段值\r\n</code> 的字符串。</p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">first</td><td>第一个字段名。 </td></tr>
+    <tr><td class="paramname">second</td><td>第一个字段值。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>构造的单条 HTTP 请求头字符串。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a5b6431edf84792cbd2a9134b219747ea"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class... Args&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string stt::data::HttpStringUtil::createHeader </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>second</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Args...&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>递归构造多个 HTTP 请求头字段。 </p>
+<p>支持多个字段名和值的构造，用法为： </p>
+<div class="fragment"><div class="line">std::string headers = <a class="code" href="classstt_1_1data_1_1HttpStringUtil.html#ad8256f33455b1299cfc1ccf46a7d9ea5">createHeader</a>(<span class="stringliteral">&quot;Host&quot;</span>, <span class="stringliteral">&quot;example.com&quot;</span>, <span class="stringliteral">&quot;Connection&quot;</span>, <span class="stringliteral">&quot;keep-alive,&quot;</span>Content-Type<span class="stringliteral">&quot;,&quot;</span>charset=UTF-8<span class="stringliteral">&quot;);</span></div>
+</div><!-- fragment --><p> 最终生成： </p>
+<div class="fragment"><div class="line">Host: example.com\r\n</div>
+<div class="line">Connection: keep-alive\r\n</div>
+<div class="line">Content-Type: charset=UTF-8\r\n</div>
+</div><!-- fragment --><dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Args</td><td>其余参数，需以 (字段名, 字段值) 成对传入。 </td></tr>
+    <tr><td class="paramname">first</td><td>当前字段名。 </td></tr>
+    <tr><td class="paramname">second</td><td>当前字段值。 </td></tr>
+    <tr><td class="paramname">args</td><td>后续的字段名和值（必须为偶数个）。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>构造的完整 HTTP 请求头字符串。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae3e71e9b5662949f0069127660588bcd"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string&amp; stt::data::HttpStringUtil::get_location_str </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>ori_str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>提取 URL 中 path 和 query 部分。 </p>
+<p>例如从 <code><a href="http://abc.com/path?query=123">http://abc.com/path?query=123</a></code> 或者从/path?query=123 提取 <code>/path</code>。</p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ori_str</td><td>原始 URL。 </td></tr>
+    <tr><td class="paramname">str</td><td>返回 path 部分。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>引用，指向结果字符串。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a399758b7cd03d7d4952fa7ee8cd7c59d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string&amp; stt::data::HttpStringUtil::get_split_str </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>ori_str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t &amp;&#160;</td>
+          <td class="paramname"><em>pos</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>从原始字符串中提取两个标记之间的子串。 </p>
+<p>提取从 a 到 b 之间的内容（不包含 a 和 b），可指定起始搜索位置。 若 a 或 b 为空字符串，则分别表示从头或到尾。 若a找不到，则默认从头开始 若b找不到，则默认到尾</p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ori_str</td><td>原始字符串。 </td></tr>
+    <tr><td class="paramname">str</td><td>存储提取结果的字符串。 </td></tr>
+    <tr><td class="paramname">a</td><td>起始标记字符串。 </td></tr>
+    <tr><td class="paramname">b</td><td>终止标记字符串。 </td></tr>
+    <tr><td class="paramname">pos</td><td>搜索起始位置。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>引用，指向结果字符串。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a500a4e33d6ad797d915bb42291d5dca4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string&amp; stt::data::HttpStringUtil::get_value_header </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>ori_str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>从 HTTP 请求头中提取指定字段的值。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ori_str</td><td>原始 HTTP 请求头字符串。 </td></tr>
+    <tr><td class="paramname">str</td><td>提取结果。 </td></tr>
+    <tr><td class="paramname">name</td><td>请求头字段名（如 "Host"）。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>引用，指向结果字符串。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a904906ac8010ece1c306d4338809b49f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string&amp; stt::data::HttpStringUtil::get_value_str </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>ori_str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>从 URL 查询参数中提取指定 key 的值。 </p>
+<dl class="section note"><dt>注解</dt><dd>url不需要完整也行 例如从 <code>?id=123&amp;name=abc</code>提取 <code>id</code> 的值和从<code><a href="http://xxxx/?id=123&name=abc">http://xxxx/?id=123&amp;name=abc</a></code>提取 <code>id</code> 的值是一样的。</dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ori_str</td><td>原始 URL 字符串。 </td></tr>
+    <tr><td class="paramname">str</td><td>存储提取结果的字符串。 </td></tr>
+    <tr><td class="paramname">name</td><td>参数名（key）。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>引用，指向结果字符串。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a23d8fe01488654d7889a9bf4478c6aab"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string&amp; stt::data::HttpStringUtil::getIP </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>url</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>IP</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>从 URL 中提取主机 IP 或域名。 </p>
+<p>例如从 <code><a href="http://127.0.0.1:8080/">http://127.0.0.1:8080/</a></code> 提取 <code>127.0.0.1</code>。</p>
+<dl class="section warning"><dt>警告</dt><dd>url必须完整而且显式指明端口 </dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">url</td><td>完整 URL。 </td></tr>
+    <tr><td class="paramname">IP</td><td>存储提取的 IP 或域名。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>引用，指向结果字符串。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a693fcfba7f7df1295d245389d2528695"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string&amp; stt::data::HttpStringUtil::getLocPara </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>url</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>locPara</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>提取 URL 的 path 部分（不含 query）。 </p>
+<p>与 <code>get_location_str</code> 类似，但保留 path 之后的所有内容（如参数）。</p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">URL。</td><td></td></tr>
+    <tr><td class="paramname">locPara</td><td>返回 path+参数部分。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>引用，指向结果字符串。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a7ca0971f2dfdf015c8cdd20177424ff4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string&amp; stt::data::HttpStringUtil::getPara </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>url</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>para</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>获取 URL 中的查询参数字符串（包括 ?）。 </p>
+<dl class="section note"><dt>注解</dt><dd>可以是完整url 也可以是不太完整的，比如/path?id=123&amp;name=abc</dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">URL。</td><td></td></tr>
+    <tr><td class="paramname">para</td><td>返回参数部分（形如 "?id=123&amp;name=abc"）。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>引用，指向结果字符串。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a5d9894e4283bbd3acdfbcf65dc318b76"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int&amp; stt::data::HttpStringUtil::getPort </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>url</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &amp;&#160;</td>
+          <td class="paramname"><em>port</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>从 URL 中提取端口号。 </p>
+<p>例如从 <code><a href="http://127.0.0.1:8080/">http://127.0.0.1:8080/</a></code> 中提取 8080。</p>
+<dl class="section warning"><dt>警告</dt><dd>必须是完整的url，而且必须显式指定端口 还有路径 就算路径没有 也要写个/ </dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">url</td><td>完整 URL。 </td></tr>
+    <tr><td class="paramname">port</td><td>存储解析出的端口号。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>引用，指向端口号。 </dd></dl>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成:<ul>
+<li>include/<a class="el" href="sttnet_8h_source.html">sttnet.h</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.5
+</small></address>
+</body>
+</html>
