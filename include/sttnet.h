@@ -1511,20 +1511,20 @@ namespace stt
             * @param num 数组索引位置(从0开始)（仅适用于 arrayvalue / arrayjson/array）。
             * @return std::string& 返回结果字符串的引用。
             */
-	        std::string& getValue(const std::string &oriStr,std::string& result,const std::string &type="value",const std::string &name="a",const int &num=0);
+	        static std::string& getValue(const std::string &oriStr,std::string& result,const std::string &type="value",const std::string &name="a",const int &num=0);
 
             /**
             * @brief 将 Json::Value 转换为字符串。
             * @param val JSON 值。
             * @return std::string 字符串形式的值。
             */
-            std::string toString(const Json::Value &val);
+            static std::string toString(const Json::Value &val);
             /**
             * @brief 解析 JSON 字符串为 Json::Value。
             * @param str 输入的 JSON 字符串。
             * @return Json::Value 解析后的 JSON 对象或数组。
             */
-	        Json::Value toJsonArray(const std::string & str);
+	        static Json::Value toJsonArray(const std::string & str);
             /**
             * @brief 创建仅包含一个键值对的 JSON 字符串。
             * 
@@ -1535,7 +1535,7 @@ namespace stt
             * @return std::string JSON 字符串。
             */
             template<class T1,class T2>
-	        std::string createJson(T1 first,T2 second)
+	        static std::string createJson(T1 first,T2 second)
 	        {
 		        Json::Value root;
 		        root[first]=second;
@@ -1555,7 +1555,7 @@ namespace stt
             * @return std::string 拼接完成的 JSON 字符串。
             */
              template<class T1,class T2,class... Args>
-	        std::string createJson(T1 first,T2 second,Args... args)
+	        static std::string createJson(T1 first,T2 second,Args... args)
 	        {
 		        Json::Value root;
 		        root[first]=second;
@@ -1575,7 +1575,7 @@ namespace stt
             * @return std::string JSON 数组字符串。
             */
 	        template<class T>
-	        std::string createArray(T first)
+	        static std::string createArray(T first)
 	        {
 		        Json::Value root(Json::arrayValue);
 		        root.append(first);
@@ -1593,7 +1593,7 @@ namespace stt
             * @return std::string 拼接完成的 JSON 数组字符串。
             */
             template<class T,class... Args>
-	        std::string createArray(T first,Args... args)
+	        static std::string createArray(T first,Args... args)
 	        {
 		        Json::Value root(Json::arrayValue);
 		        root.append(first);
@@ -1611,21 +1611,21 @@ namespace stt
             * @param b 第二个 JSON 字符串。
             * @return std::string 拼接后的 JSON 字符串。
             */
-            std::string jsonAdd(const std::string &a,const std::string &b);
+            static std::string jsonAdd(const std::string &a,const std::string &b);
              /**
             * @brief 将格式化后的 JSON 字符串去除缩进、空格等变成紧凑格式。
             * @param a 输入的 JSON 字符串。
             * @param b 存储格式化结果的引用。
             * @return std::string& 紧凑格式的字符串引用。
             */
-            std::string& jsonFormatify(const std::string &a,std::string &b);
+            static std::string& jsonFormatify(const std::string &a,std::string &b);
             /**
             * @brief 将 JSON 字符串中的 \uXXXX 转换为 UTF-8 字符。
             * @param input 含有 Unicode 编码的 JSON 字符串。
             * @param output 存储转换后字符串的引用。
             * @return std::string& 返回转换后的字符串引用。
             */
-            std::string& jsonToUTF8(const std::string &input,std::string &output);
+            static std::string& jsonToUTF8(const std::string &input,std::string &output);
         };
     }
     /**

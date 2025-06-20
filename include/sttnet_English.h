@@ -1514,20 +1514,20 @@ public:
             * @param num Array index position (starting from 0) (only applicable to arrayvalue / arrayjson/array).
             * @return std::string& Reference to the result string.
             */
-	        std::string& getValue(const std::string &oriStr, std::string& result, const std::string &type = "value", const std::string &name = "a", const int &num = 0);
+	        static std::string& getValue(const std::string &oriStr, std::string& result, const std::string &type = "value", const std::string &name = "a", const int &num = 0);
 
             /**
             * @brief Convert Json::Value to a string.
             * @param val JSON value.
             * @return std::string String form of the value.
             */
-            std::string toString(const Json::Value &val);
+            static std::string toString(const Json::Value &val);
             /**
             * @brief Parse a JSON string into Json::Value.
             * @param str Input JSON string.
             * @return Json::Value Parsed JSON object or array.
             */
-	        Json::Value toJsonArray(const std::string & str);
+	        static Json::Value toJsonArray(const std::string & str);
             /**
             * @brief Create a JSON string containing only one key-value pair.
             * 
@@ -1538,7 +1538,7 @@ public:
             * @return std::string JSON string.
             */
             template<class T1, class T2>
-	        std::string createJson(T1 first, T2 second)
+	        static std::string createJson(T1 first, T2 second)
 	        {
 		        Json::Value root;
 		        root[first] = second;
@@ -1558,7 +1558,7 @@ public:
             * @return std::string The concatenated JSON string.
             */
              template<class T1, class T2, class... Args>
-	        std::string createJson(T1 first, T2 second, Args... args)
+	        static std::string createJson(T1 first, T2 second, Args... args)
 	        {
 		        Json::Value root;
 		        root[first] = second;
@@ -1578,7 +1578,7 @@ public:
             * @return std::string JSON array string.
             */
 	        template<class T>
-	        std::string createArray(T first)
+	        static std::string createArray(T first)
 	        {
 		        Json::Value root(Json::arrayValue);
 		        root.append(first);
@@ -1596,7 +1596,7 @@ public:
             * @return std::string The concatenated JSON array string.
             */
             template<class T, class... Args>
-	        std::string createArray(T first, Args... args)
+	        static std::string createArray(T first, Args... args)
 	        {
 		        Json::Value root(Json::arrayValue);
 		        root.append(first);
@@ -1614,21 +1614,21 @@ public:
             * @param b The second JSON string.
             * @return std::string Concatenated JSON string.
             */
-            std::string jsonAdd(const std::string &a, const std::string &b);
+            static std::string jsonAdd(const std::string &a, const std::string &b);
              /**
             * @brief Remove indentation, spaces, etc., from a formatted JSON string to make it compact.
             * @param a Input JSON string.
             * @param b Reference to store the formatted result.
             * @return std::string& Reference to the compact format string.
             */
-            std::string& jsonFormatify(const std::string &a, std::string &b);
+            static std::string& jsonFormatify(const std::string &a, std::string &b);
             /**
             * @brief Convert \uXXXX in a JSON string to UTF-8 characters.
             * @param input JSON string with Unicode encoding.
             * @param output Reference to store the converted string.
             * @return std::string& Reference to the converted string.
             */
-            std::string& jsonToUTF8(const std::string &input, std::string &output);
+            static std::string& jsonToUTF8(const std::string &input, std::string &output);
         };
     }
     /**
