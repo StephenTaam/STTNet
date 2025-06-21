@@ -2558,7 +2558,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             unblockSet();
         DateTime timer;
         Duration dt{0,0,0,sec,0};
-        char buffer[length];
+        unique_ptr<char[]> buffer(new char[length]);
         data.clear();
         uint64_t size=length;
         int64_t recvSize;
@@ -2566,9 +2566,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         {
             timer.startTiming();
             if(ssl==nullptr)
-                recvSize=::recv(fd,buffer,size,0);
+                recvSize=::recv(fd,buffer.get(),size,0);
             else
-                recvSize=SSL_read(ssl,buffer,size);
+                recvSize=SSL_read(ssl,buffer.get(),size);
             if(recvSize<=0)
             {
                 if(recvSize<0&&(errno==EAGAIN||errno==EWOULDBLOCK))
@@ -2588,7 +2588,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 break;
             }
             timer.endTiming(); 
-            data+=string(buffer,recvSize);
+            data+=string(buffer.get(),recvSize);
             size-=recvSize;
         }
         //cout<<"quit"<<endl;
@@ -2688,7 +2688,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             unblockSet();
         DateTime timer;
         Duration dt{0,0,0,sec,0};
-        char buffer[length];
+        unique_ptr<char[]> buffer(new char[length]);
         memset(data,0,length);
         uint64_t size=length;
         int64_t recvSize=0;
@@ -2696,9 +2696,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         {
             timer.startTiming();
             if(ssl==nullptr)
-                recvSize=::recv(fd,buffer,size,0);
+                recvSize=::recv(fd,buffer.get(),size,0);
             else
-                recvSize=SSL_read(ssl,buffer,size);
+                recvSize=SSL_read(ssl,buffer.get(),size);
             if(recvSize<=0)
             {
                 if(recvSize<0&&(errno==EAGAIN||errno==EWOULDBLOCK))
@@ -2724,7 +2724,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             //cout<<"b="<<static_cast<void*>(data)<<endl;
             //cout<<"length-size:"<<length-size<<endl;
             //cout<<"recvsize:"<<recvSize<<endl;
-            memcpy(data+(length-size),buffer,recvSize);
+            memcpy(data+(length-size),buffer.get(),recvSize);
             //cout<<"b"<<endl;
             size-=recvSize;
         }
@@ -2737,14 +2737,14 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     {
         if(!isConnect())
             return -99;
-        char buffer[length];
+        unique_ptr<char[]> buffer(new char[length]);
         int size;
         if(ssl==nullptr)
-            size=::recv(fd,buffer,length,0);
+            size=::recv(fd,buffer.get(),length,0);
         else
-            size=SSL_read(ssl,buffer,length);
+            size=SSL_read(ssl,buffer.get(),length);
         if(size>0)
-            data=string(buffer,size);
+            data=string(buffer.get(),size);
         else
         {
             if(flag1==true&&size<0&&(errno==EAGAIN||errno==EWOULDBLOCK))
@@ -2757,14 +2757,14 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     {
         if(fd==-1)
             return -99;
-        char buffer[length];
+        unique_ptr<char[]> buffer(new char[length]);
         int size;
         struct sockaddr_in chenfan;
 	    socklen_t tanziliang=sizeof(chenfan);
-        size=::recvfrom(fd,buffer,length,0,(struct sockaddr*)&chenfan,&tanziliang);
+        size=::recvfrom(fd,buffer.get(),length,0,(struct sockaddr*)&chenfan,&tanziliang);
         if(size>0)
         {
-            data=string(buffer,size);
+            data=string(buffer.get(),size);
             port=chenfan.sin_port;
 	        ip.assign(inet_ntoa(chenfan.sin_addr));
         }
