@@ -4002,11 +4002,15 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
              to_string(length)+"\r\n"+\
              header1+\
              header+"\r\n";
-        char buffer[length+ii.length()];
+        char *buffer=new char[length+ii.length()];
         memcpy(buffer,ii.c_str(),ii.length());
         memcpy(buffer+ii.length(),data,length);
         if(sendData(buffer,length+ii.length())!=length+ii.length())
+        {
+            delete buffer;
             return false;
+        }
+        delete buffer;
         return true;
     }
     
