@@ -3784,7 +3784,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         while(flag1)
         {
             //监听等待，一秒钟检查一次flag条件是否满足
-            int infds=epoll_wait(epollFD,evs,200,1000);
+            int infds=epoll_wait(epollFD,evs,evsNum,1000);
             if(infds<=0)//<0失败=0超时
             {
                 continue;
