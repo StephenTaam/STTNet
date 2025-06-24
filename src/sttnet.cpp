@@ -3805,8 +3805,14 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                     break;//全部连接都accept了
                                 else//真的失败
                                 {
-                                    flag1=false;
-                                    break;
+                                    if(stt::system::ServerSetting::logfile!=nullptr)
+                                    {
+                                        if(stt::system::ServerSetting::language=="Chinese")
+                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll:accept错误 error="+errno);
+                                        else
+                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll:accept failed error="+errno);
+                                    }
+                                    continue;
                                 }
                             }
                             if(TLS)//加密accept
@@ -3911,7 +3917,10 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             {
                 cv1.wait(ul1);
                 if(!flag1)
+                {
+                    ul1.unlock();
                     break;
+                }
             }
             if(!flag1)
             {
