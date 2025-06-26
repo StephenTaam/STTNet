@@ -2561,7 +2561,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     {
         if(!isConnect())
             return -99;
-        if(flag1)//非阻塞模式
+        if(flag1&&sec!=-1)//非阻塞模式且sec设置为非无限等待
         {
             DateTime timer;
             Duration dt{0,0,0,sec,0};
@@ -2705,7 +2705,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         if(!isConnect())
             return -99;
         
-        if(flag1)//非阻塞模式
+        if(flag1&&sec!=-1)//非阻塞模式
         {
             DateTime timer;
             Duration dt{0,0,0,sec,0};
