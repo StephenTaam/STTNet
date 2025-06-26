@@ -1993,11 +1993,20 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     }
 
     
-    void stt::network::TcpFDHandler::blockSet()
+    void stt::network::TcpFDHandler::blockSet(const int &sec)
     {
         int flags=fcntl(fd,F_GETFL,0);//获取当前标志
         fcntl(fd,F_GETFL,flags&~O_NONBLOCK);
         flag1=false;
+        if(sec!=-1)
+        {
+            struct timeval tv;
+            tv.tv_sec = sec;  // 设置接收超时时间为 5 秒
+            tv.tv_usec = 0;
+
+            setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
+        }
+        this->sec=sec;
     }
     void stt::network::UdpFDHandler::blockSet(const int &sec)
     {
@@ -2552,54 +2561,67 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     {
         if(!isConnect())
             return -99;
-        //如果是阻塞模式要短暂性设置为非阻塞状态
-        bool unblock=flag1;//记录当前状态
-        if(!flag1)
-            unblockSet();
-        DateTime timer;
-        Duration dt{0,0,0,sec,0};
-        unique_ptr<char[]> buffer(new char[length]);
-        data.clear();
-        uint64_t size=length;
-        int64_t recvSize;
-        while(size>0)
+        if(flag1)//非阻塞模式
         {
-            timer.startTiming();
-            if(ssl==nullptr)
-                recvSize=::recv(fd,buffer.get(),size,0);
-            else
-                recvSize=SSL_read(ssl,buffer.get(),size);
-            if(recvSize<=0)
+            DateTime timer;
+            Duration dt{0,0,0,sec,0};
+            unique_ptr<char[]> buffer(new char[length]);
+            data.clear();
+            uint64_t size=length;
+            int64_t recvSize;
+            while(size>0)
             {
-                if(recvSize<0&&(errno==EAGAIN||errno==EWOULDBLOCK))
+                timer.startTiming();
+                if(ssl==nullptr)
+                    recvSize=::recv(fd,buffer.get(),size,0);
+                else
+                    recvSize=SSL_read(ssl,buffer.get(),size);
+                if(recvSize<=0)
                 {
-                    //cout<<"ok"<<endl;
-                    if(dt<timer.checkTime())
-                        continue;
-                    else
+                    if(recvSize<0&&(errno==EAGAIN||errno==EWOULDBLOCK))
                     {
-                        this->flag1=unblock;
-                        if(!flag1)
-                            blockSet();
-                        return -100;
+                        //cout<<"ok"<<endl;
+                        if(dt>=timer.checkTime())
+                            continue;
+                        else
+                        {
+                            return -100;
+                        }
                     }
+                    return recvSize;
                 }
-                perror("recv()");
-                break;
+                timer.endTiming(); 
+                data+=string(buffer.get(),recvSize);
+                size-=recvSize;
             }
-            timer.endTiming(); 
-            data+=string(buffer.get(),recvSize);
-            size-=recvSize;
         }
-        //cout<<"quit"<<endl;
-        //sleep(1);
-        //cout<<recvSize<<endl;
-        //cout<<data<<endl;
-        this->flag1=unblock;
-        if(!flag1)
-            blockSet();
-        if(recvSize<=0)
-            return recvSize;
+        else//阻塞模式
+        {
+            int sec_backup=this->sec;
+            blockSet(sec);
+            unique_ptr<char[]> buffer(new char[length]);
+            data.clear();
+            uint64_t size=length;
+            int64_t recvSize;
+            while(size>0)
+            {
+                if(ssl==nullptr)
+                    recvSize=::recv(fd,buffer.get(),size,0);
+                else
+                    recvSize=SSL_read(ssl,buffer.get(),size);
+                if(recvSize<=0)
+                {
+                    blockSet(sec_backup);
+                    if(recvSize<0&&(errno==EAGAIN||errno==EWOULDBLOCK))
+                        return -100;
+                    return recvSize;
+                }
+                data+=string(buffer.get(),recvSize);
+                size-=recvSize;
+            }
+        }
+
+        
         return length;
     }
     /*
@@ -2682,55 +2704,68 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     {
         if(!isConnect())
             return -99;
-        //如果是阻塞模式要短暂性设置为非阻塞状态
-        bool unblock=flag1;//记录当前状态
-        if(!flag1)
-            unblockSet();
-        DateTime timer;
-        Duration dt{0,0,0,sec,0};
-        unique_ptr<char[]> buffer(new char[length]);
-        memset(data,0,length);
-        uint64_t size=length;
-        int64_t recvSize=0;
-        while(size>0)
+        
+        if(flag1)//非阻塞模式
         {
-            timer.startTiming();
-            if(ssl==nullptr)
-                recvSize=::recv(fd,buffer.get(),size,0);
-            else
-                recvSize=SSL_read(ssl,buffer.get(),size);
-            if(recvSize<=0)
+            DateTime timer;
+            Duration dt{0,0,0,sec,0};
+            memset(data,0,length);
+            uint64_t size=length;
+            int64_t recvSize=0;
+            while(size>0)
             {
-                if(recvSize<0&&(errno==EAGAIN||errno==EWOULDBLOCK))
+                timer.startTiming();
+                if(ssl==nullptr)
+                    recvSize=::recv(fd,data+(length-size),size,0);
+                else
+                    recvSize=SSL_read(ssl,data+(length-size),size);
+                if(recvSize<=0)
                 {
-                    if(dt<timer.checkTime())
-                        continue;
-                    else
+                    if(recvSize<0&&(errno==EAGAIN||errno==EWOULDBLOCK))
                     {
-                        this->flag1=unblock;
-                        if(!flag1)
-                            blockSet();
+                        if(dt>=timer.checkTime())
+                            continue;
+                        else
+                        {
+                            return -100;
+                        }
+                    }
+
+                    return recvSize;
+                }
+                timer.endTiming();
+
+                size-=recvSize;
+            }
+        }
+        else
+        {
+            int sec_backup=this->sec;
+            blockSet(sec);
+            memset(data,0,length);
+            uint64_t size=length;
+            int64_t recvSize=0;
+            while(size>0)
+            {
+                if(ssl==nullptr)
+                    recvSize=::recv(fd,data+(length-size),size,0);
+                else
+                    recvSize=SSL_read(ssl,data+(length-size),size);
+                if(recvSize<=0)
+                {
+                    blockSet(sec_backup);
+                    if(recvSize<0&&(errno==EAGAIN||errno==EWOULDBLOCK))
+                    {
                         return -100;
                     }
+
+                    return recvSize;
                 }
-                perror("recv()");
-                this->flag1=unblock;
-                if(!flag1)
-                    blockSet();
-                return recvSize;
+
+                size-=recvSize;
             }
-            timer.endTiming();
-            //cout<<"a"<<endl;
-            //cout<<"b="<<static_cast<void*>(data)<<endl;
-            //cout<<"length-size:"<<length-size<<endl;
-            //cout<<"recvsize:"<<recvSize<<endl;
-            memcpy(data+(length-size),buffer.get(),recvSize);
-            //cout<<"b"<<endl;
-            size-=recvSize;
         }
-        this->flag1=unblock;
-        if(!flag1)
-            blockSet();
+
         return length;
     }
     int stt::network::TcpFDHandler::recvData(string &data,const uint64_t &length)

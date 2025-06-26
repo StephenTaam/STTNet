@@ -129,9 +129,9 @@ Public 成员函数</h2></td></tr>
 <tr class="memitem:a79895e184bbef0e6cfe8c0684501c1bc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a79895e184bbef0e6cfe8c0684501c1bc">close</a> (const bool &amp;cle=true)</td></tr>
 <tr class="memdesc:a79895e184bbef0e6cfe8c0684501c1bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭对象  <a href="#a79895e184bbef0e6cfe8c0684501c1bc">更多...</a><br/></td></tr>
 <tr class="separator:a79895e184bbef0e6cfe8c0684501c1bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc21ab11e1d22f104d85c32c14a3e84f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#afc21ab11e1d22f104d85c32c14a3e84f">blockSet</a> ()</td></tr>
-<tr class="memdesc:afc21ab11e1d22f104d85c32c14a3e84f"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置对象中的套接字为阻塞模式  <a href="#afc21ab11e1d22f104d85c32c14a3e84f">更多...</a><br/></td></tr>
-<tr class="separator:afc21ab11e1d22f104d85c32c14a3e84f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cf6c36f39d7e81633c569fe1505676a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a6cf6c36f39d7e81633c569fe1505676a">blockSet</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a>=-1)</td></tr>
+<tr class="memdesc:a6cf6c36f39d7e81633c569fe1505676a"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置对象中的套接字为阻塞模式  <a href="#a6cf6c36f39d7e81633c569fe1505676a">更多...</a><br/></td></tr>
+<tr class="separator:a6cf6c36f39d7e81633c569fe1505676a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93726054291d3b786e2d289c808fd3a2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a93726054291d3b786e2d289c808fd3a2">unblockSet</a> ()</td></tr>
 <tr class="memdesc:a93726054291d3b786e2d289c808fd3a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置对象中的套接字为非阻塞模式  <a href="#a93726054291d3b786e2d289c808fd3a2">更多...</a><br/></td></tr>
 <tr class="separator:a93726054291d3b786e2d289c808fd3a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,10 +147,10 @@ Public 成员函数</h2></td></tr>
 <tr class="memitem:a7890ad3bebfeeeed4d67c4b3ce0f72b4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7890ad3bebfeeeed4d67c4b3ce0f72b4">sendData</a> (const char *data, const uint64_t &amp;length, const bool &amp;block=true)</td></tr>
 <tr class="memdesc:a7890ad3bebfeeeed4d67c4b3ce0f72b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">向已连接的套接字发送指定长度的二进制数据。  <a href="#a7890ad3bebfeeeed4d67c4b3ce0f72b4">更多...</a><br/></td></tr>
 <tr class="separator:a7890ad3bebfeeeed4d67c4b3ce0f72b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d12a36453b01e460373633ad9b09ed7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a4d12a36453b01e460373633ad9b09ed7">recvDataByLength</a> (std::string &amp;data, const uint64_t &amp;length, const int &amp;sec=2)</td></tr>
+<tr class="memitem:a4d12a36453b01e460373633ad9b09ed7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a4d12a36453b01e460373633ad9b09ed7">recvDataByLength</a> (std::string &amp;data, const uint64_t &amp;length, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a>=2)</td></tr>
 <tr class="memdesc:a4d12a36453b01e460373633ad9b09ed7"><td class="mdescLeft">&#160;</td><td class="mdescRight">从已连接的套接字中阻塞接收指定长度的数据到字符串  <a href="#a4d12a36453b01e460373633ad9b09ed7">更多...</a><br/></td></tr>
 <tr class="separator:a4d12a36453b01e460373633ad9b09ed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1bf6a148bd15cc6abaa3c6fcae98641e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a1bf6a148bd15cc6abaa3c6fcae98641e">recvDataByLength</a> (char *data, const uint64_t &amp;length, const int &amp;sec=2)</td></tr>
+<tr class="memitem:a1bf6a148bd15cc6abaa3c6fcae98641e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a1bf6a148bd15cc6abaa3c6fcae98641e">recvDataByLength</a> (char *data, const uint64_t &amp;length, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a>=2)</td></tr>
 <tr class="memdesc:a1bf6a148bd15cc6abaa3c6fcae98641e"><td class="mdescLeft">&#160;</td><td class="mdescRight">从已连接的套接字中阻塞接收指定长度的数据到char*容器  <a href="#a1bf6a148bd15cc6abaa3c6fcae98641e">更多...</a><br/></td></tr>
 <tr class="separator:a1bf6a148bd15cc6abaa3c6fcae98641e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e302132d955321d11fd0198fd93b968"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a9e302132d955321d11fd0198fd93b968">recvData</a> (std::string &amp;data, const uint64_t &amp;length)</td></tr>
@@ -176,24 +176,33 @@ Protected 属性</h2></td></tr>
 <tr class="separator:a4d510c27152fbe94b3794858d4b22d0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21d3fa9b11f0b144be7cc0ea8f107afb"><td class="memItemLeft" align="right" valign="top">SSL *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a21d3fa9b11f0b144be7cc0ea8f107afb">ssl</a> =nullptr</td></tr>
 <tr class="separator:a21d3fa9b11f0b144be7cc0ea8f107afb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ec216fea83f00a5750852e101ca4ef0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a> =-1</td></tr>
+<tr class="separator:a7ec216fea83f00a5750852e101ca4ef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>tcp协议的套接字操作类 </p>
 </div><h2 class="groupheader">成员函数说明</h2>
-<a class="anchor" id="afc21ab11e1d22f104d85c32c14a3e84f"></a>
+<a class="anchor" id="a6cf6c36f39d7e81633c569fe1505676a"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void stt::network::TcpFDHandler::blockSet </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>sec</em> = <code>-1</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>设置对象中的套接字为阻塞模式 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sec</td><td>阻塞超时时间 阻塞超过这个时间就不会再阻塞了 默认为-1 即无限等待 </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -760,6 +769,26 @@ Protected 属性</h2></td></tr>
 </div><div class="memdoc">
 
 <p>如果sendData的block=true，如果发送过程中连接断开，这个标志位会置为true </p>
+
+</div>
+</div>
+<a class="anchor" id="a7ec216fea83f00a5750852e101ca4ef0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int stt::network::TcpFDHandler::sec =-1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

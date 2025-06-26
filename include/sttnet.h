@@ -1645,6 +1645,7 @@ namespace stt
         bool flag1=false;
         bool flag2=false;
         SSL *ssl=nullptr;
+        int sec=-1;
     public:
         /**
         * @brief 如果sendData的block=true，如果发送过程中连接断开，这个标志位会置为true
@@ -1677,8 +1678,9 @@ namespace stt
         void close(const bool &cle=true);
         /**
         * @brief 设置对象中的套接字为阻塞模式
+        * @param sec 阻塞超时时间 阻塞超过这个时间就不会再阻塞了 默认为-1 即无限等待
         */
-        void blockSet();
+        void blockSet(const int &sec = -1);
         /**
         * @brief 设置对象中的套接字为非阻塞模式
         */

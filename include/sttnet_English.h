@@ -1648,6 +1648,7 @@ public:
         bool flag1 = false;
         bool flag2 = false;
         SSL *ssl = nullptr;
+        int sec=-1;
     public:
         /**
         * @brief if the connection lost while using sendData function with block=true，this flag will be set to true
@@ -1681,8 +1682,9 @@ public:
         void close(const bool &cle = true);
         /**
         * @brief Set the socket in the object to blocking mode
+        * @param sec Blocking timeout, no longer block if blocking exceeds this time, default is -1, i.e., infinite wait
         */
-        void blockSet();
+        void blockSet(const int &sec = -1);
         /**
         * @brief Set the socket in the object to non-blocking mode
         */
