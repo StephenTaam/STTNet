@@ -115,18 +115,18 @@ Public 成员函数</h2></td></tr>
 <tr class="memitem:a7419eec11ac06e4f11048bab0057f347"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html#a7419eec11ac06e4f11048bab0057f347">HttpClient</a> (const bool &amp;TLS=false, const char *ca=&quot;&quot;, const char *cert=&quot;&quot;, const char *key=&quot;&quot;, const char *passwd=&quot;&quot;)</td></tr>
 <tr class="memdesc:a7419eec11ac06e4f11048bab0057f347"><td class="mdescLeft">&#160;</td><td class="mdescRight">HttpClient类的构造函数  <a href="#a7419eec11ac06e4f11048bab0057f347">更多...</a><br/></td></tr>
 <tr class="separator:a7419eec11ac06e4f11048bab0057f347"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a073b654d172a359e3f95a20c4f66cdd4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html#a073b654d172a359e3f95a20c4f66cdd4">getRequest</a> (const std::string &amp;url, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a947f020fda0aac9b1ed4d07f304c8f84">header</a>=&quot;&quot;, const std::string &amp;header1=&quot;Connection: keep-alive&quot;)</td></tr>
-<tr class="memdesc:a073b654d172a359e3f95a20c4f66cdd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送一个GET请求到服务器  <a href="#a073b654d172a359e3f95a20c4f66cdd4">更多...</a><br/></td></tr>
-<tr class="separator:a073b654d172a359e3f95a20c4f66cdd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ba3254c5acf7f0e289d4bf659235b32"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html#a3ba3254c5acf7f0e289d4bf659235b32">postRequest</a> (const std::string &amp;url, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a7d810da88a2940fb4517bb72afb9e5f1">body</a>=&quot;&quot;, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a947f020fda0aac9b1ed4d07f304c8f84">header</a>=&quot;&quot;, const std::string &amp;header1=&quot;Connection: keep-alive&quot;)</td></tr>
-<tr class="memdesc:a3ba3254c5acf7f0e289d4bf659235b32"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送一个POST请求到服务器  <a href="#a3ba3254c5acf7f0e289d4bf659235b32">更多...</a><br/></td></tr>
-<tr class="separator:a3ba3254c5acf7f0e289d4bf659235b32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b06bee83e60b35a802c13ccb67c6a3d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html#a8b06bee83e60b35a802c13ccb67c6a3d">getRequestFromFD</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a0e2ca810e24be8a9335a665a8933b2f8">fd</a>, SSL *<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a21d3fa9b11f0b144be7cc0ea8f107afb">ssl</a>, const std::string &amp;url, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a947f020fda0aac9b1ed4d07f304c8f84">header</a>=&quot;&quot;, const std::string &amp;header1=&quot;Connection: keep-alive&quot;)</td></tr>
-<tr class="memdesc:a8b06bee83e60b35a802c13ccb67c6a3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">从tcp套接字发送一个GET请求到服务器  <a href="#a8b06bee83e60b35a802c13ccb67c6a3d">更多...</a><br/></td></tr>
-<tr class="separator:a8b06bee83e60b35a802c13ccb67c6a3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9142b3601b5110c07002ce7648a69ef0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html#a9142b3601b5110c07002ce7648a69ef0">postRequestFromFD</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a0e2ca810e24be8a9335a665a8933b2f8">fd</a>, SSL *<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a21d3fa9b11f0b144be7cc0ea8f107afb">ssl</a>, const std::string &amp;url, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a7d810da88a2940fb4517bb72afb9e5f1">body</a>=&quot;&quot;, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a947f020fda0aac9b1ed4d07f304c8f84">header</a>=&quot;&quot;, const std::string &amp;header1=&quot;Connection: keep-alive&quot;)</td></tr>
-<tr class="memdesc:a9142b3601b5110c07002ce7648a69ef0"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送一个POST请求到服务器  <a href="#a9142b3601b5110c07002ce7648a69ef0">更多...</a><br/></td></tr>
-<tr class="separator:a9142b3601b5110c07002ce7648a69ef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29b5fe77bf37ef4f8b67fd06e5d4c315"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html#a29b5fe77bf37ef4f8b67fd06e5d4c315">getRequest</a> (const std::string &amp;url, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a947f020fda0aac9b1ed4d07f304c8f84">header</a>=&quot;&quot;, const std::string &amp;header1=&quot;Connection: keep-alive&quot;, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a>=-1)</td></tr>
+<tr class="memdesc:a29b5fe77bf37ef4f8b67fd06e5d4c315"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送一个GET请求到服务器  <a href="#a29b5fe77bf37ef4f8b67fd06e5d4c315">更多...</a><br/></td></tr>
+<tr class="separator:a29b5fe77bf37ef4f8b67fd06e5d4c315"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab66e33ef484cea1fc2113fc4c1d7ca84"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html#ab66e33ef484cea1fc2113fc4c1d7ca84">postRequest</a> (const std::string &amp;url, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a7d810da88a2940fb4517bb72afb9e5f1">body</a>=&quot;&quot;, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a947f020fda0aac9b1ed4d07f304c8f84">header</a>=&quot;&quot;, const std::string &amp;header1=&quot;Connection: keep-alive&quot;, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a>=-1)</td></tr>
+<tr class="memdesc:ab66e33ef484cea1fc2113fc4c1d7ca84"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送一个POST请求到服务器  <a href="#ab66e33ef484cea1fc2113fc4c1d7ca84">更多...</a><br/></td></tr>
+<tr class="separator:ab66e33ef484cea1fc2113fc4c1d7ca84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acaba2d0d5da4c77121539339fd705b71"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html#acaba2d0d5da4c77121539339fd705b71">getRequestFromFD</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a0e2ca810e24be8a9335a665a8933b2f8">fd</a>, SSL *<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a21d3fa9b11f0b144be7cc0ea8f107afb">ssl</a>, const std::string &amp;url, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a947f020fda0aac9b1ed4d07f304c8f84">header</a>=&quot;&quot;, const std::string &amp;header1=&quot;Connection: keep-alive&quot;, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a>=2)</td></tr>
+<tr class="memdesc:acaba2d0d5da4c77121539339fd705b71"><td class="mdescLeft">&#160;</td><td class="mdescRight">从tcp套接字发送一个GET请求到服务器  <a href="#acaba2d0d5da4c77121539339fd705b71">更多...</a><br/></td></tr>
+<tr class="separator:acaba2d0d5da4c77121539339fd705b71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae86481dee255249a2de76e5dc01ad0b1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html#ae86481dee255249a2de76e5dc01ad0b1">postRequestFromFD</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a0e2ca810e24be8a9335a665a8933b2f8">fd</a>, SSL *<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a21d3fa9b11f0b144be7cc0ea8f107afb">ssl</a>, const std::string &amp;url, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a7d810da88a2940fb4517bb72afb9e5f1">body</a>=&quot;&quot;, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a947f020fda0aac9b1ed4d07f304c8f84">header</a>=&quot;&quot;, const std::string &amp;header1=&quot;Connection: keep-alive&quot;, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a>=2)</td></tr>
+<tr class="memdesc:ae86481dee255249a2de76e5dc01ad0b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送一个POST请求到服务器  <a href="#ae86481dee255249a2de76e5dc01ad0b1">更多...</a><br/></td></tr>
+<tr class="separator:ae86481dee255249a2de76e5dc01ad0b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca10767469bcd7cc444998e8f4c6a99e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html#aca10767469bcd7cc444998e8f4c6a99e">isReturn</a> ()</td></tr>
 <tr class="memdesc:aca10767469bcd7cc444998e8f4c6a99e"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取服务器返回响应状态  <a href="#aca10767469bcd7cc444998e8f4c6a99e">更多...</a><br/></td></tr>
 <tr class="separator:aca10767469bcd7cc444998e8f4c6a99e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -210,7 +210,7 @@ Public 属性</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">成员函数说明</h2>
-<a class="anchor" id="a073b654d172a359e3f95a20c4f66cdd4"></a>
+<a class="anchor" id="a29b5fe77bf37ef4f8b67fd06e5d4c315"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -230,7 +230,13 @@ Public 属性</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>header1</em> = <code>&quot;Connection:&#160;keep-alive&quot;</code>&#160;</td>
+          <td class="paramname"><em>header1</em> = <code>&quot;Connection:&#160;keep-alive&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>sec</em> = <code>-1</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -243,7 +249,9 @@ Public 属性</h2></td></tr>
 <p>发送一个GET请求到服务器 </p>
 <dl class="section note"><dt>注解</dt><dd>返回结果请调用isReturn函数判断；如果有返回结果，返回头和返回体存在header和body这两个全局变量中。 </dd>
 <dd>
-如果使用了TLS，会自动采用https协议，否则是自动采用http协议 </dd></dl>
+如果使用了TLS，会自动采用https协议，否则是自动采用http协议 </dd>
+<dd>
+默认是阻塞的 </dd></dl>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
     <tr><td class="paramname">url</td><td>http/https的完整url（注意需要显式指定端口和路径） 如：https://google.com 要写成https://google.com:443/ (补全:443和/) </td></tr>
@@ -251,6 +259,7 @@ Public 属性</h2></td></tr>
 。 </td></tr>
     <tr><td class="paramname">header1</td><td>HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入<br/>
 （不能用createHeader）。（默认填入了keepalive项） </td></tr>
+    <tr><td class="paramname">sec</td><td>阻塞超时时间(s) 阻塞超过这个时间就不会再阻塞了 默认为-1 即无限等待 </td></tr>
   </table>
   </dd>
 </dl>
@@ -259,7 +268,7 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a8b06bee83e60b35a802c13ccb67c6a3d"></a>
+<a class="anchor" id="acaba2d0d5da4c77121539339fd705b71"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -291,7 +300,13 @@ Public 属性</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>header1</em> = <code>&quot;Connection:&#160;keep-alive&quot;</code>&#160;</td>
+          <td class="paramname"><em>header1</em> = <code>&quot;Connection:&#160;keep-alive&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>sec</em> = <code>2</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -304,7 +319,9 @@ Public 属性</h2></td></tr>
 <p>从tcp套接字发送一个GET请求到服务器 </p>
 <dl class="section note"><dt>注解</dt><dd>返回结果请调用isReturn函数判断；如果有返回结果，返回头和返回体存在header和body这两个全局变量中。 </dd>
 <dd>
-如果填入的ssl不为nullptr，会自动采用https协议，否则是自动采用http协议 </dd></dl>
+如果填入的ssl不为nullptr，会自动采用https协议，否则是自动采用http协议 </dd>
+<dd>
+调用的时候会阻塞，改变原有fd的状态，注意备份和恢复 </dd></dl>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
     <tr><td class="paramname">fd</td><td>tcp套接字 </td></tr>
@@ -314,6 +331,7 @@ Public 属性</h2></td></tr>
 。 </td></tr>
     <tr><td class="paramname">header1</td><td>HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入<br/>
 （不能用createHeader）。（默认填入了keepalive项） </td></tr>
+    <tr><td class="paramname">sec</td><td>阻塞超时时间(s) 阻塞超过这个时间就不会再阻塞了 默认为2s </td></tr>
   </table>
   </dd>
 </dl>
@@ -348,7 +366,7 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3ba3254c5acf7f0e289d4bf659235b32"></a>
+<a class="anchor" id="ab66e33ef484cea1fc2113fc4c1d7ca84"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -374,7 +392,13 @@ Public 属性</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>header1</em> = <code>&quot;Connection:&#160;keep-alive&quot;</code>&#160;</td>
+          <td class="paramname"><em>header1</em> = <code>&quot;Connection:&#160;keep-alive&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>sec</em> = <code>-1</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -387,7 +411,9 @@ Public 属性</h2></td></tr>
 <p>发送一个POST请求到服务器 </p>
 <dl class="section note"><dt>注解</dt><dd>返回结果请调用isReturn函数判断；如果有返回结果，返回头和返回体存在header和body这两个全局变量中。 </dd>
 <dd>
-如果使用了TLS，会自动采用https协议，否则是自动采用http协议 </dd></dl>
+如果使用了TLS，会自动采用https协议，否则是自动采用http协议 </dd>
+<dd>
+默认是阻塞的 </dd></dl>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
     <tr><td class="paramname">url</td><td>http/https的完整url（注意需要显式指定端口和路径） 如：https://google.com 要写成https://google.com:443/ (补全:443和/) </td></tr>
@@ -396,6 +422,7 @@ Public 属性</h2></td></tr>
 。 </td></tr>
     <tr><td class="paramname">header1</td><td>HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入<br/>
 （不能用createHeader）。（默认填入了keepalive项） </td></tr>
+    <tr><td class="paramname">sec</td><td>阻塞超时时间(s) 阻塞超过这个时间就不会再阻塞了 默认为-1 即无限等待 </td></tr>
   </table>
   </dd>
 </dl>
@@ -404,7 +431,7 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a9142b3601b5110c07002ce7648a69ef0"></a>
+<a class="anchor" id="ae86481dee255249a2de76e5dc01ad0b1"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -442,7 +469,13 @@ Public 属性</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>header1</em> = <code>&quot;Connection:&#160;keep-alive&quot;</code>&#160;</td>
+          <td class="paramname"><em>header1</em> = <code>&quot;Connection:&#160;keep-alive&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>sec</em> = <code>2</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -455,7 +488,9 @@ Public 属性</h2></td></tr>
 <p>发送一个POST请求到服务器 </p>
 <dl class="section note"><dt>注解</dt><dd>返回结果请调用isReturn函数判断；如果有返回结果，返回头和返回体存在header和body这两个全局变量中。 </dd>
 <dd>
-如果填入的ssl不为nullptr，会自动采用https协议，否则是自动采用http协议 </dd></dl>
+如果填入的ssl不为nullptr，会自动采用https协议，否则是自动采用http协议 </dd>
+<dd>
+调用的时候会阻塞，改变原有fd的状态，注意备份和恢复 </dd></dl>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
     <tr><td class="paramname">fd</td><td>tcp套接字 </td></tr>
@@ -466,6 +501,7 @@ Public 属性</h2></td></tr>
 。 </td></tr>
     <tr><td class="paramname">header1</td><td>HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入<br/>
 （不能用createHeader）。（默认填入了keepalive项） </td></tr>
+    <tr><td class="paramname">sec</td><td>阻塞超时时间(s) 阻塞超过这个时间就不会再阻塞了 默认为-1 即无限等待 </td></tr>
   </table>
   </dd>
 </dl>

@@ -120,6 +120,21 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a29b72edd9475c8c94c91affb5bfc7ad1"><td class="memItemLeft" align="right" valign="top">time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a29b72edd9475c8c94c91affb5bfc7ad1">response</a></td></tr>
 <tr class="memdesc:a29b72edd9475c8c94c91affb5bfc7ad1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time of last received message.  <a href="#a29b72edd9475c8c94c91affb5bfc7ad1">More...</a><br/></td></tr>
 <tr class="separator:a29b72edd9475c8c94c91affb5bfc7ad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d9e6b29271923079bc27244a97ab213"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a1d9e6b29271923079bc27244a97ab213">recv_length</a></td></tr>
+<tr class="memdesc:a1d9e6b29271923079bc27244a97ab213"><td class="mdescLeft">&#160;</td><td class="mdescRight">Length to be received.  <a href="#a1d9e6b29271923079bc27244a97ab213">More...</a><br/></td></tr>
+<tr class="separator:a1d9e6b29271923079bc27244a97ab213"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9c4f50ef624980430aed039534781c4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#aa9c4f50ef624980430aed039534781c4">message_type</a></td></tr>
+<tr class="memdesc:aa9c4f50ef624980430aed039534781c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Message type.  <a href="#aa9c4f50ef624980430aed039534781c4">More...</a><br/></td></tr>
+<tr class="separator:aa9c4f50ef624980430aed039534781c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af531c538a773d596dfce63037f1e6985"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#af531c538a773d596dfce63037f1e6985">message</a> =&quot;&quot;</td></tr>
+<tr class="memdesc:af531c538a773d596dfce63037f1e6985"><td class="mdescLeft">&#160;</td><td class="mdescRight">Message.  <a href="#af531c538a773d596dfce63037f1e6985">More...</a><br/></td></tr>
+<tr class="separator:af531c538a773d596dfce63037f1e6985"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a291990a2a4b4198a0112057434082fa9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a291990a2a4b4198a0112057434082fa9">fin</a></td></tr>
+<tr class="memdesc:a291990a2a4b4198a0112057434082fa9"><td class="mdescLeft">&#160;</td><td class="mdescRight">state of fin  <a href="#a291990a2a4b4198a0112057434082fa9">More...</a><br/></td></tr>
+<tr class="separator:a291990a2a4b4198a0112057434082fa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1068105fd815f6972b1261c219d86ad"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#ae1068105fd815f6972b1261c219d86ad">mask</a></td></tr>
+<tr class="memdesc:ae1068105fd815f6972b1261c219d86ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">mask  <a href="#ae1068105fd815f6972b1261c219d86ad">More...</a><br/></td></tr>
+<tr class="separator:ae1068105fd815f6972b1261c219d86ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Structure to save client WS/WSS request information. </p>
@@ -149,6 +164,20 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Underlying socket descriptor. </p>
+
+</div>
+</div>
+<a class="anchor" id="a291990a2a4b4198a0112057434082fa9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool stt::network::WebSocketFDInformation::fin</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>state of fin </p>
 
 </div>
 </div>
@@ -191,6 +220,62 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Http/Https path and parameters during the handshake phase. </p>
+
+</div>
+</div>
+<a class="anchor" id="ae1068105fd815f6972b1261c219d86ad"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string stt::network::WebSocketFDInformation::mask</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>mask </p>
+
+</div>
+</div>
+<a class="anchor" id="af531c538a773d596dfce63037f1e6985"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string stt::network::WebSocketFDInformation::message =&quot;&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Message. </p>
+
+</div>
+</div>
+<a class="anchor" id="aa9c4f50ef624980430aed039534781c4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int stt::network::WebSocketFDInformation::message_type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Message type. </p>
+
+</div>
+</div>
+<a class="anchor" id="a1d9e6b29271923079bc27244a97ab213"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t stt::network::WebSocketFDInformation::recv_length</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Length to be received. </p>
 
 </div>
 </div>

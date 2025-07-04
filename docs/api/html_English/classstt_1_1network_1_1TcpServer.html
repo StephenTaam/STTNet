@@ -96,6 +96,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
+<p>Tcp server class.  
+ <a href="classstt_1_1network_1_1TcpServer.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="sttnet__English_8h_source.html">sttnet_English.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for stt::network::TcpServer:</div>
@@ -110,18 +113,18 @@ Inheritance diagram for stt::network::TcpServer:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:afec4cf15d132e7c1bcd15278c57ade83"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#afec4cf15d132e7c1bcd15278c57ade83">startListen</a> (const int &amp;port, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a2bd5da04eb74be110f91ae6ecacc94de">unblock</a>=false, const bool &amp;ET=true, const int &amp;evsNum=500, const int &amp;threads=5)</td></tr>
-<tr class="memdesc:afec4cf15d132e7c1bcd15278c57ade83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the TCP server listening program.  <a href="#afec4cf15d132e7c1bcd15278c57ade83">More...</a><br/></td></tr>
-<tr class="separator:afec4cf15d132e7c1bcd15278c57ade83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa055d4fb2ce4280c28ae61beb4c4f66b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aa055d4fb2ce4280c28ae61beb4c4f66b">startListen</a> (const int &amp;port, const int &amp;evsNum=50000, const int &amp;threads=5)</td></tr>
+<tr class="memdesc:aa055d4fb2ce4280c28ae61beb4c4f66b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the TCP server listening program.  <a href="#aa055d4fb2ce4280c28ae61beb4c4f66b">More...</a><br/></td></tr>
+<tr class="separator:aa055d4fb2ce4280c28ae61beb4c4f66b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c020c00d442fc3d47600091e9e34527"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a6c020c00d442fc3d47600091e9e34527">setTLS</a> (const char *cert, const char *key, const char *passwd, const char *ca)</td></tr>
 <tr class="memdesc:a6c020c00d442fc3d47600091e9e34527"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable TLS encryption and configure server-side certificate and key.  <a href="#a6c020c00d442fc3d47600091e9e34527">More...</a><br/></td></tr>
 <tr class="separator:a6c020c00d442fc3d47600091e9e34527"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39d8778843209ebac1af10aae6ba1634"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a39d8778843209ebac1af10aae6ba1634">redrawTLS</a> ()</td></tr>
 <tr class="memdesc:a39d8778843209ebac1af10aae6ba1634"><td class="mdescLeft">&#160;</td><td class="mdescRight">Revoke TLS encryption, CA certificate, etc.  <a href="#a39d8778843209ebac1af10aae6ba1634">More...</a><br/></td></tr>
 <tr class="separator:a39d8778843209ebac1af10aae6ba1634"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3fb61692c04694c9aa6cab03f837742"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#af3fb61692c04694c9aa6cab03f837742">setFunction</a> (std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k)&gt; fc)</td></tr>
-<tr class="memdesc:af3fb61692c04694c9aa6cab03f837742"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the callback function after receiving a message from the client Register a callback function.  <a href="#af3fb61692c04694c9aa6cab03f837742">More...</a><br/></td></tr>
-<tr class="separator:af3fb61692c04694c9aa6cab03f837742"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81a3c6578bedb21021ce260563af54c8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a81a3c6578bedb21021ce260563af54c8">setFunction</a> (std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> &amp;inf)&gt; fc)</td></tr>
+<tr class="memdesc:a81a3c6578bedb21021ce260563af54c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the callback function after receiving a message from the client Register a callback function.  <a href="#a81a3c6578bedb21021ce260563af54c8">More...</a><br/></td></tr>
+<tr class="separator:a81a3c6578bedb21021ce260563af54c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78a5301698be343f3834208f3875dab9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a78a5301698be343f3834208f3875dab9">stopListen</a> ()</td></tr>
 <tr class="memdesc:a78a5301698be343f3834208f3875dab9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop listening.  <a href="#a78a5301698be343f3834208f3875dab9">More...</a><br/></td></tr>
 <tr class="separator:a78a5301698be343f3834208f3875dab9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -138,7 +141,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a26a718a822a9ffddf4f13ebccb790e57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Query the connection with the server, pass in the socket, and return the encrypted SSL handle.  <a href="#a26a718a822a9ffddf4f13ebccb790e57">More...</a><br/></td></tr>
 <tr class="separator:a26a718a822a9ffddf4f13ebccb790e57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a293d3497aae9c899c682d903654c0e49"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a293d3497aae9c899c682d903654c0e49">~TcpServer</a> ()</td></tr>
-<tr class="memdesc:a293d3497aae9c899c682d903654c0e49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor of <a class="el" href="classstt_1_1network_1_1TcpServer.html">TcpServer</a> class.  <a href="#a293d3497aae9c899c682d903654c0e49">More...</a><br/></td></tr>
+<tr class="memdesc:a293d3497aae9c899c682d903654c0e49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor of <a class="el" href="classstt_1_1network_1_1TcpServer.html" title="Tcp server class. ">TcpServer</a> class.  <a href="#a293d3497aae9c899c682d903654c0e49">More...</a><br/></td></tr>
 <tr class="separator:a293d3497aae9c899c682d903654c0e49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
@@ -174,7 +177,10 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a73557f9d7ac2b09778668b2288418810"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a73557f9d7ac2b09778668b2288418810">ltl1</a></td></tr>
 <tr class="separator:a73557f9d7ac2b09778668b2288418810"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Tcp server class. </p>
+<dl class="section note"><dt>Note</dt><dd>The default underlying implementation is epoll edge trigger + socket non-blocking mode </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a293d3497aae9c899c682d903654c0e49"></a>
 <div class="memitem">
 <div class="memproto">
@@ -196,7 +202,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Destructor of <a class="el" href="classstt_1_1network_1_1TcpServer.html">TcpServer</a> class. </p>
+<p>Destructor of <a class="el" href="classstt_1_1network_1_1TcpServer.html" title="Tcp server class. ">TcpServer</a> class. </p>
 <dl class="section note"><dt>Note</dt><dd>Calls the close function to close </dd></dl>
 
 </div>
@@ -310,7 +316,7 @@ Will block until all closures are complete </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="af3fb61692c04694c9aa6cab03f837742"></a>
+<a class="anchor" id="a81a3c6578bedb21021ce260563af54c8"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -320,7 +326,7 @@ Will block until all closures are complete </dd></dl>
         <tr>
           <td class="memname">bool stt::network::TcpServer::setFunction </td>
           <td>(</td>
-          <td class="paramtype">std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k)&gt;&#160;</td>
+          <td class="paramtype">std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> &amp;inf)&gt;&#160;</td>
           <td class="paramname"><em>fc</em></td><td>)</td>
           <td></td>
         </tr>
@@ -336,7 +342,7 @@ Will block until all closures are complete </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">fc</td><td>A function or function object for processing logic after receiving a message from the client<ul>
-<li>Parameter: <a class="el" href="classstt_1_1network_1_1TcpFDHandler.html" title="TCP socket operation class. ">TcpFDHandler</a> k - Reference to the socket connected to the client</li>
+<li>Parameter: <a class="el" href="classstt_1_1network_1_1TcpFDHandler.html" title="TCP socket operation class. ">TcpFDHandler</a> &amp;k - Reference to the socket connected to the client <a class="el" href="structstt_1_1network_1_1TcpFDInf.html" title="Structure to save TCP client information. ">TcpFDInf</a> &amp;inf - client information, processing progress, state machine information, etc.</li>
 <li>Return: bool - true for successful processing, false for processing failure </li>
 </ul>
 </td></tr>
@@ -412,7 +418,7 @@ false if enabling fails (specific error will be logged)</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="afec4cf15d132e7c1bcd15278c57ade83"></a>
+<a class="anchor" id="aa055d4fb2ce4280c28ae61beb4c4f66b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -425,20 +431,8 @@ false if enabling fails (specific error will be logged)</dd></dl>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const bool &amp;&#160;</td>
-          <td class="paramname"><em>unblock</em> = <code>false</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const bool &amp;&#160;</td>
-          <td class="paramname"><em>ET</em> = <code>true</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>evsNum</em> = <code>500</code>, </td>
+          <td class="paramname"><em>evsNum</em> = <code>50000</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -458,9 +452,7 @@ false if enabling fails (specific error will be logged)</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">port</td><td>Port to listen on </td></tr>
-    <tr><td class="paramname">unblock</td><td>true: Non-blocking mode for client connections, false: Blocking mode (default is blocking mode) </td></tr>
-    <tr><td class="paramname">ET</td><td>true: Edge triggering, false: Level triggering (default is edge triggering) </td></tr>
-    <tr><td class="paramname">evsNum</td><td>Maximum number of events processed by epoll at one time (default is 500) </td></tr>
+    <tr><td class="paramname">evsNum</td><td>Maximum number of events processed by epoll at one time (default is 50000) </td></tr>
     <tr><td class="paramname">threads</td><td>Number of consumer threads (default is 5) </td></tr>
   </table>
   </dd>

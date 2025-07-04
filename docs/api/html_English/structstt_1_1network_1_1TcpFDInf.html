@@ -111,10 +111,33 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:ac72bee9ed7ac2b2f15dcc303cf99dbf9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#ac72bee9ed7ac2b2f15dcc303cf99dbf9">port</a></td></tr>
 <tr class="memdesc:ac72bee9ed7ac2b2f15dcc303cf99dbf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Client port.  <a href="#ac72bee9ed7ac2b2f15dcc303cf99dbf9">More...</a><br/></td></tr>
 <tr class="separator:ac72bee9ed7ac2b2f15dcc303cf99dbf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a063c9fbf86050be4a2b6ecfaef9859e7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#a063c9fbf86050be4a2b6ecfaef9859e7">status</a></td></tr>
+<tr class="memdesc:a063c9fbf86050be4a2b6ecfaef9859e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current fd status, used to save the processor logic.  <a href="#a063c9fbf86050be4a2b6ecfaef9859e7">More...</a><br/></td></tr>
+<tr class="separator:a063c9fbf86050be4a2b6ecfaef9859e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdb388bdf0d563f5cfb711f38fa52fe6"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#abdb388bdf0d563f5cfb711f38fa52fe6">data</a></td></tr>
+<tr class="memdesc:abdb388bdf0d563f5cfb711f38fa52fe6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save the data received from the client.  <a href="#abdb388bdf0d563f5cfb711f38fa52fe6">More...</a><br/></td></tr>
+<tr class="separator:abdb388bdf0d563f5cfb711f38fa52fe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54423c00645c7f217a75b0c3f65986b3"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#a54423c00645c7f217a75b0c3f65986b3">HttpInf</a></td></tr>
+<tr class="memdesc:a54423c00645c7f217a75b0c3f65986b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">saves http/https protocol information  <a href="#a54423c00645c7f217a75b0c3f65986b3">More...</a><br/></td></tr>
+<tr class="separator:a54423c00645c7f217a75b0c3f65986b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Structure to save TCP client information. </p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="abdb388bdf0d563f5cfb711f38fa52fe6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string stt::network::TcpFDInf::data</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Save the data received from the client. </p>
+
+</div>
+</div>
 <a class="anchor" id="a5af5011c8c77f215d83b86dafbc94bd4"></a>
 <div class="memitem">
 <div class="memproto">
@@ -126,6 +149,20 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Socket file descriptor. </p>
+
+</div>
+</div>
+<a class="anchor" id="a54423c00645c7f217a75b0c3f65986b3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> stt::network::TcpFDInf::HttpInf</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>saves http/https protocol information </p>
 
 </div>
 </div>
@@ -154,6 +191,20 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Client port. </p>
+
+</div>
+</div>
+<a class="anchor" id="a063c9fbf86050be4a2b6ecfaef9859e7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int stt::network::TcpFDInf::status</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The current fd status, used to save the processor logic. </p>
 
 </div>
 </div>

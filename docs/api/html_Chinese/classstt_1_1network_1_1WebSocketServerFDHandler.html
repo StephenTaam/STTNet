@@ -114,9 +114,9 @@ Public 成员函数</h2></td></tr>
 <tr class="memitem:adeee2d76d393da6f20912fce74fdaaf6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html#adeee2d76d393da6f20912fce74fdaaf6">setFD</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a0e2ca810e24be8a9335a665a8933b2f8">fd</a>, SSL *<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a21d3fa9b11f0b144be7cc0ea8f107afb">ssl</a>=nullptr, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a035967e9eebf16b1f7626a51aec05690">flag1</a>=false, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a4d510c27152fbe94b3794858d4b22d0e">flag2</a>=true)</td></tr>
 <tr class="memdesc:adeee2d76d393da6f20912fce74fdaaf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">初始化对象，传入套接字等参数  <a href="#adeee2d76d393da6f20912fce74fdaaf6">更多...</a><br/></td></tr>
 <tr class="separator:adeee2d76d393da6f20912fce74fdaaf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a067c03a1c8ae83ce8d2184e24ea824b3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html#a067c03a1c8ae83ce8d2184e24ea824b3">getMessage</a> (std::string &amp;msg)</td></tr>
-<tr class="memdesc:a067c03a1c8ae83ce8d2184e24ea824b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取一条websocket消息  <a href="#a067c03a1c8ae83ce8d2184e24ea824b3">更多...</a><br/></td></tr>
-<tr class="separator:a067c03a1c8ae83ce8d2184e24ea824b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34c6147141450c2bff131ebf3b479ff8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html#a34c6147141450c2bff131ebf3b479ff8">getMessage</a> (<a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> &amp;Tcpinf, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;Websocketinf)</td></tr>
+<tr class="memdesc:a34c6147141450c2bff131ebf3b479ff8"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取一条websocket消息  <a href="#a34c6147141450c2bff131ebf3b479ff8">更多...</a><br/></td></tr>
+<tr class="separator:a34c6147141450c2bff131ebf3b479ff8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b6442cd9ac75a81063030a3c1bd7724"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html#a2b6442cd9ac75a81063030a3c1bd7724">sendMessage</a> (const std::string &amp;msg, const std::string &amp;type=&quot;0001&quot;)</td></tr>
 <tr class="memdesc:a2b6442cd9ac75a81063030a3c1bd7724"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送一条websocket信息  <a href="#a2b6442cd9ac75a81063030a3c1bd7724">更多...</a><br/></td></tr>
 <tr class="separator:a2b6442cd9ac75a81063030a3c1bd7724"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -124,16 +124,26 @@ Public 成员函数</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>WebSocket协议的操作类 仅传入套接字，然后使用这个类进行WebSocket的操作 </p>
 </div><h2 class="groupheader">成员函数说明</h2>
-<a class="anchor" id="a067c03a1c8ae83ce8d2184e24ea824b3"></a>
+<a class="anchor" id="a34c6147141450c2bff131ebf3b479ff8"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">int stt::network::WebSocketServerFDHandler::getMessage </td>
           <td>(</td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>msg</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> &amp;&#160;</td>
+          <td class="paramname"><em>Tcpinf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;&#160;</td>
+          <td class="paramname"><em>Websocketinf</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -141,11 +151,14 @@ Public 成员函数</h2></td></tr>
 <p>获取一条websocket消息 </p>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
-    <tr><td class="paramname">msg</td><td>保存websocket信息的string容器 </td></tr>
+    <tr><td class="paramname">Tcpinf</td><td>保存底层tcp状态的信息 </td></tr>
+    <tr><td class="paramname">Websocketinf</td><td>保存websocket协议状态信息 </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>返回</dt><dd>-1：获取失败 0：一般报文 1：关闭帧 2：心跳确认报文 3：心跳报文 </dd></dl>
+<dl class="section return"><dt>返回</dt><dd>-1：获取失败 0：一般报文 1：关闭帧 2：心跳确认报文 3：心跳报文 4: 等待数据 </dd></dl>
+<dl class="section note"><dt>注解</dt><dd>TcpInf.status</dd></dl>
+<p>0 初始状态 1 确认消息类型中 2 确认消息长度中 3 接收mask中 4 接收消息中 </p>
 
 </div>
 </div>

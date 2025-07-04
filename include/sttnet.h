@@ -1,8 +1,8 @@
 /**
 * @mainpage STTNet C++ Framework
 * @author StephenTaam(1356597983@qq.com)
-* @version 0.1.0
-* @date 2025-06-18
+* @version 0.2.0
+* @date 2025-07-05
 */
 #ifndef PUBLIC_H
 #define PUBLIC_H 1
@@ -1659,8 +1659,9 @@ namespace stt
         * @param ssl fd经过TLS加密后的SSL句柄（如果没有可以填nullptr）
         * @param flag1 true：启用非阻塞模式  false：启用阻塞模式 （默认为false，即启用阻塞模式）
         * @param flag2 true：启用SO_REUSEADDR模式  false：不启用SO_REUSEADDR模式 （默认为false，即不启用SO_REUSEADDR模式）
+        * @param sec 阻塞超时时间 阻塞超过这个时间就不会再阻塞了 默认为-1 即无限等待
         */
-        void setFD(const int &fd,SSL *ssl,const bool &flag1=false,const bool &flag2=false);
+        void setFD(const int &fd,SSL *ssl,const bool &flag1=false,const bool &flag2=false,const int &sec=-1);
         /**
         * @brief 获取该对象的套接字
         * @return 返回该对象的套接字
@@ -1906,52 +1907,60 @@ namespace stt
         * @brief 发送一个GET请求到服务器
         * @note 返回结果请调用isReturn函数判断；如果有返回结果，返回头和返回体存在header和body这两个全局变量中。
         * @note 如果使用了TLS，会自动采用https协议，否则是自动采用http协议
+        * @note 默认是阻塞的
         * @param url http/https的完整url（注意需要显式指定端口和路径） 如：https://google.com 要写成https://google.com:443/ (补全:443和/)
         * @param header Http请求头；如果不是用createHeader生成，记得在末尾要加上\r\n。
         * @param header1 HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入\r\n（不能用createHeader）。（默认填入了keepalive项）
+        * @param sec 阻塞超时时间(s) 阻塞超过这个时间就不会再阻塞了 默认为-1 即无限等待
         * @return true：请求发送成功   false：请求发送失败  注意：这不代表是否返回，只说明了发送成功
         * @warning 需要http/https协议的完整url（注意需要显式指定端口和路径（就算路径不需要也要填入/）） 如：https://google.com 要写成https://google.com:443/ (补全:443和/)
         */
-        bool getRequest(const std::string &url,const std::string &header="",const std::string &header1="Connection: keep-alive");
+        bool getRequest(const std::string &url,const std::string &header="",const std::string &header1="Connection: keep-alive",const int &sec=-1);
         /**
         * @brief 发送一个POST请求到服务器
         * @note 返回结果请调用isReturn函数判断；如果有返回结果，返回头和返回体存在header和body这两个全局变量中。
         * @note 如果使用了TLS，会自动采用https协议，否则是自动采用http协议
+        * @note 默认是阻塞的
         * @param url http/https的完整url（注意需要显式指定端口和路径） 如：https://google.com 要写成https://google.com:443/ (补全:443和/)
         * @param body http请求体
         * @param header Http请求头；如果不是用createHeader生成，记得在末尾要加上\r\n。
         * @param header1 HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入\r\n（不能用createHeader）。（默认填入了keepalive项）
+        * @param sec 阻塞超时时间(s) 阻塞超过这个时间就不会再阻塞了 默认为-1 即无限等待
         * @return true：请求发送成功   false：请求发送失败  注意：这不代表是否返回，只说明了发送成功
         * @warning 需要http/https协议的完整url（注意需要显式指定端口和路径（就算路径不需要也要填入/）） 如：https://google.com 要写成https://google.com:443/ (补全:443和/)
         */
-        bool postRequest(const std::string &url,const std::string &body="",const std::string &header="",const std::string &header1="Connection: keep-alive");
+        bool postRequest(const std::string &url,const std::string &body="",const std::string &header="",const std::string &header1="Connection: keep-alive",const int &sec=-1);
         /**
         * @brief 从tcp套接字发送一个GET请求到服务器
         * @note 返回结果请调用isReturn函数判断；如果有返回结果，返回头和返回体存在header和body这两个全局变量中。
         * @note 如果填入的ssl不为nullptr，会自动采用https协议，否则是自动采用http协议
+        * @note 调用的时候会阻塞，改变原有fd的状态，注意备份和恢复
         * @param fd tcp套接字
         * @param ssl TLS加密套接字
         * @param url http/https的完整url（注意需要显式指定端口和路径） 如：https://google.com 要写成https://google.com:443/ (补全:443和/)
         * @param header Http请求头；如果不是用createHeader生成，记得在末尾要加上\r\n。
         * @param header1 HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入\r\n（不能用createHeader）。（默认填入了keepalive项）
+        * @param sec 阻塞超时时间(s) 阻塞超过这个时间就不会再阻塞了 默认为2s
         * @return true：请求发送成功   false：请求发送失败  注意：这不代表是否返回，只说明了发送成功
         * @warning 需要http/https协议的完整url（注意需要显式指定端口和路径（就算路径不需要也要填入/）） 如：https://google.com 要写成https://google.com:443/ (补全:443和/)
         */
-        bool getRequestFromFD(const int &fd,SSL *ssl,const std::string &url,const std::string &header="",const std::string &header1="Connection: keep-alive");
+        bool getRequestFromFD(const int &fd,SSL *ssl,const std::string &url,const std::string &header="",const std::string &header1="Connection: keep-alive",const int &sec=2);
         /**
         * @brief 发送一个POST请求到服务器
         * @note 返回结果请调用isReturn函数判断；如果有返回结果，返回头和返回体存在header和body这两个全局变量中。
         * @note 如果填入的ssl不为nullptr，会自动采用https协议，否则是自动采用http协议
+        * @note 调用的时候会阻塞，改变原有fd的状态，注意备份和恢复
         * @param fd tcp套接字
         * @param ssl TLS加密套接字
         * @param url http/https的完整url（注意需要显式指定端口和路径） 如：https://google.com 要写成https://google.com:443/ (补全:443和/)
         * @param body http请求体
         * @param header Http请求头；如果不是用createHeader生成，记得在末尾要加上\r\n。
         * @param header1 HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入\r\n（不能用createHeader）。（默认填入了keepalive项）
+        * @param sec 阻塞超时时间(s) 阻塞超过这个时间就不会再阻塞了 默认为-1 即无限等待
         * @return true：请求发送成功   false：请求发送失败  注意：这不代表是否返回，只说明了发送成功
         * @warning 需要http/https协议的完整url（注意需要显式指定端口和路径（就算路径不需要也要填入/）） 如：https://google.com 要写成https://google.com:443/ (补全:443和/)
         */
-        bool postRequestFromFD(const int &fd,SSL *ssl,const std::string &url,const std::string &body="",const std::string &header="",const std::string &header1="Connection: keep-alive");
+        bool postRequestFromFD(const int &fd,SSL *ssl,const std::string &url,const std::string &body="",const std::string &header="",const std::string &header1="Connection: keep-alive",const int &sec=2);
     public:
         /**
         * @brief 获取服务器返回响应状态
@@ -2181,8 +2190,83 @@ namespace stt
         ~WebSocketClient();
     };
 
-        
-
+    /**
+    * @brief 保存HTTP/HTTPS请求信息的结构体
+    */
+    struct HttpRequestInformation 
+    {
+        /**
+        * @brief url中的路径和参数
+        */
+        std::string locPara;
+        /**
+        * @brief url中的路径
+        */
+        std::string loc;
+        /**
+        * @brief url中的参数
+        */
+        std::string para;
+        /**
+        * @brief 请求头
+        */
+        std::string header;
+        /**
+        * @brief 请求体
+        */
+        std::string body;
+    };
+    
+    /**
+    * @brief 保存客户端WS/WSS请求信息的结构体
+    */
+    struct WebSocketFDInformation
+    {
+        /**
+        * @brief 底层的socket套接字
+        */
+        int fd;
+        /**
+        * @brief true:发送了关闭帧  false：没有发送关闭帧
+        */
+        bool closeflag;
+        /**
+        * @brief  握手阶段的Http/Https路径和参数
+        */
+        std::string locPara;
+        /**
+        * @brief  握手阶段的Http/Https请求头
+        */
+        std::string header;
+        /**
+        * @brief 发送心跳的时间（没有发送过就填0） (检查完又要清空为0)
+        */
+        time_t HBTime=0;
+        /**
+        * @brief 上次收到信息的时间
+        */
+        time_t response;
+        /**
+        * @brief 待接收的长度
+        */
+        size_t recv_length;
+        /**
+        * @brief 消息类型
+        */
+        int message_type;
+        /**
+        * @brief 消息
+        */
+        std::string message="";
+        /**
+        * @brief fin的状态
+        */
+        bool fin;
+        /**
+        * @brief mask
+        */
+        std::string mask;
+    };
 
     /**
     * @brief 保存Tcp客户端信息的结构体
@@ -2201,12 +2285,29 @@ namespace stt
         * @brief 客户端端口
         */
         std::string port;
+        /**
+        * @brief 当前fd的状态，用于保存处理机逻辑
+        */
+        int status;
+        /**
+        * @brief 保存收到的客户端传来的数据
+        */
+        std::string data;
+        /**
+        * @brief 保存http/https协议的信息
+        */
+        struct HttpRequestInformation HttpInf;
+
     };
     /**
     * @brief 定义maxFD这个宏为1000000,后续会用到的一个服务对象的最大接受连接数
     */
     #define maxFD 1000000
     
+    /**
+    * @brief Tcp服务端类
+    * @note 默认底层实现是epoll边缘触发+套接字非阻塞模式
+    */
     class TcpServer 
     {
     protected:
@@ -2228,25 +2329,23 @@ namespace stt
         std::unordered_map<int,SSL*> tlsfd;
         std::mutex ltl1;
     private:
-        std::function<bool(TcpFDHandler &k)> fc;
+        std::function<bool(TcpFDHandler &k,TcpFDInf &inf)> fc;
         int fd=-1;
         int port=-1;
         int flag=false;
         bool flag2=false;
     private:
-        void epolll(const bool &ET,const int &evsNum);
+        void epolll(const int &evsNum);
         virtual void consumer(const int &threadID);
     public:
         /**
         * @brief 打开Tcp服务器监听程序
         * @param port 监听的端口
-        * @param unblock true：和客户端的连接为非阻塞模式  false：和客户端的连接为阻塞模式 （默认为阻塞模式）
-        * @param ET true：边缘触发  false：水平触发 （默认为边缘触发）
-        * @param evsNum epoll一次性处理返回事件的最大数目 （默认为500）
+        * @param evsNum epoll一次性处理返回事件的最大数目 （默认为50000）
         * @param threads 消费者线程的数量 （默认为5）
         * @return true：打开监听程序成功 false：打开监听程序失败
         */
-        bool startListen(const int &port,const bool &unblock=false,const bool &ET=true,const int &evsNum=500,const int &threads=5);
+        bool startListen(const int &port,const int &evsNum=50000,const int &threads=5);
         /**
         * @brief 启用 TLS 加密并配置服务器端证书与密钥
         * 
@@ -2282,13 +2381,14 @@ namespace stt
         * @brief 设置收到客户端消息后的回调函数
         * 注册一个回调函数
         * @param fc 一个函数或函数对象，用于收到客户端消息后处理逻辑
-        * -参数：TcpFDHandler k - 和客户端连接的套接字的引用
+        * -参数：TcpFDHandler &k - 和客户端连接的套接字的引用
+        *       TcpFDInf &inf - 客户端信息，还有处理进度，状态机信息等
         * -返回： bool - 返回true处理成功，返回false处理失败
         * @note 传入的函数应该有如下签名 bool func(TcpFDHandler &k)
         * @note 如果处理失败了 会关闭Tcp连接
         */
-        bool setFunction(std::function<bool(TcpFDHandler &k)> fc){this->fc=fc;return true;}
-        /**
+        bool setFunction(std::function<bool(TcpFDHandler &k,TcpFDInf &inf)> fc){this->fc=fc;return true;}
+        /** 
         * @brief 停止监听
         * @warning 仅停止监听(但是套接字也已经无法接收了，它依赖于监听和消费者，所以这个函数没什么意义)
         * @return true:停止成功  false：停止失败
@@ -2325,32 +2425,7 @@ namespace stt
         ~TcpServer(){close();}
     };
 
-    /**
-    * @brief 保存HTTP/HTTPS请求信息的结构体
-    */
-    struct HttpRequestInformation 
-    {
-        /**
-        * @brief url中的路径和参数
-        */
-        std::string locPara;
-        /**
-        * @brief url中的路径
-        */
-        std::string loc;
-        /**
-        * @brief url中的参数
-        */
-        std::string para;
-        /**
-        * @brief 请求头
-        */
-        std::string header;
-        /**
-        * @brief 请求体
-        */
-        std::string body;
-    };
+    
 
     /**
     * @brief 解析，响应Http/https请求的操作类
@@ -2369,10 +2444,17 @@ namespace stt
         void setFD(const int &fd,SSL *ssl=nullptr,const bool &flag1=false,const bool &flag2=true){TcpFDHandler::setFD(fd,ssl,flag1,flag2);}
         /**
         * @brief 解析Http/Https请求
-        * @param inf 存放解析后的Http/Https请求信息的HttpRequestInfoamation容器
-        * @return true：解析成功  false：解析失败
+        * @param TcpInf 存放底层tcp处理套接字的信息
+        * @return -1:解析失败 0:还需要继续解析 1:解析完成
+        * @note TcpInf.status
+        *
+        * 0 初始状态
+        * 1 接收请求头中
+        * 2 接收请求体中(chunk模式)
+        * 3 接收请求体中(非chunk模式)
+        * 
         */
-        bool solveRequest(HttpRequestInformation &inf);
+        int solveRequest(TcpFDInf &TcpInf);
         /**
         * @brief 发送Http/Https响应
         * @param data 装着响应体的数据的string容器
@@ -2432,15 +2514,25 @@ namespace stt
         void setFD(const int &fd,SSL *ssl=nullptr,const bool &flag1=false,const bool &flag2=true){TcpFDHandler::setFD(fd,ssl,flag1,flag2);}
         /**
         * @brief 获取一条websocket消息
-        * @param msg 保存websocket信息的string容器
+        * @param Tcpinf 保存底层tcp状态的信息
+        * @param Websocketinf 保存websocket协议状态信息
         * @return
         * -1：获取失败
         * 0：一般报文
         * 1：关闭帧
         * 2：心跳确认报文
         * 3：心跳报文
+        * 4: 等待数据
+        * @note TcpInf.status
+        *
+        * 0 初始状态
+        * 1 确认消息类型中
+        * 2 确认消息长度中
+        * 3 接收mask中
+        * 4 接收消息中
+        * 
         */
-        int getMessage(std::string &msg);
+        int getMessage(TcpFDInf &Tcpinf,WebSocketFDInformation &Websocketinf);
         /**
         * @brief 发送一条websocket信息
         * @param msg 需要发送的websocket信息
@@ -2458,36 +2550,7 @@ namespace stt
         bool sendMessage(const std::string &msg,const std::string &type="0001");
        
     };
-    /**
-    * @brief 保存客户端WS/WSS请求信息的结构体
-    */
-    struct WebSocketFDInformation
-    {
-        /**
-        * @brief 底层的socket套接字
-        */
-        int fd;
-        /**
-        * @brief true:发送了关闭帧  false：没有发送关闭帧
-        */
-        bool closeflag;
-        /**
-        * @brief  握手阶段的Http/Https路径和参数
-        */
-        std::string locPara;
-        /**
-        * @brief  握手阶段的Http/Https请求头
-        */
-        std::string header;
-        /**
-        * @brief 发送心跳的时间（没有发送过就填0） (检查完又要清空为0)
-        */
-        time_t HBTime=0;
-        /**
-        * @brief 上次收到信息的时间
-        */
-        time_t response;
-    };
+    
     /**
     * @brief WebSocketServer服务端操作类
     */
@@ -2496,7 +2559,7 @@ namespace stt
     private:
         std::unordered_map<int,WebSocketFDInformation> wbclientfd;
         std::mutex lwb;
-        std::function<bool(const std::string &msg,WebSocketServer &k)> fc=[](const std::string &message,WebSocketServer &k)->bool
+        std::function<bool(const std::string &msg,WebSocketServer &k,const WebSocketFDInformation &inf)> fc=[](const std::string &message,WebSocketServer &k,const WebSocketFDInformation &inf)->bool
         {std::cout<<"收到: "<<message<<std::endl;return true;};
         std::function<bool(const WebSocketFDInformation &k)> fcc=[](const WebSocketFDInformation &k)
         {return true;};
@@ -2542,11 +2605,12 @@ namespace stt
         * @param fc 一个函数或函数对象，用于收到客户端消息后处理逻辑
         * -参数：string &message - 要处理的套接字
                 WebsocketClient &k - 当前对象的引用
+        *       WebSocketFDInformation &inf - 客户端信息
         * -返回： bool - 返回true处理成功，返回false处理失败
         * @note 传入的函数应该有如下签名 bool func(const std::string &message,WebSocketClient &k)
         * @note 如果处理失败了 会直接关闭整个websocket连接
         */
-        void setFunction(std::function<bool(const std::string &msg,WebSocketServer &k)> fc){this->fc=fc;}
+        void setFunction(std::function<bool(const std::string &msg,WebSocketServer &k,const WebSocketFDInformation &inf)> fc){this->fc=fc;}
         /**
         * @brief 设置心跳时间
         * @param seca 心跳时间 单位为分钟。不设置默认为20分钟
@@ -2628,10 +2692,10 @@ namespace stt
         * @param threads 消费者线程的数量 （默认为5）
         * @return true：打开监听程序成功 false：打开监听程序失败
         */
-        bool startListen(const int &port,const bool &unblock=false,const bool &ET=true,const int &evsNum=500,const int &threads=3)
+        bool startListen(const int &port,const int &evsNum=500,const int &threads=3)
         {
             std::thread(&WebSocketServer::HB,this).detach();
-            return TcpServer::startListen(port,unblock,ET,evsNum,threads);
+            return TcpServer::startListen(port,evsNum,threads);
         }
         /**
         * @brief 广播发送 WebSocket 消息

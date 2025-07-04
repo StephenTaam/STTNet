@@ -9,6 +9,7 @@ using namespace stt::system;
 //设置全局变量
 LogFile lf;
 HttpServer *httpserver;
+WebSocketServer *s;
 int main(int argc,char *argv[])
 {
 	//init logfile and use logfile system and ignore all signal but 15. And all error signals or unknown exception will transmit signal 15.
@@ -49,6 +50,19 @@ int main(int argc,char *argv[])
 	//监听8080端口，并且加入日志文件到这个服务对象
 	httpserver->startListen(8080);
 
+	/*
+		s=new WebSocketServer;
+		s->setFunction([](const std::string &msg, WebSocketServer &k,const WebSocketFDInformation &inf) -> bool {
+			return k.sendMessage(inf.fd,msg);
+    });
+	s->setStartFunction([](const WebSocketFDInformation &inf, WebSocketServer &k) -> void {
+			sleep(10);
+			k.close(inf.fd);
+    });
+	s->startListen(5055);
+	*/
+
+	
 	//block the main thread
 	//阻塞主线程
 	pause();

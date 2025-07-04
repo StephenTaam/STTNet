@@ -120,6 +120,21 @@ Public 属性</h2></td></tr>
 <tr class="memitem:a29b72edd9475c8c94c91affb5bfc7ad1"><td class="memItemLeft" align="right" valign="top">time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a29b72edd9475c8c94c91affb5bfc7ad1">response</a></td></tr>
 <tr class="memdesc:a29b72edd9475c8c94c91affb5bfc7ad1"><td class="mdescLeft">&#160;</td><td class="mdescRight">上次收到信息的时间  <a href="#a29b72edd9475c8c94c91affb5bfc7ad1">更多...</a><br/></td></tr>
 <tr class="separator:a29b72edd9475c8c94c91affb5bfc7ad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d9e6b29271923079bc27244a97ab213"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a1d9e6b29271923079bc27244a97ab213">recv_length</a></td></tr>
+<tr class="memdesc:a1d9e6b29271923079bc27244a97ab213"><td class="mdescLeft">&#160;</td><td class="mdescRight">待接收的长度  <a href="#a1d9e6b29271923079bc27244a97ab213">更多...</a><br/></td></tr>
+<tr class="separator:a1d9e6b29271923079bc27244a97ab213"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9c4f50ef624980430aed039534781c4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#aa9c4f50ef624980430aed039534781c4">message_type</a></td></tr>
+<tr class="memdesc:aa9c4f50ef624980430aed039534781c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">消息类型  <a href="#aa9c4f50ef624980430aed039534781c4">更多...</a><br/></td></tr>
+<tr class="separator:aa9c4f50ef624980430aed039534781c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af531c538a773d596dfce63037f1e6985"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#af531c538a773d596dfce63037f1e6985">message</a> =&quot;&quot;</td></tr>
+<tr class="memdesc:af531c538a773d596dfce63037f1e6985"><td class="mdescLeft">&#160;</td><td class="mdescRight">消息  <a href="#af531c538a773d596dfce63037f1e6985">更多...</a><br/></td></tr>
+<tr class="separator:af531c538a773d596dfce63037f1e6985"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a291990a2a4b4198a0112057434082fa9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a291990a2a4b4198a0112057434082fa9">fin</a></td></tr>
+<tr class="memdesc:a291990a2a4b4198a0112057434082fa9"><td class="mdescLeft">&#160;</td><td class="mdescRight">fin的状态  <a href="#a291990a2a4b4198a0112057434082fa9">更多...</a><br/></td></tr>
+<tr class="separator:a291990a2a4b4198a0112057434082fa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1068105fd815f6972b1261c219d86ad"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#ae1068105fd815f6972b1261c219d86ad">mask</a></td></tr>
+<tr class="memdesc:ae1068105fd815f6972b1261c219d86ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">mask  <a href="#ae1068105fd815f6972b1261c219d86ad">更多...</a><br/></td></tr>
+<tr class="separator:ae1068105fd815f6972b1261c219d86ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>保存客户端WS/WSS请求信息的结构体 </p>
@@ -149,6 +164,20 @@ Public 属性</h2></td></tr>
 </div><div class="memdoc">
 
 <p>底层的socket套接字 </p>
+
+</div>
+</div>
+<a class="anchor" id="a291990a2a4b4198a0112057434082fa9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool stt::network::WebSocketFDInformation::fin</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>fin的状态 </p>
 
 </div>
 </div>
@@ -191,6 +220,62 @@ Public 属性</h2></td></tr>
 </div><div class="memdoc">
 
 <p>握手阶段的Http/Https路径和参数 </p>
+
+</div>
+</div>
+<a class="anchor" id="ae1068105fd815f6972b1261c219d86ad"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string stt::network::WebSocketFDInformation::mask</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>mask </p>
+
+</div>
+</div>
+<a class="anchor" id="af531c538a773d596dfce63037f1e6985"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string stt::network::WebSocketFDInformation::message =&quot;&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>消息 </p>
+
+</div>
+</div>
+<a class="anchor" id="aa9c4f50ef624980430aed039534781c4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int stt::network::WebSocketFDInformation::message_type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>消息类型 </p>
+
+</div>
+</div>
+<a class="anchor" id="a1d9e6b29271923079bc27244a97ab213"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t stt::network::WebSocketFDInformation::recv_length</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>待接收的长度 </p>
 
 </div>
 </div>

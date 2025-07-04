@@ -115,18 +115,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7419eec11ac06e4f11048bab0057f347"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html#a7419eec11ac06e4f11048bab0057f347">HttpClient</a> (const bool &amp;TLS=false, const char *ca=&quot;&quot;, const char *cert=&quot;&quot;, const char *key=&quot;&quot;, const char *passwd=&quot;&quot;)</td></tr>
 <tr class="memdesc:a7419eec11ac06e4f11048bab0057f347"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor of <a class="el" href="classstt_1_1network_1_1HttpClient.html" title="Http/Https client operation class. ">HttpClient</a> class.  <a href="#a7419eec11ac06e4f11048bab0057f347">More...</a><br/></td></tr>
 <tr class="separator:a7419eec11ac06e4f11048bab0057f347"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a073b654d172a359e3f95a20c4f66cdd4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html#a073b654d172a359e3f95a20c4f66cdd4">getRequest</a> (const std::string &amp;url, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a947f020fda0aac9b1ed4d07f304c8f84">header</a>=&quot;&quot;, const std::string &amp;header1=&quot;Connection: keep-alive&quot;)</td></tr>
-<tr class="memdesc:a073b654d172a359e3f95a20c4f66cdd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a GET request to the server.  <a href="#a073b654d172a359e3f95a20c4f66cdd4">More...</a><br/></td></tr>
-<tr class="separator:a073b654d172a359e3f95a20c4f66cdd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ba3254c5acf7f0e289d4bf659235b32"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html#a3ba3254c5acf7f0e289d4bf659235b32">postRequest</a> (const std::string &amp;url, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a7d810da88a2940fb4517bb72afb9e5f1">body</a>=&quot;&quot;, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a947f020fda0aac9b1ed4d07f304c8f84">header</a>=&quot;&quot;, const std::string &amp;header1=&quot;Connection: keep-alive&quot;)</td></tr>
-<tr class="memdesc:a3ba3254c5acf7f0e289d4bf659235b32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a POST request to the server.  <a href="#a3ba3254c5acf7f0e289d4bf659235b32">More...</a><br/></td></tr>
-<tr class="separator:a3ba3254c5acf7f0e289d4bf659235b32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b06bee83e60b35a802c13ccb67c6a3d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html#a8b06bee83e60b35a802c13ccb67c6a3d">getRequestFromFD</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a0e2ca810e24be8a9335a665a8933b2f8">fd</a>, SSL *<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a21d3fa9b11f0b144be7cc0ea8f107afb">ssl</a>, const std::string &amp;url, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a947f020fda0aac9b1ed4d07f304c8f84">header</a>=&quot;&quot;, const std::string &amp;header1=&quot;Connection: keep-alive&quot;)</td></tr>
-<tr class="memdesc:a8b06bee83e60b35a802c13ccb67c6a3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a GET request to the server from a tcp socket.  <a href="#a8b06bee83e60b35a802c13ccb67c6a3d">More...</a><br/></td></tr>
-<tr class="separator:a8b06bee83e60b35a802c13ccb67c6a3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9142b3601b5110c07002ce7648a69ef0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html#a9142b3601b5110c07002ce7648a69ef0">postRequestFromFD</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a0e2ca810e24be8a9335a665a8933b2f8">fd</a>, SSL *<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a21d3fa9b11f0b144be7cc0ea8f107afb">ssl</a>, const std::string &amp;url, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a7d810da88a2940fb4517bb72afb9e5f1">body</a>=&quot;&quot;, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a947f020fda0aac9b1ed4d07f304c8f84">header</a>=&quot;&quot;, const std::string &amp;header1=&quot;Connection: keep-alive&quot;)</td></tr>
-<tr class="memdesc:a9142b3601b5110c07002ce7648a69ef0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a POST request to the server.  <a href="#a9142b3601b5110c07002ce7648a69ef0">More...</a><br/></td></tr>
-<tr class="separator:a9142b3601b5110c07002ce7648a69ef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29b5fe77bf37ef4f8b67fd06e5d4c315"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html#a29b5fe77bf37ef4f8b67fd06e5d4c315">getRequest</a> (const std::string &amp;url, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a947f020fda0aac9b1ed4d07f304c8f84">header</a>=&quot;&quot;, const std::string &amp;header1=&quot;Connection: keep-alive&quot;, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a>=-1)</td></tr>
+<tr class="memdesc:a29b5fe77bf37ef4f8b67fd06e5d4c315"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a GET request to the server.  <a href="#a29b5fe77bf37ef4f8b67fd06e5d4c315">More...</a><br/></td></tr>
+<tr class="separator:a29b5fe77bf37ef4f8b67fd06e5d4c315"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab66e33ef484cea1fc2113fc4c1d7ca84"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html#ab66e33ef484cea1fc2113fc4c1d7ca84">postRequest</a> (const std::string &amp;url, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a7d810da88a2940fb4517bb72afb9e5f1">body</a>=&quot;&quot;, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a947f020fda0aac9b1ed4d07f304c8f84">header</a>=&quot;&quot;, const std::string &amp;header1=&quot;Connection: keep-alive&quot;, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a>=-1)</td></tr>
+<tr class="memdesc:ab66e33ef484cea1fc2113fc4c1d7ca84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a POST request to the server.  <a href="#ab66e33ef484cea1fc2113fc4c1d7ca84">More...</a><br/></td></tr>
+<tr class="separator:ab66e33ef484cea1fc2113fc4c1d7ca84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acaba2d0d5da4c77121539339fd705b71"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html#acaba2d0d5da4c77121539339fd705b71">getRequestFromFD</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a0e2ca810e24be8a9335a665a8933b2f8">fd</a>, SSL *<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a21d3fa9b11f0b144be7cc0ea8f107afb">ssl</a>, const std::string &amp;url, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a947f020fda0aac9b1ed4d07f304c8f84">header</a>=&quot;&quot;, const std::string &amp;header1=&quot;Connection: keep-alive&quot;, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a>=2)</td></tr>
+<tr class="memdesc:acaba2d0d5da4c77121539339fd705b71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a GET request to the server from a tcp socket.  <a href="#acaba2d0d5da4c77121539339fd705b71">More...</a><br/></td></tr>
+<tr class="separator:acaba2d0d5da4c77121539339fd705b71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae86481dee255249a2de76e5dc01ad0b1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html#ae86481dee255249a2de76e5dc01ad0b1">postRequestFromFD</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a0e2ca810e24be8a9335a665a8933b2f8">fd</a>, SSL *<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a21d3fa9b11f0b144be7cc0ea8f107afb">ssl</a>, const std::string &amp;url, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a7d810da88a2940fb4517bb72afb9e5f1">body</a>=&quot;&quot;, const std::string &amp;<a class="el" href="classstt_1_1network_1_1HttpClient.html#a947f020fda0aac9b1ed4d07f304c8f84">header</a>=&quot;&quot;, const std::string &amp;header1=&quot;Connection: keep-alive&quot;, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a>=2)</td></tr>
+<tr class="memdesc:ae86481dee255249a2de76e5dc01ad0b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a POST request to the server.  <a href="#ae86481dee255249a2de76e5dc01ad0b1">More...</a><br/></td></tr>
+<tr class="separator:ae86481dee255249a2de76e5dc01ad0b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca10767469bcd7cc444998e8f4c6a99e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html#aca10767469bcd7cc444998e8f4c6a99e">isReturn</a> ()</td></tr>
 <tr class="memdesc:aca10767469bcd7cc444998e8f4c6a99e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the server response status.  <a href="#aca10767469bcd7cc444998e8f4c6a99e">More...</a><br/></td></tr>
 <tr class="separator:aca10767469bcd7cc444998e8f4c6a99e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -220,7 +220,7 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a073b654d172a359e3f95a20c4f66cdd4"></a>
+<a class="anchor" id="a29b5fe77bf37ef4f8b67fd06e5d4c315"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -240,7 +240,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>header1</em> = <code>&quot;Connection:&#160;keep-alive&quot;</code>&#160;</td>
+          <td class="paramname"><em>header1</em> = <code>&quot;Connection:&#160;keep-alive&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>sec</em> = <code>-1</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -253,7 +259,9 @@ Public Attributes</h2></td></tr>
 <p>Send a GET request to the server. </p>
 <dl class="section note"><dt>Note</dt><dd>To get the result, please call the isReturn function; if there is a result, the response header and body are stored in the global variables header and body. </dd>
 <dd>
-If TLS is used, the https protocol will be automatically adopted, otherwise the http protocol will be used </dd></dl>
+If TLS is used, the https protocol will be automatically adopted, otherwise the http protocol will be used </dd>
+<dd>
+is blocking by default </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">url</td><td>Complete http/https url (note that the port and path need to be specified explicitly) e.g., <a href="https://google.com">https://google.com</a> should be written as <a href="https://google.com:443/">https://google.com:443/</a> (complete with :443 and /) </td></tr>
@@ -261,6 +269,7 @@ If TLS is used, the https protocol will be automatically adopted, otherwise the 
  at the end. </td></tr>
     <tr><td class="paramname">header1</td><td>Additional item for the HTTP request header; if needed, must fill in a valid item; no need to add <br/>
  at the end (cannot use createHeader). (keepalive item is filled in by default) </td></tr>
+    <tr><td class="paramname">sec</td><td>blocking timeout (s) Blocking beyond this time will no longer block The default is -1, i.e. infinite waiting </td></tr>
   </table>
   </dd>
 </dl>
@@ -269,7 +278,7 @@ If TLS is used, the https protocol will be automatically adopted, otherwise the 
 
 </div>
 </div>
-<a class="anchor" id="a8b06bee83e60b35a802c13ccb67c6a3d"></a>
+<a class="anchor" id="acaba2d0d5da4c77121539339fd705b71"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -301,7 +310,13 @@ If TLS is used, the https protocol will be automatically adopted, otherwise the 
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>header1</em> = <code>&quot;Connection:&#160;keep-alive&quot;</code>&#160;</td>
+          <td class="paramname"><em>header1</em> = <code>&quot;Connection:&#160;keep-alive&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>sec</em> = <code>2</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -314,7 +329,9 @@ If TLS is used, the https protocol will be automatically adopted, otherwise the 
 <p>Send a GET request to the server from a tcp socket. </p>
 <dl class="section note"><dt>Note</dt><dd>To get the result, please call the isReturn function; if there is a result, the response header and body are stored in the global variables header and body. </dd>
 <dd>
-If ssl is not nullptr, the https protocol will be automatically adopted, otherwise the http protocol will be used </dd></dl>
+If ssl is not nullptr, the https protocol will be automatically adopted, otherwise the http protocol will be used </dd>
+<dd>
+When calling, it will be blocked, change the status of the original FD, pay attention to backup and restore </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">fd</td><td>tcp socket </td></tr>
@@ -324,6 +341,7 @@ If ssl is not nullptr, the https protocol will be automatically adopted, otherwi
  at the end. </td></tr>
     <tr><td class="paramname">header1</td><td>Additional item for the HTTP request header; if needed, must fill in a valid item; no need to add <br/>
  at the end (cannot use createHeader). (keepalive item is filled in by default) </td></tr>
+    <tr><td class="paramname">sec</td><td>blocking timeout (s) Blocking beyond this time will no longer block The default is 2s </td></tr>
   </table>
   </dd>
 </dl>
@@ -358,7 +376,7 @@ If ssl is not nullptr, the https protocol will be automatically adopted, otherwi
 
 </div>
 </div>
-<a class="anchor" id="a3ba3254c5acf7f0e289d4bf659235b32"></a>
+<a class="anchor" id="ab66e33ef484cea1fc2113fc4c1d7ca84"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -384,7 +402,13 @@ If ssl is not nullptr, the https protocol will be automatically adopted, otherwi
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>header1</em> = <code>&quot;Connection:&#160;keep-alive&quot;</code>&#160;</td>
+          <td class="paramname"><em>header1</em> = <code>&quot;Connection:&#160;keep-alive&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>sec</em> = <code>-1</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -397,7 +421,9 @@ If ssl is not nullptr, the https protocol will be automatically adopted, otherwi
 <p>Send a POST request to the server. </p>
 <dl class="section note"><dt>Note</dt><dd>To get the result, please call the isReturn function; if there is a result, the response header and body are stored in the global variables header and body. </dd>
 <dd>
-If TLS is used, the https protocol will be automatically adopted, otherwise the http protocol will be used </dd></dl>
+If TLS is used, the https protocol will be automatically adopted, otherwise the http protocol will be used </dd>
+<dd>
+is blocking by default </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">url</td><td>Complete http/https url (note that the port and path need to be specified explicitly) e.g., <a href="https://google.com">https://google.com</a> should be written as <a href="https://google.com:443/">https://google.com:443/</a> (complete with :443 and /) </td></tr>
@@ -406,6 +432,7 @@ If TLS is used, the https protocol will be automatically adopted, otherwise the 
  at the end. </td></tr>
     <tr><td class="paramname">header1</td><td>Additional item for the HTTP request header; if needed, must fill in a valid item; no need to add <br/>
  at the end (cannot use createHeader). (keepalive item is filled in by default) </td></tr>
+    <tr><td class="paramname">sec</td><td>blocking timeout (s) Blocking beyond this time will no longer block The default is -1, i.e. infinite waiting </td></tr>
   </table>
   </dd>
 </dl>
@@ -414,7 +441,7 @@ If TLS is used, the https protocol will be automatically adopted, otherwise the 
 
 </div>
 </div>
-<a class="anchor" id="a9142b3601b5110c07002ce7648a69ef0"></a>
+<a class="anchor" id="ae86481dee255249a2de76e5dc01ad0b1"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -452,7 +479,13 @@ If TLS is used, the https protocol will be automatically adopted, otherwise the 
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>header1</em> = <code>&quot;Connection:&#160;keep-alive&quot;</code>&#160;</td>
+          <td class="paramname"><em>header1</em> = <code>&quot;Connection:&#160;keep-alive&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>sec</em> = <code>2</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -465,7 +498,9 @@ If TLS is used, the https protocol will be automatically adopted, otherwise the 
 <p>Send a POST request to the server. </p>
 <dl class="section note"><dt>Note</dt><dd>To get the result, please call the isReturn function; if there is a result, the response header and body are stored in the global variables header and body. </dd>
 <dd>
-If ssl is not nullptr, the https protocol will be automatically adopted, otherwise the http protocol will be used </dd></dl>
+If ssl is not nullptr, the https protocol will be automatically adopted, otherwise the http protocol will be used </dd>
+<dd>
+When calling, it will be blocked, change the status of the original FD, pay attention to backup and restore </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">fd</td><td>tcp socket </td></tr>
@@ -476,6 +511,7 @@ If ssl is not nullptr, the https protocol will be automatically adopted, otherwi
  at the end. </td></tr>
     <tr><td class="paramname">header1</td><td>Additional item for the HTTP request header; if needed, must fill in a valid item; no need to add <br/>
  at the end (cannot use createHeader). (keepalive item is filled in by default) </td></tr>
+    <tr><td class="paramname">sec</td><td>blocking timeout (s) Blocking beyond this time will no longer block The default is 2s </td></tr>
   </table>
   </dd>
 </dl>

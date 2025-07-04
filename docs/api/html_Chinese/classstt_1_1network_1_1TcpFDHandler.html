@@ -117,9 +117,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public 成员函数</h2></td></tr>
-<tr class="memitem:a4d04a07864abbbfa59e7d125efde60ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a4d04a07864abbbfa59e7d125efde60ef">setFD</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a0e2ca810e24be8a9335a665a8933b2f8">fd</a>, SSL *<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a21d3fa9b11f0b144be7cc0ea8f107afb">ssl</a>, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a035967e9eebf16b1f7626a51aec05690">flag1</a>=false, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a4d510c27152fbe94b3794858d4b22d0e">flag2</a>=false)</td></tr>
-<tr class="memdesc:a4d04a07864abbbfa59e7d125efde60ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">传入套接字初始化对象  <a href="#a4d04a07864abbbfa59e7d125efde60ef">更多...</a><br/></td></tr>
-<tr class="separator:a4d04a07864abbbfa59e7d125efde60ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab71525a4c022c4c58acfa7ec97d46a56"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#ab71525a4c022c4c58acfa7ec97d46a56">setFD</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a0e2ca810e24be8a9335a665a8933b2f8">fd</a>, SSL *<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a21d3fa9b11f0b144be7cc0ea8f107afb">ssl</a>, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a035967e9eebf16b1f7626a51aec05690">flag1</a>=false, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a4d510c27152fbe94b3794858d4b22d0e">flag2</a>=false, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a>=-1)</td></tr>
+<tr class="memdesc:ab71525a4c022c4c58acfa7ec97d46a56"><td class="mdescLeft">&#160;</td><td class="mdescRight">传入套接字初始化对象  <a href="#ab71525a4c022c4c58acfa7ec97d46a56">更多...</a><br/></td></tr>
+<tr class="separator:ab71525a4c022c4c58acfa7ec97d46a56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a217de98d7c8df98233599cdbd1a4e52c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a217de98d7c8df98233599cdbd1a4e52c">getFD</a> ()</td></tr>
 <tr class="memdesc:a217de98d7c8df98233599cdbd1a4e52c"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取该对象的套接字  <a href="#a217de98d7c8df98233599cdbd1a4e52c">更多...</a><br/></td></tr>
 <tr class="separator:a217de98d7c8df98233599cdbd1a4e52c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -630,7 +630,7 @@ Protected 属性</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a4d04a07864abbbfa59e7d125efde60ef"></a>
+<a class="anchor" id="ab71525a4c022c4c58acfa7ec97d46a56"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -656,7 +656,13 @@ Protected 属性</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const bool &amp;&#160;</td>
-          <td class="paramname"><em>flag2</em> = <code>false</code>&#160;</td>
+          <td class="paramname"><em>flag2</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>sec</em> = <code>-1</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -674,6 +680,7 @@ Protected 属性</h2></td></tr>
     <tr><td class="paramname">ssl</td><td>fd经过TLS加密后的SSL句柄（如果没有可以填nullptr） </td></tr>
     <tr><td class="paramname">flag1</td><td>true：启用非阻塞模式 false：启用阻塞模式 （默认为false，即启用阻塞模式） </td></tr>
     <tr><td class="paramname">flag2</td><td>true：启用SO_REUSEADDR模式 false：不启用SO_REUSEADDR模式 （默认为false，即不启用SO_REUSEADDR模式） </td></tr>
+    <tr><td class="paramname">sec</td><td>阻塞超时时间 阻塞超过这个时间就不会再阻塞了 默认为-1 即无限等待 </td></tr>
   </table>
   </dd>
 </dl>

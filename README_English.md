@@ -195,3 +195,14 @@ int main(int argc,char *argv[])
 
 This project is licensed under the MIT License. You are free to use, modify, and distribute it commercially, but please retain the author attribution.
 
+
+## 📝 Changelog
+
+### v0.2.0 - 2025-07-05
+
+🚀 Major architecture upgrade:
+
+- All server modules refactored to use **non-blocking I/O with epoll edge-triggered mode (EPOLLET)**
+- Introduced **state-machine-based connection handling**
+- Improved performance and clarity under high concurrency
+- Better compatibility with multi-threading and multi-process modules

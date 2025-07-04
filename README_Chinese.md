@@ -184,3 +184,20 @@ int main(int argc,char *argv[])
 本项目采用 MIT License 开源协议，你可以自由使用、修改、商用此项目，但请保留作者署名。
 
 ---
+
+
+### v0.2.0 - 2025-07-05
+
+🚀 Major architecture upgrade / 架构重大升级：
+
+- All server modules refactored to use **non-blocking I/O with epoll edge-triggered mode (EPOLLET)**  
+  所有服务器模块重构为 **非阻塞 I/O + epoll 边缘触发（EPOLLET）模式**
+
+- Introduced **state-machine-based connection handling**  
+  引入 **基于状态机的连接处理机制**
+
+- Improved performance and clarity under high concurrency  
+  在高并发场景下大幅提升性能与逻辑清晰度
+
+- Better compatibility with multi-threading and multi-process modules  
+  更好地兼容多线程与多进程模块的协同工作
