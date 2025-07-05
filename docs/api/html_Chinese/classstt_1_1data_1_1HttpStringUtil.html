@@ -102,9 +102,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 静态 Public 成员函数</h2></td></tr>
-<tr class="memitem:a399758b7cd03d7d4952fa7ee8cd7c59d"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a399758b7cd03d7d4952fa7ee8cd7c59d">get_split_str</a> (const std::string &amp;ori_str, std::string &amp;str, const std::string &amp;a, const std::string &amp;b, const size_t &amp;pos=0)</td></tr>
-<tr class="memdesc:a399758b7cd03d7d4952fa7ee8cd7c59d"><td class="mdescLeft">&#160;</td><td class="mdescRight">从原始字符串中提取两个标记之间的子串。  <a href="#a399758b7cd03d7d4952fa7ee8cd7c59d">更多...</a><br/></td></tr>
-<tr class="separator:a399758b7cd03d7d4952fa7ee8cd7c59d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64a8803460f9e575c4dd9d0060eb3914"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a64a8803460f9e575c4dd9d0060eb3914">get_split_str</a> (const std::string &amp;ori_str, std::string &amp;str, const std::string &amp;a, const std::string &amp;b, const size_t &amp;pos=0)</td></tr>
+<tr class="memdesc:a64a8803460f9e575c4dd9d0060eb3914"><td class="mdescLeft">&#160;</td><td class="mdescRight">从原始字符串中提取两个标记之间的子串。  <a href="#a64a8803460f9e575c4dd9d0060eb3914">更多...</a><br/></td></tr>
+<tr class="separator:a64a8803460f9e575c4dd9d0060eb3914"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a904906ac8010ece1c306d4338809b49f"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a904906ac8010ece1c306d4338809b49f">get_value_str</a> (const std::string &amp;ori_str, std::string &amp;str, const std::string &amp;name)</td></tr>
 <tr class="memdesc:a904906ac8010ece1c306d4338809b49f"><td class="mdescLeft">&#160;</td><td class="mdescRight">从 URL 查询参数中提取指定 key 的值。  <a href="#a904906ac8010ece1c306d4338809b49f">更多...</a><br/></td></tr>
 <tr class="separator:a904906ac8010ece1c306d4338809b49f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -287,7 +287,7 @@ template&lt;class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a399758b7cd03d7d4952fa7ee8cd7c59d"></a>
+<a class="anchor" id="a64a8803460f9e575c4dd9d0060eb3914"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -295,7 +295,7 @@ template&lt;class... Args&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::string&amp; stt::data::HttpStringUtil::get_split_str </td>
+          <td class="memname">static size_t stt::data::HttpStringUtil::get_split_str </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>ori_str</em>, </td>
@@ -349,7 +349,8 @@ template&lt;class... Args&gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>返回</dt><dd>引用，指向结果字符串。 </dd></dl>
+<dl class="section return"><dt>返回</dt><dd>返回b在ori_str中的位置(可能返回string::npos,如果b找不到或者b为"") </dd></dl>
+<dl class="section note"><dt>注解</dt><dd>如果找不到，结果字符串为"" </dd></dl>
 
 </div>
 </div>

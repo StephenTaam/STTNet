@@ -1462,7 +1462,7 @@ unsigned long& stt::data::NetworkOrderUtil::htonl_ntohl_64(unsigned long &data)
         number=round(number*pow(10,bitt))/pow(10,bitt);
         return number;
     }
-    string& stt::data::HttpStringUtil::get_split_str(const string& ori_str,string &str,const string &a,const string &b,const size_t &pos)
+    size_t stt::data::HttpStringUtil::get_split_str(const string& ori_str,string &str,const string &a,const string &b,const size_t &pos)
     {
         size_t aa;
         size_t bb;
@@ -1477,22 +1477,26 @@ unsigned long& stt::data::NetworkOrderUtil::htonl_ntohl_64(unsigned long &data)
         if(aa==string::npos&&bb==string::npos)
         {
                 str="";
-                return str;
+                //return str;
+                return bb;
         }
         else if(aa==string::npos&&bb!=string::npos)
         {
                 str=ori_str.substr(0,bb);
-                return str;
+                //return str;
+                return bb;
         }
         else if(aa!=string::npos&&bb==string::npos)
         {
                 aa+=a.length();
                 str=ori_str.substr(aa);
-                return str;
+                //return str;
+                return bb;
         }
         aa+=a.length();
         str=ori_str.substr(aa,bb-aa);
-        return str;
+        //return str;
+        return bb;
     }
     string& stt::data::HttpStringUtil::get_value_header(const string& ori_str,string &str,const string& name)
     {
@@ -1578,13 +1582,15 @@ unsigned long& stt::data::NetworkOrderUtil::htonl_ntohl_64(unsigned long &data)
 
     string& stt::data::HttpStringUtil::getIP(const string &url,string &IP)
     {
-        return HttpStringUtil::get_split_str(url,IP,"//",":");
+        HttpStringUtil::get_split_str(url,IP,"//",":");
+        return IP;
     }
     int& stt::data::HttpStringUtil::getPort(const string &url,int &port)
     {
         auto pos=url.find(":");
         string pport;
-        return stt::data::NumberStringConvertUtil::toInt(HttpStringUtil::get_split_str(url,pport,":","/",pos+1),port);
+        HttpStringUtil::get_split_str(url,pport,":","/",pos+1);
+        return stt::data::NumberStringConvertUtil::toInt(pport,port);
     }
     string stt::data::HttpStringUtil::createHeader(const string& first,const string& second)
 	{
@@ -3036,7 +3042,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             auto ppos=pos+2;
             while(1)
             {
-                size=HttpStringUtil::get_split_str(totalRecv,size,"\r\n","\r\n",ppos);
+                HttpStringUtil::get_split_str(totalRecv,size,"\r\n","\r\n",ppos);
                 ppos=totalRecv.find("\r\n",ppos+2);
                 //cout<<size<<endl;
                 NumberStringConvertUtil::str16toInt(size,ssize);
@@ -3069,7 +3075,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             int hasReceived=totalRecv.length()-(pos+4);
             string size;
             int ssize;
-            size=HttpStringUtil::get_split_str(totalRecv,size,"Content-Length: ","\r\n");
+            HttpStringUtil::get_split_str(totalRecv,size,"Content-Length: ","\r\n");
             NumberStringConvertUtil::toInt(size,ssize);
             if(ssize==-1)
             {
@@ -3183,7 +3189,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             auto ppos=pos+2;
             while(1)
             {
-                size=HttpStringUtil::get_split_str(totalRecv,size,"\r\n","\r\n",ppos);
+                HttpStringUtil::get_split_str(totalRecv,size,"\r\n","\r\n",ppos);
                 ppos=totalRecv.find("\r\n",ppos+2);
                 //cout<<size<<endl;
                 NumberStringConvertUtil::str16toInt(size,ssize);
@@ -3216,7 +3222,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             int hasReceived=totalRecv.length()-(pos+4);
             string size;
             int ssize;
-            size=HttpStringUtil::get_split_str(totalRecv,size,"Content-Length: ","\r\n");
+            HttpStringUtil::get_split_str(totalRecv,size,"Content-Length: ","\r\n");
             NumberStringConvertUtil::toInt(size,ssize);
             if(ssize==-1)
             {
@@ -3350,7 +3356,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             auto ppos=pos+2;
             while(1)
             {
-                size=HttpStringUtil::get_split_str(totalRecv,size,"\r\n","\r\n",ppos);
+                HttpStringUtil::get_split_str(totalRecv,size,"\r\n","\r\n",ppos);
                 ppos=totalRecv.find("\r\n",ppos+2);
                 //cout<<size<<endl;
                 NumberStringConvertUtil::str16toInt(size,ssize);
@@ -3383,7 +3389,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             int hasReceived=totalRecv.length()-(pos+4);
             string size;
             int ssize;
-            size=HttpStringUtil::get_split_str(totalRecv,size,"Content-Length: ","\r\n");
+            HttpStringUtil::get_split_str(totalRecv,size,"Content-Length: ","\r\n");
             NumberStringConvertUtil::toInt(size,ssize);
             if(ssize==-1)
             {
@@ -3499,7 +3505,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             auto ppos=pos+2;
             while(1)
             {
-                size=HttpStringUtil::get_split_str(totalRecv,size,"\r\n","\r\n",ppos);
+                HttpStringUtil::get_split_str(totalRecv,size,"\r\n","\r\n",ppos);
                 ppos=totalRecv.find("\r\n",ppos+2);
                 //cout<<size<<endl;
                 NumberStringConvertUtil::str16toInt(size,ssize);
@@ -3532,7 +3538,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             int hasReceived=totalRecv.length()-(pos+4);
             string size;
             int ssize;
-            size=HttpStringUtil::get_split_str(totalRecv,size,"Content-Length: ","\r\n");
+            HttpStringUtil::get_split_str(totalRecv,size,"Content-Length: ","\r\n");
             NumberStringConvertUtil::toInt(size,ssize);
             if(ssize==-1)
             {
@@ -4182,7 +4188,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 size_t ppos=0;
                 while(1)
                 {
-                    size=HttpStringUtil::get_split_str(TcpInf.data,size,"\r\n","\r\n",ppos);
+                    HttpStringUtil::get_split_str(TcpInf.data,size,"\r\n","\r\n",ppos);
                     ppos=TcpInf.data.find("\r\n",ppos+2);
                     NumberStringConvertUtil::str16toInt(size,ssize);
                     if(ssize==-1)
@@ -4207,7 +4213,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 TcpInf.status=3;
                 string size;
                 long ssize;
-                size=HttpStringUtil::get_split_str(TcpInf.HttpInf.header,size,"Content-Length: ","\r\n");
+                HttpStringUtil::get_split_str(TcpInf.HttpInf.header,size,"Content-Length: ","\r\n");
                 NumberStringConvertUtil::toLong(size,ssize);
 
                 if(ssize==-1)
@@ -4252,7 +4258,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 size_t ppos=0;
                 while(1)
                 {
-                    size=HttpStringUtil::get_split_str(TcpInf.data,size,"\r\n","\r\n",ppos);
+                    HttpStringUtil::get_split_str(TcpInf.data,size,"\r\n","\r\n",ppos);
                     ppos=TcpInf.data.find("\r\n",ppos+2);
                     NumberStringConvertUtil::str16toInt(size,ssize);
                     if(ssize==-1)
@@ -4276,7 +4282,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         {
                 string size;
                 long ssize;
-                size=HttpStringUtil::get_split_str(TcpInf.HttpInf.header,size,"Content-Length: ","\r\n");
+                HttpStringUtil::get_split_str(TcpInf.HttpInf.header,size,"Content-Length: ","\r\n");
                 NumberStringConvertUtil::toLong(size,ssize);
 
                 if(ssize==-1)

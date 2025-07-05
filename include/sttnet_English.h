@@ -1240,7 +1240,8 @@ public:
             * @param a Start marker string.
             * @param b End marker string.
             * @param pos Starting search position.
-            * @return Reference to the result string.
+            * @return Returns the position of b in ori_str (may return string::npos if b is not found or b is "")
+            * @note If not found, the result string is ""
             */       
 	        static std::string& get_split_str(const std::string& ori_str, std::string &str, const std::string &a, const std::string &b, const size_t &pos = 0);
             /**

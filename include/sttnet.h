@@ -1237,9 +1237,10 @@ namespace stt
             * @param a 起始标记字符串。
             * @param b 终止标记字符串。
             * @param pos 搜索起始位置。
-            * @return 引用，指向结果字符串。
+            * @return 返回b在ori_str中的位置(可能返回string::npos,如果b找不到或者b为"")
+            * @note 如果找不到，结果字符串为""
             */       
-	        static std::string& get_split_str(const std::string& ori_str,std::string &str,const std::string &a,const std::string &b,const size_t &pos=0);
+	        static size_t get_split_str(const std::string& ori_str,std::string &str,const std::string &a,const std::string &b,const size_t &pos=0);
             /**
             * @brief 从 URL 查询参数中提取指定 key 的值。
             *
