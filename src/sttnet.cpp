@@ -4849,7 +4849,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     EncodingUtil::maskCalculate(msg,mask);
                     return 2;
                 }
-                BitUtil::bitOutput_bit(b1,1,b1);
+                //BitUtil::bitOutput_bit(b1,1,b1);
             }while(BitUtil::bitOutput(b1,code).substr(0,1)=="0"&&BitUtil::bitOutput(b1,code).substr(4)=="0000"&&isRec);  
 
             //处理mask
