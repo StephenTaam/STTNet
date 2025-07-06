@@ -1499,6 +1499,9 @@ namespace stt
             */
 	        static std::string& maskCalculate(std::string &data,const std::string &mask);
         };
+        /**
+        * @brief json数据操作类
+        */
         class JsonHelper
         {
             public:

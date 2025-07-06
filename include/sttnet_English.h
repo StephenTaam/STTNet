@@ -1502,6 +1502,9 @@ public:
             */
 	        static std::string& maskCalculate(std::string &data, const std::string &mask);
         };
+        /**
+        * @brief class of solving json data
+        */
         class JsonHelper
         {
             public:
