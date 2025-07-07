@@ -4204,8 +4204,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 {
                     if(TcpInf.data.length()-2>=ssize)
                     {
-                        TcpInf.HttpInf.body=TcpInf.data.substr(2,ssize+2);
-                        TcpInf.data.substr(ssize);
+                        TcpInf.HttpInf.body=TcpInf.data.substr(2,ssize);
+                        if(TcpInf.data.length()-2==ssize)
+                            TcpInf.data.clear();
+                        else
+                            TcpInf.data=TcpInf.data.substr(ssize+2);
                         TcpInf.status=0;
                         return 1;
                     }
@@ -4273,8 +4276,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 {
                     if(TcpInf.data.length()-2>=ssize)
                     {
-                        TcpInf.HttpInf.body=TcpInf.data.substr(2,ssize+2);
-                        TcpInf.data.substr(ssize);
+                        TcpInf.HttpInf.body=TcpInf.data.substr(2,ssize);
+                        if(TcpInf.data.length()-2==ssize)
+                            TcpInf.data.clear();
+                        else
+                            TcpInf.data=TcpInf.data.substr(ssize+2);
                         TcpInf.status=0;
                         return 1;
                     }
@@ -5087,7 +5093,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     else
                     {
                         a=Tcpinf.data.substr(0,Websocketinf.recv_length);
-                        Tcpinf.data.substr(Websocketinf.recv_length);
+                        Tcpinf.data=Tcpinf.data.substr(Websocketinf.recv_length);
                         Websocketinf.recv_length=0;
                        
                     }

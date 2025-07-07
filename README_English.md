@@ -208,8 +208,16 @@ This project is licensed under the MIT License. You are free to use, modify, and
 - Better compatibility with multi-threading and multi-process modules
 - Some APIs are no longer compatible
 
+⚠ There is a critical error in the receive buffer for the service class function, please deprecate that version and upgrade to v0.3.1
+
 ### v0.3.0 - 2025-07-07
 
 - The stt::d ata::JsonHelper::getValue function has been simplified, and the meaning of parameters and return values have been modified, which are no longer compatible with the previous version.
 
 - The return value of stt::d ata::HttpStringUtil::get_split_str has been changed and is no longer compatible with previous versions.
+
+⚠ There is a critical error in the receive buffer for the service class function, please deprecate that version and upgrade to v0.3.1
+
+### v0.3.1 - 2025-07-07
+
+fix bug

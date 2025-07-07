@@ -205,8 +205,16 @@ int main(int argc,char *argv[])
 - Some APIs are no longer compatible
   部分api不再兼容
 
+⚠服务类函数的接收缓冲区存在严重错误，请弃用该版本并升级到v0.3.1
+
 ### v0.3.0 - 2025-07-07
 
 - 精简了stt::data::JsonHelper::getValue函数，修改了参数意义，返回值等，不再兼容前面的版本。
 
 - stt::data::HttpStringUtil::get_split_str返回值改变，不再兼容前面的版本。
+
+⚠服务类函数的接收缓冲区存在严重错误，请弃用该版本并升级到v0.3.1
+
+### v0.3.1 - 2025-07-07
+
+fix bug
