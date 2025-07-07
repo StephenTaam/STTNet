@@ -102,9 +102,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a5cbd9f1160e892af4fc0e77798af8299"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1JsonHelper.html#a5cbd9f1160e892af4fc0e77798af8299">getValue</a> (const std::string &amp;oriStr, std::string &amp;result, const std::string &amp;type=&quot;value&quot;, const std::string &amp;name=&quot;a&quot;, const int &amp;num=0)</td></tr>
-<tr class="memdesc:a5cbd9f1160e892af4fc0e77798af8299"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract the value or nested structure of a specified field in a JSON string.  <a href="#a5cbd9f1160e892af4fc0e77798af8299">More...</a><br/></td></tr>
-<tr class="separator:a5cbd9f1160e892af4fc0e77798af8299"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5198deea9a0dcddc31c4164bcbe0e637"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1JsonHelper.html#a5198deea9a0dcddc31c4164bcbe0e637">getValue</a> (const std::string &amp;oriStr, std::string &amp;result, const std::string &amp;type=&quot;value&quot;, const std::string &amp;name=&quot;a&quot;, const int &amp;num=0)</td></tr>
+<tr class="memdesc:a5198deea9a0dcddc31c4164bcbe0e637"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract the value or nested structure of a specified field in a JSON string.  <a href="#a5198deea9a0dcddc31c4164bcbe0e637">More...</a><br/></td></tr>
+<tr class="separator:a5198deea9a0dcddc31c4164bcbe0e637"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a416fa5e4965944ea9e4e9443170cae5f"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1JsonHelper.html#a416fa5e4965944ea9e4e9443170cae5f">toString</a> (const Json::Value &amp;val)</td></tr>
 <tr class="memdesc:a416fa5e4965944ea9e4e9443170cae5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert Json::Value to a string.  <a href="#a416fa5e4965944ea9e4e9443170cae5f">More...</a><br/></td></tr>
 <tr class="separator:a416fa5e4965944ea9e4e9443170cae5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -328,7 +328,7 @@ template&lt;class T1 , class T2 , class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a5cbd9f1160e892af4fc0e77798af8299"></a>
+<a class="anchor" id="a5198deea9a0dcddc31c4164bcbe0e637"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -336,7 +336,7 @@ template&lt;class T1 , class T2 , class... Args&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::string&amp; stt::data::JsonHelper::getValue </td>
+          <td class="memname">static int stt::data::JsonHelper::getValue </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>oriStr</em>, </td>
@@ -381,15 +381,15 @@ template&lt;class T1 , class T2 , class... Args&gt; </div>
 <p>Extract the value or nested structure of a specified field in a JSON string. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">oriStr</td><td>Original JSON string. </td></tr>
-    <tr><td class="paramname">result</td><td>Reference to the string storing the return value. </td></tr>
-    <tr><td class="paramname">type</td><td>Type mode, optional values: value, json/array, arrayvalue, arrayjson/array. </td></tr>
-    <tr><td class="paramname">name</td><td>Key name in JSON (only applicable to value / json/array). </td></tr>
-    <tr><td class="paramname">num</td><td>Array index position (starting from 0) (only applicable to arrayvalue / arrayjson/array). </td></tr>
+    <tr><td class="paramname">oriStr</td><td>raw JSON string. </td></tr>
+    <tr><td class="paramname">result</td><td>stores a string reference to the return value. </td></tr>
+    <tr><td class="paramname">type</td><td>mode, optional values: value, arrayvalue. They are the values in ordinary JSON objects and the values in array objects. </td></tr>
+    <tr><td class="paramname">name</td><td>key name in JSON (value only). </td></tr>
+    <tr><td class="paramname">num</td><td>array index position (starting from 0) (for arrayvalue only). </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>std::string&amp; Reference to the result string. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>-1: Extraction failed 0: Returns a non-JSON object 1: Returns a JSON object </dd></dl>
 
 </div>
 </div>

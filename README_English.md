@@ -206,3 +206,10 @@ This project is licensed under the MIT License. You are free to use, modify, and
 - Introduced **state-machine-based connection handling**
 - Improved performance and clarity under high concurrency
 - Better compatibility with multi-threading and multi-process modules
+- Some APIs are no longer compatible
+
+### v0.3.0 - 2025-07-07
+
+- The stt::d ata::JsonHelper::getValue function has been simplified, and the meaning of parameters and return values have been modified, which are no longer compatible with the previous version.
+
+- The return value of stt::d ata::HttpStringUtil::get_split_str has been changed and is no longer compatible with previous versions.

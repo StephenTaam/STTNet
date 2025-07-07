@@ -206,7 +206,11 @@ This project is licensed under the MIT License. You are free to use, modify, and
 - Improved performance and clarity under high concurrency
 - Better compatibility with multi-threading and multi-process modules
 
+### v0.3.0 - 2025-07-07
 
+- The stt::d ata::JsonHelper::getValue function has been simplified, and the meaning of parameters and return values have been modified, which are no longer compatible with the previous version.
+
+- The return value of stt::d ata::HttpStringUtil::get_split_str has been changed and is no longer compatible with previous versions.
 
 
 
@@ -414,3 +418,9 @@ int main(int argc,char *argv[])
 
 - Better compatibility with multi-threading and multi-process modules  
   更好地兼容多线程与多进程模块的协同工作
+
+### v0.3.0 - 2025-07-07
+
+- 精简了stt::data::JsonHelper::getValue函数，修改了参数意义，返回值等，不再兼容前面的版本。
+
+- stt::data::HttpStringUtil::get_split_str返回值改变，不再兼容前面的版本。

@@ -1,8 +1,8 @@
 /**
 * @mainpage STTNet C++ Framework
 * @author StephenTaam(1356597983@qq.com)
-* @version 0.2.0
-* @date 2025-07-05
+* @version 0.3.0
+* @date 2025-07-07
 */
 #ifndef PUBLIC_H
 #define PUBLIC_H 1
@@ -1510,12 +1510,14 @@ namespace stt
             * 
             * @param oriStr 原始 JSON 字符串。
             * @param result 存储返回值的字符串引用。
-            * @param type 类型模式，可选值：value, json/array, arrayvalue, arrayjson/array。
-            * @param name JSON 中的键名（仅适用于 value / json/array）。
-            * @param num 数组索引位置(从0开始)（仅适用于 arrayvalue / arrayjson/array）。
-            * @return std::string& 返回结果字符串的引用。
+            * @param type 类型模式，可选值：value, arrayvalue。分别为普通json对象里面的值，数组对象里面的值。
+            * @param name JSON 中的键名（仅适用于 value）。
+            * @param num 数组索引位置(从0开始)（仅适用于 arrayvalue）。
+            * @return -1:提取失败
+            *          0:返回非json对象
+            *          1:返回json对象
             */
-	        static std::string& getValue(const std::string &oriStr,std::string& result,const std::string &type="value",const std::string &name="a",const int &num=0);
+	        static int getValue(const std::string &oriStr,std::string& result,const std::string &type="value",const std::string &name="a",const int &num=0);
 
             /**
             * @brief 将 Json::Value 转换为字符串。

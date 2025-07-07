@@ -201,3 +201,12 @@ int main(int argc,char *argv[])
 
 - Better compatibility with multi-threading and multi-process modules  
   更好地兼容多线程与多进程模块的协同工作
+
+- Some APIs are no longer compatible
+  部分api不再兼容
+
+### v0.3.0 - 2025-07-07
+
+- 精简了stt::data::JsonHelper::getValue函数，修改了参数意义，返回值等，不再兼容前面的版本。
+
+- stt::data::HttpStringUtil::get_split_str返回值改变，不再兼容前面的版本。

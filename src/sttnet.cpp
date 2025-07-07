@@ -1813,97 +1813,66 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         BitUtil::toBit(bitStr,mask);
         return mask;
 }
-    string& stt::data::JsonHelper::getValue(const string &oriStr,string &result,const string &type,const string &name,const int &num)
+    int stt::data::JsonHelper::getValue(const string &oriStr,string &result,const string &type,const string &name,const int &num)
     {
         Json::Value root;
         Json::CharReaderBuilder reader;
         string errs;
         istringstream s(oriStr);
         bool is;
-        if(type=="json/array")//json中的json或者数组嵌套
-        {
-            is=Json::parseFromStream(reader,s,&root,&errs);
-            if(!is||!root.isObject()||root.isNull())
-            {   
-                result="NULL";
-                return result;
-            }
-            Json::Value next=root[name];
-            if(!(next.isObject()||next.isArray())||next.isNull())
-            {   
-                result="NULL";
-                return result;
-            }
-            Json::StreamWriterBuilder writerBuilder;
-            result = Json::writeString(writerBuilder, next);
-            return result;
-        }
-        else if(type=="arrayvalue")//数组中的数据
+
+        if(type=="arrayvalue")//数组中的数据
         {
             is=Json::parseFromStream(reader,s,&root,&errs);
             if(!is||!root.isArray()||root.isNull())
             {   
-                result="NULL";
-                return result;
-            }
-            result=root[num].asString();
-            if(result=="")
-            {   
-                result="NULL";
-                return result;
-            }
-            
-            else
-                return result;
-        }
-        else if(type=="arrayjson/array")//数组中的json或者数组嵌套
-        {
-            is=Json::parseFromStream(reader,s,&root,&errs);
-            if(!is||!root.isArray()||root.isNull())
-            {   
-                result="NULL";
-                return result;
+                return -1;
             }
             Json::Value next=root[num];
-            if(!(next.isObject()||next.isArray())||next.isNull())
-            {   
-                result="NULL";
-                return result;
+            if(next.isNull())
+            {
+                return -1;
             }
-            Json::StreamWriterBuilder writerBuilder;
-            result = Json::writeString(writerBuilder, next);
-            return result;
+
+            if(next.isObject()||next.isArray())//嵌套了数组或者json对象
+            {
+                Json::StreamWriterBuilder writerBuilder;
+                result = Json::writeString(writerBuilder, next);
+                return 1;
+            }
+            else//普通数据
+            {
+                result=root[num].asString();
+                return 0;
+            }
         }
+        
         else if(type=="value")//json中的普通数据
         {
             is=Json::parseFromStream(reader,s,&root,&errs);
             if(!is||!root.isObject()||root.isNull())
             {   
-                result="NULL";
-                return result;
+                return -1;
             }
-            try//防止是对象但是用了value访问的崩溃
+            Json::Value next=root[name];
+            if(next.isNull())
+                return -1;
+            if(next.isObject()||next.isArray())//对象
+            {
+                Json::StreamWriterBuilder writerBuilder;
+                result = Json::writeString(writerBuilder, next);
+                return 1;
+            }
+            else//普通数据
             {
                 result=root[name].asString();
-            }
-            catch(...)
-            { 
-                result="NULL";
-                return result;
-            }
-            if(result=="")
-            {   
-                result="NULL";
-                return result;
+                return 0;
             }
             
-            else
-                return result;
-        }
+        }    
         else
         {   
-            result="NULL";
-            return result;
+            return -1;
         }
     }
     string stt::data::JsonHelper::toString(const Json::Value &val)

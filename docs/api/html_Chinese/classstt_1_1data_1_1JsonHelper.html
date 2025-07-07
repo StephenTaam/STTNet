@@ -102,9 +102,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 静态 Public 成员函数</h2></td></tr>
-<tr class="memitem:a5cbd9f1160e892af4fc0e77798af8299"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1JsonHelper.html#a5cbd9f1160e892af4fc0e77798af8299">getValue</a> (const std::string &amp;oriStr, std::string &amp;result, const std::string &amp;type=&quot;value&quot;, const std::string &amp;name=&quot;a&quot;, const int &amp;num=0)</td></tr>
-<tr class="memdesc:a5cbd9f1160e892af4fc0e77798af8299"><td class="mdescLeft">&#160;</td><td class="mdescRight">提取 JSON 字符串中指定字段的值或嵌套结构。  <a href="#a5cbd9f1160e892af4fc0e77798af8299">更多...</a><br/></td></tr>
-<tr class="separator:a5cbd9f1160e892af4fc0e77798af8299"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5198deea9a0dcddc31c4164bcbe0e637"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1JsonHelper.html#a5198deea9a0dcddc31c4164bcbe0e637">getValue</a> (const std::string &amp;oriStr, std::string &amp;result, const std::string &amp;type=&quot;value&quot;, const std::string &amp;name=&quot;a&quot;, const int &amp;num=0)</td></tr>
+<tr class="memdesc:a5198deea9a0dcddc31c4164bcbe0e637"><td class="mdescLeft">&#160;</td><td class="mdescRight">提取 JSON 字符串中指定字段的值或嵌套结构。  <a href="#a5198deea9a0dcddc31c4164bcbe0e637">更多...</a><br/></td></tr>
+<tr class="separator:a5198deea9a0dcddc31c4164bcbe0e637"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a416fa5e4965944ea9e4e9443170cae5f"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1JsonHelper.html#a416fa5e4965944ea9e4e9443170cae5f">toString</a> (const Json::Value &amp;val)</td></tr>
 <tr class="memdesc:a416fa5e4965944ea9e4e9443170cae5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">将 Json::Value 转换为字符串。  <a href="#a416fa5e4965944ea9e4e9443170cae5f">更多...</a><br/></td></tr>
 <tr class="separator:a416fa5e4965944ea9e4e9443170cae5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -328,7 +328,7 @@ template&lt;class T1 , class T2 , class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a5cbd9f1160e892af4fc0e77798af8299"></a>
+<a class="anchor" id="a5198deea9a0dcddc31c4164bcbe0e637"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -336,7 +336,7 @@ template&lt;class T1 , class T2 , class... Args&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::string&amp; stt::data::JsonHelper::getValue </td>
+          <td class="memname">static int stt::data::JsonHelper::getValue </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>oriStr</em>, </td>
@@ -383,13 +383,13 @@ template&lt;class T1 , class T2 , class... Args&gt; </div>
   <table class="params">
     <tr><td class="paramname">oriStr</td><td>原始 JSON 字符串。 </td></tr>
     <tr><td class="paramname">result</td><td>存储返回值的字符串引用。 </td></tr>
-    <tr><td class="paramname">type</td><td>类型模式，可选值：value, json/array, arrayvalue, arrayjson/array。 </td></tr>
-    <tr><td class="paramname">name</td><td>JSON 中的键名（仅适用于 value / json/array）。 </td></tr>
-    <tr><td class="paramname">num</td><td>数组索引位置(从0开始)（仅适用于 arrayvalue / arrayjson/array）。 </td></tr>
+    <tr><td class="paramname">type</td><td>类型模式，可选值：value, arrayvalue。分别为普通json对象里面的值，数组对象里面的值。 </td></tr>
+    <tr><td class="paramname">name</td><td>JSON 中的键名（仅适用于 value）。 </td></tr>
+    <tr><td class="paramname">num</td><td>数组索引位置(从0开始)（仅适用于 arrayvalue）。 </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>返回</dt><dd>std::string&amp; 返回结果字符串的引用。 </dd></dl>
+<dl class="section return"><dt>返回</dt><dd>-1:提取失败 0:返回非json对象 1:返回json对象 </dd></dl>
 
 </div>
 </div>

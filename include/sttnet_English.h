@@ -1,8 +1,8 @@
 /**
 * @mainpage STTNet C++ Framework
 * @author StephenTaam(1356597983@qq.com)
-* @version 0.2.0
-* @date 2025-07-05
+* @version 0.3.0
+* @date 2025-07-07
 */
 #ifndef PUBLIC_H
 #define PUBLIC_H 1
@@ -1510,15 +1510,17 @@ public:
             public:
             /**
             * @brief Extract the value or nested structure of a specified field in a JSON string.
-            * 
-            * @param oriStr Original JSON string.
-            * @param result Reference to the string storing the return value.
-            * @param type Type mode, optional values: value, json/array, arrayvalue, arrayjson/array.
-            * @param name Key name in JSON (only applicable to value / json/array).
-            * @param num Array index position (starting from 0) (only applicable to arrayvalue / arrayjson/array).
-            * @return std::string& Reference to the result string.
+            *
+            * @param oriStr raw JSON string.
+            * @param result stores a string reference to the return value.
+            * @param type mode, optional values: value, arrayvalue. They are the values in ordinary JSON objects and the values in array objects.
+            * @param name key name in JSON (value only).
+            * @param num array index position (starting from 0) (for arrayvalue only).
+            * @return -1: Extraction failed
+            *           0: Returns a non-JSON object
+            *           1: Returns a JSON object
             */
-	        static std::string& getValue(const std::string &oriStr, std::string& result, const std::string &type = "value", const std::string &name = "a", const int &num = 0);
+            static int getValue(const std::string &oriStr,std::string& result,const std::string &type="value",const std::string &name="a",const int &num=0);
 
             /**
             * @brief Convert Json::Value to a string.
