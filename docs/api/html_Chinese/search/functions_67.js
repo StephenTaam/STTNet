@@ -29,5 +29,5 @@ var searchData=
   ['gettime',['getTime',['../classstt_1_1time_1_1DateTime.html#ab5d77adef08847aba04f11e9731c013d',1,'stt::time::DateTime']]],
   ['geturl',['getUrl',['../classstt_1_1network_1_1WebSocketClient.html#a58028db6105b2bf9b9a21706e5b3665a',1,'stt::network::WebSocketClient']]],
   ['getvalidfloat',['getValidFloat',['../classstt_1_1data_1_1PrecisionUtil.html#a684e25d87e5039fbfc17862b8c3298d8',1,'stt::data::PrecisionUtil']]],
-  ['getvalue',['getvalue',['../classstt_1_1system_1_1csemp.html#ace7b5b4def39ff4a068d1a583b095226',1,'stt::system::csemp::getvalue()'],['../classstt_1_1data_1_1JsonHelper.html#a5198deea9a0dcddc31c4164bcbe0e637',1,'stt::data::JsonHelper::getValue()']]]
+  ['getvalue',['getValue',['../classstt_1_1data_1_1JsonHelper.html#a5198deea9a0dcddc31c4164bcbe0e637',1,'stt::data::JsonHelper::getValue()'],['../classstt_1_1system_1_1csemp.html#ace7b5b4def39ff4a068d1a583b095226',1,'stt::system::csemp::getvalue()']]]
 ];

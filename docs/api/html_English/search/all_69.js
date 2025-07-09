@@ -2,6 +2,7 @@ var searchData=
 [
   ['init',['init',['../classstt_1_1system_1_1ServerSetting.html#ada8122a77666fc2fa29af7f15bf4dded',1,'stt::system::ServerSetting::init()'],['../classstt_1_1system_1_1csemp.html#a25ea72b7ea419830e76b5be59ab96f10',1,'stt::system::csemp::init()']]],
   ['ip',['ip',['../structstt_1_1network_1_1TcpFDInf.html#a21f09ab19a62d07ea50990237762fa03',1,'stt::network::TcpFDInf']]],
+  ['ipinformation',['IPInformation',['../structstt_1_1security_1_1IPInformation.html',1,'stt::security']]],
   ['isbinary',['isBinary',['../classstt_1_1file_1_1File.html#aead14862f08ebf1bb6828d030a506eb3',1,'stt::file::File']]],
   ['isconnect',['isConnect',['../classstt_1_1network_1_1TcpFDHandler.html#a8f5e4b3d7e80e33a53e1c86b67510278',1,'stt::network::TcpFDHandler::isConnect()'],['../classstt_1_1network_1_1TcpClient.html#a5adf67d71e57fd326d11b5cb8c8ad756',1,'stt::network::TcpClient::isConnect()'],['../classstt_1_1network_1_1WebSocketClient.html#aaadb67abf50e475f10ce6e8e8988808b',1,'stt::network::WebSocketClient::isConnect()']]],
   ['islisten',['isListen',['../classstt_1_1network_1_1EpollSingle.html#a86bfc234117e6b7c2ccd36949b4283d0',1,'stt::network::EpollSingle::isListen()'],['../classstt_1_1network_1_1TcpServer.html#aaffeca105457365cc5cd117218d1b098',1,'stt::network::TcpServer::isListen()']]],

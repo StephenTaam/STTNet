@@ -12,6 +12,5 @@ var searchData=
   ['locpara',['locPara',['../structstt_1_1network_1_1HttpRequestInformation.html#a4bf9b17871ed9aaf349fb44d4a227ee7',1,'stt::network::HttpRequestInformation::locPara()'],['../structstt_1_1network_1_1WebSocketFDInformation.html#a97d0c483c33d236c5d2af3504b74857e',1,'stt::network::WebSocketFDInformation::locPara()']]],
   ['logfile',['LogFile',['../classstt_1_1file_1_1LogFile.html',1,'stt::file']]],
   ['logfile',['logfile',['../classstt_1_1system_1_1ServerSetting.html#aa657090c9fae15e10eaaad26da0224dc',1,'stt::system::ServerSetting']]],
-  ['lq1',['lq1',['../classstt_1_1network_1_1TcpServer.html#af154330d122318dc0720f911eaa9edf7',1,'stt::network::TcpServer']]],
-  ['ltl1',['ltl1',['../classstt_1_1network_1_1TcpServer.html#a73557f9d7ac2b09778668b2288418810',1,'stt::network::TcpServer']]]
+  ['lq1',['lq1',['../classstt_1_1network_1_1TcpServer.html#af154330d122318dc0720f911eaa9edf7',1,'stt::network::TcpServer']]]
 ];

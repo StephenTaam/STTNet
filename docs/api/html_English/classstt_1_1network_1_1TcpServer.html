@@ -113,6 +113,9 @@ Inheritance diagram for stt::network::TcpServer:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:ad883188f669a67eeb7e709ff72320d7e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ad883188f669a67eeb7e709ff72320d7e">TcpServer</a> (const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;connectionRateLimit=6)</td></tr>
+<tr class="memdesc:ad883188f669a67eeb7e709ff72320d7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor, which is enabled by default. Limit the maximum number of connections to an IP address to 20; The fastest connection speed per second for the same IP address is 6.  <a href="#ad883188f669a67eeb7e709ff72320d7e">More...</a><br/></td></tr>
+<tr class="separator:ad883188f669a67eeb7e709ff72320d7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa055d4fb2ce4280c28ae61beb4c4f66b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aa055d4fb2ce4280c28ae61beb4c4f66b">startListen</a> (const int &amp;port, const int &amp;evsNum=50000, const int &amp;threads=5)</td></tr>
 <tr class="memdesc:aa055d4fb2ce4280c28ae61beb4c4f66b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the TCP server listening program.  <a href="#aa055d4fb2ce4280c28ae61beb4c4f66b">More...</a><br/></td></tr>
 <tr class="separator:aa055d4fb2ce4280c28ae61beb4c4f66b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,6 +153,8 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a3353869f874adcdc220a7beedeed55c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d68c9eb4cc4966ae71e0e6faad43ec0"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a3d68c9eb4cc4966ae71e0e6faad43ec0">solvingFD_lock</a></td></tr>
 <tr class="separator:a3d68c9eb4cc4966ae71e0e6faad43ec0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a879f386e01460ecd71f70ea13a725019"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html">security::ConnectionLimiter</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a879f386e01460ecd71f70ea13a725019">connectionLimiter</a></td></tr>
+<tr class="separator:a879f386e01460ecd71f70ea13a725019"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c0e79a422e5bdec321e029da0bd8c84"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; int, <a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a3c0e79a422e5bdec321e029da0bd8c84">clientfd</a></td></tr>
 <tr class="separator:a3c0e79a422e5bdec321e029da0bd8c84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bda2199ef1870a4b2b8b25f5cb90ed8"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a4bda2199ef1870a4b2b8b25f5cb90ed8">lc1</a></td></tr>
@@ -172,15 +177,64 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:aa26712d21ba87595fa4f6b4a108e126b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a295aa6784cd288fdc9448d6b99d2c212"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a295aa6784cd288fdc9448d6b99d2c212">TLS</a> = false</td></tr>
 <tr class="separator:a295aa6784cd288fdc9448d6b99d2c212"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a308e287aaf80ae51bb10ac6a80a19545"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; int, SSL * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a308e287aaf80ae51bb10ac6a80a19545">tlsfd</a></td></tr>
-<tr class="separator:a308e287aaf80ae51bb10ac6a80a19545"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73557f9d7ac2b09778668b2288418810"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a73557f9d7ac2b09778668b2288418810">ltl1</a></td></tr>
-<tr class="separator:a73557f9d7ac2b09778668b2288418810"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e6cde1deb1473010f4c94ef8bb45693"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a></td></tr>
+<tr class="separator:a9e6cde1deb1473010f4c94ef8bb45693"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Tcp server class. </p>
 <dl class="section note"><dt>Note</dt><dd>The default underlying implementation is epoll edge trigger + socket non-blocking mode </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="ad883188f669a67eeb7e709ff72320d7e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">stt::network::TcpServer::TcpServer </td>
+          <td>(</td>
+          <td class="paramtype">const bool &amp;&#160;</td>
+          <td class="paramname"><em>security_open</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>connectionNumLimit</em> = <code>20</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>connectionRateLimit</em> = <code>6</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor, which is enabled by default. Limit the maximum number of connections to an IP address to 20; The fastest connection speed per second for the same IP address is 6. </p>
+<dl class="section note"><dt>Note</dt><dd>Turning on the security module has a performance impact </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">security_open</td><td>true: enable the security module false: disable the security module (enabled by default) </td></tr>
+    <tr><td class="paramname">connectionNumLimit</td><td>The maximum number of connections from the same IP address </td></tr>
+    <tr><td class="paramname">connectionRateLimit</td><td>The maximum number of connections per second to the same IP address </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a293d3497aae9c899c682d903654c0e49"></a>
 <div class="memitem">
 <div class="memproto">
@@ -501,6 +555,26 @@ false if enabling fails (specific error will be logged)</dd></dl>
 
 </div>
 </div>
+<a class="anchor" id="a879f386e01460ecd71f70ea13a725019"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html">security::ConnectionLimiter</a> stt::network::TcpServer::connectionLimiter</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a6529b1505d47bc417f4ff614e7d70dfd"></a>
 <div class="memitem">
 <div class="memproto">
@@ -661,7 +735,7 @@ false if enabling fails (specific error will be logged)</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a73557f9d7ac2b09778668b2288418810"></a>
+<a class="anchor" id="a9e6cde1deb1473010f4c94ef8bb45693"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -669,7 +743,7 @@ false if enabling fails (specific error will be logged)</dd></dl>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::mutex stt::network::TcpServer::ltl1</td>
+          <td class="memname">bool stt::network::TcpServer::security_open</td>
         </tr>
       </table>
   </td>
@@ -730,26 +804,6 @@ false if enabling fails (specific error will be logged)</dd></dl>
       <table class="memname">
         <tr>
           <td class="memname">bool stt::network::TcpServer::TLS = false</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a308e287aaf80ae51bb10ac6a80a19545"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unordered_map&lt;int,SSL*&gt; stt::network::TcpServer::tlsfd</td>
         </tr>
       </table>
   </td>

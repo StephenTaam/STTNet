@@ -1,6 +1,7 @@
 var searchData=
 [
   ['randomutil',['RandomUtil',['../classstt_1_1data_1_1RandomUtil.html',1,'stt::data']]],
+  ['ratelimiter',['RateLimiter',['../classstt_1_1security_1_1RateLimiter.html',1,'stt::security']]],
   ['read',['read',['../classstt_1_1file_1_1File.html#a860b8315f11150b659a2b272c2420516',1,'stt::file::File::read(std::string &amp;data, const int &amp;linePos, const int &amp;num)'],['../classstt_1_1file_1_1File.html#adbaabcd58ae0db72a4941acf9381066f',1,'stt::file::File::read(char *data, const size_t &amp;pos, const size_t &amp;size)']]],
   ['readall',['readAll',['../classstt_1_1file_1_1File.html#af883f1eb8ca2ac80ec658a5a02b09feb',1,'stt::file::File']]],
   ['readallc',['readAllC',['../classstt_1_1file_1_1File.html#a8f2ef283347652a44c15e273cad2950b',1,'stt::file::File']]],
