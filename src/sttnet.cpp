@@ -3714,17 +3714,16 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 return false;
         }
         unique_lock<mutex> lock2(lc1);
-        unique_lock<mutex> lock1(ltl1);
+        //unique_lock<mutex> lock1(ltl1);
         for(auto &ii:clientfd)
         {
             if(this->security_open)
                 connectionLimiter.clearIP(ii.second.ip);
-            auto jj=tlsfd.find(ii.first);
-            if(jj!=tlsfd.end())//这个套接字启用了tls
+            //auto jj=tlsfd.find(ii.first);
+            if(ii.second.ssl!=nullptr)//这个套接字启用了tls
             {
-                SSL_shutdown(jj->second);
-                SSL_free(jj->second);
-                tlsfd.erase(jj);
+                SSL_shutdown(ii.second.ssl);
+                SSL_free(ii.second.ssl);
             }
             shutdown(ii.first,SHUT_RDWR);
             ::close(ii.first);
@@ -3738,7 +3737,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     bool stt::network::TcpServer::close(const int &fd)
     {
         unique_lock<mutex> lock2(lc1);
-        unique_lock<mutex> lock1(ltl1);
+        //unique_lock<mutex> lock1(ltl1);
         auto ii=clientfd.find(fd);
         if(ii==clientfd.end())
         {
@@ -3748,12 +3747,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         {
             if(this->security_open)
                 connectionLimiter.clearIP(ii->second.ip);
-            auto jj=tlsfd.find(fd);
-            if(jj!=tlsfd.end())
+            //auto jj=tlsfd.find(fd);
+            if(ii->second.ssl!=nullptr)
             {
-                SSL_shutdown(jj->second);
-                SSL_free(jj->second);
-                tlsfd.erase(jj);
+                SSL_shutdown(ii->second.ssl);
+                SSL_free(ii->second.ssl);
             }
             ::close(fd);
             clientfd.erase(ii);
@@ -3851,7 +3849,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 continue;
                             }
                             }
-                            
+                            inf.ssl=nullptr;
                             if(TLS)//加密accept
                             {
                                 ssl=SSL_new(ctx);
@@ -3872,8 +3870,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                     ::close(cfd);
                                     continue;
                                 }
-                                unique_lock<mutex> lock1(ltl1);
-                                tlsfd.emplace(cfd,ssl);//emplace???erase???
+                                //unique_lock<mutex> lock1(ltl1);
+                                //tlsfd.emplace(cfd,ssl);//emplace???erase???
+                                inf.ssl=ssl;
                             }
                             //cout<<"ok"<<endl;
                             //epoll注册
@@ -4025,6 +4024,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 else
                     stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" :now handleing fd= "+to_string(cclientfd));
             }
+            /*
             unique_lock<mutex> lock1(ltl1);
             auto ii=tlsfd.find(cclientfd);
             if(ii==tlsfd.end())
@@ -4032,11 +4032,12 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             else
                 k.setFD(cclientfd,ii->second,unblock);
             lock1.unlock();
-
+            */
             unique_lock<mutex> lock6(lc1);
             auto jj=clientfd.find(cclientfd);
             if(jj==clientfd.end())//can not find fd information,we need to writedown this error and close this fd
             {
+                /*
                 lock6.unlock();
                 unique_lock<mutex> lock7(ltl1);
                 auto jj=tlsfd.find(cclientfd);
@@ -4056,13 +4057,18 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     else
                         stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : find information of handled fd= "+to_string(cclientfd)+" fail,now has closed this connection");
                 }
+                */
+                lock6.unlock();
                 solvingFD_lock.lock();
                 solvingFD[cclientfd]=false;
                 solvingFD_lock.unlock();
                 continue;
             }
             else
+            {
+                k.setFD(cclientfd,jj->second.ssl,unblock);
                 inf=jj->second;
+            }
             lock6.unlock();
             
             if(!fc(k,inf))
@@ -4370,6 +4376,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             auto jj=clientfd.find(cclientfd);
             if(jj==clientfd.end())//can not find fd information,we need to writedown this error and close this fd
             {
+                /*
                 lock6.unlock();
                 unique_lock<mutex> lock7(ltl1);
                 auto jj=tlsfd.find(cclientfd);
@@ -4390,7 +4397,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     else
                         stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : find information of handled fd= "+to_string(cclientfd)+" fail,now has closed this connection");
                 }
-                
+                */
+                lock6.unlock();
                 solvingFD_lock.lock();
                 solvingFD[cclientfd]=false;
                 solvingFD_lock.unlock();
@@ -4398,6 +4406,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
             else
             {
+                k.setFD(cclientfd,jj->second.ssl,unblock);
                 TcpFDInf &Tcpinf=jj->second;
             lock6.unlock();
 
@@ -4409,6 +4418,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : now start solveing fd= "+to_string(cclientfd));
              }
             
+            /*
             unique_lock<mutex> lock1(ltl1);
             auto ii=tlsfd.find(cclientfd);
             if(ii==tlsfd.end())
@@ -4416,6 +4426,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             else
                 k.setFD(cclientfd,ii->second,unblock);
             lock1.unlock();
+            */
              if(stt::system::ServerSetting::logfile!=nullptr)
              {
                 if(stt::system::ServerSetting::language=="Chinese")
@@ -4523,7 +4534,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             else
                 stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(consumerNum)+"quit");
         }
-    };
+    }
 
     
     bool stt::network::EpollSingle::endListen()
@@ -5404,6 +5415,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             auto ii=clientfd.find(cclientfd);
             if(ii==clientfd.end())//can not find fd information,we need to writedown this error and close this fd
             {
+                /*
                 lock6.unlock();
                 unique_lock<mutex> lock7(ltl1);
                 auto ii=tlsfd.find(cclientfd);
@@ -5423,6 +5435,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     else
                         stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : find information of handled fd= "+to_string(cclientfd)+" fail,now has closed this connection");
                 }
+                */
+                lock6.unlock();
                 solvingFD_lock.lock();
                 solvingFD[cclientfd]=false;
                 solvingFD_lock.unlock();
@@ -5430,6 +5444,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
             else
             {
+                k.setFD(cclientfd,ii->second.ssl,unblock);
                 TcpFDInf &Tcpinf=ii->second;
             lock6.unlock();
             cout<<"websocket fd="<<cclientfd<<endl;
@@ -5456,6 +5471,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 WebSocketFDInformation winf;
                 winf.fd=cclientfd;
                 winf.closeflag=false;
+                /*
                 unique_lock<mutex> lock1(ltl1);
                     auto ii=tlsfd.find(cclientfd);
                 if(ii==tlsfd.end())
@@ -5463,6 +5479,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 else
                     k.setFD(cclientfd,ii->second,unblock);
                 lock1.unlock();
+                */
 
                 int ret=k.solveRequest(Tcpinf);
                 if(ret==-1)
@@ -5564,7 +5581,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             else//已经进行了握手操作
             {
                 
-
+                /*
                 unique_lock<mutex> lock1(ltl1);
                 auto ii=tlsfd.find(cclientfd);
                 if(ii==tlsfd.end())
@@ -5572,7 +5589,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 else
                     k1.setFD(cclientfd,ii->second,unblock);
                 lock1.unlock();
-
+                */
                 int r=k1.getMessage(Tcpinf,jj->second);
 
                 if(r==-1)
@@ -5719,14 +5736,18 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     }
     SSL* stt::network::TcpServer::getSSL(const int &fd)
     {
-        SSL *ssl;
-        unique_lock<mutex> lock1(ltl1);
-        auto ii=tlsfd.find(fd);
-        if(ii==tlsfd.end())
-            ssl=nullptr;
-        else
-            ssl=ii->second;
-        return ssl;
+        //SSL *ssl;
+        //unique_lock<mutex> lock1(ltl1);
+        //auto ii=tlsfd.find(fd);
+        //if(ii==tlsfd.end())
+        //    ssl=nullptr;
+        //else
+        //    ssl=ii->second;
+        unique_lock<mutex> lock1(lc1);
+        auto ii=clientfd.find(fd);
+        if(ii==clientfd.end())
+            return nullptr;
+        return ii->second.ssl;
     }
     void stt::network::WebSocketServer::HB()
     {

@@ -2418,8 +2418,8 @@ public:
         bool unblock;
         SSL_CTX *ctx = nullptr;
         bool TLS = false;
-        std::unordered_map<int,SSL*> tlsfd;
-        std::mutex ltl1;
+        //std::unordered_map<int,SSL*> tlsfd;
+        //std::mutex ltl1;
         bool security_open;
     private:
         std::function<bool(TcpFDHandler &k,TcpFDInf &inf)> fc;
