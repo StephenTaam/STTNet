@@ -3717,6 +3717,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         unique_lock<mutex> lock1(ltl1);
         for(auto &ii:clientfd)
         {
+            if(this->security_open)
+                connectionLimiter.clearIP(ii.second.ip);
             auto jj=tlsfd.find(ii.first);
             if(jj!=tlsfd.end())//这个套接字启用了tls
             {
@@ -3744,6 +3746,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         }
         else
         {
+            if(this->security_open)
+                connectionLimiter.clearIP(ii->second.ip);
             auto jj=tlsfd.find(fd);
             if(jj!=tlsfd.end())
             {
@@ -3810,6 +3814,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     {
                         while(1)
                         {  
+
                             k_len = sizeof(k);
                             int cfd=accept(fd,(struct sockaddr*)&k,&k_len);
                             if(cfd<0)
@@ -3828,6 +3833,25 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                     continue;
                                 }
                             }
+                            
+                            string ip(inet_ntoa(k.sin_addr));//获取客户端的ip
+                            
+                            if(this->security_open)
+                            {
+                            if(!connectionLimiter.allow(ip))
+                            {
+                                ::close(cfd);
+                                if(stt::system::ServerSetting::logfile!=nullptr)
+                                {
+                                        if(stt::system::ServerSetting::language=="Chinese")
+                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll:fd="+to_string(cfd)+" ip="+ip+" 此ip连接数量或者速度达到上限，已经关闭这个连接");
+                                        else
+                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll:fd="+to_string(cfd)+" ip="+ip+" this connection has been closed because this ip has reached connection num's or rate's limit");
+                                }
+                                continue;
+                            }
+                            }
+                            
                             if(TLS)//加密accept
                             {
                                 ssl=SSL_new(ctx);
@@ -3861,7 +3885,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             cout<<"listen:"<<cfd<<endl;
                             //对象表注册
                             string port=to_string(k.sin_port);//获取客户端的端口
-                            string ip(inet_ntoa(k.sin_addr));//获取客户端的ip
+                            //string ip(inet_ntoa(k.sin_addr));//获取客户端的ip
                             inf.fd=cfd;
                             inf.ip=ip;
                             inf.port=port;
@@ -6141,3 +6165,48 @@ stt::system::HBSystem::~HBSystem()
     }
 }
 
+bool stt::security::ConnectionLimiter::allow(const std::string &ip)
+{
+    auto ii=connectionTable.find(ip);
+    //找到
+    if(ii!=connectionTable.end())
+    {
+        if(ii->second.connectionNum<connectionLimit)//检查是否达到上限
+        {
+            //检查速度
+            //首先清空大于一秒内的
+            chrono::steady_clock::time_point now=chrono::steady_clock::now();
+            while(!ii->second.connectionTimeQueue.empty()&&now-ii->second.connectionTimeQueue.front()>chrono::seconds(1))
+            {
+                ii->second.connectionTimeQueue.pop_front();
+            }
+
+            if(ii->second.connectionTimeQueue.size()<connectionRateLimit)//满足条件
+            {
+                ii->second.connectionNum++;
+                ii->second.connectionTimeQueue.push_back(now);
+                return true;
+            }
+            else
+                return false;
+        }
+        else
+            return false;
+    }
+    //找不到
+    else
+    {
+        chrono::steady_clock::time_point now=chrono::steady_clock::now();
+        connectionTable.emplace(ip,IPInformation{1,deque<chrono::steady_clock::time_point>{now}});
+        return true;
+    }
+}
+
+void stt::security::ConnectionLimiter::clearIP(const std::string &ip)
+{
+    auto ii=connectionTable.find(ip);
+    if(ii!=connectionTable.end())
+    {
+        ii->second.connectionNum=0;
+    }
+}

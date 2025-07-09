@@ -1637,6 +1637,53 @@ public:
             static std::string& jsonToUTF8(const std::string &input, std::string &output);
         };
     }
+
+    /**
+    * @brief API related to information security
+    */
+    namespace security
+    {
+        /**
+        * @brief A structure that records IP information, such as the number of connections, connection rate, etc
+        */
+        struct IPInformation
+        {
+            int connectionNum;
+            std::deque<std::chrono::steady_clock::time_point> connectionTimeQueue;
+        };
+        /**
+        * @brief Restrict the classes that can be connected to the same IP address
+        * @note No locks, no synchronization and thread safety, their own on the upper layer to ensure it.
+        * @note Limit the number and speed of connections to the same IP
+        */
+        class ConnectionLimiter
+        {
+        private:
+            int connectionLimit;
+            int connectionRateLimit;
+            std::unordered_map<std::string,IPInformation> connectionTable;
+
+        public:
+            /**
+            * @brief ConnectionLimiter constructor
+            * @param connectionLimit The maximum number of connections to the same IP address is 20 by default
+            * @param connectionRateLimit The maximum number of connections per second for the same IP address is 6 by default
+            */
+            ConnectionLimiter(const int &connectionLimit=20,const int &connectionRateLimit=6):connectionLimit(connectionLimit),connectionRateLimit(connectionRateLimit){}
+            /**
+            * @brief Determines whether to allow connections to a particular IP address based on the number of connections and speed
+            * @param ip IP address
+            * @return true：Connections from a certain IP address should be allowed false: Connections from a certain IP address should be denied
+            */
+            bool allow(const std::string &ip);
+            /**
+            * @brief Clear the number of connections that record an IP address
+            * @param IP address
+            */
+            void clearIP(const std::string &ip);
+        };
+    }
+
     /**
     * @namespace stt::network
     * @brief Network framework, protocols, communication, and IO multiplexing related
@@ -2340,6 +2387,10 @@ public:
         * @brief saves http/https protocol information
         */
         struct HttpRequestInformation HttpInf;
+        /**
+        * @brief If encrypted, store the encryption handle
+        */
+        SSL* ssl;
     };
     /**
     * @brief Define the macro maxFD as 1000000, the maximum number of connections a service object can accept
@@ -2355,7 +2406,7 @@ public:
         bool solvingFD[maxFD];
         std::mutex solvingFD_lock;
     protected:
-        
+        security::ConnectionLimiter connectionLimiter;
         std::unordered_map<int,TcpFDInf> clientfd;
         std::mutex lc1;
         int flag1 = true;
@@ -2369,6 +2420,7 @@ public:
         bool TLS = false;
         std::unordered_map<int,SSL*> tlsfd;
         std::mutex ltl1;
+        bool security_open;
     private:
         std::function<bool(TcpFDHandler &k,TcpFDInf &inf)> fc;
         int fd = -1;
@@ -2379,6 +2431,14 @@ public:
         void epolll(const int &evsNum);
         virtual void consumer(const int &threadID);
     public:
+        /**
+        * @brief Constructor, which is enabled by default. Limit the maximum number of connections to an IP address to 20; The fastest connection speed per second for the same IP address is 6
+        * @note Turning on the security module has a performance impact
+        * @param security_open true: enable the security module false: disable the security module (enabled by default)
+        * @param connectionNumLimit The maximum number of connections from the same IP address
+        * @param connectionRateLimit The maximum number of connections per second to the same IP address
+        */
+        TcpServer(const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):connectionLimiter(connectionNumLimit,connectionRateLimit),security_open(security_open){}
         /**
         * @brief Start the TCP server listening program
         * @param port Port to listen on
@@ -2529,6 +2589,14 @@ public:
         void consumer(const int &threadID);
     public:
         /**
+        * @brief Constructor, which is enabled by default. Limit the maximum number of connections to an IP address to 20; The fastest connection speed per second for the same IP address is 6
+        * @note Turning on the security module has a performance impact
+        * @param security_open true: enable the security module false: disable the security module (enabled by default)
+        * @param connectionNumLimit The maximum number of connections from the same IP address
+        * @param connectionRateLimit The maximum number of connections per second to the same IP address
+        */
+        HttpServer(const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):TcpServer(security_open,connectionNumLimit,connectionRateLimit){}
+        /**
         * @brief Set a callback function for responding after receiving and successfully parsing an Http/Https request
         * Register a callback function
         * @param fc A function or function object for the callback function to respond after receiving and successfully parsing an Http/Https request
@@ -2623,6 +2691,14 @@ public:
         bool closeWithoutLock(const int &fd, const std::string &closeCodeAndMessage);
         bool closeWithoutLock(const int &fd, const short &code = 1000, const std::string &message = "bye");
     public:
+        /**
+        * @brief Constructor, which is enabled by default. Limit the maximum number of connections to an IP address to 20; The fastest connection speed per second for the same IP address is 6
+        * @note Turning on the security module has a performance impact
+        * @param security_open true: enable the security module false: disable the security module (enabled by default)
+        * @param connectionNumLimit The maximum number of connections from the same IP address
+        * @param connectionRateLimit The maximum number of connections per second to the same IP address
+        */
+        WebSocketServer(const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):TcpServer(security_open,connectionNumLimit,connectionRateLimit){}
         /**
         * @brief Set the callback function to be executed after a websocket connection is successful
         * Register a callback function
@@ -3336,6 +3412,8 @@ public:
             }
         };
     }
+
+    
 }
 
 

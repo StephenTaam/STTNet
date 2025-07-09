@@ -1634,6 +1634,57 @@ namespace stt
             static std::string& jsonToUTF8(const std::string &input,std::string &output);
         };
     }
+
+    /**
+    * @brief 涉及信息安全的api
+    */
+    namespace security
+    {
+        /**
+        * @brief 记录ip信息的结构体，比如连接数，连接速率等
+        */
+        struct IPInformation
+        {
+            int connectionNum;
+            std::deque<std::chrono::steady_clock::time_point> connectionTimeQueue;
+        };
+        /**
+        * @brief 限制同一ip连接的类
+        * @note 不带锁，不确保同步和线程安全，自己在上层确保。
+        * @note 限制同一ip的连接数目和速度
+        */
+        class ConnectionLimiter
+        {
+        private:
+            int connectionLimit;
+            int connectionRateLimit;
+            std::unordered_map<std::string,IPInformation> connectionTable;
+
+        public:
+            /**
+            * @brief ConnectionLimiter 的构造函数
+            * @param connectionLimit 同一个ip的最大连接数，默认为20
+            * @param connectionRateLimit 同一ip每秒的连接最大次数，默认为6
+            */
+            ConnectionLimiter(const int &connectionLimit=20,const int &connectionRateLimit=6):connectionLimit(connectionLimit),connectionRateLimit(connectionRateLimit){}
+            /**
+            * @brief 根据连接数和速度判断是否允许某ip的连接
+            * @param ip ip地址
+            * @return true：应当允许某ip的连接 false：应当拒绝某ip的连接
+            */
+            bool allow(const std::string &ip);
+            /**
+            * @brief 把记录某ip的连接数清零
+            * @param ip地址
+            */
+            void clearIP(const std::string &ip);
+        };
+        class RateLimiter
+        {
+
+        };
+    }
+
     /**
     * @namespace stt::network
     * @brief 网络框架，协议，通信，io多路复用相关
@@ -2303,7 +2354,10 @@ namespace stt
         * @brief 保存http/https协议的信息
         */
         struct HttpRequestInformation HttpInf;
-
+        /**
+        * @brief 如果加密了，存放加密句柄
+        */
+        SSL* ssl;
     };
     /**
     * @brief 定义maxFD这个宏为1000000,后续会用到的一个服务对象的最大接受连接数
@@ -2320,7 +2374,7 @@ namespace stt
         bool solvingFD[maxFD];
         std::mutex solvingFD_lock;
     protected:
-        
+        security::ConnectionLimiter connectionLimiter;
         std::unordered_map<int,TcpFDInf> clientfd;
         std::mutex lc1;
         int flag1=true;
@@ -2334,6 +2388,7 @@ namespace stt
         bool TLS=false;
         std::unordered_map<int,SSL*> tlsfd;
         std::mutex ltl1;
+        bool security_open;
     private:
         std::function<bool(TcpFDHandler &k,TcpFDInf &inf)> fc;
         int fd=-1;
@@ -2344,6 +2399,14 @@ namespace stt
         void epolll(const int &evsNum);
         virtual void consumer(const int &threadID);
     public:
+        /**
+        * @brief 构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6
+        * @note 打开安全模块会对性能有影响
+        * @param security_open true:开启安全模块 false：关闭安全模块 （默认为开启）
+        * @param connectionNumLimit 同一个ip连接数目的上限
+        * @param connectionRateLimit 同一个ip每秒钟连接数目的上限
+        */
+        TcpServer(const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):connectionLimiter(connectionNumLimit,connectionRateLimit),security_open(security_open){}
         /**
         * @brief 打开Tcp服务器监听程序
         * @param port 监听的端口
@@ -2492,6 +2555,14 @@ namespace stt
         void consumer(const int &threadID);
     public:
         /**
+        * @brief 构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6
+        * @note 打开安全模块会对性能有影响
+        * @param security_open true:开启安全模块 false：关闭安全模块 （默认为开启）
+        * @param connectionNumLimit 同一个ip连接数目的上限
+        * @param connectionRateLimit 同一个ip每秒钟连接数目的上限
+        */
+        HttpServer(const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):TcpServer(security_open,connectionNumLimit,connectionRateLimit){}
+        /**
         * @brief 设置一个收到Http/Https请求并成功解析后进行响应的回调函数
         * 注册一个回调函数
         * @param fc 一个函数或函数对象，用于当收到Http/Https请求并成功解析后进行响应的回调函数
@@ -2586,6 +2657,14 @@ namespace stt
         bool closeWithoutLock(const int &fd,const std::string &closeCodeAndMessage);
         bool closeWithoutLock(const int &fd,const short &code=1000,const std::string &message="bye");
     public:
+        /**
+        * @brief 构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6
+        * @note 打开安全模块会对性能有影响
+        * @param security_open true:开启安全模块 false：关闭安全模块 （默认为开启）
+        * @param connectionNumLimit 同一个ip连接数目的上限
+        * @param connectionRateLimit 同一个ip每秒钟连接数目的上限
+        */
+        WebSocketServer(const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):TcpServer(security_open,connectionNumLimit,connectionRateLimit){}
         /**
         * @brief 设置websocket连接成功后就执行的回调函数
         * 注册一个回调函数
@@ -3290,6 +3369,7 @@ namespace stt
             }
         };
     }
+    
 }
 
 
