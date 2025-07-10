@@ -3639,6 +3639,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         //clientfd=new TcpFDInf[maxFD];
         fdQueue=new queue<QueueFD>[threads];
         cv=new condition_variable[threads];
+        lq1=new mutex[threads];
         //socket准备
         fd=socket(AF_INET,SOCK_STREAM,0);
         if(fd<0)
@@ -3959,7 +3960,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     {
         TcpFDHandler k;
         TcpFDInf inf;
-        unique_lock<mutex> ul1(lq1);
+        unique_lock<mutex> ul1(lq1[threadID]);
         bool first=true;
         if(stt::system::ServerSetting::logfile!=nullptr)
         {
@@ -4286,7 +4287,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     {
         HttpServerFDHandler k;
         //TcpFDInf &Tcpinf;
-        unique_lock<mutex> ul1(lq1);
+        unique_lock<mutex> ul1(lq1[threadID]);
         bool first=true;
         if(stt::system::ServerSetting::logfile!=nullptr)
         {
@@ -5271,7 +5272,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         HttpServerFDHandler k;
         //TcpFDInf &Tcpinf;
         WebSocketServerFDHandler k1;
-        unique_lock<mutex> ul1(lq1);
+        unique_lock<mutex> ul1(lq1[threadID]);
         bool first=true;
         if(stt::system::ServerSetting::logfile!=nullptr)
         {
