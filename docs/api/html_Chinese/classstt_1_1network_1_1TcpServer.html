@@ -113,12 +113,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public 成员函数</h2></td></tr>
-<tr class="memitem:ad883188f669a67eeb7e709ff72320d7e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ad883188f669a67eeb7e709ff72320d7e">TcpServer</a> (const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;connectionRateLimit=6)</td></tr>
-<tr class="memdesc:ad883188f669a67eeb7e709ff72320d7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6  <a href="#ad883188f669a67eeb7e709ff72320d7e">更多...</a><br/></td></tr>
-<tr class="separator:ad883188f669a67eeb7e709ff72320d7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa055d4fb2ce4280c28ae61beb4c4f66b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aa055d4fb2ce4280c28ae61beb4c4f66b">startListen</a> (const int &amp;port, const int &amp;evsNum=50000, const int &amp;threads=5)</td></tr>
-<tr class="memdesc:aa055d4fb2ce4280c28ae61beb4c4f66b"><td class="mdescLeft">&#160;</td><td class="mdescRight">打开Tcp服务器监听程序  <a href="#aa055d4fb2ce4280c28ae61beb4c4f66b">更多...</a><br/></td></tr>
-<tr class="separator:aa055d4fb2ce4280c28ae61beb4c4f66b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1c8fad685f00d207fcdb0d189088853"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ab1c8fad685f00d207fcdb0d189088853">TcpServer</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a32538424c01d62f24d986e01f65cc267">maxFD</a>=10000000, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;connectionRateLimit=6)</td></tr>
+<tr class="memdesc:ab1c8fad685f00d207fcdb0d189088853"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6  <a href="#ab1c8fad685f00d207fcdb0d189088853">更多...</a><br/></td></tr>
+<tr class="separator:ab1c8fad685f00d207fcdb0d189088853"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaeae7d42b0dc26836f1430daa5e61b7f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aaeae7d42b0dc26836f1430daa5e61b7f">startListen</a> (const int &amp;port, const int &amp;threads=5)</td></tr>
+<tr class="memdesc:aaeae7d42b0dc26836f1430daa5e61b7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">打开Tcp服务器监听程序  <a href="#aaeae7d42b0dc26836f1430daa5e61b7f">更多...</a><br/></td></tr>
+<tr class="separator:aaeae7d42b0dc26836f1430daa5e61b7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c020c00d442fc3d47600091e9e34527"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a6c020c00d442fc3d47600091e9e34527">setTLS</a> (const char *cert, const char *key, const char *passwd, const char *ca)</td></tr>
 <tr class="memdesc:a6c020c00d442fc3d47600091e9e34527"><td class="mdescLeft">&#160;</td><td class="mdescRight">启用 TLS 加密并配置服务器端证书与密钥  <a href="#a6c020c00d442fc3d47600091e9e34527">更多...</a><br/></td></tr>
 <tr class="separator:a6c020c00d442fc3d47600091e9e34527"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -149,10 +149,8 @@ Public 成员函数</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected 属性</h2></td></tr>
-<tr class="memitem:a3353869f874adcdc220a7beedeed55c5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a3353869f874adcdc220a7beedeed55c5">solvingFD</a> [<a class="el" href="sttnet_8h.html#ae27515887d4276929f45c1f2e6234105">maxFD</a>]</td></tr>
-<tr class="separator:a3353869f874adcdc220a7beedeed55c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d68c9eb4cc4966ae71e0e6faad43ec0"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a3d68c9eb4cc4966ae71e0e6faad43ec0">solvingFD_lock</a></td></tr>
-<tr class="separator:a3d68c9eb4cc4966ae71e0e6faad43ec0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32538424c01d62f24d986e01f65cc267"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a32538424c01d62f24d986e01f65cc267">maxFD</a></td></tr>
+<tr class="separator:a32538424c01d62f24d986e01f65cc267"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a879f386e01460ecd71f70ea13a725019"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html">security::ConnectionLimiter</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a879f386e01460ecd71f70ea13a725019">connectionLimiter</a></td></tr>
 <tr class="separator:a879f386e01460ecd71f70ea13a725019"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c0e79a422e5bdec321e029da0bd8c84"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; int, <a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a3c0e79a422e5bdec321e029da0bd8c84">clientfd</a></td></tr>
@@ -161,12 +159,12 @@ Protected 属性</h2></td></tr>
 <tr class="separator:a4bda2199ef1870a4b2b8b25f5cb90ed8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb62cf93ae93211e7bbe9f16ed73a802"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#abb62cf93ae93211e7bbe9f16ed73a802">flag1</a> =true</td></tr>
 <tr class="separator:abb62cf93ae93211e7bbe9f16ed73a802"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0266c58ded1f95ee5d7d6599fec9aaba"><td class="memItemLeft" align="right" valign="top">std::queue&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a0266c58ded1f95ee5d7d6599fec9aaba">fdQueue</a></td></tr>
-<tr class="separator:a0266c58ded1f95ee5d7d6599fec9aaba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f5ba7bd1c2414a450eca207edc61dee"><td class="memItemLeft" align="right" valign="top">std::queue&lt; <a class="el" href="structstt_1_1network_1_1QueueFD.html">QueueFD</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a9f5ba7bd1c2414a450eca207edc61dee">fdQueue</a></td></tr>
+<tr class="separator:a9f5ba7bd1c2414a450eca207edc61dee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af154330d122318dc0720f911eaa9edf7"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#af154330d122318dc0720f911eaa9edf7">lq1</a></td></tr>
 <tr class="separator:af154330d122318dc0720f911eaa9edf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a78b1bd41772012c52f0777a20deb57a1"><td class="memItemLeft" align="right" valign="top">std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a78b1bd41772012c52f0777a20deb57a1">cv1</a></td></tr>
-<tr class="separator:a78b1bd41772012c52f0777a20deb57a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a542f5eb7a7fa5d644886dee30d265267"><td class="memItemLeft" align="right" valign="top">std::condition_variable *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a542f5eb7a7fa5d644886dee30d265267">cv</a></td></tr>
+<tr class="separator:a542f5eb7a7fa5d644886dee30d265267"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6529b1505d47bc417f4ff614e7d70dfd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a6529b1505d47bc417f4ff614e7d70dfd">consumerNum</a></td></tr>
 <tr class="separator:a6529b1505d47bc417f4ff614e7d70dfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99624f98f3700468495ccc5d5c3597e7"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a99624f98f3700468495ccc5d5c3597e7">lco1</a></td></tr>
@@ -184,7 +182,7 @@ Protected 属性</h2></td></tr>
 <div class="textblock"><p>Tcp服务端类 </p>
 <dl class="section note"><dt>注解</dt><dd>默认底层实现是epoll边缘触发+套接字非阻塞模式 </dd></dl>
 </div><h2 class="groupheader">构造及析构函数说明</h2>
-<a class="anchor" id="ad883188f669a67eeb7e709ff72320d7e"></a>
+<a class="anchor" id="ab1c8fad685f00d207fcdb0d189088853"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -194,6 +192,12 @@ Protected 属性</h2></td></tr>
         <tr>
           <td class="memname">stt::network::TcpServer::TcpServer </td>
           <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>maxFD</em> = <code>10000000</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const bool &amp;&#160;</td>
           <td class="paramname"><em>security_open</em> = <code>true</code>, </td>
         </tr>
@@ -226,6 +230,7 @@ Protected 属性</h2></td></tr>
 <dl class="section note"><dt>注解</dt><dd>打开安全模块会对性能有影响 </dd></dl>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
+    <tr><td class="paramname">maxFD</td><td>服务对象的最大接受连接数 </td></tr>
     <tr><td class="paramname">security_open</td><td>true:开启安全模块 false：关闭安全模块 （默认为开启） </td></tr>
     <tr><td class="paramname">connectionNumLimit</td><td>同一个ip连接数目的上限 </td></tr>
     <tr><td class="paramname">connectionRateLimit</td><td>同一个ip每秒钟连接数目的上限 </td></tr>
@@ -468,7 +473,7 @@ false 启用失败（日志将输出具体错误）</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="aa055d4fb2ce4280c28ae61beb4c4f66b"></a>
+<a class="anchor" id="aaeae7d42b0dc26836f1430daa5e61b7f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -477,12 +482,6 @@ false 启用失败（日志将输出具体错误）</dd></dl>
           <td>(</td>
           <td class="paramtype">const int &amp;&#160;</td>
           <td class="paramname"><em>port</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>evsNum</em> = <code>50000</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -502,7 +501,6 @@ false 启用失败（日志将输出具体错误）</dd></dl>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
     <tr><td class="paramname">port</td><td>监听的端口 </td></tr>
-    <tr><td class="paramname">evsNum</td><td>epoll一次性处理返回事件的最大数目 （默认为50000） </td></tr>
     <tr><td class="paramname">threads</td><td>消费者线程的数量 （默认为5） </td></tr>
   </table>
   </dd>
@@ -611,7 +609,7 @@ false 启用失败（日志将输出具体错误）</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a78b1bd41772012c52f0777a20deb57a1"></a>
+<a class="anchor" id="a542f5eb7a7fa5d644886dee30d265267"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -619,7 +617,7 @@ false 启用失败（日志将输出具体错误）</dd></dl>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::condition_variable stt::network::TcpServer::cv1</td>
+          <td class="memname">std::condition_variable* stt::network::TcpServer::cv</td>
         </tr>
       </table>
   </td>
@@ -631,7 +629,7 @@ false 启用失败（日志将输出具体错误）</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a0266c58ded1f95ee5d7d6599fec9aaba"></a>
+<a class="anchor" id="a9f5ba7bd1c2414a450eca207edc61dee"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -639,7 +637,7 @@ false 启用失败（日志将输出具体错误）</dd></dl>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::queue&lt;int&gt; stt::network::TcpServer::fdQueue</td>
+          <td class="memname">std::queue&lt;<a class="el" href="structstt_1_1network_1_1QueueFD.html">QueueFD</a>&gt; stt::network::TcpServer::fdQueue</td>
         </tr>
       </table>
   </td>
@@ -731,6 +729,26 @@ false 启用失败（日志将输出具体错误）</dd></dl>
 
 </div>
 </div>
+<a class="anchor" id="a32538424c01d62f24d986e01f65cc267"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int stt::network::TcpServer::maxFD</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a9e6cde1deb1473010f4c94ef8bb45693"></a>
 <div class="memitem">
 <div class="memproto">
@@ -740,46 +758,6 @@ false 启用失败（日志将输出具体错误）</dd></dl>
       <table class="memname">
         <tr>
           <td class="memname">bool stt::network::TcpServer::security_open</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a3353869f874adcdc220a7beedeed55c5"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool stt::network::TcpServer::solvingFD[<a class="el" href="sttnet_8h.html#ae27515887d4276929f45c1f2e6234105">maxFD</a>]</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a3d68c9eb4cc4966ae71e0e6faad43ec0"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::mutex stt::network::TcpServer::solvingFD_lock</td>
         </tr>
       </table>
   </td>

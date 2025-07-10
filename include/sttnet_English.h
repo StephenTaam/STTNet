@@ -2820,16 +2820,13 @@ public:
         /**
         * @brief Open the Websocket server listening program
         * @param port Port to listen on
-        * @param unblock true: Non-blocking mode for client connections, false: Blocking mode (default is blocking mode)
-        * @param ET true: Edge triggering, false: Level triggering (default is edge triggering)
-        * @param evsNum Maximum number of events processed by epoll at one time (default is 500)
-        * @param threads Number of consumer threads (default is 3)
+        * @param threads Number of consumer threads (default is 5)
         * @return true: Listening started successfully, false: Failed to start listening
         */
-        bool startListen(const int &port, const int &evsNum = 500, const int &threads = 3)
+        bool startListen(const int &port, const int &threads = 5)
         {
             std::thread(&WebSocketServer::HB, this).detach();
-            return TcpServer::startListen(port, evsNum, threads);
+            return TcpServer::startListen(port, threads);
         }
         /**
         * @brief Broadcast send a WebSocket message

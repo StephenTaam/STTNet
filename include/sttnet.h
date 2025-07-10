@@ -2785,13 +2785,10 @@ namespace stt
         /**
         * @brief 打开Websocket服务器监听程序
         * @param port 监听的端口
-        * @param unblock true：和客户端的连接为非阻塞模式  false：和客户端的连接为阻塞模式 （默认为阻塞模式）
-        * @param ET true：边缘触发  false：水平触发 （默认为边缘触发）
-        * @param evsNum epoll一次性处理返回事件的最大数目 （默认为500）
         * @param threads 消费者线程的数量 （默认为5）
         * @return true：打开监听程序成功 false：打开监听程序失败
         */
-        bool startListen(const int &port,const int &evsNum=500,const int &threads=3)
+        bool startListen(const int &port,const int &threads=5)
         {
             std::thread(&WebSocketServer::HB,this).detach();
             return TcpServer::startListen(port,threads);
