@@ -3619,7 +3619,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             TLS=false;
         }
     }
-    bool stt::network::TcpServer::startListen(const int &port,const int &evsNum,const int &threads)
+    bool stt::network::TcpServer::startListen(const int &port,const int &threads)
     {
         if(threads<=0)
             return false;
@@ -3636,8 +3636,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         }
         //this->logfile=logfile;
         //memset(solvingFD,0,sizeof(int)*maxFD);
-        for(int ii=0;ii<maxFD;ii++)
-            solvingFD[ii]=false;
+        //clientfd=new TcpFDInf[maxFD];
+        cv=new condition_variable[threads];
         //socket准备
         fd=socket(AF_INET,SOCK_STREAM,0);
         if(fd<0)
@@ -3681,7 +3681,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         this->unblock=true;
         for(int sj=0;sj<threads;sj++)
             thread(&TcpServer::consumer,this,sj).detach();
-        thread(&TcpServer::epolll,this,evsNum).detach();
+        thread(&TcpServer::epolll,this,maxFD+10).detach();
         this->consumerNum=threads;
         flag=true;
         //this->logfile=logfile;
@@ -3697,11 +3697,13 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         ::close(fd);
         //随后取消掉几个监听和消费线程
         flag1=false;
-        cv1.notify_all();
+        for(int ii=0;ii<consumerNum;ii++)
+            cv[ii].notify_all();
         while(consumerNum!=0||!flag2)
         {
             flag1=false;//不断提醒关闭
-            cv1.notify_all();
+            for(int ii=0;ii<consumerNum;ii++)
+                cv[ii].notify_all();
         }
         flag=false;
         return true;
@@ -3907,37 +3909,21 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     {
                         if(evs[ii].events&(EPOLLERR | EPOLLHUP | EPOLLRDHUP))
                         {
-                            solvingFD_lock.lock();
-                            if(solvingFD[evs[ii].data.fd]==true)
-                            {
-                                solvingFD_lock.unlock();
-                                if(stt::system::ServerSetting::logfile!=nullptr)
-                                {
-                                    if(stt::system::ServerSetting::language=="Chinese")
-                                        stt::system::ServerSetting::logfile->writeLog("tcp server epoll:收到连接关闭消息：fd= "+to_string(evs[ii].data.fd)+" 但已经有线程在处理这个fd,把它交给消费者线程关闭");
-                                    else
-                                        stt::system::ServerSetting::logfile->writeLog("tcp server epoll:receive connection close message: fd= "+to_string(evs[ii].data.fd)+"But there is already a thread processing this fd, hand it over to the consumer thread to close");
-                                }
-                                //我们要把这个套接字放进消息队列，防止存在处理间隙，套接字刚好没被关闭。重新放入队列能保证一定关闭。虽然这影响效率，但能防止黑客恶意攻击，所以加入了EPOLLERR | EPOLLHUP | EPOLLRDHUP判断。
-                                //We need to put this socket into the message queue to prevent the socket from being closed during processing gaps. Putting it back into the queue can ensure that it is closed. Although this affects efficiency, it can prevent malicious attacks by hackers, so the EPOLLERR | EPOLLHUP | EPOLLRDHUP judgment is added.
-                                unique_lock<mutex> lock5(lq1);
 
-                                fdQueue.push(evs[ii].data.fd);
-                                lock5.unlock();
-                                cv1.notify_all();
-                            }
-                            else
-                            {
-                                TcpServer::close(evs[ii].data.fd);
-                                solvingFD_lock.unlock();
+                                
                                 if(stt::system::ServerSetting::logfile!=nullptr)
                                 {
                                     if(stt::system::ServerSetting::language=="Chinese")
-                                        stt::system::ServerSetting::logfile->writeLog("tcp server epoll:收到连接关闭消息：fd= "+to_string(evs[ii].data.fd)+" 且已当场关闭");
+                                        stt::system::ServerSetting::logfile->writeLog("tcp server epoll:收到连接关闭消息：fd= "+to_string(evs[ii].data.fd)+" 已经放入队列");
                                     else
-                                        stt::system::ServerSetting::logfile->writeLog("tcp server epoll:receive connection close message: fd= "+to_string(evs[ii].data.fd)+" and close it immediately");
+                                        stt::system::ServerSetting::logfile->writeLog("tcp server epoll:receive connection close message: fd= "+to_string(evs[ii].data.fd)+" and it has been pushed into queue");
                                 }
-                            }
+                                
+
+                                fdQueue.push(QueueFD{evs[ii].data.fd,true});
+                                cv[evs[ii].data.fd%maxFD].notify_all();
+                            
+
                         }
                         else
                         {
@@ -3948,11 +3934,10 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 else
                                     stt::system::ServerSetting::logfile->writeLog("tcp server epoll:has received new data: fd= "+to_string(evs[ii].data.fd));
                             }
-                            unique_lock<mutex> lock5(lq1);
+                            
 
-                            fdQueue.push(evs[ii].data.fd);
-                            lock5.unlock();
-                            cv1.notify_all();
+                            fdQueue.push(QueueFD{evs[ii].data.fd,false});
+                            cv[evs[ii].data.fd%maxFD].notify_all();
                         }
                     }
                 }
@@ -3991,7 +3976,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             //unique_lock<mutex> ul1(lq1);
             while(fdQueue.empty())
             {
-                cv1.wait(ul1);
+                cv[threadID].wait(ul1);
                 if(!flag1)
                 {
                     ul1.unlock();
@@ -4004,82 +3989,53 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 break;
             }
             
-            int cclientfd=fdQueue.front();
+            QueueFD cclientfd=fdQueue.front();
             fdQueue.pop();
-            solvingFD_lock.lock();
-            if(solvingFD[cclientfd]==true)//正在被执行中
+            
+            ul1.unlock();
+
+            if(cclientfd.close)
             {
-                fdQueue.push(cclientfd);
-                solvingFD_lock.unlock();
-                ul1.unlock();
+                TcpServer::close(cclientfd.fd);
+                if(stt::system::ServerSetting::language=="Chinese")
+                stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : 完成关闭fd= "+to_string(cclientfd.fd));
+                else
+                    stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" :has closed fd= "+to_string(cclientfd.fd));
                 continue;
             }
-            solvingFD[cclientfd]=true;
-            solvingFD_lock.unlock();
-            ul1.unlock();
+
             if(stt::system::ServerSetting::logfile!=nullptr)
             {
                 if(stt::system::ServerSetting::language=="Chinese")
-                stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : 正在处理fd= "+to_string(cclientfd));
+                stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : 正在处理fd= "+to_string(cclientfd.fd));
                 else
-                    stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" :now handleing fd= "+to_string(cclientfd));
+                    stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" :now handleing fd= "+to_string(cclientfd.fd));
             }
-            /*
-            unique_lock<mutex> lock1(ltl1);
-            auto ii=tlsfd.find(cclientfd);
-            if(ii==tlsfd.end())
-                k.setFD(cclientfd,nullptr,unblock);
-            else
-                k.setFD(cclientfd,ii->second,unblock);
-            lock1.unlock();
-            */
+            
+            
             unique_lock<mutex> lock6(lc1);
-            auto jj=clientfd.find(cclientfd);
+            auto jj=clientfd.find(cclientfd.fd);
             if(jj==clientfd.end())//can not find fd information,we need to writedown this error and close this fd
             {
-                /*
                 lock6.unlock();
-                unique_lock<mutex> lock7(ltl1);
-                auto jj=tlsfd.find(cclientfd);
-                if(jj!=tlsfd.end())
-                {
-                    SSL_shutdown(jj->second);
-                    SSL_free(jj->second);
-                    tlsfd.erase(jj);
-                }
-                lock7.unlock();
-                ::close(cclientfd);
-                
-                if(stt::system::ServerSetting::logfile!=nullptr)
-                {
-                    if(stt::system::ServerSetting::language=="Chinese")
-                        stt::system::ServerSetting::logfile->writeLog("tcp server consumer"+to_string(threadID)+" : 查找fd= "+to_string(cclientfd)+" 的信息失败，已经关闭连接");
-                    else
-                        stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : find information of handled fd= "+to_string(cclientfd)+" fail,now has closed this connection");
-                }
-                */
-                lock6.unlock();
-                solvingFD_lock.lock();
-                solvingFD[cclientfd]=false;
-                solvingFD_lock.unlock();
                 continue;
             }
             else
             {
-                k.setFD(cclientfd,jj->second.ssl,unblock);
+                k.setFD(cclientfd.fd,jj->second.ssl,unblock);
                 inf=jj->second;
             }
             lock6.unlock();
             
             if(!fc(k,inf))
             {
-                close(cclientfd);
+                TcpServer::close(cclientfd.fd);
                 if(stt::system::ServerSetting::logfile!=nullptr)
                 {
                     if(stt::system::ServerSetting::language=="Chinese")
-                        stt::system::ServerSetting::logfile->writeLog("tcp server consumer"+to_string(threadID)+" : 处理fd= "+to_string(cclientfd)+" 失败，已经关闭连接");
+                        stt::system::ServerSetting::logfile->writeLog("tcp server consumer"+to_string(threadID)+" : 处理fd= "+to_string(cclientfd.fd)+" 失败，已经关闭连接");
                     else
-                        stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : handled fd= "+to_string(cclientfd)+" fail,now has closed this connection");
+                        stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : handled fd= "+to_string(cclientfd.fd)+" fail,now has closed this connection");
                 }
             }
             else
@@ -4087,14 +4043,12 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 if(stt::system::ServerSetting::logfile!=nullptr)
                 {
                     if(stt::system::ServerSetting::language=="Chinese")
-                        stt::system::ServerSetting::logfile->writeLog("tcp server consumer"+to_string(threadID)+" : 处理fd= "+to_string(cclientfd)+" 完成");
+                        stt::system::ServerSetting::logfile->writeLog("tcp server consumer"+to_string(threadID)+" : 处理fd= "+to_string(cclientfd.fd)+" 完成");
                     else
-                        stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : handled fd= "+to_string(cclientfd)+" sucessfully");
+                        stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : handled fd= "+to_string(cclientfd.fd)+" sucessfully");
                 }
             }
-            solvingFD_lock.lock();
-            solvingFD[cclientfd]=false;
-            solvingFD_lock.unlock();
+            
         }
         //跳出循环意味着结束线程
         unique_lock<mutex> lock3(lco1);
@@ -4347,7 +4301,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             //unique_lock<mutex> ul1(lq1);
             while(fdQueue.empty())
             {
-                cv1.wait(ul1);
+                cv[threadID].wait(ul1);
                 if(!flag1)
                 {
                     break;
@@ -4358,141 +4312,89 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 ul1.unlock();
                 break;
             }
-            int cclientfd=fdQueue.front();
+            QueueFD cclientfd=fdQueue.front();
             fdQueue.pop();
-            solvingFD_lock.lock();
-            if(solvingFD[cclientfd]==true)
+            
+            ul1.unlock();
+            if(cclientfd.close)
             {
-                fdQueue.push(cclientfd);
-                solvingFD_lock.unlock();
-                ul1.unlock();
+                TcpServer::close(cclientfd.fd);
+                if(stt::system::ServerSetting::language=="Chinese")
+                stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : 完成关闭fd= "+to_string(cclientfd.fd));
+                else
+                    stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" :has closed fd= "+to_string(cclientfd.fd));
                 continue;
             }
-            solvingFD[cclientfd]=true;
-            solvingFD_lock.unlock();
-            ul1.unlock();
 
             unique_lock<mutex> lock6(lc1);
-            auto jj=clientfd.find(cclientfd);
+            auto jj=clientfd.find(cclientfd.fd);
             if(jj==clientfd.end())//can not find fd information,we need to writedown this error and close this fd
             {
-                /*
                 lock6.unlock();
-                unique_lock<mutex> lock7(ltl1);
-                auto jj=tlsfd.find(cclientfd);
-                if(jj!=tlsfd.end())
-                {
-                    SSL_shutdown(jj->second);
-                    SSL_free(jj->second);
-                    tlsfd.erase(jj);
-                }
-                lock7.unlock();
-                
-                ::close(cclientfd);
-                
-                if(stt::system::ServerSetting::logfile!=nullptr)
-                {
-                    if(stt::system::ServerSetting::language=="Chinese")
-                        stt::system::ServerSetting::logfile->writeLog("tcp server consumer"+to_string(threadID)+" : 查找fd= "+to_string(cclientfd)+" 的信息失败，已经关闭连接");
-                    else
-                        stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : find information of handled fd= "+to_string(cclientfd)+" fail,now has closed this connection");
-                }
-                */
-                lock6.unlock();
-                solvingFD_lock.lock();
-                solvingFD[cclientfd]=false;
-                solvingFD_lock.unlock();
                 continue;
             }
             else
             {
-                k.setFD(cclientfd,jj->second.ssl,unblock);
+                k.setFD(cclientfd.fd,jj->second.ssl,unblock);
                 TcpFDInf &Tcpinf=jj->second;
             lock6.unlock();
 
              if(stt::system::ServerSetting::logfile!=nullptr)
              {
                 if(stt::system::ServerSetting::language=="Chinese")
-                    stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : 开始处理fd= "+to_string(cclientfd));
+                    stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : 开始处理fd= "+to_string(cclientfd.fd));
                 else
-                    stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : now start solveing fd= "+to_string(cclientfd));
+                    stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : now start solveing fd= "+to_string(cclientfd.fd));
              }
             
-            /*
-            unique_lock<mutex> lock1(ltl1);
-            auto ii=tlsfd.find(cclientfd);
-            if(ii==tlsfd.end())
-                k.setFD(cclientfd,nullptr,unblock);
-            else
-                k.setFD(cclientfd,ii->second,unblock);
-            lock1.unlock();
-            */
+            
              if(stt::system::ServerSetting::logfile!=nullptr)
              {
                 if(stt::system::ServerSetting::language=="Chinese")
-                    stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" 正在解析请求...");
+                    stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" 正在解析请求...");
                 else
-                    stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" now solveing request...");
+                    stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" now solveing request...");
              }
 
             int ret=k.solveRequest(Tcpinf);
             if(ret==-1)
             {
-                //k.close();//不至于关闭 因为可能一个连接有时多个事件 有的是空的 关闭就全部都杀了
-                //lc1.lock();
-                //clientfd.remove(cclientfd);
-                //lc1.unlock();
-                /*
-                k.close();
-                lc1.lock();
-                ltl1.lock();
-                auto jj=clientfd.find(cclientfd);
-                if(jj!=clientfd.end())
-                    clientfd.erase(jj);
-                tlsfd.erase(ii);
-                lc1.unlock();
-                lc1.unlock();
-                */
-
-                    TcpServer::close(cclientfd);
+                    TcpServer::close(cclientfd.fd);
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" 解析请求失败或者是对方已经关闭连接，服务器已经关闭这个连接");
+                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" 解析请求失败或者是对方已经关闭连接，服务器已经关闭这个连接");
                         else
-                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" solved request fail or host had closed connection.now server has closed this connection");
+                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" solved request fail or host had closed connection.now server has closed this connection");
                     }
-                solvingFD_lock.lock();
-                solvingFD[cclientfd]=false;
-                solvingFD_lock.unlock();
                 continue;
             }
 
             else if(ret==1)
             {
-                cout<<"fd="<<cclientfd<<endl;
+                cout<<"fd="<<cclientfd.fd<<endl;
                 if(stt::system::ServerSetting::logfile!=nullptr)
                 {
                     if(stt::system::ServerSetting::language=="Chinese")
                     {
-                        stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" 正在处理请求... \n*******请求信息：*********\nheader= "+Tcpinf.HttpInf.header+"\nbody="+Tcpinf.HttpInf.body+"\n*************************");
+                        stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" 正在处理请求... \n*******请求信息：*********\nheader= "+Tcpinf.HttpInf.header+"\nbody="+Tcpinf.HttpInf.body+"\n*************************");
                     }
                     else
                     {
-                        stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" now handleing request...\n*******request information：*********\nheader= "+Tcpinf.HttpInf.header+"\nbody="+Tcpinf.HttpInf.body+"\n*************************");
+                        stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" now handleing request...\n*******request information：*********\nheader= "+Tcpinf.HttpInf.header+"\nbody="+Tcpinf.HttpInf.body+"\n*************************");
                     }
 
                 }
                 if(!fc(Tcpinf.HttpInf,k))
                 {
                 
-                    close(cclientfd);
+                    close(cclientfd.fd);
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : 处理fd= "+to_string(cclientfd)+"失败或者是对方已经关闭连接，已经关闭连接");
+                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : 处理fd= "+to_string(cclientfd.fd)+"失败或者是对方已经关闭连接，已经关闭连接");
                         else
-                           stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : handle fd= "+to_string(cclientfd)+"fail or host had closed connection.now server has closed this connection");
+                           stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : handle fd= "+to_string(cclientfd.fd)+"fail or host had closed connection.now server has closed this connection");
                     }
 
                 }
@@ -4502,9 +4404,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : 处理fd= "+to_string(cclientfd)+"完成");
+                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : 处理fd= "+to_string(cclientfd.fd)+"完成");
                         else
-                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : has solved fd= "+to_string(cclientfd)+"sucessfully");
+                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : has solved fd= "+to_string(cclientfd.fd)+"sucessfully");
                     }
                 }
             }
@@ -4513,14 +4415,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : 解析fd= "+to_string(cclientfd)+"未完成 等待新的数据继续解析");
+                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : 解析fd= "+to_string(cclientfd.fd)+"未完成 等待新的数据继续解析");
                         else
-                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+"wait new data to continue solve this request");
+                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+"wait new data to continue solve this request");
                     }
             }
-            solvingFD_lock.lock();
-            solvingFD[cclientfd]=false;
-            solvingFD_lock.unlock();
             }
         }
         //跳出循环意味着结束线程
@@ -5259,9 +5158,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             k.setFD(fd,getSSL(fd),unblock);
             if(!k.sendMessage(closeCodeAndMessage,"1000"))
             {
-                solvingFD_lock.lock();
-                if(!solvingFD[fd])
-                {
+                
+                
                     lock.lock();
                     auto ii=wbclientfd.find(fd);
                     if(ii!=wbclientfd.end())
@@ -5270,8 +5168,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         wbclientfd.erase(ii);
                     }
                     lock.unlock();
-                }
-                solvingFD_lock.unlock();
+                
+                
                 return true;
             }
             ii->second.closeflag=true;
@@ -5297,9 +5195,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             k.setFD(fd,getSSL(fd),unblock);
             if(!k.sendMessage(codee,"1000"))//发送失败会自动删除在记录表里的
             {
-                solvingFD_lock.lock();
-                if(!solvingFD[fd])
-                {
+                
                     lock.lock();
                     auto ii=wbclientfd.find(fd);
                     if(ii!=wbclientfd.end())
@@ -5308,8 +5204,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         wbclientfd.erase(ii);
                     }
                     lock.unlock();
-                }
-                solvingFD_lock.unlock();
+                
                 return true;
             }
             ii->second.closeflag=true;
@@ -5387,7 +5282,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             //unique_lock<mutex> ul1(lq1);
             while(fdQueue.empty())
             {
-                cv1.wait(ul1);
+                cv[threadID].wait(ul1);
                 if(!flag1)
                 {
                     break;
@@ -5398,106 +5293,72 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 ul1.unlock();
                 break;
             }
-            int cclientfd=fdQueue.front();
+            QueueFD cclientfd=fdQueue.front();
             fdQueue.pop();
-            solvingFD_lock.lock();
-            if(solvingFD[cclientfd]==true)
+            
+            ul1.unlock();
+            if(cclientfd.close)
             {
-                fdQueue.push(cclientfd);
-                solvingFD_lock.unlock();
-                ul1.unlock();
+                TcpServer::close(cclientfd.fd);
+                if(stt::system::ServerSetting::language=="Chinese")
+                stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : 完成关闭fd= "+to_string(cclientfd.fd));
+                else
+                    stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" :has closed fd= "+to_string(cclientfd.fd));
                 continue;
             }
-            solvingFD[cclientfd]=true;
-            solvingFD_lock.unlock();
-            ul1.unlock();
+
             unique_lock<mutex> lock6(lc1);
-            auto ii=clientfd.find(cclientfd);
+            auto ii=clientfd.find(cclientfd.fd);
             if(ii==clientfd.end())//can not find fd information,we need to writedown this error and close this fd
             {
-                /*
                 lock6.unlock();
-                unique_lock<mutex> lock7(ltl1);
-                auto ii=tlsfd.find(cclientfd);
-                if(ii!=tlsfd.end())
-                {
-                    SSL_shutdown(ii->second);
-                    SSL_free(ii->second);
-                    tlsfd.erase(ii);
-                }
-                lock7.unlock();
-                ::close(cclientfd);
-                
-                if(stt::system::ServerSetting::logfile!=nullptr)
-                {
-                    if(stt::system::ServerSetting::language=="Chinese")
-                        stt::system::ServerSetting::logfile->writeLog("tcp server consumer"+to_string(threadID)+" : 查找fd= "+to_string(cclientfd)+" 的信息失败，已经关闭连接");
-                    else
-                        stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : find information of handled fd= "+to_string(cclientfd)+" fail,now has closed this connection");
-                }
-                */
-                lock6.unlock();
-                solvingFD_lock.lock();
-                solvingFD[cclientfd]=false;
-                solvingFD_lock.unlock();
                 continue;
             }
             else
             {
-                k.setFD(cclientfd,ii->second.ssl,unblock);
+                k.setFD(cclientfd.fd,ii->second.ssl,unblock);
                 TcpFDInf &Tcpinf=ii->second;
             lock6.unlock();
-            cout<<"websocket fd="<<cclientfd<<endl;
+            cout<<"websocket fd="<<cclientfd.fd<<endl;
             if(stt::system::ServerSetting::logfile!=nullptr)
              {
                 if(stt::system::ServerSetting::language=="Chinese")
-                    stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : 正在处理fd= "+to_string(cclientfd));
+                    stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : 正在处理fd= "+to_string(cclientfd.fd));
                 else
-                    stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : now solveing fd= "+to_string(cclientfd));
+                    stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : now solveing fd= "+to_string(cclientfd.fd));
              }
             //拿到fd之后开始操作
             unique_lock<mutex> lock(lwb);
-            auto jj=wbclientfd.find(cclientfd);
+            auto jj=wbclientfd.find(cclientfd.fd);
             if(jj==wbclientfd.end())//没有进行wb握手
             {
                 //unique_lock<mutex> lock(lwb);
                 if(stt::system::ServerSetting::logfile!=nullptr)
                 {
                     if(stt::system::ServerSetting::language=="Chinese")
-                        stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" 正在进行websocket握手");
+                        stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" 正在进行websocket握手");
                     else
-                        stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" handshaking websocket...");
+                        stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" handshaking websocket...");
                 }
                 WebSocketFDInformation winf;
-                winf.fd=cclientfd;
+                winf.fd=cclientfd.fd;
                 winf.closeflag=false;
-                /*
-                unique_lock<mutex> lock1(ltl1);
-                    auto ii=tlsfd.find(cclientfd);
-                if(ii==tlsfd.end())
-                    k.setFD(cclientfd,nullptr,unblock);
-                else
-                    k.setFD(cclientfd,ii->second,unblock);
-                lock1.unlock();
-                */
+                
 
                 int ret=k.solveRequest(Tcpinf);
                 if(ret==-1)
                 {
                     //k.close();
 
-                        TcpServer::close(cclientfd);
+                        TcpServer::close(cclientfd.fd);
                         cout<<"无法解析http请求 wb握手失败"<<endl;
                         if(stt::system::ServerSetting::logfile!=nullptr)
                         {
                             if(stt::system::ServerSetting::language=="Chinese")
-                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" 无法解析http请求或者对端关闭连接 wb握手失败 已经关闭这个连接");
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" 无法解析http请求或者对端关闭连接 wb握手失败 已经关闭这个连接");
                             else
-                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" couldn't solve http request or host had closed this connection.fail to handshake websocket.have closed this connection");
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" couldn't solve http request or host had closed this connection.fail to handshake websocket.have closed this connection");
                         }
-                    solvingFD_lock.lock();
-                    solvingFD[cclientfd]=false;
-                    solvingFD_lock.unlock();
                     continue;
                     //wb握手失败
                 }
@@ -5506,13 +5367,10 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : 解析fd= "+to_string(cclientfd)+"未完成 等待新的数据继续解析");
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : 解析fd= "+to_string(cclientfd.fd)+"未完成 等待新的数据继续解析");
                         else
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+"wait new data to continue solve this request");
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+"wait new data to continue solve this request");
                     }
-                    solvingFD_lock.lock();
-                    solvingFD[cclientfd]=false;
-                    solvingFD_lock.unlock();
                     continue;
                 }
                 else if(ret==1)
@@ -5523,18 +5381,15 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(!fcc(winf))//条件不满足
                     {
                         //k.close();
-                        TcpServer::close(cclientfd);
+                        TcpServer::close(cclientfd.fd);
                         cout<<"连接限制条件不满足 wb握手失败"<<endl;
                         if(stt::system::ServerSetting::logfile!=nullptr)
                         {
                             if(stt::system::ServerSetting::language=="Chinese")
-                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" 连接限制条件不满足 websocket握手失败 服务器已经关闭这个连接");
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" 连接限制条件不满足 websocket握手失败 服务器已经关闭这个连接");
                             else
-                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" The connection constraints are not met.websocket handshake fail.server has closed this connection.");
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" The connection constraints are not met.websocket handshake fail.server has closed this connection.");
                         }
-                        solvingFD_lock.lock();
-                        solvingFD[cclientfd]=false;
-                        solvingFD_lock.unlock();
                         continue;
                     }
                     string key;
@@ -5549,31 +5404,28 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(!k.sendBack("",result,"101"))
                     {
                         //k.close();
-                        TcpServer::close(cclientfd);
+                        TcpServer::close(cclientfd.fd);
                         cout<<"握手响应无法发送 wb握手失败"<<endl;
                         if(stt::system::ServerSetting::logfile!=nullptr)
                         {
                             if(stt::system::ServerSetting::language=="Chinese")
-                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" 握手响应无法发送 websocket握手失败 服务器已经关闭这个连接");
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" 握手响应无法发送 websocket握手失败 服务器已经关闭这个连接");
                             else
-                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" couldn't send handshake response .websocket handshake fail. server has closed this connection");
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" couldn't send handshake response .websocket handshake fail. server has closed this connection");
                         }
-                        solvingFD_lock.lock();
-                        solvingFD[cclientfd]=false;
-                        solvingFD_lock.unlock();
                         continue;
                         //握手失败
                     }
                     winf.response=::time(0);
                     winf.HBTime=0;
-                    wbclientfd.emplace(cclientfd,winf);
+                    wbclientfd.emplace(cclientfd.fd,winf);
                 
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                             if(stt::system::ServerSetting::language=="Chinese")
-                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" websocket握手成功");
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" websocket握手成功");
                             else
-                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" websocket has handshaked sucessfully");
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" websocket has handshaked sucessfully");
                     }
                     thread(fccc,winf,ref(*this)).detach();
                 }
@@ -5581,15 +5433,6 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             else//已经进行了握手操作
             {
                 
-                /*
-                unique_lock<mutex> lock1(ltl1);
-                auto ii=tlsfd.find(cclientfd);
-                if(ii==tlsfd.end())
-                    k1.setFD(cclientfd,nullptr,unblock);
-                else
-                    k1.setFD(cclientfd,ii->second,unblock);
-                lock1.unlock();
-                */
                 int r=k1.getMessage(Tcpinf,jj->second);
 
                 if(r==-1)
@@ -5597,11 +5440,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" 接收错误，关闭连接中 ");
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" 接收错误，关闭连接中 ");
                         else 
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+"error of receiving, and now closing this connection ");
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+"error of receiving, and now closing this connection ");
                     }
-                    closeWithoutLock(cclientfd);
+                    closeWithoutLock(cclientfd.fd);
                 }
                 else if(r==1)
                 {
@@ -5613,23 +5456,23 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         if(stt::system::ServerSetting::logfile!=nullptr)
                         {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" 收到关闭确认帧: "+ jj->second.message);
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" 收到关闭确认帧: "+ jj->second.message);
                         else 
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" has received closed confirm fin:"+ jj->second.message);
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" has received closed confirm fin:"+ jj->second.message);
                         }
-                        TcpServer::close(cclientfd);
+                        TcpServer::close(cclientfd.fd);
                     }
                     else//收到关闭
                     {
                         if(stt::system::ServerSetting::logfile!=nullptr)
                         {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" 收到关闭帧: "+ jj->second.message);
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" 收到关闭帧: "+ jj->second.message);
                         else 
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" has received closed fin:"+ jj->second.message);
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" has received closed fin:"+ jj->second.message);
                         }
                         cout<<"yes"<<endl;
-                        closeAck(cclientfd,jj->second.message);
+                        closeAck(cclientfd.fd,jj->second.message);
                     }
                     wbclientfd.erase(jj);
                     
@@ -5639,9 +5482,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" 收到心跳确认: "+ jj->second.message);
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" 收到心跳确认: "+ jj->second.message);
                         else 
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" has received heartbeat confirm:"+ jj->second.message);
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" has received heartbeat confirm:"+ jj->second.message);
                     }
                     jj->second.response=::time(0);
                     jj->second.HBTime=0;
@@ -5655,9 +5498,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" 收到心跳: "+ jj->second.message);
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" 收到心跳: "+ jj->second.message);
                         else 
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" has received heartbeat:"+ jj->second.message);
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" has received heartbeat:"+ jj->second.message);
                     }
                     jj->second.response=::time(0);
                     if(!sendMessage(jj->first,"心跳","1010"))//发送心跳失败直接关闭
@@ -5675,14 +5518,14 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" 收到常规信息: "+ jj->second.message);
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" 收到常规信息: "+ jj->second.message);
                         else 
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" has received normal message:"+ jj->second.message);
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" has received normal message:"+ jj->second.message);
                     }
                     jj->second.response=::time(0);
                     if(!fc(jj->second.message,*this,jj->second))//回调函数失败
                     {
-                        close(cclientfd);
+                        close(cclientfd.fd);
                     }
                     jj->second.message="";
                 }
@@ -5700,9 +5543,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" 处理完成");
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" 处理完成");
                         else 
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" has solved sucessfully");
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" has solved sucessfully");
                     }
                 }
                 else
@@ -5710,15 +5553,12 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" 继续等待数据中");
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" 继续等待数据中");
                         else 
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" waiting data...");
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" waiting data...");
                     }
                 }
             } 
-            solvingFD_lock.lock();
-            solvingFD[cclientfd]=false;
-            solvingFD_lock.unlock();
             }
         }
         //跳出循环意味着结束线程

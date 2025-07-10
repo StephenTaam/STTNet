@@ -2392,10 +2392,22 @@ public:
         */
         SSL* ssl;
     };
+
     /**
-    * @brief Define the macro maxFD as 1000000, the maximum number of connections a service object can accept
+    * @brief The structure of the message queue element
     */
-    #define maxFD 1000000
+    struct QueueFD
+    {
+    /**
+    * @brief sockets
+    */
+    int fd;
+    /**
+    * @brief is not a closing message
+    */
+    bool close;
+    };
+    
     /**
     * @brief Tcp server class
     * @note The default underlying implementation is epoll edge trigger + socket non-blocking mode
@@ -2403,16 +2415,16 @@ public:
     class TcpServer 
     {
     protected:
-        bool solvingFD[maxFD];
-        std::mutex solvingFD_lock;
-    protected:
+        int maxFD;
         security::ConnectionLimiter connectionLimiter;
         std::unordered_map<int,TcpFDInf> clientfd;
         std::mutex lc1;
+        //TcpFDInf *clientfd;
         int flag1 = true;
-        std::queue<int> fdQueue;
+        std::queue<QueueFD> fdQueue;
         std::mutex lq1;
-        std::condition_variable cv1;
+        //std::condition_variable cv1;
+        std::condition_variable *cv;
         int consumerNum;
         std::mutex lco1;
         bool unblock;
@@ -2434,19 +2446,19 @@ public:
         /**
         * @brief Constructor, which is enabled by default. Limit the maximum number of connections to an IP address to 20; The fastest connection speed per second for the same IP address is 6
         * @note Turning on the security module has a performance impact
+        * @param maxFD service object can accept the maximum number of connections
         * @param security_open true: enable the security module false: disable the security module (enabled by default)
         * @param connectionNumLimit The maximum number of connections from the same IP address
         * @param connectionRateLimit The maximum number of connections per second to the same IP address
         */
-        TcpServer(const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):connectionLimiter(connectionNumLimit,connectionRateLimit),security_open(security_open){}
+        TcpServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit),security_open(security_open){}
         /**
         * @brief Start the TCP server listening program
         * @param port Port to listen on
-        * @param evsNum Maximum number of events processed by epoll at one time (default is 50000)
         * @param threads Number of consumer threads (default is 5)
         * @return true: Listening started successfully, false: Failed to start listening
         */
-        bool startListen(const int &port, const int &evsNum = 50000, const int &threads = 5);
+        bool startListen(const int &port, const int &threads = 5);
         /**
         * @brief Enable TLS encryption and configure server-side certificate and key
         * 
@@ -2591,11 +2603,12 @@ public:
         /**
         * @brief Constructor, which is enabled by default. Limit the maximum number of connections to an IP address to 20; The fastest connection speed per second for the same IP address is 6
         * @note Turning on the security module has a performance impact
+        * @param maxFD service object can accept the maximum number of connections
         * @param security_open true: enable the security module false: disable the security module (enabled by default)
         * @param connectionNumLimit The maximum number of connections from the same IP address
         * @param connectionRateLimit The maximum number of connections per second to the same IP address
         */
-        HttpServer(const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):TcpServer(security_open,connectionNumLimit,connectionRateLimit){}
+        HttpServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit){}
         /**
         * @brief Set a callback function for responding after receiving and successfully parsing an Http/Https request
         * Register a callback function
@@ -2694,11 +2707,12 @@ public:
         /**
         * @brief Constructor, which is enabled by default. Limit the maximum number of connections to an IP address to 20; The fastest connection speed per second for the same IP address is 6
         * @note Turning on the security module has a performance impact
+        * @param maxFD service object can accept the maximum number of connections
         * @param security_open true: enable the security module false: disable the security module (enabled by default)
         * @param connectionNumLimit The maximum number of connections from the same IP address
         * @param connectionRateLimit The maximum number of connections per second to the same IP address
         */
-        WebSocketServer(const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):TcpServer(security_open,connectionNumLimit,connectionRateLimit){}
+        WebSocketServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit){}
         /**
         * @brief Set the callback function to be executed after a websocket connection is successful
         * Register a callback function

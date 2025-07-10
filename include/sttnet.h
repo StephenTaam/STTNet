@@ -2359,10 +2359,22 @@ namespace stt
         */
         SSL* ssl;
     };
+
     /**
-    * @brief 定义maxFD这个宏为1000000,后续会用到的一个服务对象的最大接受连接数
+    * @brief 消息队列元素的结构体
     */
-    #define maxFD 1000000
+    struct QueueFD
+    {
+        /**
+        * @brief 套接字
+        */
+        int fd;
+        /**
+        * @brief 是不是关闭消息
+        */
+        bool close;
+    };
+    
     
     /**
     * @brief Tcp服务端类
@@ -2371,16 +2383,16 @@ namespace stt
     class TcpServer 
     {
     protected:
-        bool solvingFD[maxFD];
-        std::mutex solvingFD_lock;
-    protected:
+        int maxFD;
         security::ConnectionLimiter connectionLimiter;
         std::unordered_map<int,TcpFDInf> clientfd;
         std::mutex lc1;
+        //TcpFDInf *clientfd;
         int flag1=true;
-        std::queue<int> fdQueue;
+        std::queue<QueueFD> fdQueue;
         std::mutex lq1;
-        std::condition_variable cv1;
+        //std::condition_variable cv1;
+        std::condition_variable *cv;
         int consumerNum;
         std::mutex lco1;
         bool unblock;
@@ -2402,19 +2414,19 @@ namespace stt
         /**
         * @brief 构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6
         * @note 打开安全模块会对性能有影响
+        * @param maxFD 服务对象的最大接受连接数
         * @param security_open true:开启安全模块 false：关闭安全模块 （默认为开启）
         * @param connectionNumLimit 同一个ip连接数目的上限
         * @param connectionRateLimit 同一个ip每秒钟连接数目的上限
         */
-        TcpServer(const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):connectionLimiter(connectionNumLimit,connectionRateLimit),security_open(security_open){}
+        TcpServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit),security_open(security_open){}
         /**
         * @brief 打开Tcp服务器监听程序
         * @param port 监听的端口
-        * @param evsNum epoll一次性处理返回事件的最大数目 （默认为50000）
         * @param threads 消费者线程的数量 （默认为5）
         * @return true：打开监听程序成功 false：打开监听程序失败
         */
-        bool startListen(const int &port,const int &evsNum=50000,const int &threads=5);
+        bool startListen(const int &port,const int &threads=5);
         /**
         * @brief 启用 TLS 加密并配置服务器端证书与密钥
         * 
@@ -2557,11 +2569,12 @@ namespace stt
         /**
         * @brief 构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6
         * @note 打开安全模块会对性能有影响
+        * @param maxFD 服务对象的最大接受连接数
         * @param security_open true:开启安全模块 false：关闭安全模块 （默认为开启）
         * @param connectionNumLimit 同一个ip连接数目的上限
         * @param connectionRateLimit 同一个ip每秒钟连接数目的上限
         */
-        HttpServer(const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):TcpServer(security_open,connectionNumLimit,connectionRateLimit){}
+        HttpServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit){}
         /**
         * @brief 设置一个收到Http/Https请求并成功解析后进行响应的回调函数
         * 注册一个回调函数
@@ -2660,11 +2673,12 @@ namespace stt
         /**
         * @brief 构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6
         * @note 打开安全模块会对性能有影响
+        * @param maxFD 服务对象的最大接受连接数
         * @param security_open true:开启安全模块 false：关闭安全模块 （默认为开启）
         * @param connectionNumLimit 同一个ip连接数目的上限
         * @param connectionRateLimit 同一个ip每秒钟连接数目的上限
         */
-        WebSocketServer(const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):TcpServer(security_open,connectionNumLimit,connectionRateLimit){}
+        WebSocketServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit){}
         /**
         * @brief 设置websocket连接成功后就执行的回调函数
         * 注册一个回调函数
@@ -2780,7 +2794,7 @@ namespace stt
         bool startListen(const int &port,const int &evsNum=500,const int &threads=3)
         {
             std::thread(&WebSocketServer::HB,this).detach();
-            return TcpServer::startListen(port,evsNum,threads);
+            return TcpServer::startListen(port,threads);
         }
         /**
         * @brief 广播发送 WebSocket 消息
