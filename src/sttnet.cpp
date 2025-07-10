@@ -4098,8 +4098,10 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         return true;
     }
     
-    int stt::network::HttpServerFDHandler::solveRequest(TcpFDInf &TcpInf)
+    int stt::network::HttpServerFDHandler::solveRequest(TcpFDInf &TcpInf,const int &times)
     {
+        if(times==1)
+        {
         string recv="";
         int ret=1;
         while(ret>0)
@@ -4112,6 +4114,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         {
             if(ret!=-100)
                 return -1;
+        }
         }
 
         //数据准备完成，开始判断
@@ -4348,15 +4351,19 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
              }
             
             
-             if(stt::system::ServerSetting::logfile!=nullptr)
-             {
-                if(stt::system::ServerSetting::language=="Chinese")
-                    stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" 正在解析请求...");
-                else
-                    stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" now solveing request...");
-             }
-
-            int ret=k.solveRequest(Tcpinf);
+             
+             int ret=1;
+             int ii=1;
+            while(ret==1)
+            {
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                {
+                    if(stt::system::ServerSetting::language=="Chinese")
+                        stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" 正在解析请求... 第"+to_string(ii)+"次处理");
+                    else
+                        stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" now solveing request... it is the "+to_string(ii)+" times");
+                }
+            ret=k.solveRequest(Tcpinf,ii);
             if(ret==-1)
             {
                     TcpServer::close(cclientfd.fd);
@@ -4396,7 +4403,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         else
                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : handle fd= "+to_string(cclientfd.fd)+"fail or host had closed connection.now server has closed this connection");
                     }
-
+                    break;
                 }
 
                 else
@@ -4419,6 +4426,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         else
                             stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+"wait new data to continue solve this request");
                     }
+            }
+            ii++;
             }
             }
         }

@@ -2526,6 +2526,7 @@ namespace stt
         /**
         * @brief 解析Http/Https请求
         * @param TcpInf 存放底层tcp处理套接字的信息
+        * @param times 记录解析的次数，某些场景会用上
         * @return -1:解析失败 0:还需要继续解析 1:解析完成
         * @note TcpInf.status
         *
@@ -2535,7 +2536,7 @@ namespace stt
         * 3 接收请求体中(非chunk模式)
         * 
         */
-        int solveRequest(TcpFDInf &TcpInf);
+        int solveRequest(TcpFDInf &TcpInf,const int &times=1);
         /**
         * @brief 发送Http/Https响应
         * @param data 装着响应体的数据的string容器

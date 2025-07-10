@@ -2558,6 +2558,7 @@ public:
         /**
         * @brief Parse Http/Https request
         * @param TcpInf stores the state information of the underlying TCP processing socket
+        * @param times sometims will be used to record solve times
         * @return 1: Parsing completed 0: Parsing still needs to be continued -1: Parsing failed
         * @note TcpInf.status
         *
@@ -2567,7 +2568,7 @@ public:
         * 3 Receive request body (non-chunk mode)
         * 
         */
-        int solveRequest(TcpFDInf &TcpInf);
+        int solveRequest(TcpFDInf &TcpInf,const int &times=1);
         /**
         * @brief Send Http/Https response
         * @param data String container with response body data
