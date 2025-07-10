@@ -3923,7 +3923,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 
 
                                 fdQueue[evs[ii].data.fd%consumerNum].push(QueueFD{evs[ii].data.fd,true});
-                                cv[evs[ii].data.fd%consumerNum].notify_all();
+                                cv[evs[ii].data.fd%consumerNum].notify_one();
                             
 
                         }
@@ -3939,7 +3939,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             
 
                             fdQueue[evs[ii].data.fd%consumerNum].push(QueueFD{evs[ii].data.fd,false});
-                            cv[evs[ii].data.fd%consumerNum].notify_all();
+                            cv[evs[ii].data.fd%consumerNum].notify_one();
                         }
                     }
                 }
@@ -4287,8 +4287,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     {
         HttpServerFDHandler k;
         //TcpFDInf &Tcpinf;
-        unique_lock<mutex> ul1(lq1[threadID]);
-        bool first=true;
+        
+
         if(stt::system::ServerSetting::logfile!=nullptr)
         {
             if(stt::system::ServerSetting::language=="Chinese")
@@ -4299,18 +4299,10 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
 
         while(flag1)
         {
-            if(first)
-                first=!first;
-            else
-                ul1.lock();
-            //unique_lock<mutex> ul1(lq1);
-            while(fdQueue[threadID].empty())
+            unique_lock<mutex> ul1(lq1[threadID]);
+            while(fdQueue[threadID].empty()&&flag1)
             {
                 cv[threadID].wait(ul1);
-                if(!flag1)
-                {
-                    break;
-                }
             }
             if(!flag1)
             {
