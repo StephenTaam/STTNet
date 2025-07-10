@@ -2389,7 +2389,7 @@ namespace stt
         std::mutex lc1;
         //TcpFDInf *clientfd;
         int flag1=true;
-        std::queue<QueueFD> fdQueue;
+        std::queue<QueueFD> *fdQueue;
         std::mutex lq1;
         //std::condition_variable cv1;
         std::condition_variable *cv;

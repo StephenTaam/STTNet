@@ -3637,6 +3637,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         //this->logfile=logfile;
         //memset(solvingFD,0,sizeof(int)*maxFD);
         //clientfd=new TcpFDInf[maxFD];
+        fdQueue=new queue<QueueFD>[threads];
         cv=new condition_variable[threads];
         //socket准备
         fd=socket(AF_INET,SOCK_STREAM,0);
@@ -3920,8 +3921,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 }
                                 
 
-                                fdQueue.push(QueueFD{evs[ii].data.fd,true});
-                                cv[evs[ii].data.fd%maxFD].notify_all();
+                                fdQueue[evs[ii].data.fd%consumerNum].push(QueueFD{evs[ii].data.fd,true});
+                                cv[evs[ii].data.fd%consumerNum].notify_all();
                             
 
                         }
@@ -3936,8 +3937,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             }
                             
 
-                            fdQueue.push(QueueFD{evs[ii].data.fd,false});
-                            cv[evs[ii].data.fd%maxFD].notify_all();
+                            fdQueue[evs[ii].data.fd%consumerNum].push(QueueFD{evs[ii].data.fd,false});
+                            cv[evs[ii].data.fd%consumerNum].notify_all();
                         }
                     }
                 }
@@ -3974,7 +3975,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             else
                 ul1.lock();
             //unique_lock<mutex> ul1(lq1);
-            while(fdQueue.empty())
+            while(fdQueue[threadID].empty())
             {
                 cv[threadID].wait(ul1);
                 if(!flag1)
@@ -3989,18 +3990,21 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 break;
             }
             
-            QueueFD cclientfd=fdQueue.front();
-            fdQueue.pop();
+            QueueFD cclientfd=fdQueue[threadID].front();
+            fdQueue[threadID].pop();
             
             ul1.unlock();
 
             if(cclientfd.close)
             {
                 TcpServer::close(cclientfd.fd);
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                {
                 if(stt::system::ServerSetting::language=="Chinese")
-                stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : 完成关闭fd= "+to_string(cclientfd.fd));
+                    stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : 完成关闭fd= "+to_string(cclientfd.fd));
                 else
                     stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" :has closed fd= "+to_string(cclientfd.fd));
+                }
                 continue;
             }
 
@@ -4299,7 +4303,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             else
                 ul1.lock();
             //unique_lock<mutex> ul1(lq1);
-            while(fdQueue.empty())
+            while(fdQueue[threadID].empty())
             {
                 cv[threadID].wait(ul1);
                 if(!flag1)
@@ -4312,17 +4316,20 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 ul1.unlock();
                 break;
             }
-            QueueFD cclientfd=fdQueue.front();
-            fdQueue.pop();
+            QueueFD cclientfd=fdQueue[threadID].front();
+            fdQueue[threadID].pop();
             
             ul1.unlock();
             if(cclientfd.close)
             {
                 TcpServer::close(cclientfd.fd);
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                {
                 if(stt::system::ServerSetting::language=="Chinese")
-                stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : 完成关闭fd= "+to_string(cclientfd.fd));
+                    stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : 完成关闭fd= "+to_string(cclientfd.fd));
                 else
                     stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" :has closed fd= "+to_string(cclientfd.fd));
+                }
                 continue;
             }
 
@@ -5280,7 +5287,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             else
                 ul1.lock();
             //unique_lock<mutex> ul1(lq1);
-            while(fdQueue.empty())
+            while(fdQueue[threadID].empty())
             {
                 cv[threadID].wait(ul1);
                 if(!flag1)
@@ -5293,17 +5300,20 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 ul1.unlock();
                 break;
             }
-            QueueFD cclientfd=fdQueue.front();
-            fdQueue.pop();
+            QueueFD cclientfd=fdQueue[threadID].front();
+            fdQueue[threadID].pop();
             
             ul1.unlock();
             if(cclientfd.close)
             {
                 TcpServer::close(cclientfd.fd);
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                {
                 if(stt::system::ServerSetting::language=="Chinese")
-                stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : 完成关闭fd= "+to_string(cclientfd.fd));
+                    stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : 完成关闭fd= "+to_string(cclientfd.fd));
                 else
                     stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" :has closed fd= "+to_string(cclientfd.fd));
+                }
                 continue;
             }
 
