@@ -3640,6 +3640,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         fdQueue=new queue<QueueFD>[threads];
         cv=new condition_variable[threads];
         lq1=new mutex[threads];
+        clientfd=new TcpFDInf[maxFD];
+        for(int ii=0;ii<maxFD;ii++)
+            clientfd[ii].fd=-1;
         //socket准备
         fd=socket(AF_INET,SOCK_STREAM,0);
         if(fd<0)
@@ -3717,22 +3720,26 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             if(!stopListen())
                 return false;
         }
-        unique_lock<mutex> lock2(lc1);
+        //unique_lock<mutex> lock2(lc1);
         //unique_lock<mutex> lock1(ltl1);
-        for(auto &ii:clientfd)
+        for(int ii=0;ii<maxFD;ii++)
         {
-            if(this->security_open)
-                connectionLimiter.clearIP(ii.second.ip);
-            //auto jj=tlsfd.find(ii.first);
-            if(ii.second.ssl!=nullptr)//这个套接字启用了tls
+            if(clientfd[ii].fd!=-1)
             {
-                SSL_shutdown(ii.second.ssl);
-                SSL_free(ii.second.ssl);
+            if(this->security_open)
+                connectionLimiter.clearIP(clientfd[ii].ip);
+            //auto jj=tlsfd.find(ii.first);
+            if(clientfd[ii].ssl!=nullptr)//这个套接字启用了tls
+            {
+                SSL_shutdown(clientfd[ii].ssl);
+                SSL_free(clientfd[ii].ssl);
             }
-            shutdown(ii.first,SHUT_RDWR);
-            ::close(ii.first);
+            shutdown(ii,SHUT_RDWR);
+            ::close(ii);
+            clientfd[ii].fd=-1;
+            }
         }
-        clientfd.clear();
+        //clientfd.clear();
         //key.clear();
         //functionT.clear();
         //redrawTLS();
@@ -3740,25 +3747,25 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     }
     bool stt::network::TcpServer::close(const int &fd)
     {
-        unique_lock<mutex> lock2(lc1);
+        //unique_lock<mutex> lock2(lc1);
         //unique_lock<mutex> lock1(ltl1);
-        auto ii=clientfd.find(fd);
-        if(ii==clientfd.end())
+        //auto ii=clientfd.find(fd);
+        if(fd>=maxFD||clientfd[fd].fd==-1)
         {
             return false;
         }
         else
         {
             if(this->security_open)
-                connectionLimiter.clearIP(ii->second.ip);
+                connectionLimiter.clearIP(clientfd[fd].ip);
             //auto jj=tlsfd.find(fd);
-            if(ii->second.ssl!=nullptr)
+            if(clientfd[fd].ssl!=nullptr)
             {
-                SSL_shutdown(ii->second.ssl);
-                SSL_free(ii->second.ssl);
+                SSL_shutdown(clientfd[fd].ssl);
+                SSL_free(clientfd[fd].ssl);
             }
-            ::close(fd);
-            clientfd.erase(ii);
+            ::close(clientfd[fd].fd);
+            clientfd[fd].fd=-1;
         }
         return true;
     }
@@ -3770,20 +3777,24 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         ev.events=EPOLLIN|EPOLLET;//边缘触发
         epoll_ctl(epollFD,EPOLL_CTL_ADD,fd,&ev);//把事件放入epoll中
 
-        //检查连接表里面是不是有套接字，有的话加入
-        if(!clientfd.empty())
-        {
-            unique_lock<mutex> lock6(lc1);
-            for(auto &ii:clientfd)
-            {
-                cout<<"has:"<<ii.first<<endl;
-                ev.data.fd=ii.first;
-                
-                    ev.events=EPOLLIN|EPOLLET;//边缘触发
 
-                epoll_ctl(epollFD,EPOLL_CTL_ADD,ii.first,&ev);//把事件放入epoll中
-            }
+        //检查连接表里面是不是有套接字，有的话加入
+        
+        for(int ii=0;ii<maxFD;ii++)
+        {
+            //unique_lock<mutex> lock6(lc1);
+
+                if(clientfd[ii].fd!=-1)
+                {
+                cout<<"has:"<<clientfd[ii].fd<<endl;
+                ev.data.fd=clientfd[ii].fd;
+                
+                    ev.events=EPOLLIN|EPOLLERR | EPOLLHUP | EPOLLRDHUP|EPOLLET;//边缘触发
+
+                epoll_ctl(epollFD,EPOLL_CTL_ADD,clientfd[ii].fd,&ev);//把事件放入epoll中
+                }
         }
+        cout<<"ok"<<endl;
         epoll_event *evs=new epoll_event[evsNum];//存放epoll返回的事件
 
         //用来accept的
@@ -3835,8 +3846,20 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                     continue;
                                 }
                             }
-                            
                             string ip(inet_ntoa(k.sin_addr));//获取客户端的ip
+                            if(cfd>=maxFD)
+                            {
+                                ::close(cfd);
+                                if(stt::system::ServerSetting::logfile!=nullptr)
+                                {
+                                        if(stt::system::ServerSetting::language=="Chinese")
+                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll:fd="+to_string(cfd)+" ip="+ip+" ip连接数量达到系统上限，已经关闭这个连接");
+                                        else
+                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll:fd="+to_string(cfd)+" ip="+ip+" this connection has been closed because system connection has been reached limit");
+                                }
+                                continue;
+                            }
+                            
                             
                             if(this->security_open)
                             {
@@ -3894,9 +3917,10 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             inf.port=port;
                             inf.status=0;
                             inf.data="";
-                            unique_lock<mutex> lock6(lc1);
-                            clientfd.emplace(cfd,inf);
-                            lock6.unlock();
+                            //unique_lock<mutex> lock6(lc1);
+                            //clientfd.emplace(cfd,inf);
+                            clientfd[cfd]=inf;
+                            //lock6.unlock();
                             //写入日志
                             if(stt::system::ServerSetting::logfile!=nullptr)
                             {
@@ -3988,11 +4012,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
 
             
             
-            unique_lock<mutex> lock6(lc1);
-            auto jj=clientfd.find(cclientfd.fd);
-            if(jj==clientfd.end())//can not find fd information,we need to writedown this error and close this fd
+            //unique_lock<mutex> lock6(lc1);
+            //auto jj=clientfd.find(cclientfd.fd);
+            if(clientfd[cclientfd.fd].fd==-1)//can not find fd information,we need to writedown this error and close this fd
             {
-                lock6.unlock();
+                //lock6.unlock();
                 continue;
             }
             else
@@ -4004,9 +4028,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     else
                         stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" :now handleing fd= "+to_string(cclientfd.fd));
                 }
-                k.setFD(cclientfd.fd,jj->second.ssl,unblock);
-                TcpFDInf &Tcpinf=jj->second;
-            lock6.unlock();
+                k.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
+                TcpFDInf &Tcpinf=clientfd[cclientfd.fd];
+            //lock6.unlock();
             
             if(!fc(k,Tcpinf))
             {
@@ -4298,18 +4322,17 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             ul1.unlock();
             
 
-            unique_lock<mutex> lock6(lc1);
-            auto jj=clientfd.find(cclientfd.fd);
-            if(jj==clientfd.end())//can not find fd information,we need to writedown this error and close this fd
+            //unique_lock<mutex> lock6(lc1);
+            //auto jj=clientfd.find(cclientfd.fd);
+            if(clientfd[cclientfd.fd].fd==-1)//can not find fd information,we need to writedown this error and close this fd
             {
-                lock6.unlock();
                 continue;
             }
             else
             {
-                k.setFD(cclientfd.fd,jj->second.ssl,unblock);
-                TcpFDInf &Tcpinf=jj->second;
-            lock6.unlock();
+                k.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
+                TcpFDInf &Tcpinf=clientfd[cclientfd.fd];
+            //lock6.unlock();
 
              if(stt::system::ServerSetting::logfile!=nullptr)
              {
@@ -5268,18 +5291,18 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
 
             
 
-            unique_lock<mutex> lock6(lc1);
-            auto ii=clientfd.find(cclientfd.fd);
-            if(ii==clientfd.end())//can not find fd information,we need to writedown this error and close this fd
+            //unique_lock<mutex> lock6(lc1);
+            //auto ii=clientfd.find(cclientfd.fd);
+            if(clientfd[cclientfd.fd].fd==-1)//can not find fd information,we need to writedown this error and close this fd
             {
-                lock6.unlock();
+                //lock6.unlock();
                 continue;
             }
             else
             {
-                k.setFD(cclientfd.fd,ii->second.ssl,unblock);
-                TcpFDInf &Tcpinf=ii->second;
-            lock6.unlock();
+                k.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
+                TcpFDInf &Tcpinf=clientfd[cclientfd.fd];
+            //lock6.unlock();
             cout<<"websocket fd="<<cclientfd.fd<<endl;
             if(stt::system::ServerSetting::logfile!=nullptr)
              {
@@ -5559,11 +5582,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         //    ssl=nullptr;
         //else
         //    ssl=ii->second;
-        unique_lock<mutex> lock1(lc1);
-        auto ii=clientfd.find(fd);
-        if(ii==clientfd.end())
+        //unique_lock<mutex> lock1(lc1);
+        //auto ii=clientfd.find(fd);
+        if(fd>=maxFD||clientfd[fd].fd==-1)
             return nullptr;
-        return ii->second.ssl;
+        return clientfd[fd].ssl;
     }
     void stt::network::WebSocketServer::HB()
     {

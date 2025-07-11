@@ -2417,9 +2417,9 @@ public:
     protected:
         int maxFD;
         security::ConnectionLimiter connectionLimiter;
-        std::unordered_map<int,TcpFDInf> clientfd;
-        std::mutex lc1;
-        //TcpFDInf *clientfd;
+        //std::unordered_map<int,TcpFDInf> clientfd;
+        //std::mutex lc1;
+        TcpFDInf *clientfd;
         int flag1 = true;
         std::queue<QueueFD> *fdQueue;
         std::mutex *lq1;
