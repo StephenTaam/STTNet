@@ -116,9 +116,9 @@ Public 成员函数</h2></td></tr>
 <tr class="memitem:ab1c8fad685f00d207fcdb0d189088853"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ab1c8fad685f00d207fcdb0d189088853">TcpServer</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a32538424c01d62f24d986e01f65cc267">maxFD</a>=10000000, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;connectionRateLimit=6)</td></tr>
 <tr class="memdesc:ab1c8fad685f00d207fcdb0d189088853"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6  <a href="#ab1c8fad685f00d207fcdb0d189088853">更多...</a><br/></td></tr>
 <tr class="separator:ab1c8fad685f00d207fcdb0d189088853"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaeae7d42b0dc26836f1430daa5e61b7f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aaeae7d42b0dc26836f1430daa5e61b7f">startListen</a> (const int &amp;port, const int &amp;threads=5)</td></tr>
-<tr class="memdesc:aaeae7d42b0dc26836f1430daa5e61b7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">打开Tcp服务器监听程序  <a href="#aaeae7d42b0dc26836f1430daa5e61b7f">更多...</a><br/></td></tr>
-<tr class="separator:aaeae7d42b0dc26836f1430daa5e61b7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd39340be38620b1277d2881a0c8aa34"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#acd39340be38620b1277d2881a0c8aa34">startListen</a> (const int &amp;port, const int &amp;threads=8)</td></tr>
+<tr class="memdesc:acd39340be38620b1277d2881a0c8aa34"><td class="mdescLeft">&#160;</td><td class="mdescRight">打开Tcp服务器监听程序  <a href="#acd39340be38620b1277d2881a0c8aa34">更多...</a><br/></td></tr>
+<tr class="separator:acd39340be38620b1277d2881a0c8aa34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c020c00d442fc3d47600091e9e34527"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a6c020c00d442fc3d47600091e9e34527">setTLS</a> (const char *cert, const char *key, const char *passwd, const char *ca)</td></tr>
 <tr class="memdesc:a6c020c00d442fc3d47600091e9e34527"><td class="mdescLeft">&#160;</td><td class="mdescRight">启用 TLS 加密并配置服务器端证书与密钥  <a href="#a6c020c00d442fc3d47600091e9e34527">更多...</a><br/></td></tr>
 <tr class="separator:a6c020c00d442fc3d47600091e9e34527"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,10 +159,10 @@ Protected 属性</h2></td></tr>
 <tr class="separator:a4bda2199ef1870a4b2b8b25f5cb90ed8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb62cf93ae93211e7bbe9f16ed73a802"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#abb62cf93ae93211e7bbe9f16ed73a802">flag1</a> =true</td></tr>
 <tr class="separator:abb62cf93ae93211e7bbe9f16ed73a802"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f5ba7bd1c2414a450eca207edc61dee"><td class="memItemLeft" align="right" valign="top">std::queue&lt; <a class="el" href="structstt_1_1network_1_1QueueFD.html">QueueFD</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a9f5ba7bd1c2414a450eca207edc61dee">fdQueue</a></td></tr>
-<tr class="separator:a9f5ba7bd1c2414a450eca207edc61dee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af154330d122318dc0720f911eaa9edf7"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#af154330d122318dc0720f911eaa9edf7">lq1</a></td></tr>
-<tr class="separator:af154330d122318dc0720f911eaa9edf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a763a538a607d7e7f72b892fb287fb2b7"><td class="memItemLeft" align="right" valign="top">std::queue&lt; <a class="el" href="structstt_1_1network_1_1QueueFD.html">QueueFD</a> &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a763a538a607d7e7f72b892fb287fb2b7">fdQueue</a></td></tr>
+<tr class="separator:a763a538a607d7e7f72b892fb287fb2b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0be9c5aaada1f275ce509c42e1dabbab"><td class="memItemLeft" align="right" valign="top">std::mutex *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a0be9c5aaada1f275ce509c42e1dabbab">lq1</a></td></tr>
+<tr class="separator:a0be9c5aaada1f275ce509c42e1dabbab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a542f5eb7a7fa5d644886dee30d265267"><td class="memItemLeft" align="right" valign="top">std::condition_variable *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a542f5eb7a7fa5d644886dee30d265267">cv</a></td></tr>
 <tr class="separator:a542f5eb7a7fa5d644886dee30d265267"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6529b1505d47bc417f4ff614e7d70dfd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a6529b1505d47bc417f4ff614e7d70dfd">consumerNum</a></td></tr>
@@ -473,7 +473,7 @@ false 启用失败（日志将输出具体错误）</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="aaeae7d42b0dc26836f1430daa5e61b7f"></a>
+<a class="anchor" id="acd39340be38620b1277d2881a0c8aa34"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -487,7 +487,7 @@ false 启用失败（日志将输出具体错误）</dd></dl>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>threads</em> = <code>5</code>&#160;</td>
+          <td class="paramname"><em>threads</em> = <code>8</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -501,7 +501,7 @@ false 启用失败（日志将输出具体错误）</dd></dl>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
     <tr><td class="paramname">port</td><td>监听的端口 </td></tr>
-    <tr><td class="paramname">threads</td><td>消费者线程的数量 （默认为5） </td></tr>
+    <tr><td class="paramname">threads</td><td>消费者线程的数量 （默认为8） </td></tr>
   </table>
   </dd>
 </dl>
@@ -629,7 +629,7 @@ false 启用失败（日志将输出具体错误）</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a9f5ba7bd1c2414a450eca207edc61dee"></a>
+<a class="anchor" id="a763a538a607d7e7f72b892fb287fb2b7"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -637,7 +637,7 @@ false 启用失败（日志将输出具体错误）</dd></dl>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::queue&lt;<a class="el" href="structstt_1_1network_1_1QueueFD.html">QueueFD</a>&gt; stt::network::TcpServer::fdQueue</td>
+          <td class="memname">std::queue&lt;<a class="el" href="structstt_1_1network_1_1QueueFD.html">QueueFD</a>&gt;* stt::network::TcpServer::fdQueue</td>
         </tr>
       </table>
   </td>
@@ -709,7 +709,7 @@ false 启用失败（日志将输出具体错误）</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="af154330d122318dc0720f911eaa9edf7"></a>
+<a class="anchor" id="a0be9c5aaada1f275ce509c42e1dabbab"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -717,7 +717,7 @@ false 启用失败（日志将输出具体错误）</dd></dl>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::mutex stt::network::TcpServer::lq1</td>
+          <td class="memname">std::mutex* stt::network::TcpServer::lq1</td>
         </tr>
       </table>
   </td>

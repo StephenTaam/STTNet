@@ -20,7 +20,7 @@ int main(int argc,char *argv[])
 
 	//new a HttpServer Objection
 	//新建一个HttpServer对象
-	httpserver=new HttpServer(false);
+	httpserver=new HttpServer(10000000,false);
 
 	//set a callbacl function after signal 15 to quit decently.
 	//设置收到信号15后的回调函数，为了优雅退出程序。

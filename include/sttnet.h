@@ -2423,10 +2423,10 @@ namespace stt
         /**
         * @brief 打开Tcp服务器监听程序
         * @param port 监听的端口
-        * @param threads 消费者线程的数量 （默认为5）
+        * @param threads 消费者线程的数量 （默认为8）
         * @return true：打开监听程序成功 false：打开监听程序失败
         */
-        bool startListen(const int &port,const int &threads=5);
+        bool startListen(const int &port,const int &threads=8);
         /**
         * @brief 启用 TLS 加密并配置服务器端证书与密钥
         * 
@@ -2607,6 +2607,7 @@ namespace stt
         * @brief 获取一条websocket消息
         * @param Tcpinf 保存底层tcp状态的信息
         * @param Websocketinf 保存websocket协议状态信息
+        * @param ii 记录解析次数，一些场合用得到 默认为1
         * @return
         * -1：获取失败
         * 0：一般报文
@@ -2623,7 +2624,7 @@ namespace stt
         * 4 接收消息中
         * 
         */
-        int getMessage(TcpFDInf &Tcpinf,WebSocketFDInformation &Websocketinf);
+        int getMessage(TcpFDInf &Tcpinf,WebSocketFDInformation &Websocketinf,const int &ii=1);
         /**
         * @brief 发送一条websocket信息
         * @param msg 需要发送的websocket信息
@@ -2786,10 +2787,10 @@ namespace stt
         /**
         * @brief 打开Websocket服务器监听程序
         * @param port 监听的端口
-        * @param threads 消费者线程的数量 （默认为5）
+        * @param threads 消费者线程的数量 （默认为8）
         * @return true：打开监听程序成功 false：打开监听程序失败
         */
-        bool startListen(const int &port,const int &threads=5)
+        bool startListen(const int &port,const int &threads=8)
         {
             std::thread(&WebSocketServer::HB,this).detach();
             return TcpServer::startListen(port,threads);

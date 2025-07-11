@@ -114,9 +114,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:adeee2d76d393da6f20912fce74fdaaf6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html#adeee2d76d393da6f20912fce74fdaaf6">setFD</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a0e2ca810e24be8a9335a665a8933b2f8">fd</a>, SSL *<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a21d3fa9b11f0b144be7cc0ea8f107afb">ssl</a>=nullptr, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a035967e9eebf16b1f7626a51aec05690">flag1</a>=false, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a4d510c27152fbe94b3794858d4b22d0e">flag2</a>=true)</td></tr>
 <tr class="memdesc:adeee2d76d393da6f20912fce74fdaaf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the object, pass in socket and other parameters.  <a href="#adeee2d76d393da6f20912fce74fdaaf6">More...</a><br/></td></tr>
 <tr class="separator:adeee2d76d393da6f20912fce74fdaaf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a34c6147141450c2bff131ebf3b479ff8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html#a34c6147141450c2bff131ebf3b479ff8">getMessage</a> (<a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> &amp;Tcpinf, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;Websocketinf)</td></tr>
-<tr class="memdesc:a34c6147141450c2bff131ebf3b479ff8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a websocket message.  <a href="#a34c6147141450c2bff131ebf3b479ff8">More...</a><br/></td></tr>
-<tr class="separator:a34c6147141450c2bff131ebf3b479ff8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad06ec1f3177717e1a51e64d3e6fb7d4a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html#ad06ec1f3177717e1a51e64d3e6fb7d4a">getMessage</a> (<a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> &amp;Tcpinf, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;Websocketinf, const int &amp;ii=1)</td></tr>
+<tr class="memdesc:ad06ec1f3177717e1a51e64d3e6fb7d4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a websocket message.  <a href="#ad06ec1f3177717e1a51e64d3e6fb7d4a">More...</a><br/></td></tr>
+<tr class="separator:ad06ec1f3177717e1a51e64d3e6fb7d4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b6442cd9ac75a81063030a3c1bd7724"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html#a2b6442cd9ac75a81063030a3c1bd7724">sendMessage</a> (const std::string &amp;msg, const std::string &amp;type=&quot;0001&quot;)</td></tr>
 <tr class="memdesc:a2b6442cd9ac75a81063030a3c1bd7724"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a websocket message.  <a href="#a2b6442cd9ac75a81063030a3c1bd7724">More...</a><br/></td></tr>
 <tr class="separator:a2b6442cd9ac75a81063030a3c1bd7724"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -124,7 +124,7 @@ Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>WebSocket protocol operation class Only pass in the socket, then use this class for WebSocket operations. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a34c6147141450c2bff131ebf3b479ff8"></a>
+<a class="anchor" id="ad06ec1f3177717e1a51e64d3e6fb7d4a"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -138,7 +138,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;&#160;</td>
-          <td class="paramname"><em>Websocketinf</em>&#160;</td>
+          <td class="paramname"><em>Websocketinf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>ii</em> = <code>1</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -153,6 +159,7 @@ Public Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">Tcpinf</td><td>saves the underlying TCP status information </td></tr>
     <tr><td class="paramname">Websocketinf</td><td>saves the websocket protocol status information </td></tr>
+    <tr><td class="paramname">ii</td><td>Record the number of resolutions, which can be used in some cases The default is 1 </td></tr>
   </table>
   </dd>
 </dl>

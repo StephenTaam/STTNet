@@ -13,7 +13,7 @@ var searchData=
   ['getfilesize',['getFileSize',['../classstt_1_1file_1_1File.html#ad694f565a728d4bf81dc2a895459179f',1,'stt::file::File']]],
   ['getip',['getIP',['../classstt_1_1data_1_1HttpStringUtil.html#a23d8fe01488654d7889a9bf4478c6aab',1,'stt::data::HttpStringUtil']]],
   ['getlocpara',['getLocPara',['../classstt_1_1data_1_1HttpStringUtil.html#a693fcfba7f7df1295d245389d2528695',1,'stt::data::HttpStringUtil']]],
-  ['getmessage',['getMessage',['../classstt_1_1network_1_1WebSocketServerFDHandler.html#a34c6147141450c2bff131ebf3b479ff8',1,'stt::network::WebSocketServerFDHandler']]],
+  ['getmessage',['getMessage',['../classstt_1_1network_1_1WebSocketServerFDHandler.html#ad06ec1f3177717e1a51e64d3e6fb7d4a',1,'stt::network::WebSocketServerFDHandler']]],
   ['getpara',['getPara',['../classstt_1_1data_1_1HttpStringUtil.html#a7ca0971f2dfdf015c8cdd20177424ff4',1,'stt::data::HttpStringUtil']]],
   ['getport',['getPort',['../classstt_1_1data_1_1HttpStringUtil.html#a5d9894e4283bbd3acdfbcf65dc318b76',1,'stt::data::HttpStringUtil']]],
   ['getpreciesdouble',['getPreciesDouble',['../classstt_1_1data_1_1PrecisionUtil.html#a0a67be9b884acfd1c8dfdcc7cb6f65c8',1,'stt::data::PrecisionUtil::getPreciesDouble(const double &amp;number, const int &amp;bit, std::string &amp;str)'],['../classstt_1_1data_1_1PrecisionUtil.html#a405bb866f4958cabfbe88250793ab256',1,'stt::data::PrecisionUtil::getPreciesDouble(double &amp;number, const int &amp;bit)']]],

@@ -2455,10 +2455,10 @@ public:
         /**
         * @brief Start the TCP server listening program
         * @param port Port to listen on
-        * @param threads Number of consumer threads (default is 5)
+        * @param threads Number of consumer threads (default is 8)
         * @return true: Listening started successfully, false: Failed to start listening
         */
-        bool startListen(const int &port, const int &threads = 5);
+        bool startListen(const int &port, const int &threads = 8);
         /**
         * @brief Enable TLS encryption and configure server-side certificate and key
         * 
@@ -2641,6 +2641,7 @@ public:
         * @brief Get a websocket message
         * @param Tcpinf saves the underlying TCP status information
         * @param Websocketinf saves the websocket protocol status information
+        * @param ii Record the number of resolutions, which can be used in some cases The default is 1
         * @return
         * -1: Failed to get
         * 0: General message
@@ -2657,7 +2658,7 @@ public:
         * 4 Receiving messages
         *
         */
-        int getMessage(TcpFDInf &Tcpinf,WebSocketFDInformation &Websocketinf);
+        int getMessage(TcpFDInf &Tcpinf,WebSocketFDInformation &Websocketinf,const int &ii=1);
         /**
         * @brief Send a websocket message
         * @param msg Websocket message to be sent
@@ -2821,10 +2822,10 @@ public:
         /**
         * @brief Open the Websocket server listening program
         * @param port Port to listen on
-        * @param threads Number of consumer threads (default is 5)
+        * @param threads Number of consumer threads (default is 8)
         * @return true: Listening started successfully, false: Failed to start listening
         */
-        bool startListen(const int &port, const int &threads = 5)
+        bool startListen(const int &port, const int &threads = 8)
         {
             std::thread(&WebSocketServer::HB, this).detach();
             return TcpServer::startListen(port, threads);
