@@ -7,6 +7,7 @@
 #ifndef PUBLIC_H
 #define PUBLIC_H 1
 #include<jsoncpp/json/json.h>
+#include<string_view>
 #include<string>
 #include<atomic>
 #include<iostream>
@@ -1243,7 +1244,76 @@ public:
             * @return Returns the position of b in ori_str (may return string::npos if b is not found or b is "")
             * @note If not found, the result string is ""
             */       
-	        static std::string& get_split_str(const std::string& ori_str, std::string &str, const std::string &a, const std::string &b, const size_t &pos = 0);
+	        static size_t get_split_str(const std::string_view& ori_str, std::string_view &str, const std::string &a, const std::string &b, const size_t &pos = 0);
+            /**
+            * @brief Extract the value of a specified key from the URL query parameters.
+            *
+            * @note The URL does not need to be complete. For example, extracting the value of `id` from `?id=123&name=abc` is the same as extracting from `http://xxxx/?id=123&name=abc`.
+            *
+            * @param ori_str Original URL string.
+            * @param str String to store the extraction result.
+            * @param name Parameter name (key).
+            * @return Reference to the result string.
+            */
+	        static std::string_view& get_value_str(const std::string_view& ori_str, std::string_view &str, const std::string& name);
+            /**
+            * @brief Extract the value of a specified field from the HTTP request header.
+            *
+            * @param ori_str Original HTTP request header string.
+            * @param str Extraction result.
+            * @param name Request header field name (e.g., "Host").
+            * @return Reference to the result string.
+            */
+	        static std::string_view& get_value_header(const std::string_view& ori_str, std::string_view &str, const std::string& name);
+            /**
+            * @brief Extract the path and query part from the URL.
+            *
+            * For example, extract `/path` from `http://abc.com/path?query=123` or from `/path?query=123`.
+            *
+            * @param ori_str Original URL.
+            * @param str Return the path part.
+            * @return Reference to the result string.
+            */
+	        static std::string_view& get_location_str(const std::string_view& ori_str, std::string_view &str);
+            /**
+            * @brief Extract the path part of the URL (excluding the query).
+            *
+            * Similar to `get_location_str`, but retains all content after the path (such as parameters).
+            *
+            * @param URL.
+            * @param locPara Return the path+parameter part.
+            * @return Reference to the result string.
+            */
+            static std::string_view& getLocPara(const std::string_view &url, std::string_view &locPara);
+            /**
+            * @brief Get the query parameter string in the URL (including ?).
+            * @note It can be a complete URL or an incomplete one, such as /path?id=123&name=abc
+            *
+            * @param URL.
+            * @param para Return the parameter part (in the form of "?id=123&name=abc").
+            * @return Reference to the result string.
+            */
+            static std::string_view& getPara(const std::string_view &url, std::string_view &para);
+
+
+
+            /**
+            * @brief Extract a substring between two markers from the original string.
+            *
+            * Extracts the content from a to b (excluding a and b), and a starting search position can be specified.
+            * If a or b is an empty string, it means from the beginning or to the end, respectively.
+            * If a is not found, it defaults to starting from the beginning.
+            * If b is not found, it defaults to the end.
+            *
+            * @param ori_str Original string.
+            * @param str String to store the extraction result.
+            * @param a Start marker string.
+            * @param b End marker string.
+            * @param pos Starting search position.
+            * @return Returns the position of b in ori_str (may return string::npos if b is not found or b is "")
+            * @note If not found, the result string is ""
+            */       
+	        static size_t get_split_str(const std::string& ori_str, std::string &str, const std::string &a, const std::string &b, const size_t &pos = 0);
             /**
             * @brief Extract the value of a specified key from the URL query parameters.
             *
@@ -2284,25 +2354,33 @@ public:
     struct HttpRequestInformation 
     {
         /**
+        * @brief request's type
+        */
+        std::string_view type;
+        /**
         * @brief Path and parameters in the url
         */
-        std::string locPara;
+        std::string_view locPara;
         /**
         * @brief Path in the url
         */
-        std::string loc;
+        std::string_view loc;
         /**
         * @brief Parameters in the url
         */
-        std::string para;
+        std::string_view para;
         /**
         * @brief Request header
         */
-        std::string header;
+        std::string_view header;
         /**
         * @brief Request body
         */
-        std::string body;
+        std::string_view body;
+        /**
+        * @brief Request body（chunked）
+        */
+        std::string body_chunked;
     };
 
 
@@ -2382,7 +2460,7 @@ public:
         /**
         * @brief Save the data received from the client
         */
-        std::string data;
+        std::string_view data;
         /**
         * @brief saves http/https protocol information
         */
@@ -2391,6 +2469,10 @@ public:
         * @brief If encrypted, store the encryption handle
         */
         SSL* ssl;
+
+        char *buffer;
+        unsigned long p_buffer_now;
+        //unsigned long p_request_now;
     };
 
     /**
@@ -2415,6 +2497,7 @@ public:
     class TcpServer 
     {
     protected:
+        unsigned long buffer_size;
         int maxFD;
         security::ConnectionLimiter connectionLimiter;
         //std::unordered_map<int,TcpFDInf> clientfd;
@@ -2446,12 +2529,13 @@ public:
         /**
         * @brief Constructor, which is enabled by default. Limit the maximum number of connections to an IP address to 20; The fastest connection speed per second for the same IP address is 6
         * @note Turning on the security module has a performance impact
-        * @param maxFD service object can accept the maximum number of connections
+        * @param maxFD service object can accept the maximum number of connections（default 10000）
         * @param security_open true: enable the security module false: disable the security module (enabled by default)
         * @param connectionNumLimit The maximum number of connections from the same IP address
         * @param connectionRateLimit The maximum number of connections per second to the same IP address
+        * @param buffer_size The maximum amount of data allowed to be transferred over the same connection (in KB) is 8KB by default
         */
-        TcpServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit),security_open(security_open){}
+        TcpServer(const int &maxFD=10000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit),security_open(security_open),buffer_size(buffer_size*1024){}
         /**
         * @brief Start the TCP server listening program
         * @param port Port to listen on
@@ -2558,6 +2642,7 @@ public:
         /**
         * @brief Parse Http/Https request
         * @param TcpInf stores the state information of the underlying TCP processing socket
+        * @param buffer_size The size of the server-defined parsing buffer (in bytes)
         * @param times sometims will be used to record solve times
         * @return 1: Parsing completed 0: Parsing still needs to be continued -1: Parsing failed
         * @note TcpInf.status
@@ -2568,7 +2653,7 @@ public:
         * 3 Receive request body (non-chunk mode)
         * 
         */
-        int solveRequest(TcpFDInf &TcpInf,const int &times=1);
+        int solveRequest(TcpFDInf &TcpInf,const unsigned long &buffer_size,const int &times=1);
         /**
         * @brief Send Http/Https response
         * @param data String container with response body data
@@ -2608,8 +2693,9 @@ public:
         * @param security_open true: enable the security module false: disable the security module (enabled by default)
         * @param connectionNumLimit The maximum number of connections from the same IP address
         * @param connectionRateLimit The maximum number of connections per second to the same IP address
+        * @param buffer_size The maximum amount of data allowed to be transferred over the same connection (in KB) is 8KB by default
         */
-        HttpServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit){}
+        HttpServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size){}
         /**
         * @brief Set a callback function for responding after receiving and successfully parsing an Http/Https request
         * Register a callback function
@@ -2713,8 +2799,9 @@ public:
         * @param security_open true: enable the security module false: disable the security module (enabled by default)
         * @param connectionNumLimit The maximum number of connections from the same IP address
         * @param connectionRateLimit The maximum number of connections per second to the same IP address
+        * @param buffer_size The maximum amount of data allowed to be transferred over the same connection (in KB) is 8KB by default
         */
-        WebSocketServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit){}
+        WebSocketServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size){}
         /**
         * @brief Set the callback function to be executed after a websocket connection is successful
         * Register a callback function

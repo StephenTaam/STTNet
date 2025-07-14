@@ -20,7 +20,7 @@ int main(int argc,char *argv[])
 
 	//new a HttpServer Objection
 	//新建一个HttpServer对象
-	httpserver=new HttpServer(10000000,false);
+	httpserver=new HttpServer(500,false);
 
 	//set a callbacl function after signal 15 to quit decently.
 	//设置收到信号15后的回调函数，为了优雅退出程序。
@@ -39,9 +39,11 @@ int main(int argc,char *argv[])
 	//设置回调函数处理Http请求
 	httpserver->setFunction([](const HttpRequestInformation &info, HttpServerFDHandler &conn) -> bool {
         if (info.loc == "/ping") {
-            conn.sendBack("pong");
+            if(!conn.sendBack("pong"))
+				return false;
         } else {
-            conn.sendBack("404 Not Found", "", "404");
+            if(!conn.sendBack("404 Not Found", "", "404"))
+				return false;
         }
         return true;
     });

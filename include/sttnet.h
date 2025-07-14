@@ -7,6 +7,7 @@
 #ifndef PUBLIC_H
 #define PUBLIC_H 1
 #include<jsoncpp/json/json.h>
+#include<string_view>
 #include<string>
 #include<atomic>
 #include<iostream>
@@ -1240,6 +1241,74 @@ namespace stt
             * @return 返回b在ori_str中的位置(可能返回string::npos,如果b找不到或者b为"")
             * @note 如果找不到，结果字符串为""
             */       
+	        static size_t get_split_str(const std::string_view& ori_str,std::string_view &str,const std::string &a,const std::string &b,const size_t &pos=0);
+            /**
+            * @brief 从 URL 查询参数中提取指定 key 的值。
+            *
+            * @note url不需要完整也行 例如从 `?id=123&name=abc`提取 `id` 的值和从`http://xxxx/?id=123&name=abc`提取 `id` 的值是一样的。
+            *
+            * @param ori_str 原始 URL 字符串。
+            * @param str 存储提取结果的字符串。
+            * @param name 参数名（key）。
+            * @return 引用，指向结果字符串。
+            */
+	        static std::string_view& get_value_str(const std::string_view& ori_str,std::string_view &str,const std::string& name);
+            /**
+            * @brief 从 HTTP 请求头中提取指定字段的值。
+            *
+            * @param ori_str 原始 HTTP 请求头字符串。
+            * @param str 提取结果。
+            * @param name 请求头字段名（如 "Host"）。
+            * @return 引用，指向结果字符串。
+            */
+	        static std::string_view& get_value_header(const std::string_view& ori_str,std::string_view &str,const std::string& name);
+            /**
+            * @brief 提取 URL 中 path 和 query 部分。
+            *
+            * 例如从 `http://abc.com/path?query=123` 或者从/path?query=123 提取 `/path`。
+            *
+            * @param ori_str 原始 URL。
+            * @param str 返回 path 部分。
+            * @return 引用，指向结果字符串。
+            */
+	        static std::string_view& get_location_str(const std::string_view& ori_str,std::string_view &str);
+            /**
+            * @brief 提取 URL 的 path 部分（不含 query）。
+            *
+            * 与 `get_location_str` 类似，但保留 path 之后的所有内容（如参数）。
+            *
+            * @param URL。
+            * @param locPara 返回 path+参数部分。
+            * @return 引用，指向结果字符串。
+            */
+            static std::string_view& getLocPara(const std::string_view &url,std::string_view &locPara);
+            /**
+            * @brief 获取 URL 中的查询参数字符串（包括 ?）。
+            * @note 可以是完整url 也可以是不太完整的，比如/path?id=123&name=abc
+            *
+            * @param URL。
+            * @param para 返回参数部分（形如 "?id=123&name=abc"）。
+            * @return 引用，指向结果字符串。
+            */
+            static std::string_view& getPara(const std::string_view &url,std::string_view &para);
+
+
+            /**
+            * @brief 从原始字符串中提取两个标记之间的子串。
+            *
+            * 提取从 a 到 b 之间的内容（不包含 a 和 b），可指定起始搜索位置。
+            * 若 a 或 b 为空字符串，则分别表示从头或到尾。
+            * 若a找不到，则默认从头开始
+            * 若b找不到，则默认到尾
+            *
+            * @param ori_str 原始字符串。
+            * @param str 存储提取结果的字符串。
+            * @param a 起始标记字符串。
+            * @param b 终止标记字符串。
+            * @param pos 搜索起始位置。
+            * @return 返回b在ori_str中的位置(可能返回string::npos,如果b找不到或者b为"")
+            * @note 如果找不到，结果字符串为""
+            */       
 	        static size_t get_split_str(const std::string& ori_str,std::string &str,const std::string &a,const std::string &b,const size_t &pos=0);
             /**
             * @brief 从 URL 查询参数中提取指定 key 的值。
@@ -2253,25 +2322,33 @@ namespace stt
     struct HttpRequestInformation 
     {
         /**
+        * @brief 请求类型
+        */
+        std::string_view type;
+        /**
         * @brief url中的路径和参数
         */
-        std::string locPara;
+        std::string_view locPara;
         /**
         * @brief url中的路径
         */
-        std::string loc;
+        std::string_view loc;
         /**
         * @brief url中的参数
         */
-        std::string para;
+        std::string_view para;
         /**
         * @brief 请求头
         */
-        std::string header;
+        std::string_view header;
         /**
         * @brief 请求体
         */
-        std::string body;
+        std::string_view body;
+        /**
+        * @brief 请求体（chunked）
+        */
+        std::string body_chunked;
     };
     
     /**
@@ -2349,7 +2426,7 @@ namespace stt
         /**
         * @brief 保存收到的客户端传来的数据
         */
-        std::string data;
+        std::string_view data;
         /**
         * @brief 保存http/https协议的信息
         */
@@ -2358,6 +2435,10 @@ namespace stt
         * @brief 如果加密了，存放加密句柄
         */
         SSL* ssl;
+        
+        char *buffer;
+        unsigned long p_buffer_now;
+        //unsigned long p_request_now;
     };
 
     /**
@@ -2383,6 +2464,7 @@ namespace stt
     class TcpServer 
     {
     protected:
+        unsigned long buffer_size;
         int maxFD;
         security::ConnectionLimiter connectionLimiter;
         //std::unordered_map<int,TcpFDInf> clientfd;
@@ -2414,12 +2496,13 @@ namespace stt
         /**
         * @brief 构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6
         * @note 打开安全模块会对性能有影响
-        * @param maxFD 服务对象的最大接受连接数
+        * @param maxFD 服务对象的最大接受连接数 默认为10000
         * @param security_open true:开启安全模块 false：关闭安全模块 （默认为开启）
         * @param connectionNumLimit 同一个ip连接数目的上限
         * @param connectionRateLimit 同一个ip每秒钟连接数目的上限
+        * @param buffer_size 同一个连接允许传输的最大数据量（单位为kb） 默认为8kb
         */
-        TcpServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit),security_open(security_open){}
+        TcpServer(const int &maxFD=10000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit),security_open(security_open),buffer_size(buffer_size*1024){}
         /**
         * @brief 打开Tcp服务器监听程序
         * @param port 监听的端口
@@ -2526,6 +2609,7 @@ namespace stt
         /**
         * @brief 解析Http/Https请求
         * @param TcpInf 存放底层tcp处理套接字的信息
+        * @param buffer_size 服务器定义的解析缓冲区的大小（单位为字节)
         * @param times 记录解析的次数，某些场景会用上
         * @return -1:解析失败 0:还需要继续解析 1:解析完成
         * @note TcpInf.status
@@ -2536,7 +2620,7 @@ namespace stt
         * 3 接收请求体中(非chunk模式)
         * 
         */
-        int solveRequest(TcpFDInf &TcpInf,const int &times=1);
+        int solveRequest(TcpFDInf &TcpInf,const unsigned long &buffer_size,const int &times=1);
         /**
         * @brief 发送Http/Https响应
         * @param data 装着响应体的数据的string容器
@@ -2574,8 +2658,9 @@ namespace stt
         * @param security_open true:开启安全模块 false：关闭安全模块 （默认为开启）
         * @param connectionNumLimit 同一个ip连接数目的上限
         * @param connectionRateLimit 同一个ip每秒钟连接数目的上限
+        * @param buffer_size 同一个连接允许传输的最大数据量（单位为kb） 默认为8kb
         */
-        HttpServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit){}
+        HttpServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size){}
         /**
         * @brief 设置一个收到Http/Https请求并成功解析后进行响应的回调函数
         * 注册一个回调函数
@@ -2679,8 +2764,9 @@ namespace stt
         * @param security_open true:开启安全模块 false：关闭安全模块 （默认为开启）
         * @param connectionNumLimit 同一个ip连接数目的上限
         * @param connectionRateLimit 同一个ip每秒钟连接数目的上限
+        * @param buffer_size 同一个连接允许传输的最大数据量（单位为kb） 默认为8kb
         */
-        WebSocketServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit){}
+        WebSocketServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size){}
         /**
         * @brief 设置websocket连接成功后就执行的回调函数
         * 注册一个回调函数
