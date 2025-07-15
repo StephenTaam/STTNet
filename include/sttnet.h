@@ -2435,8 +2435,13 @@ namespace stt
         * @brief 如果加密了，存放加密句柄
         */
         SSL* ssl;
-        
+        /**
+        * @brief 接收空间指针
+        */
         char *buffer;
+        /**
+        * @brief 接收空间位置指针
+        */
         unsigned long p_buffer_now;
         //unsigned long p_request_now;
     };
@@ -2626,7 +2631,7 @@ namespace stt
         * @param data 装着响应体的数据的string容器
         * @param code Http响应状态码和状态说明 （默认是 200 OK）
         * @param header Http请求头；如果不是用createHeader生成，记得在末尾要加上\r\n。
-        * @param header1 HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入\r\n（不能用createHeader）。（默认填入了keepalive项）
+        * @param header1 HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入\r\n（不能用createHeader）。（比如可以默认填入keepalive项）
         * @return  true：发送响应成功  false：发送响应失败
         */
         bool sendBack(const std::string &data,const std::string &header="",const std::string &code="200 OK",const std::string &header1="");
@@ -2636,13 +2641,17 @@ namespace stt
         * @param length char*容器中的数据长度
         * @param code Http响应状态码和状态说明 （默认是 200 OK）
         * @param header Http请求头；如果不是用createHeader生成，记得在末尾要加上\r\n。
-        * @param header1 HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入\r\n（不能用createHeader）。（默认填入了keepalive项）
+        * @param header1 HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入\r\n（不能用createHeader）。（比如可以默认填入keepalive项）
+        * @param header_length 响应头部加起来的最大长度（默认为50)
+        * @warning 预留的空间务必准确 否则可能发送失败
+        * @warning 所有char*指向的数据都必须确保\0结尾 \0不计入长度 否则有崩溃风险
         * @return  true：发送响应成功  false：发送响应失败
         */
-        bool sendBack(char *data,const size_t &length,const std::string &header="",const std::string &code="200 OK",const std::string &header1="");
+        bool sendBack(const char *data,const size_t &length,const char *header="\0",const char *code="200 OK\0",const char *header1="\0",const size_t &header_length=50);
     };
     /**
     * @brief Http/HttpServer 服务端操作类
+    * @note 支持http/1.0 1.1
     */
     class HttpServer:public TcpServer
     {
