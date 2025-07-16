@@ -47,6 +47,7 @@
 #include<sys/wait.h>
 #include<sys/shm.h>
 #include<type_traits>
+#include<charconv>
 /**
 * @namespace stt
 */
@@ -1241,7 +1242,7 @@ namespace stt
             * @return 返回b在ori_str中的位置(可能返回string::npos,如果b找不到或者b为"")
             * @note 如果找不到，结果字符串为""
             */       
-	        static size_t get_split_str(const std::string_view& ori_str,std::string_view &str,const std::string &a,const std::string &b,const size_t &pos=0);
+	        static size_t get_split_str(const std::string_view& ori_str,std::string_view &str,const std::string_view &a,const std::string_view &b,const size_t &pos=0);
             /**
             * @brief 从 URL 查询参数中提取指定 key 的值。
             *
@@ -1309,7 +1310,7 @@ namespace stt
             * @return 返回b在ori_str中的位置(可能返回string::npos,如果b找不到或者b为"")
             * @note 如果找不到，结果字符串为""
             */       
-	        static size_t get_split_str(const std::string& ori_str,std::string &str,const std::string &a,const std::string &b,const size_t &pos=0);
+	        static size_t get_split_str(const std::string_view& ori_str,std::string &str,const std::string_view &a,const std::string_view &b,const size_t &pos=0);
             /**
             * @brief 从 URL 查询参数中提取指定 key 的值。
             *
@@ -1451,14 +1452,14 @@ namespace stt
             * @param i 如果转化失败 则把result赋值为i(默认为-1)
             * @return result的引用
             */
-	        static int& toInt(const std::string&ori_str,int &result,const int &i=-1);
+	        static int& toInt(const std::string_view&ori_str,int &result,const int &i=-1);
             /**
             * @brief 16进制数字的字符串表示转化为10进制int类型数字
             * @param ori_str 16进制数字的字符串表示
             * @param result 保存转化结果的int容器
             * @return 返回result的引用
             */
-            static int& str16toInt(const std::string&ori_str,int &result,const int &i=-1);
+            static int& str16toInt(const std::string_view&ori_str,int &result,const int &i=-1);
             /**
             * @brief string转化为long类型
             * @note 不会抛出异常
@@ -1467,7 +1468,7 @@ namespace stt
             * @param i 如果转化失败 则把result赋值为i(默认为-1)
             * @return result的引用
             */
-	        static long& toLong(const std::string&ori_str,long &result,const long &i=-1);
+	        static long& toLong(const std::string_view&ori_str,long &result,const long &i=-1);
             /**
             * @brief string转化为float类型
             * @note 不会抛出异常
@@ -1493,7 +1494,7 @@ namespace stt
             * @param result 存放结果的bool容器
             * @return result的引用
             */
-	        static bool& toBool(const std::string&ori_str,bool &result);
+	        static bool& toBool(const std::string_view&ori_str,bool &result);
             /**
             * @brief 将普通字符串转化为对应的十六进制表示字符串（hex string）。
              *
@@ -2600,7 +2601,7 @@ namespace stt
     * @brief 解析，响应Http/https请求的操作类
     * 仅传入套接字，然后使用这个类进行Http的操作
     */
-    class HttpServerFDHandler:private TcpFDHandler
+    class HttpServerFDHandler:public TcpFDHandler
     {
     public:
         /**

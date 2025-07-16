@@ -1463,7 +1463,7 @@ unsigned long& stt::data::NetworkOrderUtil::htonl_ntohl_64(unsigned long &data)
         return number;
     }
 
-    size_t stt::data::HttpStringUtil::get_split_str(const string_view& ori_str,string_view &str,const string &a,const string &b,const size_t &pos)
+    size_t stt::data::HttpStringUtil::get_split_str(const string_view& ori_str,string_view &str,const string_view &a,const string_view &b,const size_t &pos)
     {
         size_t aa;
         size_t bb;
@@ -1582,7 +1582,7 @@ unsigned long& stt::data::NetworkOrderUtil::htonl_ntohl_64(unsigned long &data)
     }
 
 
-    size_t stt::data::HttpStringUtil::get_split_str(const string& ori_str,string &str,const string &a,const string &b,const size_t &pos)
+    size_t stt::data::HttpStringUtil::get_split_str(const string_view& ori_str,string &str,const string_view &a,const string_view &b,const size_t &pos)
     {
         size_t aa;
         size_t bb;
@@ -1725,8 +1725,9 @@ string& stt::data::WebsocketStringUtil::transfer_websocket_key(string &str)
     str=EncodingUtil::base64_encode(b);
     return str;
 }
-    int& stt::data::NumberStringConvertUtil::toInt(const string&ori_str,int &result,const int &i)
+    int& stt::data::NumberStringConvertUtil::toInt(const string_view&ori_str,int &result,const int &i)
     {
+        /*
         try
         {
             result=stoi(ori_str);
@@ -1737,9 +1738,14 @@ string& stt::data::WebsocketStringUtil::transfer_websocket_key(string &str)
             return result;
         }
         return result;
+        */
+        if(from_chars(ori_str.data(),ori_str.data()+ori_str.length(),result).ec!=errc())
+            result=i;
+        return result;
     }
-	long& stt::data::NumberStringConvertUtil::toLong(const string&ori_str,long &result,const long &i)
+	long& stt::data::NumberStringConvertUtil::toLong(const string_view&ori_str,long &result,const long &i)
     {
+        /*
         try
         {
             result=stol(ori_str);
@@ -1750,9 +1756,14 @@ string& stt::data::WebsocketStringUtil::transfer_websocket_key(string &str)
             return result;
         }
         return result;
+        */
+        if(from_chars(ori_str.data(),ori_str.data()+ori_str.length(),result).ec!=errc())
+            result=i;
+        return result;
     }
 	float& stt::data::NumberStringConvertUtil::toFloat(const string&ori_str,float &result,const float &i)
     {
+        
         try
         {
             result=stof(ori_str);
@@ -1763,9 +1774,11 @@ string& stt::data::WebsocketStringUtil::transfer_websocket_key(string &str)
             return result;
         }
         return result;
+        
     }
 	double& stt::data::NumberStringConvertUtil::toDouble(const string&ori_str,double &result,const double &i)
     {
+        
         try
         {
             result=stod(ori_str);
@@ -1776,9 +1789,11 @@ string& stt::data::WebsocketStringUtil::transfer_websocket_key(string &str)
             return result;
         }
         return result;
+
     }
-    bool& stt::data::NumberStringConvertUtil::toBool(const string&ori_str,bool &result)
+    bool& stt::data::NumberStringConvertUtil::toBool(const string_view&ori_str,bool &result)
     {
+        
         if(ori_str=="true"||ori_str=="TRUE"||ori_str=="True")
         {
             result=true;
@@ -1789,6 +1804,7 @@ string& stt::data::WebsocketStringUtil::transfer_websocket_key(string &str)
             result=false;
             return result;
         }
+
     }
     
     
@@ -1807,7 +1823,7 @@ string& stt::data::NumberStringConvertUtil::strto16(const string &ori_str,string
     result.assign(buffer2);
     return result;
 }
-    int& stt::data::NumberStringConvertUtil::str16toInt(const string&ori_str,int &result,const int &i)
+    int& stt::data::NumberStringConvertUtil::str16toInt(const string_view&ori_str,int &result,const int &i)
     {
         int bit=ori_str.length()-1;
         result=0;
@@ -3884,6 +3900,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         }
         return true;
     }
+    
     void stt::network::TcpServer::epolll(const int &evsNum)
     {
         int epollFD=epoll_create(1);//创建epoll句柄
@@ -4077,6 +4094,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
                     else//有数据上来了
                     {
+                        
                         if(evs[ii].events&(EPOLLERR | EPOLLHUP | EPOLLRDHUP))
                         {
 
@@ -4109,6 +4127,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             fdQueue[evs[ii].data.fd%consumerNum].push(QueueFD{evs[ii].data.fd,false});
                             cv[evs[ii].data.fd%consumerNum].notify_one();
                         }
+                        
                     }
                 }
             }
@@ -4221,7 +4240,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
              header+"\r\n"+\
              data;
         
-        if(sendData(result)!=result.length())
+        if(sendData(result,false)!=result.length())
         {
             return false;
         }
@@ -4249,7 +4268,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         size_t ret=snprintf(buffer,length+header_length+4+1,"HTTP/1.1 %s\r\nContent-Length: %zu\r\n%s%s\r\n%s",code,length,header,header1,data);
         if(ret<length+header_length+4+1)
         {
-            if(sendData(buffer,ret)!=ret)
+            if(sendData(buffer,ret,false)!=ret)
             {
                 delete buffer;
                 return false;
@@ -4353,12 +4372,15 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
             else//状态3
             {
+                
                 TcpInf.status=3;
                 string_view size;
                 long ssize;
-                HttpStringUtil::get_split_str(TcpInf.HttpInf.header,size,"Content-Length: ","\r\n");
-                NumberStringConvertUtil::toLong(string(size),ssize);
 
+                HttpStringUtil::get_split_str(TcpInf.HttpInf.header,size,"Content-Length: ","\r\n");
+                
+                NumberStringConvertUtil::toLong(string(size),ssize);
+                
                 if(ssize==-1)
                 {
                     
@@ -4373,6 +4395,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         HttpStringUtil::get_split_str(TcpInf.HttpInf.header,TcpInf.HttpInf.locPara," "," ");
                         HttpStringUtil::get_location_str(TcpInf.HttpInf.locPara,TcpInf.HttpInf.loc);
                         HttpStringUtil::getPara(TcpInf.HttpInf.locPara,TcpInf.HttpInf.para);
+                        
                         return 1;
                     }
                     else
@@ -4524,7 +4547,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
                 }
         }
-
+        
         return -1;
 
     }
@@ -4559,7 +4582,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             
             ul1.unlock();
             
-
+            
             //unique_lock<mutex> lock6(lc1);
             //auto jj=clientfd.find(cclientfd.fd);
             if(clientfd[cclientfd.fd].fd==-1)//can not find fd information,we need to writedown this error and close this fd
@@ -4568,8 +4591,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
             else
             {
+                
                 k.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
+                
                 TcpFDInf &Tcpinf=clientfd[cclientfd.fd];
+                
             //lock6.unlock();
 
              if(stt::system::ServerSetting::logfile!=nullptr)
@@ -4584,6 +4610,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
              
              int ret=1;
              int ii=1;
+             
+            cout<<"fd="<<cclientfd.fd<<endl;
             while(ret==1)
             {
                 if(stt::system::ServerSetting::logfile!=nullptr)
@@ -4608,7 +4636,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
 
             else if(ret==1)
             {
-                cout<<"fd="<<cclientfd.fd<<endl;
+                
                 if(stt::system::ServerSetting::logfile!=nullptr)
                 {
                     if(stt::system::ServerSetting::language=="Chinese")
@@ -4621,6 +4649,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
 
                 }
+                
                 if(!fc(Tcpinf.HttpInf,k))
                 {
                 
@@ -4634,9 +4663,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
                     break;
                 }
-
                 else
                 {
+                    
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
@@ -4658,6 +4687,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
             ++ii;
             }
+            
             }
         }
         //跳出循环意味着结束线程
@@ -5367,7 +5397,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             mess=header+string(ss,8)+mess;
         }
         //发送数据帧
-        if(sendData(mess)!=mess.length())
+        if(sendData(mess,false)!=mess.length())
             return false;
         return true;
     }

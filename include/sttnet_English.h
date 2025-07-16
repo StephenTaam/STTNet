@@ -47,6 +47,7 @@
 #include<sys/wait.h>
 #include<sys/shm.h>
 #include<type_traits>
+#include<charconv>
 /**
 * @namespace stt
 */
@@ -1244,7 +1245,7 @@ public:
             * @return Returns the position of b in ori_str (may return string::npos if b is not found or b is "")
             * @note If not found, the result string is ""
             */       
-	        static size_t get_split_str(const std::string_view& ori_str, std::string_view &str, const std::string &a, const std::string &b, const size_t &pos = 0);
+	        static size_t get_split_str(const std::string_view& ori_str, std::string_view &str, const std::string_view &a, const std::string_view &b, const size_t &pos = 0);
             /**
             * @brief Extract the value of a specified key from the URL query parameters.
             *
@@ -1313,7 +1314,7 @@ public:
             * @return Returns the position of b in ori_str (may return string::npos if b is not found or b is "")
             * @note If not found, the result string is ""
             */       
-	        static size_t get_split_str(const std::string& ori_str, std::string &str, const std::string &a, const std::string &b, const size_t &pos = 0);
+	        static size_t get_split_str(const std::string_view& ori_str, std::string &str, const std::string_view &a, const std::string_view &b, const size_t &pos = 0);
             /**
             * @brief Extract the value of a specified key from the URL query parameters.
             *
@@ -1455,14 +1456,14 @@ public:
             * @param i If the conversion fails, assign result to i (default is -1)
             * @return Reference to result
             */
-	        static int& toInt(const std::string&ori_str, int &result, const int &i = -1);
+	        static int& toInt(const std::string_view&ori_str, int &result, const int &i = -1);
             /**
             * @brief Convert a hexadecimal number's string representation to a decimal int type number
             * @param ori_str String representation of a hexadecimal number
             * @param result Int container to save the conversion result
             * @return Reference to result
             */
-            static int& str16toInt(const std::string&ori_str, int &result,const int &i=-1);
+            static int& str16toInt(const std::string_view&ori_str, int &result,const int &i=-1);
             /**
             * @brief Convert string to long type
             * @note Does not throw exceptions
@@ -1471,7 +1472,7 @@ public:
             * @param i If the conversion fails, assign result to i (default is -1)
             * @return Reference to result
             */
-	        static long& toLong(const std::string&ori_str, long &result, const long &i = -1);
+	        static long& toLong(const std::string_view&ori_str, long &result, const long &i = -1);
             /**
             * @brief Convert string to float type
             * @note Does not throw exceptions
@@ -1497,7 +1498,7 @@ public:
             * @param result Bool container to store the result
             * @return Reference to result
             */
-	        static bool& toBool(const std::string&ori_str, bool &result);
+	        static bool& toBool(const std::string_view&ori_str, bool &result);
             /**
             * @brief Convert a normal string to its corresponding hexadecimal representation string (hex string).
              *
@@ -2634,7 +2635,7 @@ public:
     * @brief Operation class for parsing and responding to Http/https requests
     * Only pass in the socket, then use this class for Http operations
     */
-    class HttpServerFDHandler : private TcpFDHandler
+    class HttpServerFDHandler : public TcpFDHandler
     {
     public:
         /**

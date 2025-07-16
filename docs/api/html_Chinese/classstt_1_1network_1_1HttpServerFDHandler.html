@@ -114,15 +114,76 @@ Public 成员函数</h2></td></tr>
 <tr class="memitem:a7f5420b66096370c852be93bc8a34dc4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html#a7f5420b66096370c852be93bc8a34dc4">setFD</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a0e2ca810e24be8a9335a665a8933b2f8">fd</a>, SSL *<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a21d3fa9b11f0b144be7cc0ea8f107afb">ssl</a>=nullptr, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a035967e9eebf16b1f7626a51aec05690">flag1</a>=false, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a4d510c27152fbe94b3794858d4b22d0e">flag2</a>=true)</td></tr>
 <tr class="memdesc:a7f5420b66096370c852be93bc8a34dc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">初始化对象，传入套接字等参数  <a href="#a7f5420b66096370c852be93bc8a34dc4">更多...</a><br/></td></tr>
 <tr class="separator:a7f5420b66096370c852be93bc8a34dc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab38797ff487cdfa1fe628bd73dbe348"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html#aab38797ff487cdfa1fe628bd73dbe348">solveRequest</a> (<a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> &amp;TcpInf, const int &amp;times=1)</td></tr>
-<tr class="memdesc:aab38797ff487cdfa1fe628bd73dbe348"><td class="mdescLeft">&#160;</td><td class="mdescRight">解析Http/Https请求  <a href="#aab38797ff487cdfa1fe628bd73dbe348">更多...</a><br/></td></tr>
-<tr class="separator:aab38797ff487cdfa1fe628bd73dbe348"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a273bd198f50cc0845154356cfb5d80f2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html#a273bd198f50cc0845154356cfb5d80f2">solveRequest</a> (<a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> &amp;TcpInf, const unsigned long &amp;buffer_size, const int &amp;times=1)</td></tr>
+<tr class="memdesc:a273bd198f50cc0845154356cfb5d80f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">解析Http/Https请求  <a href="#a273bd198f50cc0845154356cfb5d80f2">更多...</a><br/></td></tr>
+<tr class="separator:a273bd198f50cc0845154356cfb5d80f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13e5a3a12ca525a33e741cb369667031"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html#a13e5a3a12ca525a33e741cb369667031">sendBack</a> (const std::string &amp;data, const std::string &amp;header=&quot;&quot;, const std::string &amp;code=&quot;200 OK&quot;, const std::string &amp;header1=&quot;&quot;)</td></tr>
 <tr class="memdesc:a13e5a3a12ca525a33e741cb369667031"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送Http/Https响应  <a href="#a13e5a3a12ca525a33e741cb369667031">更多...</a><br/></td></tr>
 <tr class="separator:a13e5a3a12ca525a33e741cb369667031"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3cc3f0ee7b75269fd8416b887b1d0fb0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html#a3cc3f0ee7b75269fd8416b887b1d0fb0">sendBack</a> (char *data, const size_t &amp;length, const std::string &amp;header=&quot;&quot;, const std::string &amp;code=&quot;200 OK&quot;, const std::string &amp;header1=&quot;&quot;)</td></tr>
-<tr class="memdesc:a3cc3f0ee7b75269fd8416b887b1d0fb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送Http/Https响应  <a href="#a3cc3f0ee7b75269fd8416b887b1d0fb0">更多...</a><br/></td></tr>
-<tr class="separator:a3cc3f0ee7b75269fd8416b887b1d0fb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e87e7c257a72ed767f82b9f66ab85c8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html#a5e87e7c257a72ed767f82b9f66ab85c8">sendBack</a> (const char *data, const size_t &amp;length, const char *header=&quot;\0&quot;, const char *code=&quot;200 OK\0&quot;, const char *header1=&quot;\0&quot;, const size_t &amp;header_length=50)</td></tr>
+<tr class="memdesc:a5e87e7c257a72ed767f82b9f66ab85c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送Http/Https响应  <a href="#a5e87e7c257a72ed767f82b9f66ab85c8">更多...</a><br/></td></tr>
+<tr class="separator:a5e87e7c257a72ed767f82b9f66ab85c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classstt_1_1network_1_1TcpFDHandler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classstt_1_1network_1_1TcpFDHandler')"><img src="closed.png" alt="-"/>&#160;Public 成员函数 继承自 <a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">stt::network::TcpFDHandler</a></td></tr>
+<tr class="memitem:ab71525a4c022c4c58acfa7ec97d46a56 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#ab71525a4c022c4c58acfa7ec97d46a56">setFD</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a0e2ca810e24be8a9335a665a8933b2f8">fd</a>, SSL *<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a21d3fa9b11f0b144be7cc0ea8f107afb">ssl</a>, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a035967e9eebf16b1f7626a51aec05690">flag1</a>=false, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a4d510c27152fbe94b3794858d4b22d0e">flag2</a>=false, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a>=-1)</td></tr>
+<tr class="memdesc:ab71525a4c022c4c58acfa7ec97d46a56 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">传入套接字初始化对象  <a href="#ab71525a4c022c4c58acfa7ec97d46a56">更多...</a><br/></td></tr>
+<tr class="separator:ab71525a4c022c4c58acfa7ec97d46a56 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a217de98d7c8df98233599cdbd1a4e52c inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a217de98d7c8df98233599cdbd1a4e52c">getFD</a> ()</td></tr>
+<tr class="memdesc:a217de98d7c8df98233599cdbd1a4e52c inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取该对象的套接字  <a href="#a217de98d7c8df98233599cdbd1a4e52c">更多...</a><br/></td></tr>
+<tr class="separator:a217de98d7c8df98233599cdbd1a4e52c inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a514a76ea0accee76e08cf97902d223e7 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">SSL *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a514a76ea0accee76e08cf97902d223e7">getSSL</a> ()</td></tr>
+<tr class="memdesc:a514a76ea0accee76e08cf97902d223e7 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取该对象的加密SSL句柄  <a href="#a514a76ea0accee76e08cf97902d223e7">更多...</a><br/></td></tr>
+<tr class="separator:a514a76ea0accee76e08cf97902d223e7 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79895e184bbef0e6cfe8c0684501c1bc inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a79895e184bbef0e6cfe8c0684501c1bc">close</a> (const bool &amp;cle=true)</td></tr>
+<tr class="memdesc:a79895e184bbef0e6cfe8c0684501c1bc inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭对象  <a href="#a79895e184bbef0e6cfe8c0684501c1bc">更多...</a><br/></td></tr>
+<tr class="separator:a79895e184bbef0e6cfe8c0684501c1bc inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cf6c36f39d7e81633c569fe1505676a inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a6cf6c36f39d7e81633c569fe1505676a">blockSet</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a>=-1)</td></tr>
+<tr class="memdesc:a6cf6c36f39d7e81633c569fe1505676a inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置对象中的套接字为阻塞模式  <a href="#a6cf6c36f39d7e81633c569fe1505676a">更多...</a><br/></td></tr>
+<tr class="separator:a6cf6c36f39d7e81633c569fe1505676a inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93726054291d3b786e2d289c808fd3a2 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a93726054291d3b786e2d289c808fd3a2">unblockSet</a> ()</td></tr>
+<tr class="memdesc:a93726054291d3b786e2d289c808fd3a2 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置对象中的套接字为非阻塞模式  <a href="#a93726054291d3b786e2d289c808fd3a2">更多...</a><br/></td></tr>
+<tr class="separator:a93726054291d3b786e2d289c808fd3a2 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fd0aa6aec5db38c330b227297628035 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a8fd0aa6aec5db38c330b227297628035">multiUseSet</a> ()</td></tr>
+<tr class="memdesc:a8fd0aa6aec5db38c330b227297628035 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置对象中的套接字为SO_REUSEADDR模式  <a href="#a8fd0aa6aec5db38c330b227297628035">更多...</a><br/></td></tr>
+<tr class="separator:a8fd0aa6aec5db38c330b227297628035 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f5e4b3d7e80e33a53e1c86b67510278 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a8f5e4b3d7e80e33a53e1c86b67510278">isConnect</a> ()</td></tr>
+<tr class="memdesc:a8f5e4b3d7e80e33a53e1c86b67510278 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">判断对象是否有套接字绑定  <a href="#a8f5e4b3d7e80e33a53e1c86b67510278">更多...</a><br/></td></tr>
+<tr class="separator:a8f5e4b3d7e80e33a53e1c86b67510278 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aead088b6ea93fcae0d3509f096316d63 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#aead088b6ea93fcae0d3509f096316d63">sendData</a> (const std::string &amp;data, const bool &amp;block=true)</td></tr>
+<tr class="memdesc:aead088b6ea93fcae0d3509f096316d63 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">向已连接的套接字发送字符串数据。  <a href="#aead088b6ea93fcae0d3509f096316d63">更多...</a><br/></td></tr>
+<tr class="separator:aead088b6ea93fcae0d3509f096316d63 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7890ad3bebfeeeed4d67c4b3ce0f72b4 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7890ad3bebfeeeed4d67c4b3ce0f72b4">sendData</a> (const char *data, const uint64_t &amp;length, const bool &amp;block=true)</td></tr>
+<tr class="memdesc:a7890ad3bebfeeeed4d67c4b3ce0f72b4 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">向已连接的套接字发送指定长度的二进制数据。  <a href="#a7890ad3bebfeeeed4d67c4b3ce0f72b4">更多...</a><br/></td></tr>
+<tr class="separator:a7890ad3bebfeeeed4d67c4b3ce0f72b4 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d12a36453b01e460373633ad9b09ed7 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a4d12a36453b01e460373633ad9b09ed7">recvDataByLength</a> (std::string &amp;data, const uint64_t &amp;length, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a>=2)</td></tr>
+<tr class="memdesc:a4d12a36453b01e460373633ad9b09ed7 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">从已连接的套接字中阻塞接收指定长度的数据到字符串  <a href="#a4d12a36453b01e460373633ad9b09ed7">更多...</a><br/></td></tr>
+<tr class="separator:a4d12a36453b01e460373633ad9b09ed7 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bf6a148bd15cc6abaa3c6fcae98641e inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a1bf6a148bd15cc6abaa3c6fcae98641e">recvDataByLength</a> (char *data, const uint64_t &amp;length, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a>=2)</td></tr>
+<tr class="memdesc:a1bf6a148bd15cc6abaa3c6fcae98641e inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">从已连接的套接字中阻塞接收指定长度的数据到char*容器  <a href="#a1bf6a148bd15cc6abaa3c6fcae98641e">更多...</a><br/></td></tr>
+<tr class="separator:a1bf6a148bd15cc6abaa3c6fcae98641e inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e302132d955321d11fd0198fd93b968 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a9e302132d955321d11fd0198fd93b968">recvData</a> (std::string &amp;data, const uint64_t &amp;length)</td></tr>
+<tr class="memdesc:a9e302132d955321d11fd0198fd93b968 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">从已连接的套接字中接收一次数据到string字符串容器  <a href="#a9e302132d955321d11fd0198fd93b968">更多...</a><br/></td></tr>
+<tr class="separator:a9e302132d955321d11fd0198fd93b968 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19b87d7c62b9ea4251cd963e721dcfbb inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a19b87d7c62b9ea4251cd963e721dcfbb">recvData</a> (char *data, const uint64_t &amp;length)</td></tr>
+<tr class="memdesc:a19b87d7c62b9ea4251cd963e721dcfbb inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">从已连接的套接字中接收一次数据到char*容器  <a href="#a19b87d7c62b9ea4251cd963e721dcfbb">更多...</a><br/></td></tr>
+<tr class="separator:a19b87d7c62b9ea4251cd963e721dcfbb inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+额外继承的成员函数</h2></td></tr>
+<tr class="inherit_header pub_attribs_classstt_1_1network_1_1TcpFDHandler"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classstt_1_1network_1_1TcpFDHandler')"><img src="closed.png" alt="-"/>&#160;Public 属性 继承自 <a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">stt::network::TcpFDHandler</a></td></tr>
+<tr class="memitem:aa757f19a1c5b4929829e2a19e6714a4e inherit pub_attribs_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#aa757f19a1c5b4929829e2a19e6714a4e">flag3</a> =false</td></tr>
+<tr class="memdesc:aa757f19a1c5b4929829e2a19e6714a4e inherit pub_attribs_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">如果sendData的block=true，如果发送过程中连接断开，这个标志位会置为true  <a href="#aa757f19a1c5b4929829e2a19e6714a4e">更多...</a><br/></td></tr>
+<tr class="separator:aa757f19a1c5b4929829e2a19e6714a4e inherit pub_attribs_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classstt_1_1network_1_1TcpFDHandler"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classstt_1_1network_1_1TcpFDHandler')"><img src="closed.png" alt="-"/>&#160;Protected 属性 继承自 <a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">stt::network::TcpFDHandler</a></td></tr>
+<tr class="memitem:a0e2ca810e24be8a9335a665a8933b2f8 inherit pro_attribs_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a0e2ca810e24be8a9335a665a8933b2f8">fd</a> =-1</td></tr>
+<tr class="separator:a0e2ca810e24be8a9335a665a8933b2f8 inherit pro_attribs_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a035967e9eebf16b1f7626a51aec05690 inherit pro_attribs_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a035967e9eebf16b1f7626a51aec05690">flag1</a> =false</td></tr>
+<tr class="separator:a035967e9eebf16b1f7626a51aec05690 inherit pro_attribs_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d510c27152fbe94b3794858d4b22d0e inherit pro_attribs_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a4d510c27152fbe94b3794858d4b22d0e">flag2</a> =false</td></tr>
+<tr class="separator:a4d510c27152fbe94b3794858d4b22d0e inherit pro_attribs_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21d3fa9b11f0b144be7cc0ea8f107afb inherit pro_attribs_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">SSL *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a21d3fa9b11f0b144be7cc0ea8f107afb">ssl</a> =nullptr</td></tr>
+<tr class="separator:a21d3fa9b11f0b144be7cc0ea8f107afb inherit pro_attribs_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ec216fea83f00a5750852e101ca4ef0 inherit pro_attribs_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a> =-1</td></tr>
+<tr class="separator:a7ec216fea83f00a5750852e101ca4ef0 inherit pro_attribs_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>解析，响应Http/https请求的操作类 仅传入套接字，然后使用这个类进行Http的操作 </p>
@@ -171,7 +232,7 @@ Public 成员函数</h2></td></tr>
     <tr><td class="paramname">header</td><td>Http请求头；如果不是用createHeader生成，记得在末尾要加上<br/>
 。 </td></tr>
     <tr><td class="paramname">header1</td><td>HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入<br/>
-（不能用createHeader）。（默认填入了keepalive项） </td></tr>
+（不能用createHeader）。（比如可以默认填入keepalive项） </td></tr>
   </table>
   </dd>
 </dl>
@@ -179,14 +240,14 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3cc3f0ee7b75269fd8416b887b1d0fb0"></a>
+<a class="anchor" id="a5e87e7c257a72ed767f82b9f66ab85c8"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::network::HttpServerFDHandler::sendBack </td>
           <td>(</td>
-          <td class="paramtype">char *&#160;</td>
+          <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>data</em>, </td>
         </tr>
         <tr>
@@ -198,20 +259,26 @@ Public 成员函数</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>header</em> = <code>&quot;&quot;</code>, </td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>header</em> = <code>&quot;\0&quot;</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>code</em> = <code>&quot;200&#160;OK&quot;</code>, </td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>code</em> = <code>&quot;200&#160;OK\0&quot;</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>header1</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>header1</em> = <code>&quot;\0&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t &amp;&#160;</td>
+          <td class="paramname"><em>header_length</em> = <code>50</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -230,10 +297,14 @@ Public 成员函数</h2></td></tr>
     <tr><td class="paramname">header</td><td>Http请求头；如果不是用createHeader生成，记得在末尾要加上<br/>
 。 </td></tr>
     <tr><td class="paramname">header1</td><td>HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入<br/>
-（不能用createHeader）。（默认填入了keepalive项） </td></tr>
+（不能用createHeader）。（比如可以默认填入keepalive项） </td></tr>
+    <tr><td class="paramname">header_length</td><td>响应头部加起来的最大长度（默认为50) </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section warning"><dt>警告</dt><dd>预留的空间务必准确 否则可能发送失败 </dd>
+<dd>
+所有char*指向的数据都必须确保\0结尾 \0不计入长度 否则有崩溃风险 </dd></dl>
 <dl class="section return"><dt>返回</dt><dd>true：发送响应成功 false：发送响应失败 </dd></dl>
 
 </div>
@@ -295,7 +366,7 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aab38797ff487cdfa1fe628bd73dbe348"></a>
+<a class="anchor" id="a273bd198f50cc0845154356cfb5d80f2"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -304,6 +375,12 @@ Public 成员函数</h2></td></tr>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> &amp;&#160;</td>
           <td class="paramname"><em>TcpInf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const unsigned long &amp;&#160;</td>
+          <td class="paramname"><em>buffer_size</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -323,6 +400,7 @@ Public 成员函数</h2></td></tr>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
     <tr><td class="paramname">TcpInf</td><td>存放底层tcp处理套接字的信息 </td></tr>
+    <tr><td class="paramname">buffer_size</td><td>服务器定义的解析缓冲区的大小（单位为字节) </td></tr>
     <tr><td class="paramname">times</td><td>记录解析的次数，某些场景会用上 </td></tr>
   </table>
   </dd>

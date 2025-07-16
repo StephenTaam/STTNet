@@ -102,9 +102,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 静态 Public 成员函数</h2></td></tr>
-<tr class="memitem:a64a8803460f9e575c4dd9d0060eb3914"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a64a8803460f9e575c4dd9d0060eb3914">get_split_str</a> (const std::string &amp;ori_str, std::string &amp;str, const std::string &amp;a, const std::string &amp;b, const size_t &amp;pos=0)</td></tr>
-<tr class="memdesc:a64a8803460f9e575c4dd9d0060eb3914"><td class="mdescLeft">&#160;</td><td class="mdescRight">从原始字符串中提取两个标记之间的子串。  <a href="#a64a8803460f9e575c4dd9d0060eb3914">更多...</a><br/></td></tr>
-<tr class="separator:a64a8803460f9e575c4dd9d0060eb3914"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6be62780b21c58b8844a3ddcb7cd27dd"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a6be62780b21c58b8844a3ddcb7cd27dd">get_split_str</a> (const std::string_view &amp;ori_str, std::string_view &amp;str, const std::string_view &amp;a, const std::string_view &amp;b, const size_t &amp;pos=0)</td></tr>
+<tr class="memdesc:a6be62780b21c58b8844a3ddcb7cd27dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">从原始字符串中提取两个标记之间的子串。  <a href="#a6be62780b21c58b8844a3ddcb7cd27dd">更多...</a><br/></td></tr>
+<tr class="separator:a6be62780b21c58b8844a3ddcb7cd27dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02d7f6b05fb9ca9a9966440502044c8f"><td class="memItemLeft" align="right" valign="top">static std::string_view &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a02d7f6b05fb9ca9a9966440502044c8f">get_value_str</a> (const std::string_view &amp;ori_str, std::string_view &amp;str, const std::string &amp;name)</td></tr>
+<tr class="memdesc:a02d7f6b05fb9ca9a9966440502044c8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">从 URL 查询参数中提取指定 key 的值。  <a href="#a02d7f6b05fb9ca9a9966440502044c8f">更多...</a><br/></td></tr>
+<tr class="separator:a02d7f6b05fb9ca9a9966440502044c8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad41047959d86d2f7da0ecd6c9ad5bc0c"><td class="memItemLeft" align="right" valign="top">static std::string_view &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#ad41047959d86d2f7da0ecd6c9ad5bc0c">get_value_header</a> (const std::string_view &amp;ori_str, std::string_view &amp;str, const std::string &amp;name)</td></tr>
+<tr class="memdesc:ad41047959d86d2f7da0ecd6c9ad5bc0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">从 HTTP 请求头中提取指定字段的值。  <a href="#ad41047959d86d2f7da0ecd6c9ad5bc0c">更多...</a><br/></td></tr>
+<tr class="separator:ad41047959d86d2f7da0ecd6c9ad5bc0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2f2f3fe18389bf443a43ba4f624bcd8"><td class="memItemLeft" align="right" valign="top">static std::string_view &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#ac2f2f3fe18389bf443a43ba4f624bcd8">get_location_str</a> (const std::string_view &amp;ori_str, std::string_view &amp;str)</td></tr>
+<tr class="memdesc:ac2f2f3fe18389bf443a43ba4f624bcd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">提取 URL 中 path 和 query 部分。  <a href="#ac2f2f3fe18389bf443a43ba4f624bcd8">更多...</a><br/></td></tr>
+<tr class="separator:ac2f2f3fe18389bf443a43ba4f624bcd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac170689cf6dc2278e9f93498246234f"><td class="memItemLeft" align="right" valign="top">static std::string_view &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#aac170689cf6dc2278e9f93498246234f">getLocPara</a> (const std::string_view &amp;url, std::string_view &amp;locPara)</td></tr>
+<tr class="memdesc:aac170689cf6dc2278e9f93498246234f"><td class="mdescLeft">&#160;</td><td class="mdescRight">提取 URL 的 path 部分（不含 query）。  <a href="#aac170689cf6dc2278e9f93498246234f">更多...</a><br/></td></tr>
+<tr class="separator:aac170689cf6dc2278e9f93498246234f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09424306207aeab3e8411eb0ba5343e3"><td class="memItemLeft" align="right" valign="top">static std::string_view &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a09424306207aeab3e8411eb0ba5343e3">getPara</a> (const std::string_view &amp;url, std::string_view &amp;para)</td></tr>
+<tr class="memdesc:a09424306207aeab3e8411eb0ba5343e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取 URL 中的查询参数字符串（包括 ?）。  <a href="#a09424306207aeab3e8411eb0ba5343e3">更多...</a><br/></td></tr>
+<tr class="separator:a09424306207aeab3e8411eb0ba5343e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2566c38ff3fb53247b5d8c98173504aa"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a2566c38ff3fb53247b5d8c98173504aa">get_split_str</a> (const std::string_view &amp;ori_str, std::string &amp;str, const std::string_view &amp;a, const std::string_view &amp;b, const size_t &amp;pos=0)</td></tr>
+<tr class="memdesc:a2566c38ff3fb53247b5d8c98173504aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">从原始字符串中提取两个标记之间的子串。  <a href="#a2566c38ff3fb53247b5d8c98173504aa">更多...</a><br/></td></tr>
+<tr class="separator:a2566c38ff3fb53247b5d8c98173504aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a904906ac8010ece1c306d4338809b49f"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a904906ac8010ece1c306d4338809b49f">get_value_str</a> (const std::string &amp;ori_str, std::string &amp;str, const std::string &amp;name)</td></tr>
 <tr class="memdesc:a904906ac8010ece1c306d4338809b49f"><td class="mdescLeft">&#160;</td><td class="mdescRight">从 URL 查询参数中提取指定 key 的值。  <a href="#a904906ac8010ece1c306d4338809b49f">更多...</a><br/></td></tr>
 <tr class="separator:a904906ac8010ece1c306d4338809b49f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -242,6 +260,51 @@ template&lt;class... Args&gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="ac2f2f3fe18389bf443a43ba4f624bcd8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string_view&amp; stt::data::HttpStringUtil::get_location_str </td>
+          <td>(</td>
+          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramname"><em>ori_str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string_view &amp;&#160;</td>
+          <td class="paramname"><em>str</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>提取 URL 中 path 和 query 部分。 </p>
+<p>例如从 <code><a href="http://abc.com/path?query=123">http://abc.com/path?query=123</a></code> 或者从/path?query=123 提取 <code>/path</code>。</p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ori_str</td><td>原始 URL。 </td></tr>
+    <tr><td class="paramname">str</td><td>返回 path 部分。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>引用，指向结果字符串。 </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="ae3e71e9b5662949f0069127660588bcd"></a>
 <div class="memitem">
 <div class="memproto">
@@ -287,7 +350,7 @@ template&lt;class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a64a8803460f9e575c4dd9d0060eb3914"></a>
+<a class="anchor" id="a6be62780b21c58b8844a3ddcb7cd27dd"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -297,25 +360,25 @@ template&lt;class... Args&gt; </div>
         <tr>
           <td class="memname">static size_t stt::data::HttpStringUtil::get_split_str </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramtype">const std::string_view &amp;&#160;</td>
           <td class="paramname"><em>ori_str</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramtype">std::string_view &amp;&#160;</td>
           <td class="paramname"><em>str</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramtype">const std::string_view &amp;&#160;</td>
           <td class="paramname"><em>a</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramtype">const std::string_view &amp;&#160;</td>
           <td class="paramname"><em>b</em>, </td>
         </tr>
         <tr>
@@ -351,6 +414,124 @@ template&lt;class... Args&gt; </div>
 </dl>
 <dl class="section return"><dt>返回</dt><dd>返回b在ori_str中的位置(可能返回string::npos,如果b找不到或者b为"") </dd></dl>
 <dl class="section note"><dt>注解</dt><dd>如果找不到，结果字符串为"" </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a2566c38ff3fb53247b5d8c98173504aa"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static size_t stt::data::HttpStringUtil::get_split_str </td>
+          <td>(</td>
+          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramname"><em>ori_str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t &amp;&#160;</td>
+          <td class="paramname"><em>pos</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>从原始字符串中提取两个标记之间的子串。 </p>
+<p>提取从 a 到 b 之间的内容（不包含 a 和 b），可指定起始搜索位置。 若 a 或 b 为空字符串，则分别表示从头或到尾。 若a找不到，则默认从头开始 若b找不到，则默认到尾</p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ori_str</td><td>原始字符串。 </td></tr>
+    <tr><td class="paramname">str</td><td>存储提取结果的字符串。 </td></tr>
+    <tr><td class="paramname">a</td><td>起始标记字符串。 </td></tr>
+    <tr><td class="paramname">b</td><td>终止标记字符串。 </td></tr>
+    <tr><td class="paramname">pos</td><td>搜索起始位置。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>返回b在ori_str中的位置(可能返回string::npos,如果b找不到或者b为"") </dd></dl>
+<dl class="section note"><dt>注解</dt><dd>如果找不到，结果字符串为"" </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ad41047959d86d2f7da0ecd6c9ad5bc0c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string_view&amp; stt::data::HttpStringUtil::get_value_header </td>
+          <td>(</td>
+          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramname"><em>ori_str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string_view &amp;&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>从 HTTP 请求头中提取指定字段的值。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ori_str</td><td>原始 HTTP 请求头字符串。 </td></tr>
+    <tr><td class="paramname">str</td><td>提取结果。 </td></tr>
+    <tr><td class="paramname">name</td><td>请求头字段名（如 "Host"）。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>引用，指向结果字符串。 </dd></dl>
 
 </div>
 </div>
@@ -398,6 +579,58 @@ template&lt;class... Args&gt; </div>
     <tr><td class="paramname">ori_str</td><td>原始 HTTP 请求头字符串。 </td></tr>
     <tr><td class="paramname">str</td><td>提取结果。 </td></tr>
     <tr><td class="paramname">name</td><td>请求头字段名（如 "Host"）。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>引用，指向结果字符串。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a02d7f6b05fb9ca9a9966440502044c8f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string_view&amp; stt::data::HttpStringUtil::get_value_str </td>
+          <td>(</td>
+          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramname"><em>ori_str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string_view &amp;&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>从 URL 查询参数中提取指定 key 的值。 </p>
+<dl class="section note"><dt>注解</dt><dd>url不需要完整也行 例如从 <code>?id=123&amp;name=abc</code>提取 <code>id</code> 的值和从<code><a href="http://xxxx/?id=123&name=abc">http://xxxx/?id=123&amp;name=abc</a></code>提取 <code>id</code> 的值是一样的。</dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ori_str</td><td>原始 URL 字符串。 </td></tr>
+    <tr><td class="paramname">str</td><td>存储提取结果的字符串。 </td></tr>
+    <tr><td class="paramname">name</td><td>参数名（key）。 </td></tr>
   </table>
   </dd>
 </dl>
@@ -503,6 +736,51 @@ template&lt;class... Args&gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="aac170689cf6dc2278e9f93498246234f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string_view&amp; stt::data::HttpStringUtil::getLocPara </td>
+          <td>(</td>
+          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramname"><em>url</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string_view &amp;&#160;</td>
+          <td class="paramname"><em>locPara</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>提取 URL 的 path 部分（不含 query）。 </p>
+<p>与 <code>get_location_str</code> 类似，但保留 path 之后的所有内容（如参数）。</p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">URL。</td><td></td></tr>
+    <tr><td class="paramname">locPara</td><td>返回 path+参数部分。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>引用，指向结果字符串。 </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a693fcfba7f7df1295d245389d2528695"></a>
 <div class="memitem">
 <div class="memproto">
@@ -541,6 +819,51 @@ template&lt;class... Args&gt; </div>
   <table class="params">
     <tr><td class="paramname">URL。</td><td></td></tr>
     <tr><td class="paramname">locPara</td><td>返回 path+参数部分。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>引用，指向结果字符串。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a09424306207aeab3e8411eb0ba5343e3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string_view&amp; stt::data::HttpStringUtil::getPara </td>
+          <td>(</td>
+          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramname"><em>url</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string_view &amp;&#160;</td>
+          <td class="paramname"><em>para</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>获取 URL 中的查询参数字符串（包括 ?）。 </p>
+<dl class="section note"><dt>注解</dt><dd>可以是完整url 也可以是不太完整的，比如/path?id=123&amp;name=abc</dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">URL。</td><td></td></tr>
+    <tr><td class="paramname">para</td><td>返回参数部分（形如 "?id=123&amp;name=abc"）。 </td></tr>
   </table>
   </dd>
 </dl>

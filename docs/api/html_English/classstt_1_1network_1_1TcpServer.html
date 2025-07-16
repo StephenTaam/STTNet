@@ -113,9 +113,9 @@ Inheritance diagram for stt::network::TcpServer:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab1c8fad685f00d207fcdb0d189088853"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ab1c8fad685f00d207fcdb0d189088853">TcpServer</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a32538424c01d62f24d986e01f65cc267">maxFD</a>=10000000, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;connectionRateLimit=6)</td></tr>
-<tr class="memdesc:ab1c8fad685f00d207fcdb0d189088853"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor, which is enabled by default. Limit the maximum number of connections to an IP address to 20; The fastest connection speed per second for the same IP address is 6.  <a href="#ab1c8fad685f00d207fcdb0d189088853">More...</a><br/></td></tr>
-<tr class="separator:ab1c8fad685f00d207fcdb0d189088853"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae89ad6cc0b7ec5c7fe6f4307beba9ea3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ae89ad6cc0b7ec5c7fe6f4307beba9ea3">TcpServer</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a32538424c01d62f24d986e01f65cc267">maxFD</a>=10000, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;connectionRateLimit=6, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=8)</td></tr>
+<tr class="memdesc:ae89ad6cc0b7ec5c7fe6f4307beba9ea3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor, which is enabled by default. Limit the maximum number of connections to an IP address to 20; The fastest connection speed per second for the same IP address is 6.  <a href="#ae89ad6cc0b7ec5c7fe6f4307beba9ea3">More...</a><br/></td></tr>
+<tr class="separator:ae89ad6cc0b7ec5c7fe6f4307beba9ea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd39340be38620b1277d2881a0c8aa34"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#acd39340be38620b1277d2881a0c8aa34">startListen</a> (const int &amp;port, const int &amp;threads=8)</td></tr>
 <tr class="memdesc:acd39340be38620b1277d2881a0c8aa34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the TCP server listening program.  <a href="#acd39340be38620b1277d2881a0c8aa34">More...</a><br/></td></tr>
 <tr class="separator:acd39340be38620b1277d2881a0c8aa34"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -149,14 +149,14 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
+<tr class="memitem:a8eeec7357b1de9f9a6a59a4a540c989b"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a></td></tr>
+<tr class="separator:a8eeec7357b1de9f9a6a59a4a540c989b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32538424c01d62f24d986e01f65cc267"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a32538424c01d62f24d986e01f65cc267">maxFD</a></td></tr>
 <tr class="separator:a32538424c01d62f24d986e01f65cc267"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a879f386e01460ecd71f70ea13a725019"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html">security::ConnectionLimiter</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a879f386e01460ecd71f70ea13a725019">connectionLimiter</a></td></tr>
 <tr class="separator:a879f386e01460ecd71f70ea13a725019"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c0e79a422e5bdec321e029da0bd8c84"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; int, <a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a3c0e79a422e5bdec321e029da0bd8c84">clientfd</a></td></tr>
-<tr class="separator:a3c0e79a422e5bdec321e029da0bd8c84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4bda2199ef1870a4b2b8b25f5cb90ed8"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a4bda2199ef1870a4b2b8b25f5cb90ed8">lc1</a></td></tr>
-<tr class="separator:a4bda2199ef1870a4b2b8b25f5cb90ed8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1f8c4b62b611e6557e9e52f35e8e082"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ab1f8c4b62b611e6557e9e52f35e8e082">clientfd</a></td></tr>
+<tr class="separator:ab1f8c4b62b611e6557e9e52f35e8e082"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb62cf93ae93211e7bbe9f16ed73a802"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#abb62cf93ae93211e7bbe9f16ed73a802">flag1</a> = true</td></tr>
 <tr class="separator:abb62cf93ae93211e7bbe9f16ed73a802"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a763a538a607d7e7f72b892fb287fb2b7"><td class="memItemLeft" align="right" valign="top">std::queue&lt; <a class="el" href="structstt_1_1network_1_1QueueFD.html">QueueFD</a> &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a763a538a607d7e7f72b892fb287fb2b7">fdQueue</a></td></tr>
@@ -182,7 +182,7 @@ Protected Attributes</h2></td></tr>
 <div class="textblock"><p>Tcp server class. </p>
 <dl class="section note"><dt>Note</dt><dd>The default underlying implementation is epoll edge trigger + socket non-blocking mode </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="ab1c8fad685f00d207fcdb0d189088853"></a>
+<a class="anchor" id="ae89ad6cc0b7ec5c7fe6f4307beba9ea3"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -193,7 +193,7 @@ Protected Attributes</h2></td></tr>
           <td class="memname">stt::network::TcpServer::TcpServer </td>
           <td>(</td>
           <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>maxFD</em> = <code>10000000</code>, </td>
+          <td class="paramname"><em>maxFD</em> = <code>10000</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -211,7 +211,13 @@ Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>connectionRateLimit</em> = <code>6</code>&#160;</td>
+          <td class="paramname"><em>connectionRateLimit</em> = <code>6</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>buffer_size</em> = <code>8</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -230,10 +236,11 @@ Protected Attributes</h2></td></tr>
 <dl class="section note"><dt>Note</dt><dd>Turning on the security module has a performance impact </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">maxFD</td><td>service object can accept the maximum number of connections </td></tr>
+    <tr><td class="paramname">maxFD</td><td>service object can accept the maximum number of connections（default 10000） </td></tr>
     <tr><td class="paramname">security_open</td><td>true: enable the security module false: disable the security module (enabled by default) </td></tr>
     <tr><td class="paramname">connectionNumLimit</td><td>The maximum number of connections from the same IP address </td></tr>
     <tr><td class="paramname">connectionRateLimit</td><td>The maximum number of connections per second to the same IP address </td></tr>
+    <tr><td class="paramname">buffer_size</td><td>The maximum amount of data allowed to be transferred over the same connection (in KB) is 8KB by default </td></tr>
   </table>
   </dd>
 </dl>
@@ -533,7 +540,7 @@ false if enabling fails (specific error will be logged)</dd></dl>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a3c0e79a422e5bdec321e029da0bd8c84"></a>
+<a class="anchor" id="a8eeec7357b1de9f9a6a59a4a540c989b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -541,7 +548,27 @@ false if enabling fails (specific error will be logged)</dd></dl>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;int,<a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a>&gt; stt::network::TcpServer::clientfd</td>
+          <td class="memname">unsigned long stt::network::TcpServer::buffer_size</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ab1f8c4b62b611e6557e9e52f35e8e082"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a>* stt::network::TcpServer::clientfd</td>
         </tr>
       </table>
   </td>
@@ -662,26 +689,6 @@ false if enabling fails (specific error will be logged)</dd></dl>
       <table class="memname">
         <tr>
           <td class="memname">int stt::network::TcpServer::flag1 = true</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a4bda2199ef1870a4b2b8b25f5cb90ed8"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::mutex stt::network::TcpServer::lc1</td>
         </tr>
       </table>
   </td>

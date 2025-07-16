@@ -114,25 +114,45 @@ Public 属性</h2></td></tr>
 <tr class="memitem:a063c9fbf86050be4a2b6ecfaef9859e7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#a063c9fbf86050be4a2b6ecfaef9859e7">status</a></td></tr>
 <tr class="memdesc:a063c9fbf86050be4a2b6ecfaef9859e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">当前fd的状态，用于保存处理机逻辑  <a href="#a063c9fbf86050be4a2b6ecfaef9859e7">更多...</a><br/></td></tr>
 <tr class="separator:a063c9fbf86050be4a2b6ecfaef9859e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdb388bdf0d563f5cfb711f38fa52fe6"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#abdb388bdf0d563f5cfb711f38fa52fe6">data</a></td></tr>
-<tr class="memdesc:abdb388bdf0d563f5cfb711f38fa52fe6"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存收到的客户端传来的数据  <a href="#abdb388bdf0d563f5cfb711f38fa52fe6">更多...</a><br/></td></tr>
-<tr class="separator:abdb388bdf0d563f5cfb711f38fa52fe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accb710ff8a74cffe2b6fa2195f1d833e"><td class="memItemLeft" align="right" valign="top">std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#accb710ff8a74cffe2b6fa2195f1d833e">data</a></td></tr>
+<tr class="memdesc:accb710ff8a74cffe2b6fa2195f1d833e"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存收到的客户端传来的数据  <a href="#accb710ff8a74cffe2b6fa2195f1d833e">更多...</a><br/></td></tr>
+<tr class="separator:accb710ff8a74cffe2b6fa2195f1d833e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54423c00645c7f217a75b0c3f65986b3"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#a54423c00645c7f217a75b0c3f65986b3">HttpInf</a></td></tr>
 <tr class="memdesc:a54423c00645c7f217a75b0c3f65986b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存http/https协议的信息  <a href="#a54423c00645c7f217a75b0c3f65986b3">更多...</a><br/></td></tr>
 <tr class="separator:a54423c00645c7f217a75b0c3f65986b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5792638188b5e41021bbc26b5ffcebe6"><td class="memItemLeft" align="right" valign="top">SSL *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#a5792638188b5e41021bbc26b5ffcebe6">ssl</a></td></tr>
 <tr class="memdesc:a5792638188b5e41021bbc26b5ffcebe6"><td class="mdescLeft">&#160;</td><td class="mdescRight">如果加密了，存放加密句柄  <a href="#a5792638188b5e41021bbc26b5ffcebe6">更多...</a><br/></td></tr>
 <tr class="separator:a5792638188b5e41021bbc26b5ffcebe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5818258b1cb88051c3eb22ec0195a89d"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#a5818258b1cb88051c3eb22ec0195a89d">buffer</a></td></tr>
+<tr class="memdesc:a5818258b1cb88051c3eb22ec0195a89d"><td class="mdescLeft">&#160;</td><td class="mdescRight">接收空间指针  <a href="#a5818258b1cb88051c3eb22ec0195a89d">更多...</a><br/></td></tr>
+<tr class="separator:a5818258b1cb88051c3eb22ec0195a89d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a261886a275029003ef9d39e8658947e5"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#a261886a275029003ef9d39e8658947e5">p_buffer_now</a></td></tr>
+<tr class="memdesc:a261886a275029003ef9d39e8658947e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">接收空间位置指针  <a href="#a261886a275029003ef9d39e8658947e5">更多...</a><br/></td></tr>
+<tr class="separator:a261886a275029003ef9d39e8658947e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>保存Tcp客户端信息的结构体 </p>
 </div><h2 class="groupheader">类成员变量说明</h2>
-<a class="anchor" id="abdb388bdf0d563f5cfb711f38fa52fe6"></a>
+<a class="anchor" id="a5818258b1cb88051c3eb22ec0195a89d"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::string stt::network::TcpFDInf::data</td>
+          <td class="memname">char* stt::network::TcpFDInf::buffer</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>接收空间指针 </p>
+
+</div>
+</div>
+<a class="anchor" id="accb710ff8a74cffe2b6fa2195f1d833e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string_view stt::network::TcpFDInf::data</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -180,6 +200,20 @@ Public 属性</h2></td></tr>
 </div><div class="memdoc">
 
 <p>客户端ip </p>
+
+</div>
+</div>
+<a class="anchor" id="a261886a275029003ef9d39e8658947e5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned long stt::network::TcpFDInf::p_buffer_now</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>接收空间位置指针 </p>
 
 </div>
 </div>
