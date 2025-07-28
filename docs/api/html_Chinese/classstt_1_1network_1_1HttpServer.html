@@ -111,16 +111,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public 成员函数</h2></td></tr>
-<tr class="memitem:ae68cbf974fadcf121c2b7a0236da8e4f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html#ae68cbf974fadcf121c2b7a0236da8e4f">HttpServer</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a32538424c01d62f24d986e01f65cc267">maxFD</a>=10000000, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;connectionRateLimit=6, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=8)</td></tr>
-<tr class="memdesc:ae68cbf974fadcf121c2b7a0236da8e4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6  <a href="#ae68cbf974fadcf121c2b7a0236da8e4f">更多...</a><br/></td></tr>
-<tr class="separator:ae68cbf974fadcf121c2b7a0236da8e4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e57eea93da1b006627b53abecc54a7f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html#a8e57eea93da1b006627b53abecc54a7f">HttpServer</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a32538424c01d62f24d986e01f65cc267">maxFD</a>=10000000, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;connectionRateLimit=6, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=8, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#af01531bd401ef4e815a57ffd94e321c9">requestRate</a>=12, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a>=1, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a5b8b745e201c298bf8faafb2eddc4f3a">connectionTimeout</a>=60)</td></tr>
+<tr class="memdesc:a8e57eea93da1b006627b53abecc54a7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6  <a href="#a8e57eea93da1b006627b53abecc54a7f">更多...</a><br/></td></tr>
+<tr class="separator:a8e57eea93da1b006627b53abecc54a7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a093c35e3a348b72113b3be383ba23735"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html#a093c35e3a348b72113b3be383ba23735">setFunction</a> (std::function&lt; bool(const <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> &amp;inf, <a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a> &amp;k)&gt; fc)</td></tr>
 <tr class="memdesc:a093c35e3a348b72113b3be383ba23735"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置一个收到Http/Https请求并成功解析后进行响应的回调函数 注册一个回调函数  <a href="#a093c35e3a348b72113b3be383ba23735">更多...</a><br/></td></tr>
 <tr class="separator:a093c35e3a348b72113b3be383ba23735"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classstt_1_1network_1_1TcpServer"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classstt_1_1network_1_1TcpServer')"><img src="closed.png" alt="-"/>&#160;Public 成员函数 继承自 <a class="el" href="classstt_1_1network_1_1TcpServer.html">stt::network::TcpServer</a></td></tr>
-<tr class="memitem:ae89ad6cc0b7ec5c7fe6f4307beba9ea3 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ae89ad6cc0b7ec5c7fe6f4307beba9ea3">TcpServer</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a32538424c01d62f24d986e01f65cc267">maxFD</a>=10000, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;connectionRateLimit=6, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=8)</td></tr>
-<tr class="memdesc:ae89ad6cc0b7ec5c7fe6f4307beba9ea3 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6  <a href="#ae89ad6cc0b7ec5c7fe6f4307beba9ea3">更多...</a><br/></td></tr>
-<tr class="separator:ae89ad6cc0b7ec5c7fe6f4307beba9ea3 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac85976d461f7f4755efb03f9a2d2ad4d inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ac85976d461f7f4755efb03f9a2d2ad4d">TcpServer</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a32538424c01d62f24d986e01f65cc267">maxFD</a>=10000, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;connectionRateLimit=6, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=8, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#af01531bd401ef4e815a57ffd94e321c9">requestRate</a>=12, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a>=1, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a5b8b745e201c298bf8faafb2eddc4f3a">connectionTimeout</a>=1800)</td></tr>
+<tr class="memdesc:ac85976d461f7f4755efb03f9a2d2ad4d inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6  <a href="#ac85976d461f7f4755efb03f9a2d2ad4d">更多...</a><br/></td></tr>
+<tr class="separator:ac85976d461f7f4755efb03f9a2d2ad4d inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd39340be38620b1277d2881a0c8aa34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#acd39340be38620b1277d2881a0c8aa34">startListen</a> (const int &amp;port, const int &amp;threads=8)</td></tr>
 <tr class="memdesc:acd39340be38620b1277d2881a0c8aa34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">打开Tcp服务器监听程序  <a href="#acd39340be38620b1277d2881a0c8aa34">更多...</a><br/></td></tr>
 <tr class="separator:acd39340be38620b1277d2881a0c8aa34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -154,6 +154,11 @@ Public 成员函数</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 额外继承的成员函数</h2></td></tr>
+<tr class="inherit_header pro_methods_classstt_1_1network_1_1TcpServer"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classstt_1_1network_1_1TcpServer')"><img src="closed.png" alt="-"/>&#160;Protected 成员函数 继承自 <a class="el" href="classstt_1_1network_1_1TcpServer.html">stt::network::TcpServer</a></td></tr>
+<tr class="memitem:a6f2eaa948f4955bde389feaf35376d0e inherit pro_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a6f2eaa948f4955bde389feaf35376d0e">allowRequest</a> (const int &amp;cclientfd)</td></tr>
+<tr class="separator:a6f2eaa948f4955bde389feaf35376d0e inherit pro_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3a888c45b0c64656299672289d880db inherit pro_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ad3a888c45b0c64656299672289d880db">connectionDetect</a> ()</td></tr>
+<tr class="separator:ad3a888c45b0c64656299672289d880db inherit pro_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classstt_1_1network_1_1TcpServer"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classstt_1_1network_1_1TcpServer')"><img src="closed.png" alt="-"/>&#160;Protected 属性 继承自 <a class="el" href="classstt_1_1network_1_1TcpServer.html">stt::network::TcpServer</a></td></tr>
 <tr class="memitem:a8eeec7357b1de9f9a6a59a4a540c989b inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a></td></tr>
 <tr class="separator:a8eeec7357b1de9f9a6a59a4a540c989b inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -181,6 +186,12 @@ Public 成员函数</h2></td></tr>
 <tr class="separator:aa26712d21ba87595fa4f6b4a108e126b inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a295aa6784cd288fdc9448d6b99d2c212 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a295aa6784cd288fdc9448d6b99d2c212">TLS</a> =false</td></tr>
 <tr class="separator:a295aa6784cd288fdc9448d6b99d2c212 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af01531bd401ef4e815a57ffd94e321c9 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#af01531bd401ef4e815a57ffd94e321c9">requestRate</a></td></tr>
+<tr class="separator:af01531bd401ef4e815a57ffd94e321c9 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedc126014068776e3f9cf5da4b14bb81 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a></td></tr>
+<tr class="separator:aedc126014068776e3f9cf5da4b14bb81 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b8b745e201c298bf8faafb2eddc4f3a inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a5b8b745e201c298bf8faafb2eddc4f3a">connectionTimeout</a></td></tr>
+<tr class="separator:a5b8b745e201c298bf8faafb2eddc4f3a inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e6cde1deb1473010f4c94ef8bb45693 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a></td></tr>
 <tr class="separator:a9e6cde1deb1473010f4c94ef8bb45693 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -188,7 +199,7 @@ Public 成员函数</h2></td></tr>
 <div class="textblock"><p>Http/HttpServer 服务端操作类 </p>
 <dl class="section note"><dt>注解</dt><dd>支持http/1.0 1.1 </dd></dl>
 </div><h2 class="groupheader">构造及析构函数说明</h2>
-<a class="anchor" id="ae68cbf974fadcf121c2b7a0236da8e4f"></a>
+<a class="anchor" id="a8e57eea93da1b006627b53abecc54a7f"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -223,7 +234,25 @@ Public 成员函数</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>buffer_size</em> = <code>8</code>&#160;</td>
+          <td class="paramname"><em>buffer_size</em> = <code>8</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>requestRate</em> = <code>12</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>checkFrequency</em> = <code>1</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>connectionTimeout</em> = <code>60</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -247,6 +276,9 @@ Public 成员函数</h2></td></tr>
     <tr><td class="paramname">connectionNumLimit</td><td>同一个ip连接数目的上限 </td></tr>
     <tr><td class="paramname">connectionRateLimit</td><td>同一个ip每秒钟连接数目的上限 </td></tr>
     <tr><td class="paramname">buffer_size</td><td>同一个连接允许传输的最大数据量（单位为kb） 默认为8kb </td></tr>
+    <tr><td class="paramname">requestRatte</td><td>同一个连接一秒内允许的最大请求数量 （默认为12次） </td></tr>
+    <tr><td class="paramname">checkFrequency</td><td>检查僵尸连接的频率（单位分钟） 默认为1分钟 -1为不做检查 </td></tr>
+    <tr><td class="paramname">connectionTimeout</td><td>连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认60秒 -1为无限制 </td></tr>
   </table>
   </dd>
 </dl>

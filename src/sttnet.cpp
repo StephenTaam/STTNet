@@ -2410,7 +2410,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     {
                         if(errno==EAGAIN||errno==EWOULDBLOCK)
                             continue;
-                        perror("send");
+                        //perror("send");
                         break;
                     }
                     else
@@ -2435,7 +2435,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     {
                         if(errno==EAGAIN||errno==EWOULDBLOCK)
                             continue;
-                        perror("send");
+                        //perror("send");
                         break;
                     }
                     else
@@ -2502,7 +2502,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 {
                     if(errno==EAGAIN||errno==EWOULDBLOCK)
                         continue;
-                    perror("send");
+                    //perror("send");
                     break;
                 }
                 else
@@ -2548,7 +2548,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     {
                         if(errno==EAGAIN||errno==EWOULDBLOCK)
                             continue;
-                        perror("send");
+                        //perror("send");
                         break;
                     }
                     else
@@ -2573,7 +2573,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     {
                         if(errno==EAGAIN||errno==EWOULDBLOCK)
                             continue;
-                        perror("send");
+                        //perror("send");
                         break;
                     }
                     else
@@ -2639,7 +2639,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 {
                     if(errno==EAGAIN||errno==EWOULDBLOCK)
                         continue;
-                    perror("send");
+                    //perror("send");
                     break;
                 }
                 else
@@ -2890,7 +2890,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         {
             if(flag1==true&&size<0&&(errno==EAGAIN||errno==EWOULDBLOCK))
                 return -100;
-            perror("recv()");
+            //perror("recv()");
         }
         return size;
     }
@@ -2913,7 +2913,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         {
             if((errno==EAGAIN||errno==EWOULDBLOCK))
                 return -100;
-            perror("recv()");
+            //perror("recv()");
         }
         return size;
     }
@@ -2930,7 +2930,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         {
             if(flag1==true&&(errno==EAGAIN||errno==EWOULDBLOCK))
                 return -100;
-            perror("recv()");
+            //perror("recv()");
         }
         return size;
     }
@@ -2946,7 +2946,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         {
             if((errno==EAGAIN||errno==EWOULDBLOCK))
                 return -100;
-            perror("recv()");
+            //perror("recv()");
         }
         port=chenfan.sin_port;
 	    ip.assign(inet_ntoa(chenfan.sin_addr));
@@ -3689,6 +3689,24 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
         }
     }
+    bool stt::network::TcpServer::allowRequest(const int &cclientfd)
+    {
+            //检查速度
+            //首先清空大于一秒内的
+            chrono::steady_clock::time_point now=chrono::steady_clock::now();
+            while(!clientfd[cclientfd].requestSpeedQueue.empty()&&now-clientfd[cclientfd].requestSpeedQueue.front()>chrono::seconds(1))
+            {
+                clientfd[cclientfd].requestSpeedQueue.pop_front();
+            }
+
+            if(clientfd[cclientfd].requestSpeedQueue.size()<requestRate)//满足条件
+            {
+                clientfd[cclientfd].requestSpeedQueue.push_back(now);
+                return true;
+            }
+            else
+                return false;
+    }
     bool stt::network::TcpServer::setTLS(const char *cacert,const char *key,const char *passwd,const char *ca)
     {
         if(TLS)
@@ -3900,6 +3918,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         }
         return true;
     }
+    chrono::high_resolution_clock::time_point start;
+    chrono::high_resolution_clock::time_point endd;
+    chrono::microseconds duration;
+    unsigned long op=0;
+    int times=0;
     
     void stt::network::TcpServer::epolll(const int &evsNum)
     {
@@ -4034,7 +4057,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 }
                                 continue;
                             }
-                            clientfd[cfd].ssl=nullptr;
+                            
                             if(TLS)//加密accept
                             {
                                 ssl=SSL_new(ctx);
@@ -4057,8 +4080,13 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 }
                                 //unique_lock<mutex> lock1(ltl1);
                                 //tlsfd.emplace(cfd,ssl);//emplace???erase???
-                                clientfd[cfd].ssl=ssl;
+
                             }
+                            else
+                            {
+                                ssl=nullptr;
+                            }
+                            clientfd[cfd].ssl=ssl;
                             //cout<<"ok"<<endl;
                             //epoll注册
                             ev.data.fd=cfd;
@@ -4066,7 +4094,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 ev.events=EPOLLIN|EPOLLERR | EPOLLHUP | EPOLLRDHUP|EPOLLET;//边缘触发
 
                             epoll_ctl(epollFD,EPOLL_CTL_ADD,cfd,&ev);
-                            cout<<"listen:"<<cfd<<endl;
+                            //cout<<"listen:"<<cfd<<endl;
                             //对象表注册
                             string port=to_string(k.sin_port);//获取客户端的端口
                             //string ip(inet_ntoa(k.sin_addr));//获取客户端的ip
@@ -4077,6 +4105,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             clientfd[cfd].data="";
                             clientfd[cfd].buffer=new char[buffer_size];
                             clientfd[cfd].p_buffer_now=0;
+                            clientfd[cfd].k.setFD(cfd,ssl,unblock);
                             //clientfd[cfd].p_request_now=0;
                             //unique_lock<mutex> lock6(lc1);
                             //clientfd.emplace(cfd,inf);
@@ -4094,7 +4123,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
                     else//有数据上来了
                     {
-                        
+                       //start=chrono::high_resolution_clock::now();
                         if(evs[ii].events&(EPOLLERR | EPOLLHUP | EPOLLRDHUP))
                         {
 
@@ -4127,7 +4156,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             fdQueue[evs[ii].data.fd%consumerNum].push(QueueFD{evs[ii].data.fd,false});
                             cv[evs[ii].data.fd%consumerNum].notify_one();
                         }
-                        
+                        //endd=chrono::high_resolution_clock::now();
+                        //duration=chrono::duration_cast<chrono::microseconds>(endd-start);
+                        //cout<<"入队用时"<<duration.count()<<endl;
                     }
                 }
             }
@@ -4184,6 +4215,21 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
             else
             {
+                if(security_open)
+                {
+                    if(!allowRequest(cclientfd.fd))
+                    {
+                        TcpServer::close(cclientfd.fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+"请求太频繁，已经关闭连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+"request are too frequent,now has closed this connection");
+                        }
+                        continue;
+                    }
+                }
                 if(stt::system::ServerSetting::logfile!=nullptr)
                 {
                     if(stt::system::ServerSetting::language=="Chinese")
@@ -4304,7 +4350,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             TcpInf.data=string_view(TcpInf.buffer,TcpInf.p_buffer_now);
         }
         
-        
+        //endd=chrono::high_resolution_clock::now();
+        //                duration=chrono::duration_cast<chrono::microseconds>(endd-start);
+        //                cout<<"接受完数据用时"<<duration.count()<<endl;
         //数据准备完成，开始判断
         
         if(TcpInf.status==0||TcpInf.status==1)
@@ -4372,15 +4420,21 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
             else//状态3
             {
-                
+                 //endd=chrono::high_resolution_clock::now();
+                 //       duration=chrono::duration_cast<chrono::microseconds>(endd-start);
+                 //       cout<<"状态3用时"<<duration.count()<<endl;
                 TcpInf.status=3;
                 string_view size;
                 long ssize;
 
                 HttpStringUtil::get_split_str(TcpInf.HttpInf.header,size,"Content-Length: ","\r\n");
-                
+                 //endd=chrono::high_resolution_clock::now();
+                //        duration=chrono::duration_cast<chrono::microseconds>(endd-start);
+                 //       cout<<"split完用时"<<duration.count()<<endl;
                 NumberStringConvertUtil::toLong(string(size),ssize);
-                
+                // endd=chrono::high_resolution_clock::now();
+                //        duration=chrono::duration_cast<chrono::microseconds>(endd-start);
+                //        cout<<"tolong完用时"<<duration.count()<<endl;
                 if(ssize==-1)
                 {
                     
@@ -4553,7 +4607,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     }
     void stt::network::HttpServer::consumer(const int &threadID)
     {
-        HttpServerFDHandler k;
+        //HttpServerFDHandler k;
         //TcpFDInf &Tcpinf;
         
 
@@ -4577,60 +4631,79 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 ul1.unlock();
                 break;
             }
-            QueueFD cclientfd=fdQueue[threadID].front();
+            int cclientfd=fdQueue[threadID].front().fd;
             fdQueue[threadID].pop();
             
             ul1.unlock();
             
-            
+           // endd=chrono::high_resolution_clock::now();
+            //            duration=chrono::duration_cast<chrono::microseconds>(endd-start);
+           //             cout<<"队列中拿出用时"<<duration.count()<<endl;
             //unique_lock<mutex> lock6(lc1);
             //auto jj=clientfd.find(cclientfd.fd);
-            if(clientfd[cclientfd.fd].fd==-1)//can not find fd information,we need to writedown this error and close this fd
+            if(clientfd[cclientfd].fd==-1)//can not find fd information,we need to writedown this error and close this fd
             {
                 continue;
             }
             else
             {
                 
-                k.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
+                if(security_open)
+                {
+                    if(!allowRequest(cclientfd))
+                    {
+                        TcpServer::close(cclientfd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+"请求太频繁，已经关闭连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+"request are too frequent,now has closed this connection");
+                        }
+                        continue;
+                    }
+                }
+                //k.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
                 
-                TcpFDInf &Tcpinf=clientfd[cclientfd.fd];
+                //TcpFDInf &Tcpinf=clientfd[cclientfd.fd];
                 
             //lock6.unlock();
 
              if(stt::system::ServerSetting::logfile!=nullptr)
              {
                 if(stt::system::ServerSetting::language=="Chinese")
-                    stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : 开始处理fd= "+to_string(cclientfd.fd));
+                    stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : 开始处理fd= "+to_string(cclientfd));
                 else
-                    stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : now start solveing fd= "+to_string(cclientfd.fd));
+                    stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : now start solveing fd= "+to_string(cclientfd));
              }
             
             
-             
+            //endd=chrono::high_resolution_clock::now();
+            //            duration=chrono::duration_cast<chrono::microseconds>(endd-start);
+            //            cout<<"开始处理用时"<<duration.count()<<endl;
              int ret=1;
              int ii=1;
              
-            cout<<"fd="<<cclientfd.fd<<endl;
+            //cout<<"fd="<<cclientfd<<endl;
             while(ret==1)
             {
                 if(stt::system::ServerSetting::logfile!=nullptr)
                 {
                     if(stt::system::ServerSetting::language=="Chinese")
-                        stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" 正在解析请求... 第"+to_string(ii)+"次处理");
+                        stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" 正在解析请求... 第"+to_string(ii)+"次处理");
                     else
-                        stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" now solveing request... it is the "+to_string(ii)+" times");
+                        stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" now solveing request... it is the "+to_string(ii)+" times");
                 }
-            ret=k.solveRequest(Tcpinf,buffer_size,ii);
+            ret=clientfd[cclientfd].k.solveRequest(clientfd[cclientfd],buffer_size,ii);
             if(ret==-1)
             {
-                    TcpServer::close(cclientfd.fd);
+                    TcpServer::close(cclientfd);
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" 解析请求失败或者是对方已经关闭连接，服务器已经关闭这个连接");
+                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" 解析请求失败或者是对方已经关闭连接，服务器已经关闭这个连接");
                         else
-                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" solved request fail or host had closed connection.now server has closed this connection");
+                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" solved request fail or host had closed connection.now server has closed this connection");
                     }
             }
 
@@ -4641,37 +4714,41 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 {
                     if(stt::system::ServerSetting::language=="Chinese")
                     {
-                        stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" 正在处理请求... \n*******请求信息：*********\nheader= "+string(Tcpinf.HttpInf.header)+"\nbody="+string(Tcpinf.HttpInf.body)+"\nbody_chunked="+string(Tcpinf.HttpInf.body_chunked)+"\n*************************");
+                        stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" 正在处理请求... \n*******请求信息：*********\nheader= "+string(clientfd[cclientfd].HttpInf.header)+"\nbody="+string(clientfd[cclientfd].HttpInf.body)+"\nbody_chunked="+string(clientfd[cclientfd].HttpInf.body_chunked)+"\n*************************");
                     }
                     else
                     {
-                        stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" now handleing request...\n*******request information：*********\nheader= "+string(Tcpinf.HttpInf.header)+"\nbody="+string(Tcpinf.HttpInf.body)+"\nbody_chunked="+string(Tcpinf.HttpInf.body_chunked)+"\n*************************");
+                        stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" now handleing request...\n*******request information：*********\nheader= "+string(clientfd[cclientfd].HttpInf.header)+"\nbody="+string(clientfd[cclientfd].HttpInf.body)+"\nbody_chunked="+string(clientfd[cclientfd].HttpInf.body_chunked)+"\n*************************");
                     }
 
                 }
-                
-                if(!fc(Tcpinf.HttpInf,k))
+                //endd=chrono::high_resolution_clock::now();
+                //        duration=chrono::duration_cast<chrono::microseconds>(endd-start);
+                //        cout<<"开始调用fc用时"<<duration.count()<<endl;
+                if(!fc(clientfd[cclientfd].HttpInf,clientfd[cclientfd].k))
                 {
                 
-                    TcpServer::close(cclientfd.fd);
+                    TcpServer::close(cclientfd);
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : 处理fd= "+to_string(cclientfd.fd)+"失败或者是对方已经关闭连接，已经关闭连接");
+                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : 处理fd= "+to_string(cclientfd)+"失败或者是对方已经关闭连接，已经关闭连接");
                         else
-                           stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : handle fd= "+to_string(cclientfd.fd)+"fail or host had closed connection.now server has closed this connection");
+                           stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : handle fd= "+to_string(cclientfd)+"fail or host had closed connection.now server has closed this connection");
                     }
                     break;
                 }
                 else
                 {
-                    
+                    //endd=chrono::high_resolution_clock::now();
+                    //    duration=chrono::duration_cast<chrono::microseconds>(endd-start);
+                    //    cout<<"fc完成用时"<<duration.count()<<endl;
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : 处理fd= "+to_string(cclientfd.fd)+"完成");
+                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : 处理fd= "+to_string(cclientfd)+"完成");
                         else
-                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : has solved fd= "+to_string(cclientfd.fd)+"sucessfully");
+                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : has solved fd= "+to_string(cclientfd)+"sucessfully");
                     }
                 }
             }
@@ -4680,14 +4757,21 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : 解析fd= "+to_string(cclientfd.fd)+"未完成 等待新的数据继续解析");
+                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : 解析fd= "+to_string(cclientfd)+"未完成 等待新的数据继续解析");
                         else
-                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+"wait new data to continue solve this request");
+                            stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+"wait new data to continue solve this request");
                     }
             }
             ++ii;
-            }
             
+            }
+            //endd=chrono::high_resolution_clock::now();
+            //            duration=chrono::duration_cast<chrono::microseconds>(endd-start);
+            //            cout<<"全部处理完用时"<<duration.count()<<endl;
+            //            op+=duration.count();
+             //           times++;
+            //            cout<<"times="<<times<<"op="<<op<<endl;
+
             }
         }
         //跳出循环意味着结束线程
@@ -5588,6 +5672,21 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
             else
             {
+                if(security_open)
+                {
+                    if(!allowRequest(cclientfd.fd))
+                    {
+                        TcpServer::close(cclientfd.fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+"请求太频繁，已经关闭连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+"request are too frequent,now has closed this connection");
+                        }
+                        continue;
+                    }
+                }
                 k.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
                 TcpFDInf &Tcpinf=clientfd[cclientfd.fd];
             //lock6.unlock();

@@ -58,7 +58,7 @@ int main(int argc,char *argv[])
 
 	//start listen port 8080 and add logfile to this server objection.
 	//监听8080端口，并且加入日志文件到这个服务对象
-	httpserver->startListen(8080);
+	httpserver->startListen(8080,2);
 
 	/*
 		s=new WebSocketServer;

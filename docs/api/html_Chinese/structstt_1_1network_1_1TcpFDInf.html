@@ -129,6 +129,13 @@ Public 属性</h2></td></tr>
 <tr class="memitem:a261886a275029003ef9d39e8658947e5"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#a261886a275029003ef9d39e8658947e5">p_buffer_now</a></td></tr>
 <tr class="memdesc:a261886a275029003ef9d39e8658947e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">接收空间位置指针  <a href="#a261886a275029003ef9d39e8658947e5">更多...</a><br/></td></tr>
 <tr class="separator:a261886a275029003ef9d39e8658947e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0bf9d0deae334c8bfc6aee69111ad80"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#ab0bf9d0deae334c8bfc6aee69111ad80">k</a></td></tr>
+<tr class="memdesc:ab0bf9d0deae334c8bfc6aee69111ad80"><td class="mdescLeft">&#160;</td><td class="mdescRight">处理http的类  <a href="#ab0bf9d0deae334c8bfc6aee69111ad80">更多...</a><br/></td></tr>
+<tr class="separator:ab0bf9d0deae334c8bfc6aee69111ad80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8e67895cc6d1670cc84e165afdc6a6f"><td class="memItemLeft" align="right" valign="top">std::deque<br class="typebreak"/>
+&lt; std::chrono::steady_clock::time_point &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#ab8e67895cc6d1670cc84e165afdc6a6f">requestSpeedQueue</a></td></tr>
+<tr class="memdesc:ab8e67895cc6d1670cc84e165afdc6a6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">用于请求限速的队列，实现滑动窗口算法  <a href="#ab8e67895cc6d1670cc84e165afdc6a6f">更多...</a><br/></td></tr>
+<tr class="separator:ab8e67895cc6d1670cc84e165afdc6a6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>保存Tcp客户端信息的结构体 </p>
@@ -203,6 +210,20 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ab0bf9d0deae334c8bfc6aee69111ad80"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a> stt::network::TcpFDInf::k</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>处理http的类 </p>
+
+</div>
+</div>
 <a class="anchor" id="a261886a275029003ef9d39e8658947e5"></a>
 <div class="memitem">
 <div class="memproto">
@@ -228,6 +249,20 @@ Public 属性</h2></td></tr>
 </div><div class="memdoc">
 
 <p>客户端端口 </p>
+
+</div>
+</div>
+<a class="anchor" id="ab8e67895cc6d1670cc84e165afdc6a6f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::deque&lt;std::chrono::steady_clock::time_point&gt; stt::network::TcpFDInf::requestSpeedQueue</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>用于请求限速的队列，实现滑动窗口算法 </p>
 
 </div>
 </div>

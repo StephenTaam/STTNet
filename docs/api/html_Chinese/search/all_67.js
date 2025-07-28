@@ -22,7 +22,7 @@ var searchData=
   ['getrandomstr_5fbase64',['getRandomStr_base64',['../classstt_1_1data_1_1RandomUtil.html#ae7744c11215a4158164fd96cae3bc061',1,'stt::data::RandomUtil']]],
   ['getrequest',['getRequest',['../classstt_1_1network_1_1HttpClient.html#a29b5fe77bf37ef4f8b67fd06e5d4c315',1,'stt::network::HttpClient']]],
   ['getrequestfromfd',['getRequestFromFD',['../classstt_1_1network_1_1HttpClient.html#acaba2d0d5da4c77121539339fd705b71',1,'stt::network::HttpClient']]],
-  ['getserverip',['getServerIp',['../classstt_1_1network_1_1WebSocketClient.html#a1c7809bacd31a7ef921cae0646f228fe',1,'stt::network::WebSocketClient::getServerIp()'],['../classstt_1_1network_1_1TcpClient.html#a81af3cbb2d254ab0225553c2e42f04cf',1,'stt::network::TcpClient::getServerIP()']]],
+  ['getserverip',['getServerIP',['../classstt_1_1network_1_1TcpClient.html#a81af3cbb2d254ab0225553c2e42f04cf',1,'stt::network::TcpClient::getServerIP()'],['../classstt_1_1network_1_1WebSocketClient.html#a1c7809bacd31a7ef921cae0646f228fe',1,'stt::network::WebSocketClient::getServerIp()']]],
   ['getserverport',['getServerPort',['../classstt_1_1network_1_1TcpClient.html#a51b442579f56a15a46b2a09e18793dab',1,'stt::network::TcpClient::getServerPort()'],['../classstt_1_1network_1_1WebSocketClient.html#a08728b637612a8420eb25e21390037a3',1,'stt::network::WebSocketClient::getServerPort()']]],
   ['getsize1',['getSize1',['../classstt_1_1file_1_1File.html#a50476ffc16616f200050d66565ccbe86',1,'stt::file::File']]],
   ['getssl',['getSSL',['../classstt_1_1network_1_1TcpFDHandler.html#a514a76ea0accee76e08cf97902d223e7',1,'stt::network::TcpFDHandler::getSSL()'],['../classstt_1_1network_1_1TcpServer.html#a26a718a822a9ffddf4f13ebccb790e57',1,'stt::network::TcpServer::getSSL()']]],

@@ -1749,10 +1749,7 @@ namespace stt
             */
             void clearIP(const std::string &ip);
         };
-        class RateLimiter
-        {
-
-        };
+        
     }
 
     /**
@@ -2352,6 +2349,60 @@ namespace stt
         std::string body_chunked;
     };
     
+    struct TcpFDInf;
+    /**
+    * @brief 解析，响应Http/https请求的操作类
+    * 仅传入套接字，然后使用这个类进行Http的操作
+    */
+    class HttpServerFDHandler:public TcpFDHandler
+    {
+    public:
+        /**
+        * @brief 初始化对象，传入套接字等参数
+        * @param fd 套接字
+        * @param ssl TLS加密的SSL句柄(默认为nullptr)
+        * @param flag1 true：启用非阻塞模式  false：启用阻塞模式 （默认为false，即启用阻塞模式）
+        * @param flag2 true：启用SO_REUSEADDR模式  false：不启用SO_REUSEADDR模式 （默认为true，即启用SO_REUSEADDR模式）
+        */
+        void setFD(const int &fd,SSL *ssl=nullptr,const bool &flag1=false,const bool &flag2=true){TcpFDHandler::setFD(fd,ssl,flag1,flag2);}
+        /**
+        * @brief 解析Http/Https请求
+        * @param TcpInf 存放底层tcp处理套接字的信息
+        * @param buffer_size 服务器定义的解析缓冲区的大小（单位为字节)
+        * @param times 记录解析的次数，某些场景会用上
+        * @return -1:解析失败 0:还需要继续解析 1:解析完成
+        * @note TcpInf.status
+        *
+        * 0 初始状态
+        * 1 接收请求头中
+        * 2 接收请求体中(chunk模式)
+        * 3 接收请求体中(非chunk模式)
+        * 
+        */
+        int solveRequest(TcpFDInf &TcpInf,const unsigned long &buffer_size,const int &times=1);
+        /**
+        * @brief 发送Http/Https响应
+        * @param data 装着响应体的数据的string容器
+        * @param code Http响应状态码和状态说明 （默认是 200 OK）
+        * @param header Http请求头；如果不是用createHeader生成，记得在末尾要加上\r\n。
+        * @param header1 HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入\r\n（不能用createHeader）。（比如可以默认填入keepalive项）
+        * @return  true：发送响应成功  false：发送响应失败
+        */
+        bool sendBack(const std::string &data,const std::string &header="",const std::string &code="200 OK",const std::string &header1="");
+        /**
+        * @brief 发送Http/Https响应
+        * @param data 装着响应体的数据的char *容器
+        * @param length char*容器中的数据长度
+        * @param code Http响应状态码和状态说明 （默认是 200 OK）
+        * @param header Http请求头；如果不是用createHeader生成，记得在末尾要加上\r\n。
+        * @param header1 HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入\r\n（不能用createHeader）。（比如可以默认填入keepalive项）
+        * @param header_length 响应头部加起来的最大长度（默认为50)
+        * @warning 预留的空间务必准确 否则可能发送失败
+        * @warning 所有char*指向的数据都必须确保\0结尾 \0不计入长度 否则有崩溃风险
+        * @return  true：发送响应成功  false：发送响应失败
+        */
+        bool sendBack(const char *data,const size_t &length,const char *header="\0",const char *code="200 OK\0",const char *header1="\0",const size_t &header_length=50);
+    };
     /**
     * @brief 保存客户端WS/WSS请求信息的结构体
     */
@@ -2445,6 +2496,14 @@ namespace stt
         */
         unsigned long p_buffer_now;
         //unsigned long p_request_now;
+        /**
+        * @brief 处理http的类
+        */
+        HttpServerFDHandler k;
+        /**
+        * @brief 用于请求限速的队列，实现滑动窗口算法
+        */
+        std::deque<std::chrono::steady_clock::time_point> requestSpeedQueue;
     };
 
     /**
@@ -2488,7 +2547,13 @@ namespace stt
         bool TLS=false;
         //std::unordered_map<int,SSL*> tlsfd;
         //std::mutex ltl1;
+        int requestRate;
+        int checkFrequency;
+        int connectionTimeout;
         bool security_open;
+    protected:
+        bool allowRequest(const int &cclientfd);
+        void connectionDetect();
     private:
         std::function<bool(TcpFDHandler &k,TcpFDInf &inf)> fc;
         int fd=-1;
@@ -2507,8 +2572,11 @@ namespace stt
         * @param connectionNumLimit 同一个ip连接数目的上限
         * @param connectionRateLimit 同一个ip每秒钟连接数目的上限
         * @param buffer_size 同一个连接允许传输的最大数据量（单位为kb） 默认为8kb
+        * @param requestRatte 同一个连接一秒内允许的最大请求数量 （默认为12次）
+        * @param checkFrequency 检查僵尸连接的频率（单位分钟） 默认为1分钟  -1为不做检查
+        * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认60秒 -1为无限制
         */
-        TcpServer(const int &maxFD=10000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit),security_open(security_open),buffer_size(buffer_size*1024){}
+        TcpServer(const int &maxFD=10000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=12,const int &checkFrequency=1,const int &connectionTimeout=1800):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit),security_open(security_open),buffer_size(buffer_size*1024),requestRate(requestRate),checkFrequency(checkFrequency),connectionTimeout(connectionTimeout){}
         /**
         * @brief 打开Tcp服务器监听程序
         * @param port 监听的端口
@@ -2597,59 +2665,7 @@ namespace stt
 
     
 
-    /**
-    * @brief 解析，响应Http/https请求的操作类
-    * 仅传入套接字，然后使用这个类进行Http的操作
-    */
-    class HttpServerFDHandler:public TcpFDHandler
-    {
-    public:
-        /**
-        * @brief 初始化对象，传入套接字等参数
-        * @param fd 套接字
-        * @param ssl TLS加密的SSL句柄(默认为nullptr)
-        * @param flag1 true：启用非阻塞模式  false：启用阻塞模式 （默认为false，即启用阻塞模式）
-        * @param flag2 true：启用SO_REUSEADDR模式  false：不启用SO_REUSEADDR模式 （默认为true，即启用SO_REUSEADDR模式）
-        */
-        void setFD(const int &fd,SSL *ssl=nullptr,const bool &flag1=false,const bool &flag2=true){TcpFDHandler::setFD(fd,ssl,flag1,flag2);}
-        /**
-        * @brief 解析Http/Https请求
-        * @param TcpInf 存放底层tcp处理套接字的信息
-        * @param buffer_size 服务器定义的解析缓冲区的大小（单位为字节)
-        * @param times 记录解析的次数，某些场景会用上
-        * @return -1:解析失败 0:还需要继续解析 1:解析完成
-        * @note TcpInf.status
-        *
-        * 0 初始状态
-        * 1 接收请求头中
-        * 2 接收请求体中(chunk模式)
-        * 3 接收请求体中(非chunk模式)
-        * 
-        */
-        int solveRequest(TcpFDInf &TcpInf,const unsigned long &buffer_size,const int &times=1);
-        /**
-        * @brief 发送Http/Https响应
-        * @param data 装着响应体的数据的string容器
-        * @param code Http响应状态码和状态说明 （默认是 200 OK）
-        * @param header Http请求头；如果不是用createHeader生成，记得在末尾要加上\r\n。
-        * @param header1 HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入\r\n（不能用createHeader）。（比如可以默认填入keepalive项）
-        * @return  true：发送响应成功  false：发送响应失败
-        */
-        bool sendBack(const std::string &data,const std::string &header="",const std::string &code="200 OK",const std::string &header1="");
-        /**
-        * @brief 发送Http/Https响应
-        * @param data 装着响应体的数据的char *容器
-        * @param length char*容器中的数据长度
-        * @param code Http响应状态码和状态说明 （默认是 200 OK）
-        * @param header Http请求头；如果不是用createHeader生成，记得在末尾要加上\r\n。
-        * @param header1 HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入\r\n（不能用createHeader）。（比如可以默认填入keepalive项）
-        * @param header_length 响应头部加起来的最大长度（默认为50)
-        * @warning 预留的空间务必准确 否则可能发送失败
-        * @warning 所有char*指向的数据都必须确保\0结尾 \0不计入长度 否则有崩溃风险
-        * @return  true：发送响应成功  false：发送响应失败
-        */
-        bool sendBack(const char *data,const size_t &length,const char *header="\0",const char *code="200 OK\0",const char *header1="\0",const size_t &header_length=50);
-    };
+    
     /**
     * @brief Http/HttpServer 服务端操作类
     * @note 支持http/1.0 1.1
@@ -2669,8 +2685,11 @@ namespace stt
         * @param connectionNumLimit 同一个ip连接数目的上限
         * @param connectionRateLimit 同一个ip每秒钟连接数目的上限
         * @param buffer_size 同一个连接允许传输的最大数据量（单位为kb） 默认为8kb
+        * @param requestRatte 同一个连接一秒内允许的最大请求数量 （默认为12次）
+        * @param checkFrequency 检查僵尸连接的频率（单位分钟） 默认为1分钟  -1为不做检查
+        * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认60秒 -1为无限制
         */
-        HttpServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size){}
+        HttpServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=12,const int &checkFrequency=1,const int &connectionTimeout=60):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){}
         /**
         * @brief 设置一个收到Http/Https请求并成功解析后进行响应的回调函数
         * 注册一个回调函数
@@ -2775,8 +2794,9 @@ namespace stt
         * @param connectionNumLimit 同一个ip连接数目的上限
         * @param connectionRateLimit 同一个ip每秒钟连接数目的上限
         * @param buffer_size 同一个连接允许传输的最大数据量（单位为kb） 默认为8kb
+        * @param requestRatte 同一个连接一秒内允许的最大请求数量 （默认为12次）
         */
-        WebSocketServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size){}
+        WebSocketServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=12):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,-1,-1){}
         /**
         * @brief 设置websocket连接成功后就执行的回调函数
         * 注册一个回调函数
