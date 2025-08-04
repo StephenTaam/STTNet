@@ -2368,6 +2368,7 @@ namespace stt
         /**
         * @brief 解析Http/Https请求
         * @param TcpInf 存放底层tcp处理套接字的信息
+        * @param HttpInf 存放Http协议的信息
         * @param buffer_size 服务器定义的解析缓冲区的大小（单位为字节)
         * @param times 记录解析的次数，某些场景会用上
         * @return -1:解析失败 0:还需要继续解析 1:解析完成
@@ -2379,7 +2380,7 @@ namespace stt
         * 3 接收请求体中(非chunk模式)
         * 
         */
-        int solveRequest(TcpFDInf &TcpInf,const unsigned long &buffer_size,const int &times=1);
+        int solveRequest(TcpFDInf &TcpInf,HttpRequestInformation &HttpInf,const unsigned long &buffer_size,const int &times=1);
         /**
         * @brief 发送Http/Https响应
         * @param data 装着响应体的数据的string容器
@@ -2480,10 +2481,6 @@ namespace stt
         */
         std::string_view data;
         /**
-        * @brief 保存http/https协议的信息
-        */
-        struct HttpRequestInformation HttpInf;
-        /**
         * @brief 如果加密了，存放加密句柄
         */
         SSL* ssl;
@@ -2495,11 +2492,6 @@ namespace stt
         * @brief 接收空间位置指针
         */
         unsigned long p_buffer_now;
-        //unsigned long p_request_now;
-        /**
-        * @brief 处理http的类
-        */
-        HttpServerFDHandler k;
         /**
         * @brief 用于请求限速的队列，实现滑动窗口算法
         */
@@ -2674,6 +2666,7 @@ namespace stt
     {
     private:
         std::function<bool(const HttpRequestInformation &inf,HttpServerFDHandler &k)> fc;
+        HttpRequestInformation *HttpInf;
     private:
         void consumer(const int &threadID);
     public:
@@ -2701,6 +2694,24 @@ namespace stt
         * @note 如果处理失败了 会关闭连接
         */
         bool setFunction(std::function<bool(const HttpRequestInformation &inf,HttpServerFDHandler &k)> fc){this->fc=fc;return true;}
+        /**
+        * @brief 打开Http服务器监听程序
+        * @param port 监听的端口
+        * @param threads 消费者线程的数量 （默认为8）
+        * @return true：打开监听程序成功 false：打开监听程序失败
+        */
+        bool startListen(const int &port,const int &threads=8)
+        {
+            HttpInf=new HttpRequestInformation[maxFD];
+            return TcpServer::startListen(port,threads);
+        }
+        /**
+        * @brief 析构函数
+        */
+        ~HttpServer()
+        {
+            delete[] HttpInf;
+        }
     };
     /**
     * @brief WebSocket协议的操作类
@@ -2909,6 +2920,7 @@ namespace stt
         bool startListen(const int &port,const int &threads=8)
         {
             std::thread(&WebSocketServer::HB,this).detach();
+
             return TcpServer::startListen(port,threads);
         }
         /**

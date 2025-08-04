@@ -155,12 +155,12 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
         {
             if(data_binary!=nullptr)
             {
-                delete data_binary;
+                delete[] data_binary;
                 data_binary=nullptr;
             }
             if(backUp_binary!=nullptr)
             {
-                delete backUp_binary;
+                delete[] backUp_binary;
                 backUp_binary=nullptr;
             }
         }
@@ -256,9 +256,9 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
             fin.seekg(0,ios::beg);
             */
             if(data_binary!=nullptr)
-                delete data_binary;
+                delete[] data_binary;
             if(backUp_binary!=nullptr)
-                delete backUp_binary;
+                delete[] backUp_binary;
             size=FileTool::get_file_size(fileName);
             fin.open(fileName,ios::binary);
             
@@ -3833,6 +3833,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         flag1=true;
         flag2=false;
         this->unblock=true;
+        
         for(int sj=0;sj<threads;sj++)
             thread(&TcpServer::consumer,this,sj).detach();
         thread(&TcpServer::epolll,this,maxFD+10).detach();
@@ -3864,30 +3865,42 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     }
     bool stt::network::TcpServer::close()
     {
+ 
         if(isListen())
         {
             if(!stopListen())
                 return false;
         }
+  
         //unique_lock<mutex> lock2(lc1);
         //unique_lock<mutex> lock1(ltl1);
         for(int ii=0;ii<maxFD;ii++)
         {
+
             if(clientfd[ii].fd!=-1)
             {
+
             if(this->security_open)
                 connectionLimiter.clearIP(clientfd[ii].ip);
             //auto jj=tlsfd.find(ii.first);
+
             if(clientfd[ii].ssl!=nullptr)//这个套接字启用了tls
             {
                 SSL_shutdown(clientfd[ii].ssl);
                 SSL_free(clientfd[ii].ssl);
             }
+  
             shutdown(ii,SHUT_RDWR);
             ::close(ii);
             clientfd[ii].fd=-1;
+            delete[] clientfd[ii].buffer;
             }
         }
+        //std::cout<<"tcp died"<<std::endl;
+        delete[] clientfd;
+        delete[] fdQueue;
+        delete[] lq1;
+        delete[] cv;
         //clientfd.clear();
         //key.clear();
         //functionT.clear();
@@ -3915,6 +3928,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
             ::close(clientfd[fd].fd);
             clientfd[fd].fd=-1;
+            delete[] clientfd[fd].buffer;
         }
         return true;
     }
@@ -3926,6 +3940,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     
     void stt::network::TcpServer::epolll(const int &evsNum)
     {
+    
         int epollFD=epoll_create(1);//创建epoll句柄
         epoll_event ev;//epoll事件的数据结构
         ev.data.fd=fd;
@@ -3934,7 +3949,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
 
 
         //检查连接表里面是不是有套接字，有的话加入
-        
+       
         for(int ii=0;ii<maxFD;ii++)
         {
             //unique_lock<mutex> lock6(lc1);
@@ -3949,7 +3964,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 epoll_ctl(epollFD,EPOLL_CTL_ADD,clientfd[ii].fd,&ev);//把事件放入epoll中
                 }
         }
-        cout<<"ok"<<endl;
+       //cout<<"ok"<<endl;
+       
         epoll_event *evs=new epoll_event[evsNum];//存放epoll返回的事件
 
         //用来accept的
@@ -3966,6 +3982,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             else
                 stt::system::ServerSetting::logfile->writeLog("tcp server epoll has opened");
         }
+        
         while(flag1)
         {
             //监听等待，一秒钟检查一次flag条件是否满足
@@ -4105,7 +4122,6 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             clientfd[cfd].data="";
                             clientfd[cfd].buffer=new char[buffer_size];
                             clientfd[cfd].p_buffer_now=0;
-                            clientfd[cfd].k.setFD(cfd,ssl,unblock);
                             //clientfd[cfd].p_request_now=0;
                             //unique_lock<mutex> lock6(lc1);
                             //clientfd.emplace(cfd,inf);
@@ -4163,7 +4179,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 }
             }
         }
-        delete evs;
+        delete[] evs;
         if(stt::system::ServerSetting::logfile!=nullptr)
         {
             if(stt::system::ServerSetting::language=="Chinese")
@@ -4316,20 +4332,20 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         {
             if(sendData(buffer,ret,false)!=ret)
             {
-                delete buffer;
+                delete[] buffer;
                 return false;
             }
-            delete buffer;
+            delete[] buffer;
             return true;
         }
         else
         {
-            delete buffer;
+            delete[] buffer;
             return false;
         }
     }
     
-    int stt::network::HttpServerFDHandler::solveRequest(TcpFDInf &TcpInf,const unsigned long &buffer_size,const int &times)
+    int stt::network::HttpServerFDHandler::solveRequest(TcpFDInf &TcpInf,HttpRequestInformation &HttpInf,const unsigned long &buffer_size,const int &times)
     {
 
         if(times==1)
@@ -4369,24 +4385,24 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
             
             //转到状态2或者3
-            TcpInf.HttpInf.header=TcpInf.data.substr(0,pos);
+            HttpInf.header=TcpInf.data.substr(0,pos);
             
             
-            if(TcpInf.HttpInf.header.find("Transfer-Encoding: chunked")!=string::npos)//状态2
+            if(HttpInf.header.find("Transfer-Encoding: chunked")!=string::npos)//状态2
             {
                 TcpInf.status=2;
                 
                 if(TcpInf.data.find("0\r\n\r\n")==string::npos)
                 {
                     memcpy(TcpInf.buffer,TcpInf.buffer+TcpInf.p_buffer_now-TcpInf.data.length(),TcpInf.data.length());
-                    TcpInf.HttpInf.header=string_view(TcpInf.buffer,pos);
+                    HttpInf.header=string_view(TcpInf.buffer,pos);
                     TcpInf.p_buffer_now=TcpInf.data.length();
                     return 0;
                 }
                 string_view size;
                 int ssize;
                 size_t ppos=0;
-                TcpInf.data=TcpInf.data.substr(2+TcpInf.HttpInf.header.length());
+                TcpInf.data=TcpInf.data.substr(2+HttpInf.header.length());
                 while(1)
                 {
                     HttpStringUtil::get_split_str(TcpInf.data,size,"\r\n","\r\n",ppos);
@@ -4405,15 +4421,15 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             TcpInf.data={};
                         else
                             TcpInf.data=TcpInf.data.substr(ppos+2);
-                        HttpStringUtil::get_split_str(TcpInf.HttpInf.header,TcpInf.HttpInf.type,""," ");
-                        HttpStringUtil::get_split_str(TcpInf.HttpInf.header,TcpInf.HttpInf.locPara," "," ");
-                        HttpStringUtil::get_location_str(TcpInf.HttpInf.locPara,TcpInf.HttpInf.loc);
-                        HttpStringUtil::getPara(TcpInf.HttpInf.locPara,TcpInf.HttpInf.para);
+                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
+                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
+                        HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
+                        HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
                         return 1;
                     }
                     else//读取数据
                     {
-                        TcpInf.HttpInf.body_chunked+=TcpInf.data.substr(ppos+2,ssize);
+                        HttpInf.body_chunked+=TcpInf.data.substr(ppos+2,ssize);
                         ppos=ppos+2+ssize;
                     }
                 }
@@ -4427,7 +4443,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 string_view size;
                 long ssize;
 
-                HttpStringUtil::get_split_str(TcpInf.HttpInf.header,size,"Content-Length: ","\r\n");
+                HttpStringUtil::get_split_str(HttpInf.header,size,"Content-Length: ","\r\n");
                  //endd=chrono::high_resolution_clock::now();
                 //        duration=chrono::duration_cast<chrono::microseconds>(endd-start);
                  //       cout<<"split完用时"<<duration.count()<<endl;
@@ -4438,17 +4454,17 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 if(ssize==-1)
                 {
                     
-                    if(TcpInf.HttpInf.header.find("GET")!=string::npos)
+                    if(HttpInf.header.find("GET")!=string::npos)
                     {
                         TcpInf.status=0;
-                        if(TcpInf.data.length()-4-TcpInf.HttpInf.header.length()==0)
+                        if(TcpInf.data.length()-4-HttpInf.header.length()==0)
                             TcpInf.data={};
                         else
-                            TcpInf.data=TcpInf.data.substr(TcpInf.HttpInf.header.length()+4);
-                        HttpStringUtil::get_split_str(TcpInf.HttpInf.header,TcpInf.HttpInf.type,""," ");
-                        HttpStringUtil::get_split_str(TcpInf.HttpInf.header,TcpInf.HttpInf.locPara," "," ");
-                        HttpStringUtil::get_location_str(TcpInf.HttpInf.locPara,TcpInf.HttpInf.loc);
-                        HttpStringUtil::getPara(TcpInf.HttpInf.locPara,TcpInf.HttpInf.para);
+                            TcpInf.data=TcpInf.data.substr(HttpInf.header.length()+4);
+                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
+                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
+                        HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
+                        HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
                         
                         return 1;
                     }
@@ -4458,36 +4474,36 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 else if(ssize==0)
                 {
                     TcpInf.status=0;
-                    if(TcpInf.data.length()-4-TcpInf.HttpInf.header.length()==0)
+                    if(TcpInf.data.length()-4-HttpInf.header.length()==0)
                         TcpInf.data={};
                     else
-                        TcpInf.data=TcpInf.data.substr(TcpInf.HttpInf.header.length()+4);
-                    HttpStringUtil::get_split_str(TcpInf.HttpInf.header,TcpInf.HttpInf.type,""," ");
-                    HttpStringUtil::get_split_str(TcpInf.HttpInf.header,TcpInf.HttpInf.locPara," "," ");
-                    HttpStringUtil::get_location_str(TcpInf.HttpInf.locPara,TcpInf.HttpInf.loc);
-                    HttpStringUtil::getPara(TcpInf.HttpInf.locPara,TcpInf.HttpInf.para);
+                        TcpInf.data=TcpInf.data.substr(HttpInf.header.length()+4);
+                    HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
+                    HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
+                    HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
+                    HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
                     return 1;
                 }
                 else if(ssize>0)
                 {
-                    if(TcpInf.data.length()-4-TcpInf.HttpInf.header.length()>=ssize)
+                    if(TcpInf.data.length()-4-HttpInf.header.length()>=ssize)
                     {
-                        TcpInf.HttpInf.body=TcpInf.data.substr(4+TcpInf.HttpInf.header.length(),ssize);
-                        if(TcpInf.data.length()-4-TcpInf.HttpInf.header.length()==ssize)
+                        HttpInf.body=TcpInf.data.substr(4+HttpInf.header.length(),ssize);
+                        if(TcpInf.data.length()-4-HttpInf.header.length()==ssize)
                             TcpInf.data={};
                         else
-                            TcpInf.data=TcpInf.data.substr(4+TcpInf.HttpInf.header.length()+ssize);
+                            TcpInf.data=TcpInf.data.substr(4+HttpInf.header.length()+ssize);
                         TcpInf.status=0;
-                        HttpStringUtil::get_split_str(TcpInf.HttpInf.header,TcpInf.HttpInf.type,""," ");
-                        HttpStringUtil::get_split_str(TcpInf.HttpInf.header,TcpInf.HttpInf.locPara," "," ");
-                        HttpStringUtil::get_location_str(TcpInf.HttpInf.locPara,TcpInf.HttpInf.loc);
-                        HttpStringUtil::getPara(TcpInf.HttpInf.locPara,TcpInf.HttpInf.para);
+                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
+                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
+                        HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
+                        HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
                         return 1;
                     }
                     else
                     {
                         memcpy(TcpInf.buffer,TcpInf.buffer+TcpInf.p_buffer_now-TcpInf.data.length(),TcpInf.data.length());
-                        TcpInf.HttpInf.header=string_view(TcpInf.buffer,pos);
+                        HttpInf.header=string_view(TcpInf.buffer,pos);
                         TcpInf.p_buffer_now=TcpInf.data.length();
                         return 0;
                     }
@@ -4505,7 +4521,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 string_view size;
                 int ssize;
                 size_t ppos=0;
-                TcpInf.data=TcpInf.data.substr(2+TcpInf.HttpInf.header.length());
+                TcpInf.data=TcpInf.data.substr(2+HttpInf.header.length());
                 while(1)
                 {
                     HttpStringUtil::get_split_str(TcpInf.data,size,"\r\n","\r\n",ppos);
@@ -4524,15 +4540,15 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             TcpInf.data={};
                         else
                             TcpInf.data=TcpInf.data.substr(ppos+2);
-                        HttpStringUtil::get_split_str(TcpInf.HttpInf.header,TcpInf.HttpInf.type,""," ");
-                        HttpStringUtil::get_split_str(TcpInf.HttpInf.header,TcpInf.HttpInf.locPara," "," ");
-                        HttpStringUtil::get_location_str(TcpInf.HttpInf.locPara,TcpInf.HttpInf.loc);
-                        HttpStringUtil::getPara(TcpInf.HttpInf.locPara,TcpInf.HttpInf.para);
+                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
+                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
+                        HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
+                        HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
                         return 1;
                     }
                     else//读取数据
                     {
-                        TcpInf.HttpInf.body_chunked+=TcpInf.data.substr(ppos+2,ssize);
+                        HttpInf.body_chunked+=TcpInf.data.substr(ppos+2,ssize);
                         ppos=ppos+2+ssize;
                     }
                 }
@@ -4542,23 +4558,23 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 TcpInf.status=3;
                 string_view size;
                 long ssize;
-                HttpStringUtil::get_split_str(TcpInf.HttpInf.header,size,"Content-Length: ","\r\n");
+                HttpStringUtil::get_split_str(HttpInf.header,size,"Content-Length: ","\r\n");
                 NumberStringConvertUtil::toLong(string(size),ssize);
 
                 if(ssize==-1)
                 {
                     
-                    if(TcpInf.HttpInf.header.find("GET")!=string::npos)
+                    if(HttpInf.header.find("GET")!=string::npos)
                     {
                         TcpInf.status=0;
-                        if(TcpInf.data.length()-4-TcpInf.HttpInf.header.length()==0)
+                        if(TcpInf.data.length()-4-HttpInf.header.length()==0)
                             TcpInf.data={};
                         else
-                            TcpInf.data=TcpInf.data.substr(TcpInf.HttpInf.header.length()+4);
-                        HttpStringUtil::get_split_str(TcpInf.HttpInf.header,TcpInf.HttpInf.type,""," ");
-                        HttpStringUtil::get_split_str(TcpInf.HttpInf.header,TcpInf.HttpInf.locPara," "," ");
-                        HttpStringUtil::get_location_str(TcpInf.HttpInf.locPara,TcpInf.HttpInf.loc);
-                        HttpStringUtil::getPara(TcpInf.HttpInf.locPara,TcpInf.HttpInf.para);
+                            TcpInf.data=TcpInf.data.substr(HttpInf.header.length()+4);
+                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
+                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
+                        HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
+                        HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
                         return 1;
                     }
                     else
@@ -4567,30 +4583,30 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 else if(ssize==0)
                 {
                     TcpInf.status=0;
-                    if(TcpInf.data.length()-4-TcpInf.HttpInf.header.length()==0)
+                    if(TcpInf.data.length()-4-HttpInf.header.length()==0)
                         TcpInf.data={};
                     else
-                        TcpInf.data=TcpInf.data.substr(TcpInf.HttpInf.header.length()+4);
-                    HttpStringUtil::get_split_str(TcpInf.HttpInf.header,TcpInf.HttpInf.type,""," ");
-                    HttpStringUtil::get_split_str(TcpInf.HttpInf.header,TcpInf.HttpInf.locPara," "," ");
-                    HttpStringUtil::get_location_str(TcpInf.HttpInf.locPara,TcpInf.HttpInf.loc);
-                    HttpStringUtil::getPara(TcpInf.HttpInf.locPara,TcpInf.HttpInf.para);
+                        TcpInf.data=TcpInf.data.substr(HttpInf.header.length()+4);
+                    HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
+                    HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
+                    HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
+                    HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
                     return 1;
                 }
                 else if(ssize>0)
                 {
-                    if(TcpInf.data.length()-4-TcpInf.HttpInf.header.length()>=ssize)
+                    if(TcpInf.data.length()-4-HttpInf.header.length()>=ssize)
                     {
-                        TcpInf.HttpInf.body=TcpInf.data.substr(4+TcpInf.HttpInf.header.length(),ssize);
-                        if(TcpInf.data.length()-4-TcpInf.HttpInf.header.length()==ssize)
+                        HttpInf.body=TcpInf.data.substr(4+HttpInf.header.length(),ssize);
+                        if(TcpInf.data.length()-4-HttpInf.header.length()==ssize)
                             TcpInf.data={};
                         else
-                            TcpInf.data=TcpInf.data.substr(4+TcpInf.HttpInf.header.length()+ssize);
+                            TcpInf.data=TcpInf.data.substr(4+HttpInf.header.length()+ssize);
                         TcpInf.status=0;
-                        HttpStringUtil::get_split_str(TcpInf.HttpInf.header,TcpInf.HttpInf.type,""," ");
-                        HttpStringUtil::get_split_str(TcpInf.HttpInf.header,TcpInf.HttpInf.locPara," "," ");
-                        HttpStringUtil::get_location_str(TcpInf.HttpInf.locPara,TcpInf.HttpInf.loc);
-                        HttpStringUtil::getPara(TcpInf.HttpInf.locPara,TcpInf.HttpInf.para);
+                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
+                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
+                        HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
+                        HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
                         return 1;
                     }
                     else
@@ -4607,7 +4623,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     }
     void stt::network::HttpServer::consumer(const int &threadID)
     {
-        //HttpServerFDHandler k;
+        HttpServerFDHandler k;
         //TcpFDInf &Tcpinf;
         
 
@@ -4635,7 +4651,6 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             fdQueue[threadID].pop();
             
             ul1.unlock();
-            
            // endd=chrono::high_resolution_clock::now();
             //            duration=chrono::duration_cast<chrono::microseconds>(endd-start);
            //             cout<<"队列中拿出用时"<<duration.count()<<endl;
@@ -4683,7 +4698,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             //            cout<<"开始处理用时"<<duration.count()<<endl;
              int ret=1;
              int ii=1;
-             
+             k.setFD(cclientfd,clientfd[cclientfd].ssl,unblock);
             //cout<<"fd="<<cclientfd<<endl;
             while(ret==1)
             {
@@ -4694,7 +4709,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     else
                         stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" now solveing request... it is the "+to_string(ii)+" times");
                 }
-            ret=clientfd[cclientfd].k.solveRequest(clientfd[cclientfd],buffer_size,ii);
+            ret=k.solveRequest(clientfd[cclientfd],HttpInf[cclientfd],buffer_size,ii);
             if(ret==-1)
             {
                     TcpServer::close(cclientfd);
@@ -4714,18 +4729,18 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 {
                     if(stt::system::ServerSetting::language=="Chinese")
                     {
-                        stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" 正在处理请求... \n*******请求信息：*********\nheader= "+string(clientfd[cclientfd].HttpInf.header)+"\nbody="+string(clientfd[cclientfd].HttpInf.body)+"\nbody_chunked="+string(clientfd[cclientfd].HttpInf.body_chunked)+"\n*************************");
+                        stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" 正在处理请求... \n*******请求信息：*********\nheader= "+string(HttpInf[cclientfd].header)+"\nbody="+string(HttpInf[cclientfd].body)+"\nbody_chunked="+string(HttpInf[cclientfd].body_chunked)+"\n*************************");
                     }
                     else
                     {
-                        stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" now handleing request...\n*******request information：*********\nheader= "+string(clientfd[cclientfd].HttpInf.header)+"\nbody="+string(clientfd[cclientfd].HttpInf.body)+"\nbody_chunked="+string(clientfd[cclientfd].HttpInf.body_chunked)+"\n*************************");
+                        stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd)+" now handleing request...\n*******request information：*********\nheader= "+string(HttpInf[cclientfd].header)+"\nbody="+string(HttpInf[cclientfd].body)+"\nbody_chunked="+string(HttpInf[cclientfd].body_chunked)+"\n*************************");
                     }
 
                 }
                 //endd=chrono::high_resolution_clock::now();
                 //        duration=chrono::duration_cast<chrono::microseconds>(endd-start);
                 //        cout<<"开始调用fc用时"<<duration.count()<<endl;
-                if(!fc(clientfd[cclientfd].HttpInf,clientfd[cclientfd].k))
+                if(!fc(HttpInf[cclientfd],k))
                 {
                 
                     TcpServer::close(cclientfd);
@@ -5715,8 +5730,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 winf.fd=cclientfd.fd;
                 winf.closeflag=false;
                 
-
-                int ret=k.solveRequest(Tcpinf,buffer_size,1);
+                HttpRequestInformation HttpInf;
+                int ret=k.solveRequest(Tcpinf,HttpInf,buffer_size,1);
                 if(ret==-1)
                 {
                     //k.close();
@@ -5746,8 +5761,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 }
                 else if(ret==1)
                 {
-                    winf.locPara=Tcpinf.HttpInf.locPara;
-                    winf.header=Tcpinf.HttpInf.header;
+                    winf.locPara=HttpInf.locPara;
+                    winf.header=HttpInf.header;
                     //cout<<winf.header<<endl;
                     if(!fcc(winf))//条件不满足
                     {
@@ -5765,7 +5780,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
                     string_view key;
                     string keyy;
-                    HttpStringUtil::get_value_header(Tcpinf.HttpInf.header,key,"Sec-WebSocket-Key");
+                    HttpStringUtil::get_value_header(HttpInf.header,key,"Sec-WebSocket-Key");
                     keyy.assign(key);
                     keyy+="258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
                     string result="";

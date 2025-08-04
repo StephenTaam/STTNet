@@ -2404,6 +2404,7 @@ public:
         /**
         * @brief Parse Http/Https request
         * @param TcpInf stores the state information of the underlying TCP processing socket
+        * @param HttpInf stores the information of Http
         * @param buffer_size The size of the server-defined parsing buffer (in bytes)
         * @param times sometims will be used to record solve times
         * @return 1: Parsing completed 0: Parsing still needs to be continued -1: Parsing failed
@@ -2415,7 +2416,7 @@ public:
         * 3 Receive request body (non-chunk mode)
         * 
         */
-        int solveRequest(TcpFDInf &TcpInf,const unsigned long &buffer_size,const int &times=1);
+        int solveRequest(TcpFDInf &TcpInf,HttpRequestInformation &HttpInf,const unsigned long &buffer_size,const int &times=1);
         /**
         * @brief Send Http/Https response
         * @param data String container with response body data
@@ -2520,10 +2521,6 @@ public:
         */
         std::string_view data;
         /**
-        * @brief saves http/https protocol information
-        */
-        struct HttpRequestInformation HttpInf;
-        /**
         * @brief If encrypted, store the encryption handle
         */
         SSL* ssl;
@@ -2536,11 +2533,8 @@ public:
         * @brief Receives a spatial position pointer
         */
         unsigned long p_buffer_now;
-        //unsigned long p_request_now;
-        /**
-        * @brief Classes that deal with HTTP
-        */
-        HttpServerFDHandler k;
+        
+        
         /**
         * @brief Queue for requesting speed limit, implementing sliding window algorithm
         */
@@ -2714,6 +2708,7 @@ public:
     {
     private:
         std::function<bool(const HttpRequestInformation &inf, HttpServerFDHandler &k)> fc;
+        HttpRequestInformation *HttpInf;
     private:
         void consumer(const int &threadID);
     public:
@@ -2741,6 +2736,24 @@ public:
         * @note If processing fails, the connection will be closed
         */
         bool setFunction(std::function<bool(const HttpRequestInformation &inf, HttpServerFDHandler &k)> fc) { this->fc = fc; return true; }
+        /**
+        * @brief Open the Http server listening program
+        * @param port Port to listen on
+        * @param threads Number of consumer threads (default is 8)
+        * @return true: Listening started successfully, false: Failed to start listening
+        */
+        bool startListen(const int &port, const int &threads = 8)
+        {
+            HttpInf=new HttpRequestInformation[maxFD];
+            return TcpServer::startListen(port, threads);
+        }
+        /**
+        * @brief Destructor of WebSocketServer
+        */
+        ~HttpServer()
+        {
+            delete[] HttpInf;
+        }
     };
     /**
     * @brief WebSocket protocol operation class

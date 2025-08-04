@@ -20,13 +20,14 @@ int main(int argc,char *argv[])
 
 	//new a HttpServer Objection
 	//新建一个HttpServer对象
-	httpserver=new HttpServer(500,false);
+	httpserver=new HttpServer(50000,false);
 
 	//set a callbacl function after signal 15 to quit decently.
 	//设置收到信号15后的回调函数，为了优雅退出程序。
 	signal(15,[](int signal){
 		//lf.writeLog("have received signal 15... Now ready to quit.收到信号15，正在执行退出前的流程");//you can write logfile in English or Chinese as you like here//这里可以按照自己喜好写中文或者英文日志
 		delete httpserver;
+		//delete s;
 		/*
 			...
 			*********You can write the necessary exit process here*************
@@ -60,17 +61,16 @@ int main(int argc,char *argv[])
 	//监听8080端口，并且加入日志文件到这个服务对象
 	httpserver->startListen(8080,2);
 
-	/*
-		s=new WebSocketServer;
+	
+		s=new WebSocketServer(5000,false);
 		s->setFunction([](const std::string &msg, WebSocketServer &k,const WebSocketFDInformation &inf) -> bool {
 			return k.sendMessage(inf.fd,msg);
     });
 	s->setStartFunction([](const WebSocketFDInformation &inf, WebSocketServer &k) -> void {
-			sleep(10);
 			k.close(inf.fd);
     });
-	s->startListen(5055);
-	*/
+	s->startListen(5055,2);
+	
 
 	
 	//block the main thread
@@ -78,3 +78,5 @@ int main(int argc,char *argv[])
 	pause();
 	return 0;
 }
+
+
