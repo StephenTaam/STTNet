@@ -114,9 +114,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7f5420b66096370c852be93bc8a34dc4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html#a7f5420b66096370c852be93bc8a34dc4">setFD</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a0e2ca810e24be8a9335a665a8933b2f8">fd</a>, SSL *<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a21d3fa9b11f0b144be7cc0ea8f107afb">ssl</a>=nullptr, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a035967e9eebf16b1f7626a51aec05690">flag1</a>=false, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a4d510c27152fbe94b3794858d4b22d0e">flag2</a>=true)</td></tr>
 <tr class="memdesc:a7f5420b66096370c852be93bc8a34dc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the object, pass in socket and other parameters.  <a href="#a7f5420b66096370c852be93bc8a34dc4">More...</a><br/></td></tr>
 <tr class="separator:a7f5420b66096370c852be93bc8a34dc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a273bd198f50cc0845154356cfb5d80f2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html#a273bd198f50cc0845154356cfb5d80f2">solveRequest</a> (<a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> &amp;TcpInf, const unsigned long &amp;buffer_size, const int &amp;times=1)</td></tr>
-<tr class="memdesc:a273bd198f50cc0845154356cfb5d80f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse Http/Https request.  <a href="#a273bd198f50cc0845154356cfb5d80f2">More...</a><br/></td></tr>
-<tr class="separator:a273bd198f50cc0845154356cfb5d80f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a992898f93cae26885a899d1fd4282685"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html#a992898f93cae26885a899d1fd4282685">solveRequest</a> (<a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> &amp;TcpInf, <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> &amp;HttpInf, const unsigned long &amp;buffer_size, const int &amp;times=1)</td></tr>
+<tr class="memdesc:a992898f93cae26885a899d1fd4282685"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse Http/Https request.  <a href="#a992898f93cae26885a899d1fd4282685">More...</a><br/></td></tr>
+<tr class="separator:a992898f93cae26885a899d1fd4282685"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13e5a3a12ca525a33e741cb369667031"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html#a13e5a3a12ca525a33e741cb369667031">sendBack</a> (const std::string &amp;data, const std::string &amp;header=&quot;&quot;, const std::string &amp;code=&quot;200 OK&quot;, const std::string &amp;header1=&quot;&quot;)</td></tr>
 <tr class="memdesc:a13e5a3a12ca525a33e741cb369667031"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send Http/Https response.  <a href="#a13e5a3a12ca525a33e741cb369667031">More...</a><br/></td></tr>
 <tr class="separator:a13e5a3a12ca525a33e741cb369667031"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -366,7 +366,7 @@ All data pointed to by char must be ensured that 0 ends with 0 is not counted in
 
 </div>
 </div>
-<a class="anchor" id="a273bd198f50cc0845154356cfb5d80f2"></a>
+<a class="anchor" id="a992898f93cae26885a899d1fd4282685"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -375,6 +375,12 @@ All data pointed to by char must be ensured that 0 ends with 0 is not counted in
           <td>(</td>
           <td class="paramtype"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> &amp;&#160;</td>
           <td class="paramname"><em>TcpInf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> &amp;&#160;</td>
+          <td class="paramname"><em>HttpInf</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -400,6 +406,7 @@ All data pointed to by char must be ensured that 0 ends with 0 is not counted in
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">TcpInf</td><td>stores the state information of the underlying TCP processing socket </td></tr>
+    <tr><td class="paramname">HttpInf</td><td>stores the information of Http </td></tr>
     <tr><td class="paramname">buffer_size</td><td>The size of the server-defined parsing buffer (in bytes) </td></tr>
     <tr><td class="paramname">times</td><td>sometims will be used to record solve times </td></tr>
   </table>

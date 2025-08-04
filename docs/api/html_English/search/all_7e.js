@@ -4,6 +4,7 @@ var searchData=
   ['_7eepollsingle',['~EpollSingle',['../classstt_1_1network_1_1EpollSingle.html#ac3ed060cd26cc56aced2535d6346c90d',1,'stt::network::EpollSingle']]],
   ['_7efile',['~File',['../classstt_1_1file_1_1File.html#a80729e4153b97094867efb4de281ffa3',1,'stt::file::File']]],
   ['_7ehbsystem',['~HBSystem',['../classstt_1_1system_1_1HBSystem.html#a61a001968b181c7bac0b29f9c28daa8d',1,'stt::system::HBSystem']]],
+  ['_7ehttpserver',['~HttpServer',['../classstt_1_1network_1_1HttpServer.html#ab7b01c64fa52b2513c733bb35eaeacb7',1,'stt::network::HttpServer']]],
   ['_7etcpclient',['~TcpClient',['../classstt_1_1network_1_1TcpClient.html#ac5df310c137d88b75799c51a7f012697',1,'stt::network::TcpClient']]],
   ['_7etcpserver',['~TcpServer',['../classstt_1_1network_1_1TcpServer.html#a293d3497aae9c899c682d903654c0e49',1,'stt::network::TcpServer']]],
   ['_7eudpclient',['~UdpClient',['../classstt_1_1network_1_1UdpClient.html#a45615f93668e1e41e19e5ca469ffa37f',1,'stt::network::UdpClient']]],
