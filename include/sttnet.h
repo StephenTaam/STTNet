@@ -1711,12 +1711,25 @@ namespace stt
     namespace security
     {
         /**
+        * @brief 用于实现滑动窗口限速的结构体
+
+        */
+        struct SlidingWindow
+        {
+            int num;
+            std::chrono::steady_clock::time_point lastTime;
+        };
+        /**
         * @brief 记录ip信息的结构体，比如连接数，连接速率等
         */
         struct IPInformation
         {
-            int connectionNum;
-            std::deque<std::chrono::steady_clock::time_point> connectionTimeQueue;
+            SlidingWindow connection;
+            SlidingWindow request;
+            std::unordered_map<std::string,SlidingWindow> pathRequest;
+            //std::deque<std::chrono::steady_clock::time_point> connectionTimeQueue;
+            //std::deque<std::chrono::steady_clock::time_point> requestTimeQueue;
+            //std::unordered_map<std::string path,deque<std::chrono::steady_clock::time_point>> pathTimeQueue;
         };
         /**
         * @brief 限制同一ip连接的类
@@ -1728,15 +1741,19 @@ namespace stt
         private:
             int connectionLimit;
             int connectionRateLimit;
+            int requestRate;
+            int connectionTimeout;
             std::unordered_map<std::string,IPInformation> connectionTable;
-
+            mutex lock_table;
         public:
             /**
             * @brief ConnectionLimiter 的构造函数
             * @param connectionLimit 同一个ip的最大连接数，默认为20
             * @param connectionRateLimit 同一ip每秒的连接最大次数，默认为6
+            * @param requestRate 同一个ip一秒内允许的最大请求数量 （默认为12次）
+            * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认60秒 -1为无限制
             */
-            ConnectionLimiter(const int &connectionLimit=20,const int &connectionRateLimit=6):connectionLimit(connectionLimit),connectionRateLimit(connectionRateLimit){}
+            ConnectionLimiter(const int &connectionLimit=20,const int &connectionRateLimit=6,const int &requestRate=40,const int &connectionTimeout=60):connectionLimit(connectionLimit),connectionRateLimit(connectionRateLimit),requestRate(requestRate),connectionTimeout(connectionTimeout){}
             /**
             * @brief 根据连接数和速度判断是否允许某ip的连接
             * @param ip ip地址
@@ -1748,6 +1765,18 @@ namespace stt
             * @param ip地址
             */
             void clearIP(const std::string &ip);
+            /**
+            * @brief 根据请求速率判断允许请求
+            * @param ip IP地址
+            * @return true：允许 false：不允许
+            */
+            bool allowRequest(const std::string &ip);
+            /**
+            * @brief 判断某ip的连接是否为僵尸连接
+            * @param ip IP地址
+            * @return true：是 false：否
+            */
+            bool connectionDetect(const std::string &ip);
         };
         
     }
@@ -2492,10 +2521,6 @@ namespace stt
         * @brief 接收空间位置指针
         */
         unsigned long p_buffer_now;
-        /**
-        * @brief 用于请求限速的队列，实现滑动窗口算法
-        */
-        std::deque<std::chrono::steady_clock::time_point> requestSpeedQueue;
     };
 
     /**
@@ -2522,7 +2547,7 @@ namespace stt
     {
     protected:
         unsigned long buffer_size;
-        int maxFD;
+        unsigned long long  maxFD;
         security::ConnectionLimiter connectionLimiter;
         //std::unordered_map<int,TcpFDInf> clientfd;
         //std::mutex lc1;
@@ -2539,13 +2564,10 @@ namespace stt
         bool TLS=false;
         //std::unordered_map<int,SSL*> tlsfd;
         //std::mutex ltl1;
-        int requestRate;
-        int checkFrequency;
-        int connectionTimeout;
         bool security_open;
-    protected:
-        bool allowRequest(const int &cclientfd);
-        void connectionDetect();
+        int checkFrequency;
+        bool flag_detect;
+        bool flag_detect_status;
     private:
         std::function<bool(TcpFDHandler &k,TcpFDInf &inf)> fc;
         int fd=-1;
@@ -2564,11 +2586,11 @@ namespace stt
         * @param connectionNumLimit 同一个ip连接数目的上限
         * @param connectionRateLimit 同一个ip每秒钟连接数目的上限
         * @param buffer_size 同一个连接允许传输的最大数据量（单位为kb） 默认为8kb
-        * @param requestRatte 同一个连接一秒内允许的最大请求数量 （默认为12次）
+        * @param requestRate 同一个ip一秒内允许的最大请求数量 （默认为12次）
         * @param checkFrequency 检查僵尸连接的频率（单位分钟） 默认为1分钟  -1为不做检查
         * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认60秒 -1为无限制
         */
-        TcpServer(const int &maxFD=10000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=12,const int &checkFrequency=1,const int &connectionTimeout=1800):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit),security_open(security_open),buffer_size(buffer_size*1024),requestRate(requestRate),checkFrequency(checkFrequency),connectionTimeout(connectionTimeout){}
+        TcpServer(const unsigned long long &maxFD=10000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit,requestRate,connectionTimeout),security_open(security_open),buffer_size(buffer_size*1024),checkFrequency(checkFrequency){}
         /**
         * @brief 打开Tcp服务器监听程序
         * @param port 监听的端口
@@ -2682,7 +2704,7 @@ namespace stt
         * @param checkFrequency 检查僵尸连接的频率（单位分钟） 默认为1分钟  -1为不做检查
         * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认60秒 -1为无限制
         */
-        HttpServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=12,const int &checkFrequency=1,const int &connectionTimeout=60):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){}
+        HttpServer(const unsigned long long &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){}
         /**
         * @brief 设置一个收到Http/Https请求并成功解析后进行响应的回调函数
         * 注册一个回调函数
@@ -2806,8 +2828,10 @@ namespace stt
         * @param connectionRateLimit 同一个ip每秒钟连接数目的上限
         * @param buffer_size 同一个连接允许传输的最大数据量（单位为kb） 默认为8kb
         * @param requestRatte 同一个连接一秒内允许的最大请求数量 （默认为12次）
+        * @param checkFrequency 检查僵尸连接的频率（单位分钟） 默认为1分钟  -1为不做检查
+        * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认60秒 -1为无限制
         */
-        WebSocketServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=12):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,-1,-1){}
+        WebSocketServer(const unsigned long long &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){}
         /**
         * @brief 设置websocket连接成功后就执行的回调函数
         * 注册一个回调函数

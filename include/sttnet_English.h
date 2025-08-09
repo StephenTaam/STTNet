@@ -1721,6 +1721,8 @@ public:
         {
             int connectionNum;
             std::deque<std::chrono::steady_clock::time_point> connectionTimeQueue;
+            std::deque<std::chrono::steady_clock::time_point> requestTimeQueue;
+            std::deque<std::string path> pathTimeQueue;
         };
         /**
         * @brief Restrict the classes that can be connected to the same IP address
@@ -1732,15 +1734,19 @@ public:
         private:
             int connectionLimit;
             int connectionRateLimit;
+            int requestRate;
+            int connectionTimeout;
             std::unordered_map<std::string,IPInformation> connectionTable;
-
+            mutex lock_table;
         public:
             /**
             * @brief ConnectionLimiter constructor
-            * @param connectionLimit The maximum number of connections to the same IP address is 20 by default
-            * @param connectionRateLimit The maximum number of connections per second for the same IP address is 6 by default
+            * @param connectionLimit: Maximum number of connections per IP address, defaults to 20
+            * @param connectionRateLimit: Maximum number of connections per second per IP address, defaults to 6
+            * @param requestRate: Maximum number of requests allowed per second per IP address (defaults to 12)
+            * @param connectionTimeout: Number of seconds after which a connection is considered zombie if it remains unresponsive. Defaults to 60 seconds. -1 indicates no limit.
             */
-            ConnectionLimiter(const int &connectionLimit=20,const int &connectionRateLimit=6):connectionLimit(connectionLimit),connectionRateLimit(connectionRateLimit){}
+            ConnectionLimiter(const int &connectionLimit=20,const int &connectionRateLimit=6,const int &requestRate=40,const int &connectionTimeout=60):connectionLimit(connectionLimit),connectionRateLimit(connectionRateLimit),requestRate(requestRate),connectionTimeout(connectionTimeout){}
             /**
             * @brief Determines whether to allow connections to a particular IP address based on the number of connections and speed
             * @param ip IP address
@@ -1752,6 +1758,8 @@ public:
             * @param IP address
             */
             void clearIP(const std::string &ip);
+            bool allowRequest(const int &cclientfd);
+            void connectionDetect();
         };
     }
 
@@ -2533,12 +2541,6 @@ public:
         * @brief Receives a spatial position pointer
         */
         unsigned long p_buffer_now;
-        
-        
-        /**
-        * @brief Queue for requesting speed limit, implementing sliding window algorithm
-        */
-        std::deque<std::chrono::steady_clock::time_point> requestSpeedQueue;
     };
 
     /**
@@ -2564,7 +2566,7 @@ public:
     {
     protected:
         unsigned long buffer_size;
-        int maxFD;
+        unsigned long long maxFD;
         security::ConnectionLimiter connectionLimiter;
         //std::unordered_map<int,TcpFDInf> clientfd;
         //std::mutex lc1;
@@ -2581,13 +2583,11 @@ public:
         bool TLS = false;
         //std::unordered_map<int,SSL*> tlsfd;
         //std::mutex ltl1;
-        int requestRate;
-        int checkFrequency;
-        int connectionTimeout;
         bool security_open;
-    protected:
-        bool allowRequest(const int &cclientfd);
-        void connectionDetect();
+        int checkFrequency;
+        bool flag_detect;
+        bool flag_detect_status;
+       
     private:
         std::function<bool(TcpFDHandler &k,TcpFDInf &inf)> fc;
         int fd = -1;
@@ -2606,11 +2606,11 @@ public:
         * @param connectionNumLimit The maximum number of connections from the same IP address
         * @param connectionRateLimit The maximum number of connections per second to the same IP address
         * @param buffer_size The maximum amount of data allowed to be transferred over the same connection (in KB) is 8KB by default
-        * @param requestRatte The maximum number of requests allowed for the same connection within one second (the default is 12 times)
+        * @param requestRate The maximum number of requests allowed for the same ip within one second (the default is 12 times)
         * @param checkFrequency The frequency of checking zombie connections (in minutes) The default is 1 minute -1 means no check
         * @param connectionTimeout The number of seconds that a connection is considered a zombie connection if there is no response (in seconds) The default is 60 seconds -1 means no limit
         */
-        TcpServer(const int &maxFD=10000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=12,const int &checkFrequency=1,const int &connectionTimeout=1800):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit),security_open(security_open),buffer_size(buffer_size*1024),requestRate(requestRate),checkFrequency(checkFrequency),connectionTimeout(connectionTimeout){}
+        TcpServer(const unsigned long long &maxFD=10000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit,requestRate,connectionTimeout),security_open(security_open),buffer_size(buffer_size*1024),checkFrequency{}
         /**
         * @brief Start the TCP server listening program
         * @param port Port to listen on
@@ -2724,7 +2724,7 @@ public:
         * @param checkFrequency The frequency of checking zombie connections (in minutes) The default is 1 minute -1 means no check
         * @param connectionTimeout The number of seconds that a connection is considered a zombie connection if there is no response (in seconds) The default is 60 seconds -1 means no limit
         */
-        HttpServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=12,const int &checkFrequency=1,const int &connectionTimeout=60):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){}
+        HttpServer(const unsigned long long &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){}
         /**
         * @brief Set a callback function for responding after receiving and successfully parsing an Http/Https request
         * Register a callback function
@@ -2847,8 +2847,10 @@ public:
         * @param connectionNumLimit The maximum number of connections from the same IP address
         * @param connectionRateLimit The maximum number of connections per second to the same IP address
         * @param buffer_size The maximum amount of data allowed to be transferred over the same connection (in KB) is 8KB by default
+        * @param checkFrequency The frequency of checking zombie connections (in minutes) The default is 1 minute -1 means no check
+        * @param connectionTimeout The number of seconds that a connection is considered a zombie connection if there is no response (in seconds) The default is 60 seconds -1 means no limit
         */
-        WebSocketServer(const int &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=12):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,-1,-1){}
+        WebSocketServer(const unsigned long long &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){}
         /**
         * @brief Set the callback function to be executed after a websocket connection is successful
         * Register a callback function

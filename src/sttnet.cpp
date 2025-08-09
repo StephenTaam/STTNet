@@ -3689,24 +3689,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
         }
     }
-    bool stt::network::TcpServer::allowRequest(const int &cclientfd)
-    {
-            //检查速度
-            //首先清空大于一秒内的
-            chrono::steady_clock::time_point now=chrono::steady_clock::now();
-            while(!clientfd[cclientfd].requestSpeedQueue.empty()&&now-clientfd[cclientfd].requestSpeedQueue.front()>chrono::seconds(1))
-            {
-                clientfd[cclientfd].requestSpeedQueue.pop_front();
-            }
-
-            if(clientfd[cclientfd].requestSpeedQueue.size()<requestRate)//满足条件
-            {
-                clientfd[cclientfd].requestSpeedQueue.push_back(now);
-                return true;
-            }
-            else
-                return false;
-    }
+    
     bool stt::network::TcpServer::setTLS(const char *cacert,const char *key,const char *passwd,const char *ca)
     {
         if(TLS)
@@ -3837,6 +3820,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         for(int sj=0;sj<threads;sj++)
             thread(&TcpServer::consumer,this,sj).detach();
         thread(&TcpServer::epolll,this,maxFD+10).detach();
+        flag_detect=true;
+        thread(&TcpServer::connectionDetect,this).detach();
         this->consumerNum=threads;
         flag=true;
         //this->logfile=logfile;
@@ -3861,6 +3846,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 cv[ii].notify_all();
         }
         flag=false;
+        //关闭监听连接的消息活动的线程
+        do
+        {
+            flag_detect=false;
+        }while(flag_detect_status);
         return true;
     }
     bool stt::network::TcpServer::close()
@@ -6431,6 +6421,7 @@ stt::system::HBSystem::~HBSystem()
 
 bool stt::security::ConnectionLimiter::allow(const std::string &ip)
 {
+    lock_table.lock();
     auto ii=connectionTable.find(ip);
     //找到
     if(ii!=connectionTable.end())
@@ -6449,28 +6440,102 @@ bool stt::security::ConnectionLimiter::allow(const std::string &ip)
             {
                 ii->second.connectionNum++;
                 ii->second.connectionTimeQueue.push_back(now);
+                lock_table.unlock();
                 return true;
             }
             else
+            {
+                lock_table.unlock();
                 return false;
+            }
         }
         else
+        {
+            lock_table.unlock();
             return false;
+        }
     }
     //找不到
     else
     {
         chrono::steady_clock::time_point now=chrono::steady_clock::now();
         connectionTable.emplace(ip,IPInformation{1,deque<chrono::steady_clock::time_point>{now}});
+        lock_table.unlock();
         return true;
     }
+    lock_table.unlock();
 }
 
 void stt::security::ConnectionLimiter::clearIP(const std::string &ip)
 {
+    lock_table.lock();
     auto ii=connectionTable.find(ip);
     if(ii!=connectionTable.end())
     {
-        ii->second.connectionNum=0;
+        connectionTable.erase(ii);
     }
+    lock_table.unlock();
+}
+bool stt::security::ConnectionLimiter::allowRequest(const std::string &ip)
+{
+    lock_table.lock();
+    auto ii=connectionTable.find(ip);
+    //找到
+    if(ii!=connectionTable.end())
+    {
+
+            //检查速度
+            //首先清空大于一秒内的
+            chrono::steady_clock::time_point now=chrono::steady_clock::now();
+            while(!ii->second.requestTimeQueueQueue.empty()&&now-ii->second.requestTimeQueueQueue.front()>chrono::seconds(1))
+            {
+                ii->second.connectionTimeQueue.pop_front();
+            }
+
+            if(ii->second.requestTimeQueueQueue.size()<requestRate)//满足条件
+            {
+                ii->second.requestTimeQueueQueue.push_back(now);
+                lock_table.unlock();
+                return true;
+            }
+            else
+            {
+                lock_table.unlock();
+                return false;
+            }
+
+    }
+    //找不到
+    else
+    {
+        lock_table.unlock();
+        return false;
+    }
+    lock_table.unlock();
+}
+bool stt::security::ConnectionLimiter::connectionDetect(const std::string &ip)
+{
+    lock_table.lock();
+    auto ii=connectionTable.find(ip);
+    //找到
+    if(ii!=connectionTable.end())
+    {
+        chrono::steady_clock::time_point now=chrono::steady_clock::now();
+        if(now-ii->second.requestTimeQueue.front()>chrono::seconds(connectionTimeout))//超时
+        {
+            lock_table.unlock();
+            return true;
+        }
+        else
+        {
+            lock_table.unlock();
+            return false;
+        }
+    }
+    else
+    {
+        lock_table.unlock();
+        return false;
+    }
+    lock_table.unlock();
 }
