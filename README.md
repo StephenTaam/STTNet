@@ -2,7 +2,9 @@
 
 ## Lightweight High-Performance C++ Network Framework
 
-STTNet is a lightweight, high-performance server framework written in **C++11**, featuring comprehensive **high-performance network communication capabilities**. It supports **TCP/UDP/HTTP/WebSocket and their encrypted variants (TLS+TCP, HTTPS, WSS)**. It also includes file operations, time operations, logging, common data processing, JSON handling, encryption/decryption, signal management, and process management. Built-in features include a logging system, an epoll-based high-concurrency event-driven model, multithreaded processing, thread safety, heartbeat monitoring, and exception/signal handling.
+STTNet is a lightweight, high-performance server framework written in **C++11**, featuring comprehensive **high-performance network communication capabilities**. It supports **TCP/UDP/HTTP/WebSocket and their encrypted variants (TLS+TCP, HTTPS, WSS)**. It also includes file operations, time operations, logging, common data processing, JSON handling, encryption/decryption, signal management, information security ，and process management. Built-in features include a logging system, an epoll-based high-concurrency event-driven model, multithreaded processing, thread safety, heartbeat monitoring, and exception/signal handling.
+
+Case: A stress test of an HTTP service program written in this framework on a small development board with 4 cores and 4GB of memory achieved a throughput of 65,000 requests per second and an average latency of 2-3ms.
 
 > Author: StephenTaam ([1356597983@qq.com](mailto:1356597983@qq.com))
 > Language: C++11
@@ -37,12 +39,13 @@ STTNet is a lightweight, high-performance server framework written in **C++11**,
 * ✅ Exception and signal management
 * ✅ Process management and heartbeat monitoring
 * ✅ User-friendly interface and modular structure
-
+- ✅ Information security module
 ---
 
 ## 🧱 Framework Module Structure
 
 ```
+stt
 ├── file
 │   ├── FileTool / File / LogFile
 │   └── File operation tool + file read and write encapsulation + log module
@@ -59,6 +62,9 @@ STTNet is a lightweight, high-performance server framework written in **C++11**,
 ├── system
 │   ├── ServerSetting / HBSystem /Process
 │   └── Framework initialization, signal/process/heartbeat management
+├── security
+│   ├── ConnectionLimiter
+│   └── Current limiting module
 ```
 
 ---
@@ -123,6 +129,7 @@ using namespace stt::time;
 using namespace stt::data;
 using namespace stt::network;
 using namespace stt::system;
+using namespace stt::security;
 //set global variables
 LogFile lf;
 HttpServer *httpserver;
@@ -195,6 +202,7 @@ int main(int argc,char *argv[])
 
 This project is licensed under the MIT License. You are free to use, modify, and distribute it commercially, but please retain the author attribution.
 
+
 ## 📝 Changelog
 
 ### v0.2.0 - 2025-07-05
@@ -205,6 +213,7 @@ This project is licensed under the MIT License. You are free to use, modify, and
 - Introduced **state-machine-based connection handling**
 - Improved performance and clarity under high concurrency
 - Better compatibility with multi-threading and multi-process modules
+- Some APIs are no longer compatible
 
 ⚠ There is a critical error in the receive buffer for the service class function, please deprecate that version and upgrade to v0.3.1
 
@@ -216,16 +225,20 @@ This project is licensed under the MIT License. You are free to use, modify, and
 
 ⚠ There is a critical error in the receive buffer for the service class function, please deprecate that version and upgrade to v0.3.1
 
-
 ### v0.3.1 - 2025-07-07
 
 fix bug
+
+### v.0.3.4 - 2025-08-28
+Added information security module and updated network optimization.
 
 
 ## STTNet
 ## C++ 轻量级高性能网络框架
 
-STTNet是一个基于 **C++11 标准** 编写的轻量级高性能服务器框架，具备完整的 **高性能网络通信能力**，支持 **TCP/UDP/HTTP/WebSocket 及其加密变种（TLS+TCP、HTTPS、WSS）**。支持文件操作，时间操作，日志操作，常见的数据处理，json格式的数据处理，加解密，信号管理，进程管理等常用服务端功能。并内置了日志系统、epoll高并发模型事件驱动、多线程处理、线程安全、心跳监控、异常和信号处理等功能。
+STTNet是一个基于 **C++11 标准** 编写的轻量级高性能服务器框架，具备完整的 **高性能网络通信能力**，支持 **TCP/UDP/HTTP/WebSocket 及其加密变种（TLS+TCP、HTTPS、WSS）**。支持文件操作，时间操作，日志操作，常见的数据处理，json格式的数据处理，加解密，信号管理，进程管理,信息安全等常用服务端功能。并内置了日志系统、epoll高并发模型事件驱动、多线程处理、线程安全、心跳监控、异常和信号处理等功能。
+
+案例：在4核4G内存的小型开发板上压测这个框架编写的http服务程序，达到了每秒6.5万的吞吐量，时延平均2-3ms。
 
 > 作者：StephenTaam（1356597983@qq.com）
 > 语言：C++11  
@@ -253,12 +266,13 @@ STTNet是一个基于 **C++11 标准** 编写的轻量级高性能服务器框�
 - ✅异常与信号管理
 - ✅进程管理和心跳监控机制管理
 - ✅易用的接口与模块化结构
-
+- ✅ 信息安全模块
 ---
 
 ## 🧱 框架模块结构
 
 ```
+stt
 ├── file
 │   ├── FileTool / File / LogFile
 │   └── 文件操作工具 + 文件读写封装 + 日志模块
@@ -275,6 +289,9 @@ STTNet是一个基于 **C++11 标准** 编写的轻量级高性能服务器框�
 ├── system
 │   ├── ServerSetting / HBSystem /Process
 │   └── 框架初始化、信号/进程/心跳管理
+├── security
+│   ├── ConnectionLimiter
+│   └── 限流模块
 ```
 ---
 
@@ -334,6 +351,7 @@ using namespace stt::time;
 using namespace stt::data;
 using namespace stt::network;
 using namespace stt::system;
+using namespace stt::security;
 //设置全局变量
 LogFile lf;
 HttpServer *httpserver;
@@ -409,6 +427,7 @@ int main(int argc,char *argv[])
 
 ---
 
+
 ### v0.2.0 - 2025-07-05
 
 🚀 Major architecture upgrade / 架构重大升级：
@@ -425,6 +444,9 @@ int main(int argc,char *argv[])
 - Better compatibility with multi-threading and multi-process modules  
   更好地兼容多线程与多进程模块的协同工作
 
+- Some APIs are no longer compatible
+  部分api不再兼容
+
 ⚠服务类函数的接收缓冲区存在严重错误，请弃用该版本并升级到v0.3.1
 
 ### v0.3.0 - 2025-07-07
@@ -438,3 +460,6 @@ int main(int argc,char *argv[])
 ### v0.3.1 - 2025-07-07
 
 fix bug
+
+### v.0.3.4 - 2025-08-28
+加入信息安全模块，更新了网络优化。
