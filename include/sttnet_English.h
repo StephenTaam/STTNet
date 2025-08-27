@@ -1715,18 +1715,34 @@ public:
     namespace security
     {
         /**
-        * @brief A structure that records IP information, such as the number of connections, connection rate, etc
+        * @brief Speed ​​limit for specific routes
+        */
+        struct PathLimit
+        {
+            std::string path;
+            int pathRate;
+        };
+        /**
+        * @brief Structure for implementing sliding window rate limiting
+        */
+        struct SlidingWindow
+        {
+            int num;
+            std::chrono::steady_clock::time_point lastTime;
+            int limit;
+        };
+        /**
+        * @brief A structure that records IP information, such as the number of connections, connection rate, etc.
         */
         struct IPInformation
         {
-            int connectionNum;
-            std::deque<std::chrono::steady_clock::time_point> connectionTimeQueue;
-            std::deque<std::chrono::steady_clock::time_point> requestTimeQueue;
-            std::deque<std::string path> pathTimeQueue;
+            SlidingWindow connection;
+            SlidingWindow request;
+            std::unordered_map<std::string,SlidingWindow> pathRequest;
         };
         /**
-        * @brief Restrict the classes that can be connected to the same IP address
-        * @note No locks, no synchronization and thread safety, their own on the upper layer to ensure it.
+        * @brief Limit the class of connections from the same IP
+        * @note Without locks, synchronization and thread safety are not ensured, and they are ensured at the upper level.
         * @note Limit the number and speed of connections to the same IP
         */
         class ConnectionLimiter
@@ -1736,30 +1752,43 @@ public:
             int connectionRateLimit;
             int requestRate;
             int connectionTimeout;
+            std::vector<PathLimit> pathLimit;
             std::unordered_map<std::string,IPInformation> connectionTable;
-            mutex lock_table;
+            std::mutex lock_table;
+            std::mutex lock_pathlim;
         public:
             /**
             * @brief ConnectionLimiter constructor
-            * @param connectionLimit: Maximum number of connections per IP address, defaults to 20
-            * @param connectionRateLimit: Maximum number of connections per second per IP address, defaults to 6
-            * @param requestRate: Maximum number of requests allowed per second per IP address (defaults to 12)
-            * @param connectionTimeout: Number of seconds after which a connection is considered zombie if it remains unresponsive. Defaults to 60 seconds. -1 indicates no limit.
+            * @param connectionLimit The maximum number of connections to the same IP address is 20 by default.
+            * @param connectionRateLimit The maximum number of connections per second for the same IP address, the default is 6
+            * @param requestRate The maximum number of requests allowed per second for the same IP address (default is 12)
+            * @param connectionTimeout The number of seconds a connection is considered a zombie connection if there is no response (in seconds). The default is 60 seconds. -1 means no limit.
             */
             ConnectionLimiter(const int &connectionLimit=20,const int &connectionRateLimit=6,const int &requestRate=40,const int &connectionTimeout=60):connectionLimit(connectionLimit),connectionRateLimit(connectionRateLimit),requestRate(requestRate),connectionTimeout(connectionTimeout){}
             /**
-            * @brief Determines whether to allow connections to a particular IP address based on the number of connections and speed
-            * @param ip IP address
-            * @return true：Connections from a certain IP address should be allowed false: Connections from a certain IP address should be denied
+            * @brief Determine whether to allow a certain IP connection based on the number of connections and speed
+            * @param ip ip address
+            * @return true：Connections from a specific IP address should be allowed. False: Connections from a specific IP address should be denied.
             */
-            bool allow(const std::string &ip);
+            bool allowConnect(const std::string &ip);
             /**
-            * @brief Clear the number of connections that record an IP address
-            * @param IP address
+            * @brief Clear the number of connections to a certain IP address
+            * @param ip ip address
             */
             void clearIP(const std::string &ip);
-            bool allowRequest(const int &cclientfd);
-            void connectionDetect();
+            /**
+            * @brief Allow requests based on request rate
+            * @param ip ip address
+            * @param path path
+            * @return true：allow  false：not allow
+            */
+            bool allowRequest(const std::string &ip,const std::string_view &path="//");
+            /**
+            * @brief Determine whether a certain IP connection is a zombie connection
+            * @param ip IP address
+            * @return true：yes false：no
+            */
+            bool connectionDetect(const std::string &ip);
         };
     }
 

@@ -3,15 +3,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.5"/>
+<meta name="generator" content="Doxygen 1.8.11"/>
 <title>STTNet: stt::file::FileTool类 参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
-  $(document).ready(function() { searchBox.OnSelectItem(0); });
+  $(document).ready(function() { init_search(); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
@@ -21,7 +22,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td style="padding-left: 0.5em;">
+  <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">STTNet
    </div>
   </td>
@@ -30,7 +31,7 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.5 -->
+<!-- 制作者 Doxygen 1.8.11 -->
 <script type="text/javascript">
 var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </script>
@@ -72,7 +73,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>页</a></div>
+</div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -113,16 +114,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 静态 Public 成员函数</h2></td></tr>
 <tr class="memitem:a28539247b09794fba339cfb17e731ac8"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1FileTool.html#a28539247b09794fba339cfb17e731ac8">createDir</a> (const std::string &amp;ddir, const mode_t &amp;mode=0775)</td></tr>
-<tr class="memdesc:a28539247b09794fba339cfb17e731ac8"><td class="mdescLeft">&#160;</td><td class="mdescRight">新建一个目录  <a href="#a28539247b09794fba339cfb17e731ac8">更多...</a><br/></td></tr>
+<tr class="memdesc:a28539247b09794fba339cfb17e731ac8"><td class="mdescLeft">&#160;</td><td class="mdescRight">新建一个目录  <a href="#a28539247b09794fba339cfb17e731ac8">更多...</a><br /></td></tr>
 <tr class="separator:a28539247b09794fba339cfb17e731ac8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a655ada567a41ea54a13fe12ee4f603a6"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1FileTool.html#a655ada567a41ea54a13fe12ee4f603a6">copy</a> (const std::string &amp;sourceFile, const std::string &amp;objectFile)</td></tr>
-<tr class="memdesc:a655ada567a41ea54a13fe12ee4f603a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">复制文件  <a href="#a655ada567a41ea54a13fe12ee4f603a6">更多...</a><br/></td></tr>
+<tr class="memdesc:a655ada567a41ea54a13fe12ee4f603a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">复制文件  <a href="#a655ada567a41ea54a13fe12ee4f603a6">更多...</a><br /></td></tr>
 <tr class="separator:a655ada567a41ea54a13fe12ee4f603a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a425c89e93b3c1f44ff6ac671eae2ad9f"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1FileTool.html#a425c89e93b3c1f44ff6ac671eae2ad9f">createFile</a> (const std::string &amp;filePath, const mode_t &amp;mode=0666)</td></tr>
-<tr class="memdesc:a425c89e93b3c1f44ff6ac671eae2ad9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">新建一个文件  <a href="#a425c89e93b3c1f44ff6ac671eae2ad9f">更多...</a><br/></td></tr>
+<tr class="memdesc:a425c89e93b3c1f44ff6ac671eae2ad9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">新建一个文件  <a href="#a425c89e93b3c1f44ff6ac671eae2ad9f">更多...</a><br /></td></tr>
 <tr class="separator:a425c89e93b3c1f44ff6ac671eae2ad9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb0e4ae48cbba8a2d2e5f565be018da4"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1FileTool.html#acb0e4ae48cbba8a2d2e5f565be018da4">get_file_size</a> (const std::string &amp;fileName)</td></tr>
-<tr class="memdesc:acb0e4ae48cbba8a2d2e5f565be018da4"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取文件大小  <a href="#acb0e4ae48cbba8a2d2e5f565be018da4">更多...</a><br/></td></tr>
+<tr class="memdesc:acb0e4ae48cbba8a2d2e5f565be018da4"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取文件大小  <a href="#acb0e4ae48cbba8a2d2e5f565be018da4">更多...</a><br /></td></tr>
 <tr class="separator:acb0e4ae48cbba8a2d2e5f565be018da4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
@@ -311,7 +312,7 @@ false 操作失败 </dd></dl>
 <hr class="footer"/><address class="footer"><small>
 制作者 &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.5
+</a> 1.8.11
 </small></address>
 </body>
 </html>

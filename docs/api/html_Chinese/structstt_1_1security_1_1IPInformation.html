@@ -3,15 +3,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.5"/>
+<meta name="generator" content="Doxygen 1.8.11"/>
 <title>STTNet: stt::security::IPInformation结构体 参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
-  $(document).ready(function() { searchBox.OnSelectItem(0); });
+  $(document).ready(function() { init_search(); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
@@ -21,7 +22,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td style="padding-left: 0.5em;">
+  <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">STTNet
    </div>
   </td>
@@ -30,7 +31,7 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.5 -->
+<!-- 制作者 Doxygen 1.8.11 -->
 <script type="text/javascript">
 var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </script>
@@ -72,7 +73,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>页</a></div>
+</div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -102,33 +103,46 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public 属性</h2></td></tr>
-<tr class="memitem:a9fb54927ee920022f468b4dac75a3fd3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1IPInformation.html#a9fb54927ee920022f468b4dac75a3fd3">connectionNum</a></td></tr>
-<tr class="separator:a9fb54927ee920022f468b4dac75a3fd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a073398fb9431a4cdb2cd806bf6f465bb"><td class="memItemLeft" align="right" valign="top">std::deque<br class="typebreak"/>
-&lt; std::chrono::steady_clock::time_point &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1IPInformation.html#a073398fb9431a4cdb2cd806bf6f465bb">connectionTimeQueue</a></td></tr>
-<tr class="separator:a073398fb9431a4cdb2cd806bf6f465bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22cb8aa50f4271fd9eb20f1b93ba4f74"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structstt_1_1security_1_1SlidingWindow.html">SlidingWindow</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1IPInformation.html#a22cb8aa50f4271fd9eb20f1b93ba4f74">connection</a></td></tr>
+<tr class="separator:a22cb8aa50f4271fd9eb20f1b93ba4f74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad25a4cdd6d4c844e8cdc3bb4b8486d7b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structstt_1_1security_1_1SlidingWindow.html">SlidingWindow</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1IPInformation.html#ad25a4cdd6d4c844e8cdc3bb4b8486d7b">request</a></td></tr>
+<tr class="separator:ad25a4cdd6d4c844e8cdc3bb4b8486d7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6a382cf573ee04429aefd8db9e63d20"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, <a class="el" href="structstt_1_1security_1_1SlidingWindow.html">SlidingWindow</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1IPInformation.html#ab6a382cf573ee04429aefd8db9e63d20">pathRequest</a></td></tr>
+<tr class="separator:ab6a382cf573ee04429aefd8db9e63d20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>记录ip信息的结构体，比如连接数，连接速率等 </p>
 </div><h2 class="groupheader">类成员变量说明</h2>
-<a class="anchor" id="a9fb54927ee920022f468b4dac75a3fd3"></a>
+<a class="anchor" id="a22cb8aa50f4271fd9eb20f1b93ba4f74"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int stt::security::IPInformation::connectionNum</td>
+          <td class="memname"><a class="el" href="structstt_1_1security_1_1SlidingWindow.html">SlidingWindow</a> stt::security::IPInformation::connection</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="a073398fb9431a4cdb2cd806bf6f465bb"></a>
+<a class="anchor" id="ab6a382cf573ee04429aefd8db9e63d20"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::deque&lt;std::chrono::steady_clock::time_point&gt; stt::security::IPInformation::connectionTimeQueue</td>
+          <td class="memname">std::unordered_map&lt;std::string,<a class="el" href="structstt_1_1security_1_1SlidingWindow.html">SlidingWindow</a>&gt; stt::security::IPInformation::pathRequest</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad25a4cdd6d4c844e8cdc3bb4b8486d7b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structstt_1_1security_1_1SlidingWindow.html">SlidingWindow</a> stt::security::IPInformation::request</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -143,7 +157,7 @@ Public 属性</h2></td></tr>
 <hr class="footer"/><address class="footer"><small>
 制作者 &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.5
+</a> 1.8.11
 </small></address>
 </body>
 </html>

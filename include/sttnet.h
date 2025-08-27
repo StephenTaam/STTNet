@@ -1711,13 +1711,21 @@ namespace stt
     namespace security
     {
         /**
+        * @brief 用于特定路径的限速
+        */
+        struct PathLimit
+        {
+            std::string path;
+            int pathRate;
+        };
+        /**
         * @brief 用于实现滑动窗口限速的结构体
-
         */
         struct SlidingWindow
         {
             int num;
             std::chrono::steady_clock::time_point lastTime;
+            int limit;
         };
         /**
         * @brief 记录ip信息的结构体，比如连接数，连接速率等
@@ -1727,9 +1735,6 @@ namespace stt
             SlidingWindow connection;
             SlidingWindow request;
             std::unordered_map<std::string,SlidingWindow> pathRequest;
-            //std::deque<std::chrono::steady_clock::time_point> connectionTimeQueue;
-            //std::deque<std::chrono::steady_clock::time_point> requestTimeQueue;
-            //std::unordered_map<std::string path,deque<std::chrono::steady_clock::time_point>> pathTimeQueue;
         };
         /**
         * @brief 限制同一ip连接的类
@@ -1743,8 +1748,10 @@ namespace stt
             int connectionRateLimit;
             int requestRate;
             int connectionTimeout;
+            std::vector<PathLimit> pathLimit;
             std::unordered_map<std::string,IPInformation> connectionTable;
-            mutex lock_table;
+            std::mutex lock_table;
+            std::mutex lock_pathlim;
         public:
             /**
             * @brief ConnectionLimiter 的构造函数
@@ -1759,7 +1766,7 @@ namespace stt
             * @param ip ip地址
             * @return true：应当允许某ip的连接 false：应当拒绝某ip的连接
             */
-            bool allow(const std::string &ip);
+            bool allowConnect(const std::string &ip);
             /**
             * @brief 把记录某ip的连接数清零
             * @param ip地址
@@ -1768,9 +1775,10 @@ namespace stt
             /**
             * @brief 根据请求速率判断允许请求
             * @param ip IP地址
+            * @param path 路径
             * @return true：允许 false：不允许
             */
-            bool allowRequest(const std::string &ip);
+            bool allowRequest(const std::string &ip,const std::string_view &path="//");
             /**
             * @brief 判断某ip的连接是否为僵尸连接
             * @param ip IP地址

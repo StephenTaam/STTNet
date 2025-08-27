@@ -3,15 +3,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.5"/>
+<meta name="generator" content="Doxygen 1.8.11"/>
 <title>STTNet: stt::network::WebSocketClient类 参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
-  $(document).ready(function() { searchBox.OnSelectItem(0); });
+  $(document).ready(function() { init_search(); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
@@ -21,7 +22,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td style="padding-left: 0.5em;">
+  <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">STTNet
    </div>
   </td>
@@ -30,7 +31,7 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.5 -->
+<!-- 制作者 Doxygen 1.8.11 -->
 <script type="text/javascript">
 var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </script>
@@ -72,7 +73,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>页</a></div>
+</div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -112,37 +113,37 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public 成员函数</h2></td></tr>
 <tr class="memitem:a1f1b55114196078359c8a552b54925fc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#a1f1b55114196078359c8a552b54925fc">WebSocketClient</a> (const bool &amp;TLS=false, const char *ca=&quot;&quot;, const char *cert=&quot;&quot;, const char *key=&quot;&quot;, const char *passwd=&quot;&quot;)</td></tr>
-<tr class="memdesc:a1f1b55114196078359c8a552b54925fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">WebSocketClient类的构造函数  <a href="#a1f1b55114196078359c8a552b54925fc">更多...</a><br/></td></tr>
+<tr class="memdesc:a1f1b55114196078359c8a552b54925fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">WebSocketClient类的构造函数  <a href="#a1f1b55114196078359c8a552b54925fc">更多...</a><br /></td></tr>
 <tr class="separator:a1f1b55114196078359c8a552b54925fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3eafdfc38703408b77ce924953e54429"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#a3eafdfc38703408b77ce924953e54429">setFunction</a> (std::function&lt; bool(const std::string &amp;message, <a class="el" href="classstt_1_1network_1_1WebSocketClient.html">WebSocketClient</a> &amp;k)&gt; fc)</td></tr>
-<tr class="memdesc:a3eafdfc38703408b77ce924953e54429"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置收到服务端消息后的回调函数 注册一个回调函数  <a href="#a3eafdfc38703408b77ce924953e54429">更多...</a><br/></td></tr>
+<tr class="memdesc:a3eafdfc38703408b77ce924953e54429"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置收到服务端消息后的回调函数 注册一个回调函数  <a href="#a3eafdfc38703408b77ce924953e54429">更多...</a><br /></td></tr>
 <tr class="separator:a3eafdfc38703408b77ce924953e54429"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ad7b117d99f5750aa262519d7e445e4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#a6ad7b117d99f5750aa262519d7e445e4">connect</a> (const std::string &amp;url, const int &amp;min=20)</td></tr>
-<tr class="memdesc:a6ad7b117d99f5750aa262519d7e445e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">连接到websocket服务器  <a href="#a6ad7b117d99f5750aa262519d7e445e4">更多...</a><br/></td></tr>
+<tr class="memdesc:a6ad7b117d99f5750aa262519d7e445e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">连接到websocket服务器  <a href="#a6ad7b117d99f5750aa262519d7e445e4">更多...</a><br /></td></tr>
 <tr class="separator:a6ad7b117d99f5750aa262519d7e445e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7053e8593f360827d2d5aaee37438fb8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#a7053e8593f360827d2d5aaee37438fb8">sendMessage</a> (const std::string &amp;message, const std::string &amp;type=&quot;0001&quot;)</td></tr>
-<tr class="memdesc:a7053e8593f360827d2d5aaee37438fb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送 WebSocket 消息  <a href="#a7053e8593f360827d2d5aaee37438fb8">更多...</a><br/></td></tr>
+<tr class="memdesc:a7053e8593f360827d2d5aaee37438fb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送 WebSocket 消息  <a href="#a7053e8593f360827d2d5aaee37438fb8">更多...</a><br /></td></tr>
 <tr class="separator:a7053e8593f360827d2d5aaee37438fb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46be98f860f41937c3ddb738af189b55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#a46be98f860f41937c3ddb738af189b55">close</a> (const std::string &amp;closeCodeAndMessage, const bool &amp;wait=true)</td></tr>
-<tr class="memdesc:a46be98f860f41937c3ddb738af189b55"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送关闭帧并关闭 WebSocket 连接（简化方式）  <a href="#a46be98f860f41937c3ddb738af189b55">更多...</a><br/></td></tr>
+<tr class="memdesc:a46be98f860f41937c3ddb738af189b55"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送关闭帧并关闭 WebSocket 连接（简化方式）  <a href="#a46be98f860f41937c3ddb738af189b55">更多...</a><br /></td></tr>
 <tr class="separator:a46be98f860f41937c3ddb738af189b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a389d7ee7dfeebbe283b4876d258df45d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#a389d7ee7dfeebbe283b4876d258df45d">close</a> (const short &amp;code=1000, const std::string &amp;message=&quot;bye&quot;, const bool &amp;wait=true)</td></tr>
-<tr class="memdesc:a389d7ee7dfeebbe283b4876d258df45d"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送关闭帧并关闭 WebSocket 连接（标准方式）  <a href="#a389d7ee7dfeebbe283b4876d258df45d">更多...</a><br/></td></tr>
+<tr class="memdesc:a389d7ee7dfeebbe283b4876d258df45d"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送关闭帧并关闭 WebSocket 连接（标准方式）  <a href="#a389d7ee7dfeebbe283b4876d258df45d">更多...</a><br /></td></tr>
 <tr class="separator:a389d7ee7dfeebbe283b4876d258df45d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaadb67abf50e475f10ce6e8e8988808b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#aaadb67abf50e475f10ce6e8e8988808b">isConnect</a> ()</td></tr>
-<tr class="memdesc:aaadb67abf50e475f10ce6e8e8988808b"><td class="mdescLeft">&#160;</td><td class="mdescRight">返回连接状态  <a href="#aaadb67abf50e475f10ce6e8e8988808b">更多...</a><br/></td></tr>
+<tr class="memdesc:aaadb67abf50e475f10ce6e8e8988808b"><td class="mdescLeft">&#160;</td><td class="mdescRight">返回连接状态  <a href="#aaadb67abf50e475f10ce6e8e8988808b">更多...</a><br /></td></tr>
 <tr class="separator:aaadb67abf50e475f10ce6e8e8988808b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58028db6105b2bf9b9a21706e5b3665a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#a58028db6105b2bf9b9a21706e5b3665a">getUrl</a> ()</td></tr>
-<tr class="memdesc:a58028db6105b2bf9b9a21706e5b3665a"><td class="mdescLeft">&#160;</td><td class="mdescRight">如果连接到了服务器 返回url  <a href="#a58028db6105b2bf9b9a21706e5b3665a">更多...</a><br/></td></tr>
+<tr class="memdesc:a58028db6105b2bf9b9a21706e5b3665a"><td class="mdescLeft">&#160;</td><td class="mdescRight">如果连接到了服务器 返回url  <a href="#a58028db6105b2bf9b9a21706e5b3665a">更多...</a><br /></td></tr>
 <tr class="separator:a58028db6105b2bf9b9a21706e5b3665a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c7809bacd31a7ef921cae0646f228fe"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#a1c7809bacd31a7ef921cae0646f228fe">getServerIp</a> ()</td></tr>
-<tr class="memdesc:a1c7809bacd31a7ef921cae0646f228fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">如果连接到了服务器 返回服务器ip  <a href="#a1c7809bacd31a7ef921cae0646f228fe">更多...</a><br/></td></tr>
+<tr class="memdesc:a1c7809bacd31a7ef921cae0646f228fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">如果连接到了服务器 返回服务器ip  <a href="#a1c7809bacd31a7ef921cae0646f228fe">更多...</a><br /></td></tr>
 <tr class="separator:a1c7809bacd31a7ef921cae0646f228fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08728b637612a8420eb25e21390037a3"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#a08728b637612a8420eb25e21390037a3">getServerPort</a> ()</td></tr>
-<tr class="memdesc:a08728b637612a8420eb25e21390037a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">如果连接到了服务器 返回服务器端口  <a href="#a08728b637612a8420eb25e21390037a3">更多...</a><br/></td></tr>
+<tr class="memdesc:a08728b637612a8420eb25e21390037a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">如果连接到了服务器 返回服务器端口  <a href="#a08728b637612a8420eb25e21390037a3">更多...</a><br /></td></tr>
 <tr class="separator:a08728b637612a8420eb25e21390037a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63caa68697957381788d3885d9ed5648"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#a63caa68697957381788d3885d9ed5648">~WebSocketClient</a> ()</td></tr>
-<tr class="memdesc:a63caa68697957381788d3885d9ed5648"><td class="mdescLeft">&#160;</td><td class="mdescRight">WebSocketClient类的析构函数，销毁对象时候会优雅退出断开连接  <a href="#a63caa68697957381788d3885d9ed5648">更多...</a><br/></td></tr>
+<tr class="memdesc:a63caa68697957381788d3885d9ed5648"><td class="mdescLeft">&#160;</td><td class="mdescRight">WebSocketClient类的析构函数，销毁对象时候会优雅退出断开连接  <a href="#a63caa68697957381788d3885d9ed5648">更多...</a><br /></td></tr>
 <tr class="separator:a63caa68697957381788d3885d9ed5648"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
@@ -484,8 +485,7 @@ Public 成员函数</h2></td></tr>
 </div><div class="memdoc">
 
 <p>发送 WebSocket 消息 </p>
-<p>根据 WebSocket 协议，封装并发送一条带掩码的数据帧（客户端必须使用掩码）， 支持根据 payload 长度自动选择帧格式：</p>
-<ul>
+<p>根据 WebSocket 协议，封装并发送一条带掩码的数据帧（客户端必须使用掩码）， 支持根据 payload 长度自动选择帧格式：</p><ul>
 <li>payload &lt;= 125 字节：使用 1 字节长度</li>
 <li>126 &lt;= payload &lt;= 65535：使用 2 字节扩展长度（附加 126 标记）</li>
 <li>payload &gt; 65535：使用 8 字节扩展长度（附加 127 标记）</li>
@@ -553,7 +553,7 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
 <hr class="footer"/><address class="footer"><small>
 制作者 &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.5
+</a> 1.8.11
 </small></address>
 </body>
 </html>
