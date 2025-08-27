@@ -2,7 +2,9 @@
 
 ## Lightweight High-Performance C++ Network Framework
 
-STTNet is a lightweight, high-performance server framework written in **C++11**, featuring comprehensive **high-performance network communication capabilities**. It supports **TCP/UDP/HTTP/WebSocket and their encrypted variants (TLS+TCP, HTTPS, WSS)**. It also includes file operations, time operations, logging, common data processing, JSON handling, encryption/decryption, signal management, and process management. Built-in features include a logging system, an epoll-based high-concurrency event-driven model, multithreaded processing, thread safety, heartbeat monitoring, and exception/signal handling.
+STTNet is a lightweight, high-performance server framework written in **C++11**, featuring comprehensive **high-performance network communication capabilities**. It supports **TCP/UDP/HTTP/WebSocket and their encrypted variants (TLS+TCP, HTTPS, WSS)**. It also includes file operations, time operations, logging, common data processing, JSON handling, encryption/decryption, signal management, information security ，and process management. Built-in features include a logging system, an epoll-based high-concurrency event-driven model, multithreaded processing, thread safety, heartbeat monitoring, and exception/signal handling.
+
+Case: A stress test of an HTTP service program written in this framework on a small development board with 4 cores and 4GB of memory achieved a throughput of 65,000 requests per second and an average latency of 2-3ms.
 
 > Author: StephenTaam ([1356597983@qq.com](mailto:1356597983@qq.com))
 > Language: C++11
@@ -37,12 +39,13 @@ STTNet is a lightweight, high-performance server framework written in **C++11**,
 * ✅ Exception and signal management
 * ✅ Process management and heartbeat monitoring
 * ✅ User-friendly interface and modular structure
-
+- ✅ Information security module
 ---
 
 ## 🧱 Framework Module Structure
 
 ```
+stt
 ├── file
 │   ├── FileTool / File / LogFile
 │   └── File operation tool + file read and write encapsulation + log module
@@ -59,6 +62,9 @@ STTNet is a lightweight, high-performance server framework written in **C++11**,
 ├── system
 │   ├── ServerSetting / HBSystem /Process
 │   └── Framework initialization, signal/process/heartbeat management
+├── security
+│   ├── ConnectionLimiter
+│   └── Current limiting module
 ```
 
 ---
@@ -123,6 +129,7 @@ using namespace stt::time;
 using namespace stt::data;
 using namespace stt::network;
 using namespace stt::system;
+using namespace stt::security;
 //set global variables
 LogFile lf;
 HttpServer *httpserver;
@@ -221,3 +228,6 @@ This project is licensed under the MIT License. You are free to use, modify, and
 ### v0.3.1 - 2025-07-07
 
 fix bug
+
+### v.0.3.4 - 2025-08-28
+Added information security module and updated network optimization.
