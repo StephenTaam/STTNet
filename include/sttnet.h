@@ -1,8 +1,8 @@
 /**
 * @mainpage STTNet C++ Framework
 * @author StephenTaam(1356597983@qq.com)
-* @version 0.3.0
-* @date 2025-07-07
+* @version 0.3.4
+* @date 2025-12-14
 */
 #ifndef PUBLIC_H
 #define PUBLIC_H 1
