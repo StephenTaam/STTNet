@@ -934,7 +934,16 @@ namespace stt
     private:
         std::string timeFormat;
         std::string contentFormat;
+        std::atomic<bool> consumerGuard{true};
+        std::mutex queueMutex;
+        std::condition_variable queueCV;
+        std::queue<std::string> logQueue;
+        std::thread consumerThread;
     public:
+        /**
+         * @brief 构造函数，初始化消费者线程
+         */
+        LogFile();
         /**
         * @brief 打开一个日志文件
         * @note 不存在则创建（连带目录），默认新建的目录的权限为rwx rwx r-x，默认新建的日志文件权限为rw-，rw-，r--
@@ -963,9 +972,8 @@ namespace stt
         /**
         * @brief 写一行日志
         * @param data 需要写入的日志内容
-        * @return true：写入成功  false：写入失败
         */
-        bool writeLog(const std::string &data);
+        void writeLog(const std::string &data);
         /**
         * @brief 清空所有日志
         * @return true：写入成功  false：写入失败
@@ -979,6 +987,10 @@ namespace stt
         * @return true：删除成功  false：删除失败
         */
         bool deleteLogByTime(const std::string &date1="1",const std::string &date2="2");
+        /**
+         * @brief 析构函数 写完日志 关闭消费者线程
+         */
+        ~LogFile();
     };
     }
     /**
@@ -1710,6 +1722,7 @@ namespace stt
     */
     namespace security
     {
+        
         /**
         * @brief 用于特定路径的限速
         */
@@ -1736,6 +1749,7 @@ namespace stt
             SlidingWindow request;
             std::unordered_map<std::string,SlidingWindow> pathRequest;
         };
+
         /**
         * @brief 限制同一ip连接的类
         * @note 不带锁，不确保同步和线程安全，自己在上层确保。
@@ -1752,6 +1766,7 @@ namespace stt
             std::unordered_map<std::string,IPInformation> connectionTable;
             std::mutex lock_table;
             std::mutex lock_pathlim;
+            static inline bool slideAllow(SlidingWindow &win,const std::chrono::steady_clock::time_point &now,int rate );// 每秒允许多少次
         public:
             /**
             * @brief ConnectionLimiter 的构造函数
@@ -2762,6 +2777,7 @@ namespace stt
         * @brief 获取一条websocket消息
         * @param Tcpinf 保存底层tcp状态的信息
         * @param Websocketinf 保存websocket协议状态信息
+        * @param buffer_size 服务器定义的解析缓冲区的大小（单位为字节)
         * @param ii 记录解析次数，一些场合用得到 默认为1
         * @return
         * -1：获取失败
@@ -2779,7 +2795,7 @@ namespace stt
         * 4 接收消息中
         * 
         */
-        int getMessage(TcpFDInf &Tcpinf,WebSocketFDInformation &Websocketinf,const int &ii=1);
+        int getMessage(TcpFDInf &Tcpinf,WebSocketFDInformation &Websocketinf,const unsigned long &buffer_size,const int &ii=1);
         /**
         * @brief 发送一条websocket信息
         * @param msg 需要发送的websocket信息
@@ -2823,6 +2839,8 @@ namespace stt
        
         void closeAck(const int &fd,const std::string &closeCodeAndMessage);
         void closeAck(const int &fd,const short &code=1000,const std::string &message="bye");
+        std::condition_variable hb_cv;
+        std::mutex hb_m;
         void HB();
         bool closeWithoutLock(const int &fd,const std::string &closeCodeAndMessage);
         bool closeWithoutLock(const int &fd,const short &code=1000,const std::string &message="bye");
@@ -2981,7 +2999,7 @@ namespace stt
         * @brief  WebSocketServer的析构函数
         * @note 销毁对象的时候会阻塞直到全部连接和监听等全部关闭
         */
-        ~WebSocketServer(){HBflag1=false; while(HBflag); }
+        ~WebSocketServer(){ {std::lock_guard<std::mutex> lk(hb_m);HBflag1=false;}hb_cv.notify_all(); while(HBflag); }
     };
 
     /**

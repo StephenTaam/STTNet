@@ -1121,19 +1121,58 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
         else
             return false;
     }
-    
+    stt::file::LogFile::LogFile()
+    {
+        consumerGuard=true;
+        consumerThread = thread([this]()->void
+        {
+            while(this->consumerGuard||!this->logQueue.empty())
+            {
+                unique_lock<mutex> lock(this->queueMutex);
+                while(this->logQueue.empty()&&this->consumerGuard)
+                    this->queueCV.wait(lock);
+                if(!this->logQueue.empty())//非空则执行
+                {
+                    string content=this->logQueue.front();
+                    this->logQueue.pop();
+                    lock.unlock();
+
+                    this->appendLine(content);
+                }
+
+            }
+        });
+    }
+    stt::file::LogFile::~LogFile()
+    {
+        consumerGuard=false;
+        queueCV.notify_all();
+        if(consumerThread.joinable())
+            consumerThread.join();
+    }
     bool stt::file::LogFile::openFile(const string &fileName,const string &timeFormat,const string &contentFormat)
     {
         this->timeFormat=timeFormat;
         this->contentFormat=contentFormat;
         return File::openFile(fileName,true,0,0,0664);
     }
-    bool stt::file::LogFile::writeLog(const string &data)
+    void stt::file::LogFile::writeLog(const string &data)
     {
         string content;
         getTime(content,timeFormat);
         content+=contentFormat+data;
+        
+        {
+            std::lock_guard<std::mutex> lock(queueMutex);
+            logQueue.push(std::move(content));
+        }
+        queueCV.notify_all();
+        /*
+        string content;
+        getTime(content,timeFormat);
+        content+=contentFormat+data;
         return appendLine(content);
+        */
     }
     bool stt::file::LogFile::closeFile(const bool &del)
     {
@@ -2202,6 +2241,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     }
     void stt::network::TcpFDHandler::close(const bool &cle)
     {
+        
         flag1=false;
         flag2=false;
         if(cle)
@@ -4147,8 +4187,10 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                         stt::system::ServerSetting::logfile->writeLog("tcp server epoll:receive connection close message: fd= "+to_string(evs[ii].data.fd)+" and it has been pushed into queue");
                                 }
                                 
-
+                                {
+                                std::lock_guard<std::mutex> lock(lq1[evs[ii].data.fd%consumerNum]);
                                 fdQueue[evs[ii].data.fd%consumerNum].push(QueueFD{evs[ii].data.fd,true});
+                                }
                                 cv[evs[ii].data.fd%consumerNum].notify_one();
                             
 
@@ -4163,8 +4205,10 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                     stt::system::ServerSetting::logfile->writeLog("tcp server epoll:has received new data: fd= "+to_string(evs[ii].data.fd));
                             }
                             
-
-                            fdQueue[evs[ii].data.fd%consumerNum].push(QueueFD{evs[ii].data.fd,false});
+                             {
+                                std::lock_guard<std::mutex> lock(lq1[evs[ii].data.fd%consumerNum]);
+                                fdQueue[evs[ii].data.fd%consumerNum].push(QueueFD{evs[ii].data.fd,false});
+                             }
                             cv[evs[ii].data.fd%consumerNum].notify_one();
                         }
                         //endd=chrono::high_resolution_clock::now();
@@ -4214,8 +4258,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             ul1.unlock();
 
             
-
-            
+            if(cclientfd.close)
+            {
+                TcpServer::close(cclientfd.fd);
+                continue;
+            }
             
             //unique_lock<mutex> lock6(lc1);
             //auto jj=clientfd.find(cclientfd.fd);
@@ -4297,6 +4344,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
              header+"\r\n"+\
              data;
         
+             //cout<<result<<endl;
         if(sendData(result,false)!=result.length())
         {
             return false;
@@ -4345,6 +4393,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
 
         if(times==1)
         {
+            unsigned long long p_buffer_now_backup=TcpInf.p_buffer_now;
             int ret=1;
             while(ret>0&&buffer_size-TcpInf.p_buffer_now>0)
             {
@@ -4358,9 +4407,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 if(ret!=-100)
                     return -1;
             }
-            TcpInf.data=string_view(TcpInf.buffer,TcpInf.p_buffer_now);
+            TcpInf.data=string_view(TcpInf.buffer+p_buffer_now_backup,TcpInf.p_buffer_now);
         }
-        
+        //cout<<TcpInf.data<<endl;
         //endd=chrono::high_resolution_clock::now();
         //                duration=chrono::duration_cast<chrono::microseconds>(endd-start);
         //                cout<<"接受完数据用时"<<duration.count()<<endl;
@@ -4643,9 +4692,16 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 break;
             }
             int cclientfd=fdQueue[threadID].front().fd;
+            bool cclose=fdQueue[threadID].front().close;
             fdQueue[threadID].pop();
             
             ul1.unlock();
+
+            if(cclose)
+            {
+                TcpServer::close(cclientfd);
+                continue;
+            }
            // endd=chrono::high_resolution_clock::now();
             //            duration=chrono::duration_cast<chrono::microseconds>(endd-start);
            //             cout<<"队列中拿出用时"<<duration.count()<<endl;
@@ -4760,6 +4816,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         else
                             stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(threadID)+" : has solved fd= "+to_string(cclientfd)+"sucessfully");
                     }
+                    break;
                 }
             }
             else if(ret==0)
@@ -4773,7 +4830,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
             }
             ++ii;
-            
+            //k.solveRequest(clientfd[cclientfd],HttpInf[cclientfd],buffer_size,ii);
             }
             //endd=chrono::high_resolution_clock::now();
             //            duration=chrono::duration_cast<chrono::microseconds>(endd-start);
@@ -5210,7 +5267,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         return true;
     }
     
-    int stt::network::WebSocketServerFDHandler::getMessage(TcpFDInf &Tcpinf,WebSocketFDInformation &Websocketinf,const int &ii)
+    int stt::network::WebSocketServerFDHandler::getMessage(TcpFDInf &Tcpinf,WebSocketFDInformation &Websocketinf,const unsigned long &buffer_size,const int &ii)
     {
         /*
             string recv="";
@@ -5223,25 +5280,28 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
             if(ret<=0&&ret!=-100)
                 return -1;
+            
             */
-            /*
-            if(ii==1)
-        {
+
+         //   if(ii==1)
+        //{
+            unsigned long long p_buffer_now_backup=Tcpinf.p_buffer_now;
             int ret=1;
-            while(ret>0&&buffer_size-TcpInf.p_buffer_now>0)
+            while(ret>0&&buffer_size-Tcpinf.p_buffer_now>0)
             {
-                ret=recvData(TcpInf.buffer+TcpInf.p_buffer_now,buffer_size-TcpInf.p_buffer_now);
-                TcpInf.p_buffer_now+=ret;
+                ret=recvData(Tcpinf.buffer+Tcpinf.p_buffer_now,buffer_size-Tcpinf.p_buffer_now);
+                Tcpinf.p_buffer_now+=ret;
             }
             if(ret<=0)
             {
                 if(ret!=-100)
                     return -1;
             }
-        }
+        //}
         
-        TcpInf.data=string_view(TcpInf.buffer,TcpInf.p_buffer_now);
-        */
+
+        Tcpinf.data=string_view(Tcpinf.buffer+p_buffer_now_backup,Tcpinf.p_buffer_now);
+        //cout<<Tcpinf.data<<endl;
             //数据接收完，开始处理
             
             while(1)
@@ -5283,7 +5343,6 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     else
                        Websocketinf.message_type=0;
                     Tcpinf.status=2;
-
                     if(Tcpinf.data.length()>1)
                         Tcpinf.data=Tcpinf.data.substr(1);
                     else
@@ -5368,7 +5427,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     
                     
                 }
-                
+
                 //接收mask
                 if(Tcpinf.status==3)
                 {
@@ -5390,7 +5449,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     Tcpinf.data=Tcpinf.data.substr(4);
                     
                 }
-                
+
                 //接收数据
                 if(Tcpinf.status==4)
                 {
@@ -5398,7 +5457,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     {
                     if(Tcpinf.data.length()<1)
                         return 4;
-                   
+
                     string a;
                     if(Tcpinf.data.length()<=Websocketinf.recv_length)
                     {
@@ -5418,6 +5477,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(Websocketinf.recv_length!=0)
                         return 4;
                     }
+                    //cout<<Websocketinf.message<<endl;
 
                     Tcpinf.status=0;
                     if(Websocketinf.message_type==1)
@@ -5446,7 +5506,6 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 }
             }
  
-            
              return Websocketinf.message_type;
     }
     bool stt::network::WebSocketServerFDHandler::sendMessage(const string &msg,const string &type)
@@ -5558,6 +5617,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             return true;
         }
     }
+
     bool stt::network::WebSocketServer::close(const int &fd,const short &code,const string &message)
     {
         unique_lock<mutex> lock(lwb);
@@ -5671,7 +5731,17 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             
             ul1.unlock();
 
-            
+            if(cclientfd.close)
+            {
+                    auto ii=wbclientfd.find(cclientfd.fd);
+                    if(ii!=wbclientfd.end())
+                    {
+                        TcpServer::close(cclientfd.fd);
+                        wbclientfd.erase(ii);
+                    }
+                continue;
+            }
+
 
             //unique_lock<mutex> lock6(lc1);
             //auto ii=clientfd.find(cclientfd.fd);
@@ -5697,7 +5767,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         continue;
                     }
                 }
-                k.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
+                //k.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
+                //k1.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
                 TcpFDInf &Tcpinf=clientfd[cclientfd.fd];
             //lock6.unlock();
             cout<<"websocket fd="<<cclientfd.fd<<endl;
@@ -5713,6 +5784,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             auto jj=wbclientfd.find(cclientfd.fd);
             if(jj==wbclientfd.end())//没有进行wb握手
             {
+                k.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
+                //k1.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
                 //unique_lock<mutex> lock(lwb);
                 if(stt::system::ServerSetting::logfile!=nullptr)
                 {
@@ -5783,8 +5856,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     keyy=EncodingUtil::base64_encode(result);
                     result=HttpStringUtil::createHeader("Upgrade","websocket","Connection","Upgrade","Sec-WebSocket-Accept",keyy);
                     //清理接收缓冲区可能的数据遗漏
-                    Tcpinf.data={};
-                    if(!k.sendBack("",result,"101"))
+                    //Tcpinf.data={};
+                    
+                    if(!k.sendBack("",result,"101 Switching Protocols"))
                     {
                         //k.close();
                         TcpServer::close(cclientfd.fd);
@@ -5802,7 +5876,6 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     winf.response=::time(0);
                     winf.HBTime=0;
                     wbclientfd.emplace(cclientfd.fd,winf);
-                
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                             if(stt::system::ServerSetting::language=="Chinese")
@@ -5812,10 +5885,15 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
                     thread(fccc,winf,ref(*this)).detach();
                 }
+                //sleep(10);
+                //k.solveRequest(Tcpinf,HttpInf,buffer_size,1);
+                //sleep(5);
+
             }
             else//已经进行了握手操作
             {
-                
+                //k.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
+                k1.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
             int r=1;
              int ii=1;
             while(r!=-1&&r!=4)
@@ -5827,7 +5905,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     else
                         stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(threadID)+" : fd= "+to_string(cclientfd.fd)+" now solveing request... it is the "+to_string(ii)+" times");
                 }
-                int r=k1.getMessage(Tcpinf,jj->second,ii);
+                r=k1.getMessage(Tcpinf,jj->second,buffer_size,ii);
 
                 if(r==-1)
                 {
@@ -5886,6 +5964,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     //记录心跳确认
 
                     jj->second.message="";
+                    break;
                 }
                 else if(r==3)
                 {
@@ -5907,6 +5986,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     //心跳
                     else
                         jj->second.message="";
+                    break;
                 }
                 else if(r==0)//正常报文
                 {
@@ -5924,6 +6004,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         break;
                     }
                     jj->second.message="";
+                    break;
                 }
                 //else if(r==4)
                 //{
@@ -6045,7 +6126,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             //if(stt::system::ServerSetting::logfile!=nullptr)stt::system::ServerSetting::logfile->writeLog("lwb解锁！！！！！！！！！！");
             //cout<<"lwb解锁！！！！！！！！！！"<<endl;
             lock.unlock();
-            sleep(30);
+            //sleep(30);
+            std::unique_lock<std::mutex> lk(hb_m);
+            hb_cv.wait_for(lk, std::chrono::seconds(30), [this]{ return !HBflag1; });
         }
         HBflag=false;
     }
@@ -6423,75 +6506,145 @@ stt::system::HBSystem::~HBSystem()
             cerr<<"close shared memory failed"<<endl;
     }
 }
+inline bool stt::security::ConnectionLimiter::slideAllow(SlidingWindow &win,const std::chrono::steady_clock::time_point &now,int rate )
+{
+    using namespace std::chrono;
+
+    if(rate <= 0) return true;
+
+    auto interval = nanoseconds(1'000'000'000 / rate);
+
+    // 超过一个窗口，重置
+    if(now - win.lastTime >= seconds(1))
+    {
+        win.num = 0;
+        win.lastTime = now;
+    }
+
+    // 太快
+    if(now - win.lastTime < interval && win.num >= rate)
+    {
+        return false;
+    }
+
+    win.num++;
+    win.lastTime = now;
+    return true;
+}
 
 bool stt::security::ConnectionLimiter::allowConnect(const std::string &ip)
 {
-    chrono::steady_clock::time_point now=chrono::steady_clock::now();
-    lock_table.lock();
-    auto ii=connectionTable.find(ip);
-    if(ii==connectionTable.end())//第一次
+    using namespace std::chrono;
+    auto now = steady_clock::now();
+
+    std::lock_guard<std::mutex> guard(lock_table);
+    auto it = connectionTable.find(ip);
+
+    // 第一次连接
+    if(it == connectionTable.end())
     {
-        IPInformation ipf;
-        SlidingWindow ws;
-        ipf.connection.num=1;
-        ipf.connection.lastTime=now;
-        ipf.request.num=0;
-        ipf.request.lastTime=now;
-        lock_pathlim.lock();
-        for(PathLimit &jj:pathLimit)
+        IPInformation info;
+
+        info.connection.num = 1;
+        info.connection.lastTime = now;
+        info.connection.limit = connectionLimit;
+
+        info.request.num = 0;
+        info.request.lastTime = now;
+        info.request.limit = requestRate;
+
+        // 初始化 path 限流
         {
-            ws.num=0;
-            ws.lastTime=now;
-            ws.limit=jj.pathRate;
-            ipf.pathRequest.emplace(jj.path,ws);
+            std::lock_guard<std::mutex> pguard(lock_pathlim);
+            for(auto &pl : pathLimit)
+            {
+                SlidingWindow sw;
+                sw.num = 0;
+                sw.lastTime = now;
+                sw.limit = pl.pathRate;
+                info.pathRequest.emplace(pl.path, sw);
+            }
         }
-        lock_pathlim.unlock();
-        connectionTable.emplace(ip,ipf);
-        lock_table.unlock();
+
+        connectionTable.emplace(ip, std::move(info));
         return true;
     }
-    else//非第一次，要判断是否能连接
-    {
-        if(ii->second.connection.num==connectionLimit)//连接达到上限
-        {
-            lock_table.unlock();
-            return false;
-        }
-        if(chrono::duration_cast<chrono::nanoseconds>(now-ii->second.connection.lastTime).count()*connectionRateLimit<1000000000/connectionRateLimit)//超速
-        {
-            lock_table.unlock();
-            return false;
-        }
-        ii->second.connection.num++;
-        ii->second.connection.lastTime=now;
-        lock_table.unlock();
-        return true;
-    }
+
+    IPInformation &info = it->second;
+
+    // 并发连接数限制
+    if(info.connection.num >= connectionLimit)
+        return false;
+
+    // 连接速率限制
+    if(!slideAllow(info.connection, now, connectionRateLimit))
+        return false;
+
+    info.connection.num++;
+    return true;
 }
 
 void stt::security::ConnectionLimiter::clearIP(const std::string &ip)
 {
-    lock_table.lock();
-    auto ii=connectionTable.find(ip);
-    if(ii!=connectionTable.end())
+    std::lock_guard<std::mutex> guard(lock_table);
+    auto it = connectionTable.find(ip);
+    if(it != connectionTable.end())
     {
-        connectionTable.erase(ii);
+        if(it->second.connection.num > 0)
+            it->second.connection.num--;
     }
-    lock_table.unlock();
 }
 bool stt::security::ConnectionLimiter::allowRequest(const std::string &ip,const std::string_view &path)
 {
-    chrono::steady_clock::time_point now=chrono::steady_clock::now();
-    lock_table.lock();
-    auto ii=connectionTable.find(ip);
-    if(ii==connectionTable.end())//不存在连接
-    {
-        lock_table.unlock();
+    using namespace std::chrono;
+    auto now = steady_clock::now();
+
+    std::lock_guard<std::mutex> guard(lock_table);
+    auto it = connectionTable.find(ip);
+    if(it == connectionTable.end())
         return false;
+
+    IPInformation &info = it->second;
+
+    //  IP 级请求限流
+    if(!slideAllow(info.request, now, requestRate))
+        return false;
+
+    // path 级请求限流（如果存在该路径限制）
+    auto pit = info.pathRequest.find(std::string(path));
+    if(pit != info.pathRequest.end())
+    {
+        if(!slideAllow(pit->second, now, pit->second.limit))
+            return false;
     }
+
     return true;
 }
 bool stt::security::ConnectionLimiter::connectionDetect(const std::string &ip)
 {
+    using namespace std::chrono;
+
+    if(connectionTimeout < 0)
+        return false;
+
+    auto now = steady_clock::now();
+
+    std::lock_guard<std::mutex> guard(lock_table);
+    auto it = connectionTable.find(ip);
+    if(it == connectionTable.end())
+        return false;
+
+    auto &info = it->second;
+
+    auto idle =
+        duration_cast<seconds>(now - info.connection.lastTime).count();
+
+    if(idle > connectionTimeout)
+    {
+        // 视为僵尸连接，直接清理
+        connectionTable.erase(it);
+        return true;
+    }
+
     return false;
 }

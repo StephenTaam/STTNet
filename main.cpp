@@ -7,16 +7,17 @@ using namespace stt::network;
 using namespace stt::system;
 //set global variables
 //设置全局变量
-LogFile lf;
+LogFile *lf;
 HttpServer *httpserver;
 WebSocketServer *s;
 int main(int argc,char *argv[])
 {
+	lf=new LogFile();
 	//init logfile and use logfile system and ignore all signal but 15. And all error signals or unknown exception will transmit signal 15.
 	//初始化日志文件，启用日志系统和设置系统信号；屏蔽除了15外所有信号，所有错误信号和异常都会发送信号15
 	//remember to set the second parameter if you want your logfile write in Chinese (default in English)
 	//如果你想日志系统使用中文记得填入第二个参数（默认英文）
-	//ServerSetting::init(&lf,"Chinese");
+	ServerSetting::init(lf,"Chinese");
 
 	//new a HttpServer Objection
 	//新建一个HttpServer对象
@@ -27,7 +28,8 @@ int main(int argc,char *argv[])
 	signal(15,[](int signal){
 		//lf.writeLog("have received signal 15... Now ready to quit.收到信号15，正在执行退出前的流程");//you can write logfile in English or Chinese as you like here//这里可以按照自己喜好写中文或者英文日志
 		delete httpserver;
-		//delete s;
+		delete s;
+		delete lf;
 		/*
 			...
 			*********You can write the necessary exit process here*************
@@ -66,10 +68,11 @@ int main(int argc,char *argv[])
 		s->setFunction([](const std::string &msg, WebSocketServer &k,const WebSocketFDInformation &inf) -> bool {
 			return k.sendMessage(inf.fd,msg);
     });
-	s->setStartFunction([](const WebSocketFDInformation &inf, WebSocketServer &k) -> void {
-			k.close(inf.fd);
-    });
-	s->startListen(5055,2);
+	//s->setStartFunction([](const WebSocketFDInformation &inf, WebSocketServer &k) -> void {
+	//		k.close(inf.fd);
+    //});
+	s->setTimeOutTime(1);
+	s->startListen(5050,2);
 	
 
 	
