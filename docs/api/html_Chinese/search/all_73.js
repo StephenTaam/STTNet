@@ -27,6 +27,7 @@ var searchData=
   ['sha11',['sha11',['../classstt_1_1data_1_1CryptoUtil.html#ab9b1ebe322673decf8e3d26ec5b3c4fe',1,'stt::data::CryptoUtil']]],
   ['shared_5fmemory_5fkey',['SHARED_MEMORY_KEY',['../sttnet_8h.html#a0b80156f23e93853d4f405d8eb823a9b',1,'sttnet.h']]],
   ['shared_5fmemory_5flock_5fkey',['SHARED_MEMORY_LOCK_KEY',['../sttnet_8h.html#ab081726ac6486f3d4c7499a970569a66',1,'sttnet.h']]],
+  ['slidingwindow',['SlidingWindow',['../structstt_1_1security_1_1SlidingWindow.html',1,'stt::security']]],
   ['solverequest',['solveRequest',['../classstt_1_1network_1_1HttpServerFDHandler.html#a992898f93cae26885a899d1fd4282685',1,'stt::network::HttpServerFDHandler']]],
   ['ssl',['ssl',['../classstt_1_1network_1_1TcpFDHandler.html#a21d3fa9b11f0b144be7cc0ea8f107afb',1,'stt::network::TcpFDHandler::ssl()'],['../structstt_1_1network_1_1TcpFDInf.html#a5792638188b5e41021bbc26b5ffcebe6',1,'stt::network::TcpFDInf::ssl()']]],
   ['startlisten',['startListen',['../classstt_1_1network_1_1EpollSingle.html#a5235682b174e84afff24be8132707f6b',1,'stt::network::EpollSingle::startListen()'],['../classstt_1_1network_1_1TcpServer.html#acd39340be38620b1277d2881a0c8aa34',1,'stt::network::TcpServer::startListen()'],['../classstt_1_1network_1_1HttpServer.html#a6c4bd6e14e2ab5db1e7d8ff5181a7d0c',1,'stt::network::HttpServer::startListen()'],['../classstt_1_1network_1_1WebSocketServer.html#ab2301633d489c53792226bfe39d06d55',1,'stt::network::WebSocketServer::startListen()']]],

@@ -3,16 +3,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.11"/>
+<meta name="generator" content="Doxygen 1.8.5"/>
 <title>STTNet: include/sttnet.h 文件参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
-  $(document).ready(function() { init_search(); });
+  $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
@@ -22,7 +21,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectalign" style="padding-left: 0.5em;">
+  <td style="padding-left: 0.5em;">
    <div id="projectname">STTNet
    </div>
   </td>
@@ -31,7 +30,7 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.11 -->
+<!-- 制作者 Doxygen 1.8.5 -->
 <script type="text/javascript">
 var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </script>
@@ -71,7 +70,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-</div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>页</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -96,222 +95,222 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <div class="title">sttnet.h 文件参考</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;jsoncpp/json/json.h&gt;</code><br />
-<code>#include &lt;string_view&gt;</code><br />
-<code>#include &lt;string&gt;</code><br />
-<code>#include &lt;atomic&gt;</code><br />
-<code>#include &lt;iostream&gt;</code><br />
-<code>#include &lt;unistd.h&gt;</code><br />
-<code>#include &lt;sys/stat.h&gt;</code><br />
-<code>#include &lt;fstream&gt;</code><br />
-<code>#include &lt;fcntl.h&gt;</code><br />
-<code>#include &lt;sstream&gt;</code><br />
-<code>#include &lt;mutex&gt;</code><br />
-<code>#include &lt;chrono&gt;</code><br />
-<code>#include &lt;iomanip&gt;</code><br />
-<code>#include &lt;random&gt;</code><br />
-<code>#include &lt;cmath&gt;</code><br />
-<code>#include &lt;thread&gt;</code><br />
-<code>#include &lt;openssl/sha.h&gt;</code><br />
-<code>#include &lt;netdb.h&gt;</code><br />
-<code>#include &lt;arpa/inet.h&gt;</code><br />
-<code>#include &lt;sys/types.h&gt;</code><br />
-<code>#include &lt;sys/socket.h&gt;</code><br />
-<code>#include &lt;cstring&gt;</code><br />
-<code>#include &lt;openssl/bio.h&gt;</code><br />
-<code>#include &lt;openssl/evp.h&gt;</code><br />
-<code>#include &lt;openssl/buffer.h&gt;</code><br />
-<code>#include &lt;functional&gt;</code><br />
-<code>#include &lt;list&gt;</code><br />
-<code>#include &lt;queue&gt;</code><br />
-<code>#include &lt;sys/epoll.h&gt;</code><br />
-<code>#include &lt;condition_variable&gt;</code><br />
-<code>#include &lt;regex&gt;</code><br />
-<code>#include &lt;unordered_map&gt;</code><br />
-<code>#include &lt;openssl/ssl.h&gt;</code><br />
-<code>#include &lt;openssl/err.h&gt;</code><br />
-<code>#include &lt;openssl/crypto.h&gt;</code><br />
-<code>#include &lt;signal.h&gt;</code><br />
-<code>#include &lt;sys/ipc.h&gt;</code><br />
-<code>#include &lt;sys/sem.h&gt;</code><br />
-<code>#include &lt;sys/wait.h&gt;</code><br />
-<code>#include &lt;sys/shm.h&gt;</code><br />
-<code>#include &lt;type_traits&gt;</code><br />
-<code>#include &lt;charconv&gt;</code><br />
+<div class="textblock"><code>#include &lt;jsoncpp/json/json.h&gt;</code><br/>
+<code>#include &lt;string_view&gt;</code><br/>
+<code>#include &lt;string&gt;</code><br/>
+<code>#include &lt;atomic&gt;</code><br/>
+<code>#include &lt;iostream&gt;</code><br/>
+<code>#include &lt;unistd.h&gt;</code><br/>
+<code>#include &lt;sys/stat.h&gt;</code><br/>
+<code>#include &lt;fstream&gt;</code><br/>
+<code>#include &lt;fcntl.h&gt;</code><br/>
+<code>#include &lt;sstream&gt;</code><br/>
+<code>#include &lt;mutex&gt;</code><br/>
+<code>#include &lt;chrono&gt;</code><br/>
+<code>#include &lt;iomanip&gt;</code><br/>
+<code>#include &lt;random&gt;</code><br/>
+<code>#include &lt;cmath&gt;</code><br/>
+<code>#include &lt;thread&gt;</code><br/>
+<code>#include &lt;openssl/sha.h&gt;</code><br/>
+<code>#include &lt;netdb.h&gt;</code><br/>
+<code>#include &lt;arpa/inet.h&gt;</code><br/>
+<code>#include &lt;sys/types.h&gt;</code><br/>
+<code>#include &lt;sys/socket.h&gt;</code><br/>
+<code>#include &lt;cstring&gt;</code><br/>
+<code>#include &lt;openssl/bio.h&gt;</code><br/>
+<code>#include &lt;openssl/evp.h&gt;</code><br/>
+<code>#include &lt;openssl/buffer.h&gt;</code><br/>
+<code>#include &lt;functional&gt;</code><br/>
+<code>#include &lt;list&gt;</code><br/>
+<code>#include &lt;queue&gt;</code><br/>
+<code>#include &lt;sys/epoll.h&gt;</code><br/>
+<code>#include &lt;condition_variable&gt;</code><br/>
+<code>#include &lt;regex&gt;</code><br/>
+<code>#include &lt;unordered_map&gt;</code><br/>
+<code>#include &lt;openssl/ssl.h&gt;</code><br/>
+<code>#include &lt;openssl/err.h&gt;</code><br/>
+<code>#include &lt;openssl/crypto.h&gt;</code><br/>
+<code>#include &lt;signal.h&gt;</code><br/>
+<code>#include &lt;sys/ipc.h&gt;</code><br/>
+<code>#include &lt;sys/sem.h&gt;</code><br/>
+<code>#include &lt;sys/wait.h&gt;</code><br/>
+<code>#include &lt;sys/shm.h&gt;</code><br/>
+<code>#include &lt;type_traits&gt;</code><br/>
+<code>#include &lt;charconv&gt;</code><br/>
 </div>
 <p><a href="sttnet_8h_source.html">浏览源代码.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 类</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1FileTool.html">stt::file::FileTool</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">提供文件操作的静态函数工具类  <a href="classstt_1_1file_1_1FileTool.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">提供文件操作的静态函数工具类  <a href="classstt_1_1file_1_1FileTool.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1file_1_1FileThreadLock.html">stt::file::FileThreadLock</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">记录文件和线程关系的结构体  <a href="structstt_1_1file_1_1FileThreadLock.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">记录文件和线程关系的结构体  <a href="structstt_1_1file_1_1FileThreadLock.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html">stt::file::File</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">读写磁盘文件的类  <a href="classstt_1_1file_1_1File.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">读写磁盘文件的类  <a href="classstt_1_1file_1_1File.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1time_1_1Duration.html">stt::time::Duration</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">表示时间间隔的结构体，支持天、小时、分钟、秒和毫秒粒度。  <a href="structstt_1_1time_1_1Duration.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">表示时间间隔的结构体，支持天、小时、分钟、秒和毫秒粒度。  <a href="structstt_1_1time_1_1Duration.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1time_1_1DateTime.html">stt::time::DateTime</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">时间操作、运算、计时的类  <a href="classstt_1_1time_1_1DateTime.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">时间操作、运算、计时的类  <a href="classstt_1_1time_1_1DateTime.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1LogFile.html">stt::file::LogFile</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">日志文件操作类  <a href="classstt_1_1file_1_1LogFile.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">日志文件操作类  <a href="classstt_1_1file_1_1LogFile.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1CryptoUtil.html">stt::data::CryptoUtil</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">负责加密，解密和哈希  <a href="classstt_1_1data_1_1CryptoUtil.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">负责加密，解密和哈希  <a href="classstt_1_1data_1_1CryptoUtil.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1BitUtil.html">stt::data::BitUtil</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">负责二进制数据，字符串之间的转化  <a href="classstt_1_1data_1_1BitUtil.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">负责二进制数据，字符串之间的转化  <a href="classstt_1_1data_1_1BitUtil.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1RandomUtil.html">stt::data::RandomUtil</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">随机数，字符串生成相关  <a href="classstt_1_1data_1_1RandomUtil.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">随机数，字符串生成相关  <a href="classstt_1_1data_1_1RandomUtil.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1NetworkOrderUtil.html">stt::data::NetworkOrderUtil</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">负责大小端字节序转换  <a href="classstt_1_1data_1_1NetworkOrderUtil.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">负责大小端字节序转换  <a href="classstt_1_1data_1_1NetworkOrderUtil.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1PrecisionUtil.html">stt::data::PrecisionUtil</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">负责浮点数精度处理  <a href="classstt_1_1data_1_1PrecisionUtil.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">负责浮点数精度处理  <a href="classstt_1_1data_1_1PrecisionUtil.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html">stt::data::HttpStringUtil</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">负责Http字符串和URL解析 包括从 URL 或请求报文中提取参数、IP、端口、请求头字段等功能。  <a href="classstt_1_1data_1_1HttpStringUtil.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">负责Http字符串和URL解析 包括从 URL 或请求报文中提取参数、IP、端口、请求头字段等功能。  <a href="classstt_1_1data_1_1HttpStringUtil.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1WebsocketStringUtil.html">stt::data::WebsocketStringUtil</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">负责websocket协议有关字符串的操作  <a href="classstt_1_1data_1_1WebsocketStringUtil.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">负责websocket协议有关字符串的操作  <a href="classstt_1_1data_1_1WebsocketStringUtil.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1NumberStringConvertUtil.html">stt::data::NumberStringConvertUtil</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">负责字符串和数字的转化  <a href="classstt_1_1data_1_1NumberStringConvertUtil.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">负责字符串和数字的转化  <a href="classstt_1_1data_1_1NumberStringConvertUtil.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1EncodingUtil.html">stt::data::EncodingUtil</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">数据编码解码，掩码处理等  <a href="classstt_1_1data_1_1EncodingUtil.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">数据编码解码，掩码处理等  <a href="classstt_1_1data_1_1EncodingUtil.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1JsonHelper.html">stt::data::JsonHelper</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">json数据操作类  <a href="classstt_1_1data_1_1JsonHelper.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">json数据操作类  <a href="classstt_1_1data_1_1JsonHelper.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1PathLimit.html">stt::security::PathLimit</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">用于特定路径的限速  <a href="structstt_1_1security_1_1PathLimit.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">用于特定路径的限速  <a href="structstt_1_1security_1_1PathLimit.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1SlidingWindow.html">stt::security::SlidingWindow</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">用于实现滑动窗口限速的结构体  <a href="structstt_1_1security_1_1SlidingWindow.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">用于实现滑动窗口限速的结构体  <a href="structstt_1_1security_1_1SlidingWindow.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1IPInformation.html">stt::security::IPInformation</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">记录ip信息的结构体，比如连接数，连接速率等  <a href="structstt_1_1security_1_1IPInformation.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">记录ip信息的结构体，比如连接数，连接速率等  <a href="structstt_1_1security_1_1IPInformation.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html">stt::security::ConnectionLimiter</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">限制同一ip连接的类  <a href="classstt_1_1security_1_1ConnectionLimiter.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">限制同一ip连接的类  <a href="classstt_1_1security_1_1ConnectionLimiter.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">stt::network::TcpFDHandler</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">tcp协议的套接字操作类  <a href="classstt_1_1network_1_1TcpFDHandler.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">tcp协议的套接字操作类  <a href="classstt_1_1network_1_1TcpFDHandler.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpClient.html">stt::network::TcpClient</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">tcp协议客户端操作类  <a href="classstt_1_1network_1_1TcpClient.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">tcp协议客户端操作类  <a href="classstt_1_1network_1_1TcpClient.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html">stt::network::HttpClient</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Http/Https客户端操作类  <a href="classstt_1_1network_1_1HttpClient.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Http/Https客户端操作类  <a href="classstt_1_1network_1_1HttpClient.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1EpollSingle.html">stt::network::EpollSingle</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">用epoll监听单个句柄  <a href="classstt_1_1network_1_1EpollSingle.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">用epoll监听单个句柄  <a href="classstt_1_1network_1_1EpollSingle.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html">stt::network::WebSocketClient</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Websocket客户端操作的类 -如果需要重新设置TLS/Https加密的证书，目前需要销毁对象后重新构造 底层TCP默认是阻塞的  <a href="classstt_1_1network_1_1WebSocketClient.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Websocket客户端操作的类 -如果需要重新设置TLS/Https加密的证书，目前需要销毁对象后重新构造 底层TCP默认是阻塞的  <a href="classstt_1_1network_1_1WebSocketClient.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">stt::network::HttpRequestInformation</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存HTTP/HTTPS请求信息的结构体  <a href="structstt_1_1network_1_1HttpRequestInformation.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存HTTP/HTTPS请求信息的结构体  <a href="structstt_1_1network_1_1HttpRequestInformation.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">stt::network::HttpServerFDHandler</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">解析，响应Http/https请求的操作类 仅传入套接字，然后使用这个类进行Http的操作  <a href="classstt_1_1network_1_1HttpServerFDHandler.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">解析，响应Http/https请求的操作类 仅传入套接字，然后使用这个类进行Http的操作  <a href="classstt_1_1network_1_1HttpServerFDHandler.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">stt::network::WebSocketFDInformation</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存客户端WS/WSS请求信息的结构体  <a href="structstt_1_1network_1_1WebSocketFDInformation.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存客户端WS/WSS请求信息的结构体  <a href="structstt_1_1network_1_1WebSocketFDInformation.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html">stt::network::TcpFDInf</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存Tcp客户端信息的结构体  <a href="structstt_1_1network_1_1TcpFDInf.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存Tcp客户端信息的结构体  <a href="structstt_1_1network_1_1TcpFDInf.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1QueueFD.html">stt::network::QueueFD</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">消息队列元素的结构体  <a href="structstt_1_1network_1_1QueueFD.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">消息队列元素的结构体  <a href="structstt_1_1network_1_1QueueFD.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html">stt::network::TcpServer</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tcp服务端类  <a href="classstt_1_1network_1_1TcpServer.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tcp服务端类  <a href="classstt_1_1network_1_1TcpServer.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html">stt::network::HttpServer</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Http/HttpServer 服务端操作类  <a href="classstt_1_1network_1_1HttpServer.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Http/HttpServer 服务端操作类  <a href="classstt_1_1network_1_1HttpServer.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">stt::network::WebSocketServerFDHandler</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">WebSocket协议的操作类 仅传入套接字，然后使用这个类进行WebSocket的操作  <a href="classstt_1_1network_1_1WebSocketServerFDHandler.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">WebSocket协议的操作类 仅传入套接字，然后使用这个类进行WebSocket的操作  <a href="classstt_1_1network_1_1WebSocketServerFDHandler.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html">stt::network::WebSocketServer</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">WebSocketServer服务端操作类  <a href="classstt_1_1network_1_1WebSocketServer.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">WebSocketServer服务端操作类  <a href="classstt_1_1network_1_1WebSocketServer.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpFDHandler.html">stt::network::UdpFDHandler</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">UDP操作的类 传入套接字进行UDP协议的操作  <a href="classstt_1_1network_1_1UdpFDHandler.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">UDP操作的类 传入套接字进行UDP协议的操作  <a href="classstt_1_1network_1_1UdpFDHandler.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpClient.html">stt::network::UdpClient</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">udp客户端的操作类  <a href="classstt_1_1network_1_1UdpClient.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">udp客户端的操作类  <a href="classstt_1_1network_1_1UdpClient.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpServer.html">stt::network::UdpServer</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">udp服务端的操作类  <a href="classstt_1_1network_1_1UdpServer.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">udp服务端的操作类  <a href="classstt_1_1network_1_1UdpServer.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1ServerSetting.html">stt::system::ServerSetting</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">初始化服务系统的类  <a href="classstt_1_1system_1_1ServerSetting.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">初始化服务系统的类  <a href="classstt_1_1system_1_1ServerSetting.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1csemp.html">stt::system::csemp</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">封装 System V 信号量的同步工具类。  <a href="classstt_1_1system_1_1csemp.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">封装 System V 信号量的同步工具类。  <a href="classstt_1_1system_1_1csemp.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1system_1_1ProcessInf.html">stt::system::ProcessInf</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">进程信息的结构体  <a href="structstt_1_1system_1_1ProcessInf.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">进程信息的结构体  <a href="structstt_1_1system_1_1ProcessInf.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1HBSystem.html">stt::system::HBSystem</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">负责进程心跳监控，调度的类 用于监控服务进程，保证服务进程持续有效运行 进程结束后，0x5095这一块共享内存和信号量都没有删掉 目前只支持最多三个参数的进程加入监控 应该自己手动在程序编写加入心跳监控系统，更新心跳，检查心跳系统的逻辑。该类只提供调用接口。  <a href="classstt_1_1system_1_1HBSystem.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">负责进程心跳监控，调度的类 用于监控服务进程，保证服务进程持续有效运行 进程结束后，0x5095这一块共享内存和信号量都没有删掉 目前只支持最多三个参数的进程加入监控 应该自己手动在程序编写加入心跳监控系统，更新心跳，检查心跳系统的逻辑。该类只提供调用接口。  <a href="classstt_1_1system_1_1HBSystem.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1Process.html">stt::system::Process</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">进程管理的静态工具类  <a href="classstt_1_1system_1_1Process.html#details">更多...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">进程管理的静态工具类  <a href="classstt_1_1system_1_1Process.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 命名空间</h2></td></tr>
-<tr class="memitem:namespacestt"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt.html">stt</a></td></tr>
+<tr class="memitem:namespacestt"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt.html">stt</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespacestt_1_1file"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1file.html">stt::file</a></td></tr>
-<tr class="memdesc:namespacestt_1_1file"><td class="mdescLeft">&#160;</td><td class="mdescRight">文件相关：文件读写，日志等 <br /></td></tr>
+<tr class="memitem:namespacestt_1_1file"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1file.html">stt::file</a></td></tr>
+<tr class="memdesc:namespacestt_1_1file"><td class="mdescLeft">&#160;</td><td class="mdescRight">文件相关：文件读写，日志等 <br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespacestt_1_1time"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1time.html">stt::time</a></td></tr>
-<tr class="memdesc:namespacestt_1_1time"><td class="mdescLeft">&#160;</td><td class="mdescRight">时间相关操作，基础时间工具 <br /></td></tr>
+<tr class="memitem:namespacestt_1_1time"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1time.html">stt::time</a></td></tr>
+<tr class="memdesc:namespacestt_1_1time"><td class="mdescLeft">&#160;</td><td class="mdescRight">时间相关操作，基础时间工具 <br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespacestt_1_1data"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1data.html">stt::data</a></td></tr>
-<tr class="memdesc:namespacestt_1_1data"><td class="mdescLeft">&#160;</td><td class="mdescRight">数据处理 <br /></td></tr>
+<tr class="memitem:namespacestt_1_1data"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1data.html">stt::data</a></td></tr>
+<tr class="memdesc:namespacestt_1_1data"><td class="mdescLeft">&#160;</td><td class="mdescRight">数据处理 <br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespacestt_1_1security"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1security.html">stt::security</a></td></tr>
-<tr class="memdesc:namespacestt_1_1security"><td class="mdescLeft">&#160;</td><td class="mdescRight">涉及信息安全的api <br /></td></tr>
+<tr class="memitem:namespacestt_1_1security"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1security.html">stt::security</a></td></tr>
+<tr class="memdesc:namespacestt_1_1security"><td class="mdescLeft">&#160;</td><td class="mdescRight">涉及信息安全的api <br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespacestt_1_1network"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1network.html">stt::network</a></td></tr>
-<tr class="memdesc:namespacestt_1_1network"><td class="mdescLeft">&#160;</td><td class="mdescRight">网络框架，协议，通信，io多路复用相关 <br /></td></tr>
+<tr class="memitem:namespacestt_1_1network"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1network.html">stt::network</a></td></tr>
+<tr class="memdesc:namespacestt_1_1network"><td class="mdescLeft">&#160;</td><td class="mdescRight">网络框架，协议，通信，io多路复用相关 <br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespacestt_1_1system"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1system.html">stt::system</a></td></tr>
-<tr class="memdesc:namespacestt_1_1system"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统的设置，进程的控制，心跳监控等 <br /></td></tr>
+<tr class="memitem:namespacestt_1_1system"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1system.html">stt::system</a></td></tr>
+<tr class="memdesc:namespacestt_1_1system"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统的设置，进程的控制，心跳监控等 <br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 宏定义</h2></td></tr>
 <tr class="memitem:a5ef63b482e3dd0e042d06df1e4d75bbe"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a>&#160;&#160;&#160;&quot;yyyy-mm-ddThh:mi:ss&quot;</td></tr>
-<tr class="memdesc:a5ef63b482e3dd0e042d06df1e4d75bbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">定义ISO8086A这个宏为"yyyy-mm-ddThh:mi:ss"  <a href="#a5ef63b482e3dd0e042d06df1e4d75bbe">更多...</a><br /></td></tr>
+<tr class="memdesc:a5ef63b482e3dd0e042d06df1e4d75bbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">定义ISO8086A这个宏为"yyyy-mm-ddThh:mi:ss"  <a href="#a5ef63b482e3dd0e042d06df1e4d75bbe">更多...</a><br/></td></tr>
 <tr class="separator:a5ef63b482e3dd0e042d06df1e4d75bbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1730be2d547059768753f6a82566988"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sttnet_8h.html#aa1730be2d547059768753f6a82566988">ISO8086B</a>&#160;&#160;&#160;&quot;yyyy-mm-ddThh:mi:ss.sss&quot;</td></tr>
-<tr class="memdesc:aa1730be2d547059768753f6a82566988"><td class="mdescLeft">&#160;</td><td class="mdescRight">定义ISO8086B这个宏为"yyyy-mm-ddThh:mi:ss.sss"  <a href="#aa1730be2d547059768753f6a82566988">更多...</a><br /></td></tr>
+<tr class="memdesc:aa1730be2d547059768753f6a82566988"><td class="mdescLeft">&#160;</td><td class="mdescRight">定义ISO8086B这个宏为"yyyy-mm-ddThh:mi:ss.sss"  <a href="#aa1730be2d547059768753f6a82566988">更多...</a><br/></td></tr>
 <tr class="separator:aa1730be2d547059768753f6a82566988"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad49d6c18040b4ee47b8db7a2aeccc960"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sttnet_8h.html#ad49d6c18040b4ee47b8db7a2aeccc960">MAX_PROCESS_NAME</a>&#160;&#160;&#160;100</td></tr>
-<tr class="memdesc:ad49d6c18040b4ee47b8db7a2aeccc960"><td class="mdescLeft">&#160;</td><td class="mdescRight">定义MAX_PROCESS_NAME这个宏为100,意思是进程信息中的进程名字长度不超过100个字节  <a href="#ad49d6c18040b4ee47b8db7a2aeccc960">更多...</a><br /></td></tr>
+<tr class="memdesc:ad49d6c18040b4ee47b8db7a2aeccc960"><td class="mdescLeft">&#160;</td><td class="mdescRight">定义MAX_PROCESS_NAME这个宏为100,意思是进程信息中的进程名字长度不超过100个字节  <a href="#ad49d6c18040b4ee47b8db7a2aeccc960">更多...</a><br/></td></tr>
 <tr class="separator:ad49d6c18040b4ee47b8db7a2aeccc960"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ca8d8a89923f4741b8c620322506c15"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sttnet_8h.html#a7ca8d8a89923f4741b8c620322506c15">MAX_PROCESS_INF</a>&#160;&#160;&#160;1000</td></tr>
-<tr class="memdesc:a7ca8d8a89923f4741b8c620322506c15"><td class="mdescLeft">&#160;</td><td class="mdescRight">定义MAX_PROCESS_INF这个宏为1000,意思是进程信息表记录的进程信息最多为1000条  <a href="#a7ca8d8a89923f4741b8c620322506c15">更多...</a><br /></td></tr>
+<tr class="memdesc:a7ca8d8a89923f4741b8c620322506c15"><td class="mdescLeft">&#160;</td><td class="mdescRight">定义MAX_PROCESS_INF这个宏为1000,意思是进程信息表记录的进程信息最多为1000条  <a href="#a7ca8d8a89923f4741b8c620322506c15">更多...</a><br/></td></tr>
 <tr class="separator:a7ca8d8a89923f4741b8c620322506c15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b80156f23e93853d4f405d8eb823a9b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sttnet_8h.html#a0b80156f23e93853d4f405d8eb823a9b">SHARED_MEMORY_KEY</a>&#160;&#160;&#160;0x5095</td></tr>
-<tr class="memdesc:a0b80156f23e93853d4f405d8eb823a9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">定义SHARED_MEMORY_KEY这个宏为0x5095,意思是进程信息表的共享内存键值为0x5095  <a href="#a0b80156f23e93853d4f405d8eb823a9b">更多...</a><br /></td></tr>
+<tr class="memdesc:a0b80156f23e93853d4f405d8eb823a9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">定义SHARED_MEMORY_KEY这个宏为0x5095,意思是进程信息表的共享内存键值为0x5095  <a href="#a0b80156f23e93853d4f405d8eb823a9b">更多...</a><br/></td></tr>
 <tr class="separator:a0b80156f23e93853d4f405d8eb823a9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab081726ac6486f3d4c7499a970569a66"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sttnet_8h.html#ab081726ac6486f3d4c7499a970569a66">SHARED_MEMORY_LOCK_KEY</a>&#160;&#160;&#160;0x5095</td></tr>
-<tr class="memdesc:ab081726ac6486f3d4c7499a970569a66"><td class="mdescLeft">&#160;</td><td class="mdescRight">定义SHARED_MEMORY_LOCK_KEY这个宏为0x5095,意思是操作进程信息表的信号量的键值为0x5095  <a href="#ab081726ac6486f3d4c7499a970569a66">更多...</a><br /></td></tr>
+<tr class="memdesc:ab081726ac6486f3d4c7499a970569a66"><td class="mdescLeft">&#160;</td><td class="mdescRight">定义SHARED_MEMORY_LOCK_KEY这个宏为0x5095,意思是操作进程信息表的信号量的键值为0x5095  <a href="#ab081726ac6486f3d4c7499a970569a66">更多...</a><br/></td></tr>
 <tr class="separator:ab081726ac6486f3d4c7499a970569a66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
@@ -324,7 +323,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 函数</h2></td></tr>
 <tr class="memitem:a25ddd12f207513b18ce95137f92bdc8b"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1time.html#a25ddd12f207513b18ce95137f92bdc8b">stt::time::operator&lt;&lt;</a> (std::ostream &amp;os, const Duration &amp;a)</td></tr>
-<tr class="memdesc:a25ddd12f207513b18ce95137f92bdc8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">将 <a class="el" href="structstt_1_1time_1_1Duration.html" title="表示时间间隔的结构体，支持天、小时、分钟、秒和毫秒粒度。 ">Duration</a> 对象以可读格式输出到流中。  <a href="namespacestt_1_1time.html#a25ddd12f207513b18ce95137f92bdc8b">更多...</a><br /></td></tr>
+<tr class="memdesc:a25ddd12f207513b18ce95137f92bdc8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">将 <a class="el" href="structstt_1_1time_1_1Duration.html" title="表示时间间隔的结构体，支持天、小时、分钟、秒和毫秒粒度。 ">Duration</a> 对象以可读格式输出到流中。  <a href="#a25ddd12f207513b18ce95137f92bdc8b">更多...</a><br/></td></tr>
 <tr class="separator:a25ddd12f207513b18ce95137f92bdc8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">宏定义说明</h2>
@@ -417,7 +416,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <hr class="footer"/><address class="footer"><small>
 制作者 &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.11
+</a> 1.8.5
 </small></address>
 </body>
 </html>

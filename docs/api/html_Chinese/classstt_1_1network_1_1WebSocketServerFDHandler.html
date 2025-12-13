@@ -3,16 +3,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.11"/>
+<meta name="generator" content="Doxygen 1.8.5"/>
 <title>STTNet: stt::network::WebSocketServerFDHandler类 参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
-  $(document).ready(function() { init_search(); });
+  $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
@@ -22,7 +21,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectalign" style="padding-left: 0.5em;">
+  <td style="padding-left: 0.5em;">
    <div id="projectname">STTNet
    </div>
   </td>
@@ -31,7 +30,7 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.11 -->
+<!-- 制作者 Doxygen 1.8.5 -->
 <script type="text/javascript">
 var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </script>
@@ -73,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-</div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>页</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -113,19 +112,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public 成员函数</h2></td></tr>
 <tr class="memitem:adeee2d76d393da6f20912fce74fdaaf6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html#adeee2d76d393da6f20912fce74fdaaf6">setFD</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a0e2ca810e24be8a9335a665a8933b2f8">fd</a>, SSL *<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a21d3fa9b11f0b144be7cc0ea8f107afb">ssl</a>=nullptr, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a035967e9eebf16b1f7626a51aec05690">flag1</a>=false, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a4d510c27152fbe94b3794858d4b22d0e">flag2</a>=true)</td></tr>
-<tr class="memdesc:adeee2d76d393da6f20912fce74fdaaf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">初始化对象，传入套接字等参数  <a href="#adeee2d76d393da6f20912fce74fdaaf6">更多...</a><br /></td></tr>
+<tr class="memdesc:adeee2d76d393da6f20912fce74fdaaf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">初始化对象，传入套接字等参数  <a href="#adeee2d76d393da6f20912fce74fdaaf6">更多...</a><br/></td></tr>
 <tr class="separator:adeee2d76d393da6f20912fce74fdaaf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad06ec1f3177717e1a51e64d3e6fb7d4a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html#ad06ec1f3177717e1a51e64d3e6fb7d4a">getMessage</a> (<a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> &amp;Tcpinf, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;Websocketinf, const int &amp;ii=1)</td></tr>
-<tr class="memdesc:ad06ec1f3177717e1a51e64d3e6fb7d4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取一条websocket消息  <a href="#ad06ec1f3177717e1a51e64d3e6fb7d4a">更多...</a><br /></td></tr>
-<tr class="separator:ad06ec1f3177717e1a51e64d3e6fb7d4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b12447fa1f4f0ba2201348e5c8d08a6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html#a8b12447fa1f4f0ba2201348e5c8d08a6">getMessage</a> (<a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> &amp;Tcpinf, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;Websocketinf, const unsigned long &amp;buffer_size, const int &amp;ii=1)</td></tr>
+<tr class="memdesc:a8b12447fa1f4f0ba2201348e5c8d08a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取一条websocket消息  <a href="#a8b12447fa1f4f0ba2201348e5c8d08a6">更多...</a><br/></td></tr>
+<tr class="separator:a8b12447fa1f4f0ba2201348e5c8d08a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b6442cd9ac75a81063030a3c1bd7724"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html#a2b6442cd9ac75a81063030a3c1bd7724">sendMessage</a> (const std::string &amp;msg, const std::string &amp;type=&quot;0001&quot;)</td></tr>
-<tr class="memdesc:a2b6442cd9ac75a81063030a3c1bd7724"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送一条websocket信息  <a href="#a2b6442cd9ac75a81063030a3c1bd7724">更多...</a><br /></td></tr>
+<tr class="memdesc:a2b6442cd9ac75a81063030a3c1bd7724"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送一条websocket信息  <a href="#a2b6442cd9ac75a81063030a3c1bd7724">更多...</a><br/></td></tr>
 <tr class="separator:a2b6442cd9ac75a81063030a3c1bd7724"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>WebSocket协议的操作类 仅传入套接字，然后使用这个类进行WebSocket的操作 </p>
 </div><h2 class="groupheader">成员函数说明</h2>
-<a class="anchor" id="ad06ec1f3177717e1a51e64d3e6fb7d4a"></a>
+<a class="anchor" id="a8b12447fa1f4f0ba2201348e5c8d08a6"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -140,6 +139,12 @@ Public 成员函数</h2></td></tr>
           <td></td>
           <td class="paramtype"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;&#160;</td>
           <td class="paramname"><em>Websocketinf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const unsigned long &amp;&#160;</td>
+          <td class="paramname"><em>buffer_size</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -160,6 +165,7 @@ Public 成员函数</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">Tcpinf</td><td>保存底层tcp状态的信息 </td></tr>
     <tr><td class="paramname">Websocketinf</td><td>保存websocket协议状态信息 </td></tr>
+    <tr><td class="paramname">buffer_size</td><td>服务器定义的解析缓冲区的大小（单位为字节) </td></tr>
     <tr><td class="paramname">ii</td><td>记录解析次数，一些场合用得到 默认为1 </td></tr>
   </table>
   </dd>
@@ -278,7 +284,7 @@ Public 成员函数</h2></td></tr>
 <hr class="footer"/><address class="footer"><small>
 制作者 &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.11
+</a> 1.8.5
 </small></address>
 </body>
 </html>

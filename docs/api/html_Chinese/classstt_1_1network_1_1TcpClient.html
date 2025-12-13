@@ -3,16 +3,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.11"/>
+<meta name="generator" content="Doxygen 1.8.5"/>
 <title>STTNet: stt::network::TcpClient类 参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
-  $(document).ready(function() { init_search(); });
+  $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
@@ -22,7 +21,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectalign" style="padding-left: 0.5em;">
+  <td style="padding-left: 0.5em;">
    <div id="projectname">STTNet
    </div>
   </td>
@@ -31,7 +30,7 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.11 -->
+<!-- 制作者 Doxygen 1.8.5 -->
 <script type="text/javascript">
 var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </script>
@@ -73,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-</div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>页</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -108,85 +107,85 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
   <map id="stt::network::TcpClient_map" name="stt::network::TcpClient_map">
 <area href="classstt_1_1network_1_1TcpFDHandler.html" title="tcp协议的套接字操作类 " alt="stt::network::TcpFDHandler" shape="rect" coords="92,0,267,24"/>
 <area href="classstt_1_1network_1_1HttpClient.html" title="Http/Https客户端操作类 " alt="stt::network::HttpClient" shape="rect" coords="0,112,175,136"/>
-<area href="classstt_1_1network_1_1WebSocketClient.html" title="Websocket客户端操作的类 -如果需要重新设置TLS/Https加密的证书，目前需要销毁对象后重新构造 底层TCP默认�..." alt="stt::network::WebSocketClient" shape="rect" coords="185,112,360,136"/>
+<area href="classstt_1_1network_1_1WebSocketClient.html" title="Websocket客户端操作的类 -如果需要重新设置TLS/Https加密的证书，目前需要销毁对象后重新构造 底层TCP默认是阻塞的 " alt="stt::network::WebSocketClient" shape="rect" coords="185,112,360,136"/>
 </map>
  </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public 成员函数</h2></td></tr>
 <tr class="memitem:ae028d2eb42d1efd17ff219681e108bb2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpClient.html#ae028d2eb42d1efd17ff219681e108bb2">TcpClient</a> (const bool &amp;TLS=false, const char *ca=&quot;&quot;, const char *cert=&quot;&quot;, const char *key=&quot;&quot;, const char *passwd=&quot;&quot;)</td></tr>
-<tr class="memdesc:ae028d2eb42d1efd17ff219681e108bb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">TcpClient类的构造函数  <a href="#ae028d2eb42d1efd17ff219681e108bb2">更多...</a><br /></td></tr>
+<tr class="memdesc:ae028d2eb42d1efd17ff219681e108bb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">TcpClient类的构造函数  <a href="#ae028d2eb42d1efd17ff219681e108bb2">更多...</a><br/></td></tr>
 <tr class="separator:ae028d2eb42d1efd17ff219681e108bb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa97fcdc0e7fd57f0f6529276cd25d840"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpClient.html#aa97fcdc0e7fd57f0f6529276cd25d840">connect</a> (const std::string &amp;ip, const int &amp;port)</td></tr>
-<tr class="memdesc:aa97fcdc0e7fd57f0f6529276cd25d840"><td class="mdescLeft">&#160;</td><td class="mdescRight">向服务端发起tcp连接  <a href="#aa97fcdc0e7fd57f0f6529276cd25d840">更多...</a><br /></td></tr>
+<tr class="memdesc:aa97fcdc0e7fd57f0f6529276cd25d840"><td class="mdescLeft">&#160;</td><td class="mdescRight">向服务端发起tcp连接  <a href="#aa97fcdc0e7fd57f0f6529276cd25d840">更多...</a><br/></td></tr>
 <tr class="separator:aa97fcdc0e7fd57f0f6529276cd25d840"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4f4257567d6aaeebd07225263409445"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpClient.html#ab4f4257567d6aaeebd07225263409445">resetCTX</a> (const bool &amp;TLS=false, const char *ca=&quot;&quot;, const char *cert=&quot;&quot;, const char *key=&quot;&quot;, const char *passwd=&quot;&quot;)</td></tr>
-<tr class="memdesc:ab4f4257567d6aaeebd07225263409445"><td class="mdescLeft">&#160;</td><td class="mdescRight">重新或第一次设置TLS加密参数  <a href="#ab4f4257567d6aaeebd07225263409445">更多...</a><br /></td></tr>
+<tr class="memdesc:ab4f4257567d6aaeebd07225263409445"><td class="mdescLeft">&#160;</td><td class="mdescRight">重新或第一次设置TLS加密参数  <a href="#ab4f4257567d6aaeebd07225263409445">更多...</a><br/></td></tr>
 <tr class="separator:ab4f4257567d6aaeebd07225263409445"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e27f1a4f79131a4654c0550e311cc0f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpClient.html#a0e27f1a4f79131a4654c0550e311cc0f">close</a> ()</td></tr>
-<tr class="memdesc:a0e27f1a4f79131a4654c0550e311cc0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">如果对象有套接字连接，关闭和释放这个连接和套接字，并且重新新建一个套接字。  <a href="#a0e27f1a4f79131a4654c0550e311cc0f">更多...</a><br /></td></tr>
+<tr class="memdesc:a0e27f1a4f79131a4654c0550e311cc0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">如果对象有套接字连接，关闭和释放这个连接和套接字，并且重新新建一个套接字。  <a href="#a0e27f1a4f79131a4654c0550e311cc0f">更多...</a><br/></td></tr>
 <tr class="separator:a0e27f1a4f79131a4654c0550e311cc0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5df310c137d88b75799c51a7f012697"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpClient.html#ac5df310c137d88b75799c51a7f012697">~TcpClient</a> ()</td></tr>
-<tr class="memdesc:ac5df310c137d88b75799c51a7f012697"><td class="mdescLeft">&#160;</td><td class="mdescRight">TcpClient的析构函数，会关闭释放套接字和其连接  <a href="#ac5df310c137d88b75799c51a7f012697">更多...</a><br /></td></tr>
+<tr class="memdesc:ac5df310c137d88b75799c51a7f012697"><td class="mdescLeft">&#160;</td><td class="mdescRight">TcpClient的析构函数，会关闭释放套接字和其连接  <a href="#ac5df310c137d88b75799c51a7f012697">更多...</a><br/></td></tr>
 <tr class="separator:ac5df310c137d88b75799c51a7f012697"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81af3cbb2d254ab0225553c2e42f04cf"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpClient.html#a81af3cbb2d254ab0225553c2e42f04cf">getServerIP</a> ()</td></tr>
-<tr class="memdesc:a81af3cbb2d254ab0225553c2e42f04cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">返回已连接的服务端的ip return 已连接的服务端的ip  <a href="#a81af3cbb2d254ab0225553c2e42f04cf">更多...</a><br /></td></tr>
+<tr class="memdesc:a81af3cbb2d254ab0225553c2e42f04cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">返回已连接的服务端的ip return 已连接的服务端的ip  <a href="#a81af3cbb2d254ab0225553c2e42f04cf">更多...</a><br/></td></tr>
 <tr class="separator:a81af3cbb2d254ab0225553c2e42f04cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a51b442579f56a15a46b2a09e18793dab"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpClient.html#a51b442579f56a15a46b2a09e18793dab">getServerPort</a> ()</td></tr>
-<tr class="memdesc:a51b442579f56a15a46b2a09e18793dab"><td class="mdescLeft">&#160;</td><td class="mdescRight">返回已连接的客户端的端口 return 已连接的服务端的端口  <a href="#a51b442579f56a15a46b2a09e18793dab">更多...</a><br /></td></tr>
+<tr class="memdesc:a51b442579f56a15a46b2a09e18793dab"><td class="mdescLeft">&#160;</td><td class="mdescRight">返回已连接的客户端的端口 return 已连接的服务端的端口  <a href="#a51b442579f56a15a46b2a09e18793dab">更多...</a><br/></td></tr>
 <tr class="separator:a51b442579f56a15a46b2a09e18793dab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5adf67d71e57fd326d11b5cb8c8ad756"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpClient.html#a5adf67d71e57fd326d11b5cb8c8ad756">isConnect</a> ()</td></tr>
-<tr class="memdesc:a5adf67d71e57fd326d11b5cb8c8ad756"><td class="mdescLeft">&#160;</td><td class="mdescRight">返回对象的连接状态  <a href="#a5adf67d71e57fd326d11b5cb8c8ad756">更多...</a><br /></td></tr>
+<tr class="memdesc:a5adf67d71e57fd326d11b5cb8c8ad756"><td class="mdescLeft">&#160;</td><td class="mdescRight">返回对象的连接状态  <a href="#a5adf67d71e57fd326d11b5cb8c8ad756">更多...</a><br/></td></tr>
 <tr class="separator:a5adf67d71e57fd326d11b5cb8c8ad756"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classstt_1_1network_1_1TcpFDHandler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classstt_1_1network_1_1TcpFDHandler')"><img src="closed.png" alt="-"/>&#160;Public 成员函数 继承自 <a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">stt::network::TcpFDHandler</a></td></tr>
 <tr class="memitem:ab71525a4c022c4c58acfa7ec97d46a56 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#ab71525a4c022c4c58acfa7ec97d46a56">setFD</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a0e2ca810e24be8a9335a665a8933b2f8">fd</a>, SSL *<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a21d3fa9b11f0b144be7cc0ea8f107afb">ssl</a>, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a035967e9eebf16b1f7626a51aec05690">flag1</a>=false, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a4d510c27152fbe94b3794858d4b22d0e">flag2</a>=false, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a>=-1)</td></tr>
-<tr class="memdesc:ab71525a4c022c4c58acfa7ec97d46a56 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">传入套接字初始化对象  <a href="#ab71525a4c022c4c58acfa7ec97d46a56">更多...</a><br /></td></tr>
+<tr class="memdesc:ab71525a4c022c4c58acfa7ec97d46a56 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">传入套接字初始化对象  <a href="#ab71525a4c022c4c58acfa7ec97d46a56">更多...</a><br/></td></tr>
 <tr class="separator:ab71525a4c022c4c58acfa7ec97d46a56 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a217de98d7c8df98233599cdbd1a4e52c inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a217de98d7c8df98233599cdbd1a4e52c">getFD</a> ()</td></tr>
-<tr class="memdesc:a217de98d7c8df98233599cdbd1a4e52c inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取该对象的套接字  <a href="#a217de98d7c8df98233599cdbd1a4e52c">更多...</a><br /></td></tr>
+<tr class="memdesc:a217de98d7c8df98233599cdbd1a4e52c inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取该对象的套接字  <a href="#a217de98d7c8df98233599cdbd1a4e52c">更多...</a><br/></td></tr>
 <tr class="separator:a217de98d7c8df98233599cdbd1a4e52c inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a514a76ea0accee76e08cf97902d223e7 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">SSL *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a514a76ea0accee76e08cf97902d223e7">getSSL</a> ()</td></tr>
-<tr class="memdesc:a514a76ea0accee76e08cf97902d223e7 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取该对象的加密SSL句柄  <a href="#a514a76ea0accee76e08cf97902d223e7">更多...</a><br /></td></tr>
+<tr class="memdesc:a514a76ea0accee76e08cf97902d223e7 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取该对象的加密SSL句柄  <a href="#a514a76ea0accee76e08cf97902d223e7">更多...</a><br/></td></tr>
 <tr class="separator:a514a76ea0accee76e08cf97902d223e7 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79895e184bbef0e6cfe8c0684501c1bc inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a79895e184bbef0e6cfe8c0684501c1bc">close</a> (const bool &amp;cle=true)</td></tr>
-<tr class="memdesc:a79895e184bbef0e6cfe8c0684501c1bc inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭对象  <a href="#a79895e184bbef0e6cfe8c0684501c1bc">更多...</a><br /></td></tr>
+<tr class="memdesc:a79895e184bbef0e6cfe8c0684501c1bc inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭对象  <a href="#a79895e184bbef0e6cfe8c0684501c1bc">更多...</a><br/></td></tr>
 <tr class="separator:a79895e184bbef0e6cfe8c0684501c1bc inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6cf6c36f39d7e81633c569fe1505676a inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a6cf6c36f39d7e81633c569fe1505676a">blockSet</a> (const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a>=-1)</td></tr>
-<tr class="memdesc:a6cf6c36f39d7e81633c569fe1505676a inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置对象中的套接字为阻塞模式  <a href="#a6cf6c36f39d7e81633c569fe1505676a">更多...</a><br /></td></tr>
+<tr class="memdesc:a6cf6c36f39d7e81633c569fe1505676a inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置对象中的套接字为阻塞模式  <a href="#a6cf6c36f39d7e81633c569fe1505676a">更多...</a><br/></td></tr>
 <tr class="separator:a6cf6c36f39d7e81633c569fe1505676a inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93726054291d3b786e2d289c808fd3a2 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a93726054291d3b786e2d289c808fd3a2">unblockSet</a> ()</td></tr>
-<tr class="memdesc:a93726054291d3b786e2d289c808fd3a2 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置对象中的套接字为非阻塞模式  <a href="#a93726054291d3b786e2d289c808fd3a2">更多...</a><br /></td></tr>
+<tr class="memdesc:a93726054291d3b786e2d289c808fd3a2 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置对象中的套接字为非阻塞模式  <a href="#a93726054291d3b786e2d289c808fd3a2">更多...</a><br/></td></tr>
 <tr class="separator:a93726054291d3b786e2d289c808fd3a2 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8fd0aa6aec5db38c330b227297628035 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a8fd0aa6aec5db38c330b227297628035">multiUseSet</a> ()</td></tr>
-<tr class="memdesc:a8fd0aa6aec5db38c330b227297628035 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置对象中的套接字为SO_REUSEADDR模式  <a href="#a8fd0aa6aec5db38c330b227297628035">更多...</a><br /></td></tr>
+<tr class="memdesc:a8fd0aa6aec5db38c330b227297628035 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置对象中的套接字为SO_REUSEADDR模式  <a href="#a8fd0aa6aec5db38c330b227297628035">更多...</a><br/></td></tr>
 <tr class="separator:a8fd0aa6aec5db38c330b227297628035 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f5e4b3d7e80e33a53e1c86b67510278 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a8f5e4b3d7e80e33a53e1c86b67510278">isConnect</a> ()</td></tr>
-<tr class="memdesc:a8f5e4b3d7e80e33a53e1c86b67510278 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">判断对象是否有套接字绑定  <a href="#a8f5e4b3d7e80e33a53e1c86b67510278">更多...</a><br /></td></tr>
+<tr class="memdesc:a8f5e4b3d7e80e33a53e1c86b67510278 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">判断对象是否有套接字绑定  <a href="#a8f5e4b3d7e80e33a53e1c86b67510278">更多...</a><br/></td></tr>
 <tr class="separator:a8f5e4b3d7e80e33a53e1c86b67510278 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aead088b6ea93fcae0d3509f096316d63 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#aead088b6ea93fcae0d3509f096316d63">sendData</a> (const std::string &amp;data, const bool &amp;block=true)</td></tr>
-<tr class="memdesc:aead088b6ea93fcae0d3509f096316d63 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">向已连接的套接字发送字符串数据。  <a href="#aead088b6ea93fcae0d3509f096316d63">更多...</a><br /></td></tr>
+<tr class="memdesc:aead088b6ea93fcae0d3509f096316d63 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">向已连接的套接字发送字符串数据。  <a href="#aead088b6ea93fcae0d3509f096316d63">更多...</a><br/></td></tr>
 <tr class="separator:aead088b6ea93fcae0d3509f096316d63 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7890ad3bebfeeeed4d67c4b3ce0f72b4 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7890ad3bebfeeeed4d67c4b3ce0f72b4">sendData</a> (const char *data, const uint64_t &amp;length, const bool &amp;block=true)</td></tr>
-<tr class="memdesc:a7890ad3bebfeeeed4d67c4b3ce0f72b4 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">向已连接的套接字发送指定长度的二进制数据。  <a href="#a7890ad3bebfeeeed4d67c4b3ce0f72b4">更多...</a><br /></td></tr>
+<tr class="memdesc:a7890ad3bebfeeeed4d67c4b3ce0f72b4 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">向已连接的套接字发送指定长度的二进制数据。  <a href="#a7890ad3bebfeeeed4d67c4b3ce0f72b4">更多...</a><br/></td></tr>
 <tr class="separator:a7890ad3bebfeeeed4d67c4b3ce0f72b4 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d12a36453b01e460373633ad9b09ed7 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a4d12a36453b01e460373633ad9b09ed7">recvDataByLength</a> (std::string &amp;data, const uint64_t &amp;length, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a>=2)</td></tr>
-<tr class="memdesc:a4d12a36453b01e460373633ad9b09ed7 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">从已连接的套接字中阻塞接收指定长度的数据到字符串  <a href="#a4d12a36453b01e460373633ad9b09ed7">更多...</a><br /></td></tr>
+<tr class="memdesc:a4d12a36453b01e460373633ad9b09ed7 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">从已连接的套接字中阻塞接收指定长度的数据到字符串  <a href="#a4d12a36453b01e460373633ad9b09ed7">更多...</a><br/></td></tr>
 <tr class="separator:a4d12a36453b01e460373633ad9b09ed7 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bf6a148bd15cc6abaa3c6fcae98641e inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a1bf6a148bd15cc6abaa3c6fcae98641e">recvDataByLength</a> (char *data, const uint64_t &amp;length, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a7ec216fea83f00a5750852e101ca4ef0">sec</a>=2)</td></tr>
-<tr class="memdesc:a1bf6a148bd15cc6abaa3c6fcae98641e inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">从已连接的套接字中阻塞接收指定长度的数据到char*容器  <a href="#a1bf6a148bd15cc6abaa3c6fcae98641e">更多...</a><br /></td></tr>
+<tr class="memdesc:a1bf6a148bd15cc6abaa3c6fcae98641e inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">从已连接的套接字中阻塞接收指定长度的数据到char*容器  <a href="#a1bf6a148bd15cc6abaa3c6fcae98641e">更多...</a><br/></td></tr>
 <tr class="separator:a1bf6a148bd15cc6abaa3c6fcae98641e inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e302132d955321d11fd0198fd93b968 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a9e302132d955321d11fd0198fd93b968">recvData</a> (std::string &amp;data, const uint64_t &amp;length)</td></tr>
-<tr class="memdesc:a9e302132d955321d11fd0198fd93b968 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">从已连接的套接字中接收一次数据到string字符串容器  <a href="#a9e302132d955321d11fd0198fd93b968">更多...</a><br /></td></tr>
+<tr class="memdesc:a9e302132d955321d11fd0198fd93b968 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">从已连接的套接字中接收一次数据到string字符串容器  <a href="#a9e302132d955321d11fd0198fd93b968">更多...</a><br/></td></tr>
 <tr class="separator:a9e302132d955321d11fd0198fd93b968 inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19b87d7c62b9ea4251cd963e721dcfbb inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a19b87d7c62b9ea4251cd963e721dcfbb">recvData</a> (char *data, const uint64_t &amp;length)</td></tr>
-<tr class="memdesc:a19b87d7c62b9ea4251cd963e721dcfbb inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">从已连接的套接字中接收一次数据到char*容器  <a href="#a19b87d7c62b9ea4251cd963e721dcfbb">更多...</a><br /></td></tr>
+<tr class="memdesc:a19b87d7c62b9ea4251cd963e721dcfbb inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">从已连接的套接字中接收一次数据到char*容器  <a href="#a19b87d7c62b9ea4251cd963e721dcfbb">更多...</a><br/></td></tr>
 <tr class="separator:a19b87d7c62b9ea4251cd963e721dcfbb inherit pub_methods_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 额外继承的成员函数</h2></td></tr>
 <tr class="inherit_header pub_attribs_classstt_1_1network_1_1TcpFDHandler"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classstt_1_1network_1_1TcpFDHandler')"><img src="closed.png" alt="-"/>&#160;Public 属性 继承自 <a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">stt::network::TcpFDHandler</a></td></tr>
 <tr class="memitem:aa757f19a1c5b4929829e2a19e6714a4e inherit pub_attribs_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#aa757f19a1c5b4929829e2a19e6714a4e">flag3</a> =false</td></tr>
-<tr class="memdesc:aa757f19a1c5b4929829e2a19e6714a4e inherit pub_attribs_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">如果sendData的block=true，如果发送过程中连接断开，这个标志位会置为true  <a href="#aa757f19a1c5b4929829e2a19e6714a4e">更多...</a><br /></td></tr>
+<tr class="memdesc:aa757f19a1c5b4929829e2a19e6714a4e inherit pub_attribs_classstt_1_1network_1_1TcpFDHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">如果sendData的block=true，如果发送过程中连接断开，这个标志位会置为true  <a href="#aa757f19a1c5b4929829e2a19e6714a4e">更多...</a><br/></td></tr>
 <tr class="separator:aa757f19a1c5b4929829e2a19e6714a4e inherit pub_attribs_classstt_1_1network_1_1TcpFDHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classstt_1_1network_1_1TcpFDHandler"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classstt_1_1network_1_1TcpFDHandler')"><img src="closed.png" alt="-"/>&#160;Protected 属性 继承自 <a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">stt::network::TcpFDHandler</a></td></tr>
 <tr class="memitem:a0e2ca810e24be8a9335a665a8933b2f8 inherit pro_attribs_classstt_1_1network_1_1TcpFDHandler"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a0e2ca810e24be8a9335a665a8933b2f8">fd</a> =-1</td></tr>
@@ -482,7 +481,7 @@ Public 成员函数</h2></td></tr>
 <hr class="footer"/><address class="footer"><small>
 制作者 &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.11
+</a> 1.8.5
 </small></address>
 </body>
 </html>

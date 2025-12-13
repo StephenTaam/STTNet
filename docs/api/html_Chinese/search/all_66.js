@@ -13,6 +13,8 @@ var searchData=
   ['flag1',['flag1',['../classstt_1_1network_1_1TcpFDHandler.html#a035967e9eebf16b1f7626a51aec05690',1,'stt::network::TcpFDHandler::flag1()'],['../classstt_1_1network_1_1TcpServer.html#abb62cf93ae93211e7bbe9f16ed73a802',1,'stt::network::TcpServer::flag1()'],['../classstt_1_1network_1_1UdpFDHandler.html#aafa193a4cb288f5dbbd5a78c36ec0eec',1,'stt::network::UdpFDHandler::flag1()']]],
   ['flag2',['flag2',['../classstt_1_1network_1_1TcpFDHandler.html#a4d510c27152fbe94b3794858d4b22d0e',1,'stt::network::TcpFDHandler::flag2()'],['../classstt_1_1network_1_1UdpFDHandler.html#aa2a923d69f4c7aeefbcc5916c6e3cafc',1,'stt::network::UdpFDHandler::flag2()']]],
   ['flag3',['flag3',['../classstt_1_1network_1_1TcpFDHandler.html#aa757f19a1c5b4929829e2a19e6714a4e',1,'stt::network::TcpFDHandler']]],
+  ['flag_5fdetect',['flag_detect',['../classstt_1_1network_1_1TcpServer.html#af9ad52ea8cbf6782378b1d8be8cf1278',1,'stt::network::TcpServer']]],
+  ['flag_5fdetect_5fstatus',['flag_detect_status',['../classstt_1_1network_1_1TcpServer.html#a6dcdd2af95b79cd557ec0b307c4aedc2',1,'stt::network::TcpServer']]],
   ['format',['format',['../classstt_1_1file_1_1File.html#a078268f697bac4b26edd8cb423ff8fdf',1,'stt::file::File']]],
   ['formatc',['formatC',['../classstt_1_1file_1_1File.html#ab4760645d371bdedc44c37b6f8b987f9',1,'stt::file::File']]]
 ];

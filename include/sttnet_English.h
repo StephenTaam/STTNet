@@ -936,7 +936,16 @@ class LogFile : private time::DateTime, protected file::File
 private:
     std::string timeFormat;
     std::string contentFormat;
+    std::atomic<bool> consumerGuard{true};
+    std::mutex queueMutex;
+    std::condition_variable queueCV;
+    std::queue<std::string> logQueue;
+    std::thread consumerThread;
 public:
+    /**
+    * @brief Constructor, initializes the consumer thread
+    */
+    LogFile();
     /**
     * @brief Open a log file
     * @note Create if not exists (including directories). Default directory permission: rwx rwx r-x, 
@@ -966,9 +975,8 @@ public:
     /**
     * @brief Write a line of log
     * @param data Content to be written to the log
-    * @return true for successful write, false for failure
     */
-    bool writeLog(const std::string &data);
+    void writeLog(const std::string &data);
     /**
     * @brief Clear all logs
     * @return true for successful clear, false for failure
@@ -982,6 +990,10 @@ public:
     * @return true for successful deletion, false for failure
     */
     bool deleteLogByTime(const std::string &date1 = "1", const std::string &date2 = "2");
+    /**
+    * @brief The destructor writes the log and then closes the consumer thread.
+    */
+    ~LogFile();
 };
 }
     /**
@@ -1756,6 +1768,7 @@ public:
             std::unordered_map<std::string,IPInformation> connectionTable;
             std::mutex lock_table;
             std::mutex lock_pathlim;
+            static inline bool slideAllow(SlidingWindow &win,const std::chrono::steady_clock::time_point &now,int rate );// 每秒允许多少次
         public:
             /**
             * @brief ConnectionLimiter constructor
@@ -2639,7 +2652,7 @@ public:
         * @param checkFrequency The frequency of checking zombie connections (in minutes) The default is 1 minute -1 means no check
         * @param connectionTimeout The number of seconds that a connection is considered a zombie connection if there is no response (in seconds) The default is 60 seconds -1 means no limit
         */
-        TcpServer(const unsigned long long &maxFD=10000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit,requestRate,connectionTimeout),security_open(security_open),buffer_size(buffer_size*1024),checkFrequency{}
+        TcpServer(const unsigned long long &maxFD=10000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit,requestRate,connectionTimeout),security_open(security_open),buffer_size(buffer_size*1024),checkFrequency(checkFrequency){}
         /**
         * @brief Start the TCP server listening program
         * @param port Port to listen on
@@ -2803,6 +2816,7 @@ public:
         * @brief Get a websocket message
         * @param Tcpinf saves the underlying TCP status information
         * @param Websocketinf saves the websocket protocol status information
+        * @param buffer_size The size of the server-defined parsing buffer (in bytes).
         * @param ii Record the number of resolutions, which can be used in some cases The default is 1
         * @return
         * -1: Failed to get
@@ -2820,7 +2834,7 @@ public:
         * 4 Receiving messages
         *
         */
-        int getMessage(TcpFDInf &Tcpinf,WebSocketFDInformation &Websocketinf,const int &ii=1);
+        int getMessage(TcpFDInf &Tcpinf,WebSocketFDInformation &Websocketinf,const unsigned long &buffer_size,const int &ii=1);
         /**
         * @brief Send a websocket message
         * @param msg Websocket message to be sent
@@ -2864,6 +2878,8 @@ public:
        
         void closeAck(const int &fd, const std::string &closeCodeAndMessage);
         void closeAck(const int &fd, const short &code = 1000, const std::string &message = "bye");
+        std::condition_variable hb_cv;
+        std::mutex hb_m;
         void HB();
         bool closeWithoutLock(const int &fd, const std::string &closeCodeAndMessage);
         bool closeWithoutLock(const int &fd, const short &code = 1000, const std::string &message = "bye");
@@ -3021,7 +3037,7 @@ public:
         * @brief Destructor of WebSocketServer
         * @note When destroying the object, it will block until all connections and listening are closed
         */
-        ~WebSocketServer() { HBflag1 = false; while(HBflag); }
+        ~WebSocketServer() { {std::lock_guard<std::mutex> lk(hb_m);HBflag1=false;}hb_cv.notify_all(); while(HBflag); }
     };
 
     /**
