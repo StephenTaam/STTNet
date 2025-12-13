@@ -232,6 +232,11 @@ fix bug
 ### v.0.3.4 - 2025-08-28
 Added information security module and updated network optimization.
 
+### v.0.3.4 - 2025-12-14
+1. The logging system was changed to asynchronous logging to optimize performance.
+2. Minor functionalities were added to the information security module.
+3. Numerous bugs were fixed.
+
 
 ## STTNet
 ## C++ 轻量级高性能网络框架
@@ -463,3 +468,6 @@ fix bug
 
 ### v.0.3.4 - 2025-08-28
 加入信息安全模块，更新了网络优化。
+
+### v.0.3.4 - 2025-12-14
+1，日志系统改为异步日志，优化性能。2，补完信息安全模块的小功能 3，修复大量bug。

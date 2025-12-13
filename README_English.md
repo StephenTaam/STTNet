@@ -231,3 +231,8 @@ fix bug
 
 ### v.0.3.4 - 2025-08-28
 Added information security module and updated network optimization.
+
+### v.0.3.4 - 2025-12-14
+1. The logging system was changed to asynchronous logging to optimize performance.
+2. Minor functionalities were added to the information security module.
+3. Numerous bugs were fixed.
