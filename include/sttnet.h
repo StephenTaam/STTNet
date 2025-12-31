@@ -2854,12 +2854,15 @@ namespace stt
         * -参数：HttpServerFDHandler &k - 和客户端连接的套接字的操作对象的引用
         *       HttpRequestInformation &inf - 客户端信息，保存数据，处理进度，状态机信息等
         * -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 0:处理流程已经扔入工作线程池，需要等待处理完成 1:处理成功
-        * @example httpserver->setFunction("/ping",[](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
+        * @example 
+        * @code httpserver->setFunction("/ping",[](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
 	                {
 		                k.sendBack("pong");
 		                return 1;
 	                });
-        * @example httpserver->setFunction("/ping",[](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
+        * @endcode
+        * @example 
+        * @code httpserver->setFunction("/ping",[](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
 	                {
 		                httpserver->putTask([](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
 		                {
@@ -2868,6 +2871,7 @@ namespace stt
 		                },k,inf);
 		                return 0;
 	                });
+        * @endcode
         */
         void setFunction(const std::string &key,std::function<int(HttpServerFDHandler &k,HttpRequestInformation &inf)> fc)
         {
@@ -2882,11 +2886,13 @@ namespace stt
         * -参数：HttpServerFDHandler &k - 和客户端连接的套接字的操作对象的引用
         *       HttpRequestInformation &inf - 客户端信息，保存数据，处理进度，状态机信息等
         * -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 0:处理流程已经扔入工作线程池，需要等待处理完成 1:处理成功
-        * @example httpserver->setGetKeyFunction([](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
+        * @example 
+        * @code httpserver->setGetKeyFunction([](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
 	                {
 			            inf.ctx["key"]=inf.loc;
 			            return 1;
 	                });
+        * @endcode
         */
         void setGetKeyFunction(std::function<int(HttpServerFDHandler &k,HttpRequestInformation &inf)> parseKeyFun){this->parseKey=parseKeyFun;}
         /**
@@ -3065,11 +3071,13 @@ namespace stt
         * -参数：WebSocketServerFDHandler &k - 和客户端连接的套接字的操作对象的引用
         *       WebSocketFDInformation &inf - 客户端信息，保存数据，处理进度，状态机信息等
         * -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 0:处理流程已经扔入工作线程池，需要等待处理完成 1:处理成功
-        * @example s->setFunction("ping",[](WebSocketServerFDHandler &k,WebSocketFDInformation &inf)->int
+        * @example 
+        * @code s->setFunction("ping",[](WebSocketServerFDHandler &k,WebSocketFDInformation &inf)->int
 	                {
 		                k.sendMessage("pong");
 		                return 1;
 	                });
+        * @endcode
         */
         void setFunction(const std::string &key,std::function<int(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> fc)
         {
@@ -3084,11 +3092,13 @@ namespace stt
         * -参数：WebSocketServerFDHandler &k - 和客户端连接的套接字的操作对象的引用
         *       WebSocketFDInformation &inf - 客户端信息，保存数据，处理进度，状态机信息等
         * -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 0:处理流程已经扔入工作线程池，需要等待处理完成 1:处理成功
-        * @example s->setGetKeyFunction([](WebSocketServerFDHandler &k,WebSocketFDInformation &inf)->int
+        * @example 
+        * @code s->setGetKeyFunction([](WebSocketServerFDHandler &k,WebSocketFDInformation &inf)->int
 	                {
 			            inf.ctx["key"]=inf.message;
 			            return 1;
 		            });
+        * @endcode
         */
         void setGetKeyFunction(std::function<int(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> parseKeyFun){this->parseKey=parseKeyFun;}
         //void setFunction(std::function<bool(const std::string &msg,WebSocketServer &k,const WebSocketFDInformation &inf)> fc){this->fc=fc;}

@@ -122,54 +122,155 @@ g++ -std=c++11 -o main main.cpp src/sttnet.cpp -ljsoncpp -lssl -lcrypto -lpthrea
 ## 🧪 Sample Code: Starting an HTTP Server
 
 ```cpp
-#include"include/sttnet.h"
+#include "include/sttnet.h"
+
 using namespace std;
 using namespace stt::file;
-using namespace stt::time;
-using namespace stt::data;
 using namespace stt::network;
 using namespace stt::system;
-using namespace stt::security;
-//set global variables
-LogFile lf;
-HttpServer *httpserver;
-int main(int argc,char *argv[])
+
+/*
+ * Global objects (for demo simplicity)
+ * 全局对象（Demo 简化写法）
+ */
+LogFile* lf = nullptr;
+HttpServer* httpserver = nullptr;
+WebSocketServer* wsserver = nullptr;
+
+int main(int argc, char* argv[])
 {
-	//init logfile and use logfile system and ignore all signal but 15. And all error signals or unknown exception will transmit signal 15.
-	//remember to set the second parameter to "Chinese" if you want your logfile write in Chinese (default in English)
-	ServerSetting::init(&lf);
+    /*
+     * Initialize logfile system
+     * 初始化日志系统（第二个参数指定语言，默认英文）
+     */
+    lf = new LogFile();
+    ServerSetting::init(lf, "Chinese");
 
-	//new a HttpServer Objection
-	httpserver=new HttpServer;
+    /*
+     * Create HTTP server
+     * 创建 HTTP 服务器对象
+     */
+    httpserver = new HttpServer(50000, false);
 
-	//set a callbacl function after signal 15 to quit decently.
-	signal(15,[](int signal){
-		lf.writeLog("have received signal 15... Now ready to quit. ");
-		delete httpserver;
-		/*
-			...
-			*********You can write the necessary exit process here*************
-			...
-		*/
-	});
-
-	//set a callback function to handle http request
-	httpserver->setFunction([](const HttpRequestInformation &info, HttpServerFDHandler &conn) -> bool {
-        if (info.loc == "/ping") {
-            conn.sendBack("pong");
-        } else {
-            conn.sendBack("404 Not Found", "", "404");
-        }
-        return true;
+    /*
+     * Graceful exit on signal 15 (SIGTERM)
+     * 收到 15 号信号时优雅退出
+     */
+    signal(15, [](int) {
+        delete httpserver;
+        delete wsserver;
+        delete lf;
     });
 
-	//start listen port 8080 and add logfile to this server objection.
-	httpserver->startListen(8080,&lf);
+    /*
+     * HTTP: key extraction function
+     * HTTP：从请求中提取 key（用于路由/上下文）
+     */
+    httpserver->setGetKeyFunction(
+        [](HttpServerFDHandler&, HttpRequestInformation& inf) -> int {
+            inf.ctx["key"] = inf.loc;  // use URL as key
+            return 1;
+        }
+    );
 
-	//block the main thread
-	pause();
-	return 0;
+    /*
+     * HTTP: /ping
+     * Simple synchronous response
+     * HTTP：/ping，同步返回
+     */
+    httpserver->setFunction(
+        "/ping",
+        [](HttpServerFDHandler& k, HttpRequestInformation&) -> int {
+            k.sendBack("pong");
+            return 1;
+        }
+    );
+
+    /*
+     * HTTP: /async
+     * Demonstrates task dispatch to worker thread
+     * HTTP：/async，演示投递到工作线程池
+     */
+    httpserver->setFunction(
+        "/async",
+        [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
+            httpserver->putTask(
+                [](HttpServerFDHandler& k2, HttpRequestInformation&) -> int {
+                    k2.sendBack("async pong");
+                    return 1;
+                },
+                k,
+                inf
+            );
+            return 0;  // handled asynchronously
+        }
+    );
+
+    /*
+     * Start HTTP server
+     * 启动 HTTP 监听（端口 8080，2 个 worker）
+     */
+    httpserver->startListen(8080, 2);
+
+    /*
+     * Create WebSocket server
+     * 创建 WebSocket 服务器
+     */
+    wsserver = new WebSocketServer(5000, false);
+
+    /*
+     * WebSocket: global fallback handler
+     * WebSocket：全局兜底处理函数
+     */
+    wsserver->setGlobalSolveFunction(
+        [](WebSocketServerFDHandler& k, WebSocketFDInformation& inf) -> bool {
+            return k.sendMessage(inf.message); // echo
+        }
+    );
+
+    /*
+     * WebSocket: key extraction
+     * WebSocket：提取 key
+     */
+    wsserver->setGetKeyFunction(
+        [](WebSocketServerFDHandler&, WebSocketFDInformation& inf) -> int {
+            inf.ctx["key"] = inf.message;
+            return 1;
+        }
+    );
+
+    /*
+     * WebSocket: "ping" command
+     * WebSocket：ping → pong
+     */
+    wsserver->setFunction(
+        "ping",
+        [](WebSocketServerFDHandler& k, WebSocketFDInformation&) -> int {
+            k.sendMessage("pong");
+            return 1;
+        }
+    );
+
+    /*
+     * WebSocket heartbreath (mins)
+     * WebSocket 心跳时间(分钟)
+     */
+    wsserver->setTimeOutTime(1);
+
+    /*
+     * Start WebSocket server
+     * 启动 WebSocket 监听（端口 5050）
+     */
+    wsserver->startListen(5050, 2);
+
+    /*
+     * Block main thread
+     * 阻塞主线程，Reactor 在内部运行
+     */
+    pause();
+    return 0;
 }
+
 ```
 
 ---
@@ -354,55 +455,155 @@ g++ -std=c++11 -o main main.cpp src/sttnet.cpp -ljsoncpp -lssl -lcrypto -lpthrea
 ## 🧪 示例代码：启动一个 HTTP 服务
 
 ```cpp
-#include"include/sttnet.h"
+#include "include/sttnet.h"
+
 using namespace std;
 using namespace stt::file;
-using namespace stt::time;
-using namespace stt::data;
 using namespace stt::network;
 using namespace stt::system;
-using namespace stt::security;
-//设置全局变量
-LogFile lf;
-HttpServer *httpserver;
-int main(int argc,char *argv[])
+
+/*
+ * Global objects (for demo simplicity)
+ * 全局对象（Demo 简化写法）
+ */
+LogFile* lf = nullptr;
+HttpServer* httpserver = nullptr;
+WebSocketServer* wsserver = nullptr;
+
+int main(int argc, char* argv[])
 {
-	//初始化日志文件，启用日志系统和设置系统信号；屏蔽除了15外所有信号，所有错误信号和异常都会发送信号15
-	//如果你想日志系统使用中文记得填入第二个参数（默认英文）
-	ServerSetting::init(&lf,"Chinese");
+    /*
+     * Initialize logfile system
+     * 初始化日志系统（第二个参数指定语言，默认英文）
+     */
+    lf = new LogFile();
+    ServerSetting::init(lf, "Chinese");
 
-	//new a HttpServer Objection
-	//新建一个HttpServer对象
-	httpserver=new HttpServer;
+    /*
+     * Create HTTP server
+     * 创建 HTTP 服务器对象
+     */
+    httpserver = new HttpServer(50000, false);
 
-	//设置收到信号15后的回调函数，为了优雅退出程序。
-	signal(15,[](int signal){
-		lf.writeLog("收到信号15，正在执行退出前的流程");
-		delete httpserver;
-		/*
-			...
-			*********可以在这里继续写退出之前的处理流程*****************
-			...
-		*/
-	});
-
-	//设置回调函数处理Http请求
-	httpserver->setFunction([](const HttpRequestInformation &info, HttpServerFDHandler &conn) -> bool {
-        if (info.loc == "/ping") {
-            conn.sendBack("pong");
-        } else {
-            conn.sendBack("404 Not Found", "", "404");
-        }
-        return true;
+    /*
+     * Graceful exit on signal 15 (SIGTERM)
+     * 收到 15 号信号时优雅退出
+     */
+    signal(15, [](int) {
+        delete httpserver;
+        delete wsserver;
+        delete lf;
     });
 
-	//监听8080端口，并且加入日志文件到这个服务对象
-	httpserver->startListen(8080,&lf);
+    /*
+     * HTTP: key extraction function
+     * HTTP：从请求中提取 key（用于路由/上下文）
+     */
+    httpserver->setGetKeyFunction(
+        [](HttpServerFDHandler&, HttpRequestInformation& inf) -> int {
+            inf.ctx["key"] = inf.loc;  // use URL as key
+            return 1;
+        }
+    );
 
-	//阻塞主线程
-	pause();
-	return 0;
+    /*
+     * HTTP: /ping
+     * Simple synchronous response
+     * HTTP：/ping，同步返回
+     */
+    httpserver->setFunction(
+        "/ping",
+        [](HttpServerFDHandler& k, HttpRequestInformation&) -> int {
+            k.sendBack("pong");
+            return 1;
+        }
+    );
+
+    /*
+     * HTTP: /async
+     * Demonstrates task dispatch to worker thread
+     * HTTP：/async，演示投递到工作线程池
+     */
+    httpserver->setFunction(
+        "/async",
+        [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
+            httpserver->putTask(
+                [](HttpServerFDHandler& k2, HttpRequestInformation&) -> int {
+                    k2.sendBack("async pong");
+                    return 1;
+                },
+                k,
+                inf
+            );
+            return 0;  // handled asynchronously
+        }
+    );
+
+    /*
+     * Start HTTP server
+     * 启动 HTTP 监听（端口 8080，2 个 worker）
+     */
+    httpserver->startListen(8080, 2);
+
+    /*
+     * Create WebSocket server
+     * 创建 WebSocket 服务器
+     */
+    wsserver = new WebSocketServer(5000, false);
+
+    /*
+     * WebSocket: global fallback handler
+     * WebSocket：全局兜底处理函数
+     */
+    wsserver->setGlobalSolveFunction(
+        [](WebSocketServerFDHandler& k, WebSocketFDInformation& inf) -> bool {
+            return k.sendMessage(inf.message); // echo
+        }
+    );
+
+    /*
+     * WebSocket: key extraction
+     * WebSocket：提取 key
+     */
+    wsserver->setGetKeyFunction(
+        [](WebSocketServerFDHandler&, WebSocketFDInformation& inf) -> int {
+            inf.ctx["key"] = inf.message;
+            return 1;
+        }
+    );
+
+    /*
+     * WebSocket: "ping" command
+     * WebSocket：ping → pong
+     */
+    wsserver->setFunction(
+        "ping",
+        [](WebSocketServerFDHandler& k, WebSocketFDInformation&) -> int {
+            k.sendMessage("pong");
+            return 1;
+        }
+    );
+
+    /*
+     * WebSocket heartbreath (mins)
+     * WebSocket 心跳时间(分钟)
+     */
+    wsserver->setTimeOutTime(1);
+
+    /*
+     * Start WebSocket server
+     * 启动 WebSocket 监听（端口 5050）
+     */
+    wsserver->startListen(5050, 2);
+
+    /*
+     * Block main thread
+     * 阻塞主线程，Reactor 在内部运行
+     */
+    pause();
+    return 0;
 }
+
 ```
 
 ---

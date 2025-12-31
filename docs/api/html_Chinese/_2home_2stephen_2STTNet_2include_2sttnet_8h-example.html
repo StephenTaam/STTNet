@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.5"/>
-<title>STTNet: 示例</title>
+<title>STTNet: /home/stephen/STTNet/include/sttnet.h</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -41,7 +41,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
       <li><a href="namespaces.html"><span>命名空间</span></a></li>
       <li><a href="annotated.html"><span>类</span></a></li>
       <li><a href="files.html"><span>文件</span></a></li>
-      <li class="current"><a href="examples.html"><span>示例</span></a></li>
+      <li><a href="examples.html"><span>示例</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -77,14 +77,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 
 <div class="header">
   <div class="headertitle">
-<div class="title">示例</div>  </div>
+<div class="title">/home/stephen/STTNet/include/sttnet.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock">这里列出了所有示例:</div><ul>
-<li><a class="el" href="_2home_2stephen_2STTNet_2include_2sttnet_8h-example.html">/home/stephen/STTNet/include/sttnet.h</a></li>
-
-</ul>
-</div><!-- contents -->
+<p>设置key对应的收到客户端消息后的回调函数 </p>
+<dl class="section note"><dt>注解</dt><dd>可以设置多个 ，框架会根据设置顺序依次执行回调函数；也可以设置扔入工作线程池处理的流程，注意设置不同的返回值即可。 </dd></dl>
+<dl class="section warning"><dt>警告</dt><dd>可执行对象必须严格按照规定的返回值返回 </dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>找到对应回调函数的key </td></tr>
+    <tr><td class="paramname">fc</td><td>一个函数或函数对象，用于收到客户端消息后处理逻辑 -参数：HttpServerFDHandler &amp;k - 和客户端连接的套接字的操作对象的引用 HttpRequestInformation &amp;inf - 客户端信息，保存数据，处理进度，状态机信息等 -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 0:处理流程已经扔入工作线程池，需要等待处理完成 1:处理成功</td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="fragment"><div class="line">httpserver-&gt;setFunction(<span class="stringliteral">&quot;/ping&quot;</span>,[](HttpServerFDHandler &amp;k,HttpRequestInformation &amp;inf)-&gt;<span class="keywordtype">int</span></div>
+<div class="line">         {</div>
+<div class="line">             k.sendBack(<span class="stringliteral">&quot;pong&quot;</span>);</div>
+<div class="line">             <span class="keywordflow">return</span> 1;</div>
+<div class="line">         });</div>
+</div><!-- fragment --><div class="fragment"></div><!-- fragment --> </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 制作者 &#160;<a href="http://www.doxygen.org/index.html">

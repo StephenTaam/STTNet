@@ -2987,13 +2987,16 @@ public:
      *           1 : Processing succeeded.
      *
      * @example
+     * @code
      * httpserver->setFunction("/ping",
      *     [](HttpServerFDHandler &k, HttpRequestInformation &inf) -> int {
      *         k.sendBack("pong");
      *         return 1;
      *     });
+     * @endcode
      *
      * @example
+     * @code
      * httpserver->setFunction("/ping",
      *     [](HttpServerFDHandler &k, HttpRequestInformation &inf) -> int {
      *         httpserver->putTask(
@@ -3006,6 +3009,7 @@ public:
      *         );
      *         return 0;
      *     });
+     * @endcode
      */
     void setFunction(
         const std::string &key,
@@ -3038,11 +3042,13 @@ public:
      *           1 : Processing succeeded.
      *
      * @example
+     * @code
      * httpserver->setGetKeyFunction(
      *     [](HttpServerFDHandler &k, HttpRequestInformation &inf) -> int {
      *         inf.ctx["key"] = inf.loc;
      *         return 1;
      *     });
+     * @endcode
      */
     void setGetKeyFunction(
         std::function<int(HttpServerFDHandler &k, HttpRequestInformation &inf)> parseKeyFun
