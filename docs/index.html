@@ -84,18 +84,65 @@
         <h2>Lightweight High-Performance C++ Network Framework</h2>
 
 <p>
-    <b>STTNet</b> is a lightweight and high-performance server framework written in modern C++11.  
-    It supports TCP/UDP/HTTP/WebSocket, TLS/HTTPS/WSS encrypted communication,  
-    multithreaded epoll, file I/O, logging, JSON processing, signal/exception handling,  
-    encryption utilities, information security modules, and more.
+    <b>STTNet</b> is a lightweight, high-performance server framework built around the
+    <b>Reactor event-driven concurrency model</b>, implemented in modern C++11.
+    It is designed for scalable, non-blocking network programming and efficient
+    handling of massive concurrent connections.
 </p>
 
 <p>
-    <b>STTNet</b> 是一个基于 C++11 编写的轻量级高性能服务器框架。  
-    支持 TCP、UDP、HTTP、WebSocket 以及 TLS/HTTPS/WSS 加密通信，  
-    提供多线程 epoll、文件读写、日志系统、JSON 处理、信号与异常管理、  
-    加解密工具、信息安全模块等常用服务端功能。
+    At its core, STTNet is based on epoll-driven event loops and follows a classic
+    one-loop-per-thread Reactor architecture.
+    By decoupling I/O multiplexing, event dispatching, and business logic,
+    the framework achieves low latency, high throughput, and predictable performance
+    under heavy load.
 </p>
+
+<p>
+    On top of the Reactor core, STTNet provides unified support for
+    TCP, UDP, HTTP, and WebSocket protocols, as well as
+    TLS/HTTPS/WSS encrypted communication.
+    It integrates multithreaded event loops, asynchronous task dispatching via worker
+    thread pools, and a flexible callback-based programming model.
+</p>
+
+<p>
+    In addition, STTNet includes commonly required server-side components such as
+    asynchronous file I/O, logging facilities, JSON processing,
+    signal and exception handling, and basic cryptographic and security utilities.
+    These features are designed to complement the Reactor architecture rather than
+    obscure it, keeping the framework minimal, explicit, and easy to reason about.
+</p>
+
+
+<p>
+    <b>STTNet</b> 是一个基于 <b>Reactor 事件驱动并发模型</b> 的轻量级高性能服务器框架，
+    使用现代 C++11 编写，面向可扩展的非阻塞网络编程场景，
+    能够高效支撑大规模并发连接。
+</p>
+
+<p>
+    在架构层面，STTNet 以内核级 epoll 为基础，采用经典的
+    one-loop-per-thread Reactor 设计，
+    将 I/O 多路复用、事件分发与业务逻辑清晰解耦，
+    从而在高并发负载下保持低延迟、高吞吐和稳定的性能表现。
+</p>
+
+<p>
+    在 Reactor 核心之上，STTNet 统一支持 TCP、UDP、HTTP、WebSocket 等协议，
+    并提供 TLS/HTTPS/WSS 加密通信能力。
+    框架内置多线程事件循环机制与工作线程池，
+    支持异步任务投递，采用灵活的回调模型以简化复杂并发逻辑的表达。
+</p>
+
+<p>
+    同时，STTNet 还集成了服务端开发中常见的基础组件，
+    包括异步文件 I/O、日志系统、JSON 处理、
+    信号与异常管理，以及基础的加解密与安全工具。
+    这些功能围绕 Reactor 架构进行设计，强调清晰性与可控性，
+    而非堆砌功能。
+</p>
+
         <div class="btn-group">
             <a class="button" href="api/html_Chinese/index.html">📘 中文文档</a>
             <a class="button" href="api/html_English/index.html">📙 English Docs</a>
