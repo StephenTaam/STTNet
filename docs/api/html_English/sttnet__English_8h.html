@@ -41,6 +41,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -137,6 +138,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;sys/shm.h&gt;</code><br/>
 <code>#include &lt;type_traits&gt;</code><br/>
 <code>#include &lt;charconv&gt;</code><br/>
+<code>#include &lt;any&gt;</code><br/>
+<code>#include &lt;sys/eventfd.h&gt;</code><br/>
 </div>
 <p><a href="sttnet__English_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -226,11 +229,14 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">stt::network::WebSocketFDInformation</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure to save client WS/WSS request information.  <a href="structstt_1_1network_1_1WebSocketFDInformation.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpInformation.html">stt::network::TcpInformation</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save TCP client information.  <a href="structstt_1_1network_1_1TcpInformation.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html">stt::network::TcpFDInf</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure to save TCP client information.  <a href="structstt_1_1network_1_1TcpFDInf.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1QueueFD.html">stt::network::QueueFD</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The structure of the message queue element.  <a href="structstt_1_1network_1_1QueueFD.html#details">More...</a><br/></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WorkerMessage.html">stt::network::WorkerMessage</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data structure for pushing tasks into a completion queue after they are completed at the work site.  <a href="structstt_1_1network_1_1WorkerMessage.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html">stt::network::TcpServer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tcp server class.  <a href="classstt_1_1network_1_1TcpServer.html#details">More...</a><br/></td></tr>
@@ -268,10 +274,16 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1Process.html">stt::system::Process</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static utility class for process management.  <a href="classstt_1_1system_1_1Process.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1WorkerPool.html">stt::system::WorkerPool</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fixed-size worker thread pool.  <a href="classstt_1_1system_1_1WorkerPool.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacestt"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt.html">stt</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacestt_1_1system"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1system.html">stt::system</a></td></tr>
+<tr class="memdesc:namespacestt_1_1system"><td class="mdescLeft">&#160;</td><td class="mdescRight">System settings, process control, heartbeat monitoring, etc. <br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacestt_1_1file"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1file.html">stt::file</a></td></tr>
 <tr class="memdesc:namespacestt_1_1file"><td class="mdescLeft">&#160;</td><td class="mdescRight">File-related operations: file reading and writing, logging, etc. <br/></td></tr>
@@ -287,9 +299,6 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacestt_1_1network"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1network.html">stt::network</a></td></tr>
 <tr class="memdesc:namespacestt_1_1network"><td class="mdescLeft">&#160;</td><td class="mdescRight">Network framework, protocols, communication, and IO multiplexing related. <br/></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespacestt_1_1system"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1system.html">stt::system</a></td></tr>
-<tr class="memdesc:namespacestt_1_1system"><td class="mdescLeft">&#160;</td><td class="mdescRight">System settings, process control, heartbeat monitoring, etc. <br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
@@ -319,6 +328,8 @@ Typedefs</h2></td></tr>
 <tr class="separator:aa5ee05f807eee2fbb7e032902b10499f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4770713baaf3ea1a4cede314e6c361a9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1time.html#a4770713baaf3ea1a4cede314e6c361a9">stt::time::Seconds</a> = std::chrono::duration&lt; uint64_t &gt;</td></tr>
 <tr class="separator:a4770713baaf3ea1a4cede314e6c361a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96492ef66fd55413ac968acea5978183"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1system.html#a96492ef66fd55413ac968acea5978183">stt::system::Task</a> = std::function&lt; void()&gt;</td></tr>
+<tr class="separator:a96492ef66fd55413ac968acea5978183"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>

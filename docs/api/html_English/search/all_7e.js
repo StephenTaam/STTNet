@@ -11,5 +11,6 @@ var searchData=
   ['_7eudpclient',['~UdpClient',['../classstt_1_1network_1_1UdpClient.html#a45615f93668e1e41e19e5ca469ffa37f',1,'stt::network::UdpClient']]],
   ['_7eudpserver',['~UdpServer',['../classstt_1_1network_1_1UdpServer.html#aa522e8728b0ec6ae56006f91d1ed61a6',1,'stt::network::UdpServer']]],
   ['_7ewebsocketclient',['~WebSocketClient',['../classstt_1_1network_1_1WebSocketClient.html#a63caa68697957381788d3885d9ed5648',1,'stt::network::WebSocketClient']]],
-  ['_7ewebsocketserver',['~WebSocketServer',['../classstt_1_1network_1_1WebSocketServer.html#ace579b96683cb0986ae91307262e09b5',1,'stt::network::WebSocketServer']]]
+  ['_7ewebsocketserver',['~WebSocketServer',['../classstt_1_1network_1_1WebSocketServer.html#ace579b96683cb0986ae91307262e09b5',1,'stt::network::WebSocketServer']]],
+  ['_7eworkerpool',['~WorkerPool',['../classstt_1_1system_1_1WorkerPool.html#a2ef0555151195337247cbb67f82d28e1',1,'stt::system::WorkerPool']]]
 ];

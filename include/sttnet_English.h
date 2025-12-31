@@ -48,11 +48,17 @@
 #include<sys/shm.h>
 #include<type_traits>
 #include<charconv>
+#include<any>
+#include <sys/eventfd.h>
 /**
 * @namespace stt
 */
 namespace stt
 {
+    namespace system
+    {
+        class WorkerPool;
+    }
     /**
     * @namespace stt::file
     * @brief File-related operations: file reading and writing, logging, etc.
@@ -2405,33 +2411,41 @@ public:
     struct HttpRequestInformation 
     {
         /**
-        * @brief request's type
+        * @brief Low-level socket
         */
-        std::string_view type;
+        int fd;
         /**
-        * @brief Path and parameters in the url
+        * @brief Request type
         */
-        std::string_view locPara;
+        std::string type;
         /**
-        * @brief Path in the url
+        * @brief Path and parameters in URL
         */
-        std::string_view loc;
+        std::string locPara;
         /**
-        * @brief Parameters in the url
+        * @brief path in url
         */
-        std::string_view para;
+        std::string loc;
+        /**
+        * @brief parameters in url
+        */
+        std::string para;
         /**
         * @brief Request header
         */
-        std::string_view header;
+        std::string header;
         /**
         * @brief Request body
         */
-        std::string_view body;
+        std::string body;
         /**
-        * @brief Request body（chunked）
+        * @brief Request body (chunked)
         */
         std::string body_chunked;
+        /**
+        * @brief required data warehouse
+        */
+        std::unordered_map<std::string,std::any> ctx;
     
     };
 
@@ -2527,6 +2541,10 @@ public:
         */
         size_t recv_length;
         /**
+        * @brief Length have received
+        */
+        size_t have_recv_length;
+        /**
         * @brief Message type
         */
         int message_type;
@@ -2542,7 +2560,29 @@ public:
         * @brief mask
         */
         std::string mask;
+        /**
+        * @brief required data warehouse
+        */
+        std::unordered_map<std::string,std::any> ctx;
+    };
 
+    /**
+    * @brief Save TCP client information
+    */
+    struct TcpInformation
+    {
+        /**
+        * @brief socket fd
+        */
+        int fd;
+        /**
+        * @brief Naked data
+        */
+        std::string data;
+        /**
+        * @brief required data warehouse
+        */
+        std::unordered_map<std::string,std::any> ctx;
     };
 
    /**
@@ -2583,21 +2623,29 @@ public:
         * @brief Receives a spatial position pointer
         */
         unsigned long p_buffer_now;
+        /**
+         * @brief Record which step the current state machine is at.
+         */
+        int FDStatus;
+        /**
+        * @brief Queue waiting to be processed
+        */
+        std::queue<std::any> pendindQueue;
     };
 
     /**
-    * @brief The structure of the message queue element
+    * @brief Data structure for pushing tasks into a completion queue after they are completed at the work site
     */
-    struct QueueFD
+    struct WorkerMessage
     {
-    /**
-    * @brief sockets
-    */
-    int fd;
-    /**
-    * @brief is not a closing message
-    */
-    bool close;
+        /**
+        * @brief Low-level sockets
+        */
+        int fd;
+        /**
+        * @brief Return value -2: Failure and connection closed required; -1: Failure but connection closed not required; 1: Success.
+        */
+        int ret;
     };
     
     /**
@@ -2607,39 +2655,59 @@ public:
     class TcpServer 
     {
     protected:
+        std::queue<WorkerMessage> finishQueue;
+        stt::system::WorkerPool *workpool; 
         unsigned long buffer_size;
-        unsigned long long maxFD;
+        unsigned long long  maxFD;
         security::ConnectionLimiter connectionLimiter;
         //std::unordered_map<int,TcpFDInf> clientfd;
         //std::mutex lc1;
         TcpFDInf *clientfd;
-        int flag1 = true;
-        std::queue<QueueFD> *fdQueue;
-        std::mutex *lq1;
+        int flag1=true;
+        //std::queue<QueueFD> *fdQueue;
+        //std::mutex *lq1;
         //std::condition_variable cv1;
-        std::condition_variable *cv;
-        int consumerNum;
-        std::mutex lco1;
+        //std::condition_variable *cv;
+        //int consumerNum;
+        //std::mutex lco1;
         bool unblock;
-        SSL_CTX *ctx = nullptr;
-        bool TLS = false;
+        SSL_CTX *ctx=nullptr;
+        bool TLS=false;
         //std::unordered_map<int,SSL*> tlsfd;
         //std::mutex ltl1;
         bool security_open;
         int checkFrequency;
-        bool flag_detect;
-        bool flag_detect_status;
-       
+        //bool flag_detect;
+        //bool flag_detect_status;
+        int workerEventFD;
     private:
-        std::function<bool(TcpFDHandler &k,TcpFDInf &inf)> fc;
-        int fd = -1;
-        int port = -1;
-        int flag = false;
-        bool flag2 = false;
+        std::function<bool(TcpFDHandler &k,TcpInformation &inf)> globalSolveFun=[](TcpFDHandler &k,TcpInformation &inf)->bool
+        {return true;};
+        std::unordered_map<std::string,std::vector<std::function<int(TcpFDHandler &k,TcpInformation &inf)>>> solveFun;
+        std::function<int(TcpFDHandler &k,TcpInformation &inf)> parseKey=[](TcpFDHandler &k,TcpInformation &inf)->int
+        {inf.ctx["key"]=inf.data;return 1;};
+        int fd=-1;
+        int port=-1;
+        int flag=false;
+        bool flag2=false;
     private:
         void epolll(const int &evsNum);
-        virtual void consumer(const int &threadID);
+        //virtual void consumer(const int &threadID);
+        virtual void handler_netevent(const int &fd);
+        virtual void handler_workerevent(const int &fd,const int &ret);
     public:
+        /**
+        * @brief Add a task to a worker thread pool and have it completed by worker threads.
+        * @note Slow, blocking I/O tasks should be placed in a worker thread pool.
+        * @warning Executable objects must return values ​​strictly according to the specified return values.
+        * @param fun Executable objects placed in the worker thread pool
+        * -parameter：TcpFDHandler &k - References to the operation objects of the socket connected to the client
+        *       TcpFDInf &inf - Client information, saved data, processing progress, state machine information, etc.
+        * -return value：-2:Processing failed and connection needs to be closed -1: Processing failed but connection does not need to be closed 1: Processing succeeded
+        * @param k References to the operation objects of the socket connected to the client
+        * @param inf References to client information, data storage, processing progress, state machine information, etc.
+        */
+        void putTask(const std::function<int(TcpFDHandler &k,TcpInformation &inf)> &fun,TcpFDHandler &k,TcpInformation &inf);
         /**
         * @brief Constructor, which is enabled by default. Limit the maximum number of connections to an IP address to 20; The fastest connection speed per second for the same IP address is 6
         * @note Turning on the security module has a performance impact
@@ -2647,12 +2715,12 @@ public:
         * @param security_open true: enable the security module false: disable the security module (enabled by default)
         * @param connectionNumLimit The maximum number of connections from the same IP address
         * @param connectionRateLimit The maximum number of connections per second to the same IP address
-        * @param buffer_size The maximum amount of data allowed to be transferred over the same connection (in KB) is 8KB by default
+        * @param buffer_size The maximum amount of data allowed to be transferred over the same connection (in KB) is 256KB by default
         * @param requestRate The maximum number of requests allowed for the same ip within one second (the default is 12 times)
         * @param checkFrequency The frequency of checking zombie connections (in minutes) The default is 1 minute -1 means no check
         * @param connectionTimeout The number of seconds that a connection is considered a zombie connection if there is no response (in seconds) The default is 60 seconds -1 means no limit
         */
-        TcpServer(const unsigned long long &maxFD=10000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit,requestRate,connectionTimeout),security_open(security_open),buffer_size(buffer_size*1024),checkFrequency(checkFrequency){}
+        TcpServer(const unsigned long long &maxFD=10000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=256,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit,requestRate,connectionTimeout),security_open(security_open),buffer_size(buffer_size*1024),checkFrequency(checkFrequency){}
         /**
         * @brief Start the TCP server listening program
         * @param port Port to listen on
@@ -2693,16 +2761,71 @@ public:
         */
         void redrawTLS();
         /**
-        * @brief Set the callback function after receiving a message from the client
-        * Register a callback function
-        * @param fc A function or function object for processing logic after receiving a message from the client
-        * - Parameter: TcpFDHandler &k - Reference to the socket connected to the client
-        *              TcpFDInf &inf - client information, processing progress, state machine information, etc.
-        * - Return: bool - true for successful processing, false for processing failure
-        * @note The passed function should have the signature bool func(TcpFDHandler &k)
-        * @note If processing fails, the TCP connection will be closed
+        * @brief Set global fallback function
+        * @note When a corresponding callback function cannot be found, a global backup function will be called.
+        * @param key Find the key of the corresponding callback function
+        * @param fc A function or function object used for processing logic after receiving a message from the client.
+        * -Parameters: TcpFDHandler &k - A reference to the operation object of the socket connected to the client.
+        *       TcpInformation &inf - Client information, saved data, processing progress, state machine information, etc.
+        * -Return value: true: Processing successful; false: Processing failed and the connection will be closed.
         */
-        bool setFunction(std::function<bool(TcpFDHandler &k,TcpFDInf &inf)> fc) { this->fc = fc; return true; }
+        void setGlobalSolveFunction(std::function<bool(TcpFDHandler &k,TcpInformation &inf)> fc){this->globalSolveFun=fc;}
+        /**
+ * @brief Register a callback function for a specific key.
+ * @note Multiple callbacks can be registered for the same key. The framework
+ *       will execute them sequentially in the order they are registered.
+ *       You may also choose to dispatch the processing to a worker thread pool
+ *       by returning specific values.
+ * @warning The callable object must strictly follow the required return value
+ *          conventions.
+ * @param key The key used to locate the corresponding callback function.
+ * @param fc A function or function object that defines the logic to handle
+ *        incoming client messages.
+ *        - Parameters:
+ *          TcpFDHandler &k  - Reference to the socket operation object associated
+ *                            with the client connection.
+ *          TcpInformation &inf - Client information, including received data,
+ *                            processing progress, state machine data, etc.
+ *        - Return value:
+ *          -2 : Processing failed and the connection must be closed.
+ *          -1 : Processing failed but the connection should remain open.
+ *           0 : Processing has been dispatched to a worker thread pool and
+ *               the framework should wait for completion.
+ *           1 : Processing succeeded.
+ */
+void setFunction(
+    const std::string &key,
+    std::function<int(TcpFDHandler &k, TcpInformation &inf)> fc)
+{
+    auto [it, inserted] = solveFun.try_emplace(key);
+    it->second.push_back(std::move(fc));
+}
+
+/**
+ * @brief Set the callback function used to parse the key.
+ * @note This function extracts the key from the input parameters and stores it
+ *       in the ctx hash table within TcpInformation. The framework uses this key
+ *       to locate the registered processing callbacks.
+ * @warning The callable object must strictly follow the required return value
+ *          conventions.
+ * @param parseKeyFun The callback function used to parse the key.
+ *        - Parameters:
+ *          TcpFDHandler &k  - Reference to the socket operation object associated
+ *                            with the client connection.
+ *          TcpInformation &inf - Client information, including received data,
+ *                            processing progress, state machine data, etc.
+ *        - Return value:
+ *          -2 : Processing failed and the connection must be closed.
+ *          -1 : Processing failed but the connection should remain open.
+ *           0 : Processing has been dispatched to a worker thread pool and
+ *               the framework should wait for completion.
+ *           1 : Processing succeeded.
+ */
+void setGetKeyFunction(
+    std::function<int(TcpFDHandler &k, TcpInformation &inf)> parseKeyFun)
+{
+    this->parseKey = parseKeyFun;
+}
         /**
         * @brief Stop listening
         * @warning Only stops listening (but the socket can no longer receive, it depends on listening and consumers, so this function is of little significance)
@@ -2747,56 +2870,205 @@ public:
     * @note support http/1.0 1.1
     */
     class HttpServer : public TcpServer
+{
+private:
+    // std::function<bool(HttpServerFDHandler &k, HttpRequestInformation &inf)> globalSolveFun = {};
+    std::unordered_map<
+        std::string,
+        std::vector<std::function<int(HttpServerFDHandler &k, HttpRequestInformation &inf)>>
+    > solveFun;
+
+    std::function<int(HttpServerFDHandler &k, HttpRequestInformation &inf)> parseKey =
+        [](HttpServerFDHandler &k, HttpRequestInformation &inf) -> int {
+            inf.ctx["key"] = inf.loc;
+            return 1;
+        };
+
+private:
+    void handler_netevent(const int &fd);
+    void handler_workerevent(const int &fd, const int &ret);
+
+public:
+    /**
+     * @brief Submit a task to the worker thread pool.
+     * @note Slow or potentially blocking I/O operations should be dispatched
+     *       to the worker thread pool.
+     * @warning The callable object must strictly follow the required return
+     *          value conventions.
+     * @param fun The callable object to be executed by the worker thread pool.
+     *        - Parameters:
+     *          HttpServerFDHandler &k  - Reference to the socket operation object
+     *                                  associated with the client connection.
+     *          HttpRequestInformation &inf - Client request information,
+     *                                  including data, processing progress,
+     *                                  and state machine information.
+     *        - Return value:
+     *          -2 : Processing failed and the connection must be closed.
+     *          -1 : Processing failed but the connection should remain open.
+     *           1 : Processing succeeded.
+     * @param k   Reference to the socket operation object associated with
+     *            the client connection.
+     * @param inf Reference to the client request information.
+     */
+    void putTask(
+        const std::function<int(HttpServerFDHandler &k, HttpRequestInformation &inf)> &fun,
+        HttpServerFDHandler &k,
+        HttpRequestInformation &inf
+    );
+
+    /**
+     * @brief Constructor.
+     * @note The security module is enabled by default. It limits the maximum
+     *       number of connections per IP to 20, and the maximum connection
+     *       rate per IP to 6 connections per second. Enabling the security
+     *       module may impact performance.
+     * @param maxFD Maximum number of connections the server can accept.
+     * @param security_open true to enable the security module,
+     *                      false to disable it (enabled by default).
+     * @param connectionNumLimit Maximum number of concurrent connections
+     *                            allowed per IP.
+     * @param connectionRateLimit Maximum number of connections per second
+     *                            allowed per IP.
+     * @param buffer_size Maximum amount of data allowed per connection
+     *                    (in KB). Default is 256 KB.
+     * @param requestRate Maximum number of requests allowed per connection
+     *                    per second (default: 40).
+     * @param checkFrequency Frequency for checking zombie connections
+     *                       (in minutes). Default is 1 minute.
+     *                       Use -1 to disable checking.
+     * @param connectionTimeout Time in seconds after which an inactive
+     *                          connection is considered a zombie connection.
+     *                          Default is 60 seconds. Use -1 for no limit.
+     */
+    HttpServer(
+        const unsigned long long &maxFD = 10000000,
+        const bool &security_open = true,
+        const int &connectionNumLimit = 20,
+        const int &connectionRateLimit = 6,
+        const int &buffer_size = 256,
+        const int &requestRate = 40,
+        const int &checkFrequency = 1,
+        const int &connectionTimeout = 60
+    )
+        : TcpServer(
+              maxFD,
+              security_open,
+              connectionNumLimit,
+              connectionRateLimit,
+              buffer_size,
+              requestRate,
+              checkFrequency,
+              connectionTimeout
+          )
+    {}
+
+    /**
+     * @brief Register a callback function for a specific key.
+     * @note Multiple callbacks can be registered for the same key. The framework
+     *       executes them sequentially in the order they are registered.
+     *       Processing can also be dispatched to the worker thread pool by
+     *       returning appropriate values.
+     * @warning The callable object must strictly follow the required return
+     *          value conventions.
+     * @param key The key used to locate the corresponding callback functions.
+     * @param fc  A function or function object that defines the logic for
+     *            handling client requests.
+     *        - Parameters:
+     *          HttpServerFDHandler &k  - Reference to the socket operation object
+     *                                  associated with the client connection.
+     *          HttpRequestInformation &inf - Client request information,
+     *                                  including data, processing progress,
+     *                                  and state machine information.
+     *        - Return value:
+     *          -2 : Processing failed and the connection must be closed.
+     *          -1 : Processing failed but the connection should remain open.
+     *           0 : Processing has been dispatched to the worker thread pool
+     *               and the framework should wait for completion.
+     *           1 : Processing succeeded.
+     *
+     * @example
+     * httpserver->setFunction("/ping",
+     *     [](HttpServerFDHandler &k, HttpRequestInformation &inf) -> int {
+     *         k.sendBack("pong");
+     *         return 1;
+     *     });
+     *
+     * @example
+     * httpserver->setFunction("/ping",
+     *     [](HttpServerFDHandler &k, HttpRequestInformation &inf) -> int {
+     *         httpserver->putTask(
+     *             [](HttpServerFDHandler &k, HttpRequestInformation &inf) -> int {
+     *                 k.sendBack("pong");
+     *                 return 1;
+     *             },
+     *             k,
+     *             inf
+     *         );
+     *         return 0;
+     *     });
+     */
+    void setFunction(
+        const std::string &key,
+        std::function<int(HttpServerFDHandler &k, HttpRequestInformation &inf)> fc
+    )
     {
-    private:
-        std::function<bool(const HttpRequestInformation &inf, HttpServerFDHandler &k)> fc;
-        HttpRequestInformation *HttpInf;
-    private:
-        void consumer(const int &threadID);
-    public:
-        /**
-        * @brief Constructor, which is enabled by default. Limit the maximum number of connections to an IP address to 20; The fastest connection speed per second for the same IP address is 6
-        * @note Turning on the security module has a performance impact
-        * @param maxFD service object can accept the maximum number of connections
-        * @param security_open true: enable the security module false: disable the security module (enabled by default)
-        * @param connectionNumLimit The maximum number of connections from the same IP address
-        * @param connectionRateLimit The maximum number of connections per second to the same IP address
-        * @param buffer_size The maximum amount of data allowed to be transferred over the same connection (in KB) is 8KB by default
-        * @param requestRatte The maximum number of requests allowed in one second for the same connection (the default is 12 times)
-        * @param checkFrequency The frequency of checking zombie connections (in minutes) The default is 1 minute -1 means no check
-        * @param connectionTimeout The number of seconds that a connection is considered a zombie connection if there is no response (in seconds) The default is 60 seconds -1 means no limit
-        */
-        HttpServer(const unsigned long long &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){}
-        /**
-        * @brief Set a callback function for responding after receiving and successfully parsing an Http/Https request
-        * Register a callback function
-        * @param fc A function or function object for the callback function to respond after receiving and successfully parsing an Http/Https request
-        * - Parameters: HttpRequestInformation &inf - Http/Https request information
-        *             HttpServerFDHandler &k - Reference to the server object
-        * - Return: bool - true for success, false for processing failure
-        * @note The passed function should have the signature bool func(const HttpRequestInformation &inf, HttpServerFDHandler &k)
-        * @note If processing fails, the connection will be closed
-        */
-        bool setFunction(std::function<bool(const HttpRequestInformation &inf, HttpServerFDHandler &k)> fc) { this->fc = fc; return true; }
-        /**
-        * @brief Open the Http server listening program
-        * @param port Port to listen on
-        * @param threads Number of consumer threads (default is 8)
-        * @return true: Listening started successfully, false: Failed to start listening
-        */
-        bool startListen(const int &port, const int &threads = 8)
-        {
-            HttpInf=new HttpRequestInformation[maxFD];
-            return TcpServer::startListen(port, threads);
-        }
-        /**
-        * @brief Destructor of WebSocketServer
-        */
-        ~HttpServer()
-        {
-            delete[] HttpInf;
-        }
-    };
+        auto [it, inserted] = solveFun.try_emplace(key);
+        it->second.push_back(std::move(fc));
+    }
+
+    /**
+     * @brief Set the callback function used to parse the key.
+     * @note This function extracts the key from the input parameters and stores
+     *       it in the ctx hash table of HttpRequestInformation. The framework
+     *       uses this key to locate the registered processing callbacks.
+     * @warning The callable object must strictly follow the required return
+     *          value conventions.
+     * @param parseKeyFun The callback function used to parse the key.
+     *        - Parameters:
+     *          HttpServerFDHandler &k  - Reference to the socket operation object
+     *                                  associated with the client connection.
+     *          HttpRequestInformation &inf - Client request information,
+     *                                  including data, processing progress,
+     *                                  and state machine information.
+     *        - Return value:
+     *          -2 : Processing failed and the connection must be closed.
+     *          -1 : Processing failed but the connection should remain open.
+     *           0 : Processing has been dispatched to the worker thread pool
+     *               and the framework should wait for completion.
+     *           1 : Processing succeeded.
+     *
+     * @example
+     * httpserver->setGetKeyFunction(
+     *     [](HttpServerFDHandler &k, HttpRequestInformation &inf) -> int {
+     *         inf.ctx["key"] = inf.loc;
+     *         return 1;
+     *     });
+     */
+    void setGetKeyFunction(
+        std::function<int(HttpServerFDHandler &k, HttpRequestInformation &inf)> parseKeyFun
+    )
+    {
+        this->parseKey = parseKeyFun;
+    }
+
+    /**
+     * @brief Start the HTTP server listening loop.
+     * @param port The port to listen on.
+     * @param threads Number of worker/consumer threads (default: 8).
+     * @return true if the server starts listening successfully,
+     *         false otherwise.
+     */
+    bool startListen(const int &port, const int &threads = 8)
+    {
+        return TcpServer::startListen(port, threads);
+    }
+
+    /**
+     * @brief Destructor.
+     */
+    ~HttpServer() {}
+};
+
     /**
     * @brief WebSocket protocol operation class
     * Only pass in the socket, then use this class for WebSocket operations
@@ -2857,188 +3129,277 @@ public:
     * @brief WebSocketServer server operation class
     */
     class WebSocketServer : public TcpServer
-    {
-    private:
-        std::unordered_map<int, WebSocketFDInformation> wbclientfd;
-        std::mutex lwb;
-        std::function<bool(const std::string &msg, WebSocketServer &k,const WebSocketFDInformation &inf)> fc = [](const std::string &message, WebSocketServer &k,const WebSocketFDInformation &inf)->bool
-        {std::cout << "Received: " << message << std::endl; return true;};
-        std::function<bool(const WebSocketFDInformation &k)> fcc = [](const WebSocketFDInformation &k)
-        {return true;};
-        std::function<void(const WebSocketFDInformation &inf, WebSocketServer &k)> fccc = [](const WebSocketFDInformation &inf, WebSocketServer &k)
-        {
+{
+private:
+    std::unordered_map<int, WebSocketFDInformation> wbclientfd;
+    std::mutex lwb;
 
+    std::function<bool(WebSocketFDInformation &k)> fcc =
+        [](WebSocketFDInformation &k) {
+            return true;
         };
-        int seca = 20*60;
-        int secb = 30;
-        bool HBflag;
-        bool HBflag1;
-    private:
-        void consumer(const int &threadID);
-       
-        void closeAck(const int &fd, const std::string &closeCodeAndMessage);
-        void closeAck(const int &fd, const short &code = 1000, const std::string &message = "bye");
-        std::condition_variable hb_cv;
-        std::mutex hb_m;
-        void HB();
-        bool closeWithoutLock(const int &fd, const std::string &closeCodeAndMessage);
-        bool closeWithoutLock(const int &fd, const short &code = 1000, const std::string &message = "bye");
-    public:
-        /**
-        * @brief Constructor, which is enabled by default. Limit the maximum number of connections to an IP address to 20; The fastest connection speed per second for the same IP address is 6
-        * @note Turning on the security module has a performance impact
-        * @param maxFD service object can accept the maximum number of connections
-        * @param security_open true: enable the security module false: disable the security module (enabled by default)
-        * @param connectionNumLimit The maximum number of connections from the same IP address
-        * @param connectionRateLimit The maximum number of connections per second to the same IP address
-        * @param buffer_size The maximum amount of data allowed to be transferred over the same connection (in KB) is 8KB by default
-        * @param checkFrequency The frequency of checking zombie connections (in minutes) The default is 1 minute -1 means no check
-        * @param connectionTimeout The number of seconds that a connection is considered a zombie connection if there is no response (in seconds) The default is 60 seconds -1 means no limit
-        */
-        WebSocketServer(const unsigned long long &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){}
-        /**
-        * @brief Set the callback function to be executed after a websocket connection is successful
-        * Register a callback function
-        * @param fc A function or function object to be executed after a websocket connection is successful
-        * - Parameters: const WebSocketFDInformation &inf - Websocket server information
-        *             WebSocketServer &k - Reference to the server object
-        * @note The passed function should have the signature void func(const WebSocketFDInformation &inf, WebSocketServer &k)
-        */
-        void setStartFunction(std::function<void(const WebSocketFDInformation &inf, WebSocketServer &k)> fccc) { this->fccc = fccc; }
-        /**
-        * @brief Set the handshake phase check function for websocket, only execute subsequent handshake if check passes
-        * Register a callback function
-        * @param fc A function or function object to be executed after a websocket connection is successful
-        * - Parameters: const WebSocketFDInformation &inf - Websocket server information
-        * - Return value: true: Check passed, false: Check failed
-        * @note The passed function should have the signature bool func(const WebSocketFDInformation &k)
-        * @note Only execute subsequent handshake if check passes, otherwise disconnect
-        */
-        void setJudgeFunction(std::function<bool(const WebSocketFDInformation &k)> fcc) { this->fcc = fcc; }
-        /**
-        * @brief Set the callback function after receiving a message from the client
-        * Register a callback function
-        * @param fc A function or function object for processing logic after receiving a message from the client
-        * - Parameters: string &message - Socket to be processed
-        *             WebsocketClient &k - Reference to the current object
-        *             ,WebSocketFDInformation &inf - restore client's information
-        * - Return: bool - true for successful processing, false for processing failure
-        * @note The passed function should have the signature bool func(const std::string &message, WebSocketClient &k)
-        * @note If processing fails, the entire websocket connection will be closed directly
-        */
-        void setFunction(std::function<bool(const std::string &msg, WebSocketServer &k,const WebSocketFDInformation &inf)> fc) { this->fc = fc; }
-        /**
-        * @brief Set heartbeat time
-        * @param seca Heartbeat time in minutes. Default is 20 minutes if not set
-        */
-        void setTimeOutTime(const int &seca) { this->seca = seca * 60; }
-        /**
-        * @brief Set the waiting time after sending a heartbeat
-        * @param secb Waiting time after sending a heartbeat in seconds. Default is 30 seconds if not set
-        * @note If the peer does not respond within this time, the connection will be closed
-        */
-        void setHBTimeOutTime(const int &secb) { this->secb = secb; }
-        /**
-        * @brief Send a close frame to close the WebSocket connection of the corresponding socket (simplified method)
-        * 
-        * Pass in the socket fd to close the connection
-        * Directly pass the encoded close payload, where the first two bytes are the close code (big-endian),
-        * followed by the UTF-8 encoded close reason description for simplified calling.
-        * 
-        * @param fd Socket fd
-        * @param closeCodeAndMessage Encoded close frame payload (2-byte close code + optional message)
-        * @return true: Closed successfully, false: Failed to close
-        */
-        bool close(const int &fd, const std::string &closeCodeAndMessage);
-        /**
-        * @brief Send a close frame to close the WebSocket connection of the corresponding socket (standard method)
-        * 
-        * Pass in the socket fd to close the connection
-        * Build a close frame (opcode = 0x8) that conforms to RFC 6455, with the frame payload containing 
-        * the close code (2 bytes) and an optional close reason string.
-        * 
-        * @param fd Socket fd
-        * @param code WebSocket close code, common ones include:
-        * - 1000: Normal Closure
-        * - 1001: Going Away
-        * - 1002: Protocol Error
-        * - 1003: Unsupported Data
-        * - 1006: Abnormal Closure (no close frame, used internally by the program)
-        * - 1008: Policy Violation
-        * - 1011: Internal Error
-        * 
-        * @param message Optional close reason for debugging or logging
-        * @return true: Closed successfully, false: Failed to close
-        */
-        bool close(const int &fd, const short &code = 1000, const std::string &message = "bye");
-        /**
-        * @brief Send a WebSocket message to a specific client
-        * 
-        * According to the WebSocket protocol, encapsulate and send a masked data frame (clients must use masking),
-        * supporting automatic frame format selection based on payload length:
-        * - payload <= 125 bytes: Use 1-byte length
-        * - 126 <= payload <= 65535: Use 2-byte extended length (with 126 marker)
-        * - payload > 65535: Use 8-byte extended length (with 127 marker)
-        * 
-        * @param fd Socket connected to the client
-        * @param msg Message content to be sent (already encoded as text or binary)
-        * @param type Custom field specifying the message type (usually the WebSocket frame's opcode)
-        *        Conventional format is "1000" + type, where:
-        *        - "0001" represents text frame (Text Frame)
-        *        - "0010" represents binary frame (Binary Frame)
-        *        - "1000" represents connection close (Close Frame)
-        *        - "1001" represents Ping frame
-        *        - "1010" represents Pong frame
-        *        Please use according to internal conventions, text frame (Text Frame) is used by default
-        * 
-        * @return true if sending is successful
-        * @return false if sending fails (may be due to unestablished connection or sending exception)
-        */
-        bool sendMessage(const int &fd, const std::string &msg, const std::string &type = "0001") { WebSocketServerFDHandler k; k.setFD(fd, getSSL(fd), unblock); return k.sendMessage(msg, type); }
-        /**
-        * @brief Close listening and all connections
-        * @note Will block until all are closed
-        */
-        bool close();
-        /**
-        * @brief Open the Websocket server listening program
-        * @param port Port to listen on
-        * @param threads Number of consumer threads (default is 8)
-        * @return true: Listening started successfully, false: Failed to start listening
-        */
-        bool startListen(const int &port, const int &threads = 8)
+
+    std::function<void(WebSocketServerFDHandler &k, WebSocketFDInformation &inf)> fccc =
+        [](WebSocketServerFDHandler &k, WebSocketFDInformation &inf) {};
+
+    std::function<bool(WebSocketServerFDHandler &k, WebSocketFDInformation &inf)> globalSolveFun =
+        [](WebSocketServerFDHandler &k, WebSocketFDInformation &inf) -> bool {
+            return true;
+        };
+
+    std::unordered_map<
+        std::string,
+        std::vector<std::function<int(WebSocketServerFDHandler &, WebSocketFDInformation &)>>>
+        solveFun;
+
+    std::function<int(WebSocketServerFDHandler &k, WebSocketFDInformation &inf)> parseKey =
+        [](WebSocketServerFDHandler &k, WebSocketFDInformation &inf) -> int {
+            inf.ctx["key"] = inf.message;
+            return 1;
+        };
+
+    int seca = 20 * 60;  // heartbeat interval (seconds)
+    int secb = 30;       // heartbeat response timeout (seconds)
+
+    bool HBflag;
+    bool HBflag1;
+
+private:
+    void handler_netevent(const int &fd);
+    void handler_workerevent(const int &fd, const int &ret);
+
+    void closeAck(const int &fd, const std::string &closeCodeAndMessage);
+    void closeAck(const int &fd, const short &code = 1000, const std::string &message = "bye");
+
+    std::condition_variable hb_cv;
+    std::mutex hb_m;
+
+    void HB();
+
+    bool closeWithoutLock(const int &fd, const std::string &closeCodeAndMessage);
+    bool closeWithoutLock(const int &fd, const short &code = 1000, const std::string &message = "bye");
+
+public:
+    /**
+     * @brief Submit a task to the worker thread pool.
+     * @note Slow or blocking I/O operations should be dispatched to the worker pool.
+     * @warning The callable object must strictly follow the required return value conventions.
+     * @param fun The callable task to be executed by the worker thread pool.
+     *        - Parameters:
+     *          WebSocketServerFDHandler &k  - Socket operation object bound to the client.
+     *          WebSocketFDInformation &inf - Client information including data,
+     *                                       processing progress, and state machine data.
+     *        - Return value:
+     *          -2 : Processing failed and the connection must be closed.
+     *          -1 : Processing failed but the connection should remain open.
+     *           1 : Processing succeeded.
+     * @param k   Reference to the socket handler.
+     * @param inf Reference to the client information.
+     */
+    void putTask(
+        const std::function<int(WebSocketServerFDHandler &, WebSocketFDInformation &)> &fun,
+        WebSocketServerFDHandler &k,
+        WebSocketFDInformation &inf);
+
+    /**
+     * @brief Constructor.
+     * @note The security module is enabled by default.
+     *       - Max connections per IP: 20
+     *       - Max connection rate per IP: 6 connections per second
+     *       Enabling security may slightly impact performance.
+     * @param maxFD Maximum number of concurrent connections.
+     * @param security_open Enable or disable the security module.
+     * @param connectionNumLimit Maximum number of connections per IP.
+     * @param connectionRateLimit Maximum connection rate per IP per second.
+     * @param buffer_size Maximum data size per connection (KB).
+     * @param requestRate Maximum requests per second per connection.
+     * @param checkFrequency Zombie connection check interval (minutes).
+     * @param connectionTimeout Idle timeout before considering a connection zombie (seconds).
+     */
+    WebSocketServer(
+        const unsigned long long &maxFD = 10000000,
+        const bool &security_open = true,
+        const int &connectionNumLimit = 20,
+        const int &connectionRateLimit = 6,
+        const int &buffer_size = 256,
+        const int &requestRate = 40,
+        const int &checkFrequency = 1,
+        const int &connectionTimeout = 60)
+        : TcpServer(maxFD, security_open, connectionNumLimit, connectionRateLimit,
+                    buffer_size, requestRate, checkFrequency, connectionTimeout) {}
+
+    /**
+     * @brief Set the global fallback handler.
+     * @note This handler is invoked when no matching key-based callback is found.
+     * @param fc Fallback function to process incoming messages.
+     *        - Parameters:
+     *          WebSocketServerFDHandler &k
+     *          WebSocketFDInformation &inf
+     *        - Return value:
+     *          true  : Processing succeeded.
+     *          false : Processing failed and the connection will be closed.
+     */
+    void setGlobalSolveFunction(
+        std::function<bool(WebSocketServerFDHandler &, WebSocketFDInformation &)> fc)
+    {
+        this->globalSolveFun = fc;
+    }
+
+    /**
+     * @brief Set the callback invoked immediately after a WebSocket connection is established.
+     * @param fccc Callback executed after successful WebSocket handshake.
+     *        - Parameters:
+     *          WebSocketServerFDHandler &k
+     *          WebSocketFDInformation &inf
+     */
+    void setStartFunction(
+        std::function<void(WebSocketServerFDHandler &, WebSocketFDInformation &)> fccc)
+    {
+        this->fccc = fccc;
+    }
+
+    /**
+     * @brief Set the handshake validation callback.
+     * @note Only if this check passes will the WebSocket handshake continue.
+     * @param fcc Validation function.
+     *        - Parameters:
+     *          WebSocketFDInformation &inf
+     *        - Return value:
+     *          true  : Validation passed.
+     *          false : Validation failed and the connection will be closed.
+     */
+    void setJudgeFunction(std::function<bool(WebSocketFDInformation &)> fcc)
+    {
+        this->fcc = fcc;
+    }
+
+    /**
+     * @brief Register a message handler callback for a specific key.
+     * @note Multiple handlers can be registered for the same key and will be
+     *       executed sequentially.
+     * @warning Return values must strictly follow the defined conventions.
+     * @param key Message key.
+     * @param fc  Callback function.
+     *        - Return value:
+     *          -2 : Close connection.
+     *          -1 : Processing failed but keep connection.
+     *           0 : Dispatched to worker pool.
+     *           1 : Processing succeeded.
+     */
+    void setFunction(
+        const std::string &key,
+        std::function<int(WebSocketServerFDHandler &, WebSocketFDInformation &)> fc)
+    {
+        auto [it, inserted] = solveFun.try_emplace(key);
+        it->second.push_back(std::move(fc));
+    }
+
+    /**
+     * @brief Set the key parsing callback.
+     * @note The parsed key must be stored in inf.ctx["key"].
+     * @param parseKeyFun Key parsing function.
+     */
+    void setGetKeyFunction(
+        std::function<int(WebSocketServerFDHandler &, WebSocketFDInformation &)> parseKeyFun)
+    {
+        this->parseKey = parseKeyFun;
+    }
+
+    /**
+     * @brief Set heartbeat interval.
+     * @param seca Heartbeat interval in minutes (default: 20 minutes).
+     */
+    void setTimeOutTime(const int &seca)
+    {
+        this->seca = seca * 60;
+    }
+
+    /**
+     * @brief Set heartbeat response timeout.
+     * @param secb Time to wait after sending a heartbeat (seconds).
+     * @note If no response is received within this time, the connection is closed.
+     */
+    void setHBTimeOutTime(const int &secb)
+    {
+        this->secb = secb;
+    }
+
+    /**
+     * @brief Close a WebSocket connection using an encoded close payload.
+     * @param fd Socket file descriptor.
+     * @param closeCodeAndMessage Encoded close payload
+     *        (2 bytes close code + optional UTF-8 reason).
+     * @return true if closed successfully, false otherwise.
+     */
+    bool close(const int &fd, const std::string &closeCodeAndMessage);
+
+    /**
+     * @brief Close a WebSocket connection using standard RFC 6455 format.
+     * @param fd Socket file descriptor.
+     * @param code WebSocket close code (default: 1000).
+     * @param message Optional close reason.
+     * @return true if closed successfully, false otherwise.
+     */
+    bool close(const int &fd, const short &code = 1000, const std::string &message = "bye");
+
+    /**
+     * @brief Send a WebSocket message to a specific client.
+     * @param fd Client socket file descriptor.
+     * @param msg Message payload.
+     * @param type Frame opcode type (default: text frame).
+     * @return true if sent successfully, false otherwise.
+     */
+    bool sendMessage(
+        const int &fd,
+        const std::string &msg,
+        const std::string &type = "0001")
+    {
+        WebSocketServerFDHandler k;
+        k.setFD(fd, getSSL(fd), unblock);
+        return k.sendMessage(msg, type);
+    }
+
+    /**
+     * @brief Close all connections and stop listening.
+     * @note This call blocks until all resources are released.
+     */
+    bool close();
+
+    /**
+     * @brief Start the WebSocket server.
+     * @param port Listening port.
+     * @param threads Number of worker threads (default: 8).
+     */
+    bool startListen(const int &port, const int &threads = 8)
+    {
+        std::thread(&WebSocketServer::HB, this).detach();
+        return TcpServer::startListen(port, threads);
+    }
+
+    /**
+     * @brief Broadcast a WebSocket message to all connected clients.
+     * @param msg Message payload.
+     * @param type Frame opcode type.
+     */
+    void sendMessage(const std::string &msg, const std::string &type = "0001");
+
+    /**
+     * @brief Destructor.
+     * @note Blocks until all connections, heartbeat threads,
+     *       and listening sockets are fully closed.
+     */
+    ~WebSocketServer()
+    {
         {
-            std::thread(&WebSocketServer::HB, this).detach();
-            return TcpServer::startListen(port, threads);
+            std::lock_guard<std::mutex> lk(hb_m);
+            HBflag1 = false;
         }
-        /**
-        * @brief Broadcast send a WebSocket message
-        * 
-        * Broadcast and send messages to all clients
-        * According to the WebSocket protocol, encapsulate and send a masked data frame (clients must use masking),
-        * supporting automatic frame format selection based on payload length:
-        * - payload <= 125 bytes: Use 1-byte length
-        * - 126 <= payload <= 65535: Use 2-byte extended length (with 126 marker)
-        * - payload > 65535: Use 8-byte extended length (with 127 marker)
-        * 
-        * @param msg Message content to be sent (already encoded as text or binary)
-        * @param type Custom field specifying the message type (usually the WebSocket frame's opcode)
-        *        Conventional format is "1000" + type, where:
-        *        - "0001" represents text frame (Text Frame)
-        *        - "0010" represents binary frame (Binary Frame)
-        *        - "1000" represents connection close (Close Frame)
-        *        - "1001" represents Ping frame
-        *        - "1010" represents Pong frame
-        *        Please use according to internal conventions, text frame (Text Frame) is used by default
-        * 
-        */
-        void sendMessage(const std::string &msg, const std::string &type = "0001");
-        /**
-        * @brief Destructor of WebSocketServer
-        * @note When destroying the object, it will block until all connections and listening are closed
-        */
-        ~WebSocketServer() { {std::lock_guard<std::mutex> lk(hb_m);HBflag1=false;}hb_cv.notify_all(); while(HBflag); }
-    };
+        hb_cv.notify_all();
+        while (HBflag)
+            ;
+    }
+};
+
 
     /**
     * @brief UDP operation class
@@ -3604,6 +3965,138 @@ public:
                     }
                 }
             }
+        };
+
+        using Task = std::function<void()>;
+        /**
+        * @class WorkerPool
+        * @brief Fixed-size worker thread pool
+        *
+        * WorkerPool Internally, it maintains a task queue and several worker threads.
+        * Each worker thread takes a task from the queue and executes it in a loop.
+        *
+        * ## characteristic
+        * - Fixed number of threads
+        * - Thread-safe task submission
+        * - Supports graceful shutdown.
+        *
+        * ## Thread safety instructions
+        * - submit() is thread-safe
+        * - stop() is thread-safe
+        *
+        * ## Usage example
+        * @code
+        * WorkerPool pool(4);
+        * pool.submit([] {
+        *     // perform tasks
+        * });
+        * pool.stop();
+        * @endcode
+        */
+        class WorkerPool 
+        {
+        public:
+            /**
+            * @brief Constructor, creates a specified number of worker threads.
+            *
+            * @param n Number of worker threads
+            *
+            * Once constructed, all threads start immediately and enter a waiting state.
+            */
+            explicit WorkerPool(size_t n):stop_(false)
+            {
+                for (size_t i = 0; i < n; ++i) {
+                    threads_.emplace_back([this] {
+                        this->workerLoop();
+                    });
+                }
+            }
+            /**
+            * @brief destructor
+            *
+            * stop() is automatically called during destruction.
+            * Ensure all threads exit and are correctly joined.
+            */
+            ~WorkerPool() 
+            {
+                stop();
+            }
+            /**
+            * @brief Submit a task to the thread pool
+            *
+            * @param task Callable objects, with the function signature void()
+            *
+            * The task is placed in an internal queue and executed asynchronously by a worker thread.
+            */
+            void submit(Task task) 
+            {
+                {
+                    std::lock_guard<std::mutex> lk(mtx_);
+                    tasks_.push(std::move(task));
+                }
+                cv_.notify_one();
+            }
+            /**
+             * @brief Stop the thread pool and wait for all threads to exit.
+             *
+            * After calling:
+            * - No new tasks should be submitted.
+            * - Submitted but not yet executed tasks will be completed.
+            * - All worker threads will exit and join.
+            *
+            * This function can be called repeatedly safely.
+            */
+            void stop() 
+            {
+                {
+                    std::lock_guard<std::mutex> lk(mtx_);
+                    stop_ = true;
+                }
+                cv_.notify_all();
+                for (auto &t : threads_) 
+                {
+                    if (t.joinable()) t.join();
+                }
+            }
+
+        private:
+            /**
+            * @brief Worker thread main loop
+            *
+            * This function will be executed by each worker thread:
+            * - Waiting for a task or stop signal on a condition variable.
+            * - Retrieve tasks from the task queue.
+            * - perform tasks
+            *
+            * The thread exits when stop_ is true and the task queue is empty.
+            */
+            void workerLoop() 
+            {
+                while (true) 
+                {
+                    Task task;
+                    {
+                        std::unique_lock<std::mutex> lk(mtx_);
+                        cv_.wait(lk, [this] {
+                        return stop_ || !tasks_.empty();
+                        });
+                        if (stop_ && tasks_.empty())
+                        {
+                            return;
+                        }
+                        task = std::move(tasks_.front());
+                        tasks_.pop();
+                    }
+                    task(); // perform tasks
+                }
+            }
+
+        private:
+            std::vector<std::thread> threads_;
+            std::queue<Task> tasks_;
+            std::mutex mtx_;
+            std::condition_variable cv_;
+            bool stop_;
         };
     }
 

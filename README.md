@@ -237,6 +237,11 @@ Added information security module and updated network optimization.
 2. Minor functionalities were added to the information security module.
 3. Numerous bugs were fixed.
 
+### v.0.4.0 - 2025-12-31
+🚀 Major architecture upgrade:
+
+- Changed to a true reactor model
+
 
 ## STTNet
 ## C++ 轻量级高性能网络框架
@@ -471,3 +476,7 @@ fix bug
 
 ### v.0.3.4 - 2025-12-14
 1，日志系统改为异步日志，优化性能。2，补完信息安全模块的小功能 3，修复大量bug。
+
+### v.0.4.0 - 2025-12-31
+🚀 Major architecture upgrade / 架构重大升级：
+- 改成真正的reactor模型

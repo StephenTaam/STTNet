@@ -38,8 +38,48 @@ int main(int argc,char *argv[])
 		*/
 	});
 
+	httpserver->setGetKeyFunction([](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
+	{
+		//httpserver->putTask([](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
+		//{
+			inf.ctx["key"]=inf.loc;
+			return 1;
+		//},k,inf);
+		//return 0;
+	});
+
+	httpserver->setFunction("/ping",[](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
+	{
+		cout<<"1"<<endl;
+		return 1;
+	});
+	httpserver->setFunction("/ping",[](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
+	{
+		httpserver->putTask([](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
+		{
+			cout<<"2"<<endl;
+			return 1;
+		},k,inf);
+		return 0;
+	});
+	httpserver->setFunction("/ping",[](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
+	{
+		k.sendBack("pong");
+		return 1;
+	});
+	httpserver->setFunction("/ping",[](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
+	{
+		cout<<"3"<<endl;
+		return 1;
+	});
+	httpserver->setFunction("/baby",[](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
+	{
+		k.sendBack("凡贝我爱你❤️",HttpStringUtil::createHeader("Content-Type","text/html;charset=utf-8"));
+		return 1;
+	});
 	//set a callback function to handle http request
 	//设置回调函数处理Http请求
+	/*
 	httpserver->setFunction([](const HttpRequestInformation &info, HttpServerFDHandler &conn) -> bool {
 
 		char data[10]="pong";
@@ -58,16 +98,34 @@ int main(int argc,char *argv[])
         }
         return true;
     });
-
+	*/
 	//start listen port 8080 and add logfile to this server objection.
 	//监听8080端口，并且加入日志文件到这个服务对象
 	httpserver->startListen(8080,2);
 
 	
 		s=new WebSocketServer(5000,false);
-		s->setFunction([](const std::string &msg, WebSocketServer &k,const WebSocketFDInformation &inf) -> bool {
-			return k.sendMessage(inf.fd,msg);
-    });
+		s->setGlobalSolveFunction([](WebSocketServerFDHandler &k,WebSocketFDInformation &inf)->bool
+		{
+			return k.sendMessage(inf.message);
+		});
+		s->setGetKeyFunction([](WebSocketServerFDHandler &k,WebSocketFDInformation &inf)->int
+	{
+		//httpserver->putTask([](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
+		//{
+			inf.ctx["key"]=inf.message;
+			return 1;
+		//},k,inf);
+		//return 0;
+	});
+	s->setFunction("ping",[](WebSocketServerFDHandler &k,WebSocketFDInformation &inf)->int
+	{
+		k.sendMessage("pong");
+		return 1;
+	});
+		//s->setFunction([](const std::string &msg, WebSocketServer &k,const WebSocketFDInformation &inf) -> bool {
+		//	return k.sendMessage(inf.fd,msg);
+    //});
 	//s->setStartFunction([](const WebSocketFDInformation &inf, WebSocketServer &k) -> void {
 	//		k.close(inf.fd);
     //});

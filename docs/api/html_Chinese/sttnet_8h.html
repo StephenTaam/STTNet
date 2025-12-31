@@ -41,6 +41,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
       <li><a href="namespaces.html"><span>命名空间</span></a></li>
       <li><a href="annotated.html"><span>类</span></a></li>
       <li class="current"><a href="files.html"><span>文件</span></a></li>
+      <li><a href="examples.html"><span>示例</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -137,6 +138,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <code>#include &lt;sys/shm.h&gt;</code><br/>
 <code>#include &lt;type_traits&gt;</code><br/>
 <code>#include &lt;charconv&gt;</code><br/>
+<code>#include &lt;any&gt;</code><br/>
+<code>#include &lt;sys/eventfd.h&gt;</code><br/>
 </div>
 <p><a href="sttnet_8h_source.html">浏览源代码.</a></p>
 <table class="memberdecls">
@@ -226,11 +229,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">stt::network::WebSocketFDInformation</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存客户端WS/WSS请求信息的结构体  <a href="structstt_1_1network_1_1WebSocketFDInformation.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html">stt::network::TcpFDInf</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存Tcp客户端信息的结构体  <a href="structstt_1_1network_1_1TcpFDInf.html#details">更多...</a><br/></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpInformation.html">stt::network::TcpInformation</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存Tcp客户端的信息  <a href="structstt_1_1network_1_1TcpInformation.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1QueueFD.html">stt::network::QueueFD</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">消息队列元素的结构体  <a href="structstt_1_1network_1_1QueueFD.html#details">更多...</a><br/></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html">stt::network::TcpFDInf</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存底层基础Tcp通道信息的结构体  <a href="structstt_1_1network_1_1TcpFDInf.html#details">更多...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WorkerMessage.html">stt::network::WorkerMessage</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">工作现场完成任务后压入完成队列的数据结构  <a href="structstt_1_1network_1_1WorkerMessage.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html">stt::network::TcpServer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tcp服务端类  <a href="classstt_1_1network_1_1TcpServer.html#details">更多...</a><br/></td></tr>
@@ -268,10 +274,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1Process.html">stt::system::Process</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">进程管理的静态工具类  <a href="classstt_1_1system_1_1Process.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1WorkerPool.html">stt::system::WorkerPool</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">固定大小的工作线程池  <a href="classstt_1_1system_1_1WorkerPool.html#details">更多...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 命名空间</h2></td></tr>
 <tr class="memitem:namespacestt"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt.html">stt</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacestt_1_1system"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1system.html">stt::system</a></td></tr>
+<tr class="memdesc:namespacestt_1_1system"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统的设置，进程的控制，心跳监控等 <br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacestt_1_1file"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1file.html">stt::file</a></td></tr>
 <tr class="memdesc:namespacestt_1_1file"><td class="mdescLeft">&#160;</td><td class="mdescRight">文件相关：文件读写，日志等 <br/></td></tr>
@@ -287,9 +299,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacestt_1_1network"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1network.html">stt::network</a></td></tr>
 <tr class="memdesc:namespacestt_1_1network"><td class="mdescLeft">&#160;</td><td class="mdescRight">网络框架，协议，通信，io多路复用相关 <br/></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespacestt_1_1system"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1system.html">stt::system</a></td></tr>
-<tr class="memdesc:namespacestt_1_1system"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统的设置，进程的控制，心跳监控等 <br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
@@ -319,6 +328,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <tr class="separator:a787bed48068980e66f0f4d4ea4d00ac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4770713baaf3ea1a4cede314e6c361a9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1time.html#a4770713baaf3ea1a4cede314e6c361a9">stt::time::Seconds</a> = std::chrono::duration&lt; uint64_t &gt;</td></tr>
 <tr class="separator:a4770713baaf3ea1a4cede314e6c361a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96492ef66fd55413ac968acea5978183"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1system.html#a96492ef66fd55413ac968acea5978183">stt::system::Task</a> = std::function&lt; void()&gt;</td></tr>
+<tr class="separator:a96492ef66fd55413ac968acea5978183"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 函数</h2></td></tr>

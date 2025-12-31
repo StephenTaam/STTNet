@@ -15,5 +15,6 @@ var searchData=
   ['renew',['renew',['../classstt_1_1system_1_1HBSystem.html#a645bb7b07ae96a735f8564c0dc92a165',1,'stt::system::HBSystem']]],
   ['request',['request',['../structstt_1_1security_1_1IPInformation.html#ad25a4cdd6d4c844e8cdc3bb4b8486d7b',1,'stt::security::IPInformation']]],
   ['resetctx',['resetCTX',['../classstt_1_1network_1_1TcpClient.html#ab4f4257567d6aaeebd07225263409445',1,'stt::network::TcpClient']]],
-  ['response',['response',['../structstt_1_1network_1_1WebSocketFDInformation.html#a29b72edd9475c8c94c91affb5bfc7ad1',1,'stt::network::WebSocketFDInformation']]]
+  ['response',['response',['../structstt_1_1network_1_1WebSocketFDInformation.html#a29b72edd9475c8c94c91affb5bfc7ad1',1,'stt::network::WebSocketFDInformation']]],
+  ['ret',['ret',['../structstt_1_1network_1_1WorkerMessage.html#ac7b55b9614c33f6a53eb38a947d0d2ba',1,'stt::network::WorkerMessage']]]
 ];

@@ -1,8 +1,8 @@
 /**
 * @mainpage STTNet C++ Framework
 * @author StephenTaam(1356597983@qq.com)
-* @version 0.3.4
-* @date 2025-12-14
+* @version 0.4.0
+* @date 2025-12-30
 */
 #ifndef PUBLIC_H
 #define PUBLIC_H 1
@@ -48,11 +48,20 @@
 #include<sys/shm.h>
 #include<type_traits>
 #include<charconv>
+#include<any>
+#include <sys/eventfd.h>
+
 /**
 * @namespace stt
 */
+
 namespace stt
 {
+
+    namespace system
+    {
+        class WorkerPool;
+    }
     /**
     * @namespace stt::file
     * @brief 文件相关：文件读写，日志等
@@ -2372,33 +2381,41 @@ namespace stt
     struct HttpRequestInformation 
     {
         /**
+        * @brief 底层的socket套接字
+        */
+        int fd;
+        /**
         * @brief 请求类型
         */
-        std::string_view type;
+        std::string type;
         /**
         * @brief url中的路径和参数
         */
-        std::string_view locPara;
+        std::string locPara;
         /**
         * @brief url中的路径
         */
-        std::string_view loc;
+        std::string loc;
         /**
         * @brief url中的参数
         */
-        std::string_view para;
+        std::string para;
         /**
         * @brief 请求头
         */
-        std::string_view header;
+        std::string header;
         /**
         * @brief 请求体
         */
-        std::string_view body;
+        std::string body;
         /**
         * @brief 请求体（chunked）
         */
         std::string body_chunked;
+        /**
+        * @brief 所需的数据仓库
+        */
+        std::unordered_map<std::string,std::any> ctx;
     };
     
     struct TcpFDInf;
@@ -2490,6 +2507,10 @@ namespace stt
         */
         size_t recv_length;
         /**
+        * @brief 已经接收的长度
+        */
+        size_t have_recv_length;
+        /**
         * @brief 消息类型
         */
         int message_type;
@@ -2505,10 +2526,33 @@ namespace stt
         * @brief mask
         */
         std::string mask;
+        /**
+        * @brief 所需的数据仓库
+        */
+        std::unordered_map<std::string,std::any> ctx;
     };
 
     /**
-    * @brief 保存Tcp客户端信息的结构体
+    * @brief 保存Tcp客户端的信息
+    */
+    struct TcpInformation
+    {
+        /**
+        * @brief 套接字fd
+        */
+        int fd;
+        /**
+        * @brief 裸数据
+        */
+        std::string data;
+        /**
+        * @brief 所需的数据仓库
+        */
+        std::unordered_map<std::string,std::any> ctx;
+    };
+
+    /**
+    * @brief 保存底层基础Tcp通道信息的结构体
     */
     struct TcpFDInf
     {
@@ -2525,7 +2569,15 @@ namespace stt
         */
         std::string port;
         /**
-        * @brief 当前fd的状态，用于保存处理机逻辑
+         * @brief 记录当前处理状态机到第几步了
+         */
+        int FDStatus;
+        /**
+        * @brief 等待处理的队列
+        */
+        std::queue<std::any> pendindQueue;
+        /**
+        * @brief 当前fd的接收状态，用于保存接收处理机逻辑
         */
         int status;
         /**
@@ -2547,18 +2599,18 @@ namespace stt
     };
 
     /**
-    * @brief 消息队列元素的结构体
+    * @brief 工作现场完成任务后压入完成队列的数据结构
     */
-    struct QueueFD
+    struct WorkerMessage
     {
         /**
-        * @brief 套接字
+        * @brief 底层套接字
         */
         int fd;
         /**
-        * @brief 是不是关闭消息
+        * @brief 返回值 -2:失败并且要求关闭连接 -1:失败但不需要关闭连接 1:成功
         */
-        bool close;
+        int ret;
     };
     
     
@@ -2569,6 +2621,8 @@ namespace stt
     class TcpServer 
     {
     protected:
+        std::queue<WorkerMessage> finishQueue;
+        stt::system::WorkerPool *workpool; 
         unsigned long buffer_size;
         unsigned long long  maxFD;
         security::ConnectionLimiter connectionLimiter;
@@ -2576,12 +2630,12 @@ namespace stt
         //std::mutex lc1;
         TcpFDInf *clientfd;
         int flag1=true;
-        std::queue<QueueFD> *fdQueue;
-        std::mutex *lq1;
+        //std::queue<QueueFD> *fdQueue;
+        //std::mutex *lq1;
         //std::condition_variable cv1;
-        std::condition_variable *cv;
-        int consumerNum;
-        std::mutex lco1;
+        //std::condition_variable *cv;
+        //int consumerNum;
+        //std::mutex lco1;
         bool unblock;
         SSL_CTX *ctx=nullptr;
         bool TLS=false;
@@ -2589,18 +2643,37 @@ namespace stt
         //std::mutex ltl1;
         bool security_open;
         int checkFrequency;
-        bool flag_detect;
-        bool flag_detect_status;
+        //bool flag_detect;
+        //bool flag_detect_status;
+        int workerEventFD;
     private:
-        std::function<bool(TcpFDHandler &k,TcpFDInf &inf)> fc;
+        std::function<bool(TcpFDHandler &k,TcpInformation &inf)> globalSolveFun=[](TcpFDHandler &k,TcpInformation &inf)->bool
+        {return true;};
+        std::unordered_map<std::string,std::vector<std::function<int(TcpFDHandler &k,TcpInformation &inf)>>> solveFun;
+        std::function<int(TcpFDHandler &k,TcpInformation &inf)> parseKey=[](TcpFDHandler &k,TcpInformation &inf)->int
+        {inf.ctx["key"]=inf.data;return 1;};
         int fd=-1;
         int port=-1;
         int flag=false;
         bool flag2=false;
     private:
         void epolll(const int &evsNum);
-        virtual void consumer(const int &threadID);
+        //virtual void consumer(const int &threadID);
+        virtual void handler_netevent(const int &fd);
+        virtual void handler_workerevent(const int &fd,const int &ret);
     public:
+        /**
+        * @brief 把一个任务放入工作线程池由工作线程完成
+        * @note 应当把速度慢、会阻塞的io任务放入工作线程池
+        * @warning 可执行对象必须严格按照规定的返回值返回
+        * @param fun 放入工作线程池的可执行对象
+        * -参数：TcpFDHandler &k - 和客户端连接的套接字的操作对象的引用
+        *       TcpFDInf &inf - 客户端信息，保存数据，处理进度，状态机信息等
+        * -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 1:处理成功
+        * @param k 和客户端连接的套接字的操作对象的引用
+        * @param inf 客户端信息的引用，保存数据，处理进度，状态机信息等
+        */
+        void putTask(const std::function<int(TcpFDHandler &k,TcpInformation &inf)> &fun,TcpFDHandler &k,TcpInformation &inf);
         /**
         * @brief 构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6
         * @note 打开安全模块会对性能有影响
@@ -2608,12 +2681,12 @@ namespace stt
         * @param security_open true:开启安全模块 false：关闭安全模块 （默认为开启）
         * @param connectionNumLimit 同一个ip连接数目的上限
         * @param connectionRateLimit 同一个ip每秒钟连接数目的上限
-        * @param buffer_size 同一个连接允许传输的最大数据量（单位为kb） 默认为8kb
+        * @param buffer_size 同一个连接允许传输的最大数据量（单位为kb） 默认为256kb
         * @param requestRate 同一个ip一秒内允许的最大请求数量 （默认为12次）
         * @param checkFrequency 检查僵尸连接的频率（单位分钟） 默认为1分钟  -1为不做检查
         * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认60秒 -1为无限制
         */
-        TcpServer(const unsigned long long &maxFD=10000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit,requestRate,connectionTimeout),security_open(security_open),buffer_size(buffer_size*1024),checkFrequency(checkFrequency){}
+        TcpServer(const unsigned long long &maxFD=10000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=256,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit,requestRate,connectionTimeout),security_open(security_open),buffer_size(buffer_size*1024),checkFrequency(checkFrequency){}
         /**
         * @brief 打开Tcp服务器监听程序
         * @param port 监听的端口
@@ -2653,16 +2726,40 @@ namespace stt
         */
         void redrawTLS();
         /**
-        * @brief 设置收到客户端消息后的回调函数
-        * 注册一个回调函数
+        * @brief 设置全局备用函数
+        * @note 找不到对应回调函数的时候会调用全局备用函数
+        * @param key 找到对应回调函数的key
         * @param fc 一个函数或函数对象，用于收到客户端消息后处理逻辑
-        * -参数：TcpFDHandler &k - 和客户端连接的套接字的引用
-        *       TcpFDInf &inf - 客户端信息，还有处理进度，状态机信息等
-        * -返回： bool - 返回true处理成功，返回false处理失败
-        * @note 传入的函数应该有如下签名 bool func(TcpFDHandler &k)
-        * @note 如果处理失败了 会关闭Tcp连接
+        * -参数：TcpFDHandler &k - 和客户端连接的套接字的操作对象的引用
+        *       TcpInformation &inf - 客户端信息，保存数据，处理进度，状态机信息等
+        * -返回值：true：处理成功 false：处理失败 会关闭连接
         */
-        bool setFunction(std::function<bool(TcpFDHandler &k,TcpFDInf &inf)> fc){this->fc=fc;return true;}
+        void setGlobalSolveFunction(std::function<bool(TcpFDHandler &k,TcpInformation &inf)> fc){this->globalSolveFun=fc;}
+        /**
+        * @brief 设置key对应的收到客户端消息后的回调函数
+        * @note 可以设置多个 ，框架会根据设置顺序依次执行回调函数；也可以设置扔入工作线程池处理的流程，注意设置不同的返回值即可。
+        * @warning 可执行对象必须严格按照规定的返回值返回
+        * @param key 找到对应回调函数的key
+        * @param fc 一个函数或函数对象，用于收到客户端消息后处理逻辑
+        * -参数：TcpFDHandler &k - 和客户端连接的套接字的操作对象的引用
+        *       TcpFDInf &inf - 客户端信息，保存数据，处理进度，状态机信息等
+        * -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 0:处理流程已经扔入工作线程池，需要等待处理完成 1:处理成功
+        */
+        void setFunction(const std::string &key,std::function<int(TcpFDHandler &k,TcpInformation &inf)> fc)
+        {
+            auto [it, inserted] = solveFun.try_emplace(key);
+            it->second.push_back(std::move(fc));
+        }
+        /**
+        * @brief 设置解析出key的回调函数
+        * @note 根据传入的参数把key存入TcpInformation信息中的ctx哈希表。框架会根据key的值找到你注册的处理函数。
+        * @warning 可执行对象必须严格按照规定的返回值返回
+        * @param parseKeyFun 解析key的回调函数
+        * -参数：TcpFDHandler &k - 和客户端连接的套接字的操作对象的引用
+        *       TcpFDInf &inf - 客户端信息，保存数据，处理进度，状态机信息等
+        * -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 0:处理流程已经扔入工作线程池，需要等待处理完成 1:处理成功
+        */
+        void setGetKeyFunction(std::function<int(TcpFDHandler &k,TcpInformation &inf)> parseKeyFun){this->parseKey=parseKeyFun;}
         /** 
         * @brief 停止监听
         * @warning 仅停止监听(但是套接字也已经无法接收了，它依赖于监听和消费者，所以这个函数没什么意义)
@@ -2710,11 +2807,31 @@ namespace stt
     class HttpServer:public TcpServer
     {
     private:
-        std::function<bool(const HttpRequestInformation &inf,HttpServerFDHandler &k)> fc;
-        HttpRequestInformation *HttpInf;
+        //std::function<bool(HttpServerFDHandler &k,HttpRequestInformation &inf)> globalSolveFun={};
+        std::unordered_map<std::string,std::vector<std::function<int(HttpServerFDHandler &k,HttpRequestInformation &inf)>>> solveFun;
+        std::function<int(HttpServerFDHandler &k,HttpRequestInformation &inf)> parseKey=[](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
+        {inf.ctx["key"]=inf.loc;return 1;};
+        //std::function<bool(const HttpRequestInformation &inf,HttpServerFDHandler &k)> fc;
+        //HttpRequestInformation *HttpInf;
     private:
-        void consumer(const int &threadID);
+        //void consumer(const int &threadID);
+        //inline void handler(const int &fd);
+        void handler_netevent(const int &fd);
+        void handler_workerevent(const int &fd,const int &ret);
     public:
+        /**
+        * @brief 把一个任务放入工作线程池由工作线程完成
+        * @note 应当把速度慢、会阻塞的io任务放入工作线程池
+        * @warning 可执行对象必须严格按照规定的返回值返回
+        * @param fun 放入工作线程池的可执行对象
+        * -参数：HttpServerFDHandler &k - 和客户端连接的套接字的操作对象的引用
+        *       HttpRequestInformation &inf - 客户端信息，保存数据，处理进度，状态机信息等
+        * -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 1:处理成功
+        * @param k 和客户端连接的套接字的操作对象的引用
+        * @param inf 客户端信息的引用，保存数据，处理进度，状态机信息等
+        */
+         void putTask(const std::function<int(HttpServerFDHandler &k,HttpRequestInformation &inf)> &fun,HttpServerFDHandler &k,HttpRequestInformation &inf);
+         
         /**
         * @brief 构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6
         * @note 打开安全模块会对性能有影响
@@ -2722,23 +2839,56 @@ namespace stt
         * @param security_open true:开启安全模块 false：关闭安全模块 （默认为开启）
         * @param connectionNumLimit 同一个ip连接数目的上限
         * @param connectionRateLimit 同一个ip每秒钟连接数目的上限
-        * @param buffer_size 同一个连接允许传输的最大数据量（单位为kb） 默认为8kb
+        * @param buffer_size 同一个连接允许传输的最大数据量（单位为kb） 默认为256kb
         * @param requestRatte 同一个连接一秒内允许的最大请求数量 （默认为12次）
         * @param checkFrequency 检查僵尸连接的频率（单位分钟） 默认为1分钟  -1为不做检查
         * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认60秒 -1为无限制
         */
-        HttpServer(const unsigned long long &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){}
+        HttpServer(const unsigned long long &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=256,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){}
         /**
-        * @brief 设置一个收到Http/Https请求并成功解析后进行响应的回调函数
-        * 注册一个回调函数
-        * @param fc 一个函数或函数对象，用于当收到Http/Https请求并成功解析后进行响应的回调函数
-        * -参数：HttpRequestInformation &inf - Http/Https请求的信息
-        *       HttpServerFDHandler &k - 服务端对象的引用
-        * -返回： bool - 返回true成功成功，返回false处理失败
-        * @note 传入的函数应该有如下签名 bool func(const HttpRequestInformation &inf,HttpServerFDHandler &k)
-        * @note 如果处理失败了 会关闭连接
+        * @brief 设置key对应的收到客户端消息后的回调函数
+        * @note 可以设置多个 ，框架会根据设置顺序依次执行回调函数；也可以设置扔入工作线程池处理的流程，注意设置不同的返回值即可。
+        * @warning 可执行对象必须严格按照规定的返回值返回
+        * @param key 找到对应回调函数的key
+        * @param fc 一个函数或函数对象，用于收到客户端消息后处理逻辑
+        * -参数：HttpServerFDHandler &k - 和客户端连接的套接字的操作对象的引用
+        *       HttpRequestInformation &inf - 客户端信息，保存数据，处理进度，状态机信息等
+        * -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 0:处理流程已经扔入工作线程池，需要等待处理完成 1:处理成功
+        * @example httpserver->setFunction("/ping",[](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
+	                {
+		                k.sendBack("pong");
+		                return 1;
+	                });
+        * @example httpserver->setFunction("/ping",[](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
+	                {
+		                httpserver->putTask([](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
+		                {
+			                k.sendBack("pong");
+			                return 1;
+		                },k,inf);
+		                return 0;
+	                });
         */
-        bool setFunction(std::function<bool(const HttpRequestInformation &inf,HttpServerFDHandler &k)> fc){this->fc=fc;return true;}
+        void setFunction(const std::string &key,std::function<int(HttpServerFDHandler &k,HttpRequestInformation &inf)> fc)
+        {
+            auto [it, inserted] = solveFun.try_emplace(key);
+            it->second.push_back(std::move(fc));
+        }
+        /**
+        * @brief 设置解析出key的回调函数
+        * @note 根据传入的参数把key存入TcpInformation信息中的ctx哈希表。框架会根据key的值找到你注册的处理函数。
+        * @warning 可执行对象必须严格按照规定的返回值返回
+        * @param parseKeyFun 解析key的回调函数
+        * -参数：HttpServerFDHandler &k - 和客户端连接的套接字的操作对象的引用
+        *       HttpRequestInformation &inf - 客户端信息，保存数据，处理进度，状态机信息等
+        * -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 0:处理流程已经扔入工作线程池，需要等待处理完成 1:处理成功
+        * @example httpserver->setGetKeyFunction([](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
+	                {
+			            inf.ctx["key"]=inf.loc;
+			            return 1;
+	                });
+        */
+        void setGetKeyFunction(std::function<int(HttpServerFDHandler &k,HttpRequestInformation &inf)> parseKeyFun){this->parseKey=parseKeyFun;}
         /**
         * @brief 打开Http服务器监听程序
         * @param port 监听的端口
@@ -2747,7 +2897,7 @@ namespace stt
         */
         bool startListen(const int &port,const int &threads=8)
         {
-            HttpInf=new HttpRequestInformation[maxFD];
+            //HttpInf=new HttpRequestInformation[maxFD];
             return TcpServer::startListen(port,threads);
         }
         /**
@@ -2755,7 +2905,7 @@ namespace stt
         */
         ~HttpServer()
         {
-            delete[] HttpInf;
+            //delete[] HttpInf;
         }
     };
     /**
@@ -2822,21 +2972,28 @@ namespace stt
     private:
         std::unordered_map<int,WebSocketFDInformation> wbclientfd;
         std::mutex lwb;
-        std::function<bool(const std::string &msg,WebSocketServer &k,const WebSocketFDInformation &inf)> fc=[](const std::string &message,WebSocketServer &k,const WebSocketFDInformation &inf)->bool
-        {std::cout<<"收到: "<<message<<std::endl;return true;};
-        std::function<bool(const WebSocketFDInformation &k)> fcc=[](const WebSocketFDInformation &k)
+        //std::function<bool(const std::string &msg,WebSocketServer &k,const WebSocketFDInformation &inf)> fc=[](const std::string &message,WebSocketServer &k,const WebSocketFDInformation &inf)->bool
+        //{std::cout<<"收到: "<<message<<std::endl;return true;};
+        std::function<bool(WebSocketFDInformation &k)> fcc=[](WebSocketFDInformation &k)
         {return true;};
-        std::function<void(const WebSocketFDInformation &inf,WebSocketServer &k)> fccc=[](const WebSocketFDInformation &inf,WebSocketServer &k)
+        std::function<void(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> fccc=[](WebSocketServerFDHandler &k,WebSocketFDInformation &inf)
         {
 
         };
+        std::function<bool(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> globalSolveFun=[](WebSocketServerFDHandler &k,WebSocketFDInformation &inf)->bool
+        {return true;};
+        std::unordered_map<std::string,std::vector<std::function<int(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)>>> solveFun;
+        std::function<int(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> parseKey=[](WebSocketServerFDHandler &k,WebSocketFDInformation &inf)->int
+        {inf.ctx["key"]=inf.message;return 1;};
         int seca=20*60;
         int secb=30;
         bool HBflag;
         bool HBflag1;
     private:
-        void consumer(const int &threadID);
-       
+        void handler_netevent(const int &fd);
+        void handler_workerevent(const int &fd,const int &ret);
+        //void consumer(const int &threadID);
+        //inline void handler(const int &fd);
         void closeAck(const int &fd,const std::string &closeCodeAndMessage);
         void closeAck(const int &fd,const short &code=1000,const std::string &message="bye");
         std::condition_variable hb_cv;
@@ -2846,18 +3003,40 @@ namespace stt
         bool closeWithoutLock(const int &fd,const short &code=1000,const std::string &message="bye");
     public:
         /**
+        * @brief 把一个任务放入工作线程池由工作线程完成
+        * @note 应当把速度慢、会阻塞的io任务放入工作线程池
+        * @warning 可执行对象必须严格按照规定的返回值返回
+        * @param fun 放入工作线程池的可执行对象
+        * -参数：WebSocketServerFDHandler &k - 和客户端连接的套接字的操作对象的引用
+        *       WebSocketFDInformation &inf - 客户端信息，保存数据，处理进度，状态机信息等
+        * -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 1:处理成功
+        * @param k 和客户端连接的套接字的操作对象的引用
+        * @param inf 客户端信息的引用，保存数据，处理进度，状态机信息等
+        */
+         void putTask(const std::function<int(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> &fun,WebSocketServerFDHandler &k,WebSocketFDInformation &inf);
+        /**
         * @brief 构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6
         * @note 打开安全模块会对性能有影响
         * @param maxFD 服务对象的最大接受连接数
         * @param security_open true:开启安全模块 false：关闭安全模块 （默认为开启）
         * @param connectionNumLimit 同一个ip连接数目的上限
         * @param connectionRateLimit 同一个ip每秒钟连接数目的上限
-        * @param buffer_size 同一个连接允许传输的最大数据量（单位为kb） 默认为8kb
+        * @param buffer_size 同一个连接允许传输的最大数据量（单位为kb） 默认为256kb
         * @param requestRatte 同一个连接一秒内允许的最大请求数量 （默认为12次）
         * @param checkFrequency 检查僵尸连接的频率（单位分钟） 默认为1分钟  -1为不做检查
         * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认60秒 -1为无限制
         */
-        WebSocketServer(const unsigned long long &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=8,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){}
+        WebSocketServer(const unsigned long long &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=256,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){}
+        /**
+        * @brief 设置全局备用函数
+        * @note 找不到对应回调函数的时候会调用全局备用函数
+        * @param key 找到对应回调函数的key
+        * @param fc 一个函数或函数对象，用于收到客户端消息后处理逻辑
+        * -参数：WebSocketServerFDHandler &k - 和客户端连接的套接字的操作对象的引用
+        *       WebSocketFDInformation &inf - 客户端信息，保存数据，处理进度，状态机信息等
+        * -返回值：true：处理成功 false：处理失败 会关闭连接
+        */
+        void setGlobalSolveFunction(std::function<bool(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> fc){this->globalSolveFun=fc;}
         /**
         * @brief 设置websocket连接成功后就执行的回调函数
         * 注册一个回调函数
@@ -2866,7 +3045,7 @@ namespace stt
         *       WebSocketServer &k - 服务端对象的引用
         * @note 传入的函数应该有如下签名 void func(const WebSocketFDInformation &inf,WebSocketServer &k)
         */
-        void setStartFunction(std::function<void(const WebSocketFDInformation &inf,WebSocketServer &k)> fccc){this->fccc=fccc;}
+        void setStartFunction(std::function<void(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> fccc){this->fccc=fccc;}
         /**
         * @brief 设置websocket握手阶段的检查函数，只有检查通过才执行后续握手
         * 注册一个回调函数
@@ -2876,19 +3055,43 @@ namespace stt
         * @note 传入的函数应该有如下签名 bool func(const WebSocketFDInformation &k)
         * @note 只有检查通过才执行后续握手，否则断开连接
         */
-        void setJudgeFunction(std::function<bool(const WebSocketFDInformation &k)> fcc){this->fcc=fcc;}
+        void setJudgeFunction(std::function<bool(WebSocketFDInformation &k)> fcc){this->fcc=fcc;}
         /**
-        * @brief 设置收到客户端消息后的回调函数
-        * 注册一个回调函数
+        * @brief 设置key对应的收到客户端消息后的回调函数
+        * @note 可以设置多个 ，框架会根据设置顺序依次执行回调函数；也可以设置扔入工作线程池处理的流程，注意设置不同的返回值即可。
+        * @warning 可执行对象必须严格按照规定的返回值返回
+        * @param key 找到对应回调函数的key
         * @param fc 一个函数或函数对象，用于收到客户端消息后处理逻辑
-        * -参数：string &message - 要处理的套接字
-                WebsocketClient &k - 当前对象的引用
-        *       WebSocketFDInformation &inf - 客户端信息
-        * -返回： bool - 返回true处理成功，返回false处理失败
-        * @note 传入的函数应该有如下签名 bool func(const std::string &message,WebSocketClient &k)
-        * @note 如果处理失败了 会直接关闭整个websocket连接
+        * -参数：WebSocketServerFDHandler &k - 和客户端连接的套接字的操作对象的引用
+        *       WebSocketFDInformation &inf - 客户端信息，保存数据，处理进度，状态机信息等
+        * -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 0:处理流程已经扔入工作线程池，需要等待处理完成 1:处理成功
+        * @example s->setFunction("ping",[](WebSocketServerFDHandler &k,WebSocketFDInformation &inf)->int
+	                {
+		                k.sendMessage("pong");
+		                return 1;
+	                });
         */
-        void setFunction(std::function<bool(const std::string &msg,WebSocketServer &k,const WebSocketFDInformation &inf)> fc){this->fc=fc;}
+        void setFunction(const std::string &key,std::function<int(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> fc)
+        {
+            auto [it, inserted] = solveFun.try_emplace(key);
+            it->second.push_back(std::move(fc));
+        }
+        /**
+        * @brief 设置解析出key的回调函数
+        * @note 根据传入的参数把key存入TcpInformation信息中的ctx哈希表。框架会根据key的值找到你注册的处理函数。
+        * @warning 可执行对象必须严格按照规定的返回值返回
+        * @param parseKeyFun 解析key的回调函数
+        * -参数：WebSocketServerFDHandler &k - 和客户端连接的套接字的操作对象的引用
+        *       WebSocketFDInformation &inf - 客户端信息，保存数据，处理进度，状态机信息等
+        * -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 0:处理流程已经扔入工作线程池，需要等待处理完成 1:处理成功
+        * @example s->setGetKeyFunction([](WebSocketServerFDHandler &k,WebSocketFDInformation &inf)->int
+	                {
+			            inf.ctx["key"]=inf.message;
+			            return 1;
+		            });
+        */
+        void setGetKeyFunction(std::function<int(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> parseKeyFun){this->parseKey=parseKeyFun;}
+        //void setFunction(std::function<bool(const std::string &msg,WebSocketServer &k,const WebSocketFDInformation &inf)> fc){this->fc=fc;}
         /**
         * @brief 设置心跳时间
         * @param seca 心跳时间 单位为分钟。不设置默认为20分钟
@@ -3559,6 +3762,140 @@ namespace stt
                 }
             }
         };
+
+        using Task = std::function<void()>;
+        /**
+        * @class WorkerPool
+        * @brief 固定大小的工作线程池
+        *
+        * WorkerPool 内部维护一个任务队列和若干工作线程。
+        * 每个工作线程循环从队列中取出任务并执行。
+        *
+        * ## 特性
+        * - 固定线程数量
+        * - 线程安全的任务提交
+        * - 支持优雅停止（graceful shutdown）
+        *
+        * ## 线程安全说明
+        * - submit() 是线程安全的
+        * - stop() 是线程安全的
+        *
+        * ## 使用示例
+        * @code
+        * WorkerPool pool(4);
+        * pool.submit([] {
+        *     // 执行任务
+        * });
+        * pool.stop();
+        * @endcode
+        */
+        class WorkerPool 
+        {
+        public:
+            /**
+            * @brief 构造函数，创建指定数量的工作线程
+            *
+            * @param n 工作线程数量
+            *
+            * 构造完成后，所有线程立即启动并进入等待状态。
+            */
+            explicit WorkerPool(size_t n):stop_(false)
+            {
+                for (size_t i = 0; i < n; ++i) {
+                    threads_.emplace_back([this] {
+                        this->workerLoop();
+                    });
+                }
+            }
+            /**
+            * @brief 析构函数
+            *
+            * 析构时会自动调用 stop()，
+            * 确保所有线程退出并被正确 join。
+            */
+            ~WorkerPool() 
+            {
+                stop();
+            }
+            /**
+            * @brief 向线程池提交一个任务
+            *
+            * @param task 可调用对象，函数签名为 void()
+            *
+            * 任务会被放入内部队列，并由某个工作线程异步执行。
+            */
+            void submit(Task task) 
+            {
+                {
+                    std::lock_guard<std::mutex> lk(mtx_);
+                    tasks_.push(std::move(task));
+                }
+                cv_.notify_one();
+            }
+            /**
+             * @brief 停止线程池并等待所有线程退出
+             *
+            * 调用后：
+            * - 不应再提交新的任务
+            * - 已提交但未执行的任务会被执行完
+            * - 所有工作线程都会退出并 join
+            *
+            * 该函数可安全重复调用。
+            */
+            void stop() 
+            {
+                {
+                    std::lock_guard<std::mutex> lk(mtx_);
+                    stop_ = true;
+                }
+                cv_.notify_all();
+                for (auto &t : threads_) 
+                {
+                    if (t.joinable()) t.join();
+                }
+            }
+
+        private:
+            /**
+            * @brief 工作线程主循环
+            *
+            * 每个工作线程都会执行此函数：
+            * - 在条件变量上等待任务或停止信号
+            * - 从任务队列中取出任务
+            * - 执行任务
+            *
+            * 当 stop_ 为 true 且任务队列为空时，线程退出。
+            */
+            void workerLoop() 
+            {
+                while (true) 
+                {
+                    Task task;
+                    {
+                        std::unique_lock<std::mutex> lk(mtx_);
+                        cv_.wait(lk, [this] {
+                        return stop_ || !tasks_.empty();
+                        });
+                        if (stop_ && tasks_.empty())
+                        {
+                            return;
+                        }
+                        task = std::move(tasks_.front());
+                        tasks_.pop();
+                    }
+                    task(); // 执行任务
+                }
+            }
+
+        private:
+            std::vector<std::thread> threads_;
+            std::queue<Task> tasks_;
+            std::mutex mtx_;
+            std::condition_variable cv_;
+            bool stop_;
+        };
+
+
     }
     
 }

@@ -20,7 +20,7 @@ bool stt::file::FileTool::createDir(const string & ddir,const mode_t &mode)
 			{
 				if(mkdir(k.c_str(),mode)<0)
 				{
-					cout<<k<<endl;
+					//cout<<k<<endl;
 					perror("mkdir() fail");
 					return false;
 				}
@@ -33,7 +33,7 @@ bool stt::file::FileTool::createDir(const string & ddir,const mode_t &mode)
 		{
                                 if(mkdir(test.c_str(),mode)<0)
                                 {
-                                        cout<<test<<endl;
+                                        //cout<<test<<endl;
                                         perror("mkdir() fail");
 					return false;
                                 }
@@ -458,7 +458,7 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
         if(ii==fl2.end())
         {
             //cout<<fileName<<endl;
-            cout<<"lock找不到文件"<<endl;
+            //cout<<"lock找不到文件"<<endl;
         }
         else
             ii->second.lock.lock();
@@ -468,9 +468,10 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
         //if(l1use)
         unique_lock<mutex> lock2(l1);
         auto ii=fl2.find(fileName);
-        if(ii==fl2.end())
-            cout<<"unlock找不到文件"<<endl;
-        else
+        //if(ii==fl2.end())
+            //cout<<"unlock找不到文件"<<endl;
+        //else
+        if(ii!=fl2.end())
             ii->second.lock.unlock();
     }
     bool stt::file::File::lockMemory()
@@ -3443,8 +3444,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             blockSet(sec);
             if(!connect(ip,port))
             {
-                cout<<ip<<endl;
-                cout<<port<<endl;
+                //cout<<ip<<endl;
+                //cout<<port<<endl;
                 cerr<<"http无法连接到服务器"<<endl;
                 return false;
             }
@@ -3734,7 +3735,45 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
         }
     }
-    
+    void stt::network::TcpServer::putTask(const std::function<int(TcpFDHandler &k,TcpInformation &inf)> &fun,TcpFDHandler &k,TcpInformation &inf)
+    {
+        workpool->submit([this,&k,&inf,fun]()->void
+        {
+            int ret=fun(k,inf);
+            //入队
+            this->finishQueue.push({inf.fd,ret});
+            //按钟
+            uint64_t one = 1;
+            write(this->workerEventFD, &one, sizeof(one));
+        });
+    }
+    void stt::network::HttpServer::putTask(const std::function<int(HttpServerFDHandler &k,HttpRequestInformation &inf)> &fun,HttpServerFDHandler &k,HttpRequestInformation &inf)
+    {
+        workpool->submit([this,&k,&inf,fun]()->void
+        {
+            int ret=fun(k,inf);
+            //入队
+            
+            this->finishQueue.push({inf.fd,ret});
+            //按钟
+            uint64_t one = 1;
+            
+            write(this->workerEventFD, &one, sizeof(one));
+            
+        });
+    }
+    void stt::network::WebSocketServer::putTask(const std::function<int(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> &fun,WebSocketServerFDHandler &k,WebSocketFDInformation &inf)
+    {
+        workpool->submit([this,&k,&inf,fun]()->void
+        {
+            int ret=fun(k,inf);
+            //入队
+            this->finishQueue.push({inf.fd,ret});
+            //按钟
+            uint64_t one = 1;
+            write(this->workerEventFD, &one, sizeof(one));
+        });
+    }
     bool stt::network::TcpServer::setTLS(const char *cacert,const char *key,const char *passwd,const char *ca)
     {
         if(TLS)
@@ -3814,9 +3853,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         //this->logfile=logfile;
         //memset(solvingFD,0,sizeof(int)*maxFD);
         //clientfd=new TcpFDInf[maxFD];
-        fdQueue=new queue<QueueFD>[threads];
-        cv=new condition_variable[threads];
-        lq1=new mutex[threads];
+        
+        //fdQueue=new queue<QueueFD>[threads];
+        //cv=new condition_variable[threads];
+        //lq1=new mutex[threads];
+
         clientfd=new TcpFDInf[maxFD];
         for(int ii=0;ii<maxFD;ii++)
             clientfd[ii].fd=-1;
@@ -3862,12 +3903,13 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         flag2=false;
         this->unblock=true;
         
-        for(int sj=0;sj<threads;sj++)
-            thread(&TcpServer::consumer,this,sj).detach();
+        workpool=new WorkerPool(threads);
+        //for(int sj=0;sj<threads;sj++)
+        //    thread(&TcpServer::consumer,this,sj).detach();
         thread(&TcpServer::epolll,this,maxFD+10).detach();
-        flag_detect=true;
+        //flag_detect=true;
         //thread(&security::ConnectionLimiter::connectionDetect,&connectionLimiter).detach();
-        this->consumerNum=threads;
+        //this->consumerNum=threads;
         flag=true;
         //this->logfile=logfile;
         return true;
@@ -3881,21 +3923,25 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         shutdown(fd,SHUT_RDWR);
         ::close(fd);
         //随后取消掉几个监听和消费线程
-        flag1=false;
-        for(int ii=0;ii<consumerNum;ii++)
-            cv[ii].notify_all();
-        while(consumerNum!=0||!flag2)
-        {
-            flag1=false;//不断提醒关闭
-            for(int ii=0;ii<consumerNum;ii++)
-                cv[ii].notify_all();
-        }
-        flag=false;
-        //关闭监听连接的消息活动的线程
         do
         {
-            flag_detect=false;
-        }while(flag_detect_status);
+            flag1=false;
+        }while(!flag2);
+        //for(int ii=0;ii<consumerNum;ii++)
+        //    cv[ii].notify_all();
+        //while(consumerNum!=0||!flag2)
+        //{
+        //    flag1=false;//不断提醒关闭
+        //    for(int ii=0;ii<consumerNum;ii++)
+        //        cv[ii].notify_all();
+        //}
+        workpool->stop();
+        flag=false;
+        //关闭监听连接的消息活动的线程
+        //do
+        //{
+        //    flag_detect=false;
+        //}while(flag_detect_status);
         return true;
     }
     bool stt::network::TcpServer::close()
@@ -3927,15 +3973,17 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
   
             shutdown(ii,SHUT_RDWR);
             ::close(ii);
-            clientfd[ii].fd=-1;
+            //clientfd[ii].fd=-1;
+            //clientfd[ii].pendindQueue.clear();
             delete[] clientfd[ii].buffer;
+            //delete clientfd[ii];
             }
         }
         //std::cout<<"tcp died"<<std::endl;
         delete[] clientfd;
-        delete[] fdQueue;
-        delete[] lq1;
-        delete[] cv;
+        //delete[] fdQueue;
+        //delete[] lq1;
+        //delete[] cv;
         //clientfd.clear();
         //key.clear();
         //functionT.clear();
@@ -3964,6 +4012,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             ::close(clientfd[fd].fd);
             clientfd[fd].fd=-1;
             delete[] clientfd[fd].buffer;
+            clientfd[fd].pendindQueue= std::queue<std::any>();
         }
         return true;
     }
@@ -3982,6 +4031,13 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         ev.events=EPOLLIN|EPOLLET;//边缘触发
         epoll_ctl(epollFD,EPOLL_CTL_ADD,fd,&ev);//把事件放入epoll中
 
+        //加入worker线程fd
+        workerEventFD = eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
+        ev.events = EPOLLIN;
+        ev.data.fd = workerEventFD;
+
+        epoll_ctl(epollFD, EPOLL_CTL_ADD, workerEventFD, &ev);
+
 
         //检查连接表里面是不是有套接字，有的话加入
        
@@ -3991,7 +4047,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
 
                 if(clientfd[ii].fd!=-1)
                 {
-                cout<<"has:"<<clientfd[ii].fd<<endl;
+                //cout<<"has:"<<clientfd[ii].fd<<endl;
                 ev.data.fd=clientfd[ii].fd;
                 
                     ev.events=EPOLLIN|EPOLLERR | EPOLLHUP | EPOLLRDHUP|EPOLLET;//边缘触发
@@ -4087,7 +4143,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             if(flags==-1)
                             {
                                 ::close(cfd);
-                                cout<<"The non-blocking mode setting failed"<<endl;
+                                //cout<<"The non-blocking mode setting failed"<<endl;
                                 if(stt::system::ServerSetting::logfile!=nullptr)
                                 {
                                         if(stt::system::ServerSetting::language=="Chinese")
@@ -4157,6 +4213,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             clientfd[cfd].data="";
                             clientfd[cfd].buffer=new char[buffer_size];
                             clientfd[cfd].p_buffer_now=0;
+                            clientfd[cfd].FDStatus=-1;
                             //clientfd[cfd].p_request_now=0;
                             //unique_lock<mutex> lock6(lc1);
                             //clientfd.emplace(cfd,inf);
@@ -4172,6 +4229,20 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             }
                         }                                                
                     }
+                    else if(evs[ii].data.fd==workerEventFD)
+                    {
+                        uint64_t cnt;
+                        read(workerEventFD, &cnt, sizeof(cnt)); // 清门铃
+
+                        // 一口气处理完队列
+                        while(!finishQueue.empty())
+                        {
+                            int fd=finishQueue.front().fd;
+                            int ret=finishQueue.front().ret;
+                            finishQueue.pop();
+                            handler_workerevent(fd,ret);
+                        }
+                    }
                     else//有数据上来了
                     {
                        //start=chrono::high_resolution_clock::now();
@@ -4182,16 +4253,16 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 if(stt::system::ServerSetting::logfile!=nullptr)
                                 {
                                     if(stt::system::ServerSetting::language=="Chinese")
-                                        stt::system::ServerSetting::logfile->writeLog("tcp server epoll:收到连接关闭消息：fd= "+to_string(evs[ii].data.fd)+" 已经放入队列");
+                                        stt::system::ServerSetting::logfile->writeLog("tcp server epoll:收到连接关闭消息：fd= "+to_string(evs[ii].data.fd)+" 已关闭");
                                     else
                                         stt::system::ServerSetting::logfile->writeLog("tcp server epoll:receive connection close message: fd= "+to_string(evs[ii].data.fd)+" and it has been pushed into queue");
                                 }
-                                
-                                {
-                                std::lock_guard<std::mutex> lock(lq1[evs[ii].data.fd%consumerNum]);
-                                fdQueue[evs[ii].data.fd%consumerNum].push(QueueFD{evs[ii].data.fd,true});
-                                }
-                                cv[evs[ii].data.fd%consumerNum].notify_one();
+                                TcpServer::close(evs[ii].data.fd);
+                                //{
+                                //std::lock_guard<std::mutex> lock(lq1[evs[ii].data.fd%consumerNum]);
+                                //fdQueue[evs[ii].data.fd%consumerNum].push(QueueFD{evs[ii].data.fd,true});
+                               //}
+                                //cv[evs[ii].data.fd%consumerNum].notify_one();
                             
 
                         }
@@ -4204,12 +4275,12 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 else
                                     stt::system::ServerSetting::logfile->writeLog("tcp server epoll:has received new data: fd= "+to_string(evs[ii].data.fd));
                             }
-                            
-                             {
-                                std::lock_guard<std::mutex> lock(lq1[evs[ii].data.fd%consumerNum]);
-                                fdQueue[evs[ii].data.fd%consumerNum].push(QueueFD{evs[ii].data.fd,false});
-                             }
-                            cv[evs[ii].data.fd%consumerNum].notify_one();
+                            handler_netevent(evs[ii].data.fd);
+                             //{
+                             //   std::lock_guard<std::mutex> lock(lq1[evs[ii].data.fd%consumerNum]);
+                             //   fdQueue[evs[ii].data.fd%consumerNum].push(QueueFD{evs[ii].data.fd,false});
+                             //}
+                            //cv[evs[ii].data.fd%consumerNum].notify_one();
                         }
                         //endd=chrono::high_resolution_clock::now();
                         //duration=chrono::duration_cast<chrono::microseconds>(endd-start);
@@ -4226,9 +4297,449 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             else
                 stt::system::ServerSetting::logfile->writeLog("tcp server's listening epoll quit");
         }
-        cout<<"epoll quit"<<endl;
+        //cout<<"epoll quit"<<endl;
         flag2=true;
     }
+    void stt::network::TcpServer::handler_workerevent(const int &fd,const int &ret)
+    {
+        if(ret==-2)
+        {
+            TcpServer::close(fd);
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("tcp server : worker处理失败 fd= "+to_string(fd)+" ，已经关闭连接");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("tcp server : worker solve fail fd= "+to_string(fd)+" ,now has closed this connection");
+                    }
+            return;
+        }
+        TcpFDHandler k;
+        k.setFD(fd,clientfd[fd].ssl,unblock);
+        if(ret==-1)
+        {
+            clientfd[fd].pendindQueue.pop();
+            if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("tcp server : worker处理失败 fd= "+to_string(fd)+" ，跳过本次请求");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("tcp server : worker solve fail fd= "+to_string(fd)+" ,skip this request");
+                    }
+        }
+        else
+        {
+            
+            TcpInformation &inf=std::any_cast<TcpInformation&>(clientfd[fd].pendindQueue.front());
+            auto ii=solveFun.find(std::any_cast<const std::string&>(inf.ctx["key"]));//对应的任务
+            if(stt::system::ServerSetting::logfile!=nullptr)
+            {
+                if(stt::system::ServerSetting::language=="Chinese")
+                    stt::system::ServerSetting::logfile->writeLog("tcp server : worker处理成功 fd= "+to_string(fd));
+                else
+                    stt::system::ServerSetting::logfile->writeLog("tcp server : worker solve sucessfully fd= "+to_string(fd));
+            }
+            if(ii==solveFun.end())//找不到
+                {
+                    //TcpServer::close(fd);
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("tcp server : 找不到处理函数 fd= "+to_string(fd)+"。调用全局备用处理函数");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("tcp server : can not find solve function fd= "+to_string(fd)+" . use global backup slove function.");
+                    }
+                    if(!globalSolveFun(k,inf))
+                    {
+                        TcpServer::close(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("tcp server : 调用全局备用函数失败 fd= "+to_string(fd)+"已经关闭连接.");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("tcp server : use global backup slove function fail. fd= "+to_string(fd)+". has closed this connection.");
+                        }
+                        return;
+                    }
+                    clientfd[fd].pendindQueue.pop();
+                }
+            else
+            {
+            //继续做
+            for(;clientfd[fd].FDStatus<ii->second.size();)
+            {
+                int rett=ii->second[clientfd[fd].FDStatus](k,inf);
+                clientfd[fd].FDStatus++;
+                        if(rett==1)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : 处理fd= "+to_string(fd)+" 第"+ to_string(clientfd[fd].FDStatus)+  "次完成");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : handled fd= "+to_string(fd)+" sucessfully.It's the "+to_string(clientfd[fd].FDStatus)+"times");
+                            }
+                        }
+                        else if(rett==0)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : 处理fd= "+to_string(fd)+" 第"+ to_string(clientfd[fd].FDStatus)+  "次.等待任务完成.");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : handled fd= "+to_string(fd)+" .It's the "+to_string(clientfd[fd].FDStatus)+"times job. now is waitting it to be finish.");
+                            }
+                            return;
+                        }
+                        else
+                        {
+                            TcpServer::close(fd);
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : 处理fd= "+to_string(fd)+" 第"+ to_string(clientfd[fd].FDStatus)+  "次失败。已经关闭连接。");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(clientfd[fd].FDStatus)+"times and now has closed this connection.");
+                            }
+                            //clientfd[fd].pendindQueue.pop();
+                            return;
+                        }
+            }
+            }
+            clientfd[fd].pendindQueue.pop();
+        }
+
+        TcpFDInf Tcpinf=clientfd[fd];
+        //检查是否有下一轮
+        if(Tcpinf.pendindQueue.size()>=1)//只有一个 说明没有任务没做完 直接执行
+            {
+                TcpInformation &inff=std::any_cast<TcpInformation&>(clientfd[fd].pendindQueue.front());
+                Tcpinf.FDStatus=-1;
+                int ret;
+                //获取key,自动解析到ctx的key键
+                ++Tcpinf.FDStatus;
+                ret=parseKey(k,inff);
+
+                if(ret==0) //慢任务
+                    return;
+                else if(ret<=-1)
+                {
+                    //清掉任务后返回
+                    Tcpinf.pendindQueue.pop();
+                    //-2要关闭连接
+                    if(ret==-2)
+                    {
+                        TcpServer::close(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("tcp server : parsekey的时候失败 fd= "+to_string(fd)+" ，已经关闭连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("tcp server : parsekey fail fd= "+to_string(fd)+",now has closed this connection");
+                        }
+                    }
+                    else
+                    {
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("tcp server : parsekey的时候失败 fd= "+to_string(fd)+" ，已扔掉本次任务");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("tcp server : parsekey fail fd= "+to_string(fd)+",now has throwed this task");
+                        }
+                    }
+                    return;
+                }
+                
+                //遍历任务
+                auto ii=solveFun.find(std::any_cast<const std::string&>(inff.ctx["key"]));
+                if(ii==solveFun.end())//找不到
+                {
+                    //TcpServer::close(fd);
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("tcp server : 找不到处理函数 fd= "+to_string(fd)+"。调用全局备用处理函数");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("tcp server : can not find solve function fd= "+to_string(fd)+" . use global backup slove function.");
+                    }
+                    if(!globalSolveFun(k,inff))
+                    {
+                        TcpServer::close(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("tcp server : 调用全局备用函数失败 fd= "+to_string(fd)+"已经关闭连接.");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("tcp server : use global backup slove function fail. fd= "+to_string(fd)+". has closed this connection.");
+                        }
+                        return;
+                    }
+                    Tcpinf.pendindQueue.pop();
+                }
+                else//找得到处理函数
+                {
+                    for(auto &f:ii->second)
+                    {
+                        int rett=f(k,inff);
+                        ++Tcpinf.FDStatus;
+                        if(rett==1)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次完成");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : handled fd= "+to_string(fd)+" sucessfully.It's the "+to_string(Tcpinf.FDStatus)+"times");
+                            }
+                        }
+                        else if(rett==0)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次.等待任务完成.");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : handled fd= "+to_string(fd)+" .It's the "+to_string(Tcpinf.FDStatus)+"times job. now is waitting it to be finish.");
+                            }
+                            return;
+                        }
+                        else
+                        {
+                            TcpServer::close(fd);
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次失败。已经关闭连接。");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(Tcpinf.FDStatus)+"times and now has closed this connection.");
+                            }
+                            //Tcpinf.pendindQueue.pop();
+                            return;
+                        }
+                    }
+                    
+                }
+                Tcpinf.pendindQueue.pop();
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("tcp server : 处理fd= "+to_string(fd)+" 完成");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("tcp server : handled fd= "+to_string(fd)+" sucessfully");
+                    }
+                
+            }
+
+    }
+    void stt::network::TcpServer::handler_netevent(const int &fd)
+    {
+        TcpFDHandler k;
+        TcpInformation inf;
+        if(clientfd[fd].fd!=-1)//can not find fd information,we need to writedown this error and close this fd
+        {
+            
+                if(security_open)
+                {
+                    if(!connectionLimiter.allowRequest(clientfd[fd].ip))
+                    {
+                        TcpServer::close(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"请求太频繁，已经关闭连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"request are too frequent,now has closed this connection");
+                        }
+                        return;
+                    }
+                }
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                {
+                    if(stt::system::ServerSetting::language=="Chinese")
+                        stt::system::ServerSetting::logfile->writeLog("tcp server : 正在处理fd= "+to_string(fd));
+                    else
+                        stt::system::ServerSetting::logfile->writeLog("tcp server : now handleing fd= "+to_string(fd));
+                }
+            
+            TcpFDInf &Tcpinf=clientfd[fd];
+            k.setFD(fd,clientfd[fd].ssl,unblock);
+            
+            int ret=1;
+            Tcpinf.p_buffer_now=0;
+            while(ret>0&&buffer_size-Tcpinf.p_buffer_now>0)
+            {
+                ret=k.recvData(Tcpinf.buffer+Tcpinf.p_buffer_now,buffer_size-Tcpinf.p_buffer_now);
+                if(ret>0)
+                    Tcpinf.p_buffer_now+=ret;
+            }
+            if(buffer_size-Tcpinf.p_buffer_now<=0)
+            {
+                TcpServer::close(fd);
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("tcp server : 缓冲区容量不足 读取数据fd= "+to_string(fd)+" 失败，已经关闭连接");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("tcp server : buffer size is not enough,read data from fd= "+to_string(fd)+" fail,now has closed this connection");
+                    }
+                return;
+            }
+            if(ret<=0)
+            {
+                if(ret!=-100)
+                {
+                    TcpServer::close(fd);
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("tcp server : 读取数据fd= "+to_string(fd)+" 失败，已经关闭连接");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("tcp server : read data from fd= "+to_string(fd)+" fail,now has closed this connection");
+                    }
+                    return;
+                }
+            }
+        //}
+        
+            inf.fd=fd;
+            inf.data=string(Tcpinf.buffer,Tcpinf.p_buffer_now);
+
+            
+            //lock6.unlock();
+            //开始处理
+                //入队
+            
+            Tcpinf.pendindQueue.push(move(inf));
+            
+            if(Tcpinf.pendindQueue.size()==1)//只有一个 说明没有任务没做完 直接执行
+            {
+                TcpInformation &inff=std::any_cast<TcpInformation&>(clientfd[fd].pendindQueue.front());
+                Tcpinf.FDStatus=-1;
+                int ret;
+                //获取key,自动解析到ctx的key键
+                ++Tcpinf.FDStatus;
+                ret=parseKey(k,inff);
+                
+                if(ret==0) //慢任务
+                {
+                    return;
+                }
+                else if(ret<=-1)
+                {
+                    //清掉任务后返回
+                    //Tcpinf.pendindQueue.pop();
+                    //-2要关闭连接
+                    if(ret==-2)
+                    {
+                        TcpServer::close(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("tcp server : parsekey的时候失败 fd= "+to_string(fd)+" ，已经关闭连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("tcp server : parsekey fail fd= "+to_string(fd)+",now has closed this connection");
+                        }
+                    }
+                    else
+                    {
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("tcp server : parsekey的时候失败 fd= "+to_string(fd)+" ，已扔掉本次任务");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("tcp server : parsekey fail fd= "+to_string(fd)+",now has throwed this task");
+                        }
+                    }
+                    return;
+                }
+                
+                //遍历任务
+                auto ii=solveFun.find(std::any_cast<const std::string&>(inff.ctx["key"]));
+               
+                if(ii==solveFun.end())//找不到
+                {
+                    
+                    //TcpServer::close(fd);
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("tcp server : 找不到处理函数 fd= "+to_string(fd)+"。调用全局备用处理函数");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("tcp server : can not find solve function fd= "+to_string(fd)+" . use global backup slove function.");
+                    }
+                    if(!globalSolveFun(k,inff))
+                    {
+                        TcpServer::close(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("tcp server : 调用全局备用函数失败 fd= "+to_string(fd)+"已经关闭连接.");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("tcp server : use global backup slove function fail. fd= "+to_string(fd)+". has closed this connection.");
+                        }
+                        return;
+                    }
+                    Tcpinf.pendindQueue.pop();
+                }
+                else//找得到处理函数
+                {
+                    
+                    for(auto &f:ii->second)
+                    {
+                        int rett=f(k,inff);
+                        ++Tcpinf.FDStatus;
+                        if(rett==1)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次完成");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : handled fd= "+to_string(fd)+" sucessfully.It's the "+to_string(Tcpinf.FDStatus)+"times");
+                            }
+                        }
+                        else if(rett==0)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次.等待任务完成.");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : handled fd= "+to_string(fd)+" .It's the "+to_string(Tcpinf.FDStatus)+"times job. now is waitting it to be finish.");
+                            }
+                            return;
+                        }
+                        else
+                        {
+                            TcpServer::close(fd);
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次失败。已经关闭连接。");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(Tcpinf.FDStatus)+"times and now has closed this connection.");
+                            }
+                            //Tcpinf.pendindQueue.pop();
+                            return;
+                        }
+                    }
+                    Tcpinf.pendindQueue.pop();
+                }
+
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("tcp server : 处理fd= "+to_string(fd)+" 完成");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("tcp server : handled fd= "+to_string(fd)+" sucessfully");
+                    }
+                
+            }
+            
+        }
+    }
+    /*
     void stt::network::TcpServer::consumer(const int &threadID)
     {
         TcpFDHandler k;
@@ -4336,6 +4847,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(consumerNum)+"quit");
         }
     }
+    */
     bool stt::network::HttpServerFDHandler::sendBack(const string &data,const string &header,const string &code,const string &header1)
     {
         string result="HTTP/1.1 "+code+"\r\nContent-Length: "+\
@@ -4393,7 +4905,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
 
         if(times==1)
         {
-            unsigned long long p_buffer_now_backup=TcpInf.p_buffer_now;
+            //unsigned long long p_buffer_now_backup=TcpInf.p_buffer_now;
             int ret=1;
             while(ret>0&&buffer_size-TcpInf.p_buffer_now>0)
             {
@@ -4402,12 +4914,25 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 if(ret>0)
                     TcpInf.p_buffer_now+=ret;
             }
+            if(buffer_size-TcpInf.p_buffer_now<=0)
+            {
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("http server : 缓冲区容量不足 读取数据fd= "+to_string(fd)+" 失败，已经关闭连接");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("http server : buffer size is not enough,read data from fd= "+to_string(fd)+" fail,now has closed this connection");
+                    }
+                return -1;
+            }
             if(ret<=0)
             {
                 if(ret!=-100)
                     return -1;
             }
-            TcpInf.data=string_view(TcpInf.buffer+p_buffer_now_backup,TcpInf.p_buffer_now);
+            //TcpInf.data=string_view(TcpInf.buffer+p_buffer_now_backup,TcpInf.p_buffer_now);
+            TcpInf.data=string_view(TcpInf.buffer,TcpInf.p_buffer_now);
+            //cout<<TcpInf.data<<endl;
         }
         //cout<<TcpInf.data<<endl;
         //endd=chrono::high_resolution_clock::now();
@@ -4422,8 +4947,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             {
                 if(TcpInf.status==0)
                     TcpInf.status=1;
-                memcpy(TcpInf.buffer,TcpInf.buffer+TcpInf.p_buffer_now-TcpInf.data.length(),TcpInf.data.length());
-                TcpInf.p_buffer_now=TcpInf.data.length();
+                //memcpy(TcpInf.buffer,TcpInf.buffer+TcpInf.p_buffer_now-TcpInf.data.length(),TcpInf.data.length());
+                //TcpInf.p_buffer_now=TcpInf.data.length();
                 
                 return 0;
             }
@@ -4438,9 +4963,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 
                 if(TcpInf.data.find("0\r\n\r\n")==string::npos)
                 {
-                    memcpy(TcpInf.buffer,TcpInf.buffer+TcpInf.p_buffer_now-TcpInf.data.length(),TcpInf.data.length());
-                    HttpInf.header=string_view(TcpInf.buffer,pos);
-                    TcpInf.p_buffer_now=TcpInf.data.length();
+                    //memcpy(TcpInf.buffer,TcpInf.buffer+TcpInf.p_buffer_now-TcpInf.data.length(),TcpInf.data.length());
+                    HttpInf.header=string(TcpInf.buffer,pos);
+                    //TcpInf.p_buffer_now=TcpInf.data.length();
                     return 0;
                 }
                 string_view size;
@@ -4461,14 +4986,16 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     {
                         //TcpInf.data=TcpInf.data.substr(ppos+5);
                         TcpInf.status=0;
-                        if(TcpInf.data.length()==ppos+2)
-                            TcpInf.data={};
-                        else
-                            TcpInf.data=TcpInf.data.substr(ppos+2);
+                        //if(TcpInf.data.length()==ppos+2)
+                        //    TcpInf.data={};
+                        //else
+                        //    TcpInf.data=TcpInf.data.substr(ppos+2);
                         HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
                         HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
                         HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
                         HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
+                        memcpy(TcpInf.buffer,TcpInf.buffer+ppos+2,TcpInf.p_buffer_now-(ppos+2));
+                        TcpInf.p_buffer_now=TcpInf.p_buffer_now-(ppos+2);
                         return 1;
                     }
                     else//读取数据
@@ -4501,15 +5028,16 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(HttpInf.header.find("GET")!=string::npos)
                     {
                         TcpInf.status=0;
-                        if(TcpInf.data.length()-4-HttpInf.header.length()==0)
-                            TcpInf.data={};
-                        else
-                            TcpInf.data=TcpInf.data.substr(HttpInf.header.length()+4);
+                        //if(TcpInf.data.length()-4-HttpInf.header.length()==0)
+                        //    TcpInf.data={};
+                        //else
+                        //    TcpInf.data=TcpInf.data.substr(HttpInf.header.length()+4);
                         HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
                         HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
                         HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
                         HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
-                        
+                        memcpy(TcpInf.buffer,TcpInf.buffer+HttpInf.header.length()+4,TcpInf.p_buffer_now-(HttpInf.header.length()+4));
+                        TcpInf.p_buffer_now=TcpInf.p_buffer_now-(HttpInf.header.length()+4);
                         return 1;
                     }
                     else
@@ -4518,14 +5046,16 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 else if(ssize==0)
                 {
                     TcpInf.status=0;
-                    if(TcpInf.data.length()-4-HttpInf.header.length()==0)
-                        TcpInf.data={};
-                    else
-                        TcpInf.data=TcpInf.data.substr(HttpInf.header.length()+4);
+                    //if(TcpInf.data.length()-4-HttpInf.header.length()==0)
+                    //    TcpInf.data={};
+                    //else
+                    //    TcpInf.data=TcpInf.data.substr(HttpInf.header.length()+4);
                     HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
                     HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
                     HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
                     HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
+                    memcpy(TcpInf.buffer,TcpInf.buffer+HttpInf.header.length()+4,TcpInf.p_buffer_now-(HttpInf.header.length()+4));
+                    TcpInf.p_buffer_now=TcpInf.p_buffer_now-(HttpInf.header.length()+4);
                     return 1;
                 }
                 else if(ssize>0)
@@ -4533,21 +5063,23 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(TcpInf.data.length()-4-HttpInf.header.length()>=ssize)
                     {
                         HttpInf.body=TcpInf.data.substr(4+HttpInf.header.length(),ssize);
-                        if(TcpInf.data.length()-4-HttpInf.header.length()==ssize)
-                            TcpInf.data={};
-                        else
-                            TcpInf.data=TcpInf.data.substr(4+HttpInf.header.length()+ssize);
+                        //if(TcpInf.data.length()-4-HttpInf.header.length()==ssize)
+                        //    TcpInf.data={};
+                        //else
+                        //    TcpInf.data=TcpInf.data.substr(4+HttpInf.header.length()+ssize);
                         TcpInf.status=0;
                         HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
                         HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
                         HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
                         HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
+                        memcpy(TcpInf.buffer,TcpInf.buffer+4+HttpInf.header.length()+ssize,TcpInf.p_buffer_now-(4+HttpInf.header.length()+ssize));
+                        TcpInf.p_buffer_now=TcpInf.p_buffer_now-(4+HttpInf.header.length()+ssize);
                         return 1;
                     }
                     else
                     {
                         memcpy(TcpInf.buffer,TcpInf.buffer+TcpInf.p_buffer_now-TcpInf.data.length(),TcpInf.data.length());
-                        HttpInf.header=string_view(TcpInf.buffer,pos);
+                        HttpInf.header=string(TcpInf.buffer,pos);
                         TcpInf.p_buffer_now=TcpInf.data.length();
                         return 0;
                     }
@@ -4580,14 +5112,16 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     {
                         //TcpInf.data=TcpInf.data.substr(ppos+5);
                         TcpInf.status=0;
-                        if(TcpInf.data.length()==ppos+2)
-                            TcpInf.data={};
-                        else
-                            TcpInf.data=TcpInf.data.substr(ppos+2);
+                        //if(TcpInf.data.length()==ppos+2)
+                        //    TcpInf.data={};
+                        //else
+                        //    TcpInf.data=TcpInf.data.substr(ppos+2);
                         HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
                         HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
                         HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
                         HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
+                        memcpy(TcpInf.buffer,TcpInf.buffer+ppos+2,TcpInf.p_buffer_now-(ppos+2));
+                        TcpInf.p_buffer_now=TcpInf.p_buffer_now-(ppos+2);
                         return 1;
                     }
                     else//读取数据
@@ -4611,14 +5145,16 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(HttpInf.header.find("GET")!=string::npos)
                     {
                         TcpInf.status=0;
-                        if(TcpInf.data.length()-4-HttpInf.header.length()==0)
-                            TcpInf.data={};
-                        else
-                            TcpInf.data=TcpInf.data.substr(HttpInf.header.length()+4);
+                        //if(TcpInf.data.length()-4-HttpInf.header.length()==0)
+                        //    TcpInf.data={};
+                        //else
+                        //    TcpInf.data=TcpInf.data.substr(HttpInf.header.length()+4);
                         HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
                         HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
                         HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
                         HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
+                        memcpy(TcpInf.buffer,TcpInf.buffer+4+HttpInf.header.length(),TcpInf.p_buffer_now-(4+HttpInf.header.length()));
+                        TcpInf.p_buffer_now=TcpInf.p_buffer_now-(4+HttpInf.header.length());
                         return 1;
                     }
                     else
@@ -4627,14 +5163,16 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 else if(ssize==0)
                 {
                     TcpInf.status=0;
-                    if(TcpInf.data.length()-4-HttpInf.header.length()==0)
-                        TcpInf.data={};
-                    else
-                        TcpInf.data=TcpInf.data.substr(HttpInf.header.length()+4);
+                    //if(TcpInf.data.length()-4-HttpInf.header.length()==0)
+                    //    TcpInf.data={};
+                    //else
+                    //    TcpInf.data=TcpInf.data.substr(HttpInf.header.length()+4);
                     HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
                     HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
                     HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
                     HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
+                    memcpy(TcpInf.buffer,TcpInf.buffer+4+HttpInf.header.length(),TcpInf.p_buffer_now-(4+HttpInf.header.length()));
+                    TcpInf.p_buffer_now=TcpInf.p_buffer_now-(4+HttpInf.header.length());
                     return 1;
                 }
                 else if(ssize>0)
@@ -4642,15 +5180,17 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(TcpInf.data.length()-4-HttpInf.header.length()>=ssize)
                     {
                         HttpInf.body=TcpInf.data.substr(4+HttpInf.header.length(),ssize);
-                        if(TcpInf.data.length()-4-HttpInf.header.length()==ssize)
-                            TcpInf.data={};
-                        else
-                            TcpInf.data=TcpInf.data.substr(4+HttpInf.header.length()+ssize);
+                        //if(TcpInf.data.length()-4-HttpInf.header.length()==ssize)
+                         //   TcpInf.data={};
+                        //else
+                        //    TcpInf.data=TcpInf.data.substr(4+HttpInf.header.length()+ssize);
                         TcpInf.status=0;
                         HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
                         HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
                         HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
                         HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
+                        memcpy(TcpInf.buffer,TcpInf.buffer+4+HttpInf.header.length()+ssize,TcpInf.p_buffer_now-(4+HttpInf.header.length()+ssize));
+                        TcpInf.p_buffer_now=TcpInf.p_buffer_now-(4+HttpInf.header.length()+ssize);
                         return 1;
                     }
                     else
@@ -4665,6 +5205,1096 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         return -1;
 
     }
+    void stt::network::HttpServer::handler_netevent(const int &fd)
+    {
+        HttpServerFDHandler k;
+        HttpRequestInformation inf;
+        if(clientfd[fd].fd!=-1)//can not find fd information,we need to writedown this error and close this fd
+        {
+            
+                if(security_open)
+                {
+                    if(!connectionLimiter.allowRequest(clientfd[fd].ip))
+                    {
+                        TcpServer::close(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("http server : fd="+to_string(fd)+"请求太频繁，已经关闭连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("http server : fd="+to_string(fd)+"request are too frequent,now has closed this connection");
+                        }
+                        return;
+                    }
+                }
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                {
+                    if(stt::system::ServerSetting::language=="Chinese")
+                        stt::system::ServerSetting::logfile->writeLog("http server : 正在处理fd= "+to_string(fd));
+                    else
+                        stt::system::ServerSetting::logfile->writeLog("http server : now handleing fd= "+to_string(fd));
+                }
+            TcpFDInf &Tcpinf=clientfd[fd];
+            k.setFD(fd,clientfd[fd].ssl,unblock);
+            
+            int ret=1;
+            inf.fd=fd;
+            
+            ret=k.solveRequest(Tcpinf,inf,buffer_size,1);
+            
+            if(ret==-1)
+            {
+                    TcpServer::close(fd);
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("http server : 读取数据fd= "+to_string(fd)+" 失败，已经关闭连接");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("http server : read data from fd= "+to_string(fd)+" fail,now has closed this connection");
+                    }
+                    return;
+            }
+            else if(ret==1)
+            {
+                
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                {
+                    if(stt::system::ServerSetting::language=="Chinese")
+                    {
+                        stt::system::ServerSetting::logfile->writeLog("http server consumer  : fd= "+to_string(fd)+" 读取数据完成。 \n*******请求信息：*********\nheader= "+string(inf.header)+"\nbody="+string(inf.body)+"\nbody_chunked="+string(inf.body_chunked)+"\n*************************");
+                    }
+                    else
+                    {
+                        stt::system::ServerSetting::logfile->writeLog("http server consumer  : fd= "+to_string(fd)+" now has solved request.\n*******request information：*********\nheader= "+string(inf.header)+"\nbody="+string(inf.body)+"\nbody_chunked="+string(inf.body_chunked)+"\n*************************");
+                    }
+
+                }
+                
+            }
+            else if(ret==0)
+            {
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("http server consumer  : 解析fd= "+to_string(fd)+"未完成 等待新的数据继续解析");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("http server consumer  : fd= "+to_string(fd)+"wait new data to continue solve this request");
+                    }
+                    return;
+            }
+        
+            
+
+            
+            //lock6.unlock();
+            //开始处理
+                //入队
+            Tcpinf.pendindQueue.push(move(inf));
+            
+            if(Tcpinf.pendindQueue.size()==1)//只有一个 说明没有任务没做完 直接执行
+            {
+                HttpRequestInformation &inff=std::any_cast<HttpRequestInformation&>(clientfd[fd].pendindQueue.front());
+                Tcpinf.FDStatus=-1;
+                int ret;
+                //获取key,自动解析到ctx的key键
+                ++Tcpinf.FDStatus;
+                ret=parseKey(k,inff);
+    
+                if(ret==0)//慢处理
+                {
+                    return;
+                }
+                else if(ret<=-1)
+                {
+                    //清掉任务后返回
+                    //Tcpinf.pendindQueue.pop();
+                    //-2要关闭连接
+                    if(ret==-2)
+                    {
+                        k.sendBack("","","404 NOT FOUND");
+                        TcpServer::close(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("http server : parsekey的时候失败 fd= "+to_string(fd)+" ，已经关闭连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("http server : parsekey fail fd= "+to_string(fd)+",now has closed this connection");
+                        }
+                    }
+                    else
+                    {
+                        k.sendBack("","","404 NOT FOUND");
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("http server : parsekey的时候失败 fd= "+to_string(fd)+" ，已扔掉本次任务并且发回错误信息");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("http server : parsekey fail fd= "+to_string(fd)+",now has throwed this task and send back error message");
+                        }
+                    }
+                    return;
+                }
+                
+                //遍历任务
+                
+                auto ii=solveFun.find(std::any_cast<const std::string&>(inff.ctx["key"]));
+                
+                if(ii==solveFun.end())//找不到
+                {
+                    k.sendBack("","","404 NOT FOUND");
+                    //TcpServer::close(fd);
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("http server : 找不到处理函数 fd= "+to_string(fd));
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("http server : can not find solve function fd= "+to_string(fd));
+                    }
+                    Tcpinf.pendindQueue.pop();
+                }
+                else//找得到处理函数
+                {
+                    for(auto &f:ii->second)
+                    {
+                        int rett=f(k,inff);
+                        ++Tcpinf.FDStatus;
+                        if(rett==1)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次完成");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" sucessfully.It's the "+to_string(Tcpinf.FDStatus)+"times");
+                            }
+                        }
+                        else if(rett==0)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次.等待任务完成.");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" .It's the "+to_string(Tcpinf.FDStatus)+"times job. now is waitting it to be finish.");
+                            }
+                            
+                            return;
+                        }
+                        else
+                        {
+                            TcpServer::close(fd);
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次失败。已经关闭连接。");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(Tcpinf.FDStatus)+"times and now has closed this connection.");
+                            }
+                            //Tcpinf.pendindQueue.pop();
+                            return;
+                        }
+                    }
+                    Tcpinf.pendindQueue.pop();
+                }
+
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 完成");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" sucessfully");
+                    }
+                
+            }
+            
+        }
+    }
+     void stt::network::HttpServer::handler_workerevent(const int &fd,const int &ret)
+    {
+       
+        if(ret==-2)
+        {
+            TcpServer::close(fd);
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("http server : worker处理失败 fd= "+to_string(fd)+" ，已经关闭连接");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("http server : worker solve fail fd= "+to_string(fd)+" ,now has closed this connection");
+                    }
+            return;
+        }
+        HttpServerFDHandler k;
+        k.setFD(fd,clientfd[fd].ssl,unblock);
+        
+        if(ret==-1)
+        {
+            clientfd[fd].pendindQueue.pop();
+            if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("http server : worker处理失败 fd= "+to_string(fd)+" ，跳过本次请求");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("http server : worker solve fail fd= "+to_string(fd)+" ,skip this request");
+                    }
+        }
+        else
+        {
+            
+            
+        
+            HttpRequestInformation &inf=std::any_cast<HttpRequestInformation&>(clientfd[fd].pendindQueue.front());
+            
+            auto ii=solveFun.find(std::any_cast<const std::string&>(inf.ctx["key"]));//对应的任务
+            if(stt::system::ServerSetting::logfile!=nullptr)
+            {
+                if(stt::system::ServerSetting::language=="Chinese")
+                    stt::system::ServerSetting::logfile->writeLog("http server : worker处理成功 fd= "+to_string(fd));
+                else
+                    stt::system::ServerSetting::logfile->writeLog("http server : worker solve sucessfully fd= "+to_string(fd));
+            }
+            if(ii==solveFun.end())//找不到
+                {
+                    
+                    k.sendBack("","","404 NOT FOUND");
+                    //TcpServer::close(fd);
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("http server : 找不到处理函数 fd= "+to_string(fd));
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("http server : can not find solve function fd= "+to_string(fd));
+                    }
+                    //clientfd[fd].pendindQueue.pop();
+                    clientfd[fd].pendindQueue.pop();
+                }
+            else
+            {
+            //继续做
+            
+            for(;clientfd[fd].FDStatus<ii->second.size();)
+            {
+                
+                int rett=ii->second[clientfd[fd].FDStatus](k,inf);
+                clientfd[fd].FDStatus++;
+                        if(rett==1)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(clientfd[fd].FDStatus)+  "次完成");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" sucessfully.It's the "+to_string(clientfd[fd].FDStatus)+"times");
+                            }
+                        }
+                        else if(rett==0)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(clientfd[fd].FDStatus)+  "次.等待任务完成.");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" .It's the "+to_string(clientfd[fd].FDStatus)+"times job. now is waitting it to be finish.");
+                            }
+                            return;
+                        }
+                        else
+                        {
+                            TcpServer::close(fd);
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(clientfd[fd].FDStatus)+  "次失败。已经关闭连接。");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(clientfd[fd].FDStatus)+"times and now has closed this connection.");
+                            }
+                            //clientfd[fd].pendindQueue.pop();
+                            return;
+                        }
+            }
+            
+            clientfd[fd].pendindQueue.pop();
+            }
+        }
+     
+        TcpFDInf Tcpinf=clientfd[fd];
+        //检查是否有下一轮
+        if(Tcpinf.pendindQueue.size()>=1)//只有一个 说明没有任务没做完 直接执行
+            {
+                HttpRequestInformation &inff=std::any_cast<HttpRequestInformation&>(clientfd[fd].pendindQueue.front());
+                Tcpinf.FDStatus=-1;
+                int ret;
+                //获取key,自动解析到ctx的key键
+                ++Tcpinf.FDStatus;
+                ret=parseKey(k,inff);
+
+                if(ret==0)//慢处理
+                    return;
+                else if(ret<=-1)
+                {
+                    //清掉任务后返回
+                    Tcpinf.pendindQueue.pop();
+                    //-2要关闭连接
+                    if(ret==-2)
+                    {
+                        k.sendBack("","","404 NOT FOUND");
+                        TcpServer::close(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("http server : parsekey的时候失败 fd= "+to_string(fd)+" ，已经关闭连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("http server : parsekey fail fd= "+to_string(fd)+",now has closed this connection");
+                        }
+                    }
+                    else
+                    {
+                        k.sendBack("","","404 NOT FOUND");
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("http server : parsekey的时候失败 fd= "+to_string(fd)+" ，已扔掉本次任务并且发回错误信息");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("http server : parsekey fail fd= "+to_string(fd)+",now has throwed this task and send back error message");
+                        }
+                    }
+                    return;
+                }
+                
+                //遍历任务
+                auto ii=solveFun.find(std::any_cast<const std::string&>(inff.ctx["key"]));
+                if(ii==solveFun.end())//找不到
+                {
+                    k.sendBack("","","404 NOT FOUND");
+                    //TcpServer::close(fd);
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("http server : 找不到处理函数 fd= "+to_string(fd));
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("http server : can not find solve function fd= "+to_string(fd));
+                    }
+                    Tcpinf.pendindQueue.pop();
+                }
+                else//找得到处理函数
+                {
+                    for(auto &f:ii->second)
+                    {
+                        int rett=f(k,inff);
+                        ++Tcpinf.FDStatus;
+                        if(rett==1)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次完成");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" sucessfully.It's the "+to_string(Tcpinf.FDStatus)+"times");
+                            }
+                        }
+                        else if(rett==0)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次.等待任务完成.");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" .It's the "+to_string(Tcpinf.FDStatus)+"times job. now is waitting it to be finish.");
+                            }
+                            return;
+                        }
+                        else
+                        {
+                            TcpServer::close(fd);
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次失败。已经关闭连接。");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(Tcpinf.FDStatus)+"times and now has closed this connection.");
+                            }
+                            //Tcpinf.pendindQueue.pop();
+                            return;
+                        }
+                    }
+                    
+                }
+                Tcpinf.pendindQueue.pop();
+
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 完成");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" sucessfully");
+                    }
+                
+            }
+
+    }
+
+    void stt::network::WebSocketServer::handler_netevent(const int &fd)
+    {
+        
+        
+        if(clientfd[fd].fd!=-1)//can not find fd information,we need to writedown this error and close this fd
+        {
+            
+                if(security_open)
+                {
+                    if(!connectionLimiter.allowRequest(clientfd[fd].ip))
+                    {
+                        TcpServer::close(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("websocket server : fd="+to_string(fd)+"请求太频繁，已经关闭连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("websocket server : fd="+to_string(fd)+"request are too frequent,now has closed this connection");
+                        }
+                        return;
+                    }
+                }
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                {
+                    if(stt::system::ServerSetting::language=="Chinese")
+                        stt::system::ServerSetting::logfile->writeLog("websocket server : 正在处理fd= "+to_string(fd));
+                    else
+                        stt::system::ServerSetting::logfile->writeLog("websocket server : now handleing fd= "+to_string(fd));
+                }
+            TcpFDInf &Tcpinf=clientfd[fd];
+
+            unique_lock<mutex> lock(lwb);
+            auto jj=wbclientfd.find(fd);
+            if(jj==wbclientfd.end())//没有进行wb握手
+            {
+                
+                HttpServerFDHandler k;
+                k.setFD(fd,clientfd[fd].ssl,unblock);
+                //k1.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
+                //unique_lock<mutex> lock(lwb);
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                {
+                    if(stt::system::ServerSetting::language=="Chinese")
+                        stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" 正在进行websocket握手");
+                    else
+                        stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" handshaking websocket...");
+                }
+                WebSocketFDInformation winf;
+                winf.fd=fd;
+                winf.closeflag=false;
+                
+                HttpRequestInformation HttpInf;
+                int ret=k.solveRequest(Tcpinf,HttpInf,buffer_size,1);
+                if(ret==-1)
+                {
+                    //k.close();
+
+                        TcpServer::close(fd);
+                        
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" 无法解析http请求或者对端关闭连接 wb握手失败 已经关闭这个连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" couldn't solve http request or host had closed this connection.fail to handshake websocket.have closed this connection");
+                        }
+                    //continue;
+                    return;
+                    //wb握手失败
+                }
+                else if(ret==0)
+                {
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : 解析fd= "+to_string(fd)+"未完成 等待新的数据继续解析");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+"wait new data to continue solve this request");
+                    }
+                    //continue;
+                    return;
+                }
+                else if(ret==1)
+                {
+                    winf.locPara=HttpInf.locPara;
+                    winf.header=HttpInf.header;
+                    //cout<<winf.header<<endl;
+                    if(!fcc(winf))//条件不满足
+                    {
+                        //k.close();
+                        TcpServer::close(fd);
+                        
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" 连接限制条件不满足 websocket握手失败 服务器已经关闭这个连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" The connection constraints are not met.websocket handshake fail.server has closed this connection.");
+                        }
+                        //continue;
+                        return;
+                    }
+                    string_view key;
+                    string keyy;
+                    HttpStringUtil::get_value_header(HttpInf.header,key,"Sec-WebSocket-Key");
+                    keyy.assign(key);
+                    keyy+="258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+                    string result="";
+                    CryptoUtil::sha1(string(keyy),result);
+                    keyy=EncodingUtil::base64_encode(result);
+                    result=HttpStringUtil::createHeader("Upgrade","websocket","Connection","Upgrade","Sec-WebSocket-Accept",keyy);
+                    //清理接收缓冲区可能的数据遗漏
+                    //Tcpinf.data={};
+                    memset(Tcpinf.buffer,0,buffer_size);
+                    
+                    if(!k.sendBack("",result,"101 Switching Protocols"))
+                    {
+                        //k.close();
+                        TcpServer::close(fd);
+                    
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" 握手响应无法发送 websocket握手失败 服务器已经关闭这个连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" couldn't send handshake response .websocket handshake fail. server has closed this connection");
+                        }
+                        //continue;
+                        return;
+                        //握手失败
+                    }
+                    winf.response=::time(0);
+                    winf.HBTime=0;
+                    wbclientfd.emplace(fd,winf);
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" websocket握手成功");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" websocket has handshaked sucessfully");
+                    }
+                    //thread(fccc,winf,ref(*this)).detach();
+                    WebSocketServerFDHandler kk;
+                    kk.setFD(fd,clientfd[fd].ssl,unblock);
+                    fccc(kk,winf);
+                    
+                }
+                //sleep(10);
+                //k.solveRequest(Tcpinf,HttpInf,buffer_size,1);
+                //sleep(5);
+                //lock.unlock();
+            }
+            else
+            {
+                //lock.unlock();
+                WebSocketServerFDHandler k;
+                WebSocketFDInformation inf;
+            k.setFD(fd,clientfd[fd].ssl,unblock);
+            
+            int ret=1;
+            inf.fd=fd;
+            
+            ret=k.getMessage(Tcpinf,inf,buffer_size,1);
+            
+            if(ret==-1)
+            {
+                    closeWithoutLock(fd);
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server : 读取数据fd= "+to_string(fd)+" 失败，已经关闭连接");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("websocket server : read data from fd= "+to_string(fd)+" fail,now has closed this connection");
+                    }
+                    return;
+            }
+            else if(ret==1)
+            {
+                    if(jj->second.closeflag==true)//收到关闭确认
+                    {
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" 收到关闭确认帧: "+ inf.message);
+                        else 
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" has received closed confirm fin:"+ inf.message);
+                        }
+                        TcpServer::close(fd);
+                    }
+                    else//收到关闭
+                    {
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" 收到关闭帧: "+ inf.message);
+                        else 
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" has received closed fin:"+ inf.message);
+                        }
+                        
+                        closeAck(fd,inf.message);
+                    }
+                    wbclientfd.erase(jj);
+                    return;
+            }
+            else if(ret==2)
+            {
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" 收到心跳确认: "+ inf.message);
+                        else 
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" has received heartbeat confirm:"+ inf.message);
+                    }
+                    jj->second.response=::time(0);
+                    jj->second.HBTime=0;
+
+                    //记录心跳确认
+
+                    jj->second.message="";
+                    return;
+            }
+            else if(ret==3)
+            {
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" 收到心跳: "+ inf.message);
+                        else 
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" has received heartbeat:"+ inf.message);
+                    }
+                    jj->second.response=::time(0);
+                    if(!sendMessage(jj->first,"心跳","1010"))//发送心跳失败直接关闭
+                    {
+                        wbclientfd.erase(jj);
+                        TcpServer::close(jj->first);
+                        return;
+                    }
+         
+                    //心跳
+                    else
+                        jj->second.message="";
+                    return;
+            }
+            else if(ret==4)
+            {
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : 解析fd= "+to_string(fd)+"未完成 等待新的数据继续解析");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+"wait new data to continue solve this request");
+                    }
+                    return;
+            }
+            else if(ret==0)
+            {
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" 收到常规信息: "+ inf.message);
+                        else 
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" has received normal message:"+ inf.message);
+                    }
+                    jj->second.response=::time(0);
+                    //if(!fc(jj->second.message,*this,jj->second))//回调函数失败
+                    //{
+                    //    close(fd);
+                    //    return;
+                    //}
+                    //jj->second.message="";
+                    //return;
+            }
+        
+            lock.unlock();
+            
+            
+            //lock6.unlock();
+            //开始处理
+                //入队
+            Tcpinf.pendindQueue.push(move(inf));
+            
+            if(Tcpinf.pendindQueue.size()==1)//只有一个 说明没有任务没做完 直接执行
+            {
+               
+                WebSocketFDInformation &inff=std::any_cast<WebSocketFDInformation&>(clientfd[fd].pendindQueue.front());
+                Tcpinf.FDStatus=-1;
+                int ret;
+                //获取key,自动解析到ctx的key键
+                ++Tcpinf.FDStatus;
+                ret=parseKey(k,inff);
+                
+                if(ret==0)//慢处理
+                {
+                    return;
+                }
+                else if(ret<=-1)
+                {
+                    //清掉任务后返回
+                    //Tcpinf.pendindQueue.pop();
+                    //-2要关闭连接
+                    if(ret==-2)
+                    {
+                        close(fd);
+                        //closeWithoutLock(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("websocket server : parsekey的时候失败 fd= "+to_string(fd)+" ，已经关闭连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("websocket server : parsekey fail fd= "+to_string(fd)+",now has closed this connection");
+                        }
+                    }
+                    else
+                    {
+                        //k.sendBack("","","404 NOT FOUND");
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("websocket server : parsekey的时候失败 fd= "+to_string(fd)+" ，已扔掉本次任务并且发回错误信息");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("websocket server : parsekey fail fd= "+to_string(fd)+",now has throwed this task and send back error message");
+                        }
+                    }
+                    return;
+                }
+                
+                //遍历任务
+                
+                auto ii=solveFun.find(std::any_cast<const std::string&>(inff.ctx["key"]));
+                
+                if(ii==solveFun.end())//找不到
+                {
+                    
+                    //k.sendBack("","","404 NOT FOUND");
+                    //close(fd);
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server : 找不到处理函数 fd= "+to_string(fd)+"。调用全局备用处理函数");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("websocket server : can not find solve function fd= "+to_string(fd)+" . use global backup slove function.");
+                    }
+                    if(!globalSolveFun(k,inff))
+                    {
+                        close(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("websocket server : 调用全局备用函数失败 fd= "+to_string(fd)+"已经关闭连接.");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("websocket server : use global backup slove function fail. fd= "+to_string(fd)+". has closed this connection.");
+                        }
+                    }
+                    Tcpinf.pendindQueue.pop();
+                }
+                else//找得到处理函数
+                {
+                    
+                    for(auto &f:ii->second)
+                    {
+                        int rett=f(k,inff);
+                        ++Tcpinf.FDStatus;
+                        if(rett==1)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次完成");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : handled fd= "+to_string(fd)+" sucessfully.It's the "+to_string(Tcpinf.FDStatus)+"times");
+                            }
+                        }
+                        else if(rett==0)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次.等待任务完成.");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : handled fd= "+to_string(fd)+" .It's the "+to_string(Tcpinf.FDStatus)+"times job. now is waitting it to be finish.");
+                            }
+                            
+                            return;
+                        }
+                        else
+                        {
+                            close(fd);
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次失败。已经关闭连接。");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(Tcpinf.FDStatus)+"times and now has closed this connection.");
+                            }
+                            //Tcpinf.pendindQueue.pop();
+                            return;
+                        }
+                    }
+                    
+                    Tcpinf.pendindQueue.pop();
+                }
+
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server : 处理fd= "+to_string(fd)+" 完成");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("websocket server : handled fd= "+to_string(fd)+" sucessfully");
+                    }
+                
+            }
+            
+            }
+        }
+    }
+    void stt::network::WebSocketServer::handler_workerevent(const int &fd,const int &ret)
+    {
+       
+        if(ret==-2)
+        {
+            close(fd);
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server : worker处理失败 fd= "+to_string(fd)+" ，已经关闭连接");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("websocket server : worker solve fail fd= "+to_string(fd)+" ,now has closed this connection");
+                    }
+            return;
+        }
+        WebSocketServerFDHandler k;
+        k.setFD(fd,clientfd[fd].ssl,unblock);
+        
+        if(ret==-1)
+        {
+            clientfd[fd].pendindQueue.pop();
+            if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server : worker处理失败 fd= "+to_string(fd)+" ，跳过本次请求");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("websocket server : worker solve fail fd= "+to_string(fd)+" ,skip this request");
+                    }
+        }
+        else
+        {
+            
+            
+        
+            WebSocketFDInformation &inf=std::any_cast<WebSocketFDInformation&>(clientfd[fd].pendindQueue.front());
+            
+            auto ii=solveFun.find(std::any_cast<const std::string&>(inf.ctx["key"]));//对应的任务
+            if(stt::system::ServerSetting::logfile!=nullptr)
+            {
+                if(stt::system::ServerSetting::language=="Chinese")
+                    stt::system::ServerSetting::logfile->writeLog("websocket server : worker处理成功 fd= "+to_string(fd));
+                else
+                    stt::system::ServerSetting::logfile->writeLog("websocket server : worker solve sucessfully fd= "+to_string(fd));
+            }
+            if(ii==solveFun.end())//找不到
+                {
+                    
+                    //k.sendBack("","","404 NOT FOUND");
+                    //close(fd);
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server : 找不到处理函数 fd= "+to_string(fd)+"。调用全局备用处理函数");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("websocket server : can not find solve function fd= "+to_string(fd)+" . use global backup slove function.");
+                    }
+                    if(!globalSolveFun(k,inf))
+                    {
+                        close(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("websocket server : 调用全局备用函数失败 fd= "+to_string(fd)+"已经关闭连接.");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("websocket server : use global backup slove function fail. fd= "+to_string(fd)+". has closed this connection.");
+                        }
+                    }
+                    //clientfd[fd].pendindQueue.pop();
+                    clientfd[fd].pendindQueue.pop();
+                }
+            else
+            {
+            //继续做
+            
+            for(;clientfd[fd].FDStatus<ii->second.size();)
+            {
+                
+                int rett=ii->second[clientfd[fd].FDStatus](k,inf);
+                clientfd[fd].FDStatus++;
+                        if(rett==1)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : 处理fd= "+to_string(fd)+" 第"+ to_string(clientfd[fd].FDStatus)+  "次完成");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : handled fd= "+to_string(fd)+" sucessfully.It's the "+to_string(clientfd[fd].FDStatus)+"times");
+                            }
+                        }
+                        else if(rett==0)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : 处理fd= "+to_string(fd)+" 第"+ to_string(clientfd[fd].FDStatus)+  "次.等待任务完成.");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : handled fd= "+to_string(fd)+" .It's the "+to_string(clientfd[fd].FDStatus)+"times job. now is waitting it to be finish.");
+                            }
+                            return;
+                        }
+                        else
+                        {
+                            close(fd);
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : 处理fd= "+to_string(fd)+" 第"+ to_string(clientfd[fd].FDStatus)+  "次失败。已经关闭连接。");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(clientfd[fd].FDStatus)+"times and now has closed this connection.");
+                            }
+                            //clientfd[fd].pendindQueue.pop();
+                            return;
+                        }
+            }
+            
+            clientfd[fd].pendindQueue.pop();
+            }
+        }
+     
+        TcpFDInf Tcpinf=clientfd[fd];
+        //检查是否有下一轮
+        if(Tcpinf.pendindQueue.size()>=1)//只有一个 说明没有任务没做完 直接执行
+            {
+                WebSocketFDInformation &inff=std::any_cast< WebSocketFDInformation&>(clientfd[fd].pendindQueue.front());
+                Tcpinf.FDStatus=-1;
+                int ret;
+                //获取key,自动解析到ctx的key键
+                ++Tcpinf.FDStatus;
+                ret=parseKey(k,inff);
+
+                if(ret==0)//慢处理
+                    return;
+                else if(ret<=-1)
+                {
+                    //清掉任务后返回
+                    Tcpinf.pendindQueue.pop();
+                    //-2要关闭连接
+                    if(ret==-2)
+                    {
+                        //k.sendBack("","","404 NOT FOUND");
+                        close(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("websocket server : parsekey的时候失败 fd= "+to_string(fd)+" ，已经关闭连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("websocket server : parsekey fail fd= "+to_string(fd)+",now has closed this connection");
+                        }
+                    }
+                    else
+                    {
+                        //k.sendBack("","","404 NOT FOUND");
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("websocket server : parsekey的时候失败 fd= "+to_string(fd)+" ，已扔掉本次任务并且发回错误信息");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("websocketserver : parsekey fail fd= "+to_string(fd)+",now has throwed this task and send back error message");
+                        }
+                    }
+                    return;
+                }
+                
+                //遍历任务
+                auto ii=solveFun.find(std::any_cast<const std::string&>(inff.ctx["key"]));
+                if(ii==solveFun.end())//找不到
+                {
+                    //k.sendBack("","","404 NOT FOUND");
+                    //close(fd);
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server : 找不到处理函数 fd= "+to_string(fd)+"。调用全局备用处理函数");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("websocket server : can not find solve function fd= "+to_string(fd)+" . use global backup slove function.");
+                    }
+                    if(!globalSolveFun(k,inff))
+                    {
+                        close(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("websocket server : 调用全局备用函数失败 fd= "+to_string(fd)+"已经关闭连接.");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("websocket server : use global backup slove function fail. fd= "+to_string(fd)+". has closed this connection.");
+                        }
+                    }
+                    Tcpinf.pendindQueue.pop();
+                }
+                else//找得到处理函数
+                {
+                    for(auto &f:ii->second)
+                    {
+                        int rett=f(k,inff);
+                        ++Tcpinf.FDStatus;
+                        if(rett==1)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次完成");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : handled fd= "+to_string(fd)+" sucessfully.It's the "+to_string(Tcpinf.FDStatus)+"times");
+                            }
+                        }
+                        else if(rett==0)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次.等待任务完成.");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : handled fd= "+to_string(fd)+" .It's the "+to_string(Tcpinf.FDStatus)+"times job. now is waitting it to be finish.");
+                            }
+                            return;
+                        }
+                        else
+                        {
+                            close(fd);
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次失败。已经关闭连接。");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(Tcpinf.FDStatus)+"times and now has closed this connection.");
+                            }
+                            //Tcpinf.pendindQueue.pop();
+                            return;
+                        }
+                    }
+                    
+                }
+                Tcpinf.pendindQueue.pop();
+
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server : 处理fd= "+to_string(fd)+" 完成");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("websocket server : handled fd= "+to_string(fd)+" sucessfully");
+                    }
+                
+            }
+
+
+    }
+    /*
     void stt::network::HttpServer::consumer(const int &threadID)
     {
         HttpServerFDHandler k;
@@ -4853,7 +6483,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 stt::system::ServerSetting::logfile->writeLog("http server consumer "+to_string(consumerNum)+"quit");
         }
     }
-
+    */
     
     bool stt::network::EpollSingle::endListen()
     {
@@ -5142,7 +6772,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 //cout<<"finish+"<<code<<endl;
                 if(code=="1000")
                 {
-                    cout<<"收到对端关闭帧";
+                    //cout<<"收到对端关闭帧";
                     if(this->flag5)//说明是关闭确认帧
                     {
                         return false;
@@ -5160,13 +6790,13 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 }
                 else if(code=="1001")
                 {
-                    cout<<"收到对端心跳:"<<totalResult<<endl;
+                    //cout<<"收到对端心跳:"<<totalResult<<endl;
                     this->sendMessage(totalResult,"1010");
                     isRec=false;
                 }
                 else if(code=="1010")
                 {
-                    cout<<"收到对端心跳响应"<<endl;
+                    //cout<<"收到对端心跳响应"<<endl;
                     isRec=false;
                 }
                 BitUtil::bitOutput_bit(b1,1,b1);
@@ -5207,7 +6837,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
 
         if(size<=125)
         {
-            cout<<"send1+size="<<size<<"+::"<<message<<endl;
+            //cout<<"send1+size="<<size<<"+::"<<message<<endl;
             string header;
             BitUtil::toBit(typee,header);
 
@@ -5226,7 +6856,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         }
         else if(size<=65535)
         {
-            cout<<"send2+size="<<size<<"+::"<<message<<endl;
+            //cout<<"send2+size="<<size<<"+::"<<message<<endl;
             unsigned short tt=(unsigned short)size;
             tt=htons(tt);
             string header;
@@ -5242,7 +6872,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         }
         else
         {
-            cout<<"send3+size="<<size<<"+::"<<message<<endl;
+            //cout<<"send3+size="<<size<<"+::"<<message<<endl;
             NetworkOrderUtil::htonl_ntohl_64(size);
             string header;
             BitUtil::toBit(typee+"11111111",header);
@@ -5285,12 +6915,28 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
 
          //   if(ii==1)
         //{
-            unsigned long long p_buffer_now_backup=Tcpinf.p_buffer_now;
+
             int ret=1;
+            unsigned long long p_buffer_now_backup=Tcpinf.p_buffer_now;
+            
+            
             while(ret>0&&buffer_size-Tcpinf.p_buffer_now>0)
             {
                 ret=recvData(Tcpinf.buffer+Tcpinf.p_buffer_now,buffer_size-Tcpinf.p_buffer_now);
-                Tcpinf.p_buffer_now+=ret;
+                if(ret>0)
+                    Tcpinf.p_buffer_now+=ret;
+                
+            }
+            if(buffer_size-Tcpinf.p_buffer_now<=0)
+            {
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server : 缓冲区容量不足 读取数据fd= "+to_string(fd)+" 失败，已经关闭连接");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("websocket server : buffer size is not enough,read data from fd= "+to_string(fd)+" fail,now has closed this connection");
+                    }
+                return -1;
             }
             if(ret<=0)
             {
@@ -5299,8 +6945,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
         //}
         
-
+        
         Tcpinf.data=string_view(Tcpinf.buffer+p_buffer_now_backup,Tcpinf.p_buffer_now);
+        
         //cout<<Tcpinf.data<<endl;
             //数据接收完，开始处理
             
@@ -5309,6 +6956,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 //第一个字节
                 if(Tcpinf.status==0||Tcpinf.status==1)
                 {
+                    Websocketinf.recv_length=0;
+                    Websocketinf.have_recv_length=0;
+
                     if(Tcpinf.status==0)
                         Tcpinf.status=1;
                     if(Tcpinf.data.length()<1)
@@ -5342,12 +6992,14 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
                     else
                        Websocketinf.message_type=0;
+
+                    ++Websocketinf.have_recv_length;
                     Tcpinf.status=2;
                     if(Tcpinf.data.length()>1)
                         Tcpinf.data=Tcpinf.data.substr(1);
                     else
                     {
-                        Tcpinf.data={};
+                        //Tcpinf.data={};
                         return 4;
                     }
                     Websocketinf.recv_length=1;
@@ -5363,6 +7015,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         if(Tcpinf.data.length()<1)
                             return 4;
                         char b2=Tcpinf.data[0];
+                        ++Websocketinf.have_recv_length;
                         string ssize;
                         BitUtil::bitOutput(b2,ssize);
                         ssize=ssize.substr(1);
@@ -5377,7 +7030,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             Websocketinf.recv_length=sizee;
                             if(Tcpinf.data.length()<=1)
                             {
-                                Tcpinf.data={};
+                                //Tcpinf.data={};
                                 return 4;
                             }
                             else
@@ -5389,7 +7042,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     
                         if(Tcpinf.data.length()<=1)
                         {
-                            Tcpinf.data={};
+                           // Tcpinf.data={};
                             return 4;
                         }
                         Tcpinf.data=Tcpinf.data.substr(1);
@@ -5398,18 +7051,19 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         Websocketinf.recv_length=sizee;
                         if(Tcpinf.data.length()<=2)
                         {
-                            Tcpinf.data={};
+                            //Tcpinf.data={};
                             return 4;
                         }
                         else
                             Tcpinf.data=Tcpinf.data.substr(2);
+                        Websocketinf.have_recv_length=Websocketinf.have_recv_length+2;
                     }
                     else if(Websocketinf.recv_length==8&&Tcpinf.status==2)
                     {
                         
                         if(Tcpinf.data.length()<=1)
                         {
-                            Tcpinf.data={};
+                            //Tcpinf.data={};
                             return 4;
                         }
                         Tcpinf.data=Tcpinf.data.substr(1);
@@ -5418,11 +7072,12 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         Websocketinf.recv_length=sizee;
                         if(Tcpinf.data.length()<=8)
                         {
-                            Tcpinf.data={};
+                            //Tcpinf.data={};
                             return 4;
                         }
                         else
                             Tcpinf.data=Tcpinf.data.substr(8);
+                        Websocketinf.have_recv_length=Websocketinf.have_recv_length+8;
                     }
                     
                     
@@ -5442,12 +7097,12 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     {
                         if(Websocketinf.recv_length!=0)
                         {
-                            Tcpinf.data={};
+                            //Tcpinf.data={};
                             return 4;
                         }
                     }
                     Tcpinf.data=Tcpinf.data.substr(4);
-                    
+                    Websocketinf.have_recv_length=Websocketinf.have_recv_length+4;
                 }
 
                 //接收数据
@@ -5463,17 +7118,22 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     {
                         a=Tcpinf.data;
                         Websocketinf.recv_length=Websocketinf.recv_length-Tcpinf.data.length();
-                        Tcpinf.data={};
+                        //Tcpinf.data={};
                     }
                     else
                     {
                         a=Tcpinf.data.substr(0,Websocketinf.recv_length);
                         Tcpinf.data=Tcpinf.data.substr(Websocketinf.recv_length);
+                        Websocketinf.have_recv_length=Websocketinf.have_recv_length+Websocketinf.recv_length;
+                        //搬内存
+                        memcpy(Tcpinf.buffer,Tcpinf.buffer+Websocketinf.have_recv_length,Websocketinf.have_recv_length);
+                        Tcpinf.p_buffer_now=Tcpinf.p_buffer_now-Websocketinf.have_recv_length;
                         Websocketinf.recv_length=0;
-                       
+                        Websocketinf.have_recv_length=0;
                     }
                     EncodingUtil::maskCalculate(a,Websocketinf.mask);
                     Websocketinf.message+=a;
+                    //cout<<Websocketinf.message<<endl;
                     if(Websocketinf.recv_length!=0)
                         return 4;
                     }
@@ -5482,23 +7142,24 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     Tcpinf.status=0;
                     if(Websocketinf.message_type==1)
                     {
-                        cout<<"收到对端关闭帧";
+                        //cout<<"收到对端关闭帧";
+
                         return 1;
                     }
                     else if(Websocketinf.message_type==2)
                     {
-                        cout<<"收到对端心跳响应"<<endl;
+                        //cout<<"收到对端心跳响应"<<endl;
                         return 2;
                     }
                     else if(Websocketinf.message_type==3)
                     {
-                        cout<<"收到对端心跳:"<<Websocketinf.message<<endl;
+                        //cout<<"收到对端心跳:"<<Websocketinf.message<<endl;
                         sendMessage(Websocketinf.message,"1010");
                         return 3;
                     }
                     else
                     {
-                        if(Websocketinf.fin)
+                        if(Websocketinf.fin)                         
                             break;   
                     }
                     
@@ -5586,14 +7247,18 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     }
     bool stt::network::WebSocketServer::close(const int &fd,const string &closeCodeAndMessage)
     {
+
         unique_lock<mutex> lock(lwb);
         auto ii=wbclientfd.find(fd);
+
         if(ii==wbclientfd.end()||ii->second.closeflag==true)
         {
+            
             return false;
         }
         else
         {
+            
             lock.unlock();
             WebSocketServerFDHandler k;
             k.setFD(fd,getSSL(fd),unblock);
@@ -5620,14 +7285,18 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
 
     bool stt::network::WebSocketServer::close(const int &fd,const short &code,const string &message)
     {
+        
         unique_lock<mutex> lock(lwb);
         auto ii=wbclientfd.find(fd);
+        
         if(ii==wbclientfd.end()||ii->second.closeflag==true)//找不到或者已经发送过了
         {
+            
             return false;
         }
         else
         {
+            
             lock.unlock();
             char ccode[2];
             memcpy(ccode,&code,2);
@@ -5700,7 +7369,299 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             return true;
         }
     }
-    
+    /*
+    void stt::network::WebSocketServer::handler(const int &fd)
+    {
+        HttpServerFDHandler k;
+        WebSocketServerFDHandler k1;
+            if(clientfd[fd].fd!=-1)
+            {
+                if(security_open)
+                {
+                    if(!connectionLimiter.allowRequest(clientfd[fd].ip))
+                    {
+                        TcpServer::close(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("tcp server consumer : fd= "+to_string(fd)+"请求太频繁，已经关闭连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("tcp server consumer : fd= "+to_string(fd)+"request are too frequent,now has closed this connection");
+                        }
+                      
+                    }
+                }
+                
+                TcpFDInf &Tcpinf=clientfd[fd];
+
+            cout<<"websocket fd="<<fd<<endl;
+            if(stt::system::ServerSetting::logfile!=nullptr)
+             {
+                if(stt::system::ServerSetting::language=="Chinese")
+                    stt::system::ServerSetting::logfile->writeLog("websocket server consumer : 正在处理fd= "+to_string(fd));
+                else
+                    stt::system::ServerSetting::logfile->writeLog("websocket server consumer : now solveing fd= "+to_string(fd));
+             }
+            //拿到fd之后开始操作
+            unique_lock<mutex> lock(lwb);
+            auto jj=wbclientfd.find(fd);
+            if(jj==wbclientfd.end())//没有进行wb握手
+            {
+                k.setFD(fd,clientfd[fd].ssl,unblock);
+
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                {
+                    if(stt::system::ServerSetting::language=="Chinese")
+                        stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" 正在进行websocket握手");
+                    else
+                        stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" handshaking websocket...");
+                }
+                WebSocketFDInformation winf;
+                winf.fd=fd;
+                winf.closeflag=false;
+                
+                HttpRequestInformation HttpInf;
+                int ret=k.solveRequest(Tcpinf,HttpInf,buffer_size,1);
+                if(ret==-1)
+                {
+                    //k.close();
+
+                        TcpServer::close(fd);
+                        cout<<"无法解析http请求 wb握手失败"<<endl;
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" 无法解析http请求或者对端关闭连接 wb握手失败 已经关闭这个连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" couldn't solve http request or host had closed this connection.fail to handshake websocket.have closed this connection");
+                        }
+                   
+                    //wb握手失败
+                }
+                else if(ret==0)
+                {
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer : 解析fd= "+to_string(fd)+"未完成 等待新的数据继续解析");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+"wait new data to continue solve this request");
+                    }
+                 
+                }
+                else if(ret==1)
+                {
+                    winf.locPara=HttpInf.locPara;
+                    winf.header=HttpInf.header;
+                    //cout<<winf.header<<endl;
+                    if(!fcc(winf))//条件不满足
+                    {
+                        //k.close();
+                        TcpServer::close(fd);
+                        cout<<"连接限制条件不满足 wb握手失败"<<endl;
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" 连接限制条件不满足 websocket握手失败 服务器已经关闭这个连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" The connection constraints are not met.websocket handshake fail.server has closed this connection.");
+                        }
+                    
+                    }
+                    string_view key;
+                    string keyy;
+                    HttpStringUtil::get_value_header(HttpInf.header,key,"Sec-WebSocket-Key");
+                    keyy.assign(key);
+                    keyy+="258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+                    string result="";
+                    CryptoUtil::sha1(string(keyy),result);
+                    keyy=EncodingUtil::base64_encode(result);
+                    result=HttpStringUtil::createHeader("Upgrade","websocket","Connection","Upgrade","Sec-WebSocket-Accept",keyy);
+                    //清理接收缓冲区可能的数据遗漏
+                    //Tcpinf.data={};
+                    
+                    if(!k.sendBack("",result,"101 Switching Protocols"))
+                    {
+                        //k.close();
+                        TcpServer::close(fd);
+                        cout<<"握手响应无法发送 wb握手失败"<<endl;
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" 握手响应无法发送 websocket握手失败 服务器已经关闭这个连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" couldn't send handshake response .websocket handshake fail. server has closed this connection");
+                        }
+                   
+                        //握手失败
+                    }
+                    winf.response=::time(0);
+                    winf.HBTime=0;
+                    wbclientfd.emplace(fd,winf);
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" websocket握手成功");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" websocket has handshaked sucessfully");
+                    }
+                    thread(fccc,winf,ref(*this)).detach();
+                }
+                //sleep(10);
+                //k.solveRequest(Tcpinf,HttpInf,buffer_size,1);
+                //sleep(5);
+
+            }
+            else//已经进行了握手操作
+            {
+                //k.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
+                k1.setFD(fd,clientfd[fd].ssl,unblock);
+            int r=1;
+            
+            
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                {
+                    if(stt::system::ServerSetting::language=="Chinese")
+                        stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" 正在解析请求... ");
+                    else
+                        stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" now solveing request... ");
+                }
+                r=k1.getMessage(Tcpinf,jj->second,buffer_size,1);
+
+                if(r==-1)
+                {
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" 接收错误，关闭连接中 ");
+                        else 
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+"error of receiving, and now closing this connection ");
+                    }
+                    closeWithoutLock(fd);
+                }
+                else if(r==1)
+                {
+                    
+                    
+                   
+                    if(jj->second.closeflag==true)//收到关闭确认
+                    {
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" 收到关闭确认帧: "+ jj->second.message);
+                        else 
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" has received closed confirm fin:"+ jj->second.message);
+                        }
+                        TcpServer::close(fd);
+                    }
+                    else//收到关闭
+                    {
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" 收到关闭帧: "+ jj->second.message);
+                        else 
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" has received closed fin:"+ jj->second.message);
+                        }
+                        cout<<"yes"<<endl;
+                        closeAck(fd,jj->second.message);
+                    }
+                    wbclientfd.erase(jj);
+                   
+                }
+                else if(r==2)
+                {
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" 收到心跳确认: "+ jj->second.message);
+                        else 
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" has received heartbeat confirm:"+ jj->second.message);
+                    }
+                    jj->second.response=::time(0);
+                    jj->second.HBTime=0;
+
+                    //记录心跳确认
+
+                    jj->second.message="";
+                   
+                }
+                else if(r==3)
+                {
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" 收到心跳: "+ jj->second.message);
+                        else 
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" has received heartbeat:"+ jj->second.message);
+                    }
+                    jj->second.response=::time(0);
+                    if(!sendMessage(jj->first,"心跳","1010"))//发送心跳失败直接关闭
+                    {
+                        wbclientfd.erase(jj);
+                        TcpServer::close(jj->first);
+                        
+                    }
+         
+                    //心跳
+                    else
+                        jj->second.message="";
+                    
+                }
+                else if(r==0)//正常报文
+                {
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" 收到常规信息: "+ jj->second.message);
+                        else 
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" has received normal message:"+ jj->second.message);
+                    }
+                    jj->second.response=::time(0);
+                    if(!fc(jj->second.message,*this,jj->second))//回调函数失败
+                    {
+                        close(fd);
+                        
+                    }
+                    jj->second.message="";
+                    
+                }
+                //else if(r==4)
+                //{
+                //        solvingFD_lock.lock();
+                //        solvingFD[cclientfd]=false;
+                //        solvingFD_lock.unlock();
+                //        continue;
+                //}
+
+                if(r!=4)
+                {
+
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" 处理完成");
+                        else 
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" has solved sucessfully");
+                    }
+                }
+                else
+                {
+                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    {
+                        if(stt::system::ServerSetting::language=="Chinese")
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" 继续等待数据中");
+                        else 
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer : fd= "+to_string(fd)+" waiting data...");
+                    }
+                }
+            
+            }
+            }
+    }
+    */
+    /*
     void stt::network::WebSocketServer::consumer(const int &threadID)
     {
         HttpServerFDHandler k;
@@ -6053,6 +8014,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 stt::system::ServerSetting::logfile->writeLog("websocket server consumer "+to_string(consumerNum)+"quit");
         }
     }
+    */
     SSL* stt::network::TcpServer::getSSL(const int &fd)
     {
         //SSL *ssl;
@@ -6084,7 +8046,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 {
                     if(now-ii->second.response>secb)//超时
                     {
-                        cout<<ii->first<<endl;
+                        //cout<<ii->first<<endl;
                         //if(!closeWithoutLock(ii->first))//如果发送失败就已经被erase了 如果就成功就还要等待后续再erase... 这个时候是占有锁的，跳出循环后别的线程才能占有锁erase
                         //    continue;
                         
@@ -6111,7 +8073,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 {
                     if(now-ii->second.response>seca)
                     {
-                        cout<<"send"<<endl;
+                        //cout<<"send"<<endl;
                         if(!sendMessage(ii->first,"心跳","1001"))//发送心跳失败直接关闭
                         {
                             ii=wbclientfd.erase(ii);
@@ -6334,7 +8296,7 @@ bool stt::system::HBSystem::join(const char *name,const char *argv0,const char *
     pid_t pid=getpid();
         //遍历找到位置
     first=false;
-    cout<<"join id= "<<pid<<endl;
+    //cout<<"join id= "<<pid<<endl;
     if(stt::system::ServerSetting::logfile!=nullptr)
     {
         if(stt::system::ServerSetting::language=="Chinese")
@@ -6379,7 +8341,7 @@ bool stt::system::HBSystem::renew()
         return false;
     time_t now=::time(nullptr);
     pid_t pid=getpid();
-    cout<<"renew= "<<pid<<endl;
+    //cout<<"renew= "<<pid<<endl;
     plock.wait();
     for(int ii=0;ii<MAX_PROCESS_INF;ii++)
     {
@@ -6387,7 +8349,7 @@ bool stt::system::HBSystem::renew()
         {
             p[ii].pid=pid;
             p[ii].lastTime=now;
-            cout<<"renwe*** ";
+            //cout<<"renwe*** ";
             list();
             plock.post();
             return true;
@@ -6477,7 +8439,7 @@ bool stt::system::HBSystem::deleteFromHBS()
 {
     if(isJoin&&(p!=nullptr))
     {
-        cout<<"清理信息"<<endl;
+        //cout<<"清理信息"<<endl;
         pid_t pid=getpid();
         plock.wait();
         for(int ii=0;ii<MAX_PROCESS_INF;ii++)
@@ -6499,7 +8461,7 @@ bool stt::system::HBSystem::deleteFromHBS()
 }
 stt::system::HBSystem::~HBSystem()
 {
-    cout<<"析构函数运行  ~HBS"<<endl;
+    //cout<<"析构函数运行  ~HBS"<<endl;
     if(p!=nullptr)
     {
         if(!deleteFromHBS()||shmdt(p)==-1)

@@ -41,6 +41,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
       <li><a href="namespaces.html"><span>命名空间</span></a></li>
       <li class="current"><a href="annotated.html"><span>类</span></a></li>
       <li><a href="files.html"><span>文件</span></a></li>
+      <li><a href="examples.html"><span>示例</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -95,7 +96,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </div><!--header-->
 <div class="contents">
 
-<p>保存Tcp客户端信息的结构体  
+<p>保存底层基础Tcp通道信息的结构体  
  <a href="structstt_1_1network_1_1TcpFDInf.html#details">更多...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
@@ -111,8 +112,14 @@ Public 属性</h2></td></tr>
 <tr class="memitem:ac72bee9ed7ac2b2f15dcc303cf99dbf9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#ac72bee9ed7ac2b2f15dcc303cf99dbf9">port</a></td></tr>
 <tr class="memdesc:ac72bee9ed7ac2b2f15dcc303cf99dbf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">客户端端口  <a href="#ac72bee9ed7ac2b2f15dcc303cf99dbf9">更多...</a><br/></td></tr>
 <tr class="separator:ac72bee9ed7ac2b2f15dcc303cf99dbf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd920b87dfe6955460e70df885598cf6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#acd920b87dfe6955460e70df885598cf6">FDStatus</a></td></tr>
+<tr class="memdesc:acd920b87dfe6955460e70df885598cf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">记录当前处理状态机到第几步了  <a href="#acd920b87dfe6955460e70df885598cf6">更多...</a><br/></td></tr>
+<tr class="separator:acd920b87dfe6955460e70df885598cf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18f0ee49d6f942cd835ceeca0484f0e9"><td class="memItemLeft" align="right" valign="top">std::queue&lt; std::any &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#a18f0ee49d6f942cd835ceeca0484f0e9">pendindQueue</a></td></tr>
+<tr class="memdesc:a18f0ee49d6f942cd835ceeca0484f0e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">等待处理的队列  <a href="#a18f0ee49d6f942cd835ceeca0484f0e9">更多...</a><br/></td></tr>
+<tr class="separator:a18f0ee49d6f942cd835ceeca0484f0e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a063c9fbf86050be4a2b6ecfaef9859e7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#a063c9fbf86050be4a2b6ecfaef9859e7">status</a></td></tr>
-<tr class="memdesc:a063c9fbf86050be4a2b6ecfaef9859e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">当前fd的状态，用于保存处理机逻辑  <a href="#a063c9fbf86050be4a2b6ecfaef9859e7">更多...</a><br/></td></tr>
+<tr class="memdesc:a063c9fbf86050be4a2b6ecfaef9859e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">当前fd的接收状态，用于保存接收处理机逻辑  <a href="#a063c9fbf86050be4a2b6ecfaef9859e7">更多...</a><br/></td></tr>
 <tr class="separator:a063c9fbf86050be4a2b6ecfaef9859e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:accb710ff8a74cffe2b6fa2195f1d833e"><td class="memItemLeft" align="right" valign="top">std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#accb710ff8a74cffe2b6fa2195f1d833e">data</a></td></tr>
 <tr class="memdesc:accb710ff8a74cffe2b6fa2195f1d833e"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存收到的客户端传来的数据  <a href="#accb710ff8a74cffe2b6fa2195f1d833e">更多...</a><br/></td></tr>
@@ -128,7 +135,7 @@ Public 属性</h2></td></tr>
 <tr class="separator:a261886a275029003ef9d39e8658947e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
-<div class="textblock"><p>保存Tcp客户端信息的结构体 </p>
+<div class="textblock"><p>保存底层基础Tcp通道信息的结构体 </p>
 </div><h2 class="groupheader">类成员变量说明</h2>
 <a class="anchor" id="a5818258b1cb88051c3eb22ec0195a89d"></a>
 <div class="memitem">
@@ -172,6 +179,20 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="acd920b87dfe6955460e70df885598cf6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int stt::network::TcpFDInf::FDStatus</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>记录当前处理状态机到第几步了 </p>
+
+</div>
+</div>
 <a class="anchor" id="a21f09ab19a62d07ea50990237762fa03"></a>
 <div class="memitem">
 <div class="memproto">
@@ -197,6 +218,20 @@ Public 属性</h2></td></tr>
 </div><div class="memdoc">
 
 <p>接收空间位置指针 </p>
+
+</div>
+</div>
+<a class="anchor" id="a18f0ee49d6f942cd835ceeca0484f0e9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::queue&lt;std::any&gt; stt::network::TcpFDInf::pendindQueue</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>等待处理的队列 </p>
 
 </div>
 </div>
@@ -238,7 +273,7 @@ Public 属性</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>当前fd的状态，用于保存处理机逻辑 </p>
+<p>当前fd的接收状态，用于保存接收处理机逻辑 </p>
 
 </div>
 </div>

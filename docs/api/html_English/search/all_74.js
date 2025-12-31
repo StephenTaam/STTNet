@@ -1,11 +1,13 @@
 var searchData=
 [
+  ['task',['Task',['../namespacestt_1_1system.html#a96492ef66fd55413ac968acea5978183',1,'stt::system']]],
   ['tcpclient',['TcpClient',['../classstt_1_1network_1_1TcpClient.html',1,'stt::network']]],
   ['tcpclient',['TcpClient',['../classstt_1_1network_1_1TcpClient.html#ae028d2eb42d1efd17ff219681e108bb2',1,'stt::network::TcpClient']]],
   ['tcpfdhandler',['TcpFDHandler',['../classstt_1_1network_1_1TcpFDHandler.html',1,'stt::network']]],
   ['tcpfdinf',['TcpFDInf',['../structstt_1_1network_1_1TcpFDInf.html',1,'stt::network']]],
+  ['tcpinformation',['TcpInformation',['../structstt_1_1network_1_1TcpInformation.html',1,'stt::network']]],
   ['tcpserver',['TcpServer',['../classstt_1_1network_1_1TcpServer.html',1,'stt::network']]],
-  ['tcpserver',['TcpServer',['../classstt_1_1network_1_1TcpServer.html#a9146e22c4d805bd35c1571120a75e39f',1,'stt::network::TcpServer']]],
+  ['tcpserver',['TcpServer',['../classstt_1_1network_1_1TcpServer.html#aa07f51b712e989d9493e99e1c5a859a0',1,'stt::network::TcpServer']]],
   ['threads',['threads',['../structstt_1_1file_1_1FileThreadLock.html#aaa9ef37af886e8ef7cab854472f70106',1,'stt::file::FileThreadLock']]],
   ['tls',['TLS',['../classstt_1_1network_1_1TcpServer.html#a295aa6784cd288fdc9448d6b99d2c212',1,'stt::network::TcpServer']]],
   ['tobit',['toBit',['../classstt_1_1data_1_1BitUtil.html#aacf5e390259a13c73a0013e54d52d0fd',1,'stt::data::BitUtil::toBit(const std::string &amp;input, char &amp;result)'],['../classstt_1_1data_1_1BitUtil.html#a85d6f7ef16305e9b9ada82784cfadf0e',1,'stt::data::BitUtil::toBit(const std::string &amp;input, std::string &amp;result)']]],
@@ -17,5 +19,5 @@ var searchData=
   ['tolong',['toLong',['../classstt_1_1data_1_1NumberStringConvertUtil.html#a43ba965999656897ca5ee14c7923c1ce',1,'stt::data::NumberStringConvertUtil']]],
   ['tostring',['toString',['../classstt_1_1data_1_1JsonHelper.html#a416fa5e4965944ea9e4e9443170cae5f',1,'stt::data::JsonHelper']]],
   ['transfer_5fwebsocket_5fkey',['transfer_websocket_key',['../classstt_1_1data_1_1WebsocketStringUtil.html#a63834087fb2058acaed8d4e579a10182',1,'stt::data::WebsocketStringUtil::transfer_websocket_key()'],['../classstt_1_1data_1_1EncodingUtil.html#acf60975e6e291bafd042bda73873ba4c',1,'stt::data::EncodingUtil::transfer_websocket_key()']]],
-  ['type',['type',['../structstt_1_1network_1_1HttpRequestInformation.html#afdd7c093d8a0234c93c2a45d9f9c6c05',1,'stt::network::HttpRequestInformation']]]
+  ['type',['type',['../structstt_1_1network_1_1HttpRequestInformation.html#a228b727f99c12c8b54d83a5290fdb0ad',1,'stt::network::HttpRequestInformation']]]
 ];

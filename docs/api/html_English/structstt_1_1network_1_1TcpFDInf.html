@@ -41,6 +41,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -126,6 +127,12 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a261886a275029003ef9d39e8658947e5"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#a261886a275029003ef9d39e8658947e5">p_buffer_now</a></td></tr>
 <tr class="memdesc:a261886a275029003ef9d39e8658947e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receives a spatial position pointer.  <a href="#a261886a275029003ef9d39e8658947e5">More...</a><br/></td></tr>
 <tr class="separator:a261886a275029003ef9d39e8658947e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd920b87dfe6955460e70df885598cf6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#acd920b87dfe6955460e70df885598cf6">FDStatus</a></td></tr>
+<tr class="memdesc:acd920b87dfe6955460e70df885598cf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Record which step the current state machine is at.  <a href="#acd920b87dfe6955460e70df885598cf6">More...</a><br/></td></tr>
+<tr class="separator:acd920b87dfe6955460e70df885598cf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18f0ee49d6f942cd835ceeca0484f0e9"><td class="memItemLeft" align="right" valign="top">std::queue&lt; std::any &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#a18f0ee49d6f942cd835ceeca0484f0e9">pendindQueue</a></td></tr>
+<tr class="memdesc:a18f0ee49d6f942cd835ceeca0484f0e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Queue waiting to be processed.  <a href="#a18f0ee49d6f942cd835ceeca0484f0e9">More...</a><br/></td></tr>
+<tr class="separator:a18f0ee49d6f942cd835ceeca0484f0e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Structure to save TCP client information. </p>
@@ -172,6 +179,20 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="acd920b87dfe6955460e70df885598cf6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int stt::network::TcpFDInf::FDStatus</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Record which step the current state machine is at. </p>
+
+</div>
+</div>
 <a class="anchor" id="a21f09ab19a62d07ea50990237762fa03"></a>
 <div class="memitem">
 <div class="memproto">
@@ -197,6 +218,20 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Receives a spatial position pointer. </p>
+
+</div>
+</div>
+<a class="anchor" id="a18f0ee49d6f942cd835ceeca0484f0e9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::queue&lt;std::any&gt; stt::network::TcpFDInf::pendindQueue</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Queue waiting to be processed. </p>
 
 </div>
 </div>

@@ -236,3 +236,8 @@ Added information security module and updated network optimization.
 1. The logging system was changed to asynchronous logging to optimize performance.
 2. Minor functionalities were added to the information security module.
 3. Numerous bugs were fixed.
+
+### v.0.4.0 - 2025-12-31
+🚀 Major architecture upgrade:
+
+- Changed to a true reactor model

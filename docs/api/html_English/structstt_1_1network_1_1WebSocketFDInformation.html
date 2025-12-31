@@ -41,6 +41,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -123,6 +124,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a1d9e6b29271923079bc27244a97ab213"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a1d9e6b29271923079bc27244a97ab213">recv_length</a></td></tr>
 <tr class="memdesc:a1d9e6b29271923079bc27244a97ab213"><td class="mdescLeft">&#160;</td><td class="mdescRight">Length to be received.  <a href="#a1d9e6b29271923079bc27244a97ab213">More...</a><br/></td></tr>
 <tr class="separator:a1d9e6b29271923079bc27244a97ab213"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae72efb7961dab9d184b72c3ae666f681"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#ae72efb7961dab9d184b72c3ae666f681">have_recv_length</a></td></tr>
+<tr class="memdesc:ae72efb7961dab9d184b72c3ae666f681"><td class="mdescLeft">&#160;</td><td class="mdescRight">Length have received.  <a href="#ae72efb7961dab9d184b72c3ae666f681">More...</a><br/></td></tr>
+<tr class="separator:ae72efb7961dab9d184b72c3ae666f681"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9c4f50ef624980430aed039534781c4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#aa9c4f50ef624980430aed039534781c4">message_type</a></td></tr>
 <tr class="memdesc:aa9c4f50ef624980430aed039534781c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Message type.  <a href="#aa9c4f50ef624980430aed039534781c4">More...</a><br/></td></tr>
 <tr class="separator:aa9c4f50ef624980430aed039534781c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -135,6 +139,10 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:ae1068105fd815f6972b1261c219d86ad"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#ae1068105fd815f6972b1261c219d86ad">mask</a></td></tr>
 <tr class="memdesc:ae1068105fd815f6972b1261c219d86ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">mask  <a href="#ae1068105fd815f6972b1261c219d86ad">More...</a><br/></td></tr>
 <tr class="separator:ae1068105fd815f6972b1261c219d86ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a108c4ec8de1ad8882c390522656abaaa"><td class="memItemLeft" align="right" valign="top">std::unordered_map<br class="typebreak"/>
+&lt; std::string, std::any &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a108c4ec8de1ad8882c390522656abaaa">ctx</a></td></tr>
+<tr class="memdesc:a108c4ec8de1ad8882c390522656abaaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">required data warehouse  <a href="#a108c4ec8de1ad8882c390522656abaaa">More...</a><br/></td></tr>
+<tr class="separator:a108c4ec8de1ad8882c390522656abaaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Structure to save client WS/WSS request information. </p>
@@ -150,6 +158,20 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>true: Close frame sent, false: Close frame not sent </p>
+
+</div>
+</div>
+<a class="anchor" id="a108c4ec8de1ad8882c390522656abaaa"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt;std::string,std::any&gt; stt::network::WebSocketFDInformation::ctx</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>required data warehouse </p>
 
 </div>
 </div>
@@ -178,6 +200,20 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>state of fin </p>
+
+</div>
+</div>
+<a class="anchor" id="ae72efb7961dab9d184b72c3ae666f681"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t stt::network::WebSocketFDInformation::have_recv_length</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Length have received. </p>
 
 </div>
 </div>
