@@ -41,7 +41,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
-      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -119,8 +118,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:af6ff42cfa4a77c3341382e9b02ceb30e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#af6ff42cfa4a77c3341382e9b02ceb30e">More...</a><br/></td></tr>
 <tr class="separator:af6ff42cfa4a77c3341382e9b02ceb30e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a707fcaeab33ef5592300c1f37548ae9b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html#a707fcaeab33ef5592300c1f37548ae9b">setFunction</a> (const std::string &amp;key, std::function&lt; int(<a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> &amp;inf)&gt; fc)</td></tr>
+<tr class="memdesc:a707fcaeab33ef5592300c1f37548ae9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a callback function for a specific key.  <a href="#a707fcaeab33ef5592300c1f37548ae9b">More...</a><br/></td></tr>
 <tr class="separator:a707fcaeab33ef5592300c1f37548ae9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a873c01b5d32518a92ced91710d48566f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html#a873c01b5d32518a92ced91710d48566f">setGetKeyFunction</a> (std::function&lt; int(<a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> &amp;inf)&gt; parseKeyFun)</td></tr>
+<tr class="memdesc:a873c01b5d32518a92ced91710d48566f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the callback function used to parse the key.  <a href="#a873c01b5d32518a92ced91710d48566f">More...</a><br/></td></tr>
 <tr class="separator:a873c01b5d32518a92ced91710d48566f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c4bd6e14e2ab5db1e7d8ff5181a7d0c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html#a6c4bd6e14e2ab5db1e7d8ff5181a7d0c">startListen</a> (const int &amp;port, const int &amp;threads=8)</td></tr>
 <tr class="memdesc:a6c4bd6e14e2ab5db1e7d8ff5181a7d0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the HTTP server listening loop.  <a href="#a6c4bd6e14e2ab5db1e7d8ff5181a7d0c">More...</a><br/></td></tr>
@@ -398,6 +399,38 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Register a callback function for a specific key. </p>
+<dl class="section note"><dt>Note</dt><dd>Multiple callbacks can be registered for the same key. The framework executes them sequentially in the order they are registered. Processing can also be dispatched to the worker thread pool by returning appropriate values. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>The callable object must strictly follow the required return value conventions. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The key used to locate the corresponding callback functions. </td></tr>
+    <tr><td class="paramname">fc</td><td>A function or function object that defines the logic for handling client requests.<ul>
+<li>Parameters: <a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html" title="Operation class for parsing and responding to Http/https requests Only pass in the socket...">HttpServerFDHandler</a> &amp;k - Reference to the socket operation object associated with the client connection. <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html" title="Structure to save HTTP/HTTPS request information. ">HttpRequestInformation</a> &amp;inf - Client request information, including data, processing progress, and state machine information.</li>
+<li>Return value: -2 : Processing failed and the connection must be closed. -1 : Processing failed but the connection should remain open. 0 : Processing has been dispatched to the worker thread pool and the framework should wait for completion. 1 : Processing succeeded.</li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="fragment"><div class="line">httpserver-&gt;setFunction(<span class="stringliteral">&quot;/ping&quot;</span>,</div>
+<div class="line">    [](HttpServerFDHandler &amp;k, HttpRequestInformation &amp;inf) -&gt; <span class="keywordtype">int</span> {</div>
+<div class="line">        k.sendBack(<span class="stringliteral">&quot;pong&quot;</span>);</div>
+<div class="line">        <span class="keywordflow">return</span> 1;</div>
+<div class="line">    });</div>
+</div><!-- fragment --><div class="fragment"><div class="line">httpserver-&gt;setFunction(<span class="stringliteral">&quot;/ping&quot;</span>,</div>
+<div class="line">    [](HttpServerFDHandler &amp;k, HttpRequestInformation &amp;inf) -&gt; <span class="keywordtype">int</span> {</div>
+<div class="line">        httpserver-&gt;putTask(</div>
+<div class="line">            [](HttpServerFDHandler &amp;k, HttpRequestInformation &amp;inf) -&gt; <span class="keywordtype">int</span> {</div>
+<div class="line">                k.sendBack(<span class="stringliteral">&quot;pong&quot;</span>);</div>
+<div class="line">                <span class="keywordflow">return</span> 1;</div>
+<div class="line">            },</div>
+<div class="line">            k,</div>
+<div class="line">            inf</div>
+<div class="line">        );</div>
+<div class="line">        <span class="keywordflow">return</span> 0;</div>
+<div class="line">    });</div>
+</div><!-- fragment --> 
 </div>
 </div>
 <a class="anchor" id="a873c01b5d32518a92ced91710d48566f"></a>
@@ -422,6 +455,25 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Set the callback function used to parse the key. </p>
+<dl class="section note"><dt>Note</dt><dd>This function extracts the key from the input parameters and stores it in the ctx hash table of <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html" title="Structure to save HTTP/HTTPS request information. ">HttpRequestInformation</a>. The framework uses this key to locate the registered processing callbacks. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>The callable object must strictly follow the required return value conventions. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parseKeyFun</td><td>The callback function used to parse the key.<ul>
+<li>Parameters: <a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html" title="Operation class for parsing and responding to Http/https requests Only pass in the socket...">HttpServerFDHandler</a> &amp;k - Reference to the socket operation object associated with the client connection. <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html" title="Structure to save HTTP/HTTPS request information. ">HttpRequestInformation</a> &amp;inf - Client request information, including data, processing progress, and state machine information.</li>
+<li>Return value: -2 : Processing failed and the connection must be closed. -1 : Processing failed but the connection should remain open. 0 : Processing has been dispatched to the worker thread pool and the framework should wait for completion. 1 : Processing succeeded.</li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="fragment"><div class="line">httpserver-&gt;setGetKeyFunction(</div>
+<div class="line">    [](HttpServerFDHandler &amp;k, HttpRequestInformation &amp;inf) -&gt; <span class="keywordtype">int</span> {</div>
+<div class="line">        inf.ctx[<span class="stringliteral">&quot;key&quot;</span>] = inf.loc;</div>
+<div class="line">        <span class="keywordflow">return</span> 1;</div>
+<div class="line">    });</div>
+</div><!-- fragment --> 
 </div>
 </div>
 <a class="anchor" id="a6c4bd6e14e2ab5db1e7d8ff5181a7d0c"></a>

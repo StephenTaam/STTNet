@@ -2986,7 +2986,6 @@ public:
      *               and the framework should wait for completion.
      *           1 : Processing succeeded.
      *
-     * @example
      * @code
      * httpserver->setFunction("/ping",
      *     [](HttpServerFDHandler &k, HttpRequestInformation &inf) -> int {
@@ -2995,7 +2994,6 @@ public:
      *     });
      * @endcode
      *
-     * @example
      * @code
      * httpserver->setFunction("/ping",
      *     [](HttpServerFDHandler &k, HttpRequestInformation &inf) -> int {
@@ -3041,7 +3039,6 @@ public:
      *               and the framework should wait for completion.
      *           1 : Processing succeeded.
      *
-     * @example
      * @code
      * httpserver->setGetKeyFunction(
      *     [](HttpServerFDHandler &k, HttpRequestInformation &inf) -> int {

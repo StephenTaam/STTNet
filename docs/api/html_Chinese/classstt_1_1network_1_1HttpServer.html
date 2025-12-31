@@ -41,7 +41,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
       <li><a href="namespaces.html"><span>命名空间</span></a></li>
       <li class="current"><a href="annotated.html"><span>类</span></a></li>
       <li><a href="files.html"><span>文件</span></a></li>
-      <li><a href="examples.html"><span>示例</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -119,8 +118,10 @@ Public 成员函数</h2></td></tr>
 <tr class="memdesc:af6ff42cfa4a77c3341382e9b02ceb30e"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6  <a href="#af6ff42cfa4a77c3341382e9b02ceb30e">更多...</a><br/></td></tr>
 <tr class="separator:af6ff42cfa4a77c3341382e9b02ceb30e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a707fcaeab33ef5592300c1f37548ae9b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html#a707fcaeab33ef5592300c1f37548ae9b">setFunction</a> (const std::string &amp;key, std::function&lt; int(<a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> &amp;inf)&gt; fc)</td></tr>
+<tr class="memdesc:a707fcaeab33ef5592300c1f37548ae9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置key对应的收到客户端消息后的回调函数  <a href="#a707fcaeab33ef5592300c1f37548ae9b">更多...</a><br/></td></tr>
 <tr class="separator:a707fcaeab33ef5592300c1f37548ae9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a873c01b5d32518a92ced91710d48566f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html#a873c01b5d32518a92ced91710d48566f">setGetKeyFunction</a> (std::function&lt; int(<a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> &amp;inf)&gt; parseKeyFun)</td></tr>
+<tr class="memdesc:a873c01b5d32518a92ced91710d48566f"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置解析出key的回调函数  <a href="#a873c01b5d32518a92ced91710d48566f">更多...</a><br/></td></tr>
 <tr class="separator:a873c01b5d32518a92ced91710d48566f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c4bd6e14e2ab5db1e7d8ff5181a7d0c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html#a6c4bd6e14e2ab5db1e7d8ff5181a7d0c">startListen</a> (const int &amp;port, const int &amp;threads=8)</td></tr>
 <tr class="memdesc:a6c4bd6e14e2ab5db1e7d8ff5181a7d0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">打开Http服务器监听程序  <a href="#a6c4bd6e14e2ab5db1e7d8ff5181a7d0c">更多...</a><br/></td></tr>
@@ -394,6 +395,31 @@ Public 成员函数</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>设置key对应的收到客户端消息后的回调函数 </p>
+<dl class="section note"><dt>注解</dt><dd>可以设置多个 ，框架会根据设置顺序依次执行回调函数；也可以设置扔入工作线程池处理的流程，注意设置不同的返回值即可。 </dd></dl>
+<dl class="section warning"><dt>警告</dt><dd>可执行对象必须严格按照规定的返回值返回 </dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>找到对应回调函数的key </td></tr>
+    <tr><td class="paramname">fc</td><td>一个函数或函数对象，用于收到客户端消息后处理逻辑 -参数：HttpServerFDHandler &amp;k - 和客户端连接的套接字的操作对象的引用 <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html" title="保存HTTP/HTTPS请求信息的结构体 ">HttpRequestInformation</a> &amp;inf - 客户端信息，保存数据，处理进度，状态机信息等 -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 0:处理流程已经扔入工作线程池，需要等待处理完成 1:处理成功 <div class="fragment"><div class="line">httpserver-&gt;setFunction(<span class="stringliteral">&quot;/ping&quot;</span>,[](HttpServerFDHandler &amp;k,HttpRequestInformation &amp;inf)-&gt;<span class="keywordtype">int</span></div>
+<div class="line">         {</div>
+<div class="line">             k.sendBack(<span class="stringliteral">&quot;pong&quot;</span>);</div>
+<div class="line">             <span class="keywordflow">return</span> 1;</div>
+<div class="line">         });</div>
+</div><!-- fragment --> <div class="fragment"><div class="line">httpserver-&gt;setFunction(<span class="stringliteral">&quot;/ping&quot;</span>,[](HttpServerFDHandler &amp;k,HttpRequestInformation &amp;inf)-&gt;<span class="keywordtype">int</span></div>
+<div class="line">         {</div>
+<div class="line">             httpserver-&gt;putTask([](HttpServerFDHandler &amp;k,HttpRequestInformation &amp;inf)-&gt;<span class="keywordtype">int</span></div>
+<div class="line">             {</div>
+<div class="line">                 k.sendBack(<span class="stringliteral">&quot;pong&quot;</span>);</div>
+<div class="line">                 <span class="keywordflow">return</span> 1;</div>
+<div class="line">             },k,inf);</div>
+<div class="line">             <span class="keywordflow">return</span> 0;</div>
+<div class="line">         });</div>
+</div><!-- fragment --> </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a class="anchor" id="a873c01b5d32518a92ced91710d48566f"></a>
@@ -417,6 +443,21 @@ Public 成员函数</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>设置解析出key的回调函数 </p>
+<dl class="section note"><dt>注解</dt><dd>根据传入的参数把key存入TcpInformation信息中的ctx哈希表。框架会根据key的值找到你注册的处理函数。 </dd></dl>
+<dl class="section warning"><dt>警告</dt><dd>可执行对象必须严格按照规定的返回值返回 </dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parseKeyFun</td><td>解析key的回调函数 -参数：HttpServerFDHandler &amp;k - 和客户端连接的套接字的操作对象的引用 <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html" title="保存HTTP/HTTPS请求信息的结构体 ">HttpRequestInformation</a> &amp;inf - 客户端信息，保存数据，处理进度，状态机信息等 -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 0:处理流程已经扔入工作线程池，需要等待处理完成 1:处理成功 <div class="fragment"><div class="line">httpserver-&gt;setGetKeyFunction([](HttpServerFDHandler &amp;k,HttpRequestInformation &amp;inf)-&gt;<span class="keywordtype">int</span></div>
+<div class="line">         {</div>
+<div class="line">             inf.ctx[<span class="stringliteral">&quot;key&quot;</span>]=inf.loc;</div>
+<div class="line">             <span class="keywordflow">return</span> 1;</div>
+<div class="line">         });</div>
+</div><!-- fragment --> </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
