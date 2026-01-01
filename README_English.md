@@ -340,5 +340,7 @@ Added information security module and updated network optimization.
 
 ### v.0.4.0 - 2025-12-31
 🚀 Major architecture upgrade:
-
 - Changed to a true reactor model
+
+### v.0.4.1 - 2026-01-01
+- Fixed a bug related to TLS connections
