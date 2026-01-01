@@ -1,8 +1,8 @@
 /**
 * @mainpage STTNet C++ Framework
 * @author StephenTaam(1356597983@qq.com)
-* @version 0.3.4
-* @date 2025-12-14
+* @version 0.4.0
+* @date 2025-12-30
 */
 #ifndef PUBLIC_H
 #define PUBLIC_H 1
@@ -2566,6 +2566,13 @@ public:
         std::unordered_map<std::string,std::any> ctx;
     };
 
+    enum class TLSState : uint8_t {
+    NONE = 0,        // 非 TLS 连接（普通 TCP）
+    HANDSHAKING,    // TLS 握手中（SSL_accept 还没完成）
+    ESTABLISHED,    // TLS 已建立，可以 SSL_read / SSL_write
+    ERROR           // TLS 出错（可选）
+    };
+
     /**
     * @brief Save TCP client information
     */
@@ -2614,7 +2621,10 @@ public:
         * @brief If encrypted, store the encryption handle
         */
         SSL* ssl;
-
+        /**
+        * @brief tls state
+        */
+        TLSState tls_state;
         /**
         * @brief Receives the space pointer
         */

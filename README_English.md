@@ -167,7 +167,7 @@ int main(int argc, char* argv[])
      * HTTP：从请求中提取 key（用于路由/上下文）
      */
     httpserver->setGetKeyFunction(
-        [](HttpServerFDHandler&, HttpRequestInformation& inf) -> int {
+        [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
             inf.ctx["key"] = inf.loc;  // use URL as key
             return 1;
         }
@@ -180,7 +180,7 @@ int main(int argc, char* argv[])
      */
     httpserver->setFunction(
         "/ping",
-        [](HttpServerFDHandler& k, HttpRequestInformation&) -> int {
+        [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
             k.sendBack("pong");
             return 1;
         }
@@ -195,7 +195,7 @@ int main(int argc, char* argv[])
         "/async",
         [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
             httpserver->putTask(
-                [](HttpServerFDHandler& k2, HttpRequestInformation&) -> int {
+                [](HttpServerFDHandler& k2, HttpRequestInformation& inf) -> int {
                     k2.sendBack("async pong");
                     return 1;
                 },
@@ -245,7 +245,7 @@ int main(int argc, char* argv[])
      */
     wsserver->setFunction(
         "ping",
-        [](WebSocketServerFDHandler& k, WebSocketFDInformation&) -> int {
+        [](WebSocketServerFDHandler& k, WebSocketFDInformation& inf) -> int {
             k.sendMessage("pong");
             return 1;
         }

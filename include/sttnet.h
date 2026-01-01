@@ -2551,6 +2551,13 @@ namespace stt
         std::unordered_map<std::string,std::any> ctx;
     };
 
+    enum class TLSState : uint8_t {
+    NONE = 0,        // 非 TLS 连接（普通 TCP）
+    HANDSHAKING,    // TLS 握手中（SSL_accept 还没完成）
+    ESTABLISHED,    // TLS 已建立，可以 SSL_read / SSL_write
+    ERROR           // TLS 出错（可选）
+    };
+
     /**
     * @brief 保存底层基础Tcp通道信息的结构体
     */
@@ -2588,6 +2595,10 @@ namespace stt
         * @brief 如果加密了，存放加密句柄
         */
         SSL* ssl;
+        /**
+        * @brief tls状态
+        */
+        TLSState tls_state;
         /**
         * @brief 接收空间指针
         */

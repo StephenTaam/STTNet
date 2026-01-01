@@ -4172,20 +4172,15 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 if(ssl==nullptr)
                                 {
                                     cerr<<"new ssl wrong"<<endl;
+                                    ::close(cfd);
                                     continue;
                                 }
                                 SSL_set_accept_state(ssl);
                                 //关联这个fd和ss
                                 SSL_set_fd(ssl,cfd);
-                                //tls accept
-                                ret=SSL_accept(ssl);
-                                if(ret!=1)
-                                {
-                                    //printf("SSL_accept error: %s\n", ERR_error_string(ERR_get_error(), nullptr));
-    	                            //printf("SSL_accept returned %d, SSL error code: %d\n", ret, SSL_get_error(ssl, ret));
-                                    ::close(cfd);
-                                    continue;
-                                }
+
+                                clientfd[cfd].tls_state = TLSState::HANDSHAKING;
+                                
                                 //unique_lock<mutex> lock1(ltl1);
                                 //tlsfd.emplace(cfd,ssl);//emplace???erase???
 
@@ -4193,6 +4188,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             else
                             {
                                 ssl=nullptr;
+                                clientfd[cfd].tls_state = TLSState::NONE;
                             }
                             clientfd[cfd].ssl=ssl;
                             //cout<<"ok"<<endl;
@@ -4268,6 +4264,49 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         }
                         else
                         {
+                            //tls状态
+                            if (clientfd[evs[ii].data.fd].tls_state == TLSState::HANDSHAKING) 
+                            {
+                                //tls accept
+                                int ret = SSL_accept(clientfd[evs[ii].data.fd].ssl);
+                                if (ret == 1) 
+                                {
+                                    clientfd[evs[ii].data.fd].tls_state = TLSState::ESTABLISHED;
+                                    // TLS 握手完成
+                                    if(stt::system::ServerSetting::logfile!=nullptr)
+                                    {
+                                        if(stt::system::ServerSetting::language=="Chinese")
+                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll:收到TLS握手数据：fd= "+to_string(evs[ii].data.fd)+",完成!");
+                                        else
+                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll:has received tls handshake data: fd= "+to_string(evs[ii].data.fd)+",finish!");
+                                    }
+                                } 
+                                else 
+                                {
+                                    int err = SSL_get_error(clientfd[evs[ii].data.fd].ssl, ret);
+                                    if (err == SSL_ERROR_WANT_READ) 
+                                    {
+                                        // 等下一个 EPOLLIN
+                                        
+                                    } 
+                                    else if (err == SSL_ERROR_WANT_WRITE) 
+                                    {
+                                        // 确保监听 EPOLLOUT
+                                        
+                                    }
+                                    else 
+                                    {
+                                        // 真错误
+                                        //printf("SSL_accept error: %s\n", ERR_error_string(ERR_get_error(), nullptr));
+    	                                //printf("SSL_accept returned %d, SSL error code: %d\n", ret, SSL_get_error(ssl, ret));
+                                        SSL_free(clientfd[evs[ii].data.fd].ssl);
+                                        ::close(evs[ii].data.fd);
+                                        
+                                    }
+                                }
+                                continue;
+                            }
+                            //普通数据
                             if(stt::system::ServerSetting::logfile!=nullptr)
                             {
                                 if(stt::system::ServerSetting::language=="Chinese")

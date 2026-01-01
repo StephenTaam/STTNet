@@ -72,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -120,6 +120,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a5792638188b5e41021bbc26b5ffcebe6"><td class="memItemLeft" align="right" valign="top">SSL *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#a5792638188b5e41021bbc26b5ffcebe6">ssl</a></td></tr>
 <tr class="memdesc:a5792638188b5e41021bbc26b5ffcebe6"><td class="mdescLeft">&#160;</td><td class="mdescRight">If encrypted, store the encryption handle.  <a href="#a5792638188b5e41021bbc26b5ffcebe6">More...</a><br/></td></tr>
 <tr class="separator:a5792638188b5e41021bbc26b5ffcebe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd95aa05d9e5bfde5c217aa1eb10777e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacestt_1_1network.html#a2de10f23ed7aa5e5ca07d6fb2a11eaad">TLSState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#abd95aa05d9e5bfde5c217aa1eb10777e">tls_state</a></td></tr>
+<tr class="memdesc:abd95aa05d9e5bfde5c217aa1eb10777e"><td class="mdescLeft">&#160;</td><td class="mdescRight">tls state  <a href="#abd95aa05d9e5bfde5c217aa1eb10777e">More...</a><br/></td></tr>
+<tr class="separator:abd95aa05d9e5bfde5c217aa1eb10777e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5818258b1cb88051c3eb22ec0195a89d"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html#a5818258b1cb88051c3eb22ec0195a89d">buffer</a></td></tr>
 <tr class="memdesc:a5818258b1cb88051c3eb22ec0195a89d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receives the space pointer.  <a href="#a5818258b1cb88051c3eb22ec0195a89d">More...</a><br/></td></tr>
 <tr class="separator:a5818258b1cb88051c3eb22ec0195a89d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -273,6 +276,20 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The current fd status, used to save the processor logic. </p>
+
+</div>
+</div>
+<a class="anchor" id="abd95aa05d9e5bfde5c217aa1eb10777e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacestt_1_1network.html#a2de10f23ed7aa5e5ca07d6fb2a11eaad">TLSState</a> stt::network::TcpFDInf::tls_state</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>tls state </p>
 
 </div>
 </div>
