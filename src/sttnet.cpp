@@ -3857,7 +3857,6 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         //fdQueue=new queue<QueueFD>[threads];
         //cv=new condition_variable[threads];
         //lq1=new mutex[threads];
-
         clientfd=new TcpFDInf[maxFD];
         for(int ii=0;ii<maxFD;ii++)
             clientfd[ii].fd=-1;
@@ -3992,6 +3991,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     }
     bool stt::network::TcpServer::close(const int &fd)
     {
+       
         //unique_lock<mutex> lock2(lc1);
         //unique_lock<mutex> lock1(ltl1);
         //auto ii=clientfd.find(fd);
@@ -4253,7 +4253,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                     else
                                         stt::system::ServerSetting::logfile->writeLog("tcp server epoll:receive connection close message: fd= "+to_string(evs[ii].data.fd)+" and it has been pushed into queue");
                                 }
-                                TcpServer::close(evs[ii].data.fd);
+                                
+
+                                close(evs[ii].data.fd);
                                 //{
                                 //std::lock_guard<std::mutex> lock(lq1[evs[ii].data.fd%consumerNum]);
                                 //fdQueue[evs[ii].data.fd%consumerNum].push(QueueFD{evs[ii].data.fd,true});
@@ -4543,6 +4545,18 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             }
                             return;
                         }
+                        else if(rett==-1)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次失败。");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(Tcpinf.FDStatus)+"times.");
+                            }
+                            //Tcpinf.pendindQueue.pop();
+                            return;
+                        }
                         else
                         {
                             TcpServer::close(fd);
@@ -4747,6 +4761,19 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 else
                                     stt::system::ServerSetting::logfile->writeLog("tcp server : handled fd= "+to_string(fd)+" .It's the "+to_string(Tcpinf.FDStatus)+"times job. now is waitting it to be finish.");
                             }
+                            return;
+                        }
+                        else if(rett==-1)
+                        {
+                        
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次失败。");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(Tcpinf.FDStatus)+"times.");
+                            }
+                            //Tcpinf.pendindQueue.pop();
                             return;
                         }
                         else
@@ -5419,6 +5446,19 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             
                             return;
                         }
+                        else if(rett==-1)
+                        {
+                            
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次失败。");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(Tcpinf.FDStatus)+"times.");
+                            }
+                            //Tcpinf.pendindQueue.pop();
+                            return;
+                        }
                         else
                         {
                             TcpServer::close(fd);
@@ -5642,6 +5682,18 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             }
                             return;
                         }
+                        else if(rett==-1)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次失败。");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(Tcpinf.FDStatus)+"times.");
+                            }
+                            //Tcpinf.pendindQueue.pop();
+                            return;
+                        }
                         else
                         {
                             TcpServer::close(fd);
@@ -5679,6 +5731,20 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         if(clientfd[fd].fd!=-1)//can not find fd information,we need to writedown this error and close this fd
         {
             
+                
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                {
+                    if(stt::system::ServerSetting::language=="Chinese")
+                        stt::system::ServerSetting::logfile->writeLog("websocket server : 正在处理fd= "+to_string(fd));
+                    else
+                        stt::system::ServerSetting::logfile->writeLog("websocket server : now handleing fd= "+to_string(fd));
+                }
+            TcpFDInf &Tcpinf=clientfd[fd];
+
+            unique_lock<mutex> lock(lwb);
+            auto jj=wbclientfd.find(fd);
+            if(jj==wbclientfd.end())//没有进行wb握手
+            {
                 if(security_open)
                 {
                     if(!connectionLimiter.allowRequest(clientfd[fd].ip))
@@ -5694,20 +5760,6 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         return;
                     }
                 }
-                if(stt::system::ServerSetting::logfile!=nullptr)
-                {
-                    if(stt::system::ServerSetting::language=="Chinese")
-                        stt::system::ServerSetting::logfile->writeLog("websocket server : 正在处理fd= "+to_string(fd));
-                    else
-                        stt::system::ServerSetting::logfile->writeLog("websocket server : now handleing fd= "+to_string(fd));
-                }
-            TcpFDInf &Tcpinf=clientfd[fd];
-
-            unique_lock<mutex> lock(lwb);
-            auto jj=wbclientfd.find(fd);
-            if(jj==wbclientfd.end())//没有进行wb握手
-            {
-                
                 HttpServerFDHandler k;
                 k.setFD(fd,clientfd[fd].ssl,unblock);
                 //k1.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
@@ -5826,6 +5878,21 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
             else
             {
+                if(security_open)
+                {
+                    if(!connectionLimiter.allowRequest(clientfd[fd].ip))
+                    {
+                        closeWithoutLock(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("websocket server : fd="+to_string(fd)+"请求太频繁，已经关闭连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("websocket server : fd="+to_string(fd)+"request are too frequent,now has closed this connection");
+                        }
+                        return;
+                    }
+                }
                 //lock.unlock();
                 WebSocketServerFDHandler k;
                 WebSocketFDInformation inf;
@@ -5974,7 +6041,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     //-2要关闭连接
                     if(ret==-2)
                     {
-                        close(fd);
+                        closeFD(fd);
                         //closeWithoutLock(fd);
                         if(stt::system::ServerSetting::logfile!=nullptr)
                         {
@@ -6016,7 +6083,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
                     if(!globalSolveFun(k,inff))
                     {
-                        close(fd);
+                        closeFD(fd);
                         if(stt::system::ServerSetting::logfile!=nullptr)
                         {
                             if(stt::system::ServerSetting::language=="Chinese")
@@ -6056,9 +6123,21 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             
                             return;
                         }
+                        else if(rett==-1)
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次失败.");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(Tcpinf.FDStatus)+"times.");
+                            }
+                            //Tcpinf.pendindQueue.pop();
+                            return;
+                        }
                         else
                         {
-                            close(fd);
+                            closeFD(fd);
                             if(stt::system::ServerSetting::logfile!=nullptr)
                             {
                                 if(stt::system::ServerSetting::language=="Chinese")
@@ -6092,7 +6171,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
        
         if(ret==-2)
         {
-            close(fd);
+            closeFD(fd);
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
@@ -6145,7 +6224,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
                     if(!globalSolveFun(k,inf))
                     {
-                        close(fd);
+                        closeFD(fd);
                         if(stt::system::ServerSetting::logfile!=nullptr)
                         {
                             if(stt::system::ServerSetting::language=="Chinese")
@@ -6189,7 +6268,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         }
                         else
                         {
-                            close(fd);
+                            closeFD(fd);
                             if(stt::system::ServerSetting::logfile!=nullptr)
                             {
                                 if(stt::system::ServerSetting::language=="Chinese")
@@ -6227,7 +6306,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(ret==-2)
                     {
                         //k.sendBack("","","404 NOT FOUND");
-                        close(fd);
+                        closeFD(fd);
                         if(stt::system::ServerSetting::logfile!=nullptr)
                         {
                             if(stt::system::ServerSetting::language=="Chinese")
@@ -6265,7 +6344,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
                     if(!globalSolveFun(k,inff))
                     {
-                        close(fd);
+                        closeFD(fd);
                         if(stt::system::ServerSetting::logfile!=nullptr)
                         {
                             if(stt::system::ServerSetting::language=="Chinese")
@@ -6303,9 +6382,22 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             }
                             return;
                         }
+                        else if(rett==-1)
+                        {
+
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次失败。");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(Tcpinf.FDStatus)+"times.");
+                            }
+                            //Tcpinf.pendindQueue.pop();
+                            return;
+                        }
                         else
                         {
-                            close(fd);
+                            closeFD(fd);
                             if(stt::system::ServerSetting::logfile!=nullptr)
                             {
                                 if(stt::system::ServerSetting::language=="Chinese")
@@ -7284,9 +7376,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         sendMessage(fd,codee,"1000");
         TcpServer::close(fd);
     }
-    bool stt::network::WebSocketServer::close(const int &fd,const string &closeCodeAndMessage)
+    bool stt::network::WebSocketServer::closeFD(const int &fd,const string &closeCodeAndMessage)
     {
-
+       
         unique_lock<mutex> lock(lwb);
         auto ii=wbclientfd.find(fd);
 
@@ -7298,21 +7390,21 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         else
         {
             
-            lock.unlock();
+            //lock.unlock();
             WebSocketServerFDHandler k;
             k.setFD(fd,getSSL(fd),unblock);
             if(!k.sendMessage(closeCodeAndMessage,"1000"))
             {
                 
                 
-                    lock.lock();
+                    //lock.lock();
                     auto ii=wbclientfd.find(fd);
                     if(ii!=wbclientfd.end())
                     {
                         TcpServer::close(fd);
                         wbclientfd.erase(ii);
                     }
-                    lock.unlock();
+                    //lock.unlock();
                 
                 
                 return true;
@@ -7321,8 +7413,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             return true;
         }
     }
-
-    bool stt::network::WebSocketServer::close(const int &fd,const short &code,const string &message)
+    
+    bool stt::network::WebSocketServer::closeFD(const int &fd,const short &code,const string &message)
     {
         
         unique_lock<mutex> lock(lwb);
@@ -7336,7 +7428,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         else
         {
             
-            lock.unlock();
+            //lock.unlock();
             char ccode[2];
             memcpy(ccode,&code,2);
             string codee(ccode,2);
@@ -7346,14 +7438,14 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             if(!k.sendMessage(codee,"1000"))//发送失败会自动删除在记录表里的
             {
                 
-                    lock.lock();
+                    //lock.lock();
                     auto ii=wbclientfd.find(fd);
                     if(ii!=wbclientfd.end())
                     {
                         TcpServer::close(fd);
                         wbclientfd.erase(ii);
                     }
-                    lock.unlock();
+                    //lock.unlock();
                 
                 return true;
             }
@@ -7362,6 +7454,21 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         }
     }
     
+    bool stt::network::WebSocketServer::close(const int &fd)
+    {
+
+                    unique_lock<mutex> lock(lwb);
+                    auto ii=wbclientfd.find(fd);
+                    if(ii!=wbclientfd.end())
+                    {
+                        TcpServer::close(fd);
+                        wbclientfd.erase(ii);
+                    }
+                    
+                
+                return true;
+            
+    }
     bool stt::network::WebSocketServer::closeWithoutLock(const int &fd,const string &closeCodeAndMessage)
     {
         auto ii=wbclientfd.find(fd);

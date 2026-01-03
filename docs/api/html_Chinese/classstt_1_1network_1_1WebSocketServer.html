@@ -138,18 +138,21 @@ Public 成员函数</h2></td></tr>
 <tr class="memitem:aeefa2a2130748dd40632a43c57e6aece"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#aeefa2a2130748dd40632a43c57e6aece">setHBTimeOutTime</a> (const int &amp;secb)</td></tr>
 <tr class="memdesc:aeefa2a2130748dd40632a43c57e6aece"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置发送心跳后的等待时间  <a href="#aeefa2a2130748dd40632a43c57e6aece">更多...</a><br/></td></tr>
 <tr class="separator:aeefa2a2130748dd40632a43c57e6aece"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0334d974e1de606ff9ad375b76d354f2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a0334d974e1de606ff9ad375b76d354f2">close</a> (const int &amp;fd, const std::string &amp;closeCodeAndMessage)</td></tr>
-<tr class="memdesc:a0334d974e1de606ff9ad375b76d354f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送关闭帧关闭对应套接字的 WebSocket 连接（简化方式）  <a href="#a0334d974e1de606ff9ad375b76d354f2">更多...</a><br/></td></tr>
-<tr class="separator:a0334d974e1de606ff9ad375b76d354f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09678e843d29012d35ed44b1c27c6c94"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a09678e843d29012d35ed44b1c27c6c94">close</a> (const int &amp;fd, const short &amp;code=1000, const std::string &amp;message=&quot;bye&quot;)</td></tr>
-<tr class="memdesc:a09678e843d29012d35ed44b1c27c6c94"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送关闭帧关闭对应套接字的 WebSocket 连接（标准方式）  <a href="#a09678e843d29012d35ed44b1c27c6c94">更多...</a><br/></td></tr>
-<tr class="separator:a09678e843d29012d35ed44b1c27c6c94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add10bbaaac7b118b4ee943f12178876c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#add10bbaaac7b118b4ee943f12178876c">closeFD</a> (const int &amp;fd, const std::string &amp;closeCodeAndMessage)</td></tr>
+<tr class="memdesc:add10bbaaac7b118b4ee943f12178876c"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送关闭帧关闭对应套接字的 WebSocket 连接（简化方式）  <a href="#add10bbaaac7b118b4ee943f12178876c">更多...</a><br/></td></tr>
+<tr class="separator:add10bbaaac7b118b4ee943f12178876c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a386d2fc2754967c41895371f01d0b392"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a386d2fc2754967c41895371f01d0b392">closeFD</a> (const int &amp;fd, const short &amp;code=1000, const std::string &amp;message=&quot;bye&quot;)</td></tr>
+<tr class="memdesc:a386d2fc2754967c41895371f01d0b392"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送关闭帧关闭对应套接字的 WebSocket 连接（标准方式）  <a href="#a386d2fc2754967c41895371f01d0b392">更多...</a><br/></td></tr>
+<tr class="separator:a386d2fc2754967c41895371f01d0b392"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac41562b17bf8d20764b8ea8f2f5b8fbf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#ac41562b17bf8d20764b8ea8f2f5b8fbf">sendMessage</a> (const int &amp;fd, const std::string &amp;msg, const std::string &amp;type=&quot;0001&quot;)</td></tr>
 <tr class="memdesc:ac41562b17bf8d20764b8ea8f2f5b8fbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送 WebSocket 消息给某一个客户端  <a href="#ac41562b17bf8d20764b8ea8f2f5b8fbf">更多...</a><br/></td></tr>
 <tr class="separator:ac41562b17bf8d20764b8ea8f2f5b8fbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a699cd7d80af5ecea26626833ea007a64"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a699cd7d80af5ecea26626833ea007a64">close</a> ()</td></tr>
 <tr class="memdesc:a699cd7d80af5ecea26626833ea007a64"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭监听和所有连接  <a href="#a699cd7d80af5ecea26626833ea007a64">更多...</a><br/></td></tr>
 <tr class="separator:a699cd7d80af5ecea26626833ea007a64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3bbf91532246ce96a5faba5b8cafe1b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#ad3bbf91532246ce96a5faba5b8cafe1b">close</a> (const int &amp;fd)</td></tr>
+<tr class="memdesc:ad3bbf91532246ce96a5faba5b8cafe1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭某个套接字的连接 @  <a href="#ad3bbf91532246ce96a5faba5b8cafe1b">更多...</a><br/></td></tr>
+<tr class="separator:ad3bbf91532246ce96a5faba5b8cafe1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2301633d489c53792226bfe39d06d55"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#ab2301633d489c53792226bfe39d06d55">startListen</a> (const int &amp;port, const int &amp;threads=8)</td></tr>
 <tr class="memdesc:ab2301633d489c53792226bfe39d06d55"><td class="mdescLeft">&#160;</td><td class="mdescRight">打开Websocket服务器监听程序  <a href="#ab2301633d489c53792226bfe39d06d55">更多...</a><br/></td></tr>
 <tr class="separator:ab2301633d489c53792226bfe39d06d55"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -190,9 +193,6 @@ Public 成员函数</h2></td></tr>
 <tr class="memitem:a3de689656c2e1b106b069780f03e7847 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a3de689656c2e1b106b069780f03e7847">close</a> ()</td></tr>
 <tr class="memdesc:a3de689656c2e1b106b069780f03e7847 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭监听和所有已连接的套接字  <a href="#a3de689656c2e1b106b069780f03e7847">更多...</a><br/></td></tr>
 <tr class="separator:a3de689656c2e1b106b069780f03e7847 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe6f13888b0012f6ed2f580591d39831 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#abe6f13888b0012f6ed2f580591d39831">close</a> (const int &amp;fd)</td></tr>
-<tr class="memdesc:abe6f13888b0012f6ed2f580591d39831 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭某个套接字的连接  <a href="#abe6f13888b0012f6ed2f580591d39831">更多...</a><br/></td></tr>
-<tr class="separator:abe6f13888b0012f6ed2f580591d39831 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaffeca105457365cc5cd117218d1b098 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aaffeca105457365cc5cd117218d1b098">isListen</a> ()</td></tr>
 <tr class="memdesc:aaffeca105457365cc5cd117218d1b098 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">返回对象的监听状态  <a href="#aaffeca105457365cc5cd117218d1b098">更多...</a><br/></td></tr>
 <tr class="separator:aaffeca105457365cc5cd117218d1b098 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -232,6 +232,8 @@ Public 成员函数</h2></td></tr>
 <tr class="separator:aedc126014068776e3f9cf5da4b14bb81 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef3a14d5e4511150dee675ed1c873756 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aef3a14d5e4511150dee675ed1c873756">workerEventFD</a></td></tr>
 <tr class="separator:aef3a14d5e4511150dee675ed1c873756 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9003e1373cc473588c19add76539ac94 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a9003e1373cc473588c19add76539ac94">serverType</a></td></tr>
+<tr class="separator:a9003e1373cc473588c19add76539ac94 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>WebSocketServer服务端操作类 </p>
@@ -349,12 +351,59 @@ Public 成员函数</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">成员函数说明</h2>
-<a class="anchor" id="a0334d974e1de606ff9ad375b76d354f2"></a>
+<a class="anchor" id="a699cd7d80af5ecea26626833ea007a64"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::network::WebSocketServer::close </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>关闭监听和所有连接 </p>
+<dl class="section note"><dt>注解</dt><dd>会阻塞直到全部关闭 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ad3bbf91532246ce96a5faba5b8cafe1b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool stt::network::WebSocketServer::close </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>fd</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>关闭某个套接字的连接 @ </p>
+<dl class="section note"><dt>注解</dt><dd>多态了TcpServer的close某个套接字 </dd></dl>
+
+<p>重载 <a class="el" href="classstt_1_1network_1_1TcpServer.html#a4145bfefbbac6e54eaf6e3905adb19bd">stt::network::TcpServer</a> .</p>
+
+</div>
+</div>
+<a class="anchor" id="add10bbaaac7b118b4ee943f12178876c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool stt::network::WebSocketServer::closeFD </td>
           <td>(</td>
           <td class="paramtype">const int &amp;&#160;</td>
           <td class="paramname"><em>fd</em>, </td>
@@ -386,12 +435,12 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a09678e843d29012d35ed44b1c27c6c94"></a>
+<a class="anchor" id="a386d2fc2754967c41895371f01d0b392"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool stt::network::WebSocketServer::close </td>
+          <td class="memname">bool stt::network::WebSocketServer::closeFD </td>
           <td>(</td>
           <td class="paramtype">const int &amp;&#160;</td>
           <td class="paramname"><em>fd</em>, </td>
@@ -436,24 +485,6 @@ Public 成员函数</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>返回</dt><dd>true：关闭成功 false：关闭失败 </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a699cd7d80af5ecea26626833ea007a64"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool stt::network::WebSocketServer::close </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>关闭监听和所有连接 </p>
-<dl class="section note"><dt>注解</dt><dd>会阻塞直到全部关闭 </dd></dl>
 
 </div>
 </div>

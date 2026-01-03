@@ -2690,6 +2690,7 @@ public:
         //bool flag_detect;
         //bool flag_detect_status;
         int workerEventFD;
+        int serverType; // 1 tcp 2 http 3 websocket
     private:
         std::function<bool(TcpFDHandler &k,TcpInformation &inf)> globalSolveFun=[](TcpFDHandler &k,TcpInformation &inf)->bool
         {return true;};
@@ -2730,7 +2731,7 @@ public:
         * @param checkFrequency The frequency of checking zombie connections (in minutes) The default is 1 minute -1 means no check
         * @param connectionTimeout The number of seconds that a connection is considered a zombie connection if there is no response (in seconds) The default is 60 seconds -1 means no limit
         */
-        TcpServer(const unsigned long long &maxFD=10000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=256,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit,requestRate,connectionTimeout),security_open(security_open),buffer_size(buffer_size*1024),checkFrequency(checkFrequency){}
+        TcpServer(const unsigned long long &maxFD=10000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=256,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit,requestRate,connectionTimeout),security_open(security_open),buffer_size(buffer_size*1024),checkFrequency(checkFrequency){serverType=1;}
         /**
         * @brief Start the TCP server listening program
         * @param port Port to listen on
@@ -2854,7 +2855,7 @@ void setGetKeyFunction(
         * @param fd Socket to be closed
         * @return true: Closed successfully, false: Failed to close
         */
-        bool close(const int &fd);
+        virtual bool close(const int &fd);
     public:
         /**
         * @brief Return the listening status of the object
@@ -2970,7 +2971,7 @@ public:
               checkFrequency,
               connectionTimeout
           )
-    {}
+    {serverType=2;}
 
     /**
      * @brief Register a callback function for a specific key.
@@ -3239,7 +3240,7 @@ public:
         const int &checkFrequency = 1,
         const int &connectionTimeout = 60)
         : TcpServer(maxFD, security_open, connectionNumLimit, connectionRateLimit,
-                    buffer_size, requestRate, checkFrequency, connectionTimeout) {}
+                    buffer_size, requestRate, checkFrequency, connectionTimeout) {serverType=3;}
 
     /**
      * @brief Set the global fallback handler.
@@ -3344,7 +3345,7 @@ public:
      *        (2 bytes close code + optional UTF-8 reason).
      * @return true if closed successfully, false otherwise.
      */
-    bool close(const int &fd, const std::string &closeCodeAndMessage);
+    bool closeFD(const int &fd, const std::string &closeCodeAndMessage);
 
     /**
      * @brief Close a WebSocket connection using standard RFC 6455 format.
@@ -3353,7 +3354,7 @@ public:
      * @param message Optional close reason.
      * @return true if closed successfully, false otherwise.
      */
-    bool close(const int &fd, const short &code = 1000, const std::string &message = "bye");
+    bool closeFD(const int &fd, const short &code = 1000, const std::string &message = "bye");
 
     /**
      * @brief Send a WebSocket message to a specific client.
@@ -3377,7 +3378,11 @@ public:
      * @note This call blocks until all resources are released.
      */
     bool close();
-
+    /**
+        * @brief Close the connection of a certain socket
+        @ @note Polymorphism of TcpServer's close for a certain socket
+        */
+        bool close(const int &fd);
     /**
      * @brief Start the WebSocket server.
      * @param port Listening port.

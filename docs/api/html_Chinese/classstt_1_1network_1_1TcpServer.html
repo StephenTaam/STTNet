@@ -143,9 +143,9 @@ Public 成员函数</h2></td></tr>
 <tr class="memitem:a3de689656c2e1b106b069780f03e7847"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a3de689656c2e1b106b069780f03e7847">close</a> ()</td></tr>
 <tr class="memdesc:a3de689656c2e1b106b069780f03e7847"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭监听和所有已连接的套接字  <a href="#a3de689656c2e1b106b069780f03e7847">更多...</a><br/></td></tr>
 <tr class="separator:a3de689656c2e1b106b069780f03e7847"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe6f13888b0012f6ed2f580591d39831"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#abe6f13888b0012f6ed2f580591d39831">close</a> (const int &amp;fd)</td></tr>
-<tr class="memdesc:abe6f13888b0012f6ed2f580591d39831"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭某个套接字的连接  <a href="#abe6f13888b0012f6ed2f580591d39831">更多...</a><br/></td></tr>
-<tr class="separator:abe6f13888b0012f6ed2f580591d39831"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4145bfefbbac6e54eaf6e3905adb19bd"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a4145bfefbbac6e54eaf6e3905adb19bd">close</a> (const int &amp;fd)</td></tr>
+<tr class="memdesc:a4145bfefbbac6e54eaf6e3905adb19bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭某个套接字的连接  <a href="#a4145bfefbbac6e54eaf6e3905adb19bd">更多...</a><br/></td></tr>
+<tr class="separator:a4145bfefbbac6e54eaf6e3905adb19bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaffeca105457365cc5cd117218d1b098"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aaffeca105457365cc5cd117218d1b098">isListen</a> ()</td></tr>
 <tr class="memdesc:aaffeca105457365cc5cd117218d1b098"><td class="mdescLeft">&#160;</td><td class="mdescRight">返回对象的监听状态  <a href="#aaffeca105457365cc5cd117218d1b098">更多...</a><br/></td></tr>
 <tr class="separator:aaffeca105457365cc5cd117218d1b098"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -184,6 +184,8 @@ Protected 属性</h2></td></tr>
 <tr class="separator:aedc126014068776e3f9cf5da4b14bb81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef3a14d5e4511150dee675ed1c873756"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aef3a14d5e4511150dee675ed1c873756">workerEventFD</a></td></tr>
 <tr class="separator:aef3a14d5e4511150dee675ed1c873756"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9003e1373cc473588c19add76539ac94"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a9003e1373cc473588c19add76539ac94">serverType</a></td></tr>
+<tr class="separator:a9003e1373cc473588c19add76539ac94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>Tcp服务端类 </p>
@@ -323,18 +325,26 @@ Protected 属性</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="abe6f13888b0012f6ed2f580591d39831"></a>
+<a class="anchor" id="a4145bfefbbac6e54eaf6e3905adb19bd"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool stt::network::TcpServer::close </td>
+          <td class="memname">virtual bool stt::network::TcpServer::close </td>
           <td>(</td>
           <td class="paramtype">const int &amp;&#160;</td>
           <td class="paramname"><em>fd</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>关闭某个套接字的连接 </p>
@@ -345,6 +355,8 @@ Protected 属性</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>返回</dt><dd>true：关闭成功 false：关闭失败 </dd></dl>
+
+<p>被 <a class="el" href="classstt_1_1network_1_1WebSocketServer.html#ad3bbf91532246ce96a5faba5b8cafe1b">stt::network::WebSocketServer</a> 重载.</p>
 
 </div>
 </div>
@@ -855,6 +867,26 @@ false 启用失败（日志将输出具体错误）</dd></dl>
       <table class="memname">
         <tr>
           <td class="memname">bool stt::network::TcpServer::security_open</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9003e1373cc473588c19add76539ac94"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int stt::network::TcpServer::serverType</td>
         </tr>
       </table>
   </td>

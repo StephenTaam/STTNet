@@ -2657,6 +2657,7 @@ namespace stt
         //bool flag_detect;
         //bool flag_detect_status;
         int workerEventFD;
+        int serverType; // 1 tcp 2 http 3 websocket
     private:
         std::function<bool(TcpFDHandler &k,TcpInformation &inf)> globalSolveFun=[](TcpFDHandler &k,TcpInformation &inf)->bool
         {return true;};
@@ -2697,7 +2698,7 @@ namespace stt
         * @param checkFrequency 检查僵尸连接的频率（单位分钟） 默认为1分钟  -1为不做检查
         * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认60秒 -1为无限制
         */
-        TcpServer(const unsigned long long &maxFD=10000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=256,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit,requestRate,connectionTimeout),security_open(security_open),buffer_size(buffer_size*1024),checkFrequency(checkFrequency){}
+        TcpServer(const unsigned long long &maxFD=10000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=256,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit,requestRate,connectionTimeout),security_open(security_open),buffer_size(buffer_size*1024),checkFrequency(checkFrequency){serverType=1;}
         /**
         * @brief 打开Tcp服务器监听程序
         * @param port 监听的端口
@@ -2789,7 +2790,7 @@ namespace stt
         * @param fd 需要关闭的套接字
         * @return true：关闭成功 false：关闭失败
         */
-        bool close(const int &fd);
+        virtual bool close(const int &fd);
     public:
         /**
         * @brief 返回对象的监听状态
@@ -2855,7 +2856,7 @@ namespace stt
         * @param checkFrequency 检查僵尸连接的频率（单位分钟） 默认为1分钟  -1为不做检查
         * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认60秒 -1为无限制
         */
-        HttpServer(const unsigned long long &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=256,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){}
+        HttpServer(const unsigned long long &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=256,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){serverType=2;}
         /**
         * @brief 设置key对应的收到客户端消息后的回调函数
         * @note 可以设置多个 ，框架会根据设置顺序依次执行回调函数；也可以设置扔入工作线程池处理的流程，注意设置不同的返回值即可。
@@ -3040,7 +3041,7 @@ namespace stt
         * @param checkFrequency 检查僵尸连接的频率（单位分钟） 默认为1分钟  -1为不做检查
         * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认60秒 -1为无限制
         */
-        WebSocketServer(const unsigned long long &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=256,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){}
+        WebSocketServer(const unsigned long long &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=256,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){serverType=3;}
         /**
         * @brief 设置全局备用函数
         * @note 找不到对应回调函数的时候会调用全局备用函数
@@ -3130,7 +3131,7 @@ namespace stt
         * @param closeCodeAndMessage 编码后的关闭帧 payload（2 字节关闭码 + 可选消息）
         * @return true：关闭成功  false：关闭失败
         */
-        bool close(const int &fd,const std::string &closeCodeAndMessage);
+        bool closeFD(const int &fd,const std::string &closeCodeAndMessage);
         /**
         * @brief 发送关闭帧关闭对应套接字的 WebSocket 连接（标准方式）
         * 
@@ -3150,7 +3151,7 @@ namespace stt
         * @param message 可选关闭原因，供调试或日志记录用
         * @return true：关闭成功 false：关闭失败
         */
-        bool close(const int &fd,const short &code=1000,const std::string &message="bye");
+        bool closeFD(const int &fd,const short &code=1000,const std::string &message="bye");
         /**
         * @brief 发送 WebSocket 消息给某一个客户端
         * 
@@ -3180,6 +3181,11 @@ namespace stt
         * @note 会阻塞直到全部关闭
         */
         bool close();
+        /**
+        * @brief 关闭某个套接字的连接
+        @ @note 多态了TcpServer的close某个套接字
+        */
+        bool close(const int &fd);
         /**
         * @brief 打开Websocket服务器监听程序
         * @param port 监听的端口
