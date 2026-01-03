@@ -117,6 +117,9 @@ Public 成员函数</h2></td></tr>
 <tr class="memitem:af6ff42cfa4a77c3341382e9b02ceb30e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html#af6ff42cfa4a77c3341382e9b02ceb30e">HttpServer</a> (const unsigned long long &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a71937d40d41663b3993e626b95a73ec1">maxFD</a>=10000000, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;connectionRateLimit=6, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=256, const int &amp;requestRate=40, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a>=1, const int &amp;connectionTimeout=60)</td></tr>
 <tr class="memdesc:af6ff42cfa4a77c3341382e9b02ceb30e"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6  <a href="#af6ff42cfa4a77c3341382e9b02ceb30e">更多...</a><br/></td></tr>
 <tr class="separator:af6ff42cfa4a77c3341382e9b02ceb30e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a790f2967075e96cc837f9447fa82d40c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html#a790f2967075e96cc837f9447fa82d40c">setGlobalSolveFunction</a> (std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> &amp;inf)&gt; fc)</td></tr>
+<tr class="memdesc:a790f2967075e96cc837f9447fa82d40c"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置全局备用函数  <a href="#a790f2967075e96cc837f9447fa82d40c">更多...</a><br/></td></tr>
+<tr class="separator:a790f2967075e96cc837f9447fa82d40c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a707fcaeab33ef5592300c1f37548ae9b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html#a707fcaeab33ef5592300c1f37548ae9b">setFunction</a> (const std::string &amp;key, std::function&lt; int(<a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> &amp;inf)&gt; fc)</td></tr>
 <tr class="memdesc:a707fcaeab33ef5592300c1f37548ae9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置key对应的收到客户端消息后的回调函数  <a href="#a707fcaeab33ef5592300c1f37548ae9b">更多...</a><br/></td></tr>
 <tr class="separator:a707fcaeab33ef5592300c1f37548ae9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -457,6 +460,40 @@ Public 成员函数</h2></td></tr>
 <div class="line">             <span class="keywordflow">return</span> 1;</div>
 <div class="line">         });</div>
 </div><!-- fragment --> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a790f2967075e96cc837f9447fa82d40c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::network::HttpServer::setGlobalSolveFunction </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> &amp;inf)&gt;&#160;</td>
+          <td class="paramname"><em>fc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>设置全局备用函数 </p>
+<dl class="section note"><dt>注解</dt><dd>找不到对应回调函数的时候会调用全局备用函数 </dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>找到对应回调函数的key </td></tr>
+    <tr><td class="paramname">fc</td><td>一个函数或函数对象，用于收到客户端消息后处理逻辑 -参数：HttpServerFDHandler &amp;k - 和客户端连接的套接字的操作对象的引用 <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html" title="保存HTTP/HTTPS请求信息的结构体 ">HttpRequestInformation</a> &amp;inf - 客户端信息，保存数据，处理进度，状态机信息等 -返回值：true：处理成功 false：处理失败 会关闭连接 </td></tr>
   </table>
   </dd>
 </dl>

@@ -5046,6 +5046,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     NumberStringConvertUtil::str16toInt(string(size),ssize);
                     if(ssize==-1)
                     {
+                        
                         return -1;
                     }
                     else if(ssize==0)
@@ -5091,8 +5092,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 if(ssize==-1)
                 {
                     
-                    if(HttpInf.header.find("GET")!=string::npos)
-                    {
+                    //if(HttpInf.header.find("GET")!=string::npos)
+                    //{
                         TcpInf.status=0;
                         //if(TcpInf.data.length()-4-HttpInf.header.length()==0)
                         //    TcpInf.data={};
@@ -5105,9 +5106,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         memcpy(TcpInf.buffer,TcpInf.buffer+HttpInf.header.length()+4,TcpInf.p_buffer_now-(HttpInf.header.length()+4));
                         TcpInf.p_buffer_now=TcpInf.p_buffer_now-(HttpInf.header.length()+4);
                         return 1;
-                    }
-                    else
-                        return -1;
+                    //}
+                    //else
+                    //    return -1;
                 }
                 else if(ssize==0)
                 {
@@ -5172,6 +5173,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     NumberStringConvertUtil::str16toInt(string(size),ssize);
                     if(ssize==-1)
                     {
+                        
                         return -1;
                     }
                     else if(ssize==0)
@@ -5208,8 +5210,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 if(ssize==-1)
                 {
                     
-                    if(HttpInf.header.find("GET")!=string::npos)
-                    {
+                    //if(HttpInf.header.find("GET")!=string::npos)
+                    //{
                         TcpInf.status=0;
                         //if(TcpInf.data.length()-4-HttpInf.header.length()==0)
                         //    TcpInf.data={};
@@ -5222,9 +5224,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         memcpy(TcpInf.buffer,TcpInf.buffer+4+HttpInf.header.length(),TcpInf.p_buffer_now-(4+HttpInf.header.length()));
                         TcpInf.p_buffer_now=TcpInf.p_buffer_now-(4+HttpInf.header.length());
                         return 1;
-                    }
-                    else
-                        return -1;
+                    //}
+                    //else
+                    //    return -1;
                 }
                 else if(ssize==0)
                 {
@@ -5407,16 +5409,28 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 
                 if(ii==solveFun.end())//找不到
                 {
-                    k.sendBack("","","404 NOT FOUND");
+        
                     //TcpServer::close(fd);
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("http server : 找不到处理函数 fd= "+to_string(fd));
+                            stt::system::ServerSetting::logfile->writeLog("http server : 找不到处理函数 fd= "+to_string(fd)+"。调用全局备用处理函数");
                         else
-                            stt::system::ServerSetting::logfile->writeLog("http server : can not find solve function fd= "+to_string(fd));
+                            stt::system::ServerSetting::logfile->writeLog("http server : can not find solve function fd= "+to_string(fd)+" . use global backup slove function.");
                     }
-                    Tcpinf.pendindQueue.pop();
+                    if(!globalSolveFun(k,inff))
+                    {
+                        TcpServer::close(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("http server : 调用全局备用函数失败 fd= "+to_string(fd)+"已经关闭连接.");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("http server : use global backup slove function fail. fd= "+to_string(fd)+". has closed this connection.");
+                        }
+                        return;
+                    }
+                    clientfd[fd].pendindQueue.pop();
                 }
                 else//找得到处理函数
                 {
@@ -5535,16 +5549,27 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             if(ii==solveFun.end())//找不到
                 {
                     
-                    k.sendBack("","","404 NOT FOUND");
+                    //k.sendBack("","","404 NOT FOUND");
                     //TcpServer::close(fd);
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("http server : 找不到处理函数 fd= "+to_string(fd));
+                            stt::system::ServerSetting::logfile->writeLog("http server : 找不到处理函数 fd= "+to_string(fd)+"。调用全局备用处理函数");
                         else
-                            stt::system::ServerSetting::logfile->writeLog("http server : can not find solve function fd= "+to_string(fd));
+                            stt::system::ServerSetting::logfile->writeLog("http server : can not find solve function fd= "+to_string(fd)+" . use global backup slove function.");
                     }
-                    //clientfd[fd].pendindQueue.pop();
+                    if(!globalSolveFun(k,inf))
+                    {
+                        TcpServer::close(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("http server : 调用全局备用函数失败 fd= "+to_string(fd)+"已经关闭连接.");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("http server : use global backup slove function fail. fd= "+to_string(fd)+". has closed this connection.");
+                        }
+                        return;
+                    }
                     clientfd[fd].pendindQueue.pop();
                 }
             else
@@ -5644,16 +5669,28 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 auto ii=solveFun.find(std::any_cast<const std::string&>(inff.ctx["key"]));
                 if(ii==solveFun.end())//找不到
                 {
-                    k.sendBack("","","404 NOT FOUND");
+                    //k.sendBack("","","404 NOT FOUND");
                     //TcpServer::close(fd);
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("http server : 找不到处理函数 fd= "+to_string(fd));
+                            stt::system::ServerSetting::logfile->writeLog("http server : 找不到处理函数 fd= "+to_string(fd)+"。调用全局备用处理函数");
                         else
-                            stt::system::ServerSetting::logfile->writeLog("http server : can not find solve function fd= "+to_string(fd));
+                            stt::system::ServerSetting::logfile->writeLog("http server : can not find solve function fd= "+to_string(fd)+" . use global backup slove function.");
                     }
-                    Tcpinf.pendindQueue.pop();
+                    if(!globalSolveFun(k,inff))
+                    {
+                        TcpServer::close(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("http server : 调用全局备用函数失败 fd= "+to_string(fd)+"已经关闭连接.");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("http server : use global backup slove function fail. fd= "+to_string(fd)+". has closed this connection.");
+                        }
+                        return;
+                    }
+                    clientfd[fd].pendindQueue.pop();
                 }
                 else//找得到处理函数
                 {

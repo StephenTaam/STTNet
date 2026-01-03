@@ -2883,6 +2883,8 @@ void setGetKeyFunction(
     class HttpServer : public TcpServer
 {
 private:
+    std::function<bool(HttpServerFDHandler &k,HttpRequestInformation &inf)> globalSolveFun=[](HttpServerFDHandler &k,HttpRequestInformation &inf)->bool
+        {return k.sendBack("","","404 NOT FOUND");};
     // std::function<bool(HttpServerFDHandler &k, HttpRequestInformation &inf)> globalSolveFun = {};
     std::unordered_map<
         std::string,
@@ -2972,7 +2974,16 @@ public:
               connectionTimeout
           )
     {serverType=2;}
-
+        /**
+        * @brief Set global fallback function
+        * @note When a corresponding callback function cannot be found, a global backup function will be called.
+        * @param key Find the key of the corresponding callback function
+        * @param fc A function or function object used for processing logic after receiving a message from the client.
+        * -Parameters: HttpServerFDHandler &k - A reference to the operation object of the socket connected to the client.
+        *       HttpRequestInformation &inf - Client information, saved data, processing progress, state machine information, etc.
+        * -Return value: true: Processing successful; false: Processing failed and the connection will be closed.
+        */
+        void setGlobalSolveFunction(std::function<bool(HttpServerFDHandler &k,HttpRequestInformation &inf)> fc){this->globalSolveFun=fc;}
     /**
      * @brief Register a callback function for a specific key.
      * @note Multiple callbacks can be registered for the same key. The framework
@@ -3238,7 +3249,7 @@ public:
         const int &buffer_size = 256,
         const int &requestRate = 40,
         const int &checkFrequency = 1,
-        const int &connectionTimeout = 60)
+        const int &connectionTimeout = 120)
         : TcpServer(maxFD, security_open, connectionNumLimit, connectionRateLimit,
                     buffer_size, requestRate, checkFrequency, connectionTimeout) {serverType=3;}
 

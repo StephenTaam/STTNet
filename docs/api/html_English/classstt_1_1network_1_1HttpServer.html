@@ -117,6 +117,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af6ff42cfa4a77c3341382e9b02ceb30e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html#af6ff42cfa4a77c3341382e9b02ceb30e">HttpServer</a> (const unsigned long long &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a71937d40d41663b3993e626b95a73ec1">maxFD</a>=10000000, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;connectionRateLimit=6, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=256, const int &amp;requestRate=40, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a>=1, const int &amp;connectionTimeout=60)</td></tr>
 <tr class="memdesc:af6ff42cfa4a77c3341382e9b02ceb30e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#af6ff42cfa4a77c3341382e9b02ceb30e">More...</a><br/></td></tr>
 <tr class="separator:af6ff42cfa4a77c3341382e9b02ceb30e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a790f2967075e96cc837f9447fa82d40c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html#a790f2967075e96cc837f9447fa82d40c">setGlobalSolveFunction</a> (std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> &amp;inf)&gt; fc)</td></tr>
+<tr class="memdesc:a790f2967075e96cc837f9447fa82d40c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set global fallback function.  <a href="#a790f2967075e96cc837f9447fa82d40c">More...</a><br/></td></tr>
+<tr class="separator:a790f2967075e96cc837f9447fa82d40c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a707fcaeab33ef5592300c1f37548ae9b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html#a707fcaeab33ef5592300c1f37548ae9b">setFunction</a> (const std::string &amp;key, std::function&lt; int(<a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> &amp;inf)&gt; fc)</td></tr>
 <tr class="memdesc:a707fcaeab33ef5592300c1f37548ae9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a callback function for a specific key.  <a href="#a707fcaeab33ef5592300c1f37548ae9b">More...</a><br/></td></tr>
 <tr class="separator:a707fcaeab33ef5592300c1f37548ae9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -476,6 +479,40 @@ Additional Inherited Members</h2></td></tr>
 <div class="line">        <span class="keywordflow">return</span> 1;</div>
 <div class="line">    });</div>
 </div><!-- fragment --> 
+</div>
+</div>
+<a class="anchor" id="a790f2967075e96cc837f9447fa82d40c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::network::HttpServer::setGlobalSolveFunction </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> &amp;inf)&gt;&#160;</td>
+          <td class="paramname"><em>fc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set global fallback function. </p>
+<dl class="section note"><dt>Note</dt><dd>When a corresponding callback function cannot be found, a global backup function will be called. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>Find the key of the corresponding callback function </td></tr>
+    <tr><td class="paramname">fc</td><td>A function or function object used for processing logic after receiving a message from the client. -Parameters: <a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html" title="Operation class for parsing and responding to Http/https requests Only pass in the socket...">HttpServerFDHandler</a> &amp;k - A reference to the operation object of the socket connected to the client. <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html" title="Structure to save HTTP/HTTPS request information. ">HttpRequestInformation</a> &amp;inf - Client information, saved data, processing progress, state machine information, etc. -Return value: true: Processing successful; false: Processing failed and the connection will be closed. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a class="anchor" id="a6c4bd6e14e2ab5db1e7d8ff5181a7d0c"></a>

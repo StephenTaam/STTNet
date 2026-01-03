@@ -2819,6 +2819,8 @@ namespace stt
     class HttpServer:public TcpServer
     {
     private:
+        std::function<bool(HttpServerFDHandler &k,HttpRequestInformation &inf)> globalSolveFun=[](HttpServerFDHandler &k,HttpRequestInformation &inf)->bool
+        {return k.sendBack("","","404 NOT FOUND");};
         //std::function<bool(HttpServerFDHandler &k,HttpRequestInformation &inf)> globalSolveFun={};
         std::unordered_map<std::string,std::vector<std::function<int(HttpServerFDHandler &k,HttpRequestInformation &inf)>>> solveFun;
         std::function<int(HttpServerFDHandler &k,HttpRequestInformation &inf)> parseKey=[](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
@@ -2857,6 +2859,16 @@ namespace stt
         * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认60秒 -1为无限制
         */
         HttpServer(const unsigned long long &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=256,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){serverType=2;}
+        /**
+        * @brief 设置全局备用函数
+        * @note 找不到对应回调函数的时候会调用全局备用函数
+        * @param key 找到对应回调函数的key
+        * @param fc 一个函数或函数对象，用于收到客户端消息后处理逻辑
+        * -参数：HttpServerFDHandler &k - 和客户端连接的套接字的操作对象的引用
+        *       HttpRequestInformation &inf - 客户端信息，保存数据，处理进度，状态机信息等
+        * -返回值：true：处理成功 false：处理失败 会关闭连接
+        */
+        void setGlobalSolveFunction(std::function<bool(HttpServerFDHandler &k,HttpRequestInformation &inf)> fc){this->globalSolveFun=fc;}
         /**
         * @brief 设置key对应的收到客户端消息后的回调函数
         * @note 可以设置多个 ，框架会根据设置顺序依次执行回调函数；也可以设置扔入工作线程池处理的流程，注意设置不同的返回值即可。
@@ -3039,9 +3051,9 @@ namespace stt
         * @param buffer_size 同一个连接允许传输的最大数据量（单位为kb） 默认为256kb
         * @param requestRatte 同一个连接一秒内允许的最大请求数量 （默认为12次）
         * @param checkFrequency 检查僵尸连接的频率（单位分钟） 默认为1分钟  -1为不做检查
-        * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认60秒 -1为无限制
+        * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认120秒 -1为无限制
         */
-        WebSocketServer(const unsigned long long &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=256,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){serverType=3;}
+        WebSocketServer(const unsigned long long &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=256,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=120):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){serverType=3;}
         /**
         * @brief 设置全局备用函数
         * @note 找不到对应回调函数的时候会调用全局备用函数

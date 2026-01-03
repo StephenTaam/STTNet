@@ -114,9 +114,9 @@ Public 成员函数</h2></td></tr>
 <tr class="memitem:a7d4b4dfd861c296a55f13566ef793b37"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a7d4b4dfd861c296a55f13566ef793b37">putTask</a> (const std::function&lt; int(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt; &amp;fun, <a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)</td></tr>
 <tr class="memdesc:a7d4b4dfd861c296a55f13566ef793b37"><td class="mdescLeft">&#160;</td><td class="mdescRight">把一个任务放入工作线程池由工作线程完成  <a href="#a7d4b4dfd861c296a55f13566ef793b37">更多...</a><br/></td></tr>
 <tr class="separator:a7d4b4dfd861c296a55f13566ef793b37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adbb42ee9115a43f84c2f49beeaafc632"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#adbb42ee9115a43f84c2f49beeaafc632">WebSocketServer</a> (const unsigned long long &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a71937d40d41663b3993e626b95a73ec1">maxFD</a>=10000000, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;connectionRateLimit=6, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=256, const int &amp;requestRate=40, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a>=1, const int &amp;connectionTimeout=60)</td></tr>
-<tr class="memdesc:adbb42ee9115a43f84c2f49beeaafc632"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6  <a href="#adbb42ee9115a43f84c2f49beeaafc632">更多...</a><br/></td></tr>
-<tr class="separator:adbb42ee9115a43f84c2f49beeaafc632"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cb3587af2e54ef8d09463b40d3b0459"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a6cb3587af2e54ef8d09463b40d3b0459">WebSocketServer</a> (const unsigned long long &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a71937d40d41663b3993e626b95a73ec1">maxFD</a>=10000000, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;connectionRateLimit=6, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=256, const int &amp;requestRate=40, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a>=1, const int &amp;connectionTimeout=120)</td></tr>
+<tr class="memdesc:a6cb3587af2e54ef8d09463b40d3b0459"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6  <a href="#a6cb3587af2e54ef8d09463b40d3b0459">更多...</a><br/></td></tr>
+<tr class="separator:a6cb3587af2e54ef8d09463b40d3b0459"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1aa57d1c724c6fca6fa35a9dda19a9cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a1aa57d1c724c6fca6fa35a9dda19a9cf">setGlobalSolveFunction</a> (std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt; fc)</td></tr>
 <tr class="memdesc:a1aa57d1c724c6fca6fa35a9dda19a9cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置全局备用函数  <a href="#a1aa57d1c724c6fca6fa35a9dda19a9cf">更多...</a><br/></td></tr>
 <tr class="separator:a1aa57d1c724c6fca6fa35a9dda19a9cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -238,7 +238,7 @@ Public 成员函数</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>WebSocketServer服务端操作类 </p>
 </div><h2 class="groupheader">构造及析构函数说明</h2>
-<a class="anchor" id="adbb42ee9115a43f84c2f49beeaafc632"></a>
+<a class="anchor" id="a6cb3587af2e54ef8d09463b40d3b0459"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -291,7 +291,7 @@ Public 成员函数</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>connectionTimeout</em> = <code>60</code>&#160;</td>
+          <td class="paramname"><em>connectionTimeout</em> = <code>120</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -317,7 +317,7 @@ Public 成员函数</h2></td></tr>
     <tr><td class="paramname">buffer_size</td><td>同一个连接允许传输的最大数据量（单位为kb） 默认为256kb </td></tr>
     <tr><td class="paramname">requestRatte</td><td>同一个连接一秒内允许的最大请求数量 （默认为12次） </td></tr>
     <tr><td class="paramname">checkFrequency</td><td>检查僵尸连接的频率（单位分钟） 默认为1分钟 -1为不做检查 </td></tr>
-    <tr><td class="paramname">connectionTimeout</td><td>连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认60秒 -1为无限制 </td></tr>
+    <tr><td class="paramname">connectionTimeout</td><td>连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认120秒 -1为无限制 </td></tr>
   </table>
   </dd>
 </dl>

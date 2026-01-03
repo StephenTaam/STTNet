@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
      * Create HTTP server
      * 创建 HTTP 服务器对象
      */
-    httpserver = new HttpServer(50000, false);
+    httpserver = new HttpServer();
 
     /*
      * Graceful exit on signal 15 (SIGTERM)
@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
      * Create WebSocket server
      * 创建 WebSocket 服务器
      */
-    wsserver = new WebSocketServer(5000, false);
+    wsserver = new WebSocketServer();
 
     /*
      * WebSocket: global fallback handler

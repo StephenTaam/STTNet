@@ -114,9 +114,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a185f889e5ed5eef1df6b90005e0dd09d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a185f889e5ed5eef1df6b90005e0dd09d">putTask</a> (const std::function&lt; int(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;)&gt; &amp;fun, <a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)</td></tr>
 <tr class="memdesc:a185f889e5ed5eef1df6b90005e0dd09d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Submit a task to the worker thread pool.  <a href="#a185f889e5ed5eef1df6b90005e0dd09d">More...</a><br/></td></tr>
 <tr class="separator:a185f889e5ed5eef1df6b90005e0dd09d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adbb42ee9115a43f84c2f49beeaafc632"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#adbb42ee9115a43f84c2f49beeaafc632">WebSocketServer</a> (const unsigned long long &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a71937d40d41663b3993e626b95a73ec1">maxFD</a>=10000000, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;connectionRateLimit=6, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=256, const int &amp;requestRate=40, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a>=1, const int &amp;connectionTimeout=60)</td></tr>
-<tr class="memdesc:adbb42ee9115a43f84c2f49beeaafc632"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#adbb42ee9115a43f84c2f49beeaafc632">More...</a><br/></td></tr>
-<tr class="separator:adbb42ee9115a43f84c2f49beeaafc632"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cb3587af2e54ef8d09463b40d3b0459"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a6cb3587af2e54ef8d09463b40d3b0459">WebSocketServer</a> (const unsigned long long &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a71937d40d41663b3993e626b95a73ec1">maxFD</a>=10000000, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;connectionRateLimit=6, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=256, const int &amp;requestRate=40, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a>=1, const int &amp;connectionTimeout=120)</td></tr>
+<tr class="memdesc:a6cb3587af2e54ef8d09463b40d3b0459"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a6cb3587af2e54ef8d09463b40d3b0459">More...</a><br/></td></tr>
+<tr class="separator:a6cb3587af2e54ef8d09463b40d3b0459"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92777aa4c04107f235f39f540d6c1bb8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a92777aa4c04107f235f39f540d6c1bb8">setGlobalSolveFunction</a> (std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;)&gt; fc)</td></tr>
 <tr class="memdesc:a92777aa4c04107f235f39f540d6c1bb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the global fallback handler.  <a href="#a92777aa4c04107f235f39f540d6c1bb8">More...</a><br/></td></tr>
 <tr class="separator:a92777aa4c04107f235f39f540d6c1bb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -238,7 +238,7 @@ Additional Inherited Members</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classstt_1_1network_1_1WebSocketServer.html" title="WebSocketServer server operation class. ">WebSocketServer</a> server operation class. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="adbb42ee9115a43f84c2f49beeaafc632"></a>
+<a class="anchor" id="a6cb3587af2e54ef8d09463b40d3b0459"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -291,7 +291,7 @@ Additional Inherited Members</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>connectionTimeout</em> = <code>60</code>&#160;</td>
+          <td class="paramname"><em>connectionTimeout</em> = <code>120</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
