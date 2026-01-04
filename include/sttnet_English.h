@@ -50,6 +50,7 @@
 #include<charconv>
 #include<any>
 #include <sys/eventfd.h>
+#include <sys/timerfd.h>
 /**
 * @namespace stt
 */
@@ -2706,6 +2707,7 @@ public:
         //virtual void consumer(const int &threadID);
         virtual void handler_netevent(const int &fd);
         virtual void handler_workerevent(const int &fd,const int &ret);
+        virtual void handleHeartbeat()=0;
     public:
         /**
         * @brief Add a task to a worker thread pool and have it completed by worker threads.
@@ -2900,6 +2902,7 @@ private:
 private:
     void handler_netevent(const int &fd);
     void handler_workerevent(const int &fd, const int &ret);
+    void handleHeartbeat(){}
 
 public:
     /**
@@ -3157,7 +3160,7 @@ public:
 {
 private:
     std::unordered_map<int, WebSocketFDInformation> wbclientfd;
-    std::mutex lwb;
+    
 
     std::function<bool(WebSocketFDInformation &k)> fcc =
         [](WebSocketFDInformation &k) {
@@ -3186,8 +3189,7 @@ private:
     int seca = 20 * 60;  // heartbeat interval (seconds)
     int secb = 30;       // heartbeat response timeout (seconds)
 
-    bool HBflag;
-    bool HBflag1;
+
 
 private:
     void handler_netevent(const int &fd);
@@ -3196,10 +3198,9 @@ private:
     void closeAck(const int &fd, const std::string &closeCodeAndMessage);
     void closeAck(const int &fd, const short &code = 1000, const std::string &message = "bye");
 
-    std::condition_variable hb_cv;
-    std::mutex hb_m;
+    
 
-    void HB();
+    void handleHeartbeat();
 
     bool closeWithoutLock(const int &fd, const std::string &closeCodeAndMessage);
     bool closeWithoutLock(const int &fd, const short &code = 1000, const std::string &message = "bye");
@@ -3401,7 +3402,7 @@ public:
      */
     bool startListen(const int &port, const int &threads = 8)
     {
-        std::thread(&WebSocketServer::HB, this).detach();
+        //std::thread(&WebSocketServer::HB, this).detach();
         return TcpServer::startListen(port, threads);
     }
 
@@ -3419,13 +3420,7 @@ public:
      */
     ~WebSocketServer()
     {
-        {
-            std::lock_guard<std::mutex> lk(hb_m);
-            HBflag1 = false;
-        }
-        hb_cv.notify_all();
-        while (HBflag)
-            ;
+        
     }
 };
 

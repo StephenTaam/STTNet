@@ -50,7 +50,7 @@
 #include<charconv>
 #include<any>
 #include <sys/eventfd.h>
-
+#include <sys/timerfd.h>
 /**
 * @namespace stt
 */
@@ -2673,6 +2673,7 @@ namespace stt
         //virtual void consumer(const int &threadID);
         virtual void handler_netevent(const int &fd);
         virtual void handler_workerevent(const int &fd,const int &ret);
+        virtual void handleHeartbeat()=0;
     public:
         /**
         * @brief 把一个任务放入工作线程池由工作线程完成
@@ -2810,7 +2811,6 @@ namespace stt
     };
 
     
-
     
     /**
     * @brief Http/HttpServer 服务端操作类
@@ -2832,6 +2832,7 @@ namespace stt
         //inline void handler(const int &fd);
         void handler_netevent(const int &fd);
         void handler_workerevent(const int &fd,const int &ret);
+        void handleHeartbeat(){}
     public:
         /**
         * @brief 把一个任务放入工作线程池由工作线程完成
@@ -2998,7 +2999,7 @@ namespace stt
     {
     private:
         std::unordered_map<int,WebSocketFDInformation> wbclientfd;
-        std::mutex lwb;
+        
         //std::function<bool(const std::string &msg,WebSocketServer &k,const WebSocketFDInformation &inf)> fc=[](const std::string &message,WebSocketServer &k,const WebSocketFDInformation &inf)->bool
         //{std::cout<<"收到: "<<message<<std::endl;return true;};
         std::function<bool(WebSocketFDInformation &k)> fcc=[](WebSocketFDInformation &k)
@@ -3014,8 +3015,7 @@ namespace stt
         {inf.ctx["key"]=inf.message;return 1;};
         int seca=20*60;
         int secb=30;
-        bool HBflag;
-        bool HBflag1;
+
     private:
         void handler_netevent(const int &fd);
         void handler_workerevent(const int &fd,const int &ret);
@@ -3023,9 +3023,8 @@ namespace stt
         //inline void handler(const int &fd);
         void closeAck(const int &fd,const std::string &closeCodeAndMessage);
         void closeAck(const int &fd,const short &code=1000,const std::string &message="bye");
-        std::condition_variable hb_cv;
-        std::mutex hb_m;
-        void HB();
+        
+        void handleHeartbeat();
         bool closeWithoutLock(const int &fd,const std::string &closeCodeAndMessage);
         bool closeWithoutLock(const int &fd,const short &code=1000,const std::string &message="bye");
     public:
@@ -3206,7 +3205,7 @@ namespace stt
         */
         bool startListen(const int &port,const int &threads=8)
         {
-            std::thread(&WebSocketServer::HB,this).detach();
+            //std::thread(&WebSocketServer::HB,this).detach();
 
             return TcpServer::startListen(port,threads);
         }
@@ -3236,7 +3235,7 @@ namespace stt
         * @brief  WebSocketServer的析构函数
         * @note 销毁对象的时候会阻塞直到全部连接和监听等全部关闭
         */
-        ~WebSocketServer(){ {std::lock_guard<std::mutex> lk(hb_m);HBflag1=false;}hb_cv.notify_all(); while(HBflag); }
+        ~WebSocketServer(){  }
     };
 
     /**

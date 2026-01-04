@@ -4038,6 +4038,22 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
 
         epoll_ctl(epollFD, EPOLL_CTL_ADD, workerEventFD, &ev);
 
+        //加入时间事件fd
+        int hbTimerFD=-1;
+        if(serverType==3)//加入websocket心跳时间事件
+        {
+            hbTimerFD = timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
+            itimerspec its{};
+            its.it_interval.tv_sec = 30;   // 每 30 秒触发一次
+            its.it_value.tv_sec    = 30;   // 首次 30 秒后触发
+            timerfd_settime(hbTimerFD, 0, &its, nullptr);
+            //丢进epoll
+            epoll_event ev;
+            ev.data.fd = hbTimerFD;
+            ev.events  = EPOLLIN;
+            epoll_ctl(epollFD, EPOLL_CTL_ADD, hbTimerFD, &ev);
+        }
+
 
         //检查连接表里面是不是有套接字，有的话加入
        
@@ -4225,7 +4241,13 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             }
                         }                                                
                     }
-                    else if(evs[ii].data.fd==workerEventFD)
+                    else if(evs[ii].data.fd==hbTimerFD)//时间事件
+                    {
+                        uint64_t exp;
+                        read(hbTimerFD, &exp, sizeof(exp)); // 必须读，清事件
+                        handleHeartbeat(); 
+                    }
+                    else if(evs[ii].data.fd==workerEventFD)//worker事件
                     {
                         uint64_t cnt;
                         read(workerEventFD, &cnt, sizeof(cnt)); // 清门铃
@@ -5778,7 +5800,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 }
             TcpFDInf &Tcpinf=clientfd[fd];
 
-            unique_lock<mutex> lock(lwb);
+            //unique_lock<mutex> lock(lwb);
             auto jj=wbclientfd.find(fd);
             if(jj==wbclientfd.end())//没有进行wb握手
             {
@@ -6049,7 +6071,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     //return;
             }
         
-            lock.unlock();
+            //lock.unlock();
             
             
             //lock6.unlock();
@@ -7416,7 +7438,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     bool stt::network::WebSocketServer::closeFD(const int &fd,const string &closeCodeAndMessage)
     {
        
-        unique_lock<mutex> lock(lwb);
+        //unique_lock<mutex> lock(lwb);
         auto ii=wbclientfd.find(fd);
 
         if(ii==wbclientfd.end()||ii->second.closeflag==true)
@@ -7454,7 +7476,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     bool stt::network::WebSocketServer::closeFD(const int &fd,const short &code,const string &message)
     {
         
-        unique_lock<mutex> lock(lwb);
+        //unique_lock<mutex> lock(lwb);
         auto ii=wbclientfd.find(fd);
         
         if(ii==wbclientfd.end()||ii->second.closeflag==true)//找不到或者已经发送过了
@@ -7494,7 +7516,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     bool stt::network::WebSocketServer::close(const int &fd)
     {
 
-                    unique_lock<mutex> lock(lwb);
+                    //unique_lock<mutex> lock(lwb);
                     auto ii=wbclientfd.find(fd);
                     if(ii!=wbclientfd.end())
                     {
@@ -8213,26 +8235,20 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             return nullptr;
         return clientfd[fd].ssl;
     }
-    void stt::network::WebSocketServer::HB()
+    void stt::network::WebSocketServer::handleHeartbeat()
     {
-        HBflag=true;
-        HBflag1=true;
+        
         time_t now;
-        while(HBflag1)
-        {
+        
             now=::time(0);
-            unique_lock<mutex> lock(lwb);
-            //if(stt::system::ServerSetting::logfile!=nullptr)stt::system::ServerSetting::logfile->writeLog("lwb上锁！！！！！！！！！！");
+            //unique_lock<mutex> lock(lwb);
+            
             for(auto ii=wbclientfd.begin();ii!=wbclientfd.end();)
             {
                 if(ii->second.HBTime!=0)//已经发送心跳
                 {
                     if(now-ii->second.response>secb)//超时
                     {
-                        //cout<<ii->first<<endl;
-                        //if(!closeWithoutLock(ii->first))//如果发送失败就已经被erase了 如果就成功就还要等待后续再erase... 这个时候是占有锁的，跳出循环后别的线程才能占有锁erase
-                        //    continue;
-                        
                         if(ii->second.closeflag!=true)
                         {
                             short code=1000;
@@ -8268,26 +8284,20 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 }
                 ++ii;
             }
-            //if(stt::system::ServerSetting::logfile!=nullptr)stt::system::ServerSetting::logfile->writeLog("lwb解锁！！！！！！！！！！");
-            //cout<<"lwb解锁！！！！！！！！！！"<<endl;
-            lock.unlock();
-            //sleep(30);
-            std::unique_lock<std::mutex> lk(hb_m);
-            hb_cv.wait_for(lk, std::chrono::seconds(30), [this]{ return !HBflag1; });
-        }
-        HBflag=false;
+            
+            
     }
     bool stt::network::WebSocketServer::close()
     {
         if(!TcpServer::close())
             return false;
-        HBflag1=false;
-        while(HBflag);
+        //HBflag1=false;
+        //while(HBflag);
         return true;
     }
     void stt::network::WebSocketServer::sendMessage(const string &msg,const string &type)
     {
-        unique_lock<mutex> lock(lwb);
+        //unique_lock<mutex> lock(lwb);
         for(auto ii=wbclientfd.begin();ii!=wbclientfd.end();)
         {
             if(!sendMessage(ii->first,msg,type))//发送失败直接关闭
