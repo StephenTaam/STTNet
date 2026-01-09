@@ -95,54 +95,91 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p>A structure that records IP information, such as the number of connections, connection rate, etc.  
+<p>Security state and connection set for a single IP.  
  <a href="structstt_1_1security_1_1IPInformation.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sttnet__English_8h_source.html">sttnet_English.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a22cb8aa50f4271fd9eb20f1b93ba4f74"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structstt_1_1security_1_1SlidingWindow.html">SlidingWindow</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1IPInformation.html#a22cb8aa50f4271fd9eb20f1b93ba4f74">connection</a></td></tr>
-<tr class="separator:a22cb8aa50f4271fd9eb20f1b93ba4f74"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad25a4cdd6d4c844e8cdc3bb4b8486d7b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structstt_1_1security_1_1SlidingWindow.html">SlidingWindow</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1IPInformation.html#ad25a4cdd6d4c844e8cdc3bb4b8486d7b">request</a></td></tr>
-<tr class="separator:ad25a4cdd6d4c844e8cdc3bb4b8486d7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6a382cf573ee04429aefd8db9e63d20"><td class="memItemLeft" align="right" valign="top">std::unordered_map<br class="typebreak"/>
-&lt; std::string, <a class="el" href="structstt_1_1security_1_1SlidingWindow.html">SlidingWindow</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1IPInformation.html#ab6a382cf573ee04429aefd8db9e63d20">pathRequest</a></td></tr>
-<tr class="separator:ab6a382cf573ee04429aefd8db9e63d20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6aa515273c80b0a464e89c54fcb67e81"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1IPInformation.html#a6aa515273c80b0a464e89c54fcb67e81">activeConnections</a> = 0</td></tr>
+<tr class="separator:a6aa515273c80b0a464e89c54fcb67e81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad373ab2e43a107f63d44e99beaf47b2f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structstt_1_1security_1_1RateState.html">RateState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1IPInformation.html#ad373ab2e43a107f63d44e99beaf47b2f">connectRate</a></td></tr>
+<tr class="separator:ad373ab2e43a107f63d44e99beaf47b2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa85f87eaf1b95f46d43280926e84fbbe"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1IPInformation.html#aa85f87eaf1b95f46d43280926e84fbbe">badScore</a> = 0</td></tr>
+<tr class="separator:aa85f87eaf1b95f46d43280926e84fbbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64849d02dd9da2a5cc260e8db2cc6fe8"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; int, <br class="typebreak"/>
+<a class="el" href="structstt_1_1security_1_1ConnectionState.html">ConnectionState</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1IPInformation.html#a64849d02dd9da2a5cc260e8db2cc6fe8">conns</a></td></tr>
+<tr class="separator:a64849d02dd9da2a5cc260e8db2cc6fe8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A structure that records IP information, such as the number of connections, connection rate, etc. </p>
+<div class="textblock"><p>Security state and connection set for a single IP. </p>
+<p>Core state unit of <a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html" title="Unified connection &amp; request security gate (IP-level + fd-level, multi-strategy limiting + blacklist)...">ConnectionLimiter</a>, implementing layered IP-level + fd-level defense:</p>
+<ul>
+<li>activeConnections: concurrent connections from this IP</li>
+<li>connectRate: IP-level connection rate limiter state</li>
+<li>badScore: accumulated risk score (escalation trigger)</li>
+<li>conns: all active connections for this IP (fd -&gt; <a class="el" href="structstt_1_1security_1_1ConnectionState.html" title="Security and limiter state for a single connection (fd). ">ConnectionState</a>)</li>
+</ul>
+<dl class="section user"><dt>Defense semantics</dt><dd><ul>
+<li>activeConnections / connectRate:<ul>
+<li>Protect against connection floods and brute-force</li>
+</ul>
+</li>
+<li>badScore:<ul>
+<li>Used to escalate defense (disconnect / temporary ban)</li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<dl class="section note"><dt>Note</dt><dd><ul>
+<li>Blacklisting (ban TTL) is managed by <a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html" title="Unified connection &amp; request security gate (IP-level + fd-level, multi-strategy limiting + blacklist)...">ConnectionLimiter</a> globally.</li>
+<li>badScore can be decayed over time or reset after a ban. </li>
+</ul>
+</dd></dl>
 </div><h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a22cb8aa50f4271fd9eb20f1b93ba4f74"></a>
+<a class="anchor" id="a6aa515273c80b0a464e89c54fcb67e81"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structstt_1_1security_1_1SlidingWindow.html">SlidingWindow</a> stt::security::IPInformation::connection</td>
+          <td class="memname">int stt::security::IPInformation::activeConnections = 0</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="ab6a382cf573ee04429aefd8db9e63d20"></a>
+<a class="anchor" id="aa85f87eaf1b95f46d43280926e84fbbe"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;std::string,<a class="el" href="structstt_1_1security_1_1SlidingWindow.html">SlidingWindow</a>&gt; stt::security::IPInformation::pathRequest</td>
+          <td class="memname">int stt::security::IPInformation::badScore = 0</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="ad25a4cdd6d4c844e8cdc3bb4b8486d7b"></a>
+<a class="anchor" id="ad373ab2e43a107f63d44e99beaf47b2f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structstt_1_1security_1_1SlidingWindow.html">SlidingWindow</a> stt::security::IPInformation::request</td>
+          <td class="memname"><a class="el" href="structstt_1_1security_1_1RateState.html">RateState</a> stt::security::IPInformation::connectRate</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a64849d02dd9da2a5cc260e8db2cc6fe8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt;int, <a class="el" href="structstt_1_1security_1_1ConnectionState.html">ConnectionState</a>&gt; stt::security::IPInformation::conns</td>
         </tr>
       </table>
 </div><div class="memdoc">

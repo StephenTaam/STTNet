@@ -150,7 +150,7 @@ int main(int argc, char* argv[])
      * Create HTTP server
      * 创建 HTTP 服务器对象
      */
-    httpserver = new HttpServer(50000, false);
+    httpserver = new HttpServer();
 
     /*
      * Graceful exit on signal 15 (SIGTERM)
@@ -216,7 +216,7 @@ int main(int argc, char* argv[])
      * Create WebSocket server
      * 创建 WebSocket 服务器
      */
-    wsserver = new WebSocketServer(5000, false);
+    wsserver = new WebSocketServer();
 
     /*
      * WebSocket: global fallback handler
@@ -344,6 +344,10 @@ Added information security module and updated network optimization.
 
 ### v.0.4.1 - 2026-01-01
 - Fixed a bug related to TLS connections
+
+### v.0.5.0 - 2026-01-09
+- Upgrade the traffic control module for information security
+-Fix the bug in TLS connection: incorrect shutdown method
 
 
 ## STTNet
@@ -485,7 +489,7 @@ int main(int argc, char* argv[])
      * Create HTTP server
      * 创建 HTTP 服务器对象
      */
-    httpserver = new HttpServer(50000, false);
+    httpserver = new HttpServer();
 
     /*
      * Graceful exit on signal 15 (SIGTERM)
@@ -551,7 +555,7 @@ int main(int argc, char* argv[])
      * Create WebSocket server
      * 创建 WebSocket 服务器
      */
-    wsserver = new WebSocketServer(5000, false);
+    wsserver = new WebSocketServer();
 
     /*
      * WebSocket: global fallback handler
@@ -686,3 +690,7 @@ fix bug
 
 ### v.0.4.1 - 2026-01-01
 -修复TLS连接的bug
+
+### v.0.5.0 - 2026-01-09
+-升级信息安全的限流模块
+-修复TLS连接的bug:错误时候的关闭方式

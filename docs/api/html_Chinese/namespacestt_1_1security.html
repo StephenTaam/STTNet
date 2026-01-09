@@ -86,7 +86,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">类</a>  </div>
+<a href="#nested-classes">类</a> &#124;
+<a href="#enum-members">枚举</a>  </div>
   <div class="headertitle">
 <div class="title">stt::security 命名空间参考</div>  </div>
 </div><!--header-->
@@ -97,22 +98,173 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 类</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1PathLimit.html">PathLimit</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">用于特定路径的限速  <a href="structstt_1_1security_1_1PathLimit.html#details">更多...</a><br/></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1RateState.html">RateState</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">单一限流器的运行状态（可复用于多种限流策略）。  <a href="structstt_1_1security_1_1RateState.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1SlidingWindow.html">SlidingWindow</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">用于实现滑动窗口限速的结构体  <a href="structstt_1_1security_1_1SlidingWindow.html#details">更多...</a><br/></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1ConnectionState.html">ConnectionState</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">单个连接（fd）的安全与限流状态。  <a href="structstt_1_1security_1_1ConnectionState.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1IPInformation.html">IPInformation</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">记录ip信息的结构体，比如连接数，连接速率等  <a href="structstt_1_1security_1_1IPInformation.html#details">更多...</a><br/></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">单个 IP 的安全状态与连接集合。  <a href="structstt_1_1security_1_1IPInformation.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html">ConnectionLimiter</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">限制同一ip连接的类  <a href="classstt_1_1security_1_1ConnectionLimiter.html#details">更多...</a><br/></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">统一的连接与请求安全裁决器（IP 级 + fd 级，多策略限流 + 黑名单）。  <a href="classstt_1_1security_1_1ConnectionLimiter.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+枚举</h2></td></tr>
+<tr class="memitem:a1a50515c0ad2e8b7be34026979b7f53c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> { <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53ca5b9cca31b21c9c04c3d6f9ecbcc3ffc8">RateLimitType::Cooldown</a>, 
+<a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53ca717b35602ecd0086be5b924568d3a7db">RateLimitType::FixedWindow</a>, 
+<a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53ca6be0e091023afd88f3791b011cc5af64">RateLimitType::SlidingWindow</a>, 
+<a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53cab117e59052b000439e30df5378b615e0">RateLimitType::TokenBucket</a>
+ }</td></tr>
+<tr class="memdesc:a1a50515c0ad2e8b7be34026979b7f53c"><td class="mdescLeft">&#160;</td><td class="mdescRight">限流算法类型（策略）。  <a href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">更多...</a><br/></td></tr>
+<tr class="separator:a1a50515c0ad2e8b7be34026979b7f53c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5e52ee574240b0d41a48d326f6a9d55"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">DefenseDecision</a> : int { <a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55a6ff7eb4808b8ec65c795becb219fe4d4">ALLOW</a> = 0, 
+<a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55a1db3d4580ff05a5d595a44d40ef4608a">DROP</a> = 1, 
+<a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55af5ec719d5b05e95b4839628814b288e8">CLOSE</a> = 2
+ }</td></tr>
+<tr class="memdesc:ab5e52ee574240b0d41a48d326f6a9d55"><td class="mdescLeft">&#160;</td><td class="mdescRight">安全裁决结果（由 ConnectionLimiter 返回）。  <a href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">更多...</a><br/></td></tr>
+<tr class="separator:ab5e52ee574240b0d41a48d326f6a9d55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>涉及信息安全的api </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">枚举类型说明</h2>
+<a class="anchor" id="ab5e52ee574240b0d41a48d326f6a9d55"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">stt::security::DefenseDecision</a> : int</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>安全裁决结果（由 <a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html" title="统一的连接与请求安全裁决器（IP 级 + fd 级，多策略限流 + 黑名单）。 ">ConnectionLimiter</a> 返回）。 </p>
+<p>所有连接 / 请求在进入业务处理前，都会经过 <a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html" title="统一的连接与请求安全裁决器（IP 级 + fd 级，多策略限流 + 黑名单）。 ">ConnectionLimiter</a> 的判定， 并返回以下三种裁决之一：</p>
+<ul>
+<li>ALLOW (0)：<ul>
+<li>正常通过，继续处理</li>
+</ul>
+</li>
+<li>DROP (1)：<ul>
+<li>无视该请求（不回应、不处理）</li>
+<li>主要用于 request 阶段的轻度防御</li>
+</ul>
+</li>
+<li>CLOSE (2)：<ul>
+<li>立即断开连接</li>
+<li>可伴随 IP 风险升级或临时封禁</li>
+</ul>
+</li>
+</ul>
+<dl class="section note"><dt>注解</dt><dd><ul>
+<li>connect 阶段通常只使用 ALLOW / CLOSE</li>
+<li>DROP 主要用于 request 阶段（fd 已存在时） </li>
+</ul>
+</dd></dl>
+<table class="fieldtable">
+<tr><th colspan="2">枚举值</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ab5e52ee574240b0d41a48d326f6a9d55a6ff7eb4808b8ec65c795becb219fe4d4"></a>ALLOW</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ab5e52ee574240b0d41a48d326f6a9d55a1db3d4580ff05a5d595a44d40ef4608a"></a>DROP</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ab5e52ee574240b0d41a48d326f6a9d55af5ec719d5b05e95b4839628814b288e8"></a>CLOSE</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+<a class="anchor" id="a1a50515c0ad2e8b7be34026979b7f53c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">stt::security::RateLimitType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>限流算法类型（策略）。 </p>
+<p>每种策略的“语义”不同，选择时请按业务/攻击模型匹配：</p>
+<dl class="section user"><dt>1) Cooldown（连续触发惩罚 / 冷却限流）</dt><dd><ul>
+<li><b>规则：在</b> secs 时间内累计达到 times 次后，后续请求全部拒绝，直到“安静”满 secs 后才恢复。</li>
+<li><b>特性：对持续刷/爆破非常狠；对正常用户的“短时间突发”不友好（可能需要完全停一段时间才能恢复）。</b> </li>
+<li><b>适用：</b> <ul>
+<li>建连防爆破（connect）</li>
+<li>登录失败次数惩罚（fail-based 可用同思路扩展）</li>
+<li>防脚本快速重试</li>
+</ul>
+</li>
+<li><b>不适用：</b> <ul>
+<li>正常会出现突发但希望“自然恢复”的接口（例如页面加载产生的突发 HTTP 请求）</li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<dl class="section user"><dt>2) FixedWindow（固定窗口计数）</dt><dd><ul>
+<li><b>规则：以某个窗口起点为基准，每</b> secs 秒为一个窗口；窗口内最多 times 次，超出拒绝；窗口结束时计数清零。</li>
+<li><b>特性：实现简单、开销小；存在“窗口边界突刺”（在窗口交界处可能短时间放行较多）。</b> </li>
+<li><b>适用：</b> <ul>
+<li>低风险、要求简单的限流</li>
+<li>统计口径清晰的“每 N 秒最多 M 次”</li>
+</ul>
+</li>
+<li><b>不适用：</b> <ul>
+<li>对抗性强的场景（容易被边界行为利用）</li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<dl class="section user"><dt>3) SlidingWindow（滑动窗口 / 时间戳队列）</dt><dd><ul>
+<li><b>规则：在任意时刻</b> now，统计 (now-secs, now] 区间内发生的次数；若 &gt;= times 则拒绝。</li>
+<li><b>特性：比</b> FixedWindow 更公平、无窗口边界突刺；需要维护时间戳队列（开销略高）。</li>
+<li><b>适用：</b> <ul>
+<li>对外 HTTP API、用户操作等希望公平且稳定的限流</li>
+<li>path 级别的关键接口（如 /login /register）</li>
+</ul>
+</li>
+<li><b>不适用：</b> <ul>
+<li>极高 QPS 且每个 key(times) 很大、又不愿意付出队列内存/维护成本的场景（可用近似桶）</li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<dl class="section user"><dt>4) TokenBucket（令牌桶）</dt><dd><ul>
+<li><b>规则（常见语义）：令牌按固定速率补充；每次请求消耗</b> 1 令牌；无令牌则拒绝。 在本类接口里通过 (times, secs) 表达：平均速率约为 times/secs，桶容量通常与 times 同级（实现可按需要定义）。</li>
+<li><b>特性：允许突发（桶里有存量时可瞬间放行一批），同时限制长期平均速率；工程上最常用。</b> </li>
+<li><b>适用：</b> <ul>
+<li>请求流量整形（允许短突发但控制长期平均）</li>
+<li>IM 消息、HTTP 请求等“既不想太硬也不想太松”的场景</li>
+</ul>
+</li>
+<li><b>不适用：</b> <ul>
+<li>你想要“打满后必须停一段时间”的强惩罚需求（那是 Cooldown） </li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<table class="fieldtable">
+<tr><th colspan="2">枚举值</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a1a50515c0ad2e8b7be34026979b7f53ca5b9cca31b21c9c04c3d6f9ecbcc3ffc8"></a>Cooldown</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a1a50515c0ad2e8b7be34026979b7f53ca717b35602ecd0086be5b924568d3a7db"></a>FixedWindow</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a1a50515c0ad2e8b7be34026979b7f53ca6be0e091023afd88f3791b011cc5af64"></a>SlidingWindow</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a1a50515c0ad2e8b7be34026979b7f53cab117e59052b000439e30df5378b615e0"></a>TokenBucket</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 制作者 &#160;<a href="http://www.doxygen.org/index.html">

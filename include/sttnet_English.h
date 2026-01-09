@@ -1,8 +1,8 @@
 /**
 * @mainpage STTNet C++ Framework
 * @author StephenTaam(1356597983@qq.com)
-* @version 0.4.0
-* @date 2025-12-30
+* @version 0.5.0
+* @date 2026-01-09
 */
 #ifndef PUBLIC_H
 #define PUBLIC_H 1
@@ -1734,82 +1734,420 @@ public:
     namespace security
     {
         /**
-        * @brief Speed ​​limit for specific routes
-        */
-        struct PathLimit
-        {
-            std::string path;
-            int pathRate;
-        };
-        /**
-        * @brief Structure for implementing sliding window rate limiting
-        */
-        struct SlidingWindow
-        {
-            int num;
-            std::chrono::steady_clock::time_point lastTime;
-            int limit;
-        };
-        /**
-        * @brief A structure that records IP information, such as the number of connections, connection rate, etc.
-        */
-        struct IPInformation
-        {
-            SlidingWindow connection;
-            SlidingWindow request;
-            std::unordered_map<std::string,SlidingWindow> pathRequest;
-        };
-        /**
-        * @brief Limit the class of connections from the same IP
-        * @note Without locks, synchronization and thread safety are not ensured, and they are ensured at the upper level.
-        * @note Limit the number and speed of connections to the same IP
-        */
-        class ConnectionLimiter
-        {
-        private:
-            int connectionLimit;
-            int connectionRateLimit;
-            int requestRate;
-            int connectionTimeout;
-            std::vector<PathLimit> pathLimit;
-            std::unordered_map<std::string,IPInformation> connectionTable;
-            std::mutex lock_table;
-            std::mutex lock_pathlim;
-            static inline bool slideAllow(SlidingWindow &win,const std::chrono::steady_clock::time_point &now,int rate );// 每秒允许多少次
-        public:
-            /**
-            * @brief ConnectionLimiter constructor
-            * @param connectionLimit The maximum number of connections to the same IP address is 20 by default.
-            * @param connectionRateLimit The maximum number of connections per second for the same IP address, the default is 6
-            * @param requestRate The maximum number of requests allowed per second for the same IP address (default is 12)
-            * @param connectionTimeout The number of seconds a connection is considered a zombie connection if there is no response (in seconds). The default is 60 seconds. -1 means no limit.
-            */
-            ConnectionLimiter(const int &connectionLimit=20,const int &connectionRateLimit=6,const int &requestRate=40,const int &connectionTimeout=60):connectionLimit(connectionLimit),connectionRateLimit(connectionRateLimit),requestRate(requestRate),connectionTimeout(connectionTimeout){}
-            /**
-            * @brief Determine whether to allow a certain IP connection based on the number of connections and speed
-            * @param ip ip address
-            * @return true：Connections from a specific IP address should be allowed. False: Connections from a specific IP address should be denied.
-            */
-            bool allowConnect(const std::string &ip);
-            /**
-            * @brief Clear the number of connections to a certain IP address
-            * @param ip ip address
-            */
-            void clearIP(const std::string &ip);
-            /**
-            * @brief Allow requests based on request rate
-            * @param ip ip address
-            * @param path path
-            * @return true：allow  false：not allow
-            */
-            bool allowRequest(const std::string &ip,const std::string_view &path="//");
-            /**
-            * @brief Determine whether a certain IP connection is a zombie connection
-            * @param ip IP address
-            * @return true：yes false：no
-            */
-            bool connectionDetect(const std::string &ip);
-        };
+ * @enum RateLimitType
+ * @brief Rate limiting algorithm / strategy type.
+ *
+ * Each strategy has different semantics. Choose based on business traffic patterns
+ * and your abuse/threat model.
+ *
+ * @par 1) Cooldown (Punishment-based / cooldown limiting)
+ * - @b Rule:
+ *   Once `times` events occur within `secs`, all subsequent requests are rejected.
+ *   The limiter only recovers after the system stays quiet for a full `secs`.
+ * - @b Characteristics:
+ *   Extremely strong against continuous abuse and brute-force attempts;
+ *   unfriendly to legitimate short bursts.
+ * - @b Suitable for:
+ *   - Connection flood / brute-force protection (connect stage)
+ *   - Login failure punishment (can be extended to fail-based rules)
+ *   - Rapid scripted retries
+ * - @b Not suitable for:
+ *   - Endpoints where short bursts are normal and "natural recovery" is expected
+ *     (e.g. page load producing multiple HTTP requests)
+ *
+ * @par 2) FixedWindow (Fixed window counter)
+ * - @b Rule:
+ *   Use a fixed window of length `secs`. Allow at most `times` events within the window.
+ *   Counter resets when the window ends.
+ * - @b Characteristics:
+ *   Simple and low overhead; vulnerable to boundary spikes (burst around window edges).
+ * - @b Suitable for:
+ *   - Low-risk scenarios requiring simplicity
+ *   - Clear quota semantics: "at most M times per N seconds"
+ * - @b Not suitable for:
+ *   - Strong adversarial scenarios (can be exploited via boundary behavior)
+ *
+ * @par 3) SlidingWindow (Sliding window / timestamp queue)
+ * - @b Rule:
+ *   At any time `now`, count events in (now - secs, now]; reject if count >= times.
+ * - @b Characteristics:
+ *   Fair and smooth; no boundary spike. Requires a timestamp deque (higher cost).
+ * - @b Suitable for:
+ *   - Public HTTP APIs, user operations where fairness is desired
+ *   - Critical endpoints (e.g. /login, /register) at path-level
+ * - @b Not suitable for:
+ *   - Extremely high-QPS keys with large per-key history where memory/cost is tight
+ *     (consider approximate buckets)
+ *
+ * @par 4) TokenBucket (Token bucket)
+ * - @b Rule (common semantics):
+ *   Tokens refill at a fixed rate. Each request consumes 1 token. If no token => reject.
+ *   In this API, (times, secs) roughly maps to average rate ~= times/secs.
+ *   Bucket capacity is typically on the same order as `times` (implementation-defined).
+ * - @b Characteristics:
+ *   Allows bursts (when tokens accumulated) while limiting long-term average.
+ *   Very commonly used in production.
+ * - @b Suitable for:
+ *   - Traffic shaping (allow short bursts but control long-term average)
+ *   - IM messages / HTTP requests where you want "not too hard, not too soft"
+ * - @b Not suitable for:
+ *   - Hard punishment requirement ("once exceeded, must stop for a while"):
+ *     use Cooldown instead.
+ */
+enum class RateLimitType
+{
+    Cooldown,      // Punishment-based: hit limit => cooldown, require quiet secs to recover
+    FixedWindow,   // Fixed window counter: each secs is a window, allow up to times
+    SlidingWindow, // Sliding window: count events within the last secs (timestamp deque)
+    TokenBucket    // Token bucket: allow bursts + control long-term average rate
+};
+
+
+/**
+ * @struct RateState
+ * @brief Runtime state for one limiter key (reused by multiple strategies).
+ *
+ * @details
+ * Stores the live state for one limiting dimension (IP / fd / path, etc.).
+ * Different algorithms reuse different fields:
+ *
+ * - Cooldown / FixedWindow:
+ *   - counter + lastTime
+ * - SlidingWindow:
+ *   - history (timestamp deque)
+ * - TokenBucket:
+ *   - tokens + lastRefill
+ *
+ * @note
+ * - `violations` counts how many times requests were rejected. This is useful for
+ *   defense escalation (DROP / CLOSE / temporary ban).
+ * - RateState does NOT make decisions. It only stores state.
+ */
+struct RateState
+{
+    // Common
+    int counter = 0;
+    int violations = 0;
+    std::chrono::steady_clock::time_point lastTime{};
+
+    // SlidingWindow
+    std::deque<std::chrono::steady_clock::time_point> history;
+
+    // TokenBucket
+    double tokens = 0.0;
+    std::chrono::steady_clock::time_point lastRefill{};
+};
+
+
+/**
+ * @struct ConnectionState
+ * @brief Security and limiter state for a single connection (fd).
+ *
+ * @details
+ * Each fd that passes allowConnect() owns a ConnectionState, enabling fd-level defense:
+ *
+ * - requestRate: overall request-rate limiter for this connection
+ * - pathRate: per-path extra limiter states
+ * - lastActivity: last activity time (zombie/idle detection)
+ *
+ * @note
+ * - One IP may have multiple ConnectionState instances (multiple concurrent fds).
+ * - Must be cleaned up when the connection is closed.
+ */
+struct ConnectionState
+{
+    int fd = -1;
+    RateState requestRate;
+    std::unordered_map<std::string, RateState> pathRate;
+    std::chrono::steady_clock::time_point lastActivity{};
+};
+
+
+/**
+ * @struct IPInformation
+ * @brief Security state and connection set for a single IP.
+ *
+ * @details
+ * Core state unit of ConnectionLimiter, implementing layered IP-level + fd-level defense:
+ *
+ * - activeConnections: concurrent connections from this IP
+ * - connectRate: IP-level connection rate limiter state
+ * - badScore: accumulated risk score (escalation trigger)
+ * - conns: all active connections for this IP (fd -> ConnectionState)
+ *
+ * @par Defense semantics
+ * - activeConnections / connectRate:
+ *   - Protect against connection floods and brute-force
+ * - badScore:
+ *   - Used to escalate defense (disconnect / temporary ban)
+ *
+ * @note
+ * - Blacklisting (ban TTL) is managed by ConnectionLimiter globally.
+ * - badScore can be decayed over time or reset after a ban.
+ */
+struct IPInformation
+{
+    int activeConnections = 0;
+    RateState connectRate;
+    int badScore = 0; // IP risk score used for escalation
+    std::unordered_map<int, ConnectionState> conns; // fd -> state
+};
+
+
+/**
+ * @enum DefenseDecision
+ * @brief Security decision returned by ConnectionLimiter.
+ *
+ * @details
+ * Every connection/request must pass the limiter before entering business logic.
+ *
+ * - ALLOW (0):
+ *   - Continue processing
+ * - DROP (1):
+ *   - Silently ignore the request (no response)
+ *   - Intended for lightweight defense at request stage
+ * - CLOSE (2):
+ *   - Close the connection immediately
+ *   - May be accompanied by risk escalation or temporary ban
+ *
+ * @note
+ * - Connect stage typically uses only ALLOW / CLOSE.
+ * - DROP is primarily for request stage (fd already exists).
+ */
+enum DefenseDecision : int
+{
+    ALLOW = 0,
+    DROP  = 1,
+    CLOSE = 2
+};
+
+
+/**
+ * @class ConnectionLimiter
+ * @brief Unified connection & request security gate
+ *        (IP-level + fd-level, multi-strategy limiting + blacklist).
+ *
+ * @details
+ * ConnectionLimiter is a "Security Gate".
+ * All connections and requests must pass through it before business logic runs.
+ *
+ * This class does NOT directly perform side effects (close/send/sleep).
+ * Instead, it returns a @ref DefenseDecision for the caller to enforce.
+ *
+ * ---
+ * @section design_overview Design Overview
+ *
+ * Layered defense model:
+ *
+ * - IP-level defense:
+ *   - Concurrent connection limit (maxConnections)
+ *   - Connection rate limit (connectRate)
+ *   - IP risk scoring (badScore)
+ *   - Temporary blacklist with TTL (blacklist)
+ *
+ * - fd-level defense:
+ *   - Per-connection request rate (requestRate)
+ *   - Per-path extra limits (pathRate)
+ *   - Activity tracking (lastActivity) for zombie detection
+ *
+ * ---
+ * @section defense_decision Decision Semantics
+ *
+ * allowConnect / allowRequest return @ref DefenseDecision:
+ *
+ * - ALLOW (0): proceed
+ * - DROP  (1): ignore silently (request stage only)
+ * - CLOSE (2): close immediately (may escalate / ban)
+ *
+ * @note
+ * - Connect stage usually uses only ALLOW / CLOSE.
+ * - DROP is mainly used in request stage.
+ *
+ * ---
+ * @section rate_limit Strategies
+ *
+ * Supported algorithms (see @ref RateLimitType):
+ * - Cooldown
+ * - FixedWindow
+ * - SlidingWindow
+ * - TokenBucket
+ *
+ * Defaults:
+ * - connectStrategy: Cooldown
+ * - requestStrategy: SlidingWindow
+ * - pathStrategy: SlidingWindow
+ *
+ * ---
+ * @section thread_safety Thread Safety
+ *
+ * @warning
+ * This class is NOT thread-safe by itself.
+ * Concurrent access to internal tables (table/pathConfig/blacklist)
+ * must be protected externally (e.g. single event-loop thread, or a mutex).
+ *
+ * ---
+ * @section lifecycle Lifecycle
+ *
+ * - allowConnect:
+ *   - Decide whether a new connection is allowed
+ *   - On ALLOW, register the fd under the IP
+ *
+ * - allowRequest:
+ *   - Decide whether a request on an existing fd is allowed
+ *
+ * - clearIP:
+ *   - Called when a connection is closed, to reclaim state and counters
+ *
+ * - connectionDetect:
+ *   - Detect and cleanup idle/zombie connections (should be called by a timer)
+ */
+class ConnectionLimiter
+{
+public:
+    /**
+     * @brief Constructor.
+     *
+     * @param maxConn Max concurrent connections allowed per IP (activeConnections cap).
+     * @param idleTimeout Idle timeout (seconds) used for zombie detection. If < 0, disable.
+     */
+    ConnectionLimiter(const int& maxConn = 20, const int& idleTimeout = 60)
+        : maxConnections(maxConn), connectionTimeout(idleTimeout) {}
+
+    // ========== Strategy configuration ==========
+
+    /**
+     * @brief Set the strategy used for connection-rate limiting.
+     *
+     * @param type Strategy type, see @ref RateLimitType.
+     * @note Default is @ref RateLimitType::Cooldown.
+     */
+    void setConnectStrategy(const RateLimitType &type);
+
+    /**
+     * @brief Set the strategy used for fd-level request limiting.
+     *
+     * @param type Strategy type, see @ref RateLimitType.
+     * @note Default is @ref RateLimitType::SlidingWindow.
+     */
+    void setRequestStrategy(const RateLimitType &type);
+
+    /**
+     * @brief Set the strategy used for path-level extra limiting.
+     *
+     * @param type Strategy type, see @ref RateLimitType.
+     * @note Default is @ref RateLimitType::SlidingWindow.
+     */
+    void setPathStrategy(const RateLimitType &type);
+
+    // ========== Path configuration ==========
+
+    /**
+     * @brief Configure extra rate limits for a specific path (path-level rule).
+     *
+     * @param path Target path, e.g. "/login", "/register".
+     * @param times Maximum allowed requests within `secs`.
+     * @param secs Window size (seconds).
+     *
+     * @note
+     * setPathLimit() defines an @b additional rule:
+     * - The (times, secs) passed into allowRequest() is still applied first
+     *   as the connection/IP-level rule.
+     * - If `path` matches a configured rule, the path-level rule is evaluated next.
+     * - Relationship is AND: any layer failing results in rejection.
+     */
+    void setPathLimit(const std::string &path, const int &times, const int &secs);
+
+    // ========== Core decisions ==========
+
+    /**
+     * @brief Security decision for a newly accepted connection (IP-level gate).
+     *
+     * @param ip Remote IP address.
+     * @param fd Newly accepted file descriptor.
+     * @param times Maximum allowed connection attempts within `secs`.
+     * @param secs Connection-rate window size (seconds).
+     *
+     * @return DefenseDecision
+     * - ALLOW: connection is allowed and fd will be registered
+     * - CLOSE: reject and caller should close the connection immediately
+     *
+     * @note
+     * - Connect stage typically does not use DROP.
+     * - If the IP is blacklisted or in a high-risk state, returns CLOSE directly.
+     */
+    DefenseDecision allowConnect(const std::string &ip, const int &fd,
+                                const int &times, const int &secs);
+
+    /**
+     * @brief Security decision for a single request on an existing connection.
+     *
+     * @param ip Remote IP address.
+     * @param fd File descriptor associated with the request.
+     * @param path Request path (used for path-level extra limiting).
+     * @param times Request-rate limit (max requests within `secs`).
+     * @param secs Request-rate window size (seconds).
+     *
+     * @return DefenseDecision
+     * - ALLOW: process normally
+     * - DROP: ignore silently (no response)
+     * - CLOSE: close connection
+     */
+    DefenseDecision allowRequest(const std::string &ip, const int &fd,
+                                const std::string_view &path,
+                                const int &times, const int &secs);
+
+    // ========== Lifecycle ==========
+
+    /**
+     * @brief Reclaim state for an fd when the connection is closed.
+     *
+     * @param ip Remote IP address.
+     * @param fd Closed file descriptor.
+     *
+     * @note
+     * - Must be called after close(fd).
+     * - Keeps activeConnections and internal state consistent.
+     */
+    void clearIP(const std::string &ip, const int &fd);
+
+    /**
+     * @brief Detect and cleanup an idle/zombie connection.
+     *
+     * @param ip Remote IP address.
+     * @param fd File descriptor to check.
+     *
+     * @return true  The connection is considered zombie and has been cleaned up.
+     * @return false Not timed out or not found.
+     *
+     * @note
+     * - "Activity" means allowConnect()/allowRequest() updates lastActivity.
+     * - Prefer calling via a timer instead of scanning hot paths.
+     */
+    bool connectionDetect(const std::string &ip, const int &fd);
+
+private:
+    // Core limiter primitive
+    bool allow(RateState &st, const RateLimitType &type,
+               const int &times, const int &secs,
+               const std::chrono::steady_clock::time_point &now);
+
+private:
+    int maxConnections;
+    int connectionTimeout;
+
+    RateLimitType connectStrategy = RateLimitType::Cooldown;
+    RateLimitType requestStrategy = RateLimitType::SlidingWindow;
+    RateLimitType pathStrategy    = RateLimitType::SlidingWindow;
+
+    std::unordered_map<std::string, IPInformation> table;
+    std::unordered_map<std::string, std::pair<int,int>> pathConfig;
+
+    // IP -> unban time
+    std::unordered_map<std::string, std::chrono::steady_clock::time_point> blacklist;
+
+    inline void logSecurity(const std::string &msgCN, const std::string &msgEN);
+};
+
     }
 
     /**
@@ -2687,12 +3025,18 @@ public:
         //std::unordered_map<int,SSL*> tlsfd;
         //std::mutex ltl1;
         bool security_open;
-        int checkFrequency;
         //bool flag_detect;
         //bool flag_detect_status;
         int workerEventFD;
         int serverType; // 1 tcp 2 http 3 websocket
+        int connectionSecs;
+        int connectionTimes;
+        int requestSecs;
+        int requestTimes;
+        int checkFrequency;
     private:
+        std::function<void(TcpFDHandler &k,TcpInformation &inf)> securitySendBackFun=[](TcpFDHandler &k,TcpInformation &inf)->void
+        {};
         std::function<bool(TcpFDHandler &k,TcpInformation &inf)> globalSolveFun=[](TcpFDHandler &k,TcpInformation &inf)->bool
         {return true;};
         std::unordered_map<std::string,std::vector<std::function<int(TcpFDHandler &k,TcpInformation &inf)>>> solveFun;
@@ -2722,18 +3066,87 @@ public:
         */
         void putTask(const std::function<int(TcpFDHandler &k,TcpInformation &inf)> &fun,TcpFDHandler &k,TcpInformation &inf);
         /**
-        * @brief Constructor, which is enabled by default. Limit the maximum number of connections to an IP address to 20; The fastest connection speed per second for the same IP address is 6
-        * @note Turning on the security module has a performance impact
-        * @param maxFD service object can accept the maximum number of connections（default 10000）
-        * @param security_open true: enable the security module false: disable the security module (enabled by default)
-        * @param connectionNumLimit The maximum number of connections from the same IP address
-        * @param connectionRateLimit The maximum number of connections per second to the same IP address
-        * @param buffer_size The maximum amount of data allowed to be transferred over the same connection (in KB) is 256KB by default
-        * @param requestRate The maximum number of requests allowed for the same ip within one second (the default is 12 times)
-        * @param checkFrequency The frequency of checking zombie connections (in minutes) The default is 1 minute -1 means no check
-        * @param connectionTimeout The number of seconds that a connection is considered a zombie connection if there is no response (in seconds) The default is 60 seconds -1 means no limit
-        */
-        TcpServer(const unsigned long long &maxFD=10000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=256,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit,requestRate,connectionTimeout),security_open(security_open),buffer_size(buffer_size*1024),checkFrequency(checkFrequency){serverType=1;}
+ * @brief Constructor.
+ *
+ * By default, allows up to 1,000,000 concurrent connections, allocates
+ * a maximum receive buffer of 256 KB per connection, and enables
+ * the security module.
+ *
+ * @note
+ * Enabling the security module will introduce additional overhead
+ * and may impact performance.
+ *
+ * @param maxFD
+ *        Maximum number of connections this server instance can accept.
+ *        Default: 1,000,000.
+ *
+ * @param buffer_size
+ *        Maximum amount of data a single connection is allowed to receive,
+ *        in kilobytes (KB).
+ *        Default: 256 KB.
+ *
+ * @param security_open
+ *        Whether to enable the security module.
+ *        - true  : enable security checks (default)
+ *        - false : disable security checks
+ *
+ * @param connectionNumLimit
+ *        Maximum number of concurrent connections allowed per IP.
+ *        Default: 20.
+ *
+ * @param connectionSecs
+ *        Time window (in seconds) for connection rate limiting.
+ *        Default: 1 second.
+ *
+ * @param connectionTimes
+ *        Maximum number of connection attempts allowed within
+ *        `connectionSecs` seconds.
+ *        Default: 6.
+ *
+ * @param requestSecs
+ *        Time window (in seconds) for request rate limiting.
+ *        Default: 1 second.
+ *
+ * @param requestTimes
+ *        Maximum number of requests allowed within `requestSecs` seconds.
+ *        Default: 40.
+ *
+ * @param checkFrequency
+ *        Frequency (in seconds) for checking zombie/idle connections.
+ *        -1 disables zombie connection detection.
+ *        Default: 60 seconds.
+ *
+ * @param connectionTimeout
+ *        If a connection has no activity for this many seconds,
+ *        it is considered a zombie connection.
+ *        -1 means no timeout (infinite).
+ *        Default: 60 seconds.
+ */
+TcpServer(
+    const unsigned long long &maxFD = 1000000,
+    const int &buffer_size = 256,
+    const bool &security_open = true,
+    const int &connectionNumLimit = 20,
+    const int &connectionSecs = 1,
+    const int &connectionTimes = 6,
+    const int &requestSecs = 1,
+    const int &requestTimes = 40,
+    const int &checkFrequency = 60,
+    const int &connectionTimeout = 60
+)
+: maxFD(maxFD),
+  buffer_size(buffer_size * 1024),
+  security_open(security_open),
+  connectionSecs(connectionSecs),
+  connectionTimes(connectionTimes),
+  requestSecs(requestSecs),
+  requestTimes(requestTimes),
+  connectionLimiter(connectionNumLimit, connectionTimeout),
+  checkFrequency(checkFrequency)
+{
+    serverType = 1;
+}
+
         /**
         * @brief Start the TCP server listening program
         * @param port Port to listen on
@@ -2773,6 +3186,45 @@ public:
         * @brief Revoke TLS encryption, CA certificate, etc.
         */
         void redrawTLS();
+        /**
+ * @brief Set the callback invoked when an information security policy is violated.
+ *
+ * @details
+ * This callback is executed when a TCP client violates a security rule
+ * (e.g. connection abuse, rate limiting, malformed data, or other
+ * security-related conditions).
+ * After the callback is executed, the connection will be closed.
+ *
+ * @note
+ * The callback is invoked once per security violation.
+ * The connection is closed unconditionally after the callback returns.
+ *
+ * @param fc
+ *        A function or function object used to handle the response
+ *        sent back to the client upon a security violation.
+ *
+ *        Callback parameters:
+ *        - TcpFDHandler &k  
+ *          Reference to the handler object used to operate on the
+ *          client socket/connection.
+ *
+ *        - TcpInformation &inf  
+ *          Client-related information, including buffered data,
+ *          processing progress, and protocol/state-machine context.
+ *
+ * @note
+ * The callback does not return a value.
+ * The connection will be closed regardless of the callback outcome.
+ */
+void setSecuritySendBackFun(
+    std::function<void(TcpFDHandler &k,
+                       TcpInformation &inf)> fc
+)
+{
+    this->securitySendBackFun = fc;
+}
+
+
         /**
         * @brief Set global fallback function
         * @note When a corresponding callback function cannot be found, a global backup function will be called.
@@ -2885,6 +3337,8 @@ void setGetKeyFunction(
     class HttpServer : public TcpServer
 {
 private:
+    std::function<void(HttpServerFDHandler &k,HttpRequestInformation &inf)> securitySendBackFun=[](HttpServerFDHandler &k,HttpRequestInformation &inf)->void
+        {};
     std::function<bool(HttpServerFDHandler &k,HttpRequestInformation &inf)> globalSolveFun=[](HttpServerFDHandler &k,HttpRequestInformation &inf)->bool
         {return k.sendBack("","","404 NOT FOUND");};
     // std::function<bool(HttpServerFDHandler &k, HttpRequestInformation &inf)> globalSolveFun = {};
@@ -2933,50 +3387,126 @@ public:
     );
 
     /**
-     * @brief Constructor.
-     * @note The security module is enabled by default. It limits the maximum
-     *       number of connections per IP to 20, and the maximum connection
-     *       rate per IP to 6 connections per second. Enabling the security
-     *       module may impact performance.
-     * @param maxFD Maximum number of connections the server can accept.
-     * @param security_open true to enable the security module,
-     *                      false to disable it (enabled by default).
-     * @param connectionNumLimit Maximum number of concurrent connections
-     *                            allowed per IP.
-     * @param connectionRateLimit Maximum number of connections per second
-     *                            allowed per IP.
-     * @param buffer_size Maximum amount of data allowed per connection
-     *                    (in KB). Default is 256 KB.
-     * @param requestRate Maximum number of requests allowed per connection
-     *                    per second (default: 40).
-     * @param checkFrequency Frequency for checking zombie connections
-     *                       (in minutes). Default is 1 minute.
-     *                       Use -1 to disable checking.
-     * @param connectionTimeout Time in seconds after which an inactive
-     *                          connection is considered a zombie connection.
-     *                          Default is 60 seconds. Use -1 for no limit.
-     */
-    HttpServer(
-        const unsigned long long &maxFD = 10000000,
-        const bool &security_open = true,
-        const int &connectionNumLimit = 20,
-        const int &connectionRateLimit = 6,
-        const int &buffer_size = 256,
-        const int &requestRate = 40,
-        const int &checkFrequency = 1,
-        const int &connectionTimeout = 60
-    )
-        : TcpServer(
-              maxFD,
-              security_open,
-              connectionNumLimit,
-              connectionRateLimit,
-              buffer_size,
-              requestRate,
-              checkFrequency,
-              connectionTimeout
-          )
-    {serverType=2;}
+ * @brief Constructor.
+ *
+ * By default, allows up to 1,000,000 concurrent connections, allocates
+ * a maximum receive buffer of 256 KB per connection, and enables
+ * the security module.
+ *
+ * @note
+ * Enabling the security module introduces additional overhead
+ * and may impact performance.
+ *
+ * @param maxFD
+ *        Maximum number of connections this server instance can accept.
+ *        Default: 1,000,000.
+ *
+ * @param buffer_size
+ *        Maximum amount of data a single connection is allowed to receive,
+ *        in kilobytes (KB).
+ *        Default: 256 KB.
+ *
+ * @param security_open
+ *        Whether to enable the security module.
+ *        - true  : enable security checks (default)
+ *        - false : disable security checks
+ *
+ * @param connectionNumLimit
+ *        Maximum number of concurrent connections allowed per IP.
+ *        Default: 10.
+ *
+ * @param connectionSecs
+ *        Time window (in seconds) for connection rate limiting.
+ *        Default: 1 second.
+ *
+ * @param connectionTimes
+ *        Maximum number of connection attempts allowed within
+ *        `connectionSecs` seconds.
+ *        Default: 3.
+ *
+ * @param requestSecs
+ *        Time window (in seconds) for request rate limiting.
+ *        Default: 1 second.
+ *
+ * @param requestTimes
+ *        Maximum number of requests allowed within `requestSecs` seconds.
+ *        Default: 20.
+ *
+ * @param checkFrequency
+ *        Frequency (in seconds) for checking zombie/idle connections.
+ *        -1 disables zombie connection detection.
+ *        Default: 30 seconds.
+ *
+ * @param connectionTimeout
+ *        If a connection has no activity for this many seconds,
+ *        it is considered a zombie connection.
+ *        -1 means no timeout (infinite).
+ *        Default: 30 seconds.
+ */
+HttpServer(
+    const unsigned long long &maxFD = 1000000,
+    const int &buffer_size = 256,
+    const bool &security_open = true,
+    const int &connectionNumLimit = 10,
+    const int &connectionSecs = 1,
+    const int &connectionTimes = 3,
+    const int &requestSecs = 1,
+    const int &requestTimes = 20,
+    const int &checkFrequency = 30,
+    const int &connectionTimeout = 30
+)
+: TcpServer(
+      maxFD,
+      buffer_size,
+      security_open,
+      connectionNumLimit,
+      connectionSecs,
+      connectionTimes,
+      requestSecs,
+      requestTimes,
+      checkFrequency,
+      connectionTimeout
+  )
+{
+    serverType = 2;
+}
+    /**
+ * @brief Set the callback invoked when an information security policy is violated.
+ *
+ * @details
+ * This callback is executed when a client violates a security rule
+ * (e.g. rate limiting, abnormal request behavior, or other security checks).
+ * After the callback is executed, the connection will be closed.
+ *
+ * @note
+ * The callback is invoked once per security violation.
+ * The connection is closed unconditionally after the callback returns.
+ *
+ * @param fc
+ *        A function or function object used to handle the response
+ *        sent back to the client upon a security violation.
+ *
+ *        Callback parameters:
+ *        - HttpServerFDHandler &k  
+ *          Reference to the handler object that operates on the
+ *          client connection/socket.
+ *
+ *        - HttpRequestInformation &inf  
+ *          Client request information, including buffered data,
+ *          processing progress, and HTTP state/context.
+ *
+ * @note
+ * The callback does not return a value.
+ * The connection will be closed regardless of the outcome of the callback.
+ */
+void setSecuritySendBackFun(
+    std::function<void(HttpServerFDHandler &k,
+                       HttpRequestInformation &inf)> fc
+)
+{
+    this->securitySendBackFun = fc;
+}
+
         /**
         * @brief Set global fallback function
         * @note When a corresponding callback function cannot be found, a global backup function will be called.
@@ -3160,7 +3690,8 @@ public:
 {
 private:
     std::unordered_map<int, WebSocketFDInformation> wbclientfd;
-    
+    std::function<void(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> securitySendBackFun=[](WebSocketServerFDHandler &k,WebSocketFDInformation &inf)->void
+        {};
 
     std::function<bool(WebSocketFDInformation &k)> fcc =
         [](WebSocketFDInformation &k) {
@@ -3228,31 +3759,127 @@ public:
         WebSocketFDInformation &inf);
 
     /**
-     * @brief Constructor.
-     * @note The security module is enabled by default.
-     *       - Max connections per IP: 20
-     *       - Max connection rate per IP: 6 connections per second
-     *       Enabling security may slightly impact performance.
-     * @param maxFD Maximum number of concurrent connections.
-     * @param security_open Enable or disable the security module.
-     * @param connectionNumLimit Maximum number of connections per IP.
-     * @param connectionRateLimit Maximum connection rate per IP per second.
-     * @param buffer_size Maximum data size per connection (KB).
-     * @param requestRate Maximum requests per second per connection.
-     * @param checkFrequency Zombie connection check interval (minutes).
-     * @param connectionTimeout Idle timeout before considering a connection zombie (seconds).
-     */
-    WebSocketServer(
-        const unsigned long long &maxFD = 10000000,
-        const bool &security_open = true,
-        const int &connectionNumLimit = 20,
-        const int &connectionRateLimit = 6,
-        const int &buffer_size = 256,
-        const int &requestRate = 40,
-        const int &checkFrequency = 1,
-        const int &connectionTimeout = 120)
-        : TcpServer(maxFD, security_open, connectionNumLimit, connectionRateLimit,
-                    buffer_size, requestRate, checkFrequency, connectionTimeout) {serverType=3;}
+ * @brief Constructor.
+ *
+ * By default, allows up to 1,000,000 concurrent connections, allocates
+ * a maximum receive buffer of 256 KB per connection, and enables
+ * the security module.
+ *
+ * @note
+ * Enabling the security module introduces additional overhead
+ * and may impact performance.
+ *
+ * @param maxFD
+ *        Maximum number of connections this server instance can accept.
+ *        Default: 1,000,000.
+ *
+ * @param buffer_size
+ *        Maximum amount of data a single connection is allowed to receive,
+ *        in kilobytes (KB).
+ *        Default: 256 KB.
+ *
+ * @param security_open
+ *        Whether to enable the security module.
+ *        - true  : enable security checks (default)
+ *        - false : disable security checks
+ *
+ * @param connectionNumLimit
+ *        Maximum number of concurrent connections allowed per IP.
+ *        Default: 5.
+ *
+ * @param connectionSecs
+ *        Time window (in seconds) for connection rate limiting.
+ *        Default: 10 seconds.
+ *
+ * @param connectionTimes
+ *        Maximum number of connection attempts allowed within
+ *        `connectionSecs` seconds.
+ *        Default: 3.
+ *
+ * @param requestSecs
+ *        Time window (in seconds) for request/message rate limiting.
+ *        Default: 1 second.
+ *
+ * @param requestTimes
+ *        Maximum number of requests/messages allowed within
+ *        `requestSecs` seconds.
+ *        Default: 10.
+ *
+ * @param checkFrequency
+ *        Frequency (in seconds) for checking zombie/idle connections.
+ *        -1 disables zombie connection detection.
+ *        Default: 60 seconds.
+ *
+ * @param connectionTimeout
+ *        If a connection has no activity for this many seconds,
+ *        it is considered a zombie connection.
+ *        -1 means no timeout (infinite).
+ *        Default: 120 seconds.
+ */
+WebSocketServer(
+    const unsigned long long &maxFD = 1000000,
+    const int &buffer_size = 256,
+    const bool &security_open = true,
+    const int &connectionNumLimit = 5,
+    const int &connectionSecs = 10,
+    const int &connectionTimes = 3,
+    const int &requestSecs = 1,
+    const int &requestTimes = 10,
+    const int &checkFrequency = 60,
+    const int &connectionTimeout = 120
+)
+: TcpServer(
+      maxFD,
+      buffer_size,
+      security_open,
+      connectionNumLimit,
+      connectionSecs,
+      connectionTimes,
+      requestSecs,
+      requestTimes,
+      checkFrequency,
+      connectionTimeout
+  )
+{
+    serverType = 3;
+}
+/**
+ * @brief Set the callback invoked when an information security policy is violated.
+ *
+ * @details
+ * This callback is executed when a WebSocket client violates a security rule
+ * (e.g. rate limiting, abnormal message behavior, protocol abuse, etc.).
+ * After the callback is executed, the connection will be closed.
+ *
+ * @note
+ * The callback is invoked once per violation.
+ * The connection is closed unconditionally after the callback returns.
+ *
+ * @param fc
+ *        A function or function object used to handle the response
+ *        sent back to the client upon a security violation.
+ *
+ *        Callback parameters:
+ *        - WebSocketServerFDHandler &k  
+ *          Reference to the handler object that operates on the
+ *          WebSocket connection/socket.
+ *
+ *        - WebSocketFDInformation &inf  
+ *          Client connection information, including buffered data,
+ *          processing progress, and WebSocket state machine context.
+ *
+ * @note
+ * The callback does not return a value.
+ * The connection will be closed regardless of the callback outcome.
+ */
+void setSecuritySendBackFun(
+    std::function<void(WebSocketServerFDHandler &k,
+                       WebSocketFDInformation &inf)> fc
+)
+{
+    this->securitySendBackFun = fc;
+}
+
 
     /**
      * @brief Set the global fallback handler.

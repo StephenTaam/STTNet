@@ -95,36 +95,136 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </div><!--header-->
 <div class="contents">
 
-<p>限制同一ip连接的类  
+<p>统一的连接与请求安全裁决器（IP 级 + fd 级，多策略限流 + 黑名单）。  
  <a href="classstt_1_1security_1_1ConnectionLimiter.html#details">更多...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public 成员函数</h2></td></tr>
-<tr class="memitem:a1911e5fd7f1fb3ebf3a536ac3e252a8f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a1911e5fd7f1fb3ebf3a536ac3e252a8f">ConnectionLimiter</a> (const int &amp;connectionLimit=20, const int &amp;connectionRateLimit=6, const int &amp;requestRate=40, const int &amp;connectionTimeout=60)</td></tr>
-<tr class="memdesc:a1911e5fd7f1fb3ebf3a536ac3e252a8f"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html" title="限制同一ip连接的类 ">ConnectionLimiter</a> 的构造函数  <a href="#a1911e5fd7f1fb3ebf3a536ac3e252a8f">更多...</a><br/></td></tr>
-<tr class="separator:a1911e5fd7f1fb3ebf3a536ac3e252a8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa50a514e93b4ceeac358d8c84da22074"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#aa50a514e93b4ceeac358d8c84da22074">allowConnect</a> (const std::string &amp;ip)</td></tr>
-<tr class="memdesc:aa50a514e93b4ceeac358d8c84da22074"><td class="mdescLeft">&#160;</td><td class="mdescRight">根据连接数和速度判断是否允许某ip的连接  <a href="#aa50a514e93b4ceeac358d8c84da22074">更多...</a><br/></td></tr>
-<tr class="separator:aa50a514e93b4ceeac358d8c84da22074"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6008f2929064b28f717af5bb5d446b8d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a6008f2929064b28f717af5bb5d446b8d">clearIP</a> (const std::string &amp;ip)</td></tr>
-<tr class="memdesc:a6008f2929064b28f717af5bb5d446b8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">把记录某ip的连接数清零  <a href="#a6008f2929064b28f717af5bb5d446b8d">更多...</a><br/></td></tr>
-<tr class="separator:a6008f2929064b28f717af5bb5d446b8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa641c5181922572d90a8ee3a49f30aa9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#aa641c5181922572d90a8ee3a49f30aa9">allowRequest</a> (const std::string &amp;ip, const std::string_view &amp;path=&quot;//&quot;)</td></tr>
-<tr class="memdesc:aa641c5181922572d90a8ee3a49f30aa9"><td class="mdescLeft">&#160;</td><td class="mdescRight">根据请求速率判断允许请求  <a href="#aa641c5181922572d90a8ee3a49f30aa9">更多...</a><br/></td></tr>
-<tr class="separator:aa641c5181922572d90a8ee3a49f30aa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a983d5a158edf360359cbe7a3a0f8e34e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a983d5a158edf360359cbe7a3a0f8e34e">connectionDetect</a> (const std::string &amp;ip)</td></tr>
-<tr class="memdesc:a983d5a158edf360359cbe7a3a0f8e34e"><td class="mdescLeft">&#160;</td><td class="mdescRight">判断某ip的连接是否为僵尸连接  <a href="#a983d5a158edf360359cbe7a3a0f8e34e">更多...</a><br/></td></tr>
-<tr class="separator:a983d5a158edf360359cbe7a3a0f8e34e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56573d9a58787ed48e873cf21c746e89"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a56573d9a58787ed48e873cf21c746e89">ConnectionLimiter</a> (const int &amp;maxConn=20, const int &amp;idleTimeout=60)</td></tr>
+<tr class="memdesc:a56573d9a58787ed48e873cf21c746e89"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数。  <a href="#a56573d9a58787ed48e873cf21c746e89">更多...</a><br/></td></tr>
+<tr class="separator:a56573d9a58787ed48e873cf21c746e89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9c354300218b12ffca35735a013d7a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#ae9c354300218b12ffca35735a013d7a4">setConnectStrategy</a> (const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;type)</td></tr>
+<tr class="memdesc:ae9c354300218b12ffca35735a013d7a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置“连接速率限流”所使用的策略。  <a href="#ae9c354300218b12ffca35735a013d7a4">更多...</a><br/></td></tr>
+<tr class="separator:ae9c354300218b12ffca35735a013d7a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21e0362f97ee4492ccfdc5860a2b3be0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a21e0362f97ee4492ccfdc5860a2b3be0">setRequestStrategy</a> (const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;type)</td></tr>
+<tr class="memdesc:a21e0362f97ee4492ccfdc5860a2b3be0"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置“IP 级请求限流”所使用的策略。  <a href="#a21e0362f97ee4492ccfdc5860a2b3be0">更多...</a><br/></td></tr>
+<tr class="separator:a21e0362f97ee4492ccfdc5860a2b3be0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89dbb769f1f6cf90c233c182fe3e37d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a89dbb769f1f6cf90c233c182fe3e37d0">setPathStrategy</a> (const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;type)</td></tr>
+<tr class="memdesc:a89dbb769f1f6cf90c233c182fe3e37d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置“path 级请求限流”所使用的策略。  <a href="#a89dbb769f1f6cf90c233c182fe3e37d0">更多...</a><br/></td></tr>
+<tr class="separator:a89dbb769f1f6cf90c233c182fe3e37d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdd3f927d82c9a3337e3de33882851fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#abdd3f927d82c9a3337e3de33882851fe">setPathLimit</a> (const std::string &amp;path, const int &amp;times, const int &amp;secs)</td></tr>
+<tr class="memdesc:abdd3f927d82c9a3337e3de33882851fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置某个路径的额外限流规则（path 级）。  <a href="#abdd3f927d82c9a3337e3de33882851fe">更多...</a><br/></td></tr>
+<tr class="separator:abdd3f927d82c9a3337e3de33882851fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7592517efd375f6b303c71a2753d43f1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">DefenseDecision</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a7592517efd375f6b303c71a2753d43f1">allowConnect</a> (const std::string &amp;ip, const int &amp;fd, const int &amp;times, const int &amp;secs)</td></tr>
+<tr class="memdesc:a7592517efd375f6b303c71a2753d43f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">对新建立的连接进行安全裁决（IP 级）。  <a href="#a7592517efd375f6b303c71a2753d43f1">更多...</a><br/></td></tr>
+<tr class="separator:a7592517efd375f6b303c71a2753d43f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27d47a3590738d92a426adb8d1b1f136"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">DefenseDecision</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a27d47a3590738d92a426adb8d1b1f136">allowRequest</a> (const std::string &amp;ip, const int &amp;fd, const std::string_view &amp;path, const int &amp;times, const int &amp;secs)</td></tr>
+<tr class="memdesc:a27d47a3590738d92a426adb8d1b1f136"><td class="mdescLeft">&#160;</td><td class="mdescRight">对已建立连接的一次请求进行安全裁决。  <a href="#a27d47a3590738d92a426adb8d1b1f136">更多...</a><br/></td></tr>
+<tr class="separator:a27d47a3590738d92a426adb8d1b1f136"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab63d6e85a83e95fed038fd4ea49b1be0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#ab63d6e85a83e95fed038fd4ea49b1be0">clearIP</a> (const std::string &amp;ip, const int &amp;fd)</td></tr>
+<tr class="memdesc:ab63d6e85a83e95fed038fd4ea49b1be0"><td class="mdescLeft">&#160;</td><td class="mdescRight">在连接断开时回收对应 fd 的状态。  <a href="#ab63d6e85a83e95fed038fd4ea49b1be0">更多...</a><br/></td></tr>
+<tr class="separator:ab63d6e85a83e95fed038fd4ea49b1be0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68cadfcc8107f14483ffb4c4df020a60"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a68cadfcc8107f14483ffb4c4df020a60">connectionDetect</a> (const std::string &amp;ip, const int &amp;fd)</td></tr>
+<tr class="memdesc:a68cadfcc8107f14483ffb4c4df020a60"><td class="mdescLeft">&#160;</td><td class="mdescRight">检测并清理僵尸连接（fd 级）。  <a href="#a68cadfcc8107f14483ffb4c4df020a60">更多...</a><br/></td></tr>
+<tr class="separator:a68cadfcc8107f14483ffb4c4df020a60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
-<div class="textblock"><p>限制同一ip连接的类 </p>
-<dl class="section note"><dt>注解</dt><dd>不带锁，不确保同步和线程安全，自己在上层确保。 </dd>
-<dd>
-限制同一ip的连接数目和速度 </dd></dl>
+<div class="textblock"><p>统一的连接与请求安全裁决器（IP 级 + fd 级，多策略限流 + 黑名单）。 </p>
+<p><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html" title="统一的连接与请求安全裁决器（IP 级 + fd 级，多策略限流 + 黑名单）。 ">ConnectionLimiter</a> 是一个“安全门（Security Gate）”， 所有连接建立与请求处理在进入业务逻辑前，都必须经过该类的裁决。</p>
+<p>本类不直接执行业务行为（如 close / send / sleep）， 而是返回一个 <a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">DefenseDecision</a> 结果，由外层统一执行。 </p>
+<hr/>
+ <h1><a class="anchor" id="design_overview"></a>
+设计概览</h1>
+<p>本类实现的是一个分层防御模型：</p>
+<ul>
+<li>IP 级防御：<ul>
+<li>并发连接数限制（maxConnections）</li>
+<li>建连速率限制（connectRate）</li>
+<li>IP 风险评分（badScore）</li>
+<li>临时黑名单（blacklist，带 TTL）</li>
+</ul>
+</li>
+<li>fd 级防御：<ul>
+<li>请求速率限制（requestRate）</li>
+<li>path 级额外限流（pathRate）</li>
+<li>连接活动时间记录（lastActivity） <hr/>
+ </li>
+</ul>
+</li>
+</ul>
+<h1><a class="anchor" id="defense_decision"></a>
+防御裁决语义</h1>
+<p>allowConnect / allowRequest 的返回值为 DefenseDecision：</p>
+<ul>
+<li>ALLOW (0)：<ul>
+<li>允许继续处理</li>
+</ul>
+</li>
+<li>DROP (1)：<ul>
+<li>无视本次请求（不回应、不处理）</li>
+<li>主要用于 request 阶段的轻度防御</li>
+</ul>
+</li>
+<li>CLOSE (2)：<ul>
+<li>立即断开连接</li>
+<li>可伴随 IP 风险升级或临时封禁</li>
+</ul>
+</li>
+</ul>
+<dl class="section note"><dt>注解</dt><dd><ul>
+<li>connect 阶段由于 TCP 连接已建立，通常只使用 ALLOW / CLOSE</li>
+<li>DROP 主要用于 request 阶段（fd 已存在时） <hr/>
+ </li>
+</ul>
+</dd></dl>
+<h1><a class="anchor" id="rate_limit"></a>
+策略与限流</h1>
+<p>本类支持多种限流策略（见 RateLimitType）：</p>
+<ul>
+<li>Cooldown</li>
+<li>FixedWindow</li>
+<li>SlidingWindow</li>
+<li>TokenBucket</li>
+</ul>
+<p>不同维度使用不同策略：</p>
+<ul>
+<li>建连速率：connectStrategy（默认 Cooldown）</li>
+<li>fd 级请求速率：requestStrategy（默认 SlidingWindow）</li>
+<li>path 级请求速率：pathStrategy（默认 SlidingWindow） <hr/>
+ </li>
+</ul>
+<h1><a class="anchor" id="thread_safety"></a>
+线程安全</h1>
+<dl class="section warning"><dt>警告</dt><dd>本类本身不包含锁：<ul>
+<li>table / pathConfig / blacklist 的并发安全 需由上层保证（如事件循环线程、外部互斥锁等）。 <hr/>
+ </li>
+</ul>
+</dd></dl>
+<h1><a class="anchor" id="lifecycle"></a>
+生命周期说明</h1>
+<ul>
+<li>allowConnect：<ul>
+<li>判断 IP 是否允许进入应用层</li>
+<li>在 ALLOW 时登记 fd</li>
+</ul>
+</li>
+<li>allowRequest：<ul>
+<li>对已登记 fd 进行请求裁决</li>
+</ul>
+</li>
+<li>clearIP：<ul>
+<li>在连接关闭时调用，回收 fd 与并发计数</li>
+</ul>
+</li>
+<li>connectionDetect：<ul>
+<li>用于检测并清理长时间无活动的僵尸连接 </li>
+</ul>
+</li>
+</ul>
 </div><h2 class="groupheader">构造及析构函数说明</h2>
-<a class="anchor" id="a1911e5fd7f1fb3ebf3a536ac3e252a8f"></a>
+<a class="anchor" id="a56573d9a58787ed48e873cf21c746e89"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -135,25 +235,13 @@ Public 成员函数</h2></td></tr>
           <td class="memname">stt::security::ConnectionLimiter::ConnectionLimiter </td>
           <td>(</td>
           <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>connectionLimit</em> = <code>20</code>, </td>
+          <td class="paramname"><em>maxConn</em> = <code>20</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>connectionRateLimit</em> = <code>6</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>requestRate</em> = <code>40</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>connectionTimeout</em> = <code>60</code>&#160;</td>
+          <td class="paramname"><em>idleTimeout</em> = <code>60</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -168,13 +256,11 @@ Public 成员函数</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html" title="限制同一ip连接的类 ">ConnectionLimiter</a> 的构造函数 </p>
+<p>构造函数。 </p>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
-    <tr><td class="paramname">connectionLimit</td><td>同一个ip的最大连接数，默认为20 </td></tr>
-    <tr><td class="paramname">connectionRateLimit</td><td>同一ip每秒的连接最大次数，默认为6 </td></tr>
-    <tr><td class="paramname">requestRate</td><td>同一个ip一秒内允许的最大请求数量 （默认为12次） </td></tr>
-    <tr><td class="paramname">connectionTimeout</td><td>连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认60秒 -1为无限制 </td></tr>
+    <tr><td class="paramname">maxConn</td><td>同一 IP 允许的最大并发连接数（activeConnections 上限）。 </td></tr>
+    <tr><td class="paramname">idleTimeout</td><td>连接僵尸检测超时时间（秒）。若 &lt; 0 表示不做僵尸检测。 </td></tr>
   </table>
   </dd>
 </dl>
@@ -182,37 +268,12 @@ Public 成员函数</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">成员函数说明</h2>
-<a class="anchor" id="aa50a514e93b4ceeac358d8c84da22074"></a>
+<a class="anchor" id="a7592517efd375f6b303c71a2753d43f1"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool stt::security::ConnectionLimiter::allowConnect </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>ip</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>根据连接数和速度判断是否允许某ip的连接 </p>
-<dl class="params"><dt>参数</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">ip</td><td>ip地址 </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>返回</dt><dd>true：应当允许某ip的连接 false：应当拒绝某ip的连接 </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="aa641c5181922572d90a8ee3a49f30aa9"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool stt::security::ConnectionLimiter::allowRequest </td>
+          <td class="memname"><a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">DefenseDecision</a> stt::security::ConnectionLimiter::allowConnect </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>ip</em>, </td>
@@ -220,8 +281,20 @@ Public 成员函数</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>path</em> = <code>&quot;//&quot;</code>&#160;</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>fd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>times</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>secs</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -231,19 +304,92 @@ Public 成员函数</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>根据请求速率判断允许请求 </p>
+<p>对新建立的连接进行安全裁决（IP 级）。 </p>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
-    <tr><td class="paramname">ip</td><td>IP地址 </td></tr>
-    <tr><td class="paramname">path</td><td>路径 </td></tr>
+    <tr><td class="paramname">ip</td><td>对端 IP 地址。 </td></tr>
+    <tr><td class="paramname">fd</td><td>新 accept 得到的文件描述符。 </td></tr>
+    <tr><td class="paramname">times</td><td>在 secs 秒内允许的最大建连次数。 </td></tr>
+    <tr><td class="paramname">secs</td><td>建连速率统计窗口（秒）。</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>返回</dt><dd>true：允许 false：不允许 </dd></dl>
+<dl class="section return"><dt>返回</dt><dd>DefenseDecision<ul>
+<li>ALLOW：允许该连接进入应用层（fd 将被登记）</li>
+<li>CLOSE：拒绝并应立即断开连接</li>
+</ul>
+</dd></dl>
+<dl class="section note"><dt>注解</dt><dd><ul>
+<li>connect 阶段通常不使用 DROP</li>
+<li>若命中黑名单或高风险状态，将直接返回 CLOSE </li>
+</ul>
+</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a6008f2929064b28f717af5bb5d446b8d"></a>
+<a class="anchor" id="a27d47a3590738d92a426adb8d1b1f136"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">DefenseDecision</a> stt::security::ConnectionLimiter::allowRequest </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>ip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>fd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramname"><em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>times</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>secs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>对已建立连接的一次请求进行安全裁决。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ip</td><td>对端 IP 地址。 </td></tr>
+    <tr><td class="paramname">fd</td><td>当前请求对应的文件描述符。 </td></tr>
+    <tr><td class="paramname">path</td><td>请求路径（用于 path 级限流）。 </td></tr>
+    <tr><td class="paramname">times</td><td>fd 级请求速率上限。 </td></tr>
+    <tr><td class="paramname">secs</td><td>请求速率统计窗口（秒）。</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>DefenseDecision<ul>
+<li>ALLOW：正常处理请求</li>
+<li>DROP：无视本次请求（不回应）</li>
+<li>CLOSE：断开连接 </li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab63d6e85a83e95fed038fd4ea49b1be0"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -251,23 +397,39 @@ Public 成员函数</h2></td></tr>
           <td class="memname">void stt::security::ConnectionLimiter::clearIP </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>ip</em></td><td>)</td>
+          <td class="paramname"><em>ip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>fd</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>把记录某ip的连接数清零 </p>
+<p>在连接断开时回收对应 fd 的状态。 </p>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
-    <tr><td class="paramname">ip地址</td><td></td></tr>
+    <tr><td class="paramname">ip</td><td>对端 IP 地址。 </td></tr>
+    <tr><td class="paramname">fd</td><td>已关闭的文件描述符。</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section note"><dt>注解</dt><dd><ul>
+<li>必须在 close(fd) 后调用</li>
+<li>用于维护 activeConnections 与内部状态一致性 </li>
+</ul>
+</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a983d5a158edf360359cbe7a3a0f8e34e"></a>
+<a class="anchor" id="a68cadfcc8107f14483ffb4c4df020a60"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -275,20 +437,161 @@ Public 成员函数</h2></td></tr>
           <td class="memname">bool stt::security::ConnectionLimiter::connectionDetect </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>ip</em></td><td>)</td>
+          <td class="paramname"><em>ip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>fd</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>检测并清理僵尸连接（fd 级）。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ip</td><td>对端 IP 地址。 </td></tr>
+    <tr><td class="paramname">fd</td><td>待检测的文件描述符。</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>true 该连接被判定为僵尸并已清理 </dd>
+<dd>
+false 未超时或不存在</dd></dl>
+<dl class="section note"><dt>注解</dt><dd><ul>
+<li>“活动”指 allowConnect / allowRequest 更新 lastActivity</li>
+<li>建议由外部定时器触发调用，避免热路径扫描 </li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae9c354300218b12ffca35735a013d7a4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::security::ConnectionLimiter::setConnectStrategy </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>判断某ip的连接是否为僵尸连接 </p>
+<p>设置“连接速率限流”所使用的策略。 </p>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
-    <tr><td class="paramname">ip</td><td>IP地址 </td></tr>
+    <tr><td class="paramname">type</td><td>策略类型，见 <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> 说明。 </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>返回</dt><dd>true：是 false：否 </dd></dl>
+<dl class="section note"><dt>注解</dt><dd>不调用本函数时，默认策略为 <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53ca5b9cca31b21c9c04c3d6f9ecbcc3ffc8">RateLimitType::Cooldown</a> 。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="abdd3f927d82c9a3337e3de33882851fe"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::security::ConnectionLimiter::setPathLimit </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>times</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>secs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>设置某个路径的额外限流规则（path 级）。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>需要额外限流的路径，例如 "/login"、"/register"。 </td></tr>
+    <tr><td class="paramname">times</td><td>在 secs 秒内允许的最大请求次数。 </td></tr>
+    <tr><td class="paramname">secs</td><td>统计窗口长度（秒）。</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>注解</dt><dd>setPathLimit 配置的是 <b>额外规则：</b> <ul>
+<li>allowRequest 调用时传入的 (times, secs) 仍然会作为 IP 级规则先执行；</li>
+<li>若 path 命中此配置，则再执行 path 级规则；</li>
+<li>两者为 AND 关系：任何一层失败即拒绝。 </li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a89dbb769f1f6cf90c233c182fe3e37d0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::security::ConnectionLimiter::setPathStrategy </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>设置“path 级请求限流”所使用的策略。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>策略类型，见 <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> 说明。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>注解</dt><dd>不调用本函数时，默认策略为 <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53ca6be0e091023afd88f3791b011cc5af64">RateLimitType::SlidingWindow</a> 。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a21e0362f97ee4492ccfdc5860a2b3be0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::security::ConnectionLimiter::setRequestStrategy </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>设置“IP 级请求限流”所使用的策略。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>策略类型，见 <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> 说明。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>注解</dt><dd>不调用本函数时，默认策略为 <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53ca6be0e091023afd88f3791b011cc5af64">RateLimitType::SlidingWindow</a> 。 </dd></dl>
 
 </div>
 </div>

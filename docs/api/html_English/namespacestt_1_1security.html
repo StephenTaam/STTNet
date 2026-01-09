@@ -86,7 +86,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <div class="title">stt::security Namespace Reference</div>  </div>
 </div><!--header-->
@@ -97,22 +98,173 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1PathLimit.html">PathLimit</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Speed ​​limit for specific routes.  <a href="structstt_1_1security_1_1PathLimit.html#details">More...</a><br/></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1RateState.html">RateState</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runtime state for one limiter key (reused by multiple strategies).  <a href="structstt_1_1security_1_1RateState.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1SlidingWindow.html">SlidingWindow</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure for implementing sliding window rate limiting.  <a href="structstt_1_1security_1_1SlidingWindow.html#details">More...</a><br/></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1ConnectionState.html">ConnectionState</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Security and limiter state for a single connection (fd).  <a href="structstt_1_1security_1_1ConnectionState.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1IPInformation.html">IPInformation</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A structure that records IP information, such as the number of connections, connection rate, etc.  <a href="structstt_1_1security_1_1IPInformation.html#details">More...</a><br/></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Security state and connection set for a single IP.  <a href="structstt_1_1security_1_1IPInformation.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html">ConnectionLimiter</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Limit the class of connections from the same IP.  <a href="classstt_1_1security_1_1ConnectionLimiter.html#details">More...</a><br/></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unified connection &amp; request security gate (IP-level + fd-level, multi-strategy limiting + blacklist).  <a href="classstt_1_1security_1_1ConnectionLimiter.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a1a50515c0ad2e8b7be34026979b7f53c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> { <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53ca5b9cca31b21c9c04c3d6f9ecbcc3ffc8">RateLimitType::Cooldown</a>, 
+<a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53ca717b35602ecd0086be5b924568d3a7db">RateLimitType::FixedWindow</a>, 
+<a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53ca6be0e091023afd88f3791b011cc5af64">RateLimitType::SlidingWindow</a>, 
+<a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53cab117e59052b000439e30df5378b615e0">RateLimitType::TokenBucket</a>
+ }</td></tr>
+<tr class="memdesc:a1a50515c0ad2e8b7be34026979b7f53c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rate limiting algorithm / strategy type.  <a href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">More...</a><br/></td></tr>
+<tr class="separator:a1a50515c0ad2e8b7be34026979b7f53c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5e52ee574240b0d41a48d326f6a9d55"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">DefenseDecision</a> : int { <a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55a6ff7eb4808b8ec65c795becb219fe4d4">ALLOW</a> = 0, 
+<a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55a1db3d4580ff05a5d595a44d40ef4608a">DROP</a> = 1, 
+<a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55af5ec719d5b05e95b4839628814b288e8">CLOSE</a> = 2
+ }</td></tr>
+<tr class="memdesc:ab5e52ee574240b0d41a48d326f6a9d55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Security decision returned by ConnectionLimiter.  <a href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">More...</a><br/></td></tr>
+<tr class="separator:ab5e52ee574240b0d41a48d326f6a9d55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>API related to information security. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+<a class="anchor" id="ab5e52ee574240b0d41a48d326f6a9d55"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">stt::security::DefenseDecision</a> : int</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Security decision returned by <a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html" title="Unified connection &amp; request security gate (IP-level + fd-level, multi-strategy limiting + blacklist)...">ConnectionLimiter</a>. </p>
+<p>Every connection/request must pass the limiter before entering business logic.</p>
+<ul>
+<li>ALLOW (0):<ul>
+<li>Continue processing</li>
+</ul>
+</li>
+<li>DROP (1):<ul>
+<li>Silently ignore the request (no response)</li>
+<li>Intended for lightweight defense at request stage</li>
+</ul>
+</li>
+<li>CLOSE (2):<ul>
+<li>Close the connection immediately</li>
+<li>May be accompanied by risk escalation or temporary ban</li>
+</ul>
+</li>
+</ul>
+<dl class="section note"><dt>Note</dt><dd><ul>
+<li>Connect stage typically uses only ALLOW / CLOSE.</li>
+<li>DROP is primarily for request stage (fd already exists). </li>
+</ul>
+</dd></dl>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ab5e52ee574240b0d41a48d326f6a9d55a6ff7eb4808b8ec65c795becb219fe4d4"></a>ALLOW</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ab5e52ee574240b0d41a48d326f6a9d55a1db3d4580ff05a5d595a44d40ef4608a"></a>DROP</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ab5e52ee574240b0d41a48d326f6a9d55af5ec719d5b05e95b4839628814b288e8"></a>CLOSE</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+<a class="anchor" id="a1a50515c0ad2e8b7be34026979b7f53c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">stt::security::RateLimitType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Rate limiting algorithm / strategy type. </p>
+<p>Each strategy has different semantics. Choose based on business traffic patterns and your abuse/threat model.</p>
+<dl class="section user"><dt>1) Cooldown (Punishment-based / cooldown limiting)</dt><dd><ul>
+<li><b>Rule:</b> Once <code>times</code> events occur within <code>secs</code>, all subsequent requests are rejected. The limiter only recovers after the system stays quiet for a full <code>secs</code>.</li>
+<li><b>Characteristics:</b> Extremely strong against continuous abuse and brute-force attempts; unfriendly to legitimate short bursts.</li>
+<li><b>Suitable</b> for:<ul>
+<li>Connection flood / brute-force protection (connect stage)</li>
+<li>Login failure punishment (can be extended to fail-based rules)</li>
+<li>Rapid scripted retries</li>
+</ul>
+</li>
+<li><b>Not</b> suitable for:<ul>
+<li>Endpoints where short bursts are normal and "natural recovery" is expected (e.g. page load producing multiple HTTP requests)</li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<dl class="section user"><dt>2) FixedWindow (Fixed window counter)</dt><dd><ul>
+<li><b>Rule:</b> Use a fixed window of length <code>secs</code>. Allow at most <code>times</code> events within the window. Counter resets when the window ends.</li>
+<li><b>Characteristics:</b> Simple and low overhead; vulnerable to boundary spikes (burst around window edges).</li>
+<li><b>Suitable</b> for:<ul>
+<li>Low-risk scenarios requiring simplicity</li>
+<li>Clear quota semantics: "at most M times per N seconds"</li>
+</ul>
+</li>
+<li><b>Not</b> suitable for:<ul>
+<li>Strong adversarial scenarios (can be exploited via boundary behavior)</li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<dl class="section user"><dt>3) SlidingWindow (Sliding window / timestamp queue)</dt><dd><ul>
+<li><b>Rule:</b> At any time <code>now</code>, count events in (now - secs, now]; reject if count &gt;= times.</li>
+<li><b>Characteristics:</b> Fair and smooth; no boundary spike. Requires a timestamp deque (higher cost).</li>
+<li><b>Suitable</b> for:<ul>
+<li>Public HTTP APIs, user operations where fairness is desired</li>
+<li>Critical endpoints (e.g. /login, /register) at path-level</li>
+</ul>
+</li>
+<li><b>Not</b> suitable for:<ul>
+<li>Extremely high-QPS keys with large per-key history where memory/cost is tight (consider approximate buckets)</li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<dl class="section user"><dt>4) TokenBucket (Token bucket)</dt><dd><ul>
+<li><b>Rule</b> (common semantics): Tokens refill at a fixed rate. Each request consumes 1 token. If no token =&gt; reject. In this API, (times, secs) roughly maps to average rate ~= times/secs. Bucket capacity is typically on the same order as <code>times</code> (implementation-defined).</li>
+<li><b>Characteristics:</b> Allows bursts (when tokens accumulated) while limiting long-term average. Very commonly used in production.</li>
+<li><b>Suitable</b> for:<ul>
+<li>Traffic shaping (allow short bursts but control long-term average)</li>
+<li>IM messages / HTTP requests where you want "not too hard, not too soft"</li>
+</ul>
+</li>
+<li><b>Not</b> suitable for:<ul>
+<li>Hard punishment requirement ("once exceeded, must stop for a while"): use Cooldown instead. </li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a1a50515c0ad2e8b7be34026979b7f53ca5b9cca31b21c9c04c3d6f9ecbcc3ffc8"></a>Cooldown</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a1a50515c0ad2e8b7be34026979b7f53ca717b35602ecd0086be5b924568d3a7db"></a>FixedWindow</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a1a50515c0ad2e8b7be34026979b7f53ca6be0e091023afd88f3791b011cc5af64"></a>SlidingWindow</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a1a50515c0ad2e8b7be34026979b7f53cab117e59052b000439e30df5378b615e0"></a>TokenBucket</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

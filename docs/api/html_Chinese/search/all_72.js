@@ -1,6 +1,8 @@
 var searchData=
 [
   ['randomutil',['RandomUtil',['../classstt_1_1data_1_1RandomUtil.html',1,'stt::data']]],
+  ['ratelimittype',['RateLimitType',['../namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c',1,'stt::security']]],
+  ['ratestate',['RateState',['../structstt_1_1security_1_1RateState.html',1,'stt::security']]],
   ['read',['read',['../classstt_1_1file_1_1File.html#a860b8315f11150b659a2b272c2420516',1,'stt::file::File::read(std::string &amp;data, const int &amp;linePos, const int &amp;num)'],['../classstt_1_1file_1_1File.html#adbaabcd58ae0db72a4941acf9381066f',1,'stt::file::File::read(char *data, const size_t &amp;pos, const size_t &amp;size)']]],
   ['readall',['readAll',['../classstt_1_1file_1_1File.html#af883f1eb8ca2ac80ec658a5a02b09feb',1,'stt::file::File']]],
   ['readallc',['readAllC',['../classstt_1_1file_1_1File.html#a8f2ef283347652a44c15e273cad2950b',1,'stt::file::File']]],
@@ -13,7 +15,9 @@ var searchData=
   ['recvdatabylength',['recvDataByLength',['../classstt_1_1network_1_1TcpFDHandler.html#a4d12a36453b01e460373633ad9b09ed7',1,'stt::network::TcpFDHandler::recvDataByLength(std::string &amp;data, const uint64_t &amp;length, const int &amp;sec=2)'],['../classstt_1_1network_1_1TcpFDHandler.html#a1bf6a148bd15cc6abaa3c6fcae98641e',1,'stt::network::TcpFDHandler::recvDataByLength(char *data, const uint64_t &amp;length, const int &amp;sec=2)']]],
   ['redrawtls',['redrawTLS',['../classstt_1_1network_1_1TcpServer.html#a39d8778843209ebac1af10aae6ba1634',1,'stt::network::TcpServer']]],
   ['renew',['renew',['../classstt_1_1system_1_1HBSystem.html#a645bb7b07ae96a735f8564c0dc92a165',1,'stt::system::HBSystem']]],
-  ['request',['request',['../structstt_1_1security_1_1IPInformation.html#ad25a4cdd6d4c844e8cdc3bb4b8486d7b',1,'stt::security::IPInformation']]],
+  ['requestrate',['requestRate',['../structstt_1_1security_1_1ConnectionState.html#a235594ec24ebaa125a8409561869f21f',1,'stt::security::ConnectionState']]],
+  ['requestsecs',['requestSecs',['../classstt_1_1network_1_1TcpServer.html#aae46831563ecec1dd25306ac3eec78ad',1,'stt::network::TcpServer']]],
+  ['requesttimes',['requestTimes',['../classstt_1_1network_1_1TcpServer.html#ae809e4044a03a89ead5535c42e0d6162',1,'stt::network::TcpServer']]],
   ['resetctx',['resetCTX',['../classstt_1_1network_1_1TcpClient.html#ab4f4257567d6aaeebd07225263409445',1,'stt::network::TcpClient']]],
   ['response',['response',['../structstt_1_1network_1_1WebSocketFDInformation.html#a29b72edd9475c8c94c91affb5bfc7ad1',1,'stt::network::WebSocketFDInformation']]],
   ['ret',['ret',['../structstt_1_1network_1_1WorkerMessage.html#ac7b55b9614c33f6a53eb38a947d0d2ba',1,'stt::network::WorkerMessage']]]

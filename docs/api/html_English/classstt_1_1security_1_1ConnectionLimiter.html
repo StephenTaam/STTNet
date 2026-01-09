@@ -95,36 +95,122 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p>Limit the class of connections from the same IP.  
+<p>Unified connection &amp; request security gate (IP-level + fd-level, multi-strategy limiting + blacklist).  
  <a href="classstt_1_1security_1_1ConnectionLimiter.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sttnet__English_8h_source.html">sttnet_English.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1911e5fd7f1fb3ebf3a536ac3e252a8f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a1911e5fd7f1fb3ebf3a536ac3e252a8f">ConnectionLimiter</a> (const int &amp;connectionLimit=20, const int &amp;connectionRateLimit=6, const int &amp;requestRate=40, const int &amp;connectionTimeout=60)</td></tr>
-<tr class="memdesc:a1911e5fd7f1fb3ebf3a536ac3e252a8f"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html" title="Limit the class of connections from the same IP. ">ConnectionLimiter</a> constructor.  <a href="#a1911e5fd7f1fb3ebf3a536ac3e252a8f">More...</a><br/></td></tr>
-<tr class="separator:a1911e5fd7f1fb3ebf3a536ac3e252a8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa50a514e93b4ceeac358d8c84da22074"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#aa50a514e93b4ceeac358d8c84da22074">allowConnect</a> (const std::string &amp;ip)</td></tr>
-<tr class="memdesc:aa50a514e93b4ceeac358d8c84da22074"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine whether to allow a certain IP connection based on the number of connections and speed.  <a href="#aa50a514e93b4ceeac358d8c84da22074">More...</a><br/></td></tr>
-<tr class="separator:aa50a514e93b4ceeac358d8c84da22074"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6008f2929064b28f717af5bb5d446b8d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a6008f2929064b28f717af5bb5d446b8d">clearIP</a> (const std::string &amp;ip)</td></tr>
-<tr class="memdesc:a6008f2929064b28f717af5bb5d446b8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear the number of connections to a certain IP address.  <a href="#a6008f2929064b28f717af5bb5d446b8d">More...</a><br/></td></tr>
-<tr class="separator:a6008f2929064b28f717af5bb5d446b8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa641c5181922572d90a8ee3a49f30aa9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#aa641c5181922572d90a8ee3a49f30aa9">allowRequest</a> (const std::string &amp;ip, const std::string_view &amp;path=&quot;//&quot;)</td></tr>
-<tr class="memdesc:aa641c5181922572d90a8ee3a49f30aa9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allow requests based on request rate.  <a href="#aa641c5181922572d90a8ee3a49f30aa9">More...</a><br/></td></tr>
-<tr class="separator:aa641c5181922572d90a8ee3a49f30aa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a983d5a158edf360359cbe7a3a0f8e34e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a983d5a158edf360359cbe7a3a0f8e34e">connectionDetect</a> (const std::string &amp;ip)</td></tr>
-<tr class="memdesc:a983d5a158edf360359cbe7a3a0f8e34e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine whether a certain IP connection is a zombie connection.  <a href="#a983d5a158edf360359cbe7a3a0f8e34e">More...</a><br/></td></tr>
-<tr class="separator:a983d5a158edf360359cbe7a3a0f8e34e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56573d9a58787ed48e873cf21c746e89"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a56573d9a58787ed48e873cf21c746e89">ConnectionLimiter</a> (const int &amp;maxConn=20, const int &amp;idleTimeout=60)</td></tr>
+<tr class="memdesc:a56573d9a58787ed48e873cf21c746e89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a56573d9a58787ed48e873cf21c746e89">More...</a><br/></td></tr>
+<tr class="separator:a56573d9a58787ed48e873cf21c746e89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9c354300218b12ffca35735a013d7a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#ae9c354300218b12ffca35735a013d7a4">setConnectStrategy</a> (const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;type)</td></tr>
+<tr class="memdesc:ae9c354300218b12ffca35735a013d7a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the strategy used for connection-rate limiting.  <a href="#ae9c354300218b12ffca35735a013d7a4">More...</a><br/></td></tr>
+<tr class="separator:ae9c354300218b12ffca35735a013d7a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21e0362f97ee4492ccfdc5860a2b3be0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a21e0362f97ee4492ccfdc5860a2b3be0">setRequestStrategy</a> (const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;type)</td></tr>
+<tr class="memdesc:a21e0362f97ee4492ccfdc5860a2b3be0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the strategy used for fd-level request limiting.  <a href="#a21e0362f97ee4492ccfdc5860a2b3be0">More...</a><br/></td></tr>
+<tr class="separator:a21e0362f97ee4492ccfdc5860a2b3be0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89dbb769f1f6cf90c233c182fe3e37d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a89dbb769f1f6cf90c233c182fe3e37d0">setPathStrategy</a> (const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;type)</td></tr>
+<tr class="memdesc:a89dbb769f1f6cf90c233c182fe3e37d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the strategy used for path-level extra limiting.  <a href="#a89dbb769f1f6cf90c233c182fe3e37d0">More...</a><br/></td></tr>
+<tr class="separator:a89dbb769f1f6cf90c233c182fe3e37d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdd3f927d82c9a3337e3de33882851fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#abdd3f927d82c9a3337e3de33882851fe">setPathLimit</a> (const std::string &amp;path, const int &amp;times, const int &amp;secs)</td></tr>
+<tr class="memdesc:abdd3f927d82c9a3337e3de33882851fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configure extra rate limits for a specific path (path-level rule).  <a href="#abdd3f927d82c9a3337e3de33882851fe">More...</a><br/></td></tr>
+<tr class="separator:abdd3f927d82c9a3337e3de33882851fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7592517efd375f6b303c71a2753d43f1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">DefenseDecision</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a7592517efd375f6b303c71a2753d43f1">allowConnect</a> (const std::string &amp;ip, const int &amp;fd, const int &amp;times, const int &amp;secs)</td></tr>
+<tr class="memdesc:a7592517efd375f6b303c71a2753d43f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Security decision for a newly accepted connection (IP-level gate).  <a href="#a7592517efd375f6b303c71a2753d43f1">More...</a><br/></td></tr>
+<tr class="separator:a7592517efd375f6b303c71a2753d43f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27d47a3590738d92a426adb8d1b1f136"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">DefenseDecision</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a27d47a3590738d92a426adb8d1b1f136">allowRequest</a> (const std::string &amp;ip, const int &amp;fd, const std::string_view &amp;path, const int &amp;times, const int &amp;secs)</td></tr>
+<tr class="memdesc:a27d47a3590738d92a426adb8d1b1f136"><td class="mdescLeft">&#160;</td><td class="mdescRight">Security decision for a single request on an existing connection.  <a href="#a27d47a3590738d92a426adb8d1b1f136">More...</a><br/></td></tr>
+<tr class="separator:a27d47a3590738d92a426adb8d1b1f136"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab63d6e85a83e95fed038fd4ea49b1be0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#ab63d6e85a83e95fed038fd4ea49b1be0">clearIP</a> (const std::string &amp;ip, const int &amp;fd)</td></tr>
+<tr class="memdesc:ab63d6e85a83e95fed038fd4ea49b1be0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reclaim state for an fd when the connection is closed.  <a href="#ab63d6e85a83e95fed038fd4ea49b1be0">More...</a><br/></td></tr>
+<tr class="separator:ab63d6e85a83e95fed038fd4ea49b1be0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68cadfcc8107f14483ffb4c4df020a60"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a68cadfcc8107f14483ffb4c4df020a60">connectionDetect</a> (const std::string &amp;ip, const int &amp;fd)</td></tr>
+<tr class="memdesc:a68cadfcc8107f14483ffb4c4df020a60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detect and cleanup an idle/zombie connection.  <a href="#a68cadfcc8107f14483ffb4c4df020a60">More...</a><br/></td></tr>
+<tr class="separator:a68cadfcc8107f14483ffb4c4df020a60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Limit the class of connections from the same IP. </p>
-<dl class="section note"><dt>Note</dt><dd>Without locks, synchronization and thread safety are not ensured, and they are ensured at the upper level. </dd>
-<dd>
-Limit the number and speed of connections to the same IP </dd></dl>
+<div class="textblock"><p>Unified connection &amp; request security gate (IP-level + fd-level, multi-strategy limiting + blacklist). </p>
+<p><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html" title="Unified connection &amp; request security gate (IP-level + fd-level, multi-strategy limiting + blacklist)...">ConnectionLimiter</a> is a "Security Gate". All connections and requests must pass through it before business logic runs.</p>
+<p>This class does NOT directly perform side effects (close/send/sleep). Instead, it returns a <a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">DefenseDecision</a> for the caller to enforce. </p>
+<hr/>
+ <h1><a class="anchor" id="design_overview"></a>
+Design Overview</h1>
+<p>Layered defense model:</p>
+<ul>
+<li>IP-level defense:<ul>
+<li>Concurrent connection limit (maxConnections)</li>
+<li>Connection rate limit (connectRate)</li>
+<li>IP risk scoring (badScore)</li>
+<li>Temporary blacklist with TTL (blacklist)</li>
+</ul>
+</li>
+<li>fd-level defense:<ul>
+<li>Per-connection request rate (requestRate)</li>
+<li>Per-path extra limits (pathRate)</li>
+<li>Activity tracking (lastActivity) for zombie detection <hr/>
+ </li>
+</ul>
+</li>
+</ul>
+<h1><a class="anchor" id="defense_decision"></a>
+Decision Semantics</h1>
+<p>allowConnect / allowRequest return DefenseDecision:</p>
+<ul>
+<li>ALLOW (0): proceed</li>
+<li>DROP (1): ignore silently (request stage only)</li>
+<li>CLOSE (2): close immediately (may escalate / ban)</li>
+</ul>
+<dl class="section note"><dt>Note</dt><dd><ul>
+<li>Connect stage usually uses only ALLOW / CLOSE.</li>
+<li>DROP is mainly used in request stage. <hr/>
+ </li>
+</ul>
+</dd></dl>
+<h1><a class="anchor" id="rate_limit"></a>
+Strategies</h1>
+<p>Supported algorithms (see <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a>):</p>
+<ul>
+<li>Cooldown</li>
+<li>FixedWindow</li>
+<li>SlidingWindow</li>
+<li>TokenBucket</li>
+</ul>
+<p>Defaults:</p>
+<ul>
+<li>connectStrategy: Cooldown</li>
+<li>requestStrategy: SlidingWindow</li>
+<li>pathStrategy: SlidingWindow <hr/>
+ </li>
+</ul>
+<h1><a class="anchor" id="thread_safety"></a>
+Thread Safety</h1>
+<dl class="section warning"><dt>Warning</dt><dd>This class is NOT thread-safe by itself. Concurrent access to internal tables (table/pathConfig/blacklist) must be protected externally (e.g. single event-loop thread, or a mutex). <hr/>
+ </dd></dl>
+<h1><a class="anchor" id="lifecycle"></a>
+Lifecycle</h1>
+<ul>
+<li>allowConnect:<ul>
+<li>Decide whether a new connection is allowed</li>
+<li>On ALLOW, register the fd under the IP</li>
+</ul>
+</li>
+<li>allowRequest:<ul>
+<li>Decide whether a request on an existing fd is allowed</li>
+</ul>
+</li>
+<li>clearIP:<ul>
+<li>Called when a connection is closed, to reclaim state and counters</li>
+</ul>
+</li>
+<li>connectionDetect:<ul>
+<li>Detect and cleanup idle/zombie connections (should be called by a timer) </li>
+</ul>
+</li>
+</ul>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a1911e5fd7f1fb3ebf3a536ac3e252a8f"></a>
+<a class="anchor" id="a56573d9a58787ed48e873cf21c746e89"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -135,25 +221,13 @@ Limit the number and speed of connections to the same IP </dd></dl>
           <td class="memname">stt::security::ConnectionLimiter::ConnectionLimiter </td>
           <td>(</td>
           <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>connectionLimit</em> = <code>20</code>, </td>
+          <td class="paramname"><em>maxConn</em> = <code>20</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>connectionRateLimit</em> = <code>6</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>requestRate</em> = <code>40</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>connectionTimeout</em> = <code>60</code>&#160;</td>
+          <td class="paramname"><em>idleTimeout</em> = <code>60</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -168,13 +242,11 @@ Limit the number and speed of connections to the same IP </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html" title="Limit the class of connections from the same IP. ">ConnectionLimiter</a> constructor. </p>
+<p>Constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">connectionLimit</td><td>The maximum number of connections to the same IP address is 20 by default. </td></tr>
-    <tr><td class="paramname">connectionRateLimit</td><td>The maximum number of connections per second for the same IP address, the default is 6 </td></tr>
-    <tr><td class="paramname">requestRate</td><td>The maximum number of requests allowed per second for the same IP address (default is 12) </td></tr>
-    <tr><td class="paramname">connectionTimeout</td><td>The number of seconds a connection is considered a zombie connection if there is no response (in seconds). The default is 60 seconds. -1 means no limit. </td></tr>
+    <tr><td class="paramname">maxConn</td><td>Max concurrent connections allowed per IP (activeConnections cap). </td></tr>
+    <tr><td class="paramname">idleTimeout</td><td>Idle timeout (seconds) used for zombie detection. If &lt; 0, disable. </td></tr>
   </table>
   </dd>
 </dl>
@@ -182,37 +254,12 @@ Limit the number and speed of connections to the same IP </dd></dl>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="aa50a514e93b4ceeac358d8c84da22074"></a>
+<a class="anchor" id="a7592517efd375f6b303c71a2753d43f1"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool stt::security::ConnectionLimiter::allowConnect </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>ip</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Determine whether to allow a certain IP connection based on the number of connections and speed. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">ip</td><td>ip address </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true：Connections from a specific IP address should be allowed. False: Connections from a specific IP address should be denied. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="aa641c5181922572d90a8ee3a49f30aa9"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool stt::security::ConnectionLimiter::allowRequest </td>
+          <td class="memname"><a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">DefenseDecision</a> stt::security::ConnectionLimiter::allowConnect </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>ip</em>, </td>
@@ -220,8 +267,20 @@ Limit the number and speed of connections to the same IP </dd></dl>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>path</em> = <code>&quot;//&quot;</code>&#160;</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>fd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>times</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>secs</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -231,19 +290,92 @@ Limit the number and speed of connections to the same IP </dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p>Allow requests based on request rate. </p>
+<p>Security decision for a newly accepted connection (IP-level gate). </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">ip</td><td>ip address </td></tr>
-    <tr><td class="paramname">path</td><td>path </td></tr>
+    <tr><td class="paramname">ip</td><td>Remote IP address. </td></tr>
+    <tr><td class="paramname">fd</td><td>Newly accepted file descriptor. </td></tr>
+    <tr><td class="paramname">times</td><td>Maximum allowed connection attempts within <code>secs</code>. </td></tr>
+    <tr><td class="paramname">secs</td><td>Connection-rate window size (seconds).</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true：allow false：not allow </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>DefenseDecision<ul>
+<li>ALLOW: connection is allowed and fd will be registered</li>
+<li>CLOSE: reject and caller should close the connection immediately</li>
+</ul>
+</dd></dl>
+<dl class="section note"><dt>Note</dt><dd><ul>
+<li>Connect stage typically does not use DROP.</li>
+<li>If the IP is blacklisted or in a high-risk state, returns CLOSE directly. </li>
+</ul>
+</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a6008f2929064b28f717af5bb5d446b8d"></a>
+<a class="anchor" id="a27d47a3590738d92a426adb8d1b1f136"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">DefenseDecision</a> stt::security::ConnectionLimiter::allowRequest </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>ip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>fd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramname"><em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>times</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>secs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Security decision for a single request on an existing connection. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ip</td><td>Remote IP address. </td></tr>
+    <tr><td class="paramname">fd</td><td>File descriptor associated with the request. </td></tr>
+    <tr><td class="paramname">path</td><td>Request path (used for path-level extra limiting). </td></tr>
+    <tr><td class="paramname">times</td><td>Request-rate limit (max requests within <code>secs</code>). </td></tr>
+    <tr><td class="paramname">secs</td><td>Request-rate window size (seconds).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>DefenseDecision<ul>
+<li>ALLOW: process normally</li>
+<li>DROP: ignore silently (no response)</li>
+<li>CLOSE: close connection </li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab63d6e85a83e95fed038fd4ea49b1be0"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -251,23 +383,39 @@ Limit the number and speed of connections to the same IP </dd></dl>
           <td class="memname">void stt::security::ConnectionLimiter::clearIP </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>ip</em></td><td>)</td>
+          <td class="paramname"><em>ip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>fd</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Clear the number of connections to a certain IP address. </p>
+<p>Reclaim state for an fd when the connection is closed. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">ip</td><td>ip address </td></tr>
+    <tr><td class="paramname">ip</td><td>Remote IP address. </td></tr>
+    <tr><td class="paramname">fd</td><td>Closed file descriptor.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section note"><dt>Note</dt><dd><ul>
+<li>Must be called after close(fd).</li>
+<li>Keeps activeConnections and internal state consistent. </li>
+</ul>
+</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a983d5a158edf360359cbe7a3a0f8e34e"></a>
+<a class="anchor" id="a68cadfcc8107f14483ffb4c4df020a60"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -275,20 +423,161 @@ Limit the number and speed of connections to the same IP </dd></dl>
           <td class="memname">bool stt::security::ConnectionLimiter::connectionDetect </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>ip</em></td><td>)</td>
+          <td class="paramname"><em>ip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>fd</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Detect and cleanup an idle/zombie connection. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ip</td><td>Remote IP address. </td></tr>
+    <tr><td class="paramname">fd</td><td>File descriptor to check.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true The connection is considered zombie and has been cleaned up. </dd>
+<dd>
+false Not timed out or not found.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd><ul>
+<li>"Activity" means <a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a7592517efd375f6b303c71a2753d43f1" title="Security decision for a newly accepted connection (IP-level gate). ">allowConnect()</a>/allowRequest() updates lastActivity.</li>
+<li>Prefer calling via a timer instead of scanning hot paths. </li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae9c354300218b12ffca35735a013d7a4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::security::ConnectionLimiter::setConnectStrategy </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Determine whether a certain IP connection is a zombie connection. </p>
+<p>Set the strategy used for connection-rate limiting. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">ip</td><td>IP address </td></tr>
+    <tr><td class="paramname">type</td><td>Strategy type, see <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a>. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true：yes false：no </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Default is <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53ca5b9cca31b21c9c04c3d6f9ecbcc3ffc8">RateLimitType::Cooldown</a>. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="abdd3f927d82c9a3337e3de33882851fe"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::security::ConnectionLimiter::setPathLimit </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>times</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>secs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Configure extra rate limits for a specific path (path-level rule). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>Target path, e.g. "/login", "/register". </td></tr>
+    <tr><td class="paramname">times</td><td>Maximum allowed requests within <code>secs</code>. </td></tr>
+    <tr><td class="paramname">secs</td><td>Window size (seconds).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#abdd3f927d82c9a3337e3de33882851fe" title="Configure extra rate limits for a specific path (path-level rule). ">setPathLimit()</a> defines an <b>additional</b> rule:<ul>
+<li>The (times, secs) passed into <a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a27d47a3590738d92a426adb8d1b1f136" title="Security decision for a single request on an existing connection. ">allowRequest()</a> is still applied first as the connection/IP-level rule.</li>
+<li>If <code>path</code> matches a configured rule, the path-level rule is evaluated next.</li>
+<li>Relationship is AND: any layer failing results in rejection. </li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a89dbb769f1f6cf90c233c182fe3e37d0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::security::ConnectionLimiter::setPathStrategy </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the strategy used for path-level extra limiting. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>Strategy type, see <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>Default is <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53ca6be0e091023afd88f3791b011cc5af64">RateLimitType::SlidingWindow</a>. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a21e0362f97ee4492ccfdc5860a2b3be0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::security::ConnectionLimiter::setRequestStrategy </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the strategy used for fd-level request limiting. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>Strategy type, see <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>Default is <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53ca6be0e091023afd88f3791b011cc5af64">RateLimitType::SlidingWindow</a>. </dd></dl>
 
 </div>
 </div>

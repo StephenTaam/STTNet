@@ -3961,7 +3961,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             {
 
             if(this->security_open)
-                connectionLimiter.clearIP(clientfd[ii].ip);
+                connectionLimiter.clearIP(clientfd[ii].ip,ii);
             //auto jj=tlsfd.find(ii.first);
 
             if(clientfd[ii].ssl!=nullptr)//这个套接字启用了tls
@@ -3995,25 +3995,39 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         //unique_lock<mutex> lock2(lc1);
         //unique_lock<mutex> lock1(ltl1);
         //auto ii=clientfd.find(fd);
+        
         if(fd>=maxFD||clientfd[fd].fd==-1)
         {
+            
             return false;
         }
         else
         {
+            
             if(this->security_open)
-                connectionLimiter.clearIP(clientfd[fd].ip);
+                connectionLimiter.clearIP(clientfd[fd].ip,clientfd[fd].fd);
+            
             //auto jj=tlsfd.find(fd);
+            
             if(clientfd[fd].ssl!=nullptr)
             {
-                SSL_shutdown(clientfd[fd].ssl);
+                if(clientfd[fd].tls_state != TLSState::HANDSHAKING)
+                {
+                    SSL_shutdown(clientfd[fd].ssl);
+                }
                 SSL_free(clientfd[fd].ssl);
             }
+            
             ::close(clientfd[fd].fd);
+            
             clientfd[fd].fd=-1;
+            
             delete[] clientfd[fd].buffer;
+            
             clientfd[fd].pendindQueue= std::queue<std::any>();
+            
         }
+        
         return true;
     }
     chrono::high_resolution_clock::time_point start;
@@ -4052,6 +4066,20 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             ev.data.fd = hbTimerFD;
             ev.events  = EPOLLIN;
             epoll_ctl(epollFD, EPOLL_CTL_ADD, hbTimerFD, &ev);
+        }
+        int securityTimerFD=-1;
+        if(this->security_open)//加入信息安全的时间事件
+        {
+            securityTimerFD = timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
+            itimerspec its{};
+            its.it_interval.tv_sec = this->checkFrequency;   
+            its.it_value.tv_sec    = this->checkFrequency;   
+            timerfd_settime(securityTimerFD, 0, &its, nullptr);
+            //丢进epoll
+            epoll_event ev;
+            ev.data.fd = securityTimerFD;
+            ev.events  = EPOLLIN;
+            epoll_ctl(epollFD, EPOLL_CTL_ADD, securityTimerFD, &ev);
         }
 
 
@@ -4142,8 +4170,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             
                             if(this->security_open)
                             {
-                            if(!connectionLimiter.allowConnect(ip))
-                            {
+                                int ret=connectionLimiter.allowConnect(ip,cfd,connectionTimes,connectionSecs);
+                                if(ret==stt::security::DefenseDecision::CLOSE)
+                                {
                                 ::close(cfd);
                                 if(stt::system::ServerSetting::logfile!=nullptr)
                                 {
@@ -4153,7 +4182,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                             stt::system::ServerSetting::logfile->writeLog("tcp server epoll:fd="+to_string(cfd)+" ip="+ip+" this connection has been closed because this ip has reached connection num's or rate's limit");
                                 }
                                 continue;
-                            }
+                                }
                             }
                             int flags=fcntl(cfd,F_GETFL,0);
                             if(flags==-1)
@@ -4241,11 +4270,40 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             }
                         }                                                
                     }
-                    else if(evs[ii].data.fd==hbTimerFD)//时间事件
+                    else if(evs[ii].data.fd==hbTimerFD)//websocket时间事件
                     {
                         uint64_t exp;
                         read(hbTimerFD, &exp, sizeof(exp)); // 必须读，清事件
                         handleHeartbeat(); 
+                    }
+                    else if(evs[ii].data.fd==securityTimerFD)//信息安全时间事件
+                    {
+                       
+                        uint64_t exp;
+                        read(securityTimerFD, &exp, sizeof(exp)); // 必须读，清事件
+                        //遍历判断所有
+                        for(int i=0;i<maxFD;i++)
+                        {
+                            if(clientfd[i].fd!=-1)
+                            {
+                                if(this->connectionLimiter.connectionDetect(clientfd[i].ip,i))//超时 是僵尸连接
+                                {
+                                    
+                                    if(stt::system::ServerSetting::logfile!=nullptr)
+                                    {
+                                        if(stt::system::ServerSetting::language=="Chinese")
+                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll:监测到僵尸连接：fd= "+to_string(i)+" 已关闭");
+                                        else
+                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll : has detected a zoombie connection : fd= "+to_string(i)+" and it has been closed");
+                                    }
+                                    close(i);
+                                    
+                                    
+
+
+                                }
+                            }
+                        }
                     }
                     else if(evs[ii].data.fd==workerEventFD)//worker事件
                     {
@@ -4323,9 +4381,15 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                         // 真错误
                                         //printf("SSL_accept error: %s\n", ERR_error_string(ERR_get_error(), nullptr));
     	                                //printf("SSL_accept returned %d, SSL error code: %d\n", ret, SSL_get_error(ssl, ret));
-                                        SSL_free(clientfd[evs[ii].data.fd].ssl);
-                                        ::close(evs[ii].data.fd);
-                                        
+                                        //SSL_free(clientfd[evs[ii].data.fd].ssl);
+                                        close(evs[ii].data.fd);
+                                        if(stt::system::ServerSetting::logfile!=nullptr)
+                                        {
+                                            if(stt::system::ServerSetting::language=="Chinese")
+                                                stt::system::ServerSetting::logfile->writeLog("tcp server epoll:TLS握手：fd= "+to_string(evs[ii].data.fd)+"错误");
+                                            else
+                                                stt::system::ServerSetting::logfile->writeLog("tcp server epoll: received tls handshake data: fd= "+to_string(evs[ii].data.fd)+" fail");
+                                        }
                                     }
                                 }
                                 continue;
@@ -4614,21 +4678,6 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         if(clientfd[fd].fd!=-1)//can not find fd information,we need to writedown this error and close this fd
         {
             
-                if(security_open)
-                {
-                    if(!connectionLimiter.allowRequest(clientfd[fd].ip))
-                    {
-                        TcpServer::close(fd);
-                        if(stt::system::ServerSetting::logfile!=nullptr)
-                        {
-                            if(stt::system::ServerSetting::language=="Chinese")
-                                stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"请求太频繁，已经关闭连接");
-                            else
-                                stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"request are too frequent,now has closed this connection");
-                        }
-                        return;
-                    }
-                }
                 if(stt::system::ServerSetting::logfile!=nullptr)
                 {
                     if(stt::system::ServerSetting::language=="Chinese")
@@ -4728,7 +4777,36 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
                     return;
                 }
-                
+                if(security_open)
+                {
+                    int ret=connectionLimiter.allowRequest(clientfd[fd].ip,fd,std::any_cast<const std::string&>(inff.ctx["key"]),requestTimes,requestSecs);
+                    if(ret!=stt::security::ALLOW)
+                    {
+                        securitySendBackFun(k,inff);
+                        if(ret==stt::security::CLOSE)
+                        {
+                            TcpServer::close(fd);
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"请求太频繁，已经关闭连接");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"request are too frequent,now has closed this connection");
+                            }
+                        }
+                        else
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"请求太频繁，已经忽略连接");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"request are too frequent,now has ignored this connection");
+                            }
+                        }
+                        return;
+                    }
+                }
                 //遍历任务
                 auto ii=solveFun.find(std::any_cast<const std::string&>(inff.ctx["key"]));
                
@@ -4938,6 +5016,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     */
     bool stt::network::HttpServerFDHandler::sendBack(const string &data,const string &header,const string &code,const string &header1)
     {
+
         string result="HTTP/1.1 "+code+"\r\nContent-Length: "+\
              to_string(data.length())+"\r\n"+\
              header1+\
@@ -4945,8 +5024,10 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
              data;
         
              //cout<<result<<endl;
+        
         if(sendData(result,false)!=result.length())
         {
+        
             return false;
         }
         return true;
@@ -4954,6 +5035,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     
     bool stt::network::HttpServerFDHandler::sendBack(const char *data,const size_t &length,const char *header,const char *code,const char *header1,const size_t &header_length)
     {
+         
         /*
         string ii="HTTP/1.1 "+code+"\r\nContent-Length: "+\
              to_string(length)+"\r\n"+\
@@ -4993,6 +5075,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
 
         if(times==1)
         {
+            
             //unsigned long long p_buffer_now_backup=TcpInf.p_buffer_now;
             int ret=1;
             while(ret>0&&buffer_size-TcpInf.p_buffer_now>0)
@@ -5015,8 +5098,10 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
             if(ret<=0)
             {
+                
                 if(ret!=-100)
                     return -1;
+                
             }
             //TcpInf.data=string_view(TcpInf.buffer+p_buffer_now_backup,TcpInf.p_buffer_now);
             TcpInf.data=string_view(TcpInf.buffer,TcpInf.p_buffer_now);
@@ -5302,21 +5387,6 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         if(clientfd[fd].fd!=-1)//can not find fd information,we need to writedown this error and close this fd
         {
             
-                if(security_open)
-                {
-                    if(!connectionLimiter.allowRequest(clientfd[fd].ip))
-                    {
-                        TcpServer::close(fd);
-                        if(stt::system::ServerSetting::logfile!=nullptr)
-                        {
-                            if(stt::system::ServerSetting::language=="Chinese")
-                                stt::system::ServerSetting::logfile->writeLog("http server : fd="+to_string(fd)+"请求太频繁，已经关闭连接");
-                            else
-                                stt::system::ServerSetting::logfile->writeLog("http server : fd="+to_string(fd)+"request are too frequent,now has closed this connection");
-                        }
-                        return;
-                    }
-                }
                 if(stt::system::ServerSetting::logfile!=nullptr)
                 {
                     if(stt::system::ServerSetting::language=="Chinese")
@@ -5424,7 +5494,36 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
                     return;
                 }
-                
+                if(security_open)
+                {
+                    int ret=connectionLimiter.allowRequest(clientfd[fd].ip,fd,std::any_cast<const std::string&>(inff.ctx["key"]),requestTimes,requestSecs);
+                    if(ret!=stt::security::ALLOW)
+                    {
+                        securitySendBackFun(k,inff);
+                        if(ret==stt::security::CLOSE)
+                        {
+                            TcpServer::close(fd);
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"请求太频繁，已经关闭连接");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"request are too frequent,now has closed this connection");
+                            }
+                        }
+                        else
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"请求太频繁，已经忽略连接");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"request are too frequent,now has ignored this connection");
+                            }
+                        }
+                        return;
+                    }
+                }
                 //遍历任务
                 
                 auto ii=solveFun.find(std::any_cast<const std::string&>(inff.ctx["key"]));
@@ -5804,21 +5903,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             auto jj=wbclientfd.find(fd);
             if(jj==wbclientfd.end())//没有进行wb握手
             {
-                if(security_open)
-                {
-                    if(!connectionLimiter.allowRequest(clientfd[fd].ip))
-                    {
-                        TcpServer::close(fd);
-                        if(stt::system::ServerSetting::logfile!=nullptr)
-                        {
-                            if(stt::system::ServerSetting::language=="Chinese")
-                                stt::system::ServerSetting::logfile->writeLog("websocket server : fd="+to_string(fd)+"请求太频繁，已经关闭连接");
-                            else
-                                stt::system::ServerSetting::logfile->writeLog("websocket server : fd="+to_string(fd)+"request are too frequent,now has closed this connection");
-                        }
-                        return;
-                    }
-                }
+                
                 HttpServerFDHandler k;
                 k.setFD(fd,clientfd[fd].ssl,unblock);
                 //k1.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
@@ -5870,6 +5955,36 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     winf.locPara=HttpInf.locPara;
                     winf.header=HttpInf.header;
                     //cout<<winf.header<<endl;
+                    if(security_open)
+                    {
+                        int ret=connectionLimiter.allowRequest(clientfd[fd].ip,fd,HttpInf.loc,requestTimes,requestSecs);
+                        if(ret!=stt::security::ALLOW)
+                        {
+                            //securitySendBackFun(k,inff);
+                            if(ret==stt::security::CLOSE)
+                            {
+                                TcpServer::close(fd);
+                                if(stt::system::ServerSetting::logfile!=nullptr)
+                                {
+                                    if(stt::system::ServerSetting::language=="Chinese")
+                                        stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"请求太频繁，已经关闭连接");
+                                    else
+                                        stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"request are too frequent,now has closed this connection");
+                                }
+                            }
+                            else
+                            {
+                                if(stt::system::ServerSetting::logfile!=nullptr)
+                                {
+                                    if(stt::system::ServerSetting::language=="Chinese")
+                                        stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"请求太频繁，已经忽略连接");
+                                    else
+                                        stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"request are too frequent,now has ignored this connection");
+                                }
+                            }
+                            return;
+                        }
+                    }
                     if(!fcc(winf))//条件不满足
                     {
                         //k.close();
@@ -5937,21 +6052,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
             else
             {
-                if(security_open)
-                {
-                    if(!connectionLimiter.allowRequest(clientfd[fd].ip))
-                    {
-                        closeWithoutLock(fd);
-                        if(stt::system::ServerSetting::logfile!=nullptr)
-                        {
-                            if(stt::system::ServerSetting::language=="Chinese")
-                                stt::system::ServerSetting::logfile->writeLog("websocket server : fd="+to_string(fd)+"请求太频繁，已经关闭连接");
-                            else
-                                stt::system::ServerSetting::logfile->writeLog("websocket server : fd="+to_string(fd)+"request are too frequent,now has closed this connection");
-                        }
-                        return;
-                    }
-                }
+                
                 //lock.unlock();
                 WebSocketServerFDHandler k;
                 WebSocketFDInformation inf;
@@ -6123,7 +6224,36 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
                     return;
                 }
-                
+                if(security_open)
+                {
+                    int ret=connectionLimiter.allowRequest(clientfd[fd].ip,fd,std::any_cast<const std::string&>(inff.ctx["key"]),requestTimes,requestSecs);
+                    if(ret!=stt::security::ALLOW)
+                    {
+                        securitySendBackFun(k,inff);
+                        if(ret==stt::security::CLOSE)
+                        {
+                            TcpServer::close(fd);
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"请求太频繁，已经关闭连接");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"request are too frequent,now has closed this connection");
+                            }
+                        }
+                        else
+                        {
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"请求太频繁，已经忽略连接");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"request are too frequent,now has ignored this connection");
+                            }
+                        }
+                        return;
+                    }
+                }
                 //遍历任务
                 
                 auto ii=solveFun.find(std::any_cast<const std::string&>(inff.ctx["key"]));
@@ -8661,145 +8791,315 @@ stt::system::HBSystem::~HBSystem()
             cerr<<"close shared memory failed"<<endl;
     }
 }
-inline bool stt::security::ConnectionLimiter::slideAllow(SlidingWindow &win,const std::chrono::steady_clock::time_point &now,int rate )
+bool stt::security::ConnectionLimiter::allow(RateState &st,const RateLimitType &type,const int &times,const int &secs,const std::chrono::steady_clock::time_point &now)
 {
     using namespace std::chrono;
 
-    if(rate <= 0) return true;
+    if (times <= 0 || secs <= 0)
+        return true;
 
-    auto interval = nanoseconds(1'000'000'000 / rate);
+    auto window = seconds(secs);
 
-    // 超过一个窗口，重置
-    if(now - win.lastTime >= seconds(1))
+    switch (type)
     {
-        win.num = 0;
-        win.lastTime = now;
-    }
+    case RateLimitType::Cooldown:
+        if (st.lastTime.time_since_epoch().count() == 0)
+            st.lastTime = now;
 
-    // 太快
-    if(now - win.lastTime < interval && win.num >= rate)
-    {
-        return false;
-    }
-
-    win.num++;
-    win.lastTime = now;
-    return true;
-}
-
-bool stt::security::ConnectionLimiter::allowConnect(const std::string &ip)
-{
-    using namespace std::chrono;
-    auto now = steady_clock::now();
-
-    std::lock_guard<std::mutex> guard(lock_table);
-    auto it = connectionTable.find(ip);
-
-    // 第一次连接
-    if(it == connectionTable.end())
-    {
-        IPInformation info;
-
-        info.connection.num = 1;
-        info.connection.lastTime = now;
-        info.connection.limit = connectionLimit;
-
-        info.request.num = 0;
-        info.request.lastTime = now;
-        info.request.limit = requestRate;
-
-        // 初始化 path 限流
+        if (now - st.lastTime >= window)
         {
-            std::lock_guard<std::mutex> pguard(lock_pathlim);
-            for(auto &pl : pathLimit)
-            {
-                SlidingWindow sw;
-                sw.num = 0;
-                sw.lastTime = now;
-                sw.limit = pl.pathRate;
-                info.pathRequest.emplace(pl.path, sw);
-            }
+            st.counter = 0;
+            st.lastTime = now;
         }
 
-        connectionTable.emplace(ip, std::move(info));
+        if (st.counter >= times)
+        {
+            st.violations++;
+            return false;
+        }
+
+        st.counter++;
+        st.lastTime = now;
+        return true;
+
+    case RateLimitType::FixedWindow:
+        if (st.lastTime.time_since_epoch().count() == 0)
+            st.lastTime = now;
+
+        if (now - st.lastTime >= window)
+        {
+            st.counter = 0;
+            st.lastTime = now;
+        }
+
+        if (st.counter >= times)
+        {
+            st.violations++;
+            return false;
+        }
+
+        st.counter++;
+        return true;
+
+    case RateLimitType::SlidingWindow:
+        while (!st.history.empty() &&
+               now - st.history.front() >= window)
+            st.history.pop_front();
+
+        if ((int)st.history.size() >= times)
+        {
+            st.violations++;
+            return false;
+        }
+
+        st.history.push_back(now);
+        return true;
+
+    case RateLimitType::TokenBucket:
+        if (st.lastRefill.time_since_epoch().count() == 0)
+        {
+            st.tokens = times;
+            st.lastRefill = now;
+        }
+
+        double dt =
+            std::chrono::duration_cast<std::chrono::duration<double>>(
+                now - st.lastRefill).count();
+
+        st.tokens = std::min<double>(
+            times,
+            st.tokens + dt * (double(times) / secs));
+
+        st.lastRefill = now;
+
+        if (st.tokens < 1.0)
+        {
+            st.violations++;
+            return false;
+        }
+
+        st.tokens -= 1.0;
         return true;
     }
 
-    IPInformation &info = it->second;
-
-    // 并发连接数限制
-    if(info.connection.num >= connectionLimit)
-        return false;
-
-    // 连接速率限制
-    if(!slideAllow(info.connection, now, connectionRateLimit))
-        return false;
-
-    info.connection.num++;
     return true;
 }
-
-void stt::security::ConnectionLimiter::clearIP(const std::string &ip)
+stt::security::DefenseDecision stt::security::ConnectionLimiter::allowConnect(const std::string &ip, const int &fd,const int &times, const int &secs)
 {
-    std::lock_guard<std::mutex> guard(lock_table);
-    auto it = connectionTable.find(ip);
-    if(it != connectionTable.end())
+    auto now = std::chrono::steady_clock::now();
+
+    // ===== 黑名单检查 =====
+    auto bit = blacklist.find(ip);
+    if (bit != blacklist.end())
     {
-        if(it->second.connection.num > 0)
-            it->second.connection.num--;
-    }
-}
-bool stt::security::ConnectionLimiter::allowRequest(const std::string &ip,const std::string_view &path)
-{
-    using namespace std::chrono;
-    auto now = steady_clock::now();
-
-    std::lock_guard<std::mutex> guard(lock_table);
-    auto it = connectionTable.find(ip);
-    if(it == connectionTable.end())
-        return false;
-
-    IPInformation &info = it->second;
-
-    //  IP 级请求限流
-    if(!slideAllow(info.request, now, requestRate))
-        return false;
-
-    // path 级请求限流（如果存在该路径限制）
-    auto pit = info.pathRequest.find(std::string(path));
-    if(pit != info.pathRequest.end())
-    {
-        if(!slideAllow(pit->second, now, pit->second.limit))
-            return false;
+        if (now < bit->second)
+        {
+            logSecurity(
+                "【封禁】IP " + ip + " 尝试连接，被拒绝（封禁中）",
+                "[BAN] IP " + ip + " connection rejected (banned)"
+            );
+            return CLOSE;
+        }
+        blacklist.erase(bit); // 解封
     }
 
-    return true;
+    auto &info = table[ip];
+
+    // 并发连接数
+    if (info.activeConnections >= maxConnections)
+    {
+        info.badScore++;
+
+        logSecurity(
+            "【安全】IP " + ip + " 并发连接数超限，已断开",
+            "[SECURITY] IP " + ip + " exceeded max connections"
+        );
+
+        return CLOSE;
+    }
+
+    // 建连速率
+    if (!allow(info.connectRate, connectStrategy, times, secs, now))
+    {
+        info.badScore++;
+
+        logSecurity(
+            "【安全】IP " + ip + " 建连过快，已断开",
+            "[SECURITY] IP " + ip + " connection rate limited"
+        );
+
+        // 升级为黑名单
+        if (info.badScore >= 10)
+        {
+            blacklist[ip] = now + std::chrono::minutes(10);
+
+            logSecurity(
+                "【封禁】IP " + ip + " 多次恶意建连，封禁 10 分钟",
+                "[BAN] IP " + ip + " banned for 10 minutes"
+            );
+        }
+
+        return CLOSE;
+    }
+
+    // ===== 正式登记 fd =====
+    info.activeConnections++;
+    info.conns.emplace(fd, ConnectionState{
+        fd, RateState{}, {}, now
+    });
+
+    return ALLOW;
 }
-bool stt::security::ConnectionLimiter::connectionDetect(const std::string &ip)
+
+
+stt::security::DefenseDecision stt::security::ConnectionLimiter::allowRequest(const std::string &ip,const int &fd,const std::string_view &path,const int &times,const int &secs)
 {
-    using namespace std::chrono;
+    auto now = std::chrono::steady_clock::now();
 
-    if(connectionTimeout < 0)
-        return false;
-
-    auto now = steady_clock::now();
-
-    std::lock_guard<std::mutex> guard(lock_table);
-    auto it = connectionTable.find(ip);
-    if(it == connectionTable.end())
-        return false;
+    auto it = table.find(ip);
+    if (it == table.end())
+        return CLOSE;
 
     auto &info = it->second;
 
-    auto idle =
-        duration_cast<seconds>(now - info.connection.lastTime).count();
+    // 黑名单检查
+    auto bit = blacklist.find(ip);
+    if (bit != blacklist.end() && now < bit->second)
+        return CLOSE;
 
-    if(idle > connectionTimeout)
+    auto itc = info.conns.find(fd);
+    if (itc == info.conns.end())
+        return CLOSE;
+
+    auto &conn = itc->second;
+    conn.lastActivity = now;
+
+    // fd 级限流
+    if (!allow(conn.requestRate, requestStrategy, times, secs, now))
     {
-        // 视为僵尸连接，直接清理
-        connectionTable.erase(it);
+        if (conn.requestRate.violations < 3)
+        {
+            logSecurity(
+                "【限流】IP " + ip + " fd=" + std::to_string(fd) +
+                " 请求过快，已丢弃",
+                "[RATE] IP " + ip + " fd=" + std::to_string(fd) +
+                " request dropped"
+            );
+            return DROP;
+        }
+
+        info.badScore++;
+
+        logSecurity(
+            "【安全】IP " + ip + " fd=" + std::to_string(fd) +
+            " 多次违规，已断开",
+            "[SECURITY] IP " + ip + " fd=" + std::to_string(fd) +
+            " repeated abuse, closed"
+        );
+
+        if (info.badScore >= 15)
+        {
+            blacklist[ip] = now + std::chrono::minutes(30);
+
+            logSecurity(
+                "【封禁】IP " + ip + " 恶意请求，封禁 30 分钟",
+                "[BAN] IP " + ip + " banned for 30 minutes"
+            );
+        }
+
+        return CLOSE;
+    }
+
+    // path 级限流
+    auto pc = pathConfig.find(std::string(path));
+    if (pc != pathConfig.end())
+    {
+        auto &[ptimes, psecs] = pc->second;
+        auto &pst = conn.pathRate[std::string(path)];
+
+        if (!allow(pst, pathStrategy, ptimes, psecs, now))
+        {
+            logSecurity(
+                "【安全】IP " + ip + " fd=" + std::to_string(fd) +
+                " 访问路径 " + std::string(path) + " 过于频繁，已断开",
+                "[SECURITY] IP " + ip + " fd=" + std::to_string(fd) +
+                " path rate limited"
+            );
+
+            info.badScore++;
+            return CLOSE;
+        }
+    }
+
+    return ALLOW;
+}
+void stt::security::ConnectionLimiter::setPathLimit(const std::string &path, const int &times, const int &secs)
+{
+    pathConfig[path] = {times, secs};
+}
+bool stt::security::ConnectionLimiter::connectionDetect(const std::string &ip,const int &fd)
+{
+    if (connectionTimeout < 0)
+        return false;
+
+    auto it = table.find(ip);
+    if (it == table.end())
+        return false;
+
+    auto &info = it->second;
+    auto itc = info.conns.find(fd);
+    if (itc == info.conns.end())
+        return false;
+
+    auto now = std::chrono::steady_clock::now();
+    if (now - itc->second.lastActivity >
+        std::chrono::seconds(connectionTimeout))
+    {
+        info.conns.erase(itc);
+        if (info.activeConnections > 0)
+            info.activeConnections--;
         return true;
     }
 
     return false;
+
+}
+void stt::security::ConnectionLimiter::setConnectStrategy(const RateLimitType &type)
+{
+    connectStrategy = type;
+}
+
+void stt::security::ConnectionLimiter::setRequestStrategy(const RateLimitType &type)
+{
+    requestStrategy = type;
+}
+
+void stt::security::ConnectionLimiter::setPathStrategy(const RateLimitType &type)
+{
+    pathStrategy = type;
+}
+void stt::security::ConnectionLimiter::clearIP(const std::string &ip,const int &fd)
+{
+    auto it = table.find(ip);
+    if (it == table.end())
+        return;
+
+    auto &info = it->second;
+    auto itc = info.conns.find(fd);
+    if (itc == info.conns.end())
+        return;
+
+    info.conns.erase(itc);
+    if (info.activeConnections > 0)
+        info.activeConnections--;
+}
+inline void stt::security::ConnectionLimiter::logSecurity(const std::string &msgCN,const std::string &msgEN)
+{
+    if (stt::system::ServerSetting::logfile != nullptr)
+    {
+        if (stt::system::ServerSetting::language == "Chinese")
+            stt::system::ServerSetting::logfile->writeLog(msgCN);
+        else
+            stt::system::ServerSetting::logfile->writeLog(msgEN);
+    }
 }

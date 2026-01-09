@@ -114,9 +114,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a185f889e5ed5eef1df6b90005e0dd09d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a185f889e5ed5eef1df6b90005e0dd09d">putTask</a> (const std::function&lt; int(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;)&gt; &amp;fun, <a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)</td></tr>
 <tr class="memdesc:a185f889e5ed5eef1df6b90005e0dd09d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Submit a task to the worker thread pool.  <a href="#a185f889e5ed5eef1df6b90005e0dd09d">More...</a><br/></td></tr>
 <tr class="separator:a185f889e5ed5eef1df6b90005e0dd09d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6cb3587af2e54ef8d09463b40d3b0459"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a6cb3587af2e54ef8d09463b40d3b0459">WebSocketServer</a> (const unsigned long long &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a71937d40d41663b3993e626b95a73ec1">maxFD</a>=10000000, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;connectionRateLimit=6, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=256, const int &amp;requestRate=40, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a>=1, const int &amp;connectionTimeout=120)</td></tr>
-<tr class="memdesc:a6cb3587af2e54ef8d09463b40d3b0459"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a6cb3587af2e54ef8d09463b40d3b0459">More...</a><br/></td></tr>
-<tr class="separator:a6cb3587af2e54ef8d09463b40d3b0459"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6692d44d9da1ed7e357991e066feaf9a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a6692d44d9da1ed7e357991e066feaf9a">WebSocketServer</a> (const unsigned long long &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a71937d40d41663b3993e626b95a73ec1">maxFD</a>=1000000, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=256, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=5, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a6e0c1e70071e7f08a449860bcc3011e8">connectionSecs</a>=10, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a60b0ef61057dbda029acef08ed6fed00">connectionTimes</a>=3, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aae46831563ecec1dd25306ac3eec78ad">requestSecs</a>=1, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#ae809e4044a03a89ead5535c42e0d6162">requestTimes</a>=10, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a>=60, const int &amp;connectionTimeout=120)</td></tr>
+<tr class="memdesc:a6692d44d9da1ed7e357991e066feaf9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a6692d44d9da1ed7e357991e066feaf9a">More...</a><br/></td></tr>
+<tr class="separator:a6692d44d9da1ed7e357991e066feaf9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40e0bd0aa58b814e881d7a73f3cca331"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a40e0bd0aa58b814e881d7a73f3cca331">setSecuritySendBackFun</a> (std::function&lt; void(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt; fc)</td></tr>
+<tr class="memdesc:a40e0bd0aa58b814e881d7a73f3cca331"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the callback invoked when an information security policy is violated.  <a href="#a40e0bd0aa58b814e881d7a73f3cca331">More...</a><br/></td></tr>
+<tr class="separator:a40e0bd0aa58b814e881d7a73f3cca331"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92777aa4c04107f235f39f540d6c1bb8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a92777aa4c04107f235f39f540d6c1bb8">setGlobalSolveFunction</a> (std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;)&gt; fc)</td></tr>
 <tr class="memdesc:a92777aa4c04107f235f39f540d6c1bb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the global fallback handler.  <a href="#a92777aa4c04107f235f39f540d6c1bb8">More...</a><br/></td></tr>
 <tr class="separator:a92777aa4c04107f235f39f540d6c1bb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -166,9 +169,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a507cdbb0c5d4dbf128c57ab5f11bafb6 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a507cdbb0c5d4dbf128c57ab5f11bafb6">putTask</a> (const std::function&lt; int(<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1TcpInformation.html">TcpInformation</a> &amp;inf)&gt; &amp;fun, <a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1TcpInformation.html">TcpInformation</a> &amp;inf)</td></tr>
 <tr class="memdesc:a507cdbb0c5d4dbf128c57ab5f11bafb6 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a task to a worker thread pool and have it completed by worker threads.  <a href="#a507cdbb0c5d4dbf128c57ab5f11bafb6">More...</a><br/></td></tr>
 <tr class="separator:a507cdbb0c5d4dbf128c57ab5f11bafb6 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa07f51b712e989d9493e99e1c5a859a0 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aa07f51b712e989d9493e99e1c5a859a0">TcpServer</a> (const unsigned long long &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a71937d40d41663b3993e626b95a73ec1">maxFD</a>=10000, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;connectionRateLimit=6, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=256, const int &amp;requestRate=40, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a>=1, const int &amp;connectionTimeout=60)</td></tr>
-<tr class="memdesc:aa07f51b712e989d9493e99e1c5a859a0 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor, which is enabled by default. Limit the maximum number of connections to an IP address to 20; The fastest connection speed per second for the same IP address is 6.  <a href="#aa07f51b712e989d9493e99e1c5a859a0">More...</a><br/></td></tr>
-<tr class="separator:aa07f51b712e989d9493e99e1c5a859a0 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6290cb76b7e6e80ed541b6fdd475cc3 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ad6290cb76b7e6e80ed541b6fdd475cc3">TcpServer</a> (const unsigned long long &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a71937d40d41663b3993e626b95a73ec1">maxFD</a>=1000000, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=256, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a6e0c1e70071e7f08a449860bcc3011e8">connectionSecs</a>=1, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a60b0ef61057dbda029acef08ed6fed00">connectionTimes</a>=6, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aae46831563ecec1dd25306ac3eec78ad">requestSecs</a>=1, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#ae809e4044a03a89ead5535c42e0d6162">requestTimes</a>=40, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a>=60, const int &amp;connectionTimeout=60)</td></tr>
+<tr class="memdesc:ad6290cb76b7e6e80ed541b6fdd475cc3 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#ad6290cb76b7e6e80ed541b6fdd475cc3">More...</a><br/></td></tr>
+<tr class="separator:ad6290cb76b7e6e80ed541b6fdd475cc3 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd39340be38620b1277d2881a0c8aa34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#acd39340be38620b1277d2881a0c8aa34">startListen</a> (const int &amp;port, const int &amp;threads=8)</td></tr>
 <tr class="memdesc:acd39340be38620b1277d2881a0c8aa34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the TCP server listening program.  <a href="#acd39340be38620b1277d2881a0c8aa34">More...</a><br/></td></tr>
 <tr class="separator:acd39340be38620b1277d2881a0c8aa34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -178,6 +181,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a39d8778843209ebac1af10aae6ba1634 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a39d8778843209ebac1af10aae6ba1634">redrawTLS</a> ()</td></tr>
 <tr class="memdesc:a39d8778843209ebac1af10aae6ba1634 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Revoke TLS encryption, CA certificate, etc.  <a href="#a39d8778843209ebac1af10aae6ba1634">More...</a><br/></td></tr>
 <tr class="separator:a39d8778843209ebac1af10aae6ba1634 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7017299b20ecb55e97aa87a99589d03 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ac7017299b20ecb55e97aa87a99589d03">setSecuritySendBackFun</a> (std::function&lt; void(<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1TcpInformation.html">TcpInformation</a> &amp;inf)&gt; fc)</td></tr>
+<tr class="memdesc:ac7017299b20ecb55e97aa87a99589d03 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the callback invoked when an information security policy is violated.  <a href="#ac7017299b20ecb55e97aa87a99589d03">More...</a><br/></td></tr>
+<tr class="separator:ac7017299b20ecb55e97aa87a99589d03 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3a99e3feaf654596b258455d7427703 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aa3a99e3feaf654596b258455d7427703">setGlobalSolveFunction</a> (std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1TcpInformation.html">TcpInformation</a> &amp;inf)&gt; fc)</td></tr>
 <tr class="memdesc:aa3a99e3feaf654596b258455d7427703 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set global fallback function.  <a href="#aa3a99e3feaf654596b258455d7427703">More...</a><br/></td></tr>
 <tr class="separator:aa3a99e3feaf654596b258455d7427703 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -228,17 +234,25 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a295aa6784cd288fdc9448d6b99d2c212 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e6cde1deb1473010f4c94ef8bb45693 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a></td></tr>
 <tr class="separator:a9e6cde1deb1473010f4c94ef8bb45693 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aedc126014068776e3f9cf5da4b14bb81 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a></td></tr>
-<tr class="separator:aedc126014068776e3f9cf5da4b14bb81 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef3a14d5e4511150dee675ed1c873756 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aef3a14d5e4511150dee675ed1c873756">workerEventFD</a></td></tr>
 <tr class="separator:aef3a14d5e4511150dee675ed1c873756 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9003e1373cc473588c19add76539ac94 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a9003e1373cc473588c19add76539ac94">serverType</a></td></tr>
 <tr class="separator:a9003e1373cc473588c19add76539ac94 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e0c1e70071e7f08a449860bcc3011e8 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a6e0c1e70071e7f08a449860bcc3011e8">connectionSecs</a></td></tr>
+<tr class="separator:a6e0c1e70071e7f08a449860bcc3011e8 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60b0ef61057dbda029acef08ed6fed00 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a60b0ef61057dbda029acef08ed6fed00">connectionTimes</a></td></tr>
+<tr class="separator:a60b0ef61057dbda029acef08ed6fed00 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae46831563ecec1dd25306ac3eec78ad inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aae46831563ecec1dd25306ac3eec78ad">requestSecs</a></td></tr>
+<tr class="separator:aae46831563ecec1dd25306ac3eec78ad inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae809e4044a03a89ead5535c42e0d6162 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ae809e4044a03a89ead5535c42e0d6162">requestTimes</a></td></tr>
+<tr class="separator:ae809e4044a03a89ead5535c42e0d6162 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedc126014068776e3f9cf5da4b14bb81 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a></td></tr>
+<tr class="separator:aedc126014068776e3f9cf5da4b14bb81 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classstt_1_1network_1_1WebSocketServer.html" title="WebSocketServer server operation class. ">WebSocketServer</a> server operation class. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a6cb3587af2e54ef8d09463b40d3b0459"></a>
+<a class="anchor" id="a6692d44d9da1ed7e357991e066feaf9a"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -249,7 +263,13 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname">stt::network::WebSocketServer::WebSocketServer </td>
           <td>(</td>
           <td class="paramtype">const unsigned long long &amp;&#160;</td>
-          <td class="paramname"><em>maxFD</em> = <code>10000000</code>, </td>
+          <td class="paramname"><em>maxFD</em> = <code>1000000</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>buffer_size</em> = <code>256</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -261,31 +281,37 @@ Additional Inherited Members</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>connectionNumLimit</em> = <code>20</code>, </td>
+          <td class="paramname"><em>connectionNumLimit</em> = <code>5</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>connectionRateLimit</em> = <code>6</code>, </td>
+          <td class="paramname"><em>connectionSecs</em> = <code>10</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>buffer_size</em> = <code>256</code>, </td>
+          <td class="paramname"><em>connectionTimes</em> = <code>3</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>requestRate</em> = <code>40</code>, </td>
+          <td class="paramname"><em>requestSecs</em> = <code>1</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>checkFrequency</em> = <code>1</code>, </td>
+          <td class="paramname"><em>requestTimes</em> = <code>10</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>checkFrequency</em> = <code>60</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -307,21 +333,24 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Constructor. </p>
-<dl class="section note"><dt>Note</dt><dd>The security module is enabled by default.<ul>
-<li>Max connections per IP: 20</li>
-<li>Max connection rate per IP: 6 connections per second Enabling security may slightly impact performance. </li>
-</ul>
-</dd></dl>
+<p>By default, allows up to 1,000,000 concurrent connections, allocates a maximum receive buffer of 256 KB per connection, and enables the security module.</p>
+<dl class="section note"><dt>Note</dt><dd>Enabling the security module introduces additional overhead and may impact performance.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">maxFD</td><td>Maximum number of concurrent connections. </td></tr>
-    <tr><td class="paramname">security_open</td><td>Enable or disable the security module. </td></tr>
-    <tr><td class="paramname">connectionNumLimit</td><td>Maximum number of connections per IP. </td></tr>
-    <tr><td class="paramname">connectionRateLimit</td><td>Maximum connection rate per IP per second. </td></tr>
-    <tr><td class="paramname">buffer_size</td><td>Maximum data size per connection (KB). </td></tr>
-    <tr><td class="paramname">requestRate</td><td>Maximum requests per second per connection. </td></tr>
-    <tr><td class="paramname">checkFrequency</td><td>Zombie connection check interval (minutes). </td></tr>
-    <tr><td class="paramname">connectionTimeout</td><td>Idle timeout before considering a connection zombie (seconds). </td></tr>
+    <tr><td class="paramname">maxFD</td><td>Maximum number of connections this server instance can accept. Default: 1,000,000.</td></tr>
+    <tr><td class="paramname">buffer_size</td><td>Maximum amount of data a single connection is allowed to receive, in kilobytes (KB). Default: 256 KB.</td></tr>
+    <tr><td class="paramname">security_open</td><td>Whether to enable the security module.<ul>
+<li>true : enable security checks (default)</li>
+<li>false : disable security checks</li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">connectionNumLimit</td><td>Maximum number of concurrent connections allowed per IP. Default: 5.</td></tr>
+    <tr><td class="paramname">connectionSecs</td><td>Time window (in seconds) for connection rate limiting. Default: 10 seconds.</td></tr>
+    <tr><td class="paramname">connectionTimes</td><td>Maximum number of connection attempts allowed within <code>connectionSecs</code> seconds. Default: 3.</td></tr>
+    <tr><td class="paramname">requestSecs</td><td>Time window (in seconds) for request/message rate limiting. Default: 1 second.</td></tr>
+    <tr><td class="paramname">requestTimes</td><td>Maximum number of requests/messages allowed within <code>requestSecs</code> seconds. Default: 10.</td></tr>
+    <tr><td class="paramname">checkFrequency</td><td>Frequency (in seconds) for checking zombie/idle connections. -1 disables zombie connection detection. Default: 60 seconds.</td></tr>
+    <tr><td class="paramname">connectionTimeout</td><td>If a connection has no activity for this many seconds, it is considered a zombie connection. -1 means no timeout (infinite). Default: 120 seconds. </td></tr>
   </table>
   </dd>
 </dl>
@@ -800,6 +829,46 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="a40e0bd0aa58b814e881d7a73f3cca331"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::network::WebSocketServer::setSecuritySendBackFun </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; void(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt;&#160;</td>
+          <td class="paramname"><em>fc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the callback invoked when an information security policy is violated. </p>
+<p>This callback is executed when a WebSocket client violates a security rule (e.g. rate limiting, abnormal message behavior, protocol abuse, etc.). After the callback is executed, the connection will be closed.</p>
+<dl class="section note"><dt>Note</dt><dd>The callback is invoked once per violation. The connection is closed unconditionally after the callback returns.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fc</td><td>A function or function object used to handle the response sent back to the client upon a security violation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Callback parameters:</p>
+<ul>
+<li><a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html" title="WebSocket protocol operation class Only pass in the socket, then use this class for WebSocket operati...">WebSocketServerFDHandler</a> &amp;k Reference to the handler object that operates on the WebSocket connection/socket.</li>
+<li><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html" title="Structure to save client WS/WSS request information. ">WebSocketFDInformation</a> &amp;inf Client connection information, including buffered data, processing progress, and WebSocket state machine context.</li>
+</ul>
+<dl class="section note"><dt>Note</dt><dd>The callback does not return a value. The connection will be closed regardless of the callback outcome. </dd></dl>
 
 </div>
 </div>

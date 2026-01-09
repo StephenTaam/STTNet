@@ -140,6 +140,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <code>#include &lt;charconv&gt;</code><br/>
 <code>#include &lt;any&gt;</code><br/>
 <code>#include &lt;sys/eventfd.h&gt;</code><br/>
+<code>#include &lt;sys/timerfd.h&gt;</code><br/>
 </div>
 <p><a href="sttnet_8h_source.html">浏览源代码.</a></p>
 <table class="memberdecls">
@@ -193,17 +194,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1JsonHelper.html">stt::data::JsonHelper</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">json数据操作类  <a href="classstt_1_1data_1_1JsonHelper.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1PathLimit.html">stt::security::PathLimit</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">用于特定路径的限速  <a href="structstt_1_1security_1_1PathLimit.html#details">更多...</a><br/></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1RateState.html">stt::security::RateState</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">单一限流器的运行状态（可复用于多种限流策略）。  <a href="structstt_1_1security_1_1RateState.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1SlidingWindow.html">stt::security::SlidingWindow</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">用于实现滑动窗口限速的结构体  <a href="structstt_1_1security_1_1SlidingWindow.html#details">更多...</a><br/></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1ConnectionState.html">stt::security::ConnectionState</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">单个连接（fd）的安全与限流状态。  <a href="structstt_1_1security_1_1ConnectionState.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1security_1_1IPInformation.html">stt::security::IPInformation</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">记录ip信息的结构体，比如连接数，连接速率等  <a href="structstt_1_1security_1_1IPInformation.html#details">更多...</a><br/></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">单个 IP 的安全状态与连接集合。  <a href="structstt_1_1security_1_1IPInformation.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html">stt::security::ConnectionLimiter</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">限制同一ip连接的类  <a href="classstt_1_1security_1_1ConnectionLimiter.html#details">更多...</a><br/></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">统一的连接与请求安全裁决器（IP 级 + fd 级，多策略限流 + 黑名单）。  <a href="classstt_1_1security_1_1ConnectionLimiter.html#details">更多...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">stt::network::TcpFDHandler</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">tcp协议的套接字操作类  <a href="classstt_1_1network_1_1TcpFDHandler.html#details">更多...</a><br/></td></tr>
@@ -333,6 +334,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 枚举</h2></td></tr>
+<tr class="memitem:a1a50515c0ad2e8b7be34026979b7f53c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">stt::security::RateLimitType</a> { <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53ca5b9cca31b21c9c04c3d6f9ecbcc3ffc8">stt::security::RateLimitType::Cooldown</a>, 
+<a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53ca717b35602ecd0086be5b924568d3a7db">stt::security::RateLimitType::FixedWindow</a>, 
+<a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53ca6be0e091023afd88f3791b011cc5af64">stt::security::RateLimitType::SlidingWindow</a>, 
+<a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53cab117e59052b000439e30df5378b615e0">stt::security::RateLimitType::TokenBucket</a>
+ }</td></tr>
+<tr class="memdesc:a1a50515c0ad2e8b7be34026979b7f53c"><td class="mdescLeft">&#160;</td><td class="mdescRight">限流算法类型（策略）。  <a href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">更多...</a><br/></td></tr>
+<tr class="separator:a1a50515c0ad2e8b7be34026979b7f53c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5e52ee574240b0d41a48d326f6a9d55"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">stt::security::DefenseDecision</a> : int { <a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55a6ff7eb4808b8ec65c795becb219fe4d4">stt::security::ALLOW</a> = 0, 
+<a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55a1db3d4580ff05a5d595a44d40ef4608a">stt::security::DROP</a> = 1, 
+<a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55af5ec719d5b05e95b4839628814b288e8">stt::security::CLOSE</a> = 2
+ }</td></tr>
+<tr class="memdesc:ab5e52ee574240b0d41a48d326f6a9d55"><td class="mdescLeft">&#160;</td><td class="mdescRight">安全裁决结果（由 ConnectionLimiter 返回）。  <a href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">更多...</a><br/></td></tr>
+<tr class="separator:ab5e52ee574240b0d41a48d326f6a9d55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2de10f23ed7aa5e5ca07d6fb2a11eaad"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1network.html#a2de10f23ed7aa5e5ca07d6fb2a11eaad">stt::network::TLSState</a> : uint8_t { <a class="el" href="namespacestt_1_1network.html#a2de10f23ed7aa5e5ca07d6fb2a11eaadab50339a10e1de285ac99d4c3990b8693">stt::network::TLSState::NONE</a> = 0, 
 <a class="el" href="namespacestt_1_1network.html#a2de10f23ed7aa5e5ca07d6fb2a11eaadadab8e39d14f245d48fad05ee46d7be9e">stt::network::TLSState::HANDSHAKING</a>, 
 <a class="el" href="namespacestt_1_1network.html#a2de10f23ed7aa5e5ca07d6fb2a11eaada7640f170af693e00a6c91df543aa2b76">stt::network::TLSState::ESTABLISHED</a>, 

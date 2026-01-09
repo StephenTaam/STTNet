@@ -1,8 +1,8 @@
 /**
 * @mainpage STTNet C++ Framework
 * @author StephenTaam(1356597983@qq.com)
-* @version 0.4.0
-* @date 2025-12-30
+* @version 0.5.0
+* @date 2026-01-09
 */
 #ifndef PUBLIC_H
 #define PUBLIC_H 1
@@ -1731,85 +1731,387 @@ namespace stt
     */
     namespace security
     {
-        
-        /**
-        * @brief 用于特定路径的限速
-        */
-        struct PathLimit
+    /**
+     * @enum RateLimitType
+     * @brief 限流算法类型（策略）。
+     *
+     * 每种策略的“语义”不同，选择时请按业务/攻击模型匹配：
+     *
+     * @par 1) Cooldown（连续触发惩罚 / 冷却限流）
+     * - @b 规则：在 secs 时间内累计达到 times 次后，后续请求全部拒绝，直到“安静”满 secs 后才恢复。
+     * - @b 特性：对持续刷/爆破非常狠；对正常用户的“短时间突发”不友好（可能需要完全停一段时间才能恢复）。
+     * - @b 适用：
+     *   - 建连防爆破（connect）
+     *   - 登录失败次数惩罚（fail-based 可用同思路扩展）
+     *   - 防脚本快速重试
+     * - @b 不适用：
+     *   - 正常会出现突发但希望“自然恢复”的接口（例如页面加载产生的突发 HTTP 请求）
+     *
+     * @par 2) FixedWindow（固定窗口计数）
+     * - @b 规则：以某个窗口起点为基准，每 secs 秒为一个窗口；窗口内最多 times 次，超出拒绝；窗口结束时计数清零。
+     * - @b 特性：实现简单、开销小；存在“窗口边界突刺”（在窗口交界处可能短时间放行较多）。
+     * - @b 适用：
+     *   - 低风险、要求简单的限流
+     *   - 统计口径清晰的“每 N 秒最多 M 次”
+     * - @b 不适用：
+     *   - 对抗性强的场景（容易被边界行为利用）
+     *
+     * @par 3) SlidingWindow（滑动窗口 / 时间戳队列）
+     * - @b 规则：在任意时刻 now，统计 (now-secs, now] 区间内发生的次数；若 >= times 则拒绝。
+     * - @b 特性：比 FixedWindow 更公平、无窗口边界突刺；需要维护时间戳队列（开销略高）。
+     * - @b 适用：
+     *   - 对外 HTTP API、用户操作等希望公平且稳定的限流
+     *   - path 级别的关键接口（如 /login /register）
+     * - @b 不适用：
+     *   - 极高 QPS 且每个 key(times) 很大、又不愿意付出队列内存/维护成本的场景（可用近似桶）
+     *
+     * @par 4) TokenBucket（令牌桶）
+     * - @b 规则（常见语义）：令牌按固定速率补充；每次请求消耗 1 令牌；无令牌则拒绝。
+     *   在本类接口里通过 (times, secs) 表达：平均速率约为 times/secs，桶容量通常与 times 同级（实现可按需要定义）。
+     * - @b 特性：允许突发（桶里有存量时可瞬间放行一批），同时限制长期平均速率；工程上最常用。
+     * - @b 适用：
+     *   - 请求流量整形（允许短突发但控制长期平均）
+     *   - IM 消息、HTTP 请求等“既不想太硬也不想太松”的场景
+     * - @b 不适用：
+     *   - 你想要“打满后必须停一段时间”的强惩罚需求（那是 Cooldown）
+     */
+        enum class RateLimitType 
         {
-            std::string path;
-            int pathRate;
+            Cooldown,      // 连续触发惩罚：达到上限后进入冷却，需要安静 secs 才恢复
+            FixedWindow,   // 固定窗口计数：每 secs 一个窗口，窗口内最多 times 次
+            SlidingWindow, // 滑动窗口：统计最近 secs 内的次数（队列时间戳）
+            TokenBucket    // 令牌桶：允许突发 + 控制长期平均速率（常用于 API/消息）
+        };
+    /**
+ * @struct RateState
+ * @brief 单一限流器的运行状态（可复用于多种限流策略）。
+ *
+ * @details
+ * 该结构用于记录某个限流维度（IP / fd / path 等）的实时状态，
+ * 会被不同限流算法复用：
+ *
+ * - Cooldown / FixedWindow：
+ *   - 使用 counter + lastTime
+ * - SlidingWindow：
+ *   - 使用 history（时间戳队列）
+ * - TokenBucket：
+ *   - 使用 tokens + lastRefill
+ *
+ * @note
+ * - violations 用于记录“被拒绝”的次数，是防御升级（DROP / CLOSE / 封禁）的依据
+ * - RateState 本身不做任何决策，只负责记录状态
+ */
+        struct RateState
+        {
+            // 通用
+            int counter = 0;
+            int violations = 0;   // 新增：触发限流的次数
+            std::chrono::steady_clock::time_point lastTime{};
+
+            // SlidingWindow
+            std::deque<std::chrono::steady_clock::time_point> history;
+
+            // TokenBucket
+            double tokens = 0.0;
+            std::chrono::steady_clock::time_point lastRefill{};
         };
         /**
-        * @brief 用于实现滑动窗口限速的结构体
-        */
-        struct SlidingWindow
+ * @struct ConnectionState
+ * @brief 单个连接（fd）的安全与限流状态。
+ *
+ * @details
+ * 每个成功通过 allowConnect 的 fd 都会拥有一个 ConnectionState，
+ * 用于实现“连接级（fd 级）”防御：
+ *
+ * - requestRate：该连接的整体请求速率限制
+ * - pathRate：该连接在不同 path 下的额外限流状态
+ * - lastActivity：该连接最后一次活动时间（用于僵尸连接检测）
+ *
+ * @note
+ * - 一个 IP 可以对应多个 ConnectionState
+ * - 断连时必须清理对应的 ConnectionState
+ */
+        struct ConnectionState
         {
-            int num;
-            std::chrono::steady_clock::time_point lastTime;
-            int limit;
+            int fd = -1;
+            RateState requestRate;
+            std::unordered_map<std::string, RateState> pathRate;
+            std::chrono::steady_clock::time_point lastActivity{};
         };
         /**
-        * @brief 记录ip信息的结构体，比如连接数，连接速率等
-        */
+ * @struct IPInformation
+ * @brief 单个 IP 的安全状态与连接集合。
+ *
+ * @details
+ * IPInformation 是 ConnectionLimiter 的核心状态单元，
+ * 用于实现“IP 级 + fd 级”的分层防御模型：
+ *
+ * - activeConnections：当前 IP 已建立的并发连接数
+ * - connectRate：IP 级建连速率限制状态
+ * - badScore：IP 风险评分（多次恶意行为会累积）
+ * - conns：该 IP 下所有活动连接（fd -> ConnectionState）
+ *
+ * @par 防御语义
+ * - activeConnections / connectRate：
+ *   - 用于防止建连洪水、爆破
+ * - badScore：
+ *   - 用于升级防御策略（断连 / 临时封禁 IP）
+ *
+ * @note
+ * - IP 的黑名单（封禁时间）通常由 ConnectionLimiter 统一维护
+ * - badScore 可随时间衰减或在封禁后重置
+ */
         struct IPInformation
         {
-            SlidingWindow connection;
-            SlidingWindow request;
-            std::unordered_map<std::string,SlidingWindow> pathRequest;
+            int activeConnections = 0;
+            RateState connectRate;
+            int badScore = 0; //IP 风险评分（用于升级惩罚）
+            std::unordered_map<int, ConnectionState> conns; // fd -> state
         };
-
         /**
-        * @brief 限制同一ip连接的类
-        * @note 不带锁，不确保同步和线程安全，自己在上层确保。
-        * @note 限制同一ip的连接数目和速度
-        */
+ * @enum DefenseDecision
+ * @brief 安全裁决结果（由 ConnectionLimiter 返回）。
+ *
+ * @details
+ * 所有连接 / 请求在进入业务处理前，都会经过 ConnectionLimiter 的判定，
+ * 并返回以下三种裁决之一：
+ *
+ * - ALLOW (0)：
+ *   - 正常通过，继续处理
+ * - DROP (1)：
+ *   - 无视该请求（不回应、不处理）
+ *   - 主要用于 request 阶段的轻度防御
+ * - CLOSE (2)：
+ *   - 立即断开连接
+ *   - 可伴随 IP 风险升级或临时封禁
+ *
+ * @note
+ * - connect 阶段通常只使用 ALLOW / CLOSE
+ * - DROP 主要用于 request 阶段（fd 已存在时）
+ */
+        enum DefenseDecision : int
+        {
+            ALLOW = 0,  // 正常通过
+            DROP  = 1,  // 不回应（丢弃）
+            CLOSE = 2   // 断连（可伴随封 IP）
+        };
+    
+        /**
+ * @class ConnectionLimiter
+ * @brief 统一的连接与请求安全裁决器（IP 级 + fd 级，多策略限流 + 黑名单）。
+ *
+ * @details
+ * ConnectionLimiter 是一个“安全门（Security Gate）”，
+ * 所有连接建立与请求处理在进入业务逻辑前，都必须经过该类的裁决。
+ *
+ * 本类不直接执行业务行为（如 close / send / sleep），
+ * 而是返回一个 @ref DefenseDecision 结果，由外层统一执行。
+ *
+ * ---
+ * @section design_overview 设计概览
+ *
+ * 本类实现的是一个分层防御模型：
+ *
+ * - IP 级防御：
+ *   - 并发连接数限制（maxConnections）
+ *   - 建连速率限制（connectRate）
+ *   - IP 风险评分（badScore）
+ *   - 临时黑名单（blacklist，带 TTL）
+ *
+ * - fd 级防御：
+ *   - 请求速率限制（requestRate）
+ *   - path 级额外限流（pathRate）
+ *   - 连接活动时间记录（lastActivity）
+ *
+ * ---
+ * @section defense_decision 防御裁决语义
+ *
+ * allowConnect / allowRequest 的返回值为 @ref DefenseDecision：
+ *
+ * - ALLOW (0)：
+ *   - 允许继续处理
+ *
+ * - DROP (1)：
+ *   - 无视本次请求（不回应、不处理）
+ *   - 主要用于 request 阶段的轻度防御
+ *
+ * - CLOSE (2)：
+ *   - 立即断开连接
+ *   - 可伴随 IP 风险升级或临时封禁
+ *
+ * @note
+ * - connect 阶段由于 TCP 连接已建立，通常只使用 ALLOW / CLOSE
+ * - DROP 主要用于 request 阶段（fd 已存在时）
+ *
+ * ---
+ * @section rate_limit 策略与限流
+ *
+ * 本类支持多种限流策略（见 @ref RateLimitType）：
+ *
+ * - Cooldown
+ * - FixedWindow
+ * - SlidingWindow
+ * - TokenBucket
+ *
+ * 不同维度使用不同策略：
+ *
+ * - 建连速率：connectStrategy（默认 Cooldown）
+ * - fd 级请求速率：requestStrategy（默认 SlidingWindow）
+ * - path 级请求速率：pathStrategy（默认 SlidingWindow）
+ *
+ * ---
+ * @section thread_safety 线程安全
+ *
+ * @warning
+ * 本类本身不包含锁：
+ * - table / pathConfig / blacklist 的并发安全
+ *   需由上层保证（如事件循环线程、外部互斥锁等）。
+ *
+ * ---
+ * @section lifecycle 生命周期说明
+ *
+ * - allowConnect：
+ *   - 判断 IP 是否允许进入应用层
+ *   - 在 ALLOW 时登记 fd
+ *
+ * - allowRequest：
+ *   - 对已登记 fd 进行请求裁决
+ *
+ * - clearIP：
+ *   - 在连接关闭时调用，回收 fd 与并发计数
+ *
+ * - connectionDetect：
+ *   - 用于检测并清理长时间无活动的僵尸连接
+ */
         class ConnectionLimiter
         {
-        private:
-            int connectionLimit;
-            int connectionRateLimit;
-            int requestRate;
-            int connectionTimeout;
-            std::vector<PathLimit> pathLimit;
-            std::unordered_map<std::string,IPInformation> connectionTable;
-            std::mutex lock_table;
-            std::mutex lock_pathlim;
-            static inline bool slideAllow(SlidingWindow &win,const std::chrono::steady_clock::time_point &now,int rate );// 每秒允许多少次
         public:
-            /**
-            * @brief ConnectionLimiter 的构造函数
-            * @param connectionLimit 同一个ip的最大连接数，默认为20
-            * @param connectionRateLimit 同一ip每秒的连接最大次数，默认为6
-            * @param requestRate 同一个ip一秒内允许的最大请求数量 （默认为12次）
-            * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认60秒 -1为无限制
-            */
-            ConnectionLimiter(const int &connectionLimit=20,const int &connectionRateLimit=6,const int &requestRate=40,const int &connectionTimeout=60):connectionLimit(connectionLimit),connectionRateLimit(connectionRateLimit),requestRate(requestRate),connectionTimeout(connectionTimeout){}
-            /**
-            * @brief 根据连接数和速度判断是否允许某ip的连接
-            * @param ip ip地址
-            * @return true：应当允许某ip的连接 false：应当拒绝某ip的连接
-            */
-            bool allowConnect(const std::string &ip);
-            /**
-            * @brief 把记录某ip的连接数清零
-            * @param ip地址
-            */
-            void clearIP(const std::string &ip);
-            /**
-            * @brief 根据请求速率判断允许请求
-            * @param ip IP地址
-            * @param path 路径
-            * @return true：允许 false：不允许
-            */
-            bool allowRequest(const std::string &ip,const std::string_view &path="//");
-            /**
-            * @brief 判断某ip的连接是否为僵尸连接
-            * @param ip IP地址
-            * @return true：是 false：否
-            */
-            bool connectionDetect(const std::string &ip);
+        /**
+         * @brief 构造函数。
+         *
+         * @param maxConn 同一 IP 允许的最大并发连接数（activeConnections 上限）。
+         * @param idleTimeout 连接僵尸检测超时时间（秒）。若 < 0 表示不做僵尸检测。
+         */
+            ConnectionLimiter(const int& maxConn = 20, const int& idleTimeout = 60) : maxConnections(maxConn),connectionTimeout(idleTimeout){}
+
+            // ========== 策略设置 ==========
+        /**
+         * @brief 设置“连接速率限流”所使用的策略。
+         *
+         * @param type 策略类型，见 @ref RateLimitType 说明。
+         * @note 不调用本函数时，默认策略为 @ref RateLimitType::Cooldown 。
+         */
+            void setConnectStrategy(const RateLimitType &type);
+        /**
+         * @brief 设置“IP 级请求限流”所使用的策略。
+         *
+         * @param type 策略类型，见 @ref RateLimitType 说明。
+         * @note 不调用本函数时，默认策略为 @ref RateLimitType::SlidingWindow 。
+         */
+            void setRequestStrategy(const RateLimitType &type);
+        /**
+         * @brief 设置“path 级请求限流”所使用的策略。
+         *
+         * @param type 策略类型，见 @ref RateLimitType 说明。
+         * @note 不调用本函数时，默认策略为 @ref RateLimitType::SlidingWindow 。
+         */
+            void setPathStrategy(const RateLimitType &type);
+
+            // ========== Path 配置 ==========
+        /**
+         * @brief 设置某个路径的额外限流规则（path 级）。
+         *
+         * @param path 需要额外限流的路径，例如 "/login"、"/register"。
+         * @param times 在 secs 秒内允许的最大请求次数。
+         * @param secs 统计窗口长度（秒）。
+         *
+         * @note setPathLimit 配置的是 @b 额外规则：
+         * - allowRequest 调用时传入的 (times, secs) 仍然会作为 IP 级规则先执行；
+         * - 若 path 命中此配置，则再执行 path 级规则；
+         * - 两者为 AND 关系：任何一层失败即拒绝。
+         */
+            void setPathLimit(const std::string &path, const int &times, const int &secs);
+
+            // ========== 核心判断 ==========
+        /**
+     * @brief 对新建立的连接进行安全裁决（IP 级）。
+     *
+     * @param ip 对端 IP 地址。
+     * @param fd 新 accept 得到的文件描述符。
+     * @param times 在 secs 秒内允许的最大建连次数。
+     * @param secs 建连速率统计窗口（秒）。
+     *
+     * @return DefenseDecision
+     * - ALLOW：允许该连接进入应用层（fd 将被登记）
+     * - CLOSE：拒绝并应立即断开连接
+     *
+     * @note
+     * - connect 阶段通常不使用 DROP
+     * - 若命中黑名单或高风险状态，将直接返回 CLOSE
+     */
+            DefenseDecision allowConnect(const std::string &ip, const int &fd,const int &times, const int &secs);
+        /**
+     * @brief 对已建立连接的一次请求进行安全裁决。
+     *
+     * @param ip 对端 IP 地址。
+     * @param fd 当前请求对应的文件描述符。
+     * @param path 请求路径（用于 path 级限流）。
+     * @param times fd 级请求速率上限。
+     * @param secs 请求速率统计窗口（秒）。
+     *
+     * @return DefenseDecision
+     * - ALLOW：正常处理请求
+     * - DROP：无视本次请求（不回应）
+     * - CLOSE：断开连接
+     */
+            DefenseDecision allowRequest(const std::string &ip,const int &fd,const std::string_view &path,const int &times,const int &secs);
+
+            // ========== 生命周期 ==========
+        /**
+     * @brief 在连接断开时回收对应 fd 的状态。
+     *
+     * @param ip 对端 IP 地址。
+     * @param fd 已关闭的文件描述符。
+     *
+     * @note
+     * - 必须在 close(fd) 后调用
+     * - 用于维护 activeConnections 与内部状态一致性
+     */
+            void clearIP(const std::string &ip,const int &fd);
+        /**
+     * @brief 检测并清理僵尸连接（fd 级）。
+     *
+     * @param ip 对端 IP 地址。
+     * @param fd 待检测的文件描述符。
+     *
+     * @return true  该连接被判定为僵尸并已清理
+     * @return false 未超时或不存在
+     *
+     * @note
+     * - “活动”指 allowConnect / allowRequest 更新 lastActivity
+     * - 建议由外部定时器触发调用，避免热路径扫描
+     */
+            bool connectionDetect(const std::string &ip,const int &fd);
+        private:
+            // 核心判定
+            bool allow(RateState &st,const RateLimitType &type,const int &times,const int &secs,const std::chrono::steady_clock::time_point &now);
+
+        private:
+            int maxConnections;
+            int connectionTimeout;
+
+            RateLimitType connectStrategy = RateLimitType::Cooldown;
+            RateLimitType requestStrategy = RateLimitType::SlidingWindow;
+            RateLimitType pathStrategy    = RateLimitType::SlidingWindow;
+
+            std::unordered_map<std::string, IPInformation> table;
+            std::unordered_map<std::string, std::pair<int,int>> pathConfig;
+            // IP -> 解封时间
+            std::unordered_map<std::string,std::chrono::steady_clock::time_point> blacklist;
+            inline void logSecurity(const std::string &msgCN,const std::string &msgEN);
         };
+
+        
         
     }
 
@@ -2653,12 +2955,18 @@ namespace stt
         //std::unordered_map<int,SSL*> tlsfd;
         //std::mutex ltl1;
         bool security_open;
-        int checkFrequency;
         //bool flag_detect;
         //bool flag_detect_status;
         int workerEventFD;
         int serverType; // 1 tcp 2 http 3 websocket
+        int connectionSecs;
+        int connectionTimes;
+        int requestSecs;
+        int requestTimes;
+        int checkFrequency;
     private:
+        std::function<void(TcpFDHandler &k,TcpInformation &inf)> securitySendBackFun=[](TcpFDHandler &k,TcpInformation &inf)->void
+        {};
         std::function<bool(TcpFDHandler &k,TcpInformation &inf)> globalSolveFun=[](TcpFDHandler &k,TcpInformation &inf)->bool
         {return true;};
         std::unordered_map<std::string,std::vector<std::function<int(TcpFDHandler &k,TcpInformation &inf)>>> solveFun;
@@ -2688,18 +2996,23 @@ namespace stt
         */
         void putTask(const std::function<int(TcpFDHandler &k,TcpInformation &inf)> &fun,TcpFDHandler &k,TcpInformation &inf);
         /**
-        * @brief 构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6
+        * @brief 构造函数，默认是允许最大1000000个连接，每个连接接收缓冲区最大为256kb，启用安全模块。
         * @note 打开安全模块会对性能有影响
-        * @param maxFD 服务对象的最大接受连接数 默认为10000
-        * @param security_open true:开启安全模块 false：关闭安全模块 （默认为开启）
-        * @param connectionNumLimit 同一个ip连接数目的上限
-        * @param connectionRateLimit 同一个ip每秒钟连接数目的上限
+        * @param maxFD 服务对象的最大接受连接数 默认为1000000
         * @param buffer_size 同一个连接允许传输的最大数据量（单位为kb） 默认为256kb
-        * @param requestRate 同一个ip一秒内允许的最大请求数量 （默认为12次）
-        * @param checkFrequency 检查僵尸连接的频率（单位分钟） 默认为1分钟  -1为不做检查
-        * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认60秒 -1为无限制
+        * @param security_open true:开启安全模块 false：关闭安全模块 （默认为开启）
+        * @param connectionNumLimit 同一个ip连接数目的上限（默认20）
+        * @param connectionSecs   连接速率统计窗口长度（单位：秒）（默认1秒）
+        * @param connectionTimes  在 connectionSecs 秒内允许的最大连接次数 （默认6次）
+        * @param requestSecs 请求速率统计窗口长度（单位：秒）（默认1秒）
+        * @param requestTimes 在秒requestSecs内允许的最大请求数量（默认40次）
+        * @param checkFrequency 检查僵尸连接的频率（单位秒钟）  -1为不做检查 （默认为60秒）
+        * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） -1为无限制 （默认60秒）
         */
-        TcpServer(const unsigned long long &maxFD=10000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=256,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):maxFD(maxFD),connectionLimiter(connectionNumLimit,connectionRateLimit,requestRate,connectionTimeout),security_open(security_open),buffer_size(buffer_size*1024),checkFrequency(checkFrequency){serverType=1;}
+        TcpServer(const unsigned long long &maxFD=1000000,const int &buffer_size=256,const bool &security_open=true,
+        const int &connectionNumLimit=20,const int &connectionSecs=1,const int &connectionTimes=6,const int &requestSecs=1,const int &requestTimes=40,
+        const int &checkFrequency=60,const int &connectionTimeout=60):maxFD(maxFD),buffer_size(buffer_size*1024),security_open(security_open),connectionSecs(connectionSecs),connectionTimes(connectionTimes),requestSecs(requestSecs),requestTimes(requestTimes),
+        connectionLimiter(connectionNumLimit,connectionTimeout),checkFrequency(checkFrequency){serverType=1;}
         /**
         * @brief 打开Tcp服务器监听程序
         * @param port 监听的端口
@@ -2738,6 +3051,16 @@ namespace stt
         * @brief 撤销TLS加密，ca证书等
         */
         void redrawTLS();
+        /**
+        * @brief 设置违反信息安全策略时候的返回函数
+        * @note 违反信息安全策略时候的返回函数,调用完就关闭连接
+        * @param key 找到对应回调函数的key
+        * @param fc 一个函数或函数对象，用于收到客户端消息后处理逻辑
+        * -参数：TcpFDHandler &k - 和客户端连接的套接字的操作对象的引用
+        *       TcpInformation &inf - 客户端信息，保存数据，处理进度，状态机信息等
+        * -返回值：true：处理成功 false：处理失败 会关闭连接
+        */
+        void setSecuritySendBackFun(std::function<void(TcpFDHandler &k,TcpInformation &inf)> fc){this->securitySendBackFun=fc;}
         /**
         * @brief 设置全局备用函数
         * @note 找不到对应回调函数的时候会调用全局备用函数
@@ -2792,6 +3115,42 @@ namespace stt
         * @return true：关闭成功 false：关闭失败
         */
         virtual bool close(const int &fd);
+        /**
+         * @brief 设置“连接速率限流”所使用的策略。
+         *
+         * @param type 策略类型，见 @ref RateLimitType 说明。
+         * @note 不调用本函数时，默认策略为 @ref RateLimitType::Cooldown 。
+         */
+        void setConnectStrategy(const stt::security::RateLimitType &type){this->connectionLimiter.setConnectStrategy(type);}
+        /**
+         * @brief 设置“IP 级请求限流”所使用的策略。
+         *
+         * @param type 策略类型，见 @ref RateLimitType 说明。
+         * @note 不调用本函数时，默认策略为 @ref RateLimitType::SlidingWindow 。
+         */
+        void setRequestStrategy(const stt::security::RateLimitType &type){this->connectionLimiter.setRequestStrategy(type);}
+        /**
+         * @brief 设置“path 级请求限流”所使用的策略。
+         * 
+         * @param type 策略类型，见 @ref RateLimitType 说明。
+         * @note 不调用本函数时，默认策略为 @ref RateLimitType::SlidingWindow 。
+         * @note 这个path和parseKeyFun解析出来的key是一个东西
+         */
+        void setPathStrategy(const stt::security::RateLimitType &type){this->connectionLimiter.setPathStrategy(type);}
+        /**
+         * @brief 设置某个路径的额外限流规则（path 级）。
+         *
+         * @note 这个path和parseKeyFun解析出来的key是一个东西
+         * @param path 需要额外限流的路径，例如 "/login"、"/register"。
+         * @param times 在 secs 秒内允许的最大请求次数。
+         * @param secs 统计窗口长度（秒）。
+         *
+         * @note setPathLimit 配置的是 @b 额外规则：
+         * - allowRequest 调用时传入的 (times, secs) 仍然会作为 IP 级规则先执行；
+         * - 若 path 命中此配置，则再执行 path 级规则；
+         * - 两者为 AND 关系：任何一层失败即拒绝。
+         */
+        void setPathLimit(const std::string &path, const int &times, const int &secs){this->connectionLimiter.setPathLimit(path,times,secs);}
     public:
         /**
         * @brief 返回对象的监听状态
@@ -2819,6 +3178,8 @@ namespace stt
     class HttpServer:public TcpServer
     {
     private:
+        std::function<void(HttpServerFDHandler &k,HttpRequestInformation &inf)> securitySendBackFun=[](HttpServerFDHandler &k,HttpRequestInformation &inf)->void
+        {};
         std::function<bool(HttpServerFDHandler &k,HttpRequestInformation &inf)> globalSolveFun=[](HttpServerFDHandler &k,HttpRequestInformation &inf)->bool
         {return k.sendBack("","","404 NOT FOUND");};
         //std::function<bool(HttpServerFDHandler &k,HttpRequestInformation &inf)> globalSolveFun={};
@@ -2848,18 +3209,43 @@ namespace stt
          void putTask(const std::function<int(HttpServerFDHandler &k,HttpRequestInformation &inf)> &fun,HttpServerFDHandler &k,HttpRequestInformation &inf);
          
         /**
-        * @brief 构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6
+        * @brief 构造函数，默认是允许最大1000000个连接，每个连接接收缓冲区最大为256kb，启用安全模块。
         * @note 打开安全模块会对性能有影响
-        * @param maxFD 服务对象的最大接受连接数
-        * @param security_open true:开启安全模块 false：关闭安全模块 （默认为开启）
-        * @param connectionNumLimit 同一个ip连接数目的上限
-        * @param connectionRateLimit 同一个ip每秒钟连接数目的上限
+        * @param maxFD 服务对象的最大接受连接数 默认为1000000
         * @param buffer_size 同一个连接允许传输的最大数据量（单位为kb） 默认为256kb
-        * @param requestRatte 同一个连接一秒内允许的最大请求数量 （默认为12次）
-        * @param checkFrequency 检查僵尸连接的频率（单位分钟） 默认为1分钟  -1为不做检查
-        * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认60秒 -1为无限制
+        * @param security_open true:开启安全模块 false：关闭安全模块 （默认为开启）
+        * @param connectionNumLimit 同一个ip连接数目的上限（默认10）
+        * @param connectionSecs   连接速率统计窗口长度（单位：秒）（默认1秒）
+        * @param connectionTimes  在 connectionSecs 秒内允许的最大连接次数 （默认3次）
+        * @param requestSecs 请求速率统计窗口长度（单位：秒）（默认1秒）
+        * @param requestTimes 在秒requestSecs内允许的最大请求数量（默认20次）
+        * @param checkFrequency 检查僵尸连接的频率（单位：秒）  -1为不做检查 （默认为30秒）
+        * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） -1为无限制 （默认30秒）
         */
-        HttpServer(const unsigned long long &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=256,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=60):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){serverType=2;}
+        HttpServer(const unsigned long long &maxFD=1000000,const int &buffer_size=256,const bool &security_open=true,
+        const int &connectionNumLimit=10,const int &connectionSecs=1,const int &connectionTimes=3,const int &requestSecs=1,const int &requestTimes=20,
+        const int &checkFrequency=30,const int &connectionTimeout=30):TcpServer(
+              maxFD,
+              buffer_size,
+              security_open,
+              connectionNumLimit,
+              connectionSecs,
+              connectionTimes,
+              requestSecs,
+              requestTimes,
+              checkFrequency,
+              connectionTimeout
+          ){serverType=2;}
+        /**
+        * @brief 设置违反信息安全策略时候的返回函数
+        * @note 违反信息安全策略时候的返回函数,调用完就关闭连接
+        * @param key 找到对应回调函数的key
+        * @param fc 一个函数或函数对象，用于收到客户端消息后处理逻辑
+        * -参数：HttpServerFDHandler &k - 和客户端连接的套接字的操作对象的引用
+        *       HttpRequestInformation &inf - 客户端信息，保存数据，处理进度，状态机信息等
+        * -返回值：true：处理成功 false：处理失败 会关闭连接
+        */
+        void setSecuritySendBackFun(std::function<void(HttpServerFDHandler &k,HttpRequestInformation &inf)> fc){this->securitySendBackFun=fc;}
         /**
         * @brief 设置全局备用函数
         * @note 找不到对应回调函数的时候会调用全局备用函数
@@ -2999,7 +3385,8 @@ namespace stt
     {
     private:
         std::unordered_map<int,WebSocketFDInformation> wbclientfd;
-        
+        std::function<void(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> securitySendBackFun=[](WebSocketServerFDHandler &k,WebSocketFDInformation &inf)->void
+        {};
         //std::function<bool(const std::string &msg,WebSocketServer &k,const WebSocketFDInformation &inf)> fc=[](const std::string &message,WebSocketServer &k,const WebSocketFDInformation &inf)->bool
         //{std::cout<<"收到: "<<message<<std::endl;return true;};
         std::function<bool(WebSocketFDInformation &k)> fcc=[](WebSocketFDInformation &k)
@@ -3041,18 +3428,43 @@ namespace stt
         */
          void putTask(const std::function<int(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> &fun,WebSocketServerFDHandler &k,WebSocketFDInformation &inf);
         /**
-        * @brief 构造函数，默认是启用安全模块。限制一个ip最大连接为20；同一个ip每秒最快连接速度为6
+        * @brief 构造函数，默认是允许最大1000000个连接，每个连接接收缓冲区最大为256kb，启用安全模块。
         * @note 打开安全模块会对性能有影响
-        * @param maxFD 服务对象的最大接受连接数
-        * @param security_open true:开启安全模块 false：关闭安全模块 （默认为开启）
-        * @param connectionNumLimit 同一个ip连接数目的上限
-        * @param connectionRateLimit 同一个ip每秒钟连接数目的上限
+        * @param maxFD 服务对象的最大接受连接数 默认为1000000
         * @param buffer_size 同一个连接允许传输的最大数据量（单位为kb） 默认为256kb
-        * @param requestRatte 同一个连接一秒内允许的最大请求数量 （默认为12次）
-        * @param checkFrequency 检查僵尸连接的频率（单位分钟） 默认为1分钟  -1为不做检查
-        * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） 默认120秒 -1为无限制
+        * @param security_open true:开启安全模块 false：关闭安全模块 （默认为开启）
+        * @param connectionNumLimit 同一个ip连接数目的上限（默认5）
+        * @param connectionSecs   连接速率统计窗口长度（单位：秒）（默认10秒）
+        * @param connectionTimes  在 connectionSecs 秒内允许的最大连接次数 （默认3次）
+        * @param requestSecs 请求速率统计窗口长度（单位：秒）（默认1秒）
+        * @param requestTimes 在秒requestSecs内允许的最大请求数量（默认10次）
+        * @param checkFrequency 检查僵尸连接的频率（单位：秒）  -1为不做检查 （默认为60秒）
+        * @param connectionTimeout 连接多少秒内没有任何反应就视为僵尸连接 （单位为秒） -1为无限制 （默认120秒）
         */
-        WebSocketServer(const unsigned long long &maxFD=10000000,const bool &security_open=true,const int &connectionNumLimit=20,const int &connectionRateLimit=6,const int &buffer_size=256,const int &requestRate=40,const int &checkFrequency=1,const int &connectionTimeout=120):TcpServer(maxFD,security_open,connectionNumLimit,connectionRateLimit,buffer_size,requestRate,checkFrequency,connectionTimeout){serverType=3;}
+        WebSocketServer(const unsigned long long &maxFD=1000000,const int &buffer_size=256,const bool &security_open=true,
+        const int &connectionNumLimit=5,const int &connectionSecs=10,const int &connectionTimes=3,const int &requestSecs=1,const int &requestTimes=10,
+        const int &checkFrequency=60,const int &connectionTimeout=120):TcpServer(
+              maxFD,
+              buffer_size,
+              security_open,
+              connectionNumLimit,
+              connectionSecs,
+              connectionTimes,
+              requestSecs,
+              requestTimes,
+              checkFrequency,
+              connectionTimeout
+          ){serverType=3;}
+        /**
+        * @brief 设置违反信息安全策略时候的返回函数
+        * @note 违反信息安全策略时候的返回函数,调用完就关闭连接
+        * @param key 找到对应回调函数的key
+        * @param fc 一个函数或函数对象，用于收到客户端消息后处理逻辑
+        * -参数：WebSocketServerFDHandler &k - 和客户端连接的套接字的操作对象的引用
+        *       WebSocketFDInformation &inf - 客户端信息，保存数据，处理进度，状态机信息等
+        * -返回值：true：处理成功 false：处理失败 会关闭连接
+        */
+        void setSecuritySendBackFun(std::function<void(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> fc){this->securitySendBackFun=fc;}
         /**
         * @brief 设置全局备用函数
         * @note 找不到对应回调函数的时候会调用全局备用函数
