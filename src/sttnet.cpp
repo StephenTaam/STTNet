@@ -47,7 +47,7 @@ bool stt::file::FileTool::createFile(const string &filePath,const mode_t &mode)
 {
     if(access(filePath.c_str(),F_OK)==0)//检查文件是否已经存在
     {
-        cerr<<"file has already exist"<<endl;
+        //cerr<<"file has already exist"<<endl;
         return true;
     }
     //创建路径
@@ -2515,6 +2515,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 }
             }
         }
+        
         return totalSize;
     }
     
@@ -4019,6 +4020,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
             
             ::close(clientfd[fd].fd);
+
+            closeFun(clientfd[fd].fd);
             
             clientfd[fd].fd=-1;
             
@@ -5025,9 +5028,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         
              //cout<<result<<endl;
         
-        if(sendData(result,false)!=result.length())
+        if(sendData(result)!=result.length())
         {
-        
             return false;
         }
         return true;
@@ -5055,7 +5057,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         size_t ret=snprintf(buffer,length+header_length+4+1,"HTTP/1.1 %s\r\nContent-Length: %zu\r\n%s%s\r\n%s",code,length,header,header1,data);
         if(ret<length+header_length+4+1)
         {
-            if(sendData(buffer,ret,false)!=ret)
+            if(sendData(buffer,ret)!=ret)
             {
                 delete[] buffer;
                 return false;
@@ -5530,26 +5532,91 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 
                 if(ii==solveFun.end())//找不到
                 {
-        
-                    //TcpServer::close(fd);
-                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    if(globalSolveFun.size()==0)//连全局处理函数都没有 只能发404
                     {
-                        if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("http server : 找不到处理函数 fd= "+to_string(fd)+"。调用全局备用处理函数");
-                        else
-                            stt::system::ServerSetting::logfile->writeLog("http server : can not find solve function fd= "+to_string(fd)+" . use global backup slove function.");
-                    }
-                    if(!globalSolveFun(k,inff))
-                    {
-                        TcpServer::close(fd);
                         if(stt::system::ServerSetting::logfile!=nullptr)
                         {
                             if(stt::system::ServerSetting::language=="Chinese")
-                                stt::system::ServerSetting::logfile->writeLog("http server : 调用全局备用函数失败 fd= "+to_string(fd)+"已经关闭连接.");
+                                stt::system::ServerSetting::logfile->writeLog("http server : 找不到处理函数也找不到全局处理函数 fd= "+to_string(fd)+"发送404 not found.");
                             else
-                                stt::system::ServerSetting::logfile->writeLog("http server : use global backup slove function fail. fd= "+to_string(fd)+". has closed this connection.");
+                                stt::system::ServerSetting::logfile->writeLog("http server : can not find solve function and global function. fd= "+to_string(fd)+". has sent 404 not found.");
                         }
-                        return;
+                        if(!k.sendBack("","","404 NOT FOUND"))
+                        {
+                            TcpServer::close(fd);
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("http server : 发送404 not found失败 fd= "+to_string(fd)+"已经关闭连接.");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("http server : sending 404 not found fail. fd= "+to_string(fd)+". has closed this connection.");
+                            }
+                            return;
+                        }
+                    }
+                    else
+                    {
+                    
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("http server : 找不到处理函数 fd= "+to_string(fd)+"。调用全局备用处理函数");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("http server : can not find solve function fd= "+to_string(fd)+" . use global backup slove function.");
+                        }
+                        for(auto &f:globalSolveFun)
+                        {
+                            int rett=f(k,inff);
+                            ++Tcpinf.FDStatus;
+                            if(rett==1)
+                            {
+                                if(stt::system::ServerSetting::logfile!=nullptr)
+                                {
+                                    if(stt::system::ServerSetting::language=="Chinese")
+                                        stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次完成");
+                                    else
+                                        stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" sucessfully.It's the "+to_string(Tcpinf.FDStatus)+"times");
+                                }
+                            }
+                            else if(rett==0)
+                            {
+                                if(stt::system::ServerSetting::logfile!=nullptr)
+                                {
+                                    if(stt::system::ServerSetting::language=="Chinese")
+                                        stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次.等待任务完成.");
+                                    else
+                                        stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" .It's the "+to_string(Tcpinf.FDStatus)+"times job. now is waitting it to be finish.");
+                                }
+                            
+                                return;
+                            }
+                            else if(rett==-1)
+                            {
+                            
+                                if(stt::system::ServerSetting::logfile!=nullptr)
+                                {
+                                    if(stt::system::ServerSetting::language=="Chinese")
+                                        stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次失败。");
+                                    else
+                                        stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(Tcpinf.FDStatus)+"times.");
+                                }
+                                //Tcpinf.pendindQueue.pop();
+                                return;
+                            }
+                            else
+                            {
+                                TcpServer::close(fd);
+                                if(stt::system::ServerSetting::logfile!=nullptr)
+                                {
+                                    if(stt::system::ServerSetting::language=="Chinese")
+                                        stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次失败。已经关闭连接。");
+                                    else
+                                        stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(Tcpinf.FDStatus)+"times and now has closed this connection.");
+                                }
+                                //Tcpinf.pendindQueue.pop();
+                                return;
+                            }
+                        }
                     }
                     clientfd[fd].pendindQueue.pop();
                 }
@@ -5668,31 +5735,83 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     stt::system::ServerSetting::logfile->writeLog("http server : worker solve sucessfully fd= "+to_string(fd));
             }
             if(ii==solveFun.end())//找不到
-                {
+            {
                     
-                    //k.sendBack("","","404 NOT FOUND");
-                    //TcpServer::close(fd);
-                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    if(globalSolveFun.size()==0)//连全局处理函数都没有 只能发404
                     {
-                        if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("http server : 找不到处理函数 fd= "+to_string(fd)+"。调用全局备用处理函数");
-                        else
-                            stt::system::ServerSetting::logfile->writeLog("http server : can not find solve function fd= "+to_string(fd)+" . use global backup slove function.");
-                    }
-                    if(!globalSolveFun(k,inf))
-                    {
-                        TcpServer::close(fd);
                         if(stt::system::ServerSetting::logfile!=nullptr)
                         {
                             if(stt::system::ServerSetting::language=="Chinese")
-                                stt::system::ServerSetting::logfile->writeLog("http server : 调用全局备用函数失败 fd= "+to_string(fd)+"已经关闭连接.");
+                                stt::system::ServerSetting::logfile->writeLog("http server : 找不到处理函数也找不到全局处理函数 fd= "+to_string(fd)+"发送404 not found.");
                             else
-                                stt::system::ServerSetting::logfile->writeLog("http server : use global backup slove function fail. fd= "+to_string(fd)+". has closed this connection.");
+                                stt::system::ServerSetting::logfile->writeLog("http server : can not find solve function and global function. fd= "+to_string(fd)+". has sent 404 not found.");
                         }
-                        return;
+                        if(!k.sendBack("","","404 NOT FOUND"))
+                        {
+                            TcpServer::close(fd);
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("http server : 发送404 not found失败 fd= "+to_string(fd)+"已经关闭连接.");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("http server : sending 404 not found fail. fd= "+to_string(fd)+". has closed this connection.");
+                            }
+                            return;
+                        }
+                    }
+                    else
+                    {
+                    
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("http server : 找不到处理函数 fd= "+to_string(fd)+"。调用全局备用处理函数");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("http server : can not find solve function fd= "+to_string(fd)+" . use global backup slove function.");
+                        }
+                        for(;clientfd[fd].FDStatus<globalSolveFun.size();)
+                        {
+                            //继续做
+                            int rett=ii->second[clientfd[fd].FDStatus](k,inf);
+                            clientfd[fd].FDStatus++;
+                            if(rett==1)
+                            {
+                                if(stt::system::ServerSetting::logfile!=nullptr)
+                                {
+                                    if(stt::system::ServerSetting::language=="Chinese")
+                                        stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(clientfd[fd].FDStatus)+  "次完成");
+                                    else
+                                        stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" sucessfully.It's the "+to_string(clientfd[fd].FDStatus)+"times");
+                                }
+                            }
+                            else if(rett==0)
+                            {
+                                if(stt::system::ServerSetting::logfile!=nullptr)
+                                {
+                                    if(stt::system::ServerSetting::language=="Chinese")
+                                        stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(clientfd[fd].FDStatus)+  "次.等待任务完成.");
+                                    else
+                                        stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" .It's the "+to_string(clientfd[fd].FDStatus)+"times job. now is waitting it to be finish.");
+                                }
+                                return;
+                            }
+                            else
+                            {
+                                TcpServer::close(fd);
+                                if(stt::system::ServerSetting::logfile!=nullptr)
+                                {
+                                    if(stt::system::ServerSetting::language=="Chinese")
+                                        stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(clientfd[fd].FDStatus)+  "次失败。已经关闭连接。");
+                                    else
+                                        stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(clientfd[fd].FDStatus)+"times and now has closed this connection.");
+                                }
+                                //clientfd[fd].pendindQueue.pop();
+                                return;
+                            }
+                        }
                     }
                     clientfd[fd].pendindQueue.pop();
-                }
+            }
             else
             {
             //继续做
@@ -5790,26 +5909,91 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 auto ii=solveFun.find(std::any_cast<const std::string&>(inff.ctx["key"]));
                 if(ii==solveFun.end())//找不到
                 {
-                    //k.sendBack("","","404 NOT FOUND");
-                    //TcpServer::close(fd);
-                    if(stt::system::ServerSetting::logfile!=nullptr)
+                    if(globalSolveFun.size()==0)//连全局处理函数都没有 只能发404
                     {
-                        if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("http server : 找不到处理函数 fd= "+to_string(fd)+"。调用全局备用处理函数");
-                        else
-                            stt::system::ServerSetting::logfile->writeLog("http server : can not find solve function fd= "+to_string(fd)+" . use global backup slove function.");
-                    }
-                    if(!globalSolveFun(k,inff))
-                    {
-                        TcpServer::close(fd);
                         if(stt::system::ServerSetting::logfile!=nullptr)
                         {
                             if(stt::system::ServerSetting::language=="Chinese")
-                                stt::system::ServerSetting::logfile->writeLog("http server : 调用全局备用函数失败 fd= "+to_string(fd)+"已经关闭连接.");
+                                stt::system::ServerSetting::logfile->writeLog("http server : 找不到处理函数也找不到全局处理函数 fd= "+to_string(fd)+"发送404 not found.");
                             else
-                                stt::system::ServerSetting::logfile->writeLog("http server : use global backup slove function fail. fd= "+to_string(fd)+". has closed this connection.");
+                                stt::system::ServerSetting::logfile->writeLog("http server : can not find solve function and global function. fd= "+to_string(fd)+". has sent 404 not found.");
                         }
-                        return;
+                        if(!k.sendBack("","","404 NOT FOUND"))
+                        {
+                            TcpServer::close(fd);
+                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            {
+                                if(stt::system::ServerSetting::language=="Chinese")
+                                    stt::system::ServerSetting::logfile->writeLog("http server : 发送404 not found失败 fd= "+to_string(fd)+"已经关闭连接.");
+                                else
+                                    stt::system::ServerSetting::logfile->writeLog("http server : sending 404 not found fail. fd= "+to_string(fd)+". has closed this connection.");
+                            }
+                            return;
+                        }
+                    }
+                    else
+                    {
+                    
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("http server : 找不到处理函数 fd= "+to_string(fd)+"。调用全局备用处理函数");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("http server : can not find solve function fd= "+to_string(fd)+" . use global backup slove function.");
+                        }
+                        for(auto &f:globalSolveFun)
+                        {
+                            int rett=f(k,inff);
+                            ++Tcpinf.FDStatus;
+                            if(rett==1)
+                            {
+                                if(stt::system::ServerSetting::logfile!=nullptr)
+                                {
+                                    if(stt::system::ServerSetting::language=="Chinese")
+                                        stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次完成");
+                                    else
+                                        stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" sucessfully.It's the "+to_string(Tcpinf.FDStatus)+"times");
+                                }
+                            }
+                            else if(rett==0)
+                            {
+                                if(stt::system::ServerSetting::logfile!=nullptr)
+                                {
+                                    if(stt::system::ServerSetting::language=="Chinese")
+                                        stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次.等待任务完成.");
+                                    else
+                                        stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" .It's the "+to_string(Tcpinf.FDStatus)+"times job. now is waitting it to be finish.");
+                                }
+                            
+                                return;
+                            }
+                            else if(rett==-1)
+                            {
+                            
+                                if(stt::system::ServerSetting::logfile!=nullptr)
+                                {
+                                    if(stt::system::ServerSetting::language=="Chinese")
+                                        stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次失败。");
+                                    else
+                                        stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(Tcpinf.FDStatus)+"times.");
+                                }
+                                //Tcpinf.pendindQueue.pop();
+                                return;
+                            }
+                            else
+                            {
+                                TcpServer::close(fd);
+                                if(stt::system::ServerSetting::logfile!=nullptr)
+                                {
+                                    if(stt::system::ServerSetting::language=="Chinese")
+                                        stt::system::ServerSetting::logfile->writeLog("http server : 处理fd= "+to_string(fd)+" 第"+ to_string(Tcpinf.FDStatus)+  "次失败。已经关闭连接。");
+                                    else
+                                        stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(Tcpinf.FDStatus)+"times and now has closed this connection.");
+                                }
+                                //Tcpinf.pendindQueue.pop();
+                                return;
+                            }
+                        }
                     }
                     clientfd[fd].pendindQueue.pop();
                 }
@@ -6042,7 +6226,18 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     //thread(fccc,winf,ref(*this)).detach();
                     WebSocketServerFDHandler kk;
                     kk.setFD(fd,clientfd[fd].ssl,unblock);
-                    fccc(kk,winf);
+                    if(!fccc(kk,winf))
+                    {
+                        closeWithoutLock(fd);
+                        if(stt::system::ServerSetting::logfile!=nullptr)
+                        {
+                            if(stt::system::ServerSetting::language=="Chinese")
+                                stt::system::ServerSetting::logfile->writeLog("websocket server : fd= "+to_string(fd)+" 调用连接后的初始函数失败，已经关闭连接");
+                            else
+                                stt::system::ServerSetting::logfile->writeLog("websocket server : fd= "+to_string(fd)+" fail to use start function,now has closed this connection");
+                        }
+                        return;
+                    }
                     
                 }
                 //sleep(10);

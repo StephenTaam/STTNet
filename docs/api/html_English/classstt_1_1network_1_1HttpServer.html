@@ -120,9 +120,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3665c0b93cdcbcc7a4fb01c950ac9f95"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html#a3665c0b93cdcbcc7a4fb01c950ac9f95">setSecuritySendBackFun</a> (std::function&lt; void(<a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> &amp;inf)&gt; fc)</td></tr>
 <tr class="memdesc:a3665c0b93cdcbcc7a4fb01c950ac9f95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the callback invoked when an information security policy is violated.  <a href="#a3665c0b93cdcbcc7a4fb01c950ac9f95">More...</a><br/></td></tr>
 <tr class="separator:a3665c0b93cdcbcc7a4fb01c950ac9f95"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a790f2967075e96cc837f9447fa82d40c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html#a790f2967075e96cc837f9447fa82d40c">setGlobalSolveFunction</a> (std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> &amp;inf)&gt; fc)</td></tr>
-<tr class="memdesc:a790f2967075e96cc837f9447fa82d40c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set global fallback function.  <a href="#a790f2967075e96cc837f9447fa82d40c">More...</a><br/></td></tr>
-<tr class="separator:a790f2967075e96cc837f9447fa82d40c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ff42e94dfa9bb09fcf152418b117df2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html#a2ff42e94dfa9bb09fcf152418b117df2">setGlobalSolveFunction</a> (std::function&lt; int(<a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> &amp;inf)&gt; fc)</td></tr>
+<tr class="memdesc:a2ff42e94dfa9bb09fcf152418b117df2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a global backup function.  <a href="#a2ff42e94dfa9bb09fcf152418b117df2">More...</a><br/></td></tr>
+<tr class="separator:a2ff42e94dfa9bb09fcf152418b117df2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a707fcaeab33ef5592300c1f37548ae9b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html#a707fcaeab33ef5592300c1f37548ae9b">setFunction</a> (const std::string &amp;key, std::function&lt; int(<a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> &amp;inf)&gt; fc)</td></tr>
 <tr class="memdesc:a707fcaeab33ef5592300c1f37548ae9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a callback function for a specific key.  <a href="#a707fcaeab33ef5592300c1f37548ae9b">More...</a><br/></td></tr>
 <tr class="separator:a707fcaeab33ef5592300c1f37548ae9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -172,6 +172,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4145bfefbbac6e54eaf6e3905adb19bd inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a4145bfefbbac6e54eaf6e3905adb19bd">close</a> (const int &amp;fd)</td></tr>
 <tr class="memdesc:a4145bfefbbac6e54eaf6e3905adb19bd inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Close the connection of a specific socket.  <a href="#a4145bfefbbac6e54eaf6e3905adb19bd">More...</a><br/></td></tr>
 <tr class="separator:a4145bfefbbac6e54eaf6e3905adb19bd inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8f7414984fe68ee503a7838f80c2e34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#af8f7414984fe68ee503a7838f80c2e34">setCloseFun</a> (std::function&lt; void(const int &amp;fd)&gt; closeFun)</td></tr>
+<tr class="memdesc:af8f7414984fe68ee503a7838f80c2e34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">set function after tcp connection close  <a href="#af8f7414984fe68ee503a7838f80c2e34">More...</a><br/></td></tr>
+<tr class="separator:af8f7414984fe68ee503a7838f80c2e34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaffeca105457365cc5cd117218d1b098 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aaffeca105457365cc5cd117218d1b098">isListen</a> ()</td></tr>
 <tr class="memdesc:aaffeca105457365cc5cd117218d1b098 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the listening status of the object.  <a href="#aaffeca105457365cc5cd117218d1b098">More...</a><br/></td></tr>
 <tr class="separator:aaffeca105457365cc5cd117218d1b098 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -514,7 +517,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- fragment --> 
 </div>
 </div>
-<a class="anchor" id="a790f2967075e96cc837f9447fa82d40c"></a>
+<a class="anchor" id="a2ff42e94dfa9bb09fcf152418b117df2"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -524,7 +527,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void stt::network::HttpServer::setGlobalSolveFunction </td>
           <td>(</td>
-          <td class="paramtype">std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> &amp;inf)&gt;&#160;</td>
+          <td class="paramtype">std::function&lt; int(<a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> &amp;inf)&gt;&#160;</td>
           <td class="paramname"><em>fc</em></td><td>)</td>
           <td></td>
         </tr>
@@ -536,15 +539,21 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Set global fallback function. </p>
-<dl class="section note"><dt>Note</dt><dd>When a corresponding callback function cannot be found, a global backup function will be called. </dd></dl>
+<p>Sets a global backup function. </p>
+<dl class="section note"><dt>Note</dt><dd>The global backup function will be called when the corresponding callback function is not found. Multiple backup functions can be set, and the framework will execute them in the order they are set. You can also set the process of throwing the data into the worker thread pool; just be sure to set different return values.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">key</td><td>Find the key of the corresponding callback function </td></tr>
-    <tr><td class="paramname">fc</td><td>A function or function object used for processing logic after receiving a message from the client. -Parameters: <a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html" title="Operation class for parsing and responding to Http/https requests Only pass in the socket...">HttpServerFDHandler</a> &amp;k - A reference to the operation object of the socket connected to the client. <a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html" title="Structure to save HTTP/HTTPS request information. ">HttpRequestInformation</a> &amp;inf - Client information, saved data, processing progress, state machine information, etc. -Return value: true: Processing successful; false: Processing failed and the connection will be closed. </td></tr>
+    <tr><td class="paramname">fc</td><td>A function or function object used for processing logic after receiving a message from the client.</td></tr>
   </table>
   </dd>
 </dl>
+<ul>
+<li>Parameters: <a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html" title="Operation class for parsing and responding to Http/https requests Only pass in the socket...">HttpServerFDHandler</a> &amp;k - A reference to the operation object of the socket connected to the client.</li>
+</ul>
+<p><a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html" title="Structure to save HTTP/HTTPS request information. ">HttpRequestInformation</a> &amp;inf - Client information, saved data, processing progress, state machine information, etc.</p>
+<ul>
+<li>- Return value: -2: Processing failed and the connection needs to be closed -1: Processing failed but the connection does not need to be closed 0: The processing flow has been thrown into the worker thread pool and needs to wait for processing to complete 1: Processing succeeded </li>
+</ul>
 
 </div>
 </div>

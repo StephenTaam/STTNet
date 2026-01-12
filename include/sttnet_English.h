@@ -1637,7 +1637,12 @@ public:
 	        static std::string createJson(T1 first, T2 second)
 	        {
 		        Json::Value root;
-		        root[first] = second;
+		        //root[first] = second;
+                if constexpr (std::is_integral_v<T2>) {
+                    root[first] = Json::Value(static_cast<Json::Int64>(second));
+                } else {
+                    root[first] = second;
+                }
 		        Json::StreamWriterBuilder builder;
 		        std::string jsonString = Json::writeString(builder, root);
 		        return jsonString;
@@ -1657,7 +1662,12 @@ public:
 	        static std::string createJson(T1 first, T2 second, Args... args)
 	        {
 		        Json::Value root;
-		        root[first] = second;
+		        //root[first] = second;
+                if constexpr (std::is_integral_v<T2>) {
+                    root[first] = Json::Value(static_cast<Json::Int64>(second));
+                } else {
+                    root[first] = second;
+                }
 		        std::string kk = createJson(args...);
 		        Json::StreamWriterBuilder builder;
 		        std::string jsonString = Json::writeString(builder, root);
@@ -3035,6 +3045,10 @@ private:
         int requestTimes;
         int checkFrequency;
     private:
+        std::function<void(const int &fd)> closeFun=[](const int &fd)->void
+        {
+
+        };
         std::function<void(TcpFDHandler &k,TcpInformation &inf)> securitySendBackFun=[](TcpFDHandler &k,TcpInformation &inf)->void
         {};
         std::function<bool(TcpFDHandler &k,TcpInformation &inf)> globalSolveFun=[](TcpFDHandler &k,TcpInformation &inf)->bool
@@ -3310,6 +3324,10 @@ void setGetKeyFunction(
         * @return true: Closed successfully, false: Failed to close
         */
         virtual bool close(const int &fd);
+        /**
+        * @brief set function after tcp connection close
+        */
+        void setCloseFun(std::function<void(const int &fd)> closeFun){this->closeFun=closeFun;}
     public:
         /**
         * @brief Return the listening status of the object
@@ -3339,8 +3357,7 @@ void setGetKeyFunction(
 private:
     std::function<void(HttpServerFDHandler &k,HttpRequestInformation &inf)> securitySendBackFun=[](HttpServerFDHandler &k,HttpRequestInformation &inf)->void
         {};
-    std::function<bool(HttpServerFDHandler &k,HttpRequestInformation &inf)> globalSolveFun=[](HttpServerFDHandler &k,HttpRequestInformation &inf)->bool
-        {return k.sendBack("","","404 NOT FOUND");};
+    std::vector<std::function<int(HttpServerFDHandler &k,HttpRequestInformation &inf)>> globalSolveFun;
     // std::function<bool(HttpServerFDHandler &k, HttpRequestInformation &inf)> globalSolveFun = {};
     std::unordered_map<
         std::string,
@@ -3508,15 +3525,21 @@ void setSecuritySendBackFun(
 }
 
         /**
-        * @brief Set global fallback function
-        * @note When a corresponding callback function cannot be found, a global backup function will be called.
-        * @param key Find the key of the corresponding callback function
-        * @param fc A function or function object used for processing logic after receiving a message from the client.
-        * -Parameters: HttpServerFDHandler &k - A reference to the operation object of the socket connected to the client.
-        *       HttpRequestInformation &inf - Client information, saved data, processing progress, state machine information, etc.
-        * -Return value: true: Processing successful; false: Processing failed and the connection will be closed.
-        */
-        void setGlobalSolveFunction(std::function<bool(HttpServerFDHandler &k,HttpRequestInformation &inf)> fc){this->globalSolveFun=fc;}
+
+* @brief Sets a global backup function
+
+* @note The global backup function will be called when the corresponding callback function is not found. Multiple backup functions can be set, and the framework will execute them in the order they are set. You can also set the process of throwing the data into the worker thread pool; just be sure to set different return values.
+
+* @param fc A function or function object used for processing logic after receiving a message from the client.
+
+* - Parameters: HttpServerFDHandler &k - A reference to the operation object of the socket connected to the client.
+
+* HttpRequestInformation &inf - Client information, saved data, processing progress, state machine information, etc.
+
+* * - Return value: -2: Processing failed and the connection needs to be closed -1: Processing failed but the connection does not need to be closed 0: The processing flow has been thrown into the worker thread pool and needs to wait for processing to complete 1: Processing succeeded
+
+*/
+        void setGlobalSolveFunction(std::function<int(HttpServerFDHandler &k,HttpRequestInformation &inf)> fc){globalSolveFun.push_back(std::move(fc));}
     /**
      * @brief Register a callback function for a specific key.
      * @note Multiple callbacks can be registered for the same key. The framework
@@ -3698,8 +3721,9 @@ private:
             return true;
         };
 
-    std::function<void(WebSocketServerFDHandler &k, WebSocketFDInformation &inf)> fccc =
-        [](WebSocketServerFDHandler &k, WebSocketFDInformation &inf) {};
+    std::function<bool(WebSocketServerFDHandler &k, WebSocketFDInformation &inf)> fccc =
+        [](WebSocketServerFDHandler &k, WebSocketFDInformation &inf) ->bool
+        {return true};
 
     std::function<bool(WebSocketServerFDHandler &k, WebSocketFDInformation &inf)> globalSolveFun =
         [](WebSocketServerFDHandler &k, WebSocketFDInformation &inf) -> bool {
@@ -3906,7 +3930,7 @@ void setSecuritySendBackFun(
      *          WebSocketFDInformation &inf
      */
     void setStartFunction(
-        std::function<void(WebSocketServerFDHandler &, WebSocketFDInformation &)> fccc)
+        std::function<bool(WebSocketServerFDHandler &, WebSocketFDInformation &)> fccc)
     {
         this->fccc = fccc;
     }

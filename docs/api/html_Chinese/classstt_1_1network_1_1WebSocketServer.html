@@ -123,9 +123,9 @@ Public 成员函数</h2></td></tr>
 <tr class="memitem:a1aa57d1c724c6fca6fa35a9dda19a9cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a1aa57d1c724c6fca6fa35a9dda19a9cf">setGlobalSolveFunction</a> (std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt; fc)</td></tr>
 <tr class="memdesc:a1aa57d1c724c6fca6fa35a9dda19a9cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置全局备用函数  <a href="#a1aa57d1c724c6fca6fa35a9dda19a9cf">更多...</a><br/></td></tr>
 <tr class="separator:a1aa57d1c724c6fca6fa35a9dda19a9cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a917b6a0ee02dab6f5f438e89a2586b5a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a917b6a0ee02dab6f5f438e89a2586b5a">setStartFunction</a> (std::function&lt; void(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt; fccc)</td></tr>
-<tr class="memdesc:a917b6a0ee02dab6f5f438e89a2586b5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置websocket连接成功后就执行的回调函数 注册一个回调函数  <a href="#a917b6a0ee02dab6f5f438e89a2586b5a">更多...</a><br/></td></tr>
-<tr class="separator:a917b6a0ee02dab6f5f438e89a2586b5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcfe3809d2fa4a22028e2cf59aa193e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#abcfe3809d2fa4a22028e2cf59aa193e0">setStartFunction</a> (std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt; fccc)</td></tr>
+<tr class="memdesc:abcfe3809d2fa4a22028e2cf59aa193e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置websocket连接成功后就执行的回调函数 注册一个回调函数  <a href="#abcfe3809d2fa4a22028e2cf59aa193e0">更多...</a><br/></td></tr>
+<tr class="separator:abcfe3809d2fa4a22028e2cf59aa193e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8db5e5143e41cb11029680e6f271707f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a8db5e5143e41cb11029680e6f271707f">setJudgeFunction</a> (std::function&lt; bool(<a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;k)&gt; fcc)</td></tr>
 <tr class="memdesc:a8db5e5143e41cb11029680e6f271707f"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置websocket握手阶段的检查函数，只有检查通过才执行后续握手 注册一个回调函数  <a href="#a8db5e5143e41cb11029680e6f271707f">更多...</a><br/></td></tr>
 <tr class="separator:a8db5e5143e41cb11029680e6f271707f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -211,6 +211,9 @@ Public 成员函数</h2></td></tr>
 <tr class="memitem:ab2e7db08d54ad783a58b8c0bf3e915f3 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ab2e7db08d54ad783a58b8c0bf3e915f3">setPathLimit</a> (const std::string &amp;path, const int &amp;times, const int &amp;secs)</td></tr>
 <tr class="memdesc:ab2e7db08d54ad783a58b8c0bf3e915f3 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置某个路径的额外限流规则（path 级）。  <a href="#ab2e7db08d54ad783a58b8c0bf3e915f3">更多...</a><br/></td></tr>
 <tr class="separator:ab2e7db08d54ad783a58b8c0bf3e915f3 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8f7414984fe68ee503a7838f80c2e34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#af8f7414984fe68ee503a7838f80c2e34">setCloseFun</a> (std::function&lt; void(const int &amp;fd)&gt; closeFun)</td></tr>
+<tr class="memdesc:af8f7414984fe68ee503a7838f80c2e34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置关闭tcp连接之后调用的函数  <a href="#af8f7414984fe68ee503a7838f80c2e34">更多...</a><br/></td></tr>
+<tr class="separator:af8f7414984fe68ee503a7838f80c2e34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaffeca105457365cc5cd117218d1b098 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aaffeca105457365cc5cd117218d1b098">isListen</a> ()</td></tr>
 <tr class="memdesc:aaffeca105457365cc5cd117218d1b098 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">返回对象的监听状态  <a href="#aaffeca105457365cc5cd117218d1b098">更多...</a><br/></td></tr>
 <tr class="separator:aaffeca105457365cc5cd117218d1b098 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -911,7 +914,7 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a917b6a0ee02dab6f5f438e89a2586b5a"></a>
+<a class="anchor" id="abcfe3809d2fa4a22028e2cf59aa193e0"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -921,7 +924,7 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
         <tr>
           <td class="memname">void stt::network::WebSocketServer::setStartFunction </td>
           <td>(</td>
-          <td class="paramtype">std::function&lt; void(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt;&#160;</td>
+          <td class="paramtype">std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt;&#160;</td>
           <td class="paramname"><em>fccc</em></td><td>)</td>
           <td></td>
         </tr>

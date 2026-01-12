@@ -149,6 +149,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4145bfefbbac6e54eaf6e3905adb19bd"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a4145bfefbbac6e54eaf6e3905adb19bd">close</a> (const int &amp;fd)</td></tr>
 <tr class="memdesc:a4145bfefbbac6e54eaf6e3905adb19bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Close the connection of a specific socket.  <a href="#a4145bfefbbac6e54eaf6e3905adb19bd">More...</a><br/></td></tr>
 <tr class="separator:a4145bfefbbac6e54eaf6e3905adb19bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8f7414984fe68ee503a7838f80c2e34"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#af8f7414984fe68ee503a7838f80c2e34">setCloseFun</a> (std::function&lt; void(const int &amp;fd)&gt; closeFun)</td></tr>
+<tr class="memdesc:af8f7414984fe68ee503a7838f80c2e34"><td class="mdescLeft">&#160;</td><td class="mdescRight">set function after tcp connection close  <a href="#af8f7414984fe68ee503a7838f80c2e34">More...</a><br/></td></tr>
+<tr class="separator:af8f7414984fe68ee503a7838f80c2e34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaffeca105457365cc5cd117218d1b098"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aaffeca105457365cc5cd117218d1b098">isListen</a> ()</td></tr>
 <tr class="memdesc:aaffeca105457365cc5cd117218d1b098"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the listening status of the object.  <a href="#aaffeca105457365cc5cd117218d1b098">More...</a><br/></td></tr>
 <tr class="separator:aaffeca105457365cc5cd117218d1b098"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -493,6 +496,32 @@ Will block until all closures are complete </dd></dl>
 </div><div class="memdoc">
 
 <p>Revoke TLS encryption, CA certificate, etc. </p>
+
+</div>
+</div>
+<a class="anchor" id="af8f7414984fe68ee503a7838f80c2e34"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::network::TcpServer::setCloseFun </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; void(const int &amp;fd)&gt;&#160;</td>
+          <td class="paramname"><em>closeFun</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>set function after tcp connection close </p>
 
 </div>
 </div>

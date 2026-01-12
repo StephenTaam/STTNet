@@ -123,9 +123,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a92777aa4c04107f235f39f540d6c1bb8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a92777aa4c04107f235f39f540d6c1bb8">setGlobalSolveFunction</a> (std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;)&gt; fc)</td></tr>
 <tr class="memdesc:a92777aa4c04107f235f39f540d6c1bb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the global fallback handler.  <a href="#a92777aa4c04107f235f39f540d6c1bb8">More...</a><br/></td></tr>
 <tr class="separator:a92777aa4c04107f235f39f540d6c1bb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56184c0ad0c1bfedace1ea216a4689e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a56184c0ad0c1bfedace1ea216a4689e3">setStartFunction</a> (std::function&lt; void(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;)&gt; fccc)</td></tr>
-<tr class="memdesc:a56184c0ad0c1bfedace1ea216a4689e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the callback invoked immediately after a WebSocket connection is established.  <a href="#a56184c0ad0c1bfedace1ea216a4689e3">More...</a><br/></td></tr>
-<tr class="separator:a56184c0ad0c1bfedace1ea216a4689e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad07624cf9a882b1f9bbec006f43d3f6c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#ad07624cf9a882b1f9bbec006f43d3f6c">setStartFunction</a> (std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;)&gt; fccc)</td></tr>
+<tr class="memdesc:ad07624cf9a882b1f9bbec006f43d3f6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the callback invoked immediately after a WebSocket connection is established.  <a href="#ad07624cf9a882b1f9bbec006f43d3f6c">More...</a><br/></td></tr>
+<tr class="separator:ad07624cf9a882b1f9bbec006f43d3f6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63e18ff338d0e31fd416616294d05870"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a63e18ff338d0e31fd416616294d05870">setJudgeFunction</a> (std::function&lt; bool(<a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;)&gt; fcc)</td></tr>
 <tr class="memdesc:a63e18ff338d0e31fd416616294d05870"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the handshake validation callback.  <a href="#a63e18ff338d0e31fd416616294d05870">More...</a><br/></td></tr>
 <tr class="separator:a63e18ff338d0e31fd416616294d05870"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -199,6 +199,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3de689656c2e1b106b069780f03e7847 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a3de689656c2e1b106b069780f03e7847">close</a> ()</td></tr>
 <tr class="memdesc:a3de689656c2e1b106b069780f03e7847 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Close listening and all connected sockets.  <a href="#a3de689656c2e1b106b069780f03e7847">More...</a><br/></td></tr>
 <tr class="separator:a3de689656c2e1b106b069780f03e7847 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8f7414984fe68ee503a7838f80c2e34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#af8f7414984fe68ee503a7838f80c2e34">setCloseFun</a> (std::function&lt; void(const int &amp;fd)&gt; closeFun)</td></tr>
+<tr class="memdesc:af8f7414984fe68ee503a7838f80c2e34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">set function after tcp connection close  <a href="#af8f7414984fe68ee503a7838f80c2e34">More...</a><br/></td></tr>
+<tr class="separator:af8f7414984fe68ee503a7838f80c2e34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaffeca105457365cc5cd117218d1b098 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aaffeca105457365cc5cd117218d1b098">isListen</a> ()</td></tr>
 <tr class="memdesc:aaffeca105457365cc5cd117218d1b098 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the listening status of the object.  <a href="#aaffeca105457365cc5cd117218d1b098">More...</a><br/></td></tr>
 <tr class="separator:aaffeca105457365cc5cd117218d1b098 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -872,7 +875,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a56184c0ad0c1bfedace1ea216a4689e3"></a>
+<a class="anchor" id="ad07624cf9a882b1f9bbec006f43d3f6c"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -882,7 +885,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void stt::network::WebSocketServer::setStartFunction </td>
           <td>(</td>
-          <td class="paramtype">std::function&lt; void(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;)&gt;&#160;</td>
+          <td class="paramtype">std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;)&gt;&#160;</td>
           <td class="paramname"><em>fccc</em></td><td>)</td>
           <td></td>
         </tr>

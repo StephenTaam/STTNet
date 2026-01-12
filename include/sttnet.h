@@ -1635,7 +1635,12 @@ namespace stt
 	        static std::string createJson(T1 first,T2 second)
 	        {
 		        Json::Value root;
-		        root[first]=second;
+		        //root[first]=second;
+                if constexpr (std::is_integral_v<T2>) {
+                    root[first] = Json::Value(static_cast<Json::Int64>(second));
+                } else {
+                    root[first] = second;
+                }
 		        Json::StreamWriterBuilder builder;
 		        std::string jsonString=Json::writeString(builder,root);
 		        return jsonString;
@@ -1655,7 +1660,12 @@ namespace stt
 	        static std::string createJson(T1 first,T2 second,Args... args)
 	        {
 		        Json::Value root;
-		        root[first]=second;
+		        //root[first]=second;
+                if constexpr (std::is_integral_v<T2>) {
+                    root[first] = Json::Value(static_cast<Json::Int64>(second));
+                } else {
+                    root[first] = second;
+                }
 		        std::string kk=createJson(args...);
 		        Json::StreamWriterBuilder builder;
 		        std::string jsonString=Json::writeString(builder,root);
@@ -2965,6 +2975,10 @@ namespace stt
         int requestTimes;
         int checkFrequency;
     private:
+        std::function<void(const int &fd)> closeFun=[](const int &fd)->void
+        {
+
+        };
         std::function<void(TcpFDHandler &k,TcpInformation &inf)> securitySendBackFun=[](TcpFDHandler &k,TcpInformation &inf)->void
         {};
         std::function<bool(TcpFDHandler &k,TcpInformation &inf)> globalSolveFun=[](TcpFDHandler &k,TcpInformation &inf)->bool
@@ -3151,6 +3165,10 @@ namespace stt
          * - 两者为 AND 关系：任何一层失败即拒绝。
          */
         void setPathLimit(const std::string &path, const int &times, const int &secs){this->connectionLimiter.setPathLimit(path,times,secs);}
+        /**
+        * @brief 设置关闭tcp连接之后调用的函数
+        */
+        void setCloseFun(std::function<void(const int &fd)> closeFun){this->closeFun=closeFun;}
     public:
         /**
         * @brief 返回对象的监听状态
@@ -3180,8 +3198,7 @@ namespace stt
     private:
         std::function<void(HttpServerFDHandler &k,HttpRequestInformation &inf)> securitySendBackFun=[](HttpServerFDHandler &k,HttpRequestInformation &inf)->void
         {};
-        std::function<bool(HttpServerFDHandler &k,HttpRequestInformation &inf)> globalSolveFun=[](HttpServerFDHandler &k,HttpRequestInformation &inf)->bool
-        {return k.sendBack("","","404 NOT FOUND");};
+        std::vector<std::function<int(HttpServerFDHandler &k,HttpRequestInformation &inf)>> globalSolveFun;
         //std::function<bool(HttpServerFDHandler &k,HttpRequestInformation &inf)> globalSolveFun={};
         std::unordered_map<std::string,std::vector<std::function<int(HttpServerFDHandler &k,HttpRequestInformation &inf)>>> solveFun;
         std::function<int(HttpServerFDHandler &k,HttpRequestInformation &inf)> parseKey=[](HttpServerFDHandler &k,HttpRequestInformation &inf)->int
@@ -3248,14 +3265,13 @@ namespace stt
         void setSecuritySendBackFun(std::function<void(HttpServerFDHandler &k,HttpRequestInformation &inf)> fc){this->securitySendBackFun=fc;}
         /**
         * @brief 设置全局备用函数
-        * @note 找不到对应回调函数的时候会调用全局备用函数
-        * @param key 找到对应回调函数的key
+        * @note 找不到对应回调函数的时候会调用全局备用函数.可以设置多个 ，框架会根据设置顺序依次执行回调函数；也可以设置扔入工作线程池处理的流程，注意设置不同的返回值即可。
         * @param fc 一个函数或函数对象，用于收到客户端消息后处理逻辑
         * -参数：HttpServerFDHandler &k - 和客户端连接的套接字的操作对象的引用
         *       HttpRequestInformation &inf - 客户端信息，保存数据，处理进度，状态机信息等
-        * -返回值：true：处理成功 false：处理失败 会关闭连接
+        * * -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 0:处理流程已经扔入工作线程池，需要等待处理完成 1:处理成功
         */
-        void setGlobalSolveFunction(std::function<bool(HttpServerFDHandler &k,HttpRequestInformation &inf)> fc){this->globalSolveFun=fc;}
+        void setGlobalSolveFunction(std::function<int(HttpServerFDHandler &k,HttpRequestInformation &inf)> fc){globalSolveFun.push_back(std::move(fc));}
         /**
         * @brief 设置key对应的收到客户端消息后的回调函数
         * @note 可以设置多个 ，框架会根据设置顺序依次执行回调函数；也可以设置扔入工作线程池处理的流程，注意设置不同的返回值即可。
@@ -3391,9 +3407,9 @@ namespace stt
         //{std::cout<<"收到: "<<message<<std::endl;return true;};
         std::function<bool(WebSocketFDInformation &k)> fcc=[](WebSocketFDInformation &k)
         {return true;};
-        std::function<void(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> fccc=[](WebSocketServerFDHandler &k,WebSocketFDInformation &inf)
+        std::function<bool(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> fccc=[](WebSocketServerFDHandler &k,WebSocketFDInformation &inf)->bool
         {
-
+            return true;
         };
         std::function<bool(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> globalSolveFun=[](WebSocketServerFDHandler &k,WebSocketFDInformation &inf)->bool
         {return true;};
@@ -3483,7 +3499,7 @@ namespace stt
         *       WebSocketServer &k - 服务端对象的引用
         * @note 传入的函数应该有如下签名 void func(const WebSocketFDInformation &inf,WebSocketServer &k)
         */
-        void setStartFunction(std::function<void(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> fccc){this->fccc=fccc;}
+        void setStartFunction(std::function<bool(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> fccc){this->fccc=fccc;}
         /**
         * @brief 设置websocket握手阶段的检查函数，只有检查通过才执行后续握手
         * 注册一个回调函数
