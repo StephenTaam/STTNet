@@ -69,7 +69,33 @@
             font-size: 0.9rem;
             color: #777;
         }
+        .contact-box {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px 24px;
+  background: #f8f9ff;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+}
 
+.contact-box h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.contact-link {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 1.1rem;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.contact-link:hover {
+  text-decoration: underline;
+  color: #0067d6;
+}
         @media (max-width: 600px) {
             h1 { font-size: 2.3rem; }
             h2 { font-size: 1.2rem; }
@@ -110,8 +136,6 @@
     In addition, STTNet includes commonly required server-side components such as
     asynchronous file I/O, logging facilities, JSON processing,
     signal and exception handling, and basic cryptographic and security utilities.
-    These features are designed to complement the Reactor architecture rather than
-    obscure it, keeping the framework minimal, explicit, and easy to reason about.
 </p>
 
 
@@ -139,8 +163,6 @@
     同时，STTNet 还集成了服务端开发中常见的基础组件，
     包括异步文件 I/O、日志系统、JSON 处理、
     信号与异常管理，以及基础的加解密与安全工具。
-    这些功能围绕 Reactor 架构进行设计，强调清晰性与可控性，
-    而非堆砌功能。
 </p>
 
         <div class="btn-group">
@@ -148,9 +170,13 @@
             <a class="button" href="api/html_English/index.html">📙 English Docs</a>
             <a class="button" href="https://github.com/StephenTaam/STTNet.git">🌐 GitHub</a>
         </div>
-
+        <div class="contact-box">
+          <h3>📬 联系作者</h3>
+          <p>如果你在使用 STTCrypt 时遇到问题，或想提出建议，可以通过以下方式联系我：</p>
+          <a class="contact-link" href="1356597983@qq.com">📧 1356597983@qq.com</a>
+        </div>
         <div class="footer">
-            MIT License · © 2025 StephenTaam
+            MIT License · © 2026 StephenTaam
         </div>
     </div>
 </body>
