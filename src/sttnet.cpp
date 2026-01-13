@@ -4802,9 +4802,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             if(stt::system::ServerSetting::logfile!=nullptr)
                             {
                                 if(stt::system::ServerSetting::language=="Chinese")
-                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"请求太频繁，已经忽略连接");
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"请求太频繁，已经忽略请求");
                                 else
-                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"request are too frequent,now has ignored this connection");
+                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"request are too frequent,now has ignored this request");
                             }
                         }
                         return;
@@ -5385,7 +5385,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     void stt::network::HttpServer::handler_netevent(const int &fd)
     {
         HttpServerFDHandler k;
-        HttpRequestInformation inf;
+        //HttpRequestInformation inf;
         if(clientfd[fd].fd!=-1)//can not find fd information,we need to writedown this error and close this fd
         {
             
@@ -5400,9 +5400,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             k.setFD(fd,clientfd[fd].ssl,unblock);
             
             int ret=1;
-            inf.fd=fd;
+            httpinf[fd].fd=fd;
             
-            ret=k.solveRequest(Tcpinf,inf,buffer_size,1);
+            ret=k.solveRequest(Tcpinf,httpinf[fd],buffer_size,1);
             
             if(ret==-1)
             {
@@ -5423,11 +5423,17 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 {
                     if(stt::system::ServerSetting::language=="Chinese")
                     {
-                        stt::system::ServerSetting::logfile->writeLog("http server consumer  : fd= "+to_string(fd)+" 读取数据完成。 \n*******请求信息：*********\nheader= "+string(inf.header)+"\nbody="+string(inf.body)+"\nbody_chunked="+string(inf.body_chunked)+"\n*************************");
+                        if(httpinf[fd].body.length()<=1024*10 && httpinf[fd].body_chunked.length()<=1024*10)
+                            stt::system::ServerSetting::logfile->writeLog("http server consumer  : fd= "+to_string(fd)+" 读取数据完成。 \n*******请求信息：*********\nheader= "+string(httpinf[fd].header)+"\nbody="+string(httpinf[fd].body)+"\nbody_chunked="+string(httpinf[fd].body_chunked)+"\n*************************");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("http server consumer  : fd= "+to_string(fd)+" 读取数据完成。 \n*******请求信息：*********\nheader= "+string(httpinf[fd].header)+"\nbody,body_chunked= ... \n*************************");
                     }
                     else
                     {
-                        stt::system::ServerSetting::logfile->writeLog("http server consumer  : fd= "+to_string(fd)+" now has solved request.\n*******request information：*********\nheader= "+string(inf.header)+"\nbody="+string(inf.body)+"\nbody_chunked="+string(inf.body_chunked)+"\n*************************");
+                        if(httpinf[fd].body.length()<=1024*10 && httpinf[fd].body_chunked.length()<=1024*10)
+                            stt::system::ServerSetting::logfile->writeLog("http server consumer  : fd= "+to_string(fd)+" now has solved request.\n*******request information：*********\nheader= "+string(httpinf[fd].header)+"\nbody="+string(httpinf[fd].body)+"\nbody_chunked="+string(httpinf[fd].body_chunked)+"\n*************************");
+                        else
+                            stt::system::ServerSetting::logfile->writeLog("http server consumer  : fd= "+to_string(fd)+" now has solved request.\n*******request information：*********\nheader= "+string(httpinf[fd].header)+"\nbody,body_chunked= ... \n*************************");
                     }
 
                 }
@@ -5451,7 +5457,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             //lock6.unlock();
             //开始处理
                 //入队
-            Tcpinf.pendindQueue.push(move(inf));
+            Tcpinf.pendindQueue.push(move(httpinf[fd]));
             
             if(Tcpinf.pendindQueue.size()==1)//只有一个 说明没有任务没做完 直接执行
             {
@@ -5508,9 +5514,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             if(stt::system::ServerSetting::logfile!=nullptr)
                             {
                                 if(stt::system::ServerSetting::language=="Chinese")
-                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"请求太频繁，已经关闭连接");
+                                    stt::system::ServerSetting::logfile->writeLog("http server : fd="+to_string(fd)+"请求太频繁，已经关闭连接");
                                 else
-                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"request are too frequent,now has closed this connection");
+                                    stt::system::ServerSetting::logfile->writeLog("http server : fd="+to_string(fd)+"request are too frequent,now has closed this connection");
                             }
                         }
                         else
@@ -5518,9 +5524,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             if(stt::system::ServerSetting::logfile!=nullptr)
                             {
                                 if(stt::system::ServerSetting::language=="Chinese")
-                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"请求太频繁，已经忽略连接");
+                                    stt::system::ServerSetting::logfile->writeLog("http server : fd="+to_string(fd)+"请求太频繁，已经忽略请求");
                                 else
-                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"request are too frequent,now has ignored this connection");
+                                    stt::system::ServerSetting::logfile->writeLog("http server : fd="+to_string(fd)+"request are too frequent,now has ignored this request");
                             }
                         }
                         return;
@@ -6103,8 +6109,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 winf.fd=fd;
                 winf.closeflag=false;
                 
-                HttpRequestInformation HttpInf;
-                int ret=k.solveRequest(Tcpinf,HttpInf,buffer_size,1);
+                //HttpRequestInformation HttpInf;
+                int ret=k.solveRequest(Tcpinf,winf.httpinf,buffer_size,1);
                 if(ret==-1)
                 {
                     //k.close();
@@ -6136,12 +6142,12 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 }
                 else if(ret==1)
                 {
-                    winf.locPara=HttpInf.locPara;
-                    winf.header=HttpInf.header;
+                    winf.locPara=winf.httpinf.locPara;
+                    winf.header=winf.httpinf.header;
                     //cout<<winf.header<<endl;
                     if(security_open)
                     {
-                        int ret=connectionLimiter.allowRequest(clientfd[fd].ip,fd,HttpInf.loc,requestTimes,requestSecs);
+                        int ret=connectionLimiter.allowRequest(clientfd[fd].ip,fd,winf.httpinf.loc,requestTimes,requestSecs);
                         if(ret!=stt::security::ALLOW)
                         {
                             //securitySendBackFun(k,inff);
@@ -6151,9 +6157,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 if(stt::system::ServerSetting::logfile!=nullptr)
                                 {
                                     if(stt::system::ServerSetting::language=="Chinese")
-                                        stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"请求太频繁，已经关闭连接");
+                                        stt::system::ServerSetting::logfile->writeLog("websocket server : fd="+to_string(fd)+"请求太频繁，已经关闭连接");
                                     else
-                                        stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"request are too frequent,now has closed this connection");
+                                        stt::system::ServerSetting::logfile->writeLog("websocket server : fd="+to_string(fd)+"request are too frequent,now has closed this connection");
                                 }
                             }
                             else
@@ -6161,9 +6167,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 if(stt::system::ServerSetting::logfile!=nullptr)
                                 {
                                     if(stt::system::ServerSetting::language=="Chinese")
-                                        stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"请求太频繁，已经忽略连接");
+                                        stt::system::ServerSetting::logfile->writeLog("websocket server : fd="+to_string(fd)+"请求太频繁，已经忽略请求");
                                     else
-                                        stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"request are too frequent,now has ignored this connection");
+                                        stt::system::ServerSetting::logfile->writeLog("websocket server : fd="+to_string(fd)+"request are too frequent,now has ignored this request");
                                 }
                             }
                             return;
@@ -6186,7 +6192,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
                     string_view key;
                     string keyy;
-                    HttpStringUtil::get_value_header(HttpInf.header,key,"Sec-WebSocket-Key");
+                    HttpStringUtil::get_value_header(winf.httpinf.header,key,"Sec-WebSocket-Key");
                     keyy.assign(key);
                     keyy+="258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
                     string result="";
@@ -6250,13 +6256,13 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 
                 //lock.unlock();
                 WebSocketServerFDHandler k;
-                WebSocketFDInformation inf;
+                
             k.setFD(fd,clientfd[fd].ssl,unblock);
             
             int ret=1;
-            inf.fd=fd;
+            jj->second.fd=fd;
             
-            ret=k.getMessage(Tcpinf,inf,buffer_size,1);
+            ret=k.getMessage(Tcpinf,jj->second,buffer_size,1);
             
             if(ret==-1)
             {
@@ -6277,9 +6283,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         if(stt::system::ServerSetting::logfile!=nullptr)
                         {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" 收到关闭确认帧: "+ inf.message);
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" 收到关闭确认帧: "+ jj->second.message);
                         else 
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" has received closed confirm fin:"+ inf.message);
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" has received closed confirm fin:"+ jj->second.message);
                         }
                         TcpServer::close(fd);
                     }
@@ -6288,12 +6294,12 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         if(stt::system::ServerSetting::logfile!=nullptr)
                         {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" 收到关闭帧: "+ inf.message);
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" 收到关闭帧: "+ jj->second.message);
                         else 
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" has received closed fin:"+ inf.message);
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" has received closed fin:"+ jj->second.message);
                         }
                         
-                        closeAck(fd,inf.message);
+                        closeAck(fd,jj->second.message);
                     }
                     wbclientfd.erase(jj);
                     return;
@@ -6303,9 +6309,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" 收到心跳确认: "+ inf.message);
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" 收到心跳确认: "+ jj->second.message);
                         else 
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" has received heartbeat confirm:"+ inf.message);
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" has received heartbeat confirm:"+ jj->second.message);
                     }
                     jj->second.response=::time(0);
                     jj->second.HBTime=0;
@@ -6320,9 +6326,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" 收到心跳: "+ inf.message);
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" 收到心跳: "+ jj->second.message);
                         else 
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" has received heartbeat:"+ inf.message);
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" has received heartbeat:"+ jj->second.message);
                     }
                     jj->second.response=::time(0);
                     if(!sendMessage(jj->first,"心跳","1010"))//发送心跳失败直接关闭
@@ -6353,9 +6359,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                         if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" 收到常规信息: "+ inf.message);
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" 收到常规信息: "+ jj->second.message);
                         else 
-                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" has received normal message:"+ inf.message);
+                            stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" has received normal message:"+ jj->second.message);
                     }
                     jj->second.response=::time(0);
                     //if(!fc(jj->second.message,*this,jj->second))//回调函数失败
@@ -6373,7 +6379,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             //lock6.unlock();
             //开始处理
                 //入队
-            Tcpinf.pendindQueue.push(move(inf));
+            Tcpinf.pendindQueue.push(move(jj->second));
             
             if(Tcpinf.pendindQueue.size()==1)//只有一个 说明没有任务没做完 直接执行
             {
@@ -6431,9 +6437,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             if(stt::system::ServerSetting::logfile!=nullptr)
                             {
                                 if(stt::system::ServerSetting::language=="Chinese")
-                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"请求太频繁，已经关闭连接");
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : fd="+to_string(fd)+"请求太频繁，已经关闭连接");
                                 else
-                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"request are too frequent,now has closed this connection");
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : fd="+to_string(fd)+"request are too frequent,now has closed this connection");
                             }
                         }
                         else
@@ -6441,9 +6447,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             if(stt::system::ServerSetting::logfile!=nullptr)
                             {
                                 if(stt::system::ServerSetting::language=="Chinese")
-                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"请求太频繁，已经忽略连接");
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : fd="+to_string(fd)+"请求太频繁，已经忽略请求");
                                 else
-                                    stt::system::ServerSetting::logfile->writeLog("tcp server : fd="+to_string(fd)+"request are too frequent,now has ignored this connection");
+                                    stt::system::ServerSetting::logfile->writeLog("websocket server : fd="+to_string(fd)+"request are too frequent,now has ignored this request");
                             }
                         }
                         return;

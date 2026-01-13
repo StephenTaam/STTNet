@@ -2842,6 +2842,10 @@ namespace stt
         * @brief 所需的数据仓库
         */
         std::unordered_map<std::string,std::any> ctx;
+        /**
+        * @brief 握手阶段保存的http信息
+        */
+        HttpRequestInformation httpinf;
     };
 
     /**
@@ -3205,6 +3209,7 @@ namespace stt
         {inf.ctx["key"]=inf.loc;return 1;};
         //std::function<bool(const HttpRequestInformation &inf,HttpServerFDHandler &k)> fc;
         //HttpRequestInformation *HttpInf;
+        HttpRequestInformation *httpinf;
     private:
         //void consumer(const int &threadID);
         //inline void handler(const int &fd);
@@ -3328,6 +3333,7 @@ namespace stt
         bool startListen(const int &port,const int &threads=8)
         {
             //HttpInf=new HttpRequestInformation[maxFD];
+            httpinf=new HttpRequestInformation[maxFD];
             return TcpServer::startListen(port,threads);
         }
         /**
@@ -3335,7 +3341,7 @@ namespace stt
         */
         ~HttpServer()
         {
-            //delete[] HttpInf;
+            delete[] httpinf;
         }
     };
     /**

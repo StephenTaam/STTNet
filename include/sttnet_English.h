@@ -2913,6 +2913,10 @@ private:
         * @brief required data warehouse
         */
         std::unordered_map<std::string,std::any> ctx;
+        /**
+        * @brief http information in handshake stage
+        */
+        HttpRequestInformation httpinf;
     };
 
     enum class TLSState : uint8_t {
@@ -3369,6 +3373,7 @@ private:
             inf.ctx["key"] = inf.loc;
             return 1;
         };
+        HttpRequestInformation *httpinf;
 
 private:
     void handler_netevent(const int &fd);
@@ -3641,13 +3646,14 @@ void setSecuritySendBackFun(
      */
     bool startListen(const int &port, const int &threads = 8)
     {
+        httpinf = new HttpRequestInformation[maxFD];
         return TcpServer::startListen(port, threads);
     }
 
     /**
      * @brief Destructor.
      */
-    ~HttpServer() {}
+    ~HttpServer() {delete[] httpinf;}
 };
 
     /**
