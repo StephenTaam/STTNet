@@ -2102,6 +2102,47 @@ namespace stt
      * - 建议由外部定时器触发调用，避免热路径扫描
      */
             bool connectionDetect(const std::string &ip,const int &fd);
+        /**
+ * @brief 立即将指定 IP 加入黑名单（直接封禁）。
+ *
+ * @details
+ * 该接口用于在检测到“明确恶意行为”时，绕过评分与渐进惩罚，
+ * 直接对 IP 进行封禁（写入黑名单）。
+ *
+ * 封禁语义说明：
+ * - 若 IP 当前不在黑名单中：直接加入；
+ * - 若 IP 已在黑名单中：@b 刷新（覆盖）封禁到期时间；
+ * - 若 banSeconds < 0：表示永久封禁（使用 time_point::max）。
+ *
+ * @param ip 需要封禁的 IP 地址。
+ * @param banSeconds 封禁时长（秒）：
+ *   - > 0 ：封禁 banSeconds 秒（短期封禁）
+ *   - = 0 ：不做任何操作
+ *   - < 0 ：永久封禁
+ * @param reasonCN 封禁原因（中文，用于日志）。
+ * @param reasonEN 封禁原因（英文，用于日志）。
+ *
+ * @note
+ * - 本函数 @b 不会 立即断开已有连接；
+ *   外层逻辑应在返回 CLOSE 后自行 close(fd)。
+ * - 使用 steady_clock，不受系统时间调整影响。
+ * - 该接口是安全裁决的“终态动作”，应谨慎调用。
+  * @note
+ * - 若 IP 已被封禁且原到期时间晚于本次封禁时间，
+ *   将保留更长的封禁（不会缩短）。
+
+ */
+        void banIP(const std::string &ip,int banSeconds,const std::string &reasonCN,const std::string &reasonEN);
+        /**
+ * @brief 手动解除某个 IP 的黑名单。
+ */
+    void unbanIP(const std::string &ip);
+    /**
+    * @brief 判断某ip是否被封禁
+    */
+    bool isBanned(const std::string &ip) const;
+
+
         private:
             // 核心判定
             bool allow(RateState &st,const RateLimitType &type,const int &times,const int &secs,const std::chrono::steady_clock::time_point &now);

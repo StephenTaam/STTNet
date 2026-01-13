@@ -9304,3 +9304,73 @@ inline void stt::security::ConnectionLimiter::logSecurity(const std::string &msg
             stt::system::ServerSetting::logfile->writeLog(msgEN);
     }
 }
+void stt::security::ConnectionLimiter::banIP(
+    const std::string &ip,
+    int banSeconds,
+    const std::string &reasonCN,
+    const std::string &reasonEN)
+{
+    auto now = std::chrono::steady_clock::now();
+
+    std::chrono::steady_clock::time_point until;
+
+    if (banSeconds < 0)
+    {
+        // 永久封禁（不会溢出、不会依赖 int）
+        until = std::chrono::steady_clock::time_point::max();
+    }
+    else if (banSeconds == 0)
+    {
+        return;
+    }
+    else
+    {
+        // 防御性截断，避免 int 极值/误传
+        if (banSeconds > 65535)
+            banSeconds = 65535;
+
+        until = now + std::chrono::seconds(banSeconds);
+    }
+    auto it = blacklist.find(ip);
+    if (it != blacklist.end())
+    {
+        // 若已有封禁时间更晚，则不缩短
+        if (it->second >= until)
+            return;
+    }
+    blacklist[ip] = until;
+
+    logSecurity(
+        "【直接封禁】IP " + ip + "：" + reasonCN +
+            (banSeconds < 0
+                ? "（永久封禁）"
+                : "，封禁 " + std::to_string(banSeconds) + " 秒"),
+        "[DIRECT BAN] IP " + ip + ": " + reasonEN +
+            (banSeconds < 0
+                ? " (permanent)"
+                : ", banned for " + std::to_string(banSeconds) + " seconds")
+    );
+}
+
+void stt::security::ConnectionLimiter::unbanIP(const std::string &ip)
+{
+    auto it = blacklist.find(ip);
+    if (it != blacklist.end())
+    {
+        blacklist.erase(it);
+
+        logSecurity(
+            "【解封】IP " + ip + " 已解除封禁",
+            "[UNBAN] IP " + ip + " unbanned"
+        );
+    }
+}
+bool stt::security::ConnectionLimiter::isBanned(
+    const std::string &ip) const
+{
+    auto it = blacklist.find(ip);
+    if (it == blacklist.end())
+        return false;
+
+    return std::chrono::steady_clock::now() < it->second;
+}

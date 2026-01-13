@@ -2134,6 +2134,60 @@ public:
      * - Prefer calling via a timer instead of scanning hot paths.
      */
     bool connectionDetect(const std::string &ip, const int &fd);
+    /**
+ * @brief Immediately add the specified IP to the blacklist (direct ban).
+ *
+ * @details
+ * This function is used when a client exhibits @b clearly malicious behavior.
+ * It bypasses score-based and progressive penalties and directly bans the IP
+ * by inserting it into the blacklist.
+ *
+ * Ban semantics:
+ * - If the IP is not currently blacklisted: it will be added;
+ * - If the IP is already blacklisted: the ban expiration time will be
+ *   @b refreshed (overwritten);
+ * - If @p banSeconds < 0: the ban is permanent
+ *   (implemented using @c std::chrono::steady_clock::time_point::max).
+ *
+ * @param ip The IP address to be banned.
+ * @param banSeconds Ban duration in seconds:
+ *   - > 0 : ban for @p banSeconds seconds (temporary ban)
+ *   - = 0 : no operation
+ *   - < 0 : permanent ban
+ * @param reasonCN Ban reason in Chinese (for logging).
+ * @param reasonEN Ban reason in English (for logging).
+ *
+ * @note
+ * - This function does @b not immediately close existing connections;
+ *   the caller should close the corresponding fd after receiving
+ *   a @ref DefenseDecision::CLOSE decision.
+ * - Uses @c std::chrono::steady_clock and is not affected by system time changes.
+ * - This function represents a @b terminal security action and should be
+ *   used with caution.
+ *
+ * @note
+ * - If the IP is already banned and the existing expiration time is later than
+ *   the new one, the longer ban will be preserved (the ban will not be shortened).
+ */
+void banIP(const std::string &ip,
+           int banSeconds,
+           const std::string &reasonCN,
+           const std::string &reasonEN);
+/**
+ * @brief Manually remove an IP address from the blacklist.
+ *
+ * @param ip The IP address to be unbanned.
+ */
+void unbanIP(const std::string &ip);
+/**
+ * @brief Check whether the specified IP address is currently banned.
+ *
+ * @param ip The IP address to check.
+ * @return true  The IP is currently banned.
+ * @return false The IP is not banned or the ban has expired.
+ */
+bool isBanned(const std::string &ip) const;
+
 
 private:
     // Core limiter primitive
@@ -3729,7 +3783,7 @@ private:
 
     std::function<bool(WebSocketServerFDHandler &k, WebSocketFDInformation &inf)> fccc =
         [](WebSocketServerFDHandler &k, WebSocketFDInformation &inf) ->bool
-        {return true};
+        {return true;};
 
     std::function<bool(WebSocketServerFDHandler &k, WebSocketFDInformation &inf)> globalSolveFun =
         [](WebSocketServerFDHandler &k, WebSocketFDInformation &inf) -> bool {
