@@ -11,9 +11,10 @@ var searchData=
   ['htonl_5fntohl_5f64',['htonl_ntohl_64',['../classstt_1_1data_1_1NetworkOrderUtil.html#a83f2b74359885bc9775ed9eaa99d675f',1,'stt::data::NetworkOrderUtil']]],
   ['httpclient',['HttpClient',['../classstt_1_1network_1_1HttpClient.html',1,'stt::network']]],
   ['httpclient',['HttpClient',['../classstt_1_1network_1_1HttpClient.html#a7419eec11ac06e4f11048bab0057f347',1,'stt::network::HttpClient']]],
+  ['httpinf',['httpinf',['../structstt_1_1network_1_1WebSocketFDInformation.html#a304661b91e961a8b68b6f75b8daf5ffe',1,'stt::network::WebSocketFDInformation']]],
   ['httprequestinformation',['HttpRequestInformation',['../structstt_1_1network_1_1HttpRequestInformation.html',1,'stt::network']]],
-  ['httpserver',['HttpServer',['../classstt_1_1network_1_1HttpServer.html',1,'stt::network']]],
   ['httpserver',['HttpServer',['../classstt_1_1network_1_1HttpServer.html#aebc4295cde4f8f33fba168a11055fad2',1,'stt::network::HttpServer']]],
+  ['httpserver',['HttpServer',['../classstt_1_1network_1_1HttpServer.html',1,'stt::network']]],
   ['httpserverfdhandler',['HttpServerFDHandler',['../classstt_1_1network_1_1HttpServerFDHandler.html',1,'stt::network']]],
   ['httpstringutil',['HttpStringUtil',['../classstt_1_1data_1_1HttpStringUtil.html',1,'stt::data']]]
 ];

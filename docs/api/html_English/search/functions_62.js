@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['banip',['banIP',['../classstt_1_1security_1_1ConnectionLimiter.html#acc01144137996fcc040763e77354717e',1,'stt::security::ConnectionLimiter']]],
   ['base64_5fdecode',['base64_decode',['../classstt_1_1data_1_1EncodingUtil.html#aa651f31c77acc528267ce30c1ee14f45',1,'stt::data::EncodingUtil']]],
   ['base64_5fencode',['base64_encode',['../classstt_1_1data_1_1EncodingUtil.html#a9b7355efba12a0e1ff749e6374dfe2b7',1,'stt::data::EncodingUtil']]],
   ['bitoutput',['bitOutput',['../classstt_1_1data_1_1BitUtil.html#a2648aba62ba0916a9765c8d6f3d5d8e6',1,'stt::data::BitUtil::bitOutput(char input, std::string &amp;result)'],['../classstt_1_1data_1_1BitUtil.html#ae9914e321d56b413725068696447663a',1,'stt::data::BitUtil::bitOutput(const std::string &amp;input, std::string &amp;result)']]],

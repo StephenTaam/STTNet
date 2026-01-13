@@ -129,6 +129,15 @@ Public 成员函数</h2></td></tr>
 <tr class="memitem:a68cadfcc8107f14483ffb4c4df020a60"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a68cadfcc8107f14483ffb4c4df020a60">connectionDetect</a> (const std::string &amp;ip, const int &amp;fd)</td></tr>
 <tr class="memdesc:a68cadfcc8107f14483ffb4c4df020a60"><td class="mdescLeft">&#160;</td><td class="mdescRight">检测并清理僵尸连接（fd 级）。  <a href="#a68cadfcc8107f14483ffb4c4df020a60">更多...</a><br/></td></tr>
 <tr class="separator:a68cadfcc8107f14483ffb4c4df020a60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc01144137996fcc040763e77354717e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#acc01144137996fcc040763e77354717e">banIP</a> (const std::string &amp;ip, int banSeconds, const std::string &amp;reasonCN, const std::string &amp;reasonEN)</td></tr>
+<tr class="memdesc:acc01144137996fcc040763e77354717e"><td class="mdescLeft">&#160;</td><td class="mdescRight">立即将指定 IP 加入黑名单（直接封禁）。  <a href="#acc01144137996fcc040763e77354717e">更多...</a><br/></td></tr>
+<tr class="separator:acc01144137996fcc040763e77354717e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afff60c7b0c0ee5a5786b0563e74f2864"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#afff60c7b0c0ee5a5786b0563e74f2864">unbanIP</a> (const std::string &amp;ip)</td></tr>
+<tr class="memdesc:afff60c7b0c0ee5a5786b0563e74f2864"><td class="mdescLeft">&#160;</td><td class="mdescRight">手动解除某个 IP 的黑名单。  <a href="#afff60c7b0c0ee5a5786b0563e74f2864">更多...</a><br/></td></tr>
+<tr class="separator:afff60c7b0c0ee5a5786b0563e74f2864"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93ebf30684cba4ac4e6fd06b49b23957"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a93ebf30684cba4ac4e6fd06b49b23957">isBanned</a> (const std::string &amp;ip) const </td></tr>
+<tr class="memdesc:a93ebf30684cba4ac4e6fd06b49b23957"><td class="mdescLeft">&#160;</td><td class="mdescRight">判断某ip是否被封禁  <a href="#a93ebf30684cba4ac4e6fd06b49b23957">更多...</a><br/></td></tr>
+<tr class="separator:a93ebf30684cba4ac4e6fd06b49b23957"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>统一的连接与请求安全裁决器（IP 级 + fd 级，多策略限流 + 黑名单）。 </p>
@@ -389,6 +398,78 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="acc01144137996fcc040763e77354717e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::security::ConnectionLimiter::banIP </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>ip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>banSeconds</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>reasonCN</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>reasonEN</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>立即将指定 IP 加入黑名单（直接封禁）。 </p>
+<p>该接口用于在检测到“明确恶意行为”时，绕过评分与渐进惩罚， 直接对 IP 进行封禁（写入黑名单）。</p>
+<p>封禁语义说明：</p>
+<ul>
+<li>若 IP 当前不在黑名单中：直接加入；</li>
+<li>若 IP 已在黑名单中：<b>刷新（覆盖）封禁到期时间；</b> </li>
+<li>若 banSeconds &lt; 0：表示永久封禁（使用 time_point::max）。</li>
+</ul>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ip</td><td>需要封禁的 IP 地址。 </td></tr>
+    <tr><td class="paramname">banSeconds</td><td>封禁时长（秒）：<ul>
+<li>&gt; 0 ：封禁 banSeconds 秒（短期封禁）</li>
+<li>= 0 ：不做任何操作</li>
+<li>&lt; 0 ：永久封禁 </li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">reasonCN</td><td>封禁原因（中文，用于日志）。 </td></tr>
+    <tr><td class="paramname">reasonEN</td><td>封禁原因（英文，用于日志）。</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>注解</dt><dd><ul>
+<li>本函数 <b>不会</b> 立即断开已有连接； 外层逻辑应在返回 CLOSE 后自行 close(fd)。</li>
+<li>使用 steady_clock，不受系统时间调整影响。</li>
+<li>该接口是安全裁决的“终态动作”，应谨慎调用。 </li>
+</ul>
+</dd>
+<dd>
+<ul>
+<li>若 IP 已被封禁且原到期时间晚于本次封禁时间， 将保留更长的封禁（不会缩短）。 </li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="ab63d6e85a83e95fed038fd4ea49b1be0"></a>
 <div class="memitem">
 <div class="memproto">
@@ -469,6 +550,24 @@ false 未超时或不存在</dd></dl>
 <li>建议由外部定时器触发调用，避免热路径扫描 </li>
 </ul>
 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a93ebf30684cba4ac4e6fd06b49b23957"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool stt::security::ConnectionLimiter::isBanned </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>ip</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>判断某ip是否被封禁 </p>
 
 </div>
 </div>
@@ -592,6 +691,24 @@ false 未超时或不存在</dd></dl>
   </dd>
 </dl>
 <dl class="section note"><dt>注解</dt><dd>不调用本函数时，默认策略为 <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53ca6be0e091023afd88f3791b011cc5af64">RateLimitType::SlidingWindow</a> 。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="afff60c7b0c0ee5a5786b0563e74f2864"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::security::ConnectionLimiter::unbanIP </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>ip</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>手动解除某个 IP 的黑名单。 </p>
 
 </div>
 </div>

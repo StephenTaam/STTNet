@@ -129,6 +129,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a68cadfcc8107f14483ffb4c4df020a60"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a68cadfcc8107f14483ffb4c4df020a60">connectionDetect</a> (const std::string &amp;ip, const int &amp;fd)</td></tr>
 <tr class="memdesc:a68cadfcc8107f14483ffb4c4df020a60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detect and cleanup an idle/zombie connection.  <a href="#a68cadfcc8107f14483ffb4c4df020a60">More...</a><br/></td></tr>
 <tr class="separator:a68cadfcc8107f14483ffb4c4df020a60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc01144137996fcc040763e77354717e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#acc01144137996fcc040763e77354717e">banIP</a> (const std::string &amp;ip, int banSeconds, const std::string &amp;reasonCN, const std::string &amp;reasonEN)</td></tr>
+<tr class="memdesc:acc01144137996fcc040763e77354717e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Immediately add the specified IP to the blacklist (direct ban).  <a href="#acc01144137996fcc040763e77354717e">More...</a><br/></td></tr>
+<tr class="separator:acc01144137996fcc040763e77354717e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afff60c7b0c0ee5a5786b0563e74f2864"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#afff60c7b0c0ee5a5786b0563e74f2864">unbanIP</a> (const std::string &amp;ip)</td></tr>
+<tr class="memdesc:afff60c7b0c0ee5a5786b0563e74f2864"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manually remove an IP address from the blacklist.  <a href="#afff60c7b0c0ee5a5786b0563e74f2864">More...</a><br/></td></tr>
+<tr class="separator:afff60c7b0c0ee5a5786b0563e74f2864"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93ebf30684cba4ac4e6fd06b49b23957"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a93ebf30684cba4ac4e6fd06b49b23957">isBanned</a> (const std::string &amp;ip) const </td></tr>
+<tr class="memdesc:a93ebf30684cba4ac4e6fd06b49b23957"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether the specified IP address is currently banned.  <a href="#a93ebf30684cba4ac4e6fd06b49b23957">More...</a><br/></td></tr>
+<tr class="separator:a93ebf30684cba4ac4e6fd06b49b23957"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Unified connection &amp; request security gate (IP-level + fd-level, multi-strategy limiting + blacklist). </p>
@@ -375,6 +384,78 @@ Lifecycle</h1>
 
 </div>
 </div>
+<a class="anchor" id="acc01144137996fcc040763e77354717e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::security::ConnectionLimiter::banIP </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>ip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>banSeconds</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>reasonCN</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>reasonEN</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Immediately add the specified IP to the blacklist (direct ban). </p>
+<p>This function is used when a client exhibits <b>clearly</b> malicious behavior. It bypasses score-based and progressive penalties and directly bans the IP by inserting it into the blacklist.</p>
+<p>Ban semantics:</p>
+<ul>
+<li>If the IP is not currently blacklisted: it will be added;</li>
+<li>If the IP is already blacklisted: the ban expiration time will be <b>refreshed</b> (overwritten);</li>
+<li>If <code>banSeconds</code> &lt; 0: the ban is permanent (implemented using <code>std::chrono::steady_clock::time_point::max</code>).</li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ip</td><td>The IP address to be banned. </td></tr>
+    <tr><td class="paramname">banSeconds</td><td>Ban duration in seconds:<ul>
+<li>&gt; 0 : ban for <code>banSeconds</code> seconds (temporary ban)</li>
+<li>= 0 : no operation</li>
+<li>&lt; 0 : permanent ban </li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">reasonCN</td><td>Ban reason in Chinese (for logging). </td></tr>
+    <tr><td class="paramname">reasonEN</td><td>Ban reason in English (for logging).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd><ul>
+<li>This function does <b>not</b> immediately close existing connections; the caller should close the corresponding fd after receiving a DefenseDecision::CLOSE decision.</li>
+<li>Uses <code>std::chrono::steady_clock</code> and is not affected by system time changes.</li>
+<li>This function represents a <b>terminal</b> security action and should be used with caution.</li>
+</ul>
+</dd>
+<dd>
+<ul>
+<li>If the IP is already banned and the existing expiration time is later than the new one, the longer ban will be preserved (the ban will not be shortened). </li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="ab63d6e85a83e95fed038fd4ea49b1be0"></a>
 <div class="memitem">
 <div class="memproto">
@@ -455,6 +536,33 @@ false Not timed out or not found.</dd></dl>
 <li>Prefer calling via a timer instead of scanning hot paths. </li>
 </ul>
 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a93ebf30684cba4ac4e6fd06b49b23957"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool stt::security::ConnectionLimiter::isBanned </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>ip</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check whether the specified IP address is currently banned. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ip</td><td>The IP address to check. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true The IP is currently banned. </dd>
+<dd>
+false The IP is not banned or the ban has expired. </dd></dl>
 
 </div>
 </div>
@@ -578,6 +686,30 @@ false Not timed out or not found.</dd></dl>
   </dd>
 </dl>
 <dl class="section note"><dt>Note</dt><dd>Default is <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53ca6be0e091023afd88f3791b011cc5af64">RateLimitType::SlidingWindow</a>. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="afff60c7b0c0ee5a5786b0563e74f2864"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::security::ConnectionLimiter::unbanIP </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>ip</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Manually remove an IP address from the blacklist. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ip</td><td>The IP address to be unbanned. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
