@@ -179,9 +179,9 @@ Public 成员函数</h2></td></tr>
 <tr class="memitem:a7a0938542769e9535826a3e68ed1ffc2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a7a0938542769e9535826a3e68ed1ffc2">writeC</a> (const char *data, const size_t &amp;pos, const size_t &amp;size)</td></tr>
 <tr class="memdesc:a7a0938542769e9535826a3e68ed1ffc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">写数据块  <a href="#a7a0938542769e9535826a3e68ed1ffc2">更多...</a><br/></td></tr>
 <tr class="separator:a7a0938542769e9535826a3e68ed1ffc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4760645d371bdedc44c37b6f8b987f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ab4760645d371bdedc44c37b6f8b987f9">formatC</a> ()</td></tr>
-<tr class="memdesc:ab4760645d371bdedc44c37b6f8b987f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">格式化数据  <a href="#ab4760645d371bdedc44c37b6f8b987f9">更多...</a><br/></td></tr>
-<tr class="separator:ab4760645d371bdedc44c37b6f8b987f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f9a7d7d262b4fbb0b0e9b9e9b652667"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a9f9a7d7d262b4fbb0b0e9b9e9b652667">formatC</a> ()</td></tr>
+<tr class="memdesc:a9f9a7d7d262b4fbb0b0e9b9e9b652667"><td class="mdescLeft">&#160;</td><td class="mdescRight">格式化数据  <a href="#a9f9a7d7d262b4fbb0b0e9b9e9b652667">更多...</a><br/></td></tr>
+<tr class="separator:a9f9a7d7d262b4fbb0b0e9b9e9b652667"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">直接操作磁盘数据的函数-文本模式</div></td></tr>
 <tr class="memitem:a7e6bc48253473e70edc56099f949f1e6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a7e6bc48253473e70edc56099f949f1e6">find</a> (const std::string &amp;targetString, const int linePos=1)</td></tr>
 <tr class="memdesc:a7e6bc48253473e70edc56099f949f1e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">查找行  <a href="#a7e6bc48253473e70edc56099f949f1e6">更多...</a><br/></td></tr>
@@ -658,12 +658,12 @@ false 删除失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="ab4760645d371bdedc44c37b6f8b987f9"></a>
+<a class="anchor" id="a9f9a7d7d262b4fbb0b0e9b9e9b652667"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void stt::file::File::formatC </td>
+          <td class="memname">bool stt::file::File::formatC </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -918,7 +918,7 @@ false 操作失败 </dd></dl>
     <tr><td class="paramname">fileName</td><td>打开文件的名字（可以用绝对路径或者相对路径） </td></tr>
     <tr><td class="paramname">create</td><td>true：当文件不存在的时候创建文件（以及目录） false：当文件不存在的时候不创建文件 （默认为true） </td></tr>
     <tr><td class="paramname">multiple</td><td>当&gt;=1的时候启用二进制打开文件，这个值为需要操作文件所需的预定的文件空间大小和原文件大小的比值  当&lt;1的时候采用文本模式打开文件 （默认为0 文本模式打开） </td></tr>
-    <tr><td class="paramname">size</td><td>当文件大小为0且参数multiple启用了二进制打开时，因为0和任何倍数都等于0，所以参数multiple会失效。这时候需要手动填入所需的预定文件空间的大小 （单位字节）（默认为0） </td></tr>
+    <tr><td class="paramname">size</td><td>手动填入所需的预定文件空间的大小，当这个参数非0时，不会采用multiple的倍数预留值而是直接用这个预定大小 （单位字节）（默认为0） </td></tr>
     <tr><td class="paramname">mode</td><td>如果create为true，且文件不存在，用位掩码表示新建文件的权限（默认为0666 rw- rw- rw-） </td></tr>
   </table>
   </dd>

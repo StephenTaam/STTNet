@@ -184,7 +184,7 @@ namespace stt
         * @param fileName 打开文件的名字（可以用绝对路径或者相对路径）
         * @param create true：当文件不存在的时候创建文件（以及目录） false：当文件不存在的时候不创建文件 （默认为true）
         * @param multiple 当>=1的时候启用二进制打开文件，这个值为需要操作文件所需的预定的文件空间大小和原文件大小的比值  当<1的时候采用文本模式打开文件 （默认为0 文本模式打开）
-        * @param size 当文件大小为0且参数multiple启用了二进制打开时，因为0和任何倍数都等于0，所以参数multiple会失效。这时候需要手动填入所需的预定文件空间的大小 （单位字节）（默认为0）
+        * @param size 手动填入所需的预定文件空间的大小，当这个参数非0时，不会采用multiple的倍数预留值而是直接用这个预定大小 （单位字节）（默认为0）
         * @param mode 如果create为true，且文件不存在，用位掩码表示新建文件的权限（默认为0666 rw- rw- rw-）
         * @return true:打开成功
         * @return false:打开失败
@@ -397,7 +397,7 @@ namespace stt
         * @brief 格式化数据
         * @note 把文件导入内存的数据全部删除
         */
-        void formatC();
+        bool formatC();
         /** @} */
     public:
         /**
@@ -3669,7 +3669,7 @@ namespace stt
         bool close();
         /**
         * @brief 关闭某个套接字的连接
-        @ @note 多态了TcpServer的close某个套接字
+        @ @note 多态了TcpServer的close某个套接字 直接掐掉Tcp连接 没有按照websocket协议关闭
         */
         bool close(const int &fd);
         /**

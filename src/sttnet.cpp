@@ -262,7 +262,7 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
             size=FileTool::get_file_size(fileName);
             fin.open(fileName,ios::binary);
             
-            if(size!=0)
+            if(multiple_backup==0)
             {
                 malloced=size*multiple;
             }
@@ -784,12 +784,13 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
         formatC();
         unlockMemory();
     }
-    void stt::file::File::formatC()
+    bool stt::file::File::formatC()
     {
         //格式化内存
         memset(data_binary,0,size1);
         //改变size1的值
         size1=0;
+        return true;
     }
     
     ostream& stt::time::operator<<(ostream &os,const Duration &a)

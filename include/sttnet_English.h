@@ -182,7 +182,7 @@ namespace stt
         * @param fileName The name of the file to open (can be an absolute or relative path).
         * @param create true: Create the file (and directory) if it does not exist. false: Do not create the file if it does not exist (default is true).
         * @param multiple When >= 1, open the file in binary mode. This value is the ratio of the预定 file space size required for operating the file to the original file size. When < 1, open the file in text mode (default is 0, open in text mode).
-        * @param size When the file size is 0 and the binary mode is enabled by the parameter multiple, since 0 multiplied by any number is 0, the parameter multiple will be invalid. In this case, manually enter the预定 file space size (in bytes) (default is 0).
+        * @param size Manually specify the desired preallocated file space size. When this parameter is non-zero, the multiple-based reservation value will not be used; instead, this preallocated size will be applied directly (unit: bytes) (default: 0)
         * @param mode If create is true and the file does not exist, use a bit mask to represent the permissions of the newly created file (default is 0666, rw- rw- rw-).
         * @return true: File opened successfully.
         * @return false: Failed to open the file.
@@ -395,7 +395,7 @@ namespace stt
         * @brief Format the data.
         * @note Delete all the data imported from the file into memory.
         */
-        void formatC();
+        bool formatC();
         /** @} */
     public:
         /**
@@ -4103,7 +4103,7 @@ void setSecuritySendBackFun(
     bool close();
     /**
         * @brief Close the connection of a certain socket
-        @ @note Polymorphism of TcpServer's close for a certain socket
+        @ @note Polymorphism of TcpServer's close for a certain socket. close Tcp connection directly and do not use websocket rule.
         */
         bool close(const int &fd);
     /**

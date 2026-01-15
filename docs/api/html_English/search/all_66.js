@@ -16,5 +16,5 @@ var searchData=
   ['flag2',['flag2',['../classstt_1_1network_1_1TcpFDHandler.html#a4d510c27152fbe94b3794858d4b22d0e',1,'stt::network::TcpFDHandler::flag2()'],['../classstt_1_1network_1_1UdpFDHandler.html#aa2a923d69f4c7aeefbcc5916c6e3cafc',1,'stt::network::UdpFDHandler::flag2()']]],
   ['flag3',['flag3',['../classstt_1_1network_1_1TcpFDHandler.html#aa757f19a1c5b4929829e2a19e6714a4e',1,'stt::network::TcpFDHandler']]],
   ['format',['format',['../classstt_1_1file_1_1File.html#a078268f697bac4b26edd8cb423ff8fdf',1,'stt::file::File']]],
-  ['formatc',['formatC',['../classstt_1_1file_1_1File.html#ab4760645d371bdedc44c37b6f8b987f9',1,'stt::file::File']]]
+  ['formatc',['formatC',['../classstt_1_1file_1_1File.html#a9f9a7d7d262b4fbb0b0e9b9e9b652667',1,'stt::file::File']]]
 ];

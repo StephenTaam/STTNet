@@ -179,9 +179,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7a0938542769e9535826a3e68ed1ffc2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a7a0938542769e9535826a3e68ed1ffc2">writeC</a> (const char *data, const size_t &amp;pos, const size_t &amp;size)</td></tr>
 <tr class="memdesc:a7a0938542769e9535826a3e68ed1ffc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write a data block.  <a href="#a7a0938542769e9535826a3e68ed1ffc2">More...</a><br/></td></tr>
 <tr class="separator:a7a0938542769e9535826a3e68ed1ffc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4760645d371bdedc44c37b6f8b987f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ab4760645d371bdedc44c37b6f8b987f9">formatC</a> ()</td></tr>
-<tr class="memdesc:ab4760645d371bdedc44c37b6f8b987f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Format the data.  <a href="#ab4760645d371bdedc44c37b6f8b987f9">More...</a><br/></td></tr>
-<tr class="separator:ab4760645d371bdedc44c37b6f8b987f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f9a7d7d262b4fbb0b0e9b9e9b652667"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a9f9a7d7d262b4fbb0b0e9b9e9b652667">formatC</a> ()</td></tr>
+<tr class="memdesc:a9f9a7d7d262b4fbb0b0e9b9e9b652667"><td class="mdescLeft">&#160;</td><td class="mdescRight">Format the data.  <a href="#a9f9a7d7d262b4fbb0b0e9b9e9b652667">More...</a><br/></td></tr>
+<tr class="separator:a9f9a7d7d262b4fbb0b0e9b9e9b652667"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Functions for directly operating on disk data - Text mode</div></td></tr>
 <tr class="memitem:a7e6bc48253473e70edc56099f949f1e6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a7e6bc48253473e70edc56099f949f1e6">find</a> (const std::string &amp;targetString, const int linePos=1)</td></tr>
 <tr class="memdesc:a7e6bc48253473e70edc56099f949f1e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find a line.  <a href="#a7e6bc48253473e70edc56099f949f1e6">More...</a><br/></td></tr>
@@ -657,12 +657,12 @@ false if the deletion fails. </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="ab4760645d371bdedc44c37b6f8b987f9"></a>
+<a class="anchor" id="a9f9a7d7d262b4fbb0b0e9b9e9b652667"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void stt::file::File::formatC </td>
+          <td class="memname">bool stt::file::File::formatC </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -917,7 +917,7 @@ false if the operation fails. </dd></dl>
     <tr><td class="paramname">fileName</td><td>The name of the file to open (can be an absolute or relative path). </td></tr>
     <tr><td class="paramname">create</td><td>true: Create the file (and directory) if it does not exist. false: Do not create the file if it does not exist (default is true). </td></tr>
     <tr><td class="paramname">multiple</td><td>When &gt;= 1, open the file in binary mode. This value is the ratio of the预定 file space size required for operating the file to the original file size. When &lt; 1, open the file in text mode (default is 0, open in text mode). </td></tr>
-    <tr><td class="paramname">size</td><td>When the file size is 0 and the binary mode is enabled by the parameter multiple, since 0 multiplied by any number is 0, the parameter multiple will be invalid. In this case, manually enter the预定 file space size (in bytes) (default is 0). </td></tr>
+    <tr><td class="paramname">size</td><td>Manually specify the desired preallocated file space size. When this parameter is non-zero, the multiple-based reservation value will not be used; instead, this preallocated size will be applied directly (unit: bytes) (default: 0) </td></tr>
     <tr><td class="paramname">mode</td><td>If create is true and the file does not exist, use a bit mask to represent the permissions of the newly created file (default is 0666, rw- rw- rw-). </td></tr>
   </table>
   </dd>
