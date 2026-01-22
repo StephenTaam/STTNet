@@ -2738,6 +2738,10 @@ namespace stt
         */
         int fd;
         /**
+        * @brief 连接对象fd
+        */
+        uint64_t connection_obj_fd;
+        /**
         * @brief 请求类型
         */
         std::string type;
@@ -2836,6 +2840,10 @@ namespace stt
         */
         int fd;
         /**
+        * @brief 连接对象fd
+        */
+        uint64_t connection_obj_fd;
+        /**
         * @brief true:发送了关闭帧  false：没有发送关闭帧
         */
         bool closeflag;
@@ -2899,6 +2907,10 @@ namespace stt
         */
         int fd;
         /**
+        * @brief 连接对象fd
+        */
+        uint64_t connection_obj_fd;
+        /**
         * @brief 裸数据
         */
         std::string data;
@@ -2924,6 +2936,10 @@ namespace stt
         * @brief 套接字fd
         */
         int fd;
+        /**
+        * @brief 连接对象fd
+        */
+        uint64_t connection_obj_fd;
         /**
         * @brief 客户端ip
         */
@@ -3019,6 +3035,7 @@ namespace stt
         int requestSecs;
         int requestTimes;
         int checkFrequency;
+        uint64_t connection_obj_fd;
     private:
         std::function<void(const int &fd)> closeFun=[](const int &fd)->void
         {

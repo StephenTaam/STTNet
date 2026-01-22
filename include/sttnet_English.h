@@ -2818,6 +2818,10 @@ private:
         */
         int fd;
         /**
+        * @brief connection objection fd
+        */
+        uint64_t connection_obj_fd;
+        /**
         * @brief Request type
         */
         std::string type;
@@ -2920,6 +2924,10 @@ private:
         */
         int fd;
         /**
+        * @brief connection objection fd
+        */
+        uint64_t connection_obj_fd;
+        /**
         * @brief true: Close frame sent, false: Close frame not sent
         */
         bool closeflag;
@@ -2990,6 +2998,10 @@ private:
         */
         int fd;
         /**
+        * @brief connection objection fd
+        */
+        uint64_t connection_obj_fd;
+        /**
         * @brief Naked data
         */
         std::string data;
@@ -3008,6 +3020,10 @@ private:
         * @brief Socket file descriptor
         */
         int fd;
+        /**
+        * @brief connection objection fd
+        */
+        uint64_t connection_obj_fd;
         /**
         * @brief Client IP
         */
@@ -3102,6 +3118,7 @@ private:
         int requestSecs;
         int requestTimes;
         int checkFrequency;
+        uint64_t connection_obj_fd;
     private:
         std::function<void(const int &fd)> closeFun=[](const int &fd)->void
         {

@@ -3911,6 +3911,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         //flag_detect=true;
         //thread(&security::ConnectionLimiter::connectionDetect,&connectionLimiter).detach();
         //this->consumerNum=threads;
+
+        connection_obj_fd=1;
         flag=true;
         //this->logfile=logfile;
         return true;
@@ -4259,6 +4261,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             clientfd[cfd].buffer=new char[buffer_size];
                             clientfd[cfd].p_buffer_now=0;
                             clientfd[cfd].FDStatus=-1;
+                            clientfd[cfd].connection_obj_fd=this->connection_obj_fd++;
                             //clientfd[cfd].p_request_now=0;
                             //unique_lock<mutex> lock6(lc1);
                             //clientfd.emplace(cfd,inf);
@@ -4460,8 +4463,29 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         }
         else
         {
-            
+            if(clientfd[fd].pendindQueue.empty())
+            {
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                {
+                    if(stt::system::ServerSetting::language=="Chinese")
+                        stt::system::ServerSetting::logfile->writeLog("tcp server : worker处理成功,但是上一个连接已经关闭，所以不予继续处理 fd= "+to_string(fd));
+                    else
+                        stt::system::ServerSetting::logfile->writeLog("tcp server : worker solve sucessfully.but the last connection has been closed so stop solving this request. fd= "+to_string(fd));
+                }
+                return;
+            }
             TcpInformation &inf=std::any_cast<TcpInformation&>(clientfd[fd].pendindQueue.front());
+            if(inf.connection_obj_fd!=clientfd[fd].connection_obj_fd)
+            {
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                {
+                    if(stt::system::ServerSetting::language=="Chinese")
+                        stt::system::ServerSetting::logfile->writeLog("tcp server : worker处理成功,但是上一个连接已经关闭，所以不予继续处理 fd= "+to_string(fd));
+                    else
+                        stt::system::ServerSetting::logfile->writeLog("tcp server : worker solve sucessfully.but the last connection has been closed so stop solving this request. fd= "+to_string(fd));
+                }
+                return;
+            }
             auto ii=solveFun.find(std::any_cast<const std::string&>(inf.ctx["key"]));//对应的任务
             if(stt::system::ServerSetting::logfile!=nullptr)
             {
@@ -4731,6 +4755,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         //}
         
             inf.fd=fd;
+            inf.connection_obj_fd=clientfd[fd].connection_obj_fd;
             inf.data=string(Tcpinf.buffer,Tcpinf.p_buffer_now);
 
             
@@ -5026,8 +5051,6 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
              header1+\
              header+"\r\n"+\
              data;
-        
-             //cout<<result<<endl;
         
         if(sendData(result)!=result.length())
         {
@@ -5402,6 +5425,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             
             int ret=1;
             httpinf[fd].fd=fd;
+            httpinf[fd].connection_obj_fd=clientfd[fd].connection_obj_fd;
             
             ret=k.solveRequest(Tcpinf,httpinf[fd],buffer_size,1);
             
@@ -5728,10 +5752,29 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         }
         else
         {
-            
-            
-        
+            if(clientfd[fd].pendindQueue.empty())
+            {
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                {
+                    if(stt::system::ServerSetting::language=="Chinese")
+                        stt::system::ServerSetting::logfile->writeLog("http server : worker处理成功,但是上一个连接已经关闭，所以不予继续处理 fd= "+to_string(fd));
+                    else
+                        stt::system::ServerSetting::logfile->writeLog("http server : worker solve sucessfully.but the last connection has been closed so stop solving this request. fd= "+to_string(fd));
+                }
+                return;
+            }
             HttpRequestInformation &inf=std::any_cast<HttpRequestInformation&>(clientfd[fd].pendindQueue.front());
+            if(inf.connection_obj_fd!=clientfd[fd].connection_obj_fd)
+            {
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                {
+                    if(stt::system::ServerSetting::language=="Chinese")
+                        stt::system::ServerSetting::logfile->writeLog("http server : worker处理成功,但是上一个连接已经关闭，所以不予继续处理 fd= "+to_string(fd));
+                    else
+                        stt::system::ServerSetting::logfile->writeLog("http server : worker solve sucessfully.but the last connection has been closed so stop solving this request. fd= "+to_string(fd));
+                }
+                return;
+            }
             
             auto ii=solveFun.find(std::any_cast<const std::string&>(inf.ctx["key"]));//对应的任务
             if(stt::system::ServerSetting::logfile!=nullptr)
@@ -6262,6 +6305,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             
             int ret=1;
             jj->second.fd=fd;
+            jj->second.connection_obj_fd=clientfd[fd].connection_obj_fd;
             
             ret=k.getMessage(Tcpinf,jj->second,buffer_size,1);
             
@@ -6588,10 +6632,29 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         }
         else
         {
-            
-            
-        
+            if(clientfd[fd].pendindQueue.empty())
+            {
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                {
+                    if(stt::system::ServerSetting::language=="Chinese")
+                        stt::system::ServerSetting::logfile->writeLog("websocket server : worker处理成功,但是上一个连接已经关闭，所以不予继续处理 fd= "+to_string(fd));
+                    else
+                        stt::system::ServerSetting::logfile->writeLog("websocket server : worker solve sucessfully.but the last connection has been closed so stop solving this request. fd= "+to_string(fd));
+                }
+                return;
+            }
             WebSocketFDInformation &inf=std::any_cast<WebSocketFDInformation&>(clientfd[fd].pendindQueue.front());
+            if(inf.connection_obj_fd!=clientfd[fd].connection_obj_fd)
+            {
+                if(stt::system::ServerSetting::logfile!=nullptr)
+                {
+                    if(stt::system::ServerSetting::language=="Chinese")
+                        stt::system::ServerSetting::logfile->writeLog("websocket server : worker处理成功,但是上一个连接已经关闭，所以不予继续处理 fd= "+to_string(fd));
+                    else
+                        stt::system::ServerSetting::logfile->writeLog("websocket server : worker solve sucessfully.but the last connection has been closed so stop solving this request. fd= "+to_string(fd));
+                }
+                return;
+            }
             
             auto ii=solveFun.find(std::any_cast<const std::string&>(inf.ctx["key"]));//对应的任务
             if(stt::system::ServerSetting::logfile!=nullptr)
