@@ -61,6 +61,161 @@ namespace stt
     namespace system
     {
         class WorkerPool;
+        /**
+ * @brief Lock-free MPSC queue (Multi-Producer Single-Consumer)
+ *        无锁多生产者单消费者队列
+ *
+ * Multiple threads may push concurrently.
+ * Only ONE thread is allowed to pop.
+ *
+ * 多个线程可以同时 push，
+ * 但只允许一个线程 pop（通常是 reactor 线程）。
+ *
+ * This implementation is based on a linked-list with a dummy node,
+ * using atomic tail and single-threaded head.
+ *
+ * 基于链表 + dummy 节点：
+ *  - tail 是原子（多生产者）
+ *  - head 仅消费者访问（无需原子）
+ *
+ * Threading model:
+ *  - push(): MPSC (thread-safe)
+ *  - pop():  SPSC (must be single consumer)
+ *
+ * IMPORTANT:
+ *  ❗ Do NOT call pop() from multiple threads.
+ *  ❗ Do NOT call delete externally on nodes.
+ *
+ * 重要：
+ *  ❗ pop 只能由一个线程调用
+ *  ❗ 外部不得操作内部节点
+ */
+template<typename T>
+class MPSCQueue
+{
+    /**
+     * @brief Internal queue node
+     *        内部链表节点
+     */
+    struct Node {
+        T data;                          ///< Stored payload / 存储的数据
+        std::atomic<Node*> next{nullptr}; ///< Next pointer (atomic for producers)
+
+        /**
+         * @brief Construct node with moved value
+         */
+        Node(T&& d) : data(std::move(d)) {}
+    };
+
+    /**
+     * @brief Tail pointer (shared by all producers)
+     *        尾指针（所有生产者共享）
+     */
+    std::atomic<Node*> tail;
+
+    /**
+     * @brief Head pointer (consumer only)
+     *        头指针（仅消费者访问）
+     */
+    Node* head;
+
+public:
+
+    /**
+     * @brief Construct queue with dummy node
+     *        构造队列（创建 dummy 节点）
+     *
+     * We start with a dummy node so that:
+     *  - head always points to a valid node
+     *  - first real element is head->next
+     *
+     * 使用 dummy 节点保证：
+     *  - head 永远有效
+     *  - 实际数据从 head->next 开始
+     */
+    MPSCQueue()
+    {
+        Node* dummy = new Node(T{});
+        head = dummy;
+        tail.store(dummy, std::memory_order_relaxed);
+    }
+
+    /**
+     * @brief Push element into queue (thread-safe, multi-producer)
+     *        入队（多线程安全）
+     *
+     * @param v Value to push (moved)
+     *
+     * Algorithm:
+     * 1. Create new node
+     * 2. Atomically swap tail (exchange)
+     * 3. Link previous tail->next to new node
+     *
+     * 算法：
+     * 1. 创建新节点
+     * 2. atomic exchange 抢占尾指针
+     * 3. 将旧尾节点的 next 指向新节点
+     *
+     * Memory ordering:
+     *  - exchange(acq_rel): synchronize producers
+     *  - next.store(release): publish node to consumer
+     *
+     * 内存序：
+     *  - acq_rel：生产者之间同步
+     *  - release：向消费者发布节点
+     */
+    void push(T&& v)
+    {
+        Node* n = new Node(std::move(v));
+
+        // Atomically replace tail and get previous tail
+        Node* prev = tail.exchange(n, std::memory_order_acq_rel);
+
+        // Publish node to consumer
+        prev->next.store(n, std::memory_order_release);
+    }
+
+    /**
+     * @brief Pop element from queue (single consumer only)
+     *        出队（仅允许单消费者）
+     *
+     * @param out Output value
+     * @return true if element popped, false if queue empty
+     *
+     * Consumer logic:
+     *  - Read head->next
+     *  - If null: queue empty
+     *  - Otherwise advance head and delete old dummy
+     *
+     * 消费逻辑：
+     *  - 读取 head->next
+     *  - 若为空则队列为空
+     *  - 否则前移 head 并释放旧 dummy
+     *
+     * Memory ordering:
+     *  - next.load(acquire): pairs with producer's release
+     *
+     * 内存序：
+     *  - acquire：保证读取到完整写入的数据
+     */
+    bool pop(T& out)
+    {
+        Node* h = head;
+
+        // Acquire ensures visibility of producer writes
+        Node* nxt = h->next.load(std::memory_order_acquire);
+
+        if(!nxt)
+            return false; // empty
+
+        out = std::move(nxt->data);
+        head = nxt;
+        delete h;         // safe: only consumer deletes
+
+        return true;
+    }
+};
+
     }
     /**
     * @namespace stt::file
@@ -3005,7 +3160,7 @@ namespace stt
     class TcpServer 
     {
     protected:
-        std::queue<WorkerMessage> finishQueue;
+        system::MPSCQueue<WorkerMessage> finishQueue;
         stt::system::WorkerPool *workpool; 
         unsigned long buffer_size;
         unsigned long long  maxFD;
@@ -4419,8 +4574,6 @@ namespace stt
             std::condition_variable cv_;
             bool stop_;
         };
-
-
     }
     
 }

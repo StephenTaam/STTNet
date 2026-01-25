@@ -176,8 +176,8 @@ Public 成员函数</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected 属性</h2></td></tr>
-<tr class="memitem:a46d2e391d6323c8cfc00b2d97c3bf012"><td class="memItemLeft" align="right" valign="top">std::queue&lt; <a class="el" href="structstt_1_1network_1_1WorkerMessage.html">WorkerMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a46d2e391d6323c8cfc00b2d97c3bf012">finishQueue</a></td></tr>
-<tr class="separator:a46d2e391d6323c8cfc00b2d97c3bf012"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fddafbac93c57fa716f9bac06cdbf8f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">system::MPSCQueue</a>&lt; <a class="el" href="structstt_1_1network_1_1WorkerMessage.html">WorkerMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a7fddafbac93c57fa716f9bac06cdbf8f">finishQueue</a></td></tr>
+<tr class="separator:a7fddafbac93c57fa716f9bac06cdbf8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28af55077bc4d25649c42e6d4ffb9407"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstt_1_1system_1_1WorkerPool.html">stt::system::WorkerPool</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a28af55077bc4d25649c42e6d4ffb9407">workpool</a></td></tr>
 <tr class="separator:a28af55077bc4d25649c42e6d4ffb9407"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8eeec7357b1de9f9a6a59a4a540c989b"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a></td></tr>
@@ -212,6 +212,8 @@ Protected 属性</h2></td></tr>
 <tr class="separator:ae809e4044a03a89ead5535c42e0d6162"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aedc126014068776e3f9cf5da4b14bb81"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a></td></tr>
 <tr class="separator:aedc126014068776e3f9cf5da4b14bb81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01cf3c8ae704de7b4c035ec9d80990c6"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a01cf3c8ae704de7b4c035ec9d80990c6">connection_obj_fd</a></td></tr>
+<tr class="separator:a01cf3c8ae704de7b4c035ec9d80990c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>Tcp服务端类 </p>
@@ -1016,6 +1018,26 @@ false 启用失败（日志将输出具体错误）</dd></dl>
 
 </div>
 </div>
+<a class="anchor" id="a01cf3c8ae704de7b4c035ec9d80990c6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::TcpServer::connection_obj_fd</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a879f386e01460ecd71f70ea13a725019"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1096,7 +1118,7 @@ false 启用失败（日志将输出具体错误）</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a46d2e391d6323c8cfc00b2d97c3bf012"></a>
+<a class="anchor" id="a7fddafbac93c57fa716f9bac06cdbf8f"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1104,7 +1126,7 @@ false 启用失败（日志将输出具体错误）</dd></dl>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::queue&lt;<a class="el" href="structstt_1_1network_1_1WorkerMessage.html">WorkerMessage</a>&gt; stt::network::TcpServer::finishQueue</td>
+          <td class="memname"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">system::MPSCQueue</a>&lt;<a class="el" href="structstt_1_1network_1_1WorkerMessage.html">WorkerMessage</a>&gt; stt::network::TcpServer::finishQueue</td>
         </tr>
       </table>
   </td>

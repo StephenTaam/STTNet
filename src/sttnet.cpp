@@ -6,6 +6,7 @@ using namespace stt::data;
 using namespace stt::network;
 using namespace stt::system;
 
+
             //思路：先从尾到头遍历检查看看哪里的目录是不存在的，边检查边逐级创建
 bool stt::file::FileTool::createDir(const string & ddir,const mode_t &mode)
 {	
@@ -3893,7 +3894,13 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             return false;
         }
         //listen
-        if(listen(fd,maxFD)!=0)
+        uint64_t backlog = maxFD / 50;  // 经验值
+        //backlog = std::clamp(backlog, 128, 4096);
+        if(backlog<128)
+            backlog=128;
+        else if(backlog>4096)
+            backlog=4096;
+        if(listen(fd,backlog)!=0)
         {
             perror("listen");
             ::close(fd);
@@ -4316,14 +4323,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     {
                         uint64_t cnt;
                         read(workerEventFD, &cnt, sizeof(cnt)); // 清门铃
-
+                        WorkerMessage wm;
                         // 一口气处理完队列
-                        while(!finishQueue.empty())
+                        while(finishQueue.pop(wm))
                         {
-                            int fd=finishQueue.front().fd;
-                            int ret=finishQueue.front().ret;
-                            finishQueue.pop();
-                            handler_workerevent(fd,ret);
+                            handler_workerevent(wm.fd,wm.ret);
                         }
                     }
                     else//有数据上来了
