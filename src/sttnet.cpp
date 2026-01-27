@@ -5826,7 +5826,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         for(;clientfd[fd].FDStatus<globalSolveFun.size();)
                         {
                             //继续做
-                            int rett=ii->second[clientfd[fd].FDStatus](k,inf);
+                            int rett=globalSolveFun[clientfd[fd].FDStatus](k,inf);
                             clientfd[fd].FDStatus++;
                             if(rett==1)
                             {
