@@ -1164,11 +1164,17 @@ public:
         consumerThread = std::thread([this]()->void
         {
             std::string content;
+            content.reserve(1024);
+            std::string time;
+            content.reserve(1074);
             while(this->consumerGuard)
             {
                 while(this->logQueue.pop(content))//非空则执行
-                {                   
-                        this->appendLine(content);
+                {       
+                    getTime(time,timeFormat);
+                    time+=contentFormat;
+                    time+=content;
+                    this->appendLine(time);
                 }
                 std::this_thread::sleep_for(std::chrono::microseconds(500));
 

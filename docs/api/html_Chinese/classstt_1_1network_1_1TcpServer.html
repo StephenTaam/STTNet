@@ -116,9 +116,9 @@ Public 成员函数</h2></td></tr>
 <tr class="memitem:a507cdbb0c5d4dbf128c57ab5f11bafb6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a507cdbb0c5d4dbf128c57ab5f11bafb6">putTask</a> (const std::function&lt; int(<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1TcpInformation.html">TcpInformation</a> &amp;inf)&gt; &amp;fun, <a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1TcpInformation.html">TcpInformation</a> &amp;inf)</td></tr>
 <tr class="memdesc:a507cdbb0c5d4dbf128c57ab5f11bafb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">把一个任务放入工作线程池由工作线程完成  <a href="#a507cdbb0c5d4dbf128c57ab5f11bafb6">更多...</a><br/></td></tr>
 <tr class="separator:a507cdbb0c5d4dbf128c57ab5f11bafb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6290cb76b7e6e80ed541b6fdd475cc3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ad6290cb76b7e6e80ed541b6fdd475cc3">TcpServer</a> (const unsigned long long &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a71937d40d41663b3993e626b95a73ec1">maxFD</a>=1000000, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=256, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a6e0c1e70071e7f08a449860bcc3011e8">connectionSecs</a>=1, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a60b0ef61057dbda029acef08ed6fed00">connectionTimes</a>=6, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aae46831563ecec1dd25306ac3eec78ad">requestSecs</a>=1, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#ae809e4044a03a89ead5535c42e0d6162">requestTimes</a>=40, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a>=60, const int &amp;connectionTimeout=60)</td></tr>
-<tr class="memdesc:ad6290cb76b7e6e80ed541b6fdd475cc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数，默认是允许最大1000000个连接，每个连接接收缓冲区最大为256kb，启用安全模块。  <a href="#ad6290cb76b7e6e80ed541b6fdd475cc3">更多...</a><br/></td></tr>
-<tr class="separator:ad6290cb76b7e6e80ed541b6fdd475cc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58c35e8c268bdf9a0918f4aa4546f026"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a58c35e8c268bdf9a0918f4aa4546f026">TcpServer</a> (const unsigned long long &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a71937d40d41663b3993e626b95a73ec1">maxFD</a>=1000000, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=256, const size_t &amp;finishQueue_cap=65536, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a6e0c1e70071e7f08a449860bcc3011e8">connectionSecs</a>=1, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a60b0ef61057dbda029acef08ed6fed00">connectionTimes</a>=6, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aae46831563ecec1dd25306ac3eec78ad">requestSecs</a>=1, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#ae809e4044a03a89ead5535c42e0d6162">requestTimes</a>=40, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a>=60, const int &amp;connectionTimeout=60)</td></tr>
+<tr class="memdesc:a58c35e8c268bdf9a0918f4aa4546f026"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数，默认是允许最大1000000个连接，每个连接接收缓冲区最大为256kb，启用安全模块。  <a href="#a58c35e8c268bdf9a0918f4aa4546f026">更多...</a><br/></td></tr>
+<tr class="separator:a58c35e8c268bdf9a0918f4aa4546f026"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd39340be38620b1277d2881a0c8aa34"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#acd39340be38620b1277d2881a0c8aa34">startListen</a> (const int &amp;port, const int &amp;threads=8)</td></tr>
 <tr class="memdesc:acd39340be38620b1277d2881a0c8aa34"><td class="mdescLeft">&#160;</td><td class="mdescRight">打开Tcp服务器监听程序  <a href="#acd39340be38620b1277d2881a0c8aa34">更多...</a><br/></td></tr>
 <tr class="separator:acd39340be38620b1277d2881a0c8aa34"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -219,7 +219,7 @@ Protected 属性</h2></td></tr>
 <div class="textblock"><p>Tcp服务端类 </p>
 <dl class="section note"><dt>注解</dt><dd>默认底层实现是epoll边缘触发+套接字非阻塞模式 </dd></dl>
 </div><h2 class="groupheader">构造及析构函数说明</h2>
-<a class="anchor" id="ad6290cb76b7e6e80ed541b6fdd475cc3"></a>
+<a class="anchor" id="a58c35e8c268bdf9a0918f4aa4546f026"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -237,6 +237,12 @@ Protected 属性</h2></td></tr>
           <td></td>
           <td class="paramtype">const int &amp;&#160;</td>
           <td class="paramname"><em>buffer_size</em> = <code>256</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t &amp;&#160;</td>
+          <td class="paramname"><em>finishQueue_cap</em> = <code>65536</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -300,11 +306,21 @@ Protected 属性</h2></td></tr>
 </div><div class="memdoc">
 
 <p>构造函数，默认是允许最大1000000个连接，每个连接接收缓冲区最大为256kb，启用安全模块。 </p>
-<dl class="section note"><dt>注解</dt><dd>打开安全模块会对性能有影响 </dd></dl>
+<pre class="fragment">      @note 打开安全模块会对性能有影响
+      @param maxFD 服务对象的最大接受连接数 默认为1000000
+      @param buffer_size 同一个连接允许传输的最大数据量（单位为kb） 默认为256kb
+      @param finishQueue_cap Worker 完成队列（Worker → Reactor）的容量，必须为 2 的幂。
+</pre><p>该队列用于承载 worker 线程已完成任务的结果，等待 reactor 线程消费。 这是主数据通路的一部分，对系统吞吐和延迟极其敏感。</p>
+<p>选型原则： finishQueue_cap &gt;= 峰值完成速率(QPS) × reactor 最坏暂停时间</p>
+<p>建议值（经验）：</p>
+<ul>
+<li>低负载/轻业务： 8192 (~8k)</li>
+<li>常规高并发： 65536 (~64k) 【默认】</li>
+<li>极端突发流量： 131072(~128k)</li>
+</ul>
+<p>队列满时 请求将会丢弃，框架不会阻塞生产者。 </p>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
-    <tr><td class="paramname">maxFD</td><td>服务对象的最大接受连接数 默认为1000000 </td></tr>
-    <tr><td class="paramname">buffer_size</td><td>同一个连接允许传输的最大数据量（单位为kb） 默认为256kb </td></tr>
     <tr><td class="paramname">security_open</td><td>true:开启安全模块 false：关闭安全模块 （默认为开启） </td></tr>
     <tr><td class="paramname">connectionNumLimit</td><td>同一个ip连接数目的上限（默认20） </td></tr>
     <tr><td class="paramname">connectionSecs</td><td>连接速率统计窗口长度（单位：秒）（默认1秒） </td></tr>
@@ -488,6 +504,7 @@ Protected 属性</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>返回</dt><dd>true：投递成功 false：投递失败 </dd></dl>
 
 </div>
 </div>

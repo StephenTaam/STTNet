@@ -5,7 +5,7 @@ var searchData=
   ['websocketclient',['WebSocketClient',['../classstt_1_1network_1_1WebSocketClient.html',1,'stt::network']]],
   ['websocketclient',['WebSocketClient',['../classstt_1_1network_1_1WebSocketClient.html#a1f1b55114196078359c8a552b54925fc',1,'stt::network::WebSocketClient']]],
   ['websocketfdinformation',['WebSocketFDInformation',['../structstt_1_1network_1_1WebSocketFDInformation.html',1,'stt::network']]],
-  ['websocketserver',['WebSocketServer',['../classstt_1_1network_1_1WebSocketServer.html#a6692d44d9da1ed7e357991e066feaf9a',1,'stt::network::WebSocketServer']]],
+  ['websocketserver',['WebSocketServer',['../classstt_1_1network_1_1WebSocketServer.html#a725c81385c1a347fbafb4e3e0483ba27',1,'stt::network::WebSocketServer']]],
   ['websocketserver',['WebSocketServer',['../classstt_1_1network_1_1WebSocketServer.html',1,'stt::network']]],
   ['websocketserverfdhandler',['WebSocketServerFDHandler',['../classstt_1_1network_1_1WebSocketServerFDHandler.html',1,'stt::network']]],
   ['websocketstringutil',['WebsocketStringUtil',['../classstt_1_1data_1_1WebsocketStringUtil.html',1,'stt::data']]],

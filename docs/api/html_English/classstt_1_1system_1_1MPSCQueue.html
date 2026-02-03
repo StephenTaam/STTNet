@@ -96,55 +96,121 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p>Lock-free MPSC queue (Multi-Producer Single-Consumer) 无锁多生产者单消费者队列  
+<p>Lock-free bounded MPSC queue (Multi-Producer Single-Consumer) 无锁有界多生产者单消费者队列（环形缓冲）  
  <a href="classstt_1_1system_1_1MPSCQueue.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sttnet__English_8h_source.html">sttnet_English.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5ea21705e52eebfeee9e7de0f4eb5807"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#a5ea21705e52eebfeee9e7de0f4eb5807">MPSCQueue</a> ()</td></tr>
-<tr class="memdesc:a5ea21705e52eebfeee9e7de0f4eb5807"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct queue with dummy node 构造队列（创建 dummy 节点）  <a href="#a5ea21705e52eebfeee9e7de0f4eb5807">More...</a><br/></td></tr>
-<tr class="separator:a5ea21705e52eebfeee9e7de0f4eb5807"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6fabbcbe4cbfa9d988dff3082626d0a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#ad6fabbcbe4cbfa9d988dff3082626d0a">push</a> (T &amp;&amp;v)</td></tr>
-<tr class="memdesc:ad6fabbcbe4cbfa9d988dff3082626d0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Push element into queue (thread-safe, multi-producer) 入队（多线程安全）  <a href="#ad6fabbcbe4cbfa9d988dff3082626d0a">More...</a><br/></td></tr>
-<tr class="separator:ad6fabbcbe4cbfa9d988dff3082626d0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1150d7c4743b359dc78cb71d6be7fe61"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#a1150d7c4743b359dc78cb71d6be7fe61">pop</a> (T &amp;out)</td></tr>
-<tr class="memdesc:a1150d7c4743b359dc78cb71d6be7fe61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pop element from queue (single consumer only) 出队（仅允许单消费者）  <a href="#a1150d7c4743b359dc78cb71d6be7fe61">More...</a><br/></td></tr>
-<tr class="separator:a1150d7c4743b359dc78cb71d6be7fe61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a661d13fbd40bd4b263ca8f383069f6ab"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#a661d13fbd40bd4b263ca8f383069f6ab">MPSCQueue</a> (std::size_t capacity_pow2)</td></tr>
+<tr class="separator:a661d13fbd40bd4b263ca8f383069f6ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89e130fd017b5c9260aab9e6345195e4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#a89e130fd017b5c9260aab9e6345195e4">MPSCQueue</a> (const <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a> &amp;)=delete</td></tr>
+<tr class="separator:a89e130fd017b5c9260aab9e6345195e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6df80f1a4186c85bd5fcdea67d5967e5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#a6df80f1a4186c85bd5fcdea67d5967e5">operator=</a> (const <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a> &amp;)=delete</td></tr>
+<tr class="separator:a6df80f1a4186c85bd5fcdea67d5967e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89a16696b120fef50b9779b855e11c7e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#a89a16696b120fef50b9779b855e11c7e">~MPSCQueue</a> ()</td></tr>
+<tr class="separator:a89a16696b120fef50b9779b855e11c7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6b3c1b463babfc2a4e0424267439593"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#ab6b3c1b463babfc2a4e0424267439593">push</a> (T &amp;&amp;v) noexcept(std::is_nothrow_move_constructible_v&lt; T &gt;)</td></tr>
+<tr class="memdesc:ab6b3c1b463babfc2a4e0424267439593"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try push (non-blocking). Returns false if queue is full. 尝试入队（非阻塞），队列满则返回 false.  <a href="#ab6b3c1b463babfc2a4e0424267439593">More...</a><br/></td></tr>
+<tr class="separator:ab6b3c1b463babfc2a4e0424267439593"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2bc5d9ad3573d7b33a24ee4352381ac"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#aa2bc5d9ad3573d7b33a24ee4352381ac">push</a> (const T &amp;v) noexcept(std::is_nothrow_copy_constructible_v&lt; T &gt;)</td></tr>
+<tr class="separator:aa2bc5d9ad3573d7b33a24ee4352381ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8e13c37c8ef183a5f95aa6b0322abcb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#ae8e13c37c8ef183a5f95aa6b0322abcb">pop</a> (T &amp;out) noexcept(std::is_nothrow_move_assignable_v&lt; T &gt; &amp;&amp;std::is_nothrow_move_constructible_v&lt; T &gt;)</td></tr>
+<tr class="memdesc:ae8e13c37c8ef183a5f95aa6b0322abcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try pop (single consumer). Returns false if empty. 尝试出队（单消费者），空则返回 false.  <a href="#ae8e13c37c8ef183a5f95aa6b0322abcb">More...</a><br/></td></tr>
+<tr class="separator:ae8e13c37c8ef183a5f95aa6b0322abcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad154fc408c8f7dbf32bd9b647e56157c"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#ad154fc408c8f7dbf32bd9b647e56157c">approx_size</a> () const noexcept</td></tr>
+<tr class="memdesc:ad154fc408c8f7dbf32bd9b647e56157c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Approximate size (may be inaccurate under concurrency) 近似长度（并发下可能不精确）  <a href="#ad154fc408c8f7dbf32bd9b647e56157c">More...</a><br/></td></tr>
+<tr class="separator:ad154fc408c8f7dbf32bd9b647e56157c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename T&gt;<br/>
 class stt::system::MPSCQueue&lt; T &gt;</h3>
 
-<p>Lock-free MPSC queue (Multi-Producer Single-Consumer) 无锁多生产者单消费者队列 </p>
-<p>Multiple threads may push concurrently. Only ONE thread is allowed to pop.</p>
-<p>多个线程可以同时 push， 但只允许一个线程 pop（通常是 reactor 线程）。</p>
-<p>This implementation is based on a linked-list with a dummy node, using atomic tail and single-threaded head.</p>
-<p>基于链表 + dummy 节点：</p>
+<p>Lock-free bounded MPSC queue (Multi-Producer Single-Consumer) 无锁有界多生产者单消费者队列（环形缓冲） </p>
 <ul>
-<li>tail 是原子（多生产者）</li>
-<li>head 仅消费者访问（无需原子）</li>
+<li>Multiple threads may push concurrently.</li>
+<li>Only ONE thread may pop.</li>
+<li>多个线程可以同时 push</li>
+<li>仅允许一个线程 pop（通常是 reactor 线程）</li>
 </ul>
-<p>Threading model:</p>
+<p>Design:</p>
 <ul>
-<li><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#ad6fabbcbe4cbfa9d988dff3082626d0a" title="Push element into queue (thread-safe, multi-producer) 入队（多线程安全） ">push()</a>: MPSC (thread-safe)</li>
-<li><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#a1150d7c4743b359dc78cb71d6be7fe61" title="Pop element from queue (single consumer only) 出队（仅允许单消费者） ">pop()</a>: SPSC (must be single consumer)</li>
+<li>Fixed-size ring buffer (power-of-two capacity)</li>
+<li>Per-slot sequence number to coordinate producers/consumer</li>
 </ul>
-<p>IMPORTANT: ❗ Do NOT call <a class="el" href="classstt_1_1system_1_1MPSCQueue.html#a1150d7c4743b359dc78cb71d6be7fe61" title="Pop element from queue (single consumer only) 出队（仅允许单消费者） ">pop()</a> from multiple threads. ❗ Do NOT call delete externally on nodes.</p>
-<p>重要： ❗ pop 只能由一个线程调用 ❗ 外部不得操作内部节点 </p>
+<p>特点：</p>
+<ul>
+<li>零 malloc/零 free（不为每个元素分配 Node）</li>
+<li>cache 友好</li>
+<li>push/pop 只用原子 + 轻量自旋</li>
+</ul>
+<p>IMPORTANT: ❗ Capacity must be a power of two. ❗ <a class="el" href="classstt_1_1system_1_1MPSCQueue.html#ae8e13c37c8ef183a5f95aa6b0322abcb" title="Try pop (single consumer). Returns false if empty. 尝试出队（单消费者），空则返回 false. ">pop()</a> must be called by only one thread.</p>
+<p>重要： ❗ 容量必须是 2 的幂 ❗ pop 只能由一个线程调用 </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a5ea21705e52eebfeee9e7de0f4eb5807"></a>
+<a class="anchor" id="a661d13fbd40bd4b263ca8f383069f6ab"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T &gt; </div>
+template&lt;typename T&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">stt::system::MPSCQueue</a>&lt; T &gt;::<a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a> </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>capacity_pow2</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a89e130fd017b5c9260aab9e6345195e4"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">stt::system::MPSCQueue</a>&lt; T &gt;::<a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a>&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a89a16696b120fef50b9779b855e11c7e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">stt::system::MPSCQueue</a>&lt; T &gt;::~<a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -157,26 +223,67 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Construct queue with dummy node 构造队列（创建 dummy 节点） </p>
-<p>We start with a dummy node so that:</p>
-<ul>
-<li>head always points to a valid node</li>
-<li>first real element is head-&gt;next</li>
-</ul>
-<p>使用 dummy 节点保证：</p>
-<ul>
-<li>head 永远有效</li>
-<li>实际数据从 head-&gt;next 开始 </li>
-</ul>
-
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a1150d7c4743b359dc78cb71d6be7fe61"></a>
+<a class="anchor" id="ad154fc408c8f7dbf32bd9b647e56157c"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T &gt; </div>
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">stt::system::MPSCQueue</a>&lt; T &gt;::approx_size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Approximate size (may be inaccurate under concurrency) 近似长度（并发下可能不精确） </p>
+
+</div>
+</div>
+<a class="anchor" id="a6df80f1a4186c85bd5fcdea67d5967e5"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a>&amp; <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">stt::system::MPSCQueue</a>&lt; T &gt;::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a>&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae8e13c37c8ef183a5f95aa6b0322abcb"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -191,53 +298,26 @@ template&lt;typename T &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Pop element from queue (single consumer only) 出队（仅允许单消费者） </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">out</td><td>Output value </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true if element popped, false if queue empty</dd></dl>
-<p>Consumer logic:</p>
-<ul>
-<li>Read head-&gt;next</li>
-<li>If null: queue empty</li>
-<li>Otherwise advance head and delete old dummy</li>
-</ul>
-<p>消费逻辑：</p>
-<ul>
-<li>读取 head-&gt;next</li>
-<li>若为空则队列为空</li>
-<li>否则前移 head 并释放旧 dummy</li>
-</ul>
-<p>Memory ordering:</p>
-<ul>
-<li>next.load(acquire): pairs with producer's release</li>
-</ul>
-<p>内存序：</p>
-<ul>
-<li>acquire：保证读取到完整写入的数据 </li>
-</ul>
+<p>Try pop (single consumer). Returns false if empty. 尝试出队（单消费者），空则返回 false. </p>
 
 </div>
 </div>
-<a class="anchor" id="ad6fabbcbe4cbfa9d988dff3082626d0a"></a>
+<a class="anchor" id="ab6b3c1b463babfc2a4e0424267439593"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T &gt; </div>
+template&lt;typename T&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">stt::system::MPSCQueue</a>&lt; T &gt;::push </td>
+          <td class="memname">bool <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">stt::system::MPSCQueue</a>&lt; T &gt;::push </td>
           <td>(</td>
           <td class="paramtype">T &amp;&amp;&#160;</td>
           <td class="paramname"><em>v</em></td><td>)</td>
@@ -246,40 +326,38 @@ template&lt;typename T &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Push element into queue (thread-safe, multi-producer) 入队（多线程安全） </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">v</td><td>Value to push (moved)</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>Algorithm:</p>
-<ol type="1">
-<li>Create new node</li>
-<li>Atomically swap tail (exchange)</li>
-<li>Link previous tail-&gt;next to new node</li>
-</ol>
-<p>算法：</p>
-<ol type="1">
-<li>创建新节点</li>
-<li>atomic exchange 抢占尾指针</li>
-<li>将旧尾节点的 next 指向新节点</li>
-</ol>
-<p>Memory ordering:</p>
-<ul>
-<li>exchange(acq_rel): synchronize producers</li>
-<li>next.store(release): publish node to consumer</li>
-</ul>
-<p>内存序：</p>
-<ul>
-<li>acq_rel：生产者之间同步</li>
-<li>release：向消费者发布节点 </li>
-</ul>
+<p>Try push (non-blocking). Returns false if queue is full. 尝试入队（非阻塞），队列满则返回 false. </p>
+
+</div>
+</div>
+<a class="anchor" id="aa2bc5d9ad3573d7b33a24ee4352381ac"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">stt::system::MPSCQueue</a>&lt; T &gt;::push </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

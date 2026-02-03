@@ -11,5 +11,5 @@ var searchData=
   ['lockmemory',['lockMemory',['../classstt_1_1file_1_1File.html#a236fa68305d93a21f1db4397735604aa',1,'stt::file::File']]],
   ['locpara',['locPara',['../structstt_1_1network_1_1HttpRequestInformation.html#a4bf9b17871ed9aaf349fb44d4a227ee7',1,'stt::network::HttpRequestInformation::locPara()'],['../structstt_1_1network_1_1WebSocketFDInformation.html#a97d0c483c33d236c5d2af3504b74857e',1,'stt::network::WebSocketFDInformation::locPara()']]],
   ['logfile',['LogFile',['../classstt_1_1file_1_1LogFile.html',1,'stt::file']]],
-  ['logfile',['logfile',['../classstt_1_1system_1_1ServerSetting.html#aa657090c9fae15e10eaaad26da0224dc',1,'stt::system::ServerSetting::logfile()'],['../classstt_1_1file_1_1LogFile.html#ad383ecf803753d21a346c9489286722e',1,'stt::file::LogFile::LogFile()']]]
+  ['logfile',['logfile',['../classstt_1_1system_1_1ServerSetting.html#aa657090c9fae15e10eaaad26da0224dc',1,'stt::system::ServerSetting::logfile()'],['../classstt_1_1file_1_1LogFile.html#aa143c00112aa1346eb2a1807d7ead877',1,'stt::file::LogFile::LogFile()']]]
 ];

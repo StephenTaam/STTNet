@@ -141,13 +141,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;any&gt;</code><br/>
 <code>#include &lt;sys/eventfd.h&gt;</code><br/>
 <code>#include &lt;sys/timerfd.h&gt;</code><br/>
+<code>#include &lt;cstddef&gt;</code><br/>
+<code>#include &lt;cstdint&gt;</code><br/>
+<code>#include &lt;new&gt;</code><br/>
+<code>#include &lt;vector&gt;</code><br/>
 </div>
 <p><a href="sttnet__English_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">stt::system::MPSCQueue&lt; T &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lock-free MPSC queue (Multi-Producer Single-Consumer) 无锁多生产者单消费者队列  <a href="classstt_1_1system_1_1MPSCQueue.html#details">More...</a><br/></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lock-free bounded MPSC queue (Multi-Producer Single-Consumer) 无锁有界多生产者单消费者队列（环形缓冲）  <a href="classstt_1_1system_1_1MPSCQueue.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1FileTool.html">stt::file::FileTool</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A utility class that provides static functions for file operations.  <a href="classstt_1_1file_1_1FileTool.html#details">More...</a><br/></td></tr>

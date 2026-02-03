@@ -113,9 +113,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public 成员函数</h2></td></tr>
-<tr class="memitem:ad383ecf803753d21a346c9489286722e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1LogFile.html#ad383ecf803753d21a346c9489286722e">LogFile</a> ()</td></tr>
-<tr class="memdesc:ad383ecf803753d21a346c9489286722e"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数，初始化消费者线程  <a href="#ad383ecf803753d21a346c9489286722e">更多...</a><br/></td></tr>
-<tr class="separator:ad383ecf803753d21a346c9489286722e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa143c00112aa1346eb2a1807d7ead877"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1LogFile.html#aa143c00112aa1346eb2a1807d7ead877">LogFile</a> (const size_t &amp;logQueue_cap=8192)</td></tr>
+<tr class="memdesc:aa143c00112aa1346eb2a1807d7ead877"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数，初始化消费者线程  <a href="#aa143c00112aa1346eb2a1807d7ead877">更多...</a><br/></td></tr>
+<tr class="separator:aa143c00112aa1346eb2a1807d7ead877"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a341a294e5f846b2942d874a482bfa64e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1LogFile.html#a341a294e5f846b2942d874a482bfa64e">openFile</a> (const std::string &amp;fileName, const std::string &amp;timeFormat=<a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a>, const std::string &amp;contentFormat=&quot;   &quot;)</td></tr>
 <tr class="memdesc:a341a294e5f846b2942d874a482bfa64e"><td class="mdescLeft">&#160;</td><td class="mdescRight">打开一个日志文件  <a href="#a341a294e5f846b2942d874a482bfa64e">更多...</a><br/></td></tr>
 <tr class="separator:a341a294e5f846b2942d874a482bfa64e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -255,22 +255,42 @@ Public 成员函数</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>日志文件操作类 </p>
-<dl class="section note"><dt>注解</dt><dd>此类的读写日志是线程安全的，因为继承了File类 </dd></dl>
+<dl class="section note"><dt>注解</dt><dd>此类的读写日志是线程安全的，因为继承了File类 </dd>
+<dd>
+异步日志 会单独开一个线程进行写入操作，可以多个线程同时操作日志 </dd></dl>
 </div><h2 class="groupheader">构造及析构函数说明</h2>
-<a class="anchor" id="ad383ecf803753d21a346c9489286722e"></a>
+<a class="anchor" id="aa143c00112aa1346eb2a1807d7ead877"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">stt::file::LogFile::LogFile </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const size_t &amp;&#160;</td>
+          <td class="paramname"><em>logQueue_cap</em> = <code>8192</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>构造函数，初始化消费者线程 </p>
+<pre class="fragment">       @param logQueue_cap 异步日志队列容量（必须为 2 的幂）。
+</pre><p>所有线程产生的日志会先进入该无锁队列，再由独立 logger 线程批量写入文件。 日志系统不在主业务热路径上，允许在过载时丢弃，以保护核心服务性能。</p>
+<p>选型原则： logQueue_cap &gt;= 峰值日志速率 × logger 最坏暂停时间</p>
+<p>建议值（经验）：</p>
+<ul>
+<li>默认：8192 (~8k)</li>
+<li>高频日志：16384 (~16k)</li>
+</ul>
+<p>当队列已满时：日志将丢弃，框架不会阻塞调用线程。 </p>
 
 </div>
 </div>

@@ -1140,13 +1140,13 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
     }
     void stt::file::LogFile::writeLog(const string &data)
     {
-        string content;
-        getTime(content,timeFormat);
-        content+=contentFormat+data;
+        //string content;
+        //getTime(content,timeFormat);
+        //content+=contentFormat+data;
         
         //{
         //    std::lock_guard<std::mutex> lock(queueMutex);
-            logQueue.push(std::move(content));
+            logQueue.push(std::move(data));
         //}
         //queueCV.notify_all();
         /*
