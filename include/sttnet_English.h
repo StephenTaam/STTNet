@@ -51,6 +51,10 @@
 #include<any>
 #include <sys/eventfd.h>
 #include <sys/timerfd.h>
+#include <cstddef>
+#include <cstdint>
+#include <new>
+#include <vector>
 /**
 * @namespace stt
 */
@@ -60,158 +64,181 @@ namespace stt
     {
         class WorkerPool;
         /**
- * @brief Lock-free MPSC queue (Multi-Producer Single-Consumer)
- *        无锁多生产者单消费者队列
+ * @brief Lock-free bounded MPSC queue (Multi-Producer Single-Consumer)
+ *        无锁有界多生产者单消费者队列（环形缓冲）
  *
- * Multiple threads may push concurrently.
- * Only ONE thread is allowed to pop.
+ * - Multiple threads may push concurrently.
+ * - Only ONE thread may pop.
  *
- * 多个线程可以同时 push，
- * 但只允许一个线程 pop（通常是 reactor 线程）。
+ * - 多个线程可以同时 push
+ * - 仅允许一个线程 pop（通常是 reactor 线程）
  *
- * This implementation is based on a linked-list with a dummy node,
- * using atomic tail and single-threaded head.
+ * Design:
+ * - Fixed-size ring buffer (power-of-two capacity)
+ * - Per-slot sequence number to coordinate producers/consumer
  *
- * 基于链表 + dummy 节点：
- *  - tail 是原子（多生产者）
- *  - head 仅消费者访问（无需原子）
- *
- * Threading model:
- *  - push(): MPSC (thread-safe)
- *  - pop():  SPSC (must be single consumer)
+ * 特点：
+ * - 零 malloc/零 free（不为每个元素分配 Node）
+ * - cache 友好
+ * - push/pop 只用原子 + 轻量自旋
  *
  * IMPORTANT:
- *  ❗ Do NOT call pop() from multiple threads.
- *  ❗ Do NOT call delete externally on nodes.
+ *  ❗ Capacity must be a power of two.
+ *  ❗ pop() must be called by only one thread.
  *
  * 重要：
+ *  ❗ 容量必须是 2 的幂
  *  ❗ pop 只能由一个线程调用
- *  ❗ 外部不得操作内部节点
  */
-template<typename T>
-class MPSCQueue
-{
-    /**
-     * @brief Internal queue node
-     *        内部链表节点
-     */
-    struct Node {
-        T data;                          ///< Stored payload / 存储的数据
-        std::atomic<Node*> next{nullptr}; ///< Next pointer (atomic for producers)
-
-        /**
-         * @brief Construct node with moved value
-         */
-        Node(T&& d) : data(std::move(d)) {}
-    };
-
-    /**
-     * @brief Tail pointer (shared by all producers)
-     *        尾指针（所有生产者共享）
-     */
-    std::atomic<Node*> tail;
-
-    /**
-     * @brief Head pointer (consumer only)
-     *        头指针（仅消费者访问）
-     */
-    Node* head;
-
+template <typename T>
+class MPSCQueue {
 public:
-
-    /**
-     * @brief Construct queue with dummy node
-     *        构造队列（创建 dummy 节点）
-     *
-     * We start with a dummy node so that:
-     *  - head always points to a valid node
-     *  - first real element is head->next
-     *
-     * 使用 dummy 节点保证：
-     *  - head 永远有效
-     *  - 实际数据从 head->next 开始
-     */
-    MPSCQueue()
+    explicit MPSCQueue(std::size_t capacity_pow2)
+        : capacity_(capacity_pow2),
+          mask_(capacity_pow2 - 1),
+          buffer_(capacity_pow2),
+          head_(0),
+          tail_(0)
     {
-        Node* dummy = new Node(T{});
-        head = dummy;
-        tail.store(dummy, std::memory_order_relaxed);
+        // capacity must be power of two
+        if (capacity_ < 2 || (capacity_ & mask_) != 0) {
+            // You can replace with your own assert/log
+            throw std::invalid_argument("MPSCQueue capacity must be power of two and >= 2");
+        }
+
+        // Initialize per-slot sequence
+        for (std::size_t i = 0; i < capacity_; ++i) {
+            buffer_[i].seq.store(i, std::memory_order_relaxed);
+        }
+    }
+
+    MPSCQueue(const MPSCQueue&) = delete;
+    MPSCQueue& operator=(const MPSCQueue&) = delete;
+
+    ~MPSCQueue() {
+        // Drain remaining items to call destructors if needed
+        T tmp;
+        while (pop(tmp)) {}
     }
 
     /**
-     * @brief Push element into queue (thread-safe, multi-producer)
-     *        入队（多线程安全）
-     *
-     * @param v Value to push (moved)
-     *
-     * Algorithm:
-     * 1. Create new node
-     * 2. Atomically swap tail (exchange)
-     * 3. Link previous tail->next to new node
-     *
-     * 算法：
-     * 1. 创建新节点
-     * 2. atomic exchange 抢占尾指针
-     * 3. 将旧尾节点的 next 指向新节点
-     *
-     * Memory ordering:
-     *  - exchange(acq_rel): synchronize producers
-     *  - next.store(release): publish node to consumer
-     *
-     * 内存序：
-     *  - acq_rel：生产者之间同步
-     *  - release：向消费者发布节点
+     * @brief Try push (non-blocking). Returns false if queue is full.
+     *        尝试入队（非阻塞），队列满则返回 false
      */
-    void push(T&& v)
-    {
-        Node* n = new Node(std::move(v));
+    bool push(T&& v) noexcept(std::is_nothrow_move_constructible_v<T>) {
+        return emplace_impl(std::move(v));
+    }
 
-        // Atomically replace tail and get previous tail
-        Node* prev = tail.exchange(n, std::memory_order_acq_rel);
-
-        // Publish node to consumer
-        prev->next.store(n, std::memory_order_release);
+    bool push(const T& v) noexcept(std::is_nothrow_copy_constructible_v<T>) {
+        return emplace_impl(v);
     }
 
     /**
-     * @brief Pop element from queue (single consumer only)
-     *        出队（仅允许单消费者）
-     *
-     * @param out Output value
-     * @return true if element popped, false if queue empty
-     *
-     * Consumer logic:
-     *  - Read head->next
-     *  - If null: queue empty
-     *  - Otherwise advance head and delete old dummy
-     *
-     * 消费逻辑：
-     *  - 读取 head->next
-     *  - 若为空则队列为空
-     *  - 否则前移 head 并释放旧 dummy
-     *
-     * Memory ordering:
-     *  - next.load(acquire): pairs with producer's release
-     *
-     * 内存序：
-     *  - acquire：保证读取到完整写入的数据
+     * @brief Try pop (single consumer). Returns false if empty.
+     *        尝试出队（单消费者），空则返回 false
      */
-    bool pop(T& out)
+    bool pop(T& out) noexcept(std::is_nothrow_move_assignable_v<T> &&
+                              std::is_nothrow_move_constructible_v<T>)
     {
-        Node* h = head;
+        Slot& slot = buffer_[head_ & mask_];
+        const std::size_t seq = slot.seq.load(std::memory_order_acquire);
+        const std::intptr_t dif = static_cast<std::intptr_t>(seq) - static_cast<std::intptr_t>(head_ + 1);
 
-        // Acquire ensures visibility of producer writes
-        Node* nxt = h->next.load(std::memory_order_acquire);
+        if (dif != 0) {
+            // seq != head+1 => empty
+            return false;
+        }
 
-        if(!nxt)
-            return false; // empty
+        // Move out
+        out = std::move(*slot.ptr());
 
-        out = std::move(nxt->data);
-        head = nxt;
-        delete h;         // safe: only consumer deletes
+        // Destroy in-place
+        slot.destroy();
 
+        // Mark slot as free for producers:
+        // seq = head + capacity
+        slot.seq.store(head_ + capacity_, std::memory_order_release);
+
+        ++head_;
         return true;
     }
+
+    /**
+     * @brief Approximate size (may be inaccurate under concurrency)
+     *        近似长度（并发下可能不精确）
+     */
+    std::size_t approx_size() const noexcept {
+        const std::size_t t = tail_.load(std::memory_order_relaxed);
+        const std::size_t h = head_; // consumer-only
+        return (t >= h) ? (t - h) : 0;
+    }
+
+private:
+    struct Slot {
+        std::atomic<std::size_t> seq;
+        typename std::aligned_storage<sizeof(T), alignof(T)>::type storage;
+        bool has_value = false;
+
+        T* ptr() noexcept { return reinterpret_cast<T*>(&storage); }
+        const T* ptr() const noexcept { return reinterpret_cast<const T*>(&storage); }
+
+        template <class U>
+        void construct(U&& v) noexcept(std::is_nothrow_constructible_v<T, U&&>) {
+            ::new (static_cast<void*>(&storage)) T(std::forward<U>(v));
+            has_value = true;
+        }
+
+        void destroy() noexcept {
+            if (has_value) {
+                ptr()->~T();
+                has_value = false;
+            }
+        }
+    };
+
+    template <class U>
+    bool emplace_impl(U&& v) noexcept(std::is_nothrow_constructible_v<T, U&&>) {
+        std::size_t pos = tail_.load(std::memory_order_relaxed);
+
+        for (;;) {
+            Slot& slot = buffer_[pos & mask_];
+            const std::size_t seq = slot.seq.load(std::memory_order_acquire);
+            const std::intptr_t dif = static_cast<std::intptr_t>(seq) - static_cast<std::intptr_t>(pos);
+
+            if (dif == 0) {
+                // slot is free for this pos
+                if (tail_.compare_exchange_weak(
+                        pos, pos + 1,
+                        std::memory_order_relaxed,
+                        std::memory_order_relaxed))
+                {
+                    // We own this slot now
+                    slot.construct(std::forward<U>(v));
+                    // Publish to consumer: seq = pos+1 means "ready"
+                    slot.seq.store(pos + 1, std::memory_order_release);
+                    return true;
+                }
+                // CAS failed: pos updated with current tail; retry
+            } else if (dif < 0) {
+                // slot seq < pos => queue is full (producer wrapped)
+                return false;
+            } else {
+                // Another producer is ahead; move pos forward
+                pos = tail_.load(std::memory_order_relaxed);
+            }
+        }
+    }
+
+private:
+    const std::size_t capacity_;
+    const std::size_t mask_;
+    std::vector<Slot> buffer_;
+
+    // Single consumer only
+    std::size_t head_;
+
+    // Multi-producer
+    std::atomic<std::size_t> tail_;
 };
 
     }
@@ -1092,6 +1119,7 @@ namespace file
 /**
 * @brief Log file operation class
 * @note The log reading/writing of this class is thread-safe due to inheritance from the File class
+* @note Asynchronous logging will use a separate thread for writing operations, allowing multiple threads to operate on the log simultaneously.
 */
 class LogFile : private time::DateTime, protected file::File
 {
@@ -1099,15 +1127,54 @@ private:
     std::string timeFormat;
     std::string contentFormat;
     std::atomic<bool> consumerGuard{true};
-    std::mutex queueMutex;
-    std::condition_variable queueCV;
-    std::queue<std::string> logQueue;
+    //std::mutex queueMutex;
+    //std::condition_variable queueCV;
+    system::MPSCQueue<std::string> logQueue;
     std::thread consumerThread;
 public:
     /**
-    * @brief Constructor, initializes the consumer thread
-    */
-    LogFile();
+
+* @brief Constructor, initializes the consumer thread
+
+* @param logQueue_cap Asynchronous log queue capacity (must be a power of 2).
+
+// // Logs generated by all threads will first enter this lock-free queue, and then be written to the file in batches by an independent logger thread.
+
+// The logging system is not on the main business hot path, allowing logs to be discarded during overload to protect the performance of core services.
+
+// // Selection principle:
+
+// logQueue_cap >= Peak log rate × worst-case logger pause time
+
+//
+// Recommended values ​​(empirical):
+
+// - Default: 8192 (~8k)
+
+// - High-frequency logs: 16384 (~16k)
+
+//
+// When the queue is full: logs will be discarded, and the framework will not block the calling thread.
+
+//
+*/
+    LogFile(const size_t &logQueue_cap=8192):logQueue(logQueue_cap)
+    {
+        consumerGuard=true;
+        consumerThread = std::thread([this]()->void
+        {
+            std::string content;
+            while(this->consumerGuard)
+            {
+                while(this->logQueue.pop(content))//非空则执行
+                {                   
+                        this->appendLine(content);
+                }
+                std::this_thread::sleep_for(std::chrono::microseconds(500));
+
+            }
+        });
+    }
     /**
     * @brief Open a log file
     * @note Create if not exists (including directories). Default directory permission: rwx rwx r-x, 
@@ -3243,7 +3310,7 @@ private:
     class TcpServer 
     {
     protected:
-        std::queue<WorkerMessage> finishQueue;
+        system::MPSCQueue<WorkerMessage> finishQueue;
         stt::system::WorkerPool *workpool; 
         unsigned long buffer_size;
         unsigned long long  maxFD;
@@ -3329,6 +3396,29 @@ private:
  *        in kilobytes (KB).
  *        Default: 256 KB.
  *
+* @param finishQueue_cap The capacity of the worker completion queue (Worker → Reactor), which must be a power of 2.
+
+//
+/ This queue holds the results of tasks completed by worker threads, waiting for reactor threads to consume them.
+
+// This is part of the main data path and is extremely sensitive to system throughput and latency.
+
+//
+/ Selection principle:
+
+// finishQueue_cap >= Peak completion rate (QPS) × worst-case reactor pause time
+
+//
+/ Suggested values ​​(empirical):
+
+// - Low load/light business: 8192 (~8k)
+
+// - Regular high concurrency: 65536 (~64k) [Default]
+
+// - Extreme burst traffic: 131072 (~128k)
+
+//
+/ When the queue is full, requests will be dropped; the framework will not block the producer.
  * @param security_open
  *        Whether to enable the security module.
  *        - true  : enable security checks (default)
@@ -3369,6 +3459,7 @@ private:
 TcpServer(
     const unsigned long long &maxFD = 1000000,
     const int &buffer_size = 256,
+    const size_t &finishQueue_cap=65536,
     const bool &security_open = true,
     const int &connectionNumLimit = 20,
     const int &connectionSecs = 1,
@@ -3380,6 +3471,7 @@ TcpServer(
 )
 : maxFD(maxFD),
   buffer_size(buffer_size * 1024),
+  finishQueue(finishQueue_cap),
   security_open(security_open),
   connectionSecs(connectionSecs),
   connectionTimes(connectionTimes),
@@ -3654,6 +3746,29 @@ public:
  *        in kilobytes (KB).
  *        Default: 256 KB.
  *
+ * @param finishQueue_cap The capacity of the worker completion queue (Worker → Reactor), which must be a power of 2.
+
+//
+/ This queue holds the results of tasks completed by worker threads, waiting for reactor threads to consume them.
+
+// This is part of the main data path and is extremely sensitive to system throughput and latency.
+
+//
+/ Selection principle:
+
+// finishQueue_cap >= Peak completion rate (QPS) × worst-case reactor pause time
+
+//
+/ Suggested values ​​(empirical):
+
+// - Low load/light business: 8192 (~8k)
+
+// - Regular high concurrency: 65536 (~64k) [Default]
+
+// - Extreme burst traffic: 131072 (~128k)
+
+//
+/ When the queue is full, requests will be dropped; the framework will not block the producer.
  * @param security_open
  *        Whether to enable the security module.
  *        - true  : enable security checks (default)
@@ -3694,6 +3809,7 @@ public:
 HttpServer(
     const unsigned long long &maxFD = 1000000,
     const int &buffer_size = 256,
+    const size_t &finishQueue_cap=65536,
     const bool &security_open = true,
     const int &connectionNumLimit = 10,
     const int &connectionSecs = 1,
@@ -3706,6 +3822,7 @@ HttpServer(
 : TcpServer(
       maxFD,
       buffer_size,
+      finishQueue_cap,
       security_open,
       connectionNumLimit,
       connectionSecs,
@@ -4034,6 +4151,29 @@ public:
  *        in kilobytes (KB).
  *        Default: 256 KB.
  *
+ * @param finishQueue_cap The capacity of the worker completion queue (Worker → Reactor), which must be a power of 2.
+
+//
+/ This queue holds the results of tasks completed by worker threads, waiting for reactor threads to consume them.
+
+// This is part of the main data path and is extremely sensitive to system throughput and latency.
+
+//
+/ Selection principle:
+
+// finishQueue_cap >= Peak completion rate (QPS) × worst-case reactor pause time
+
+//
+/ Suggested values ​​(empirical):
+
+// - Low load/light business: 8192 (~8k)
+
+// - Regular high concurrency: 65536 (~64k) [Default]
+
+// - Extreme burst traffic: 131072 (~128k)
+
+//
+/ When the queue is full, requests will be dropped; the framework will not block the producer.
  * @param security_open
  *        Whether to enable the security module.
  *        - true  : enable security checks (default)
@@ -4075,6 +4215,7 @@ public:
 WebSocketServer(
     const unsigned long long &maxFD = 1000000,
     const int &buffer_size = 256,
+    const size_t &finishQueue_cap=65536,
     const bool &security_open = true,
     const int &connectionNumLimit = 5,
     const int &connectionSecs = 10,
@@ -4087,6 +4228,7 @@ WebSocketServer(
 : TcpServer(
       maxFD,
       buffer_size,
+      finishQueue_cap,
       security_open,
       connectionNumLimit,
       connectionSecs,

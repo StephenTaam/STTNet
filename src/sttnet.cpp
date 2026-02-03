@@ -1124,32 +1124,11 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
         else
             return false;
     }
-    stt::file::LogFile::LogFile()
-    {
-        consumerGuard=true;
-        consumerThread = thread([this]()->void
-        {
-            while(this->consumerGuard||!this->logQueue.empty())
-            {
-                unique_lock<mutex> lock(this->queueMutex);
-                while(this->logQueue.empty()&&this->consumerGuard)
-                    this->queueCV.wait(lock);
-                if(!this->logQueue.empty())//非空则执行
-                {
-                    string content=this->logQueue.front();
-                    this->logQueue.pop();
-                    lock.unlock();
 
-                    this->appendLine(content);
-                }
-
-            }
-        });
-    }
     stt::file::LogFile::~LogFile()
     {
         consumerGuard=false;
-        queueCV.notify_all();
+        //queueCV.notify_all();
         if(consumerThread.joinable())
             consumerThread.join();
     }
@@ -1165,11 +1144,11 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
         getTime(content,timeFormat);
         content+=contentFormat+data;
         
-        {
-            std::lock_guard<std::mutex> lock(queueMutex);
+        //{
+        //    std::lock_guard<std::mutex> lock(queueMutex);
             logQueue.push(std::move(content));
-        }
-        queueCV.notify_all();
+        //}
+        //queueCV.notify_all();
         /*
         string content;
         getTime(content,timeFormat);
@@ -3772,6 +3751,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             int ret=fun(k,inf);
             //入队
             this->finishQueue.push({inf.fd,ret});
+
             //按钟
             uint64_t one = 1;
             write(this->workerEventFD, &one, sizeof(one));

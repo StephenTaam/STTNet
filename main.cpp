@@ -71,8 +71,10 @@ int main(int argc, char* argv[])
         "/async",
         [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
             httpserver->putTask(
-                [](HttpServerFDHandler& k2, HttpRequestInformation& inf) -> int {
-                    k2.sendBack("async pong");
+                [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
+                    //...
+                    cout<<"handling async..."<<endl;
+                    //...
                     return 1;
                 },
                 k,
@@ -81,7 +83,15 @@ int main(int argc, char* argv[])
             return 0;  // handled asynchronously
         }
     );
-
+    httpserver->setFunction(
+        "/async",
+        [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
+            if(!k.sendBack("async pong"))
+                return -2;
+            return 1;  
+        }
+    );
+    
     /*
      * Start HTTP server
      * 启动 HTTP 监听（端口 8080，2 个 worker）
