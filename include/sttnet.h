@@ -7,6 +7,15 @@
 * STTNet 用少量 API 提供 Linux epoll TCP、HTTP/1.1、WebSocket、TLS、WorkerPool、
 * 背压和优雅退出。最常见的服务只需要三步：创建 Server、注册回调、开始监听。
 *
+* @section integration 引入项目
+* 安装后的 CMake 用户只需链接规范目标：
+* @code{.cmake}
+* find_package(STTNet 0.7 CONFIG REQUIRED)
+* target_link_libraries(my_server PRIVATE STTNet::sttnet)
+* @endcode
+* 也可使用 `add_subdirectory` 或 FetchContent；全部方式都使用 `<sttnet.h>` 和
+* `STTNet::sttnet`。完整说明见 `docs/GETTING_STARTED_Chinese.md`。
+*
 * @section quick_http 20 行启动 HTTP 服务
 * @code{.cpp}
 * #include <sttnet.h>
@@ -19,7 +28,7 @@
 *     HttpServer server;
 *     server.setFunction("/ping",[](HttpServerFDHandler &client,
 *                                    HttpRequestInformation &) {
-*         return client.sendBack("pong") ? 1 : -2;
+*         return client.sendText("pong") ? 1 : -2;
 *     });
 *     if(!server.startListen(8080)) return 2;
 *     ServerSetting::waitForTerminationSignal(); // kill -15 或 Ctrl-C
@@ -29,6 +38,17 @@
 *
 * 测试：`curl http://127.0.0.1:8080/ping`。默认路由 key 就是 HTTP path，
 * 因此这个最小示例不需要额外配置解析函数。
+*
+* @section http_helpers 常用 HTTP 操作
+* @code{.cpp}
+* auto contentType=request.headerValue("content-type");
+* auto body=request.bodyView();
+* client.sendText("created", "201 Created");
+* Json::Value value;
+* value["ok"]=true;
+* client.sendJson(value);
+* client.redirect("/login");
+* @endcode
 *
 * @section quick_websocket 最小 WebSocket Echo 服务
 * @code{.cpp}
@@ -142,6 +162,12 @@
 
 namespace stt
 {
+
+    /** STTNet semantic version exposed to build-time and runtime diagnostics. */
+    inline constexpr int version_major=0;
+    inline constexpr int version_minor=7;
+    inline constexpr int version_patch=0;
+    inline constexpr std::string_view version="0.7.0";
 
     namespace system
     {
@@ -1970,9 +1996,9 @@ private:
 	        static int getValue(const std::string &oriStr,std::string& result,const std::string &type="value",const std::string &name="a",const int &num=0);
 
             /**
-            * @brief 将 Json::Value 转换为字符串。
+            * @brief 将 Json::Value 序列化为紧凑 JSON 文本。
             * @param val JSON 值。
-            * @return std::string 字符串形式的值。
+            * @return 合法 JSON 文本；字符串值也会包含 JSON 引号。
             */
             static std::string toString(const Json::Value &val);
             /**
@@ -3171,6 +3197,20 @@ private:
         * @brief 所需的数据仓库
         */
         std::unordered_map<std::string,std::any> ctx;
+
+        /**
+        * @brief 按大小写不敏感方式读取请求头，不分配内存。
+        * @param name 不带冒号的 header 名，例如 `content-type`。
+        * @return 指向当前 `header` 字符串的视图；不存在时返回空视图。
+        * @warning 修改或销毁本请求后，返回的视图失效。
+        */
+        std::string_view headerValue(std::string_view name) const noexcept;
+
+        /**
+        * @brief 统一读取 Content-Length 或 chunked 请求体。
+        * @return 指向 `body` 或 `body_chunked` 的非拥有视图。
+        */
+        std::string_view bodyView() const noexcept;
     };
     
     struct TcpFDInf;
@@ -3211,6 +3251,30 @@ private:
         * @return  true：发送响应成功  false：发送响应失败
         */
         bool sendBack(const std::string &data,const std::string &header="",const std::string &code="200 OK",const std::string &header1="");
+
+        /**
+        * @brief 发送文本响应，自动补充 Content-Type 和 Content-Length。
+        * @param data 响应体。
+        * @param code HTTP 状态，例如 `200 OK`。
+        * @param contentType MIME 类型，默认 UTF-8 纯文本。
+        * @param extraHeaders 额外响应头，可以是多行。
+        */
+        bool sendText(const std::string &data,const std::string &code="200 OK",
+                      const std::string &contentType="text/plain; charset=utf-8",
+                      const std::string &extraHeaders="");
+
+        /**
+        * @brief 序列化 Json::Value 并发送 application/json UTF-8 响应。
+        */
+        bool sendJson(const Json::Value &data,const std::string &code="200 OK",
+                      const std::string &extraHeaders="");
+
+        /**
+        * @brief 发送 HTTP 重定向响应。
+        * @param location Location 目标；包含 CR/LF 时会拒绝，避免响应头注入。
+        * @param code 默认 `302 Found`，也可使用 `301 Moved Permanently`。
+        */
+        bool redirect(const std::string &location,const std::string &code="302 Found");
         /**
         * @brief 发送Http/Https响应
         * @param data 装着响应体的数据的char *容器

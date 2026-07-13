@@ -2117,7 +2117,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     }
     string stt::data::JsonHelper::toString(const Json::Value &val)
     {
-        return val.asString();
+        Json::StreamWriterBuilder writer;
+        writer["indentation"]="";
+        return Json::writeString(writer,val);
     }
     Json::Value stt::data::JsonHelper::toJsonArray(const string & str)
     {
@@ -6080,6 +6082,34 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             return false;
         return sendData(result)==static_cast<int>(result.size());
     }
+
+    bool stt::network::HttpServerFDHandler::sendText(const string &data,const string &code,
+                                                     const string &contentType,const string &extraHeaders)
+    {
+        if(contentType.empty()||contentType.find_first_of("\r\n")!=string::npos)
+            return false;
+        string headers="Content-Type: "+contentType;
+        if(!extraHeaders.empty())
+        {
+            headers+="\r\n";
+            headers+=extraHeaders;
+        }
+        return sendBack(data,headers,code);
+    }
+
+    bool stt::network::HttpServerFDHandler::sendJson(const Json::Value &value,const string &code,
+                                                     const string &extraHeaders)
+    {
+        return sendText(stt::data::JsonHelper::toString(value),code,
+                        "application/json; charset=utf-8",extraHeaders);
+    }
+
+    bool stt::network::HttpServerFDHandler::redirect(const string &location,const string &code)
+    {
+        if(location.empty()||location.find_first_of("\r\n")!=string::npos)
+            return false;
+        return sendBack("","Location: "+location,code);
+    }
     
     bool stt::network::HttpServerFDHandler::sendBack(const char *data,const size_t &length,const char *header,const char *code,const char *header1,const size_t &header_length)
     {
@@ -6109,6 +6139,51 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         if(result.size()>static_cast<size_t>(std::numeric_limits<int>::max()))
             return false;
         return sendData(result)==static_cast<int>(result.size());
+    }
+
+    std::string_view stt::network::HttpRequestInformation::headerValue(const std::string_view name) const noexcept
+    {
+        if(name.empty()||name.find(':')!=std::string_view::npos)
+            return {};
+        const auto equalsIgnoreCase=[](const std::string_view left,const std::string_view right) {
+            if(left.size()!=right.size()) return false;
+            for(size_t index=0;index<left.size();++index)
+            {
+                if(std::tolower(static_cast<unsigned char>(left[index]))!=
+                   std::tolower(static_cast<unsigned char>(right[index])))
+                    return false;
+            }
+            return true;
+        };
+        const std::string_view raw(header);
+        size_t lineStart=raw.find("\r\n");
+        if(lineStart==std::string_view::npos)
+            return {};
+        lineStart+=2;
+        while(lineStart<raw.size())
+        {
+            size_t lineEnd=raw.find("\r\n",lineStart);
+            if(lineEnd==std::string_view::npos)
+                lineEnd=raw.size();
+            const std::string_view line=raw.substr(lineStart,lineEnd-lineStart);
+            const size_t colon=line.find(':');
+            if(colon!=std::string_view::npos&&equalsIgnoreCase(line.substr(0,colon),name))
+            {
+                std::string_view value=line.substr(colon+1);
+                while(!value.empty()&&(value.front()==' '||value.front()=='\t')) value.remove_prefix(1);
+                while(!value.empty()&&(value.back()==' '||value.back()=='\t')) value.remove_suffix(1);
+                return value;
+            }
+            if(lineEnd==raw.size())
+                break;
+            lineStart=lineEnd+2;
+        }
+        return {};
+    }
+
+    std::string_view stt::network::HttpRequestInformation::bodyView() const noexcept
+    {
+        return body_chunked.empty()?std::string_view(body):std::string_view(body_chunked);
     }
 
     static int parseHttpRequestBuffer(stt::network::TcpFDInf &tcp,

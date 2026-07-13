@@ -38,6 +38,10 @@ void testContentLengthAndCaseInsensitiveNames()
     STTNET_CHECK(request.loc=="/submit");
     STTNET_CHECK(request.para=="?q=1");
     STTNET_CHECK(request.body=="data");
+    STTNET_CHECK(request.bodyView()=="data");
+    STTNET_CHECK(request.headerValue("HOST")=="example.test");
+    STTNET_CHECK(request.headerValue("content-length")=="4");
+    STTNET_CHECK(request.headerValue("missing").empty());
     STTNET_CHECK(connection.p_buffer_now==0);
 }
 
@@ -68,12 +72,41 @@ void testChunkedBodyAndTrailers()
     STTNET_CHECK(parse(connection,request)==1);
     STTNET_CHECK(request.body.empty());
     STTNET_CHECK(request.body_chunked=="Wikipedia");
+    STTNET_CHECK(request.bodyView()=="Wikipedia");
 
     setInput(connection,
              "POST /chunk HTTP/1.1\r\nHost: x\r\nTransfer-Encoding: ChUnKeD\r\n\r\n"
              "3\r\nabc\r\n0\r\n\r\n");
     STTNET_CHECK(parse(connection,request)==1);
     STTNET_CHECK(request.body_chunked=="abc");
+}
+
+void testConvenienceResponses()
+{
+    stt::network::HttpServerFDHandler handler;
+    handler.setFD(42,nullptr,true);
+    std::string wire;
+    handler.setTransportFunctions([&wire](std::string data) {
+        wire=std::move(data);
+        return static_cast<int>(wire.size());
+    });
+
+    STTNET_CHECK(handler.sendText("hello"));
+    STTNET_CHECK(wire.find("HTTP/1.1 200 OK\r\n") == 0);
+    STTNET_CHECK(wire.find("Content-Type: text/plain; charset=utf-8\r\n")!=std::string::npos);
+    STTNET_CHECK(wire.substr(wire.size()-5)=="hello");
+
+    Json::Value json;
+    json["ok"]=true;
+    STTNET_CHECK(handler.sendJson(json));
+    STTNET_CHECK(wire.find("Content-Type: application/json; charset=utf-8\r\n")!=std::string::npos);
+    STTNET_CHECK(wire.find("\"ok\"")!=std::string::npos);
+
+    STTNET_CHECK(handler.redirect("/login"));
+    STTNET_CHECK(wire.find("HTTP/1.1 302 Found\r\n") == 0);
+    STTNET_CHECK(wire.find("Location: /login\r\n")!=std::string::npos);
+    STTNET_CHECK(!handler.redirect("/safe\r\nX-Injected: yes"));
+    STTNET_CHECK(!handler.sendText("x","200 OK","text/plain\r\nX-Injected: yes"));
 }
 
 void testPipelinedRequestsRemainParseable()
@@ -111,6 +144,7 @@ int main()
     testChunkedBodyAndTrailers();
     testPipelinedRequestsRemainParseable();
     testHeaderAndBodyLimits();
+    testConvenienceResponses();
     std::cout<<"all HTTP parser tests passed\n";
     return 0;
 }

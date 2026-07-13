@@ -1,0 +1,11 @@
+prefix=${pcfiledir}/../..
+exec_prefix=${prefix}
+libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+
+Name: STTNet
+Description: Lightweight high-performance C++17 network framework for Linux
+Version: @PROJECT_VERSION@
+Requires: jsoncpp openssl
+Libs: -L${libdir} -lsttnet -pthread
+Cflags: -I${includedir}

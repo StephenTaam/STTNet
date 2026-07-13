@@ -33,6 +33,14 @@ STTNet 是一个**C++17标准** 的轻量级高性能服务器框架，采用 Re
 - ✅易用的接口与模块化结构
 - ✅ 信息安全模块
 
+## 0.6.0 基础架构升级
+
+- 连接状态从按 `maxFD` 预分配整张大数组改为稀疏活跃连接表，接收缓冲首次使用时再分配。
+- Reactor 与 Worker 可 join；异步任务持有请求副本和连接代次，修复 fd 复用与断连竞态。
+- 加入每连接有界发送队列与统一 EPOLLOUT/TLS WANT 状态机，实际 socket/SSL 写入只在 Reactor 执行。
+- HTTP/1.1 增加 chunked、trailers、流水线和 request-smuggling 防护；WebSocket 补齐分片、控制帧和 UTF-8 校验。
+- 增加 CMake、Linux CI、ASan/UBSan、并发回归测试与独立 benchmark。
+
 ## 0.7.0 性能与稳定性要点
 
 - 每连接有界发送队列和统一 EPOLLOUT 状态机；Worker 不直接操作 socket/SSL。
@@ -41,6 +49,8 @@ STTNet 是一个**C++17标准** 的轻量级高性能服务器框架，采用 Re
 - SIGTERM/SIGINT 停止接入后排空在途响应；空闲连接增量检查；启动失败可准确反馈。
 - `ServerSocketOptions` 聚合 TCP_NODELAY、keepalive、缓冲、REUSEPORT、DEFER_ACCEPT、FASTOPEN 和 backlog。
 - 新增队列峰值、批量写、唤醒合并、拒绝、超时等指标；API 手册版本同步为 0.7.0。
+- 增加安装导出、`STTNet::sttnet`、`find_package`、FetchContent 与 pkg-config 接入链路。
+- 增加 `headerValue/bodyView` 与 `sendText/sendJson/redirect` 常用 API，以及独立 HTTP/WebSocket 示例。
 
 常见 HTTPS/WSS 使用 `server.setTLS(cert, key)`；历史四参数版本
 `server.setTLS(cert, key, password, clientCA)` 仍表示强制双向 TLS。需要可选客户端证书时使用
@@ -111,11 +121,31 @@ sudo pacman -S --noconfirm jsoncpp openssl base-devel
 
 ```bash
 g++ -std=c++17 -o main main.cpp src/sttnet.cpp -ljsoncpp -lssl -lcrypto -lpthread
-
-或使用 `make` 管理项目构建。
 ```
 
+也可使用 `make` 管理仓库内的示例构建。真实用户项目推荐使用下面的 CMake 目标接入。
+
 （`main.cpp` 是这个文件示例中调用这个框架写的实际应用入口）
+
+### 推荐：在用户项目中引入
+
+安装后的 CMake 项目只需：
+
+```cmake
+find_package(STTNet 0.7 CONFIG REQUIRED)
+target_link_libraries(my_server PRIVATE STTNet::sttnet)
+```
+
+也可把仓库放入 `third_party/STTNet`：
+
+```cmake
+set(STTNET_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(STTNET_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
+add_subdirectory(third_party/STTNet)
+target_link_libraries(my_server PRIVATE STTNet::sttnet)
+```
+
+FetchContent、pkg-config、安装前缀、WorkerPool 与生产配置见 [`docs/GETTING_STARTED_Chinese.md`](docs/GETTING_STARTED_Chinese.md)。
 
 推荐使用 CMake 构建并运行并发回归测试：
 
@@ -128,6 +158,8 @@ ctest --test-dir build --output-on-failure
 性能与并发优化的设计、验证方法及后续路线见 [`docs/OPTIMIZATION_Chinese.md`](docs/OPTIMIZATION_Chinese.md)。
 服务进程的 SIGTERM/SIGINT/SIGKILL 处理约定见 [`docs/SIGNALS_Chinese.md`](docs/SIGNALS_Chinese.md)。
 能力边界、框架对比与 API/ABI 兼容说明见 [`docs/CAPABILITY_Chinese.md`](docs/CAPABILITY_Chinese.md)。
+从引入依赖到生产配置的完整教程见 [`docs/GETTING_STARTED_Chinese.md`](docs/GETTING_STARTED_Chinese.md)。
+后续“轻量瑞士军刀”功能路线见 [`docs/ROADMAP_Chinese.md`](docs/ROADMAP_Chinese.md)。
 本轮完整改动和可直接使用的 commit 文案见 [`docs/CHANGELOG_2026-07-13_Chinese.md`](docs/CHANGELOG_2026-07-13_Chinese.md)。
 
 ---
@@ -137,7 +169,7 @@ ctest --test-dir build --output-on-failure
 STTNet 的常见 HTTP 服务只需要“创建、注册路由、监听”三步：
 
 ```cpp
-#include "include/sttnet.h"
+#include <sttnet.h>
 
 int main()
 {
@@ -148,7 +180,7 @@ int main()
     HttpServer server;
     server.setFunction("/ping",[](HttpServerFDHandler &client,
                                   HttpRequestInformation &) {
-        return client.sendBack("pong") ? 1 : -2;
+        return client.sendText("pong") ? 1 : -2;
     });
     if(!server.startListen(8080)) return 2;
     ServerSetting::waitForTerminationSignal();
@@ -159,7 +191,7 @@ int main()
 运行后执行 `curl http://127.0.0.1:8080/ping` 即可得到 `pong`。下面是同时展示异步任务、WebSocket 和日志的完整示例。
 
 ```cpp
-#include "include/sttnet.h"
+#include <sttnet.h>
 
 using namespace std;
 using namespace stt::file;
@@ -316,6 +348,8 @@ int main(int argc, char* argv[])
 
 - `docs/api/html_Chinese/index.html` 👉 类和方法注释说明（中文）
 - `docs/api/html_English/index.html` 👉 类和方法注释说明（英文）
+- [`docs/GETTING_STARTED_Chinese.md`](docs/GETTING_STARTED_Chinese.md) 👉 安装、引入、回调语义和生产配置
+- [`docs/ROADMAP_Chinese.md`](docs/ROADMAP_Chinese.md) 👉 功能取舍与后续路线
 
 ---
 
@@ -392,3 +426,17 @@ fix bug
 ### v.0.5.0 - 2026-01-09
 -升级信息安全的限流模块
 -修复TLS连接的bug:错误时候的关闭方式
+
+### v0.6.0 - 2026-07-13
+
+- 稀疏连接表、按需接收缓冲、可 join Reactor/Worker，显著降低启动与空闲连接内存。
+- 每连接有界发送队列、统一 EPOLLOUT/TLS 状态机、连接代次与 Worker 生命周期安全。
+- 重写并加固 HTTP/1.1 与 WebSocket 解析，加入 CMake、CI、Sanitizer 和 benchmark。
+
+### v0.7.0 - 2026-07-13
+
+- 修复 ET accept 阻塞、加入 eventfd 唤醒合并、`sendmsg+iovec`、有界 WorkerPool、写入公平性与完整背压指标。
+- 增加 socket 聚合调优、TLS 客户端认证模式/热更新、优雅排空、端口 0、停止后重启和更完整的可观测性。
+- 修复 HTTP/WebSocket/TCP/TLS/File/信号处理中的多个潜在越界、泄漏、竞态和协议正确性问题。
+- 增加标准 CMake 安装包、`find_package`/FetchContent/pkg-config、HTTP 便利 API、可运行示例和分层教程。
+- 常用业务 API 保持源码兼容，但类布局和符号已变化，升级必须完整重新编译。

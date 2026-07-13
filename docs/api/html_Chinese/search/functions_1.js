@@ -8,5 +8,6 @@ var searchData=
   ['bitstrtonumber_5',['bitStrToNumber',['../classstt_1_1data_1_1BitUtil.html#a52a8916ffd65908e625a68dad72b34db',1,'stt::data::BitUtil']]],
   ['bittonumber_6',['bitToNumber',['../classstt_1_1data_1_1BitUtil.html#a3c016562ca077de43fdfc4b53c7a8d0e',1,'stt::data::BitUtil']]],
   ['blockset_7',['blockSet',['../classstt_1_1network_1_1TcpFDHandler.html#a6cf6c36f39d7e81633c569fe1505676a',1,'stt::network::TcpFDHandler::blockSet()'],['../classstt_1_1network_1_1UdpFDHandler.html#ad4eabbd88d94996d60d764a027f9b720',1,'stt::network::UdpFDHandler::blockSet()']]],
-  ['blockterminationsignals_8',['blockTerminationSignals',['../classstt_1_1system_1_1ServerSetting.html#a3071e00f917a0c135f95e1257234c35e',1,'stt::system::ServerSetting']]]
+  ['blockterminationsignals_8',['blockTerminationSignals',['../classstt_1_1system_1_1ServerSetting.html#a3071e00f917a0c135f95e1257234c35e',1,'stt::system::ServerSetting']]],
+  ['bodyview_9',['bodyView',['../structstt_1_1network_1_1HttpRequestInformation.html#a5cf55a4bf445a3d0fbb17be0701113ec',1,'stt::network::HttpRequestInformation']]]
 ];

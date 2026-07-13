@@ -14,6 +14,7 @@ STTNet 现在适合定位为“Linux 上轻量、可嵌入、以 HTTP/1.1 与 We
 | WorkerPool | 可用 | 固定线程池、有界任务背压、可选择排空/丢弃等待任务、任务异常隔离 |
 | TCP / TLS | 可用 | 服务端 I/O 归 Reactor；TLS 最低 1.2；单向 TLS、可选客户端证书和 mTLS；安全热重载 |
 | HTTP/1.1 | 可用 | Content-Length、chunked、trailers、keep-alive、流水线延续解析 |
+| HTTP 易用 API | 可用 | header 查询、统一 body view、文本/JSON/重定向响应 |
 | WebSocket | 可用 | 严格握手、mask/opcode/长度校验、分片、ping/pong/close、UTF-8 校验 |
 | UDP | 可用 | 保持数据报边界，使用线程安全地址解析 |
 | 背压 | 可用 | 默认每连接 4 MiB 高水位，超限返回 -101 并淘汰慢客户端 |
@@ -23,6 +24,7 @@ STTNet 现在适合定位为“Linux 上轻量、可嵌入、以 HTTP/1.1 与 We
 | 运行指标 | 基础可用 | 连接、TLS、HTTP、发送/批量写、队列峰值、唤醒合并、超时和过载快照 |
 | Socket 调优 | 可用 | TCP_NODELAY、keepalive、缓冲、REUSEPORT、DEFER_ACCEPT、FASTOPEN、backlog 聚合配置 |
 | 限流 | 可用 | 连接/IP/path 策略；空闲超时已增量轮转，限流表仍可继续按 Reactor 分片 |
+| 构建与分发 | 可用 | install/export、`STTNet::sttnet`、find_package、add_subdirectory、FetchContent、pkg-config |
 | HTTP/2 / HTTP/3 | 不支持 | 当前只实现 HTTP/1.1 |
 | 多 Reactor/每核分片 | 不支持 | 单 Server 的网络推进受单 Reactor 核心上限约束 |
 | writev/sendmsg | 可用 | 普通 TCP 最多 64 个发送块合并为一次 sendmsg；TLS 仍按 SSL_write 推进 |
@@ -87,15 +89,17 @@ STTNet 现在适合定位为“Linux 上轻量、可嵌入、以 HTTP/1.1 与 We
 | TCP/TLS 客户端连接 | 行为修复 | 默认阻塞连接、线程安全 DNS、SNI/主机名验证、空 CA 使用系统信任库 |
 | WebSocket 协议校验更严格 | 非法客户端可能被拒绝 | 拒绝未 mask、非法关闭码、非法 UTF-8 和错误 Upgrade 握手 |
 | `File::closeFile()` / 内存事务 | 签名不变、行为收紧 | close 可重复调用；会等待其他线程事务；unlock 必须由加锁线程执行；非法行号改为安全失败 |
+| HTTP 请求/响应便利 API | 纯新增 | `headerValue/bodyView/sendText/sendJson/redirect`，旧代码不需修改 |
+| `JsonHelper::toString()` | 行为修复 | 序列化完整 Json::Value；字符串标量现在包含合法 JSON 引号 |
 
 Doxygen 的规范声明位于 `include/sttnet.h`；`include/sttnet_English.h` 现在只转发到这一个规范头，避免两套声明再次发生 ABI 漂移。Doxyfile 项目版本已同步为 0.7.0。
 
 ## 下一批最值得投入的工作
 
-1. `SO_REUSEPORT + 每核独立 Reactor`，把连接和 TLS 会话固定到所属 Reactor。这是继续提高多核吞吐最直接的一步。
-2. 将约万行单实现文件拆为 reactor、http、websocket、tls、security、platform 模块，建立内部接口边界。
-3. HTTP parser 接入 libFuzzer/AFL corpus，WebSocket 接入 Autobahn Testsuite，并将回归 corpus 放进 CI。
-4. 将当前增量轮转空闲检查升级为时间轮，并为限流状态增加分片或 Reactor 本地所有权。
-5. 增加静态文件 `sendfile`、预生成常用响应头和 arena/pool，继续降低复制与分配。
-6. 增加请求耗时直方图、限流命中、队列深度高水位、Prometheus exporter 和 trace hook。
-7. 若产品需要现代浏览器/网关场景，再评估 HTTP/2；HTTP/3 建议集成成熟 QUIC 库，不自行实现协议栈。
+1. HTTP method/path-parameter router、路由组与 before/after middleware，让 REST 服务不需自己组合 key。
+2. 静态文件 `sendfile` + Range + 路径规范化，同时保持有界背压和目录穿越防护。
+3. Prometheus exporter、请求耗时直方图与 trace hook，基于现有 metrics 快照做可选 adapter。
+4. `SO_REUSEPORT + 每核独立 Reactor`，把连接和 TLS 会话固定到所属 Reactor。
+5. 拆分 reactor/http/websocket/tls/security/platform 内部模块，并接入 libFuzzer 与 Autobahn Testsuite。
+6. 升级时间轮与限流分片；再根据 perf 数据决定预生成响应头和 arena/pool。
+7. HTTP/2/3 优先适配成熟库，不自行实现 QUIC/拥塞控制。完整取舍见 `docs/ROADMAP_Chinese.md`。

@@ -44,6 +44,21 @@ Historical case: an older build recorded about 65,000 requests/second and 2–3 
 - ✅ Information security module
 ---
 
+## 0.6.0 Foundation Upgrade
+
+- Replaced the `maxFD`-sized connection array with sparse active state and lazy receive buffers.
+- Made Reactor and Worker lifecycles joinable; copied async request state and added connection generations.
+- Added bounded per-connection writes and a Reactor-owned EPOLLOUT/TLS state machine.
+- Hardened HTTP/1.1 and WebSocket parsing, and added CMake, CI, sanitizers, and benchmarks.
+
+## 0.7.0 Performance, Reliability, and Usability
+
+- Added non-blocking ET accept, coalesced wakeups, batched writes, bounded workers, socket tuning, graceful draining, and richer metrics.
+- Added standard install/export support, `STTNet::sttnet`, `find_package`, FetchContent, and pkg-config.
+- Added HTTP convenience APIs, standalone examples, and layered Chinese/English tutorials.
+
+---
+
 ## 🧱 Framework Module Structure
 
 ```
@@ -113,11 +128,20 @@ sudo pacman -S --noconfirm jsoncpp openssl base-devel
 
 ```bash
 g++ -std=c++17 -o main main.cpp src/sttnet.cpp -ljsoncpp -lssl -lcrypto -lpthread
-
-# Or use `make` to manage the build.
 ```
 
+You may use `make` for the repository example. Real applications should prefer the CMake target integration below.
+
 (`main.cpp` is the sample entry demonstrating use of this framework)
+
+### Recommended consumer integration
+
+```cmake
+find_package(STTNet 0.7 CONFIG REQUIRED)
+target_link_libraries(my_server PRIVATE STTNet::sttnet)
+```
+
+Vendored source can use `add_subdirectory(third_party/STTNet)` and link the same target. FetchContent, pkg-config, install prefixes, and production settings are documented in [`docs/GETTING_STARTED_English.md`](docs/GETTING_STARTED_English.md).
 
 ---
 
@@ -126,7 +150,7 @@ g++ -std=c++17 -o main main.cpp src/sttnet.cpp -ljsoncpp -lssl -lcrypto -lpthrea
 A typical STTNet HTTP service takes only three steps: create, register a route, and listen:
 
 ```cpp
-#include "include/sttnet.h"
+#include <sttnet.h>
 
 int main()
 {
@@ -137,7 +161,7 @@ int main()
     HttpServer server;
     server.setFunction("/ping",[](HttpServerFDHandler &client,
                                   HttpRequestInformation &) {
-        return client.sendBack("pong") ? 1 : -2;
+        return client.sendText("pong") ? 1 : -2;
     });
     if(!server.startListen(8080)) return 2;
     ServerSetting::waitForTerminationSignal();
@@ -148,7 +172,7 @@ int main()
 Run `curl http://127.0.0.1:8080/ping` and receive `pong`. The longer example below also demonstrates worker tasks, WebSocket, and logging.
 
 ```cpp
-#include "include/sttnet.h"
+#include <sttnet.h>
 
 using namespace std;
 using namespace stt::file;
@@ -305,6 +329,8 @@ int main(int argc, char* argv[])
 
 - `docs/api/html_Chinese/index.html` 👉 Class and method documentation(Chinese)
 - `docs/api/html_English/index.html` 👉 Class and method documentation(English)
+- [`docs/GETTING_STARTED_English.md`](docs/GETTING_STARTED_English.md) 👉 Integration and production tutorial
+- [`docs/ROADMAP_Chinese.md`](docs/ROADMAP_Chinese.md) 👉 Lightweight backend roadmap
 
 ---
 
@@ -375,6 +401,17 @@ Added information security module and updated network optimization.
 - Upgrade the traffic control module for information security
 -Fix the bug in TLS connection: incorrect shutdown method
 
+### v0.6.0 - 2026-07-13
+
+- Added sparse connection state, lazy buffers, joinable lifecycles, connection generations, and bounded Reactor-owned writes.
+- Hardened HTTP/1.1 and WebSocket handling and added CMake, CI, sanitizers, regression tests, and benchmarks.
+
+### v0.7.0 - 2026-07-13
+
+- Added non-blocking ET accept, coalesced wakeups, batched writes, bounded workers, socket tuning, graceful draining, TLS improvements, and expanded metrics.
+- Added standard packaging, `find_package`/FetchContent/pkg-config, HTTP convenience APIs, runnable examples, and layered tutorials.
+- Common source APIs remain compatible, but this release is not ABI-compatible; rebuild all consumers.
+
 
 ## STTNet
 ## C++ 轻量级高性能网络框架
@@ -410,6 +447,20 @@ STTNet 是一个**C++17标准** 的轻量级高性能服务器框架，采用 Re
 - ✅进程管理和心跳监控机制管理
 - ✅易用的接口与模块化结构
 - ✅ 信息安全模块
+---
+
+## 0.6.0 基础架构升级
+
+- 稀疏活跃连接表、按需接收缓冲、可 join Reactor/Worker 和连接代次安全。
+- 每连接有界发送队列与统一 EPOLLOUT/TLS 状态机，socket/SSL 写入归 Reactor。
+- 加固 HTTP/1.1/WebSocket，加入 CMake、CI、Sanitizer 和 benchmark。
+
+## 0.7.0 性能、稳定性与易用性
+
+- 非阻塞 ET accept、唤醒合并、批量写、有界 Worker、socket 调优、优雅排空和完整背压指标。
+- 标准 CMake 安装包、`STTNet::sttnet`、`find_package`/FetchContent/pkg-config。
+- HTTP 便利 API、独立示例和中英文分层教程。
+
 ---
 
 ## 🧱 框架模块结构
@@ -476,11 +527,20 @@ sudo pacman -S --noconfirm jsoncpp openssl base-devel
 
 ```bash
 g++ -std=c++17 -o main main.cpp src/sttnet.cpp -ljsoncpp -lssl -lcrypto -lpthread
-
-或使用 `make` 管理项目构建。
 ```
 
+也可使用 `make` 管理仓库内的示例构建。真实用户项目推荐使用下面的 CMake 目标接入。
+
 （`main.cpp` 是这个文件示例中调用这个框架写的实际应用入口）
+
+### 推荐的用户项目接入
+
+```cmake
+find_package(STTNet 0.7 CONFIG REQUIRED)
+target_link_libraries(my_server PRIVATE STTNet::sttnet)
+```
+
+源码内置可使用 `add_subdirectory(third_party/STTNet)` 并链接同一目标。FetchContent、pkg-config、安装前缀和生产配置见 [`docs/GETTING_STARTED_Chinese.md`](docs/GETTING_STARTED_Chinese.md)。
 
 ---
 
@@ -489,7 +549,7 @@ g++ -std=c++17 -o main main.cpp src/sttnet.cpp -ljsoncpp -lssl -lcrypto -lpthrea
 STTNet 的常见 HTTP 服务只需要“创建、注册路由、监听”三步：
 
 ```cpp
-#include "include/sttnet.h"
+#include <sttnet.h>
 
 int main()
 {
@@ -500,7 +560,7 @@ int main()
     HttpServer server;
     server.setFunction("/ping",[](HttpServerFDHandler &client,
                                   HttpRequestInformation &) {
-        return client.sendBack("pong") ? 1 : -2;
+        return client.sendText("pong") ? 1 : -2;
     });
     if(!server.startListen(8080)) return 2;
     ServerSetting::waitForTerminationSignal();
@@ -511,7 +571,7 @@ int main()
 运行后执行 `curl http://127.0.0.1:8080/ping` 即可得到 `pong`。下面是同时展示异步任务、WebSocket 和日志的完整示例。
 
 ```cpp
-#include "include/sttnet.h"
+#include <sttnet.h>
 
 using namespace std;
 using namespace stt::file;
@@ -668,6 +728,8 @@ int main(int argc, char* argv[])
 
 - `docs/api/html_Chinese/index.html` 👉 类和方法注释说明（中文）
 - `docs/api/html_English/index.html` 👉 类和方法注释说明（英文）
+- [`docs/GETTING_STARTED_Chinese.md`](docs/GETTING_STARTED_Chinese.md) 👉 安装、引入、回调语义和生产配置
+- [`docs/ROADMAP_Chinese.md`](docs/ROADMAP_Chinese.md) 👉 功能取舍与后续路线
 
 ---
 
@@ -744,3 +806,14 @@ fix bug
 ### v.0.5.0 - 2026-01-09
 -升级信息安全的限流模块
 -修复TLS连接的bug:错误时候的关闭方式
+
+### v0.6.0 - 2026-07-13
+
+- 稀疏连接表、按需缓冲、可 join 生命周期、连接代次和 Reactor 统一有界发送。
+- 加固 HTTP/1.1/WebSocket，加入 CMake、CI、Sanitizer、回归测试与 benchmark。
+
+### v0.7.0 - 2026-07-13
+
+- 非阻塞 ET accept、唤醒合并、批量写、有界 Worker、socket 调优、优雅排空、TLS 强化与扩展指标。
+- 增加标准安装包、`find_package`/FetchContent/pkg-config、HTTP 便利 API、可运行示例和分层教程。
+- 常用业务 API 保持源码兼容，但本版本不保证 ABI 兼容，升级必须重新编译。

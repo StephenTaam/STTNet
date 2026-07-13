@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['模块_0',['STTNet 模块',['../group__stt.html',1,'']]]
+  ['最小_20websocket_20echo_20服务_0',['最小 WebSocket Echo 服务',['../index.html#quick_websocket',1,'']]]
 ];

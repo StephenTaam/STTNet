@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['网络框架_0',['STTNet：简单、可嵌入的 C++17 网络框架',['../index.html',1,'']]]
+  ['策略与限流_0',['策略与限流',['../classstt_1_1security_1_1ConnectionLimiter.html#rate_limit',1,'']]]
 ];

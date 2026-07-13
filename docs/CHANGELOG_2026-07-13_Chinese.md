@@ -5,25 +5,34 @@
 标题：
 
 ```text
-perf: 提升网络吞吐并完善优雅退出、CI 与 API 文档
+feat: 完善框架接入、HTTP 易用 API 与 0.7.0 教程
 ```
 
 正文：
 
 ```text
-- replace maxFD-sized connection arrays with sparse active-connection state
-- route all server socket/TLS writes through bounded per-connection queues
-- add unified EPOLLOUT/TLS WANT state handling, backpressure and write fairness
-- make reactor/worker/logging shutdown joinable and SIGTERM/SIGINT-safe
-- protect async results with connection generations and delayed fd teardown
-- harden HTTP/1.1 and WebSocket parsing against malformed/smuggling inputs
-- fix TCP/TLS client DNS, blocking connect, CA, SNI and hostname verification
-- add metrics snapshots, Linux CI, sanitizer tests and benchmark tooling
-- make every test assertion execute in Release and fix parser-test buffer leaks
-- update Doxygen/API compatibility, quick-start, signal and capability documentation
+- export STTNet::sttnet for install, find_package, FetchContent and pkg-config
+- validate installed and add_subdirectory consumers in Linux CI
+- add request header/body views and text, JSON and redirect response helpers
+- fix JsonHelper object and array serialization
+- add runnable HTTP/WebSocket examples and layered integration tutorials
+- document 0.6.0/0.7.0 changes and the lightweight backend roadmap
 ```
 
 ## 今天完成的全部内容
+
+### 0.7.0 易用性、分发与教程完善
+
+- CMake 新增规范命名空间目标 `STTNet::sttnet`，支持静态/共享构建、安装、export、`find_package(STTNet 0.7 CONFIG REQUIRED)` 和版本兼容检查。
+- 新增可重定位 `sttnet.pc`，Makefile/Meson/自定义构建可通过 `pkg-config --cflags --libs sttnet` 引入。
+- 作为 `add_subdirectory`/FetchContent 子项目时，测试、示例和安装规则默认关闭，不污染用户构建图与 install 内容。
+- Linux CI 增加“安装 -> 独立 `find_package` 消费 -> pkg-config 检查 -> 源码子项目消费”闭环。
+- 新增 `stt::version` 与 major/minor/patch 编译期常量，方便运行日志和诊断输出。
+- `HttpRequestInformation` 新增零分配、大小写不敏感的 `headerValue()` 和统一 Content-Length/chunked 的 `bodyView()`。
+- `HttpServerFDHandler` 新增 `sendText()`、`sendJson()` 和带 CR/LF 注入防护的 `redirect()`，减少用户手写响应头。
+- 修复 `JsonHelper::toString(Json::Value)` 对对象/数组错用 `asString()` 的老问题，改为 JsonCpp 紧凑序列化。
+- 新增可运行的 HTTP/WebSocket 示例；中英文教程覆盖安装、四种引入方式、回调语义、WorkerPool、背压、TLS 和优雅退出。
+- README 中英文版和双语主入口均补齐 0.6.0/0.7.0 更新说明；新增轻量后端“瑞士军刀”分级路线图。
 
 ### 0.7.0 第二阶段：吞吐、过载与可运维性
 
@@ -127,6 +136,8 @@ perf: 提升网络吞吐并完善优雅退出、CI 与 API 文档
 ## 兼容性提醒
 
 - 常用路由、回调、`startListen`、`sendBack`、`sendMessage` 等业务 API 保持不变。
+- `headerValue/bodyView/sendText/sendJson/redirect` 和版本常量均是源码兼容的新增 API；前两者返回的 `string_view` 不持有内存。
+- `JsonHelper::toString()` 现在返回合法 JSON 文本；字符串标量会带 JSON 引号，这是正确性修复，但依赖旧原始字符串行为的代码需检查。
 - 服务端回调里的发送成功现在表示“响应已进入有界队列”，实际网络写由 Reactor 异步完成。
 - 0.7.0 修改了类布局、virtual 函数和部分 C++ 符号，不保证旧二进制 ABI；提交后应完整重新编译所有目标。
 - 非法 HTTP/WebSocket 输入现在会更早被拒绝，这属于安全收紧。
@@ -144,4 +155,7 @@ perf: 提升网络吞吐并完善优雅退出、CI 与 API 文档
 - 新增真实连接上限、端口 0、停止后重启、增量空闲超时、在途响应排空、外部连接关闭路由和批量写指标 Linux 集成用例。
 - Release 信号回归不再依赖 `assert` 的副作用；HTTP/WebSocket 解析夹具在 ASan/LSan 下自动释放测试输入缓冲。
 - 中英文 Doxygen 已从干净输出目录重新生成，确认首页示例进入 `docs/api` 且没有遗留旧的异步 signal-handler 清理示例。
+- CMake 顶层构建、install/export、独立 `find_package` 消费、pkg-config 输出与 `add_subdirectory` 子项目消费均在本机构建运行通过。
+- 新增 HTTP/WebSocket 示例、安装消费示例、benchmark 和全部测试源文件通过 `-O3 -DNDEBUG -Werror` 语法检查。
+- 包含 JSON 序列化、HTTP 便利响应和请求视图的五个 Release/ASan+UBSan 测试全部通过。
 - 当前开发机不是 Linux，无法实际运行 epoll/timerfd 集成测试和可信 QPS 压测；仓库已配置 Linux Release 与 ASan/UBSan CI，最终结果以 CI/目标 Linux 主机为准。

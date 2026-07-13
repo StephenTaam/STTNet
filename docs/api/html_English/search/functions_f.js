@@ -9,10 +9,11 @@ var searchData=
   ['recoverform_6',['recoverForm',['../structstt_1_1time_1_1Duration.html#a867741939eefe81b9760da90bea5df06',1,'stt::time::Duration']]],
   ['recvdata_7',['recvData',['../classstt_1_1network_1_1TcpFDHandler.html#a9e302132d955321d11fd0198fd93b968',1,'stt::network::TcpFDHandler::recvData(std::string &amp;data, const uint64_t &amp;length)'],['../classstt_1_1network_1_1TcpFDHandler.html#a19b87d7c62b9ea4251cd963e721dcfbb',1,'stt::network::TcpFDHandler::recvData(char *data, const uint64_t &amp;length)'],['../classstt_1_1network_1_1UdpFDHandler.html#a286c2af9fa01db9e9365c5453d97d7eb',1,'stt::network::UdpFDHandler::recvData(std::string &amp;data, const uint64_t &amp;length, std::string &amp;ip, int &amp;port)'],['../classstt_1_1network_1_1UdpFDHandler.html#ad5c9c913ae4b8510abdc5f620fdf0b56',1,'stt::network::UdpFDHandler::recvData(char *data, const uint64_t &amp;length, std::string &amp;ip, int &amp;port)']]],
   ['recvdatabylength_8',['recvDataByLength',['../classstt_1_1network_1_1TcpFDHandler.html#a4d12a36453b01e460373633ad9b09ed7',1,'stt::network::TcpFDHandler::recvDataByLength(std::string &amp;data, const uint64_t &amp;length, const int &amp;sec=2)'],['../classstt_1_1network_1_1TcpFDHandler.html#a1bf6a148bd15cc6abaa3c6fcae98641e',1,'stt::network::TcpFDHandler::recvDataByLength(char *data, const uint64_t &amp;length, const int &amp;sec=2)']]],
-  ['redrawtls_9',['redrawTLS',['../classstt_1_1network_1_1TcpServer.html#a39d8778843209ebac1af10aae6ba1634',1,'stt::network::TcpServer']]],
-  ['renew_10',['renew',['../classstt_1_1system_1_1HBSystem.html#a645bb7b07ae96a735f8564c0dc92a165',1,'stt::system::HBSystem']]],
-  ['reportreactorstartup_11',['reportReactorStartup',['../classstt_1_1network_1_1TcpServer.html#a3a1388272c723490042a4bfc3ab73f95',1,'stt::network::TcpServer']]],
-  ['requestcloseafterflush_12',['requestCloseAfterFlush',['../classstt_1_1network_1_1TcpServer.html#aab4f372c454970162035438b1194cb1d',1,'stt::network::TcpServer']]],
-  ['requestqueuedclose_13',['requestQueuedClose',['../classstt_1_1network_1_1TcpServer.html#aeaa7e39221df6adde616e84a73e12d06',1,'stt::network::TcpServer']]],
-  ['resetctx_14',['resetCTX',['../classstt_1_1network_1_1TcpClient.html#ab4f4257567d6aaeebd07225263409445',1,'stt::network::TcpClient']]]
+  ['redirect_9',['redirect',['../classstt_1_1network_1_1HttpServerFDHandler.html#a3ae6dbb78e4a8613ca47284c74a361c4',1,'stt::network::HttpServerFDHandler']]],
+  ['redrawtls_10',['redrawTLS',['../classstt_1_1network_1_1TcpServer.html#a39d8778843209ebac1af10aae6ba1634',1,'stt::network::TcpServer']]],
+  ['renew_11',['renew',['../classstt_1_1system_1_1HBSystem.html#a645bb7b07ae96a735f8564c0dc92a165',1,'stt::system::HBSystem']]],
+  ['reportreactorstartup_12',['reportReactorStartup',['../classstt_1_1network_1_1TcpServer.html#a3a1388272c723490042a4bfc3ab73f95',1,'stt::network::TcpServer']]],
+  ['requestcloseafterflush_13',['requestCloseAfterFlush',['../classstt_1_1network_1_1TcpServer.html#aab4f372c454970162035438b1194cb1d',1,'stt::network::TcpServer']]],
+  ['requestqueuedclose_14',['requestQueuedClose',['../classstt_1_1network_1_1TcpServer.html#aeaa7e39221df6adde616e84a73e12d06',1,'stt::network::TcpServer']]],
+  ['resetctx_15',['resetCTX',['../classstt_1_1network_1_1TcpClient.html#ab4f4257567d6aaeebd07225263409445',1,'stt::network::TcpClient']]]
 ];

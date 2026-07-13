@@ -34,6 +34,21 @@ jobs:
       - name: Validate Doxygen
         if: matrix.build.name == 'release'
         run: cmake --build build --target sttnet_docs
+      - name: Validate installed CMake and pkg-config packages
+        if: matrix.build.name == 'release'
+        run: |
+          cmake --install build --prefix "$RUNNER_TEMP/sttnet-install"
+          cmake -S tests/package_consumer -B build-consumer -G Ninja \
+            -DCMAKE_PREFIX_PATH="$RUNNER_TEMP/sttnet-install"
+          cmake --build build-consumer
+          ./build-consumer/sttnet_package_consumer
+          export PKG_CONFIG_PATH="$RUNNER_TEMP/sttnet-install/lib/pkgconfig"
+          pkg-config --exists sttnet
+          c++ -std=c++17 examples/http_hello.cpp $(pkg-config --cflags --libs sttnet) \
+            -o build-consumer/sttnet_pkgconfig_consumer
+          cmake -S tests/subdirectory_consumer -B build-subdirectory-consumer -G Ninja
+          cmake --build build-subdirectory-consumer
+          ./build-subdirectory-consumer/sttnet_subdirectory_consumer
       - name: HTTP smoke test
         if: matrix.build.name == 'release'
         run: bash tests/graceful_shutdown.sh ./build/sttnet_example

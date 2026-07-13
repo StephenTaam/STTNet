@@ -89,6 +89,7 @@ $(function(){ initResizable(false); });
 <div id="doc-content">
 <div class="header">
   <div class="summary">
+<a href="#pub-methods">Public 成员函数</a> &#124;
 <a href="#pub-attribs">Public 属性</a> &#124;
 <a href="structstt_1_1network_1_1HttpRequestInformation-members.html">所有成员列表</a>  </div>
   <div class="headertitle"><div class="title">stt::network::HttpRequestInformation结构体 参考</div></div>
@@ -100,6 +101,15 @@ $(function(){ initResizable(false); });
 
 <p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public 成员函数</h2></td></tr>
+<tr class="memitem:ac8c2dee7ed3457a6dfaf2ab53e95c77c" id="r_ac8c2dee7ed3457a6dfaf2ab53e95c77c"><td class="memItemLeft" align="right" valign="top">std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac8c2dee7ed3457a6dfaf2ab53e95c77c">headerValue</a> (std::string_view name) const noexcept</td></tr>
+<tr class="memdesc:ac8c2dee7ed3457a6dfaf2ab53e95c77c"><td class="mdescLeft">&#160;</td><td class="mdescRight">按大小写不敏感方式读取请求头，不分配内存。  <br /></td></tr>
+<tr class="separator:ac8c2dee7ed3457a6dfaf2ab53e95c77c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5cf55a4bf445a3d0fbb17be0701113ec" id="r_a5cf55a4bf445a3d0fbb17be0701113ec"><td class="memItemLeft" align="right" valign="top">std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5cf55a4bf445a3d0fbb17be0701113ec">bodyView</a> () const noexcept</td></tr>
+<tr class="memdesc:a5cf55a4bf445a3d0fbb17be0701113ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">统一读取 Content-Length 或 chunked 请求体。  <br /></td></tr>
+<tr class="separator:a5cf55a4bf445a3d0fbb17be0701113ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public 属性</h2></td></tr>
 <tr class="memitem:a4bd4cd5d0f918c30b0f12a68e504b2c9" id="r_a4bd4cd5d0f918c30b0f12a68e504b2c9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4bd4cd5d0f918c30b0f12a68e504b2c9">fd</a> =-1</td></tr>
@@ -135,7 +145,71 @@ Public 属性</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>保存HTTP/HTTPS请求信息的结构体 </p>
-</div><h2 class="groupheader">类成员变量说明</h2>
+</div><h2 class="groupheader">成员函数说明</h2>
+<a id="a5cf55a4bf445a3d0fbb17be0701113ec" name="a5cf55a4bf445a3d0fbb17be0701113ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5cf55a4bf445a3d0fbb17be0701113ec">&#9670;&#160;</a></span>bodyView()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string_view stt::network::HttpRequestInformation::bodyView </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel noexcept">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>统一读取 Content-Length 或 chunked 请求体。 </p>
+<dl class="section return"><dt>返回</dt><dd>指向 <code>body</code> 或 <code>body_chunked</code> 的非拥有视图。 </dd></dl>
+
+</div>
+</div>
+<a id="ac8c2dee7ed3457a6dfaf2ab53e95c77c" name="ac8c2dee7ed3457a6dfaf2ab53e95c77c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8c2dee7ed3457a6dfaf2ab53e95c77c">&#9670;&#160;</a></span>headerValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string_view stt::network::HttpRequestInformation::headerValue </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view</td>          <td class="paramname"><span class="paramname"><em>name</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel noexcept">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>按大小写不敏感方式读取请求头，不分配内存。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>不带冒号的 header 名，例如 <code>content-type</code>。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>指向当前 <code>header</code> 字符串的视图；不存在时返回空视图。 </dd></dl>
+<dl class="section warning"><dt>警告</dt><dd>修改或销毁本请求后，返回的视图失效。 </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">类成员变量说明</h2>
 <a id="a67e0be1398a5a8b121243ad894eae0aa" name="a67e0be1398a5a8b121243ad894eae0aa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a67e0be1398a5a8b121243ad894eae0aa">&#9670;&#160;</a></span>body</h2>
 

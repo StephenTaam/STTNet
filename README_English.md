@@ -44,6 +44,22 @@ Historical case: an older build recorded about 65,000 requests/second and 2–3 
 - ✅ Information security module
 ---
 
+## 0.6.0 Foundation Upgrade
+
+- Replaced the `maxFD`-sized connection array with sparse active state and lazy receive buffers.
+- Made Reactor and Worker lifecycles joinable; copied async request state and added connection generations.
+- Added bounded per-connection write queues and a Reactor-owned EPOLLOUT/TLS WANT state machine.
+- Hardened HTTP/1.1 and WebSocket parsing, and added CMake, Linux CI, sanitizers, and benchmarks.
+
+## 0.7.0 Performance, Reliability, and Usability
+
+- Added non-blocking ET accept, coalesced eventfd wakeups, `sendmsg+iovec`, bounded workers, write fairness, and richer metrics.
+- Added socket option aggregation, graceful draining, TLS client-auth modes, and safe certificate reload.
+- Added install/export support, `STTNet::sttnet`, `find_package`, FetchContent, and pkg-config integration.
+- Added `headerValue/bodyView`, `sendText/sendJson/redirect`, and standalone HTTP/WebSocket examples.
+
+---
+
 ## 🧱 Framework Module Structure
 
 ```
@@ -113,11 +129,31 @@ sudo pacman -S --noconfirm jsoncpp openssl base-devel
 
 ```bash
 g++ -std=c++17 -o main main.cpp src/sttnet.cpp -ljsoncpp -lssl -lcrypto -lpthread
-
-# Or use `make` to manage the build.
 ```
 
+You may use `make` for the repository example. Real applications should prefer the CMake target integration below.
+
 (`main.cpp` is the sample entry demonstrating use of this framework)
+
+### Recommended consumer integration
+
+After installing STTNet, a CMake application only needs:
+
+```cmake
+find_package(STTNet 0.7 CONFIG REQUIRED)
+target_link_libraries(my_server PRIVATE STTNet::sttnet)
+```
+
+Vendored source works with the same target:
+
+```cmake
+set(STTNET_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(STTNET_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
+add_subdirectory(third_party/STTNet)
+target_link_libraries(my_server PRIVATE STTNet::sttnet)
+```
+
+See [`docs/GETTING_STARTED_English.md`](docs/GETTING_STARTED_English.md) for installation prefixes, FetchContent, pkg-config, workers, and production settings.
 
 ---
 
@@ -126,7 +162,7 @@ g++ -std=c++17 -o main main.cpp src/sttnet.cpp -ljsoncpp -lssl -lcrypto -lpthrea
 A typical STTNet HTTP service takes only three steps: create, register a route, and listen:
 
 ```cpp
-#include "include/sttnet.h"
+#include <sttnet.h>
 
 int main()
 {
@@ -137,7 +173,7 @@ int main()
     HttpServer server;
     server.setFunction("/ping",[](HttpServerFDHandler &client,
                                   HttpRequestInformation &) {
-        return client.sendBack("pong") ? 1 : -2;
+        return client.sendText("pong") ? 1 : -2;
     });
     if(!server.startListen(8080)) return 2;
     ServerSetting::waitForTerminationSignal();
@@ -148,7 +184,7 @@ int main()
 Run `curl http://127.0.0.1:8080/ping` and receive `pong`. The longer example below also demonstrates worker tasks, WebSocket, and logging.
 
 ```cpp
-#include "include/sttnet.h"
+#include <sttnet.h>
 
 using namespace std;
 using namespace stt::file;
@@ -305,6 +341,8 @@ int main(int argc, char* argv[])
 
 - `docs/api/html_Chinese/index.html` 👉 Class and method documentation(Chinese)
 - `docs/api/html_English/index.html` 👉 Class and method documentation(English)
+- [`docs/GETTING_STARTED_English.md`](docs/GETTING_STARTED_English.md) 👉 Integration and production tutorial
+- [`docs/ROADMAP_Chinese.md`](docs/ROADMAP_Chinese.md) 👉 Lightweight backend roadmap
 
 ---
 
@@ -374,3 +412,15 @@ Added information security module and updated network optimization.
 ### v.0.5.0 - 2026-01-09
 - Upgrade the traffic control module for information security
 -Fix the bug in TLS connection: incorrect shutdown method
+
+### v0.6.0 - 2026-07-13
+
+- Added sparse connection state, lazy receive buffers, joinable lifecycles, connection generations, and bounded Reactor-owned writes.
+- Hardened HTTP/1.1 and WebSocket protocol handling and added CMake, CI, sanitizers, regression tests, and benchmarks.
+
+### v0.7.0 - 2026-07-13
+
+- Added non-blocking ET accept, coalesced wakeups, batched TCP writes, bounded workers, socket tuning, graceful draining, and expanded metrics.
+- Improved TLS modes/reload and fixed concurrency, lifetime, protocol, signal, TCP/TLS client, and File boundary defects.
+- Added standard CMake packaging, `find_package`/FetchContent/pkg-config, HTTP convenience APIs, runnable examples, and layered tutorials.
+- Source compatibility is retained for common application APIs, but the release is not ABI-compatible; rebuild all consumers.

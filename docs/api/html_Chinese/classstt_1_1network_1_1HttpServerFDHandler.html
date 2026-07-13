@@ -120,6 +120,15 @@ Public 成员函数</h2></td></tr>
 <tr class="memitem:a13e5a3a12ca525a33e741cb369667031" id="r_a13e5a3a12ca525a33e741cb369667031"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a13e5a3a12ca525a33e741cb369667031">sendBack</a> (const std::string &amp;data, const std::string &amp;header=&quot;&quot;, const std::string &amp;code=&quot;200 OK&quot;, const std::string &amp;header1=&quot;&quot;)</td></tr>
 <tr class="memdesc:a13e5a3a12ca525a33e741cb369667031"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送Http/Https响应  <br /></td></tr>
 <tr class="separator:a13e5a3a12ca525a33e741cb369667031"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:addb3010c562bd566043e611ef9debc69" id="r_addb3010c562bd566043e611ef9debc69"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#addb3010c562bd566043e611ef9debc69">sendText</a> (const std::string &amp;data, const std::string &amp;code=&quot;200 OK&quot;, const std::string &amp;contentType=&quot;text/plain; charset=utf-8&quot;, const std::string &amp;extraHeaders=&quot;&quot;)</td></tr>
+<tr class="memdesc:addb3010c562bd566043e611ef9debc69"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送文本响应，自动补充 Content-Type 和 Content-Length。  <br /></td></tr>
+<tr class="separator:addb3010c562bd566043e611ef9debc69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ee623da02e90cdd57939d597143981e" id="r_a9ee623da02e90cdd57939d597143981e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ee623da02e90cdd57939d597143981e">sendJson</a> (const Json::Value &amp;data, const std::string &amp;code=&quot;200 OK&quot;, const std::string &amp;extraHeaders=&quot;&quot;)</td></tr>
+<tr class="memdesc:a9ee623da02e90cdd57939d597143981e"><td class="mdescLeft">&#160;</td><td class="mdescRight">序列化 Json::Value 并发送 application/json UTF-8 响应。  <br /></td></tr>
+<tr class="separator:a9ee623da02e90cdd57939d597143981e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ae6dbb78e4a8613ca47284c74a361c4" id="r_a3ae6dbb78e4a8613ca47284c74a361c4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3ae6dbb78e4a8613ca47284c74a361c4">redirect</a> (const std::string &amp;location, const std::string &amp;code=&quot;302 Found&quot;)</td></tr>
+<tr class="memdesc:a3ae6dbb78e4a8613ca47284c74a361c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送 HTTP 重定向响应。  <br /></td></tr>
+<tr class="separator:a3ae6dbb78e4a8613ca47284c74a361c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e87e7c257a72ed767f82b9f66ab85c8" id="r_a5e87e7c257a72ed767f82b9f66ab85c8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e87e7c257a72ed767f82b9f66ab85c8">sendBack</a> (const char *data, const size_t &amp;length, const char *header=&quot;\0&quot;, const char *code=&quot;200 OK\0&quot;, const char *header1=&quot;\0&quot;, const size_t &amp;header_length=50)</td></tr>
 <tr class="memdesc:a5e87e7c257a72ed767f82b9f66ab85c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送Http/Https响应  <br /></td></tr>
 <tr class="separator:a5e87e7c257a72ed767f82b9f66ab85c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -195,6 +204,36 @@ Public 成员函数</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>解析，响应Http/https请求的操作类 仅传入套接字，然后使用这个类进行Http的操作 </p>
 </div><h2 class="groupheader">成员函数说明</h2>
+<a id="a3ae6dbb78e4a8613ca47284c74a361c4" name="a3ae6dbb78e4a8613ca47284c74a361c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ae6dbb78e4a8613ca47284c74a361c4">&#9670;&#160;</a></span>redirect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool stt::network::HttpServerFDHandler::redirect </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>location</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>code</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;302&#160;Found&quot;</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>发送 HTTP 重定向响应。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">location</td><td>Location 目标；包含 CR/LF 时会拒绝，避免响应头注入。 </td></tr>
+    <tr><td class="paramname">code</td><td>默认 <code>302 Found</code>，也可使用 <code>301 Moved Permanently</code>。 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a5e87e7c257a72ed767f82b9f66ab85c8" name="a5e87e7c257a72ed767f82b9f66ab85c8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5e87e7c257a72ed767f82b9f66ab85c8">&#9670;&#160;</a></span>sendBack() <span class="overload">[1/2]</span></h2>
 
@@ -291,6 +330,76 @@ Public 成员函数</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>返回</dt><dd>true：发送响应成功 false：发送响应失败 </dd></dl>
+
+</div>
+</div>
+<a id="a9ee623da02e90cdd57939d597143981e" name="a9ee623da02e90cdd57939d597143981e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ee623da02e90cdd57939d597143981e">&#9670;&#160;</a></span>sendJson()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool stt::network::HttpServerFDHandler::sendJson </td>
+          <td>(</td>
+          <td class="paramtype">const Json::Value &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>code</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;200&#160;OK&quot;</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>extraHeaders</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;&quot;</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>序列化 Json::Value 并发送 application/json UTF-8 响应。 </p>
+
+</div>
+</div>
+<a id="addb3010c562bd566043e611ef9debc69" name="addb3010c562bd566043e611ef9debc69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#addb3010c562bd566043e611ef9debc69">&#9670;&#160;</a></span>sendText()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool stt::network::HttpServerFDHandler::sendText </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>code</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;200&#160;OK&quot;</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>contentType</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;text/plain;&#160;charset=utf-8&quot;</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>extraHeaders</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;&quot;</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>发送文本响应，自动补充 Content-Type 和 Content-Length。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>响应体。 </td></tr>
+    <tr><td class="paramname">code</td><td>HTTP 状态，例如 <code>200 OK</code>。 </td></tr>
+    <tr><td class="paramname">contentType</td><td>MIME 类型，默认 UTF-8 纯文本。 </td></tr>
+    <tr><td class="paramname">extraHeaders</td><td>额外响应头，可以是多行。 </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

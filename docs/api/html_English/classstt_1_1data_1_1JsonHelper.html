@@ -106,7 +106,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memdesc:a5198deea9a0dcddc31c4164bcbe0e637"><td class="mdescLeft">&#160;</td><td class="mdescRight">提取 JSON 字符串中指定字段的值或嵌套结构。  <br /></td></tr>
 <tr class="separator:a5198deea9a0dcddc31c4164bcbe0e637"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a416fa5e4965944ea9e4e9443170cae5f" id="r_a416fa5e4965944ea9e4e9443170cae5f"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a416fa5e4965944ea9e4e9443170cae5f">toString</a> (const Json::Value &amp;val)</td></tr>
-<tr class="memdesc:a416fa5e4965944ea9e4e9443170cae5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">将 Json::Value 转换为字符串。  <br /></td></tr>
+<tr class="memdesc:a416fa5e4965944ea9e4e9443170cae5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">将 Json::Value 序列化为紧凑 JSON 文本。  <br /></td></tr>
 <tr class="separator:a416fa5e4965944ea9e4e9443170cae5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e94bc57dcef5b5a0bd49d8a23ac5551" id="r_a1e94bc57dcef5b5a0bd49d8a23ac5551"><td class="memItemLeft" align="right" valign="top">static Json::Value&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e94bc57dcef5b5a0bd49d8a23ac5551">toJsonArray</a> (const std::string &amp;str)</td></tr>
 <tr class="memdesc:a1e94bc57dcef5b5a0bd49d8a23ac5551"><td class="mdescLeft">&#160;</td><td class="mdescRight">解析 JSON 字符串为 Json::Value。  <br /></td></tr>
@@ -564,14 +564,14 @@ template&lt;class T1, class T2, class... Args&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>将 Json::Value 转换为字符串。 </p>
+<p>将 Json::Value 序列化为紧凑 JSON 文本。 </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">val</td><td>JSON 值。 </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>std::string 字符串形式的值。 </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>合法 JSON 文本；字符串值也会包含 JSON 引号。 </dd></dl>
 
 </div>
 </div>

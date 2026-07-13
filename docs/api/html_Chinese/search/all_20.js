@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['特性_0',['特性',['../classstt_1_1system_1_1WorkerPool.html#autotoc_md5',1,'']]]
+  ['服务_0',['服务',['../index.html#quick_websocket',1,'最小 WebSocket Echo 服务'],['../index.html#quick_http',1,'20 行启动 HTTP 服务']]]
 ];
