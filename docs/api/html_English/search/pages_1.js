@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['sttnet_20c_2b_2b_20framework',['STTNet C++ Framework',['../index.html',1,'']]]
+  ['c_20framework_0',['STTNet C++ Framework',['../index.html',1,'']]]
 ];

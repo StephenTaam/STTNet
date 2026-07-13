@@ -1,8 +1,8 @@
 /**
 * @mainpage STTNet C++ Framework
 * @author StephenTaam(1356597983@qq.com)
-* @version 0.5.0
-* @date 2026-01-09
+* @version 0.6.0
+* @date 2026-07-13
 */
 #ifndef PUBLIC_H
 #define PUBLIC_H 1
@@ -55,6 +55,20 @@
 #include <cstdint>
 #include <new>
 #include <vector>
+#include <memory>
+#include <limits>
+#include <poll.h>
+#include <exception>
+#include <cstdlib>
+#include <cstdio>
+#include <deque>
+#include <algorithm>
+#include <unordered_set>
+#include <cctype>
+#ifdef __linux__
+#include <sys/prctl.h>
+#include <sys/syscall.h>
+#endif
 /**
 * @namespace stt
 */
@@ -120,8 +134,7 @@ public:
 
     ~MPSCQueue() {
         // Drain remaining items to call destructors if needed
-        T tmp;
-        while (pop(tmp)) {}
+        while (discard_one()) {}
     }
 
     /**
@@ -143,9 +156,10 @@ public:
     bool pop(T& out) noexcept(std::is_nothrow_move_assignable_v<T> &&
                               std::is_nothrow_move_constructible_v<T>)
     {
-        Slot& slot = buffer_[head_ & mask_];
+        const std::size_t head = head_.load(std::memory_order_relaxed);
+        Slot& slot = buffer_[head & mask_];
         const std::size_t seq = slot.seq.load(std::memory_order_acquire);
-        const std::intptr_t dif = static_cast<std::intptr_t>(seq) - static_cast<std::intptr_t>(head_ + 1);
+        const std::intptr_t dif = static_cast<std::intptr_t>(seq) - static_cast<std::intptr_t>(head + 1);
 
         if (dif != 0) {
             // seq != head+1 => empty
@@ -160,9 +174,9 @@ public:
 
         // Mark slot as free for producers:
         // seq = head + capacity
-        slot.seq.store(head_ + capacity_, std::memory_order_release);
+        slot.seq.store(head + capacity_, std::memory_order_release);
 
-        ++head_;
+        head_.store(head + 1, std::memory_order_relaxed);
         return true;
     }
 
@@ -172,7 +186,7 @@ public:
      */
     std::size_t approx_size() const noexcept {
         const std::size_t t = tail_.load(std::memory_order_relaxed);
-        const std::size_t h = head_; // consumer-only
+        const std::size_t h = head_.load(std::memory_order_relaxed);
         return (t >= h) ? (t - h) : 0;
     }
 
@@ -232,16 +246,28 @@ private:
         }
     }
 
+    bool discard_one() noexcept {
+        const std::size_t head = head_.load(std::memory_order_relaxed);
+        Slot& slot = buffer_[head & mask_];
+        const std::size_t seq = slot.seq.load(std::memory_order_acquire);
+        if (static_cast<std::intptr_t>(seq) - static_cast<std::intptr_t>(head + 1) != 0)
+            return false;
+        slot.destroy();
+        slot.seq.store(head + capacity_, std::memory_order_release);
+        head_.store(head + 1, std::memory_order_relaxed);
+        return true;
+    }
+
 private:
     const std::size_t capacity_;
     const std::size_t mask_;
     std::vector<Slot> buffer_;
 
     // Single consumer only
-    std::size_t head_;
+    alignas(64) std::atomic<std::size_t> head_;
 
     // Multi-producer
-    std::atomic<std::size_t> tail_;
+    alignas(64) std::atomic<std::size_t> tail_;
 };
 
 
@@ -1129,8 +1155,8 @@ private:
         std::string timeFormat;
         std::string contentFormat;
         std::atomic<bool> consumerGuard{true};
-        //std::mutex queueMutex;
-        //std::condition_variable queueCV;
+        std::mutex queueMutex;
+        std::condition_variable queueCV;
         system::MPSCQueue<std::string> logQueue;
         std::thread consumerThread;
     public:
@@ -1162,18 +1188,27 @@ private:
             std::string content;
             content.reserve(1024);
             std::string time;
-            content.reserve(1074);
-            while(this->consumerGuard)
+            time.reserve(128);
+            while (true)
             {
+                bool drained = false;
                 while(this->logQueue.pop(content))//非空则执行
                 {       
+                    drained = true;
                     getTime(time,timeFormat);
                     time+=contentFormat;
                     time+=content;
                     this->appendLine(time);
                 }
-                std::this_thread::sleep_for(std::chrono::microseconds(500));
-
+                if (!this->consumerGuard.load(std::memory_order_acquire))
+                    break;
+                if (!drained)
+                {
+                    std::unique_lock<std::mutex> lock(this->queueMutex);
+                    this->queueCV.wait_for(lock,std::chrono::milliseconds(10),[this] {
+                        return !this->consumerGuard.load(std::memory_order_acquire)||this->logQueue.approx_size()>0;
+                    });
+                }
             }
         });
         }
@@ -2408,6 +2443,8 @@ private:
         bool flag2=false;
         SSL *ssl=nullptr;
         int sec=-1;
+        std::function<int(std::string)> queuedSendFunction;
+        std::function<void()> queuedCloseFunction;
     public:
         /**
         * @brief 如果sendData的block=true，如果发送过程中连接断开，这个标志位会置为true
@@ -2424,6 +2461,18 @@ private:
         * @param sec 阻塞超时时间 阻塞超过这个时间就不会再阻塞了 默认为-1 即无限等待
         */
         void setFD(const int &fd,SSL *ssl,const bool &flag1=false,const bool &flag2=false,const int &sec=-1);
+        /**
+        * @brief 由服务端 Reactor 注入异步发送和关闭通道。
+        * @param sendFunction 接收完整数据并返回已接收入队字节数的函数。
+        * @param closeFunction 请求 Reactor 关闭连接的函数。
+        * @note 主要供 TcpServer 及派生类构造回调 handler；普通客户端不需要调用。
+        * @note 注入后，sendData() 只把数据提交到有界发送队列，实际 socket/SSL 写入由 Reactor 完成。
+        */
+        void setTransportFunctions(std::function<int(std::string)> sendFunction,std::function<void()> closeFunction={})
+        {
+            queuedSendFunction=std::move(sendFunction);
+            queuedCloseFunction=std::move(closeFunction);
+        }
         /**
         * @brief 获取该对象的套接字
         * @return 返回该对象的套接字
@@ -2472,9 +2521,12 @@ private:
         * - 返回值 < 0（只可能在block=false的情况下）：发送失败；
         *   - -99：对象未绑定 socket；
         *   - -100：非阻塞模式下，发送缓冲区已满。
+        *   - -101：服务端异步发送队列已关闭或超过每连接高水位。
         *
         * @note 若 block 为 true，会持续阻塞直到全部数据发送完毕除非出错了（无论 socket 是阻塞或非阻塞），返回值一定>=0,适合希望确保完整发送的场景。如果需要判断是否连接断开了可以检查flag3标志位判断。
         * 若 block 为 false，阻塞与否取决于套接字状态。返回值可能小于 希望发送的长度，需手动处理剩余数据。
+        * @note 当 handler 由 TcpServer 回调提供时，成功返回表示数据已被有界队列接受，并不表示已经写入内核或对端；
+        *       block 参数在该模式下不会让 Worker 线程直接写 socket/SSL。
         */
         int sendData(const std::string &data,const bool &block=true);
         /**
@@ -2492,9 +2544,11 @@ private:
         * - 返回值 < 0（只可能在block=false的情况下）：发送失败；
         *   - -99：对象未绑定 socket；
         *   - -100：非阻塞模式下，发送缓冲区已满。
+        *   - -101：服务端异步发送队列已关闭或超过每连接高水位。
         *
         * @note 若 block 为 true，会持续阻塞直到全部数据发送完毕除非出错了（无论 socket 是阻塞或非阻塞），返回值一定>=0,适合希望确保完整发送的场景。如果需要判断是否连接断开了可以检查flag3标志位判断。
         * 若 block 为 false，阻塞与否取决于套接字状态。返回值可能小于 length，需手动处理剩余数据。
+        * @note 当 handler 由 TcpServer 回调提供时，成功返回表示数据已被有界队列接受，并不表示已经写入内核或对端。
         */
         int sendData(const char *data,const uint64_t &length,const bool &block=true);
         /**
@@ -2581,13 +2635,13 @@ private:
         /**
         * @brief TcpClient类的构造函数
         * @param TLS true：启用TLS加密  false：不启用TLS加密 （默认为false不启用）
-        * @param ca CA 根证书路径（若启用TLS加密则必须填这个 默认空）
+        * @param ca CA 根证书文件路径；留空时使用操作系统默认信任库。
         * @param cert 客户端证书路径（可选 默认空）
         * @param key 客户端私钥路径（可选 默认空）
         * @param passwd 私钥解密密码（可选 默认空）
         * @note 
-        * -ca用来校验对方服务器的证书是否可信（可以用操作系统自带的根证书验证）
-        * -如果启用了TLS加密 ca必填 其他可选
+        * - TLS 最低版本为 1.2，并同时验证证书链和连接目标主机名。
+        * - ca 留空时使用系统默认根证书；指定时使用给定 CA 文件。
         * -如果服务端要求客户端身份认证（双向 TLS/SSL），你需要提供一个有效的客户端证书。
         */
         TcpClient(const bool &TLS=false,const char *ca="",const char *cert="",const char *key="",const char *passwd="");
@@ -2595,20 +2649,21 @@ private:
         * @brief 向服务端发起tcp连接
         * @param ip 服务端ip
         * @param port 服务端端口
-        * return  true：连接成功  false：连接失败
+        * @return true：DNS、TCP（以及可选 TLS）连接成功；false：失败。
+        * @note ip 也可以是域名。默认创建的是阻塞 socket；TLS 模式会设置 SNI 并校验证书主机名。
         */
         bool connect(const std::string &ip,const int &port);        
         /**
         * @brief 重新或第一次设置TLS加密参数
         * @note 设置了的TLS参数伴随整个生命周期，除非调用这个函数重新设置
         * @param TLS true：启用TLS加密  false：不启用TLS加密 （默认为false不启用）
-        * @param ca CA 根证书路径（若启用TLS加密则必须填这个 默认空）
+        * @param ca CA 根证书文件路径；留空时使用操作系统默认信任库。
         * @param cert 客户端证书路径（可选 默认空）
         * @param key 客户端私钥路径（可选 默认空）
         * @param passwd 私钥解密密码（可选 默认空）
         * @note 
-        * -ca用来校验对方服务器的证书是否可信（可以用操作系统自带的根证书验证）
-        * -如果启用了TLS加密 ca必填 其他可选
+        * - TLS 最低版本为 1.2，并同时验证证书链和连接目标主机名。
+        * - ca 留空时使用系统默认根证书；指定时使用给定 CA 文件。
         * -如果服务端要求客户端身份认证（双向 TLS/SSL），你需要提供一个有效的客户端证书。
         */
         void resetCTX(const bool &TLS=false,const char *ca="",const char *cert="",const char *key="",const char *passwd="");
@@ -2654,13 +2709,13 @@ private:
         /**
         * @brief HttpClient类的构造函数
         * @param TLS true：启用Https加密  false：不启用Https加密 （默认为false不启用）
-        * @param ca CA 根证书路径（若启用TLS加密则必须填这个 默认空）
+        * @param ca CA 根证书文件路径；留空时使用操作系统默认信任库。
         * @param cert 客户端证书路径（可选 默认空）
         * @param key 客户端私钥路径（可选 默认空）
         * @param passwd 私钥解密密码（可选 默认空）
         * @note 
-        * -ca用来校验对方服务器的证书是否可信（可以用操作系统自带的根证书验证）
-        * -如果启用了Https加密 ca必填 其他可选
+        * - TLS 最低版本为 1.2，并同时验证证书链和连接目标主机名。
+        * - ca 留空时使用系统默认根证书；指定时使用给定 CA 文件。
         * -如果服务端要求客户端身份认证（双向 TLS/SSL），你需要提供一个有效的客户端证书。
         */
         HttpClient(const bool &TLS=false,const char *ca="",const char *cert="",const char *key="",const char *passwd=""):TcpClient(TLS,ca,cert,key,passwd){}
@@ -2740,12 +2795,13 @@ private:
     };
     
     /**
-    * @brief 用epoll监听单个句柄
+    * @brief 用独立、可 join 的 Reactor 线程监听单个 Linux 文件描述符。
+    * @note 对象拥有监听线程；停止或析构会通过 eventfd 立即唤醒 epoll，不再依赖轮询等待。
     */
     class EpollSingle
     {
     private:
-        int fd;
+        int fd=-1;
         bool flag=true;
         std::function<bool(const int &fd)> fc=[](const int &fd)->bool
         {return true;};
@@ -2753,11 +2809,15 @@ private:
         {};
         std::function<bool(const int &fd)> fcTimeOut=[](const int &fd)->bool
         {return true;};
-        bool flag1=true;
-        bool flag2=false;
+        std::atomic<bool> flag1{true};
+        std::atomic<bool> flag2{false};
         time::Duration dt{0,20,0,0,0};
-        bool flag3=false;
+        std::atomic<bool> flag3{false};
         time::Duration t;
+        std::thread listenerThread;
+        int controlFD=-1;
+        std::mutex callbackMutex;
+        std::mutex countdownMutex;
     private:
         void epolll();
     public:
@@ -2766,6 +2826,8 @@ private:
         * @param fd 需要监听的句柄
         * @param flag  true：水平触发    false：边缘触发
         * @param dt 填入监听超时时间
+        * @note 从其他线程重复调用会先停止并 join 旧监听。不要在本对象自己的监听回调中重启或销毁对象；
+        *       回调中需要停止时应调用 endListenWithSignal() 或返回 false。
         */
         void startListen(const int &fd,const bool &flag=true,const time::Duration &dt=time::Duration{0,0,20,0,0});
     public:
@@ -2773,7 +2835,7 @@ private:
         * @brief 返回epoll监听状态
         * @return true：正在监听  false：没有监听
         */
-        bool isListen(){return flag2;}
+        bool isListen(){return flag2.load(std::memory_order_acquire);}
         /**
         * @brief 设置epoll触发后的处理函数
         * 注册一个回调函数
@@ -2783,7 +2845,7 @@ private:
         * @note 传入的函数应该有如下签名 bool func(const int &fd)
         * @note 如果处理失败了 会退出epoll监听（没有关闭套接字）
         */
-        void setFunction(std::function<bool(const int &fd)> fc){this->fc=fc;}
+        void setFunction(std::function<bool(const int &fd)> fc){std::lock_guard<std::mutex> lock(callbackMutex);this->fc=std::move(fc);}
         /**
         * @brief 设置epoll退出前的回调函数
         * 注册一个回调函数
@@ -2791,37 +2853,43 @@ private:
         * -参数：const int &fd - 要处理的套接字
         * @note 传入的函数应该有如下签名 void func(const int &fd)
         */
-        void setEndFunction(std::function<void(const int &fd)> fcEnd){this->fcEnd=fcEnd;};
+        void setEndFunction(std::function<void(const int &fd)> fcEnd){std::lock_guard<std::mutex> lock(callbackMutex);this->fcEnd=std::move(fcEnd);};
         /**
         * @brief 设置epoll超时后出发的回调函数
         * 注册一个回调函数
-        * @param fc 一个函数或函数对象，用于当epoll超时的时候回调处理套接字fd
+        * @param fcTimeOut 一个函数或函数对象，用于当epoll超时的时候回调处理套接字fd
         * -参数：const int &fd - 要处理的套接字
         * -返回： bool - 返回true成功成功，返回false处理失败
         * @note 传入的函数应该有如下签名 bool func(const int &fd)
         * @note 如果处理失败了 会退出epoll监听（没有关闭套接字）
         */
-        void setTimeOutFunction(std::function<bool(const int &fd)> fcTimeOut){this->fcTimeOut=fcTimeOut;};
+        void setTimeOutFunction(std::function<bool(const int &fd)> fcTimeOut){std::lock_guard<std::mutex> lock(callbackMutex);this->fcTimeOut=std::move(fcTimeOut);};
         /**
         * @brief 结束epoll监听
         * 会阻塞直到epoll退出完成
         * @return true：处理结束  false：结束失败
+        * @note 可重复调用。从监听回调线程调用时只请求停止，不会自 join。
         */
         bool endListen();
         /**
         * @brief 发送结束epoll的信号
-        * @note 仅仅发送信号，不跟进后续逻辑
+        * @note 线程安全且不阻塞；使用 eventfd 唤醒 epoll，但不等待线程退出。
         */
-        void endListenWithSignal(){flag1=false;}
+        void endListenWithSignal();
         /**
         * @brief 开始退出epoll倒计时，直到套接字有新的消息
         * 如果套接字倒计时结束还没有新的消息，那么退出epoll
         * @param t 一个Duration对象 填入倒计时时长 （默认为10秒）
         */
-        void waitAndQuit(const time::Duration &t=time::Duration{0,0,0,10,10}){flag3=true;this->t=t;}
+        void waitAndQuit(const time::Duration &t=time::Duration{0,0,0,10,10})
+        {
+            std::lock_guard<std::mutex> lock(countdownMutex);
+            this->t=t;
+            flag3.store(true,std::memory_order_release);
+        }
         /**
         * @brief EpollSingle的析构函数
-        * 调用eldListen阻塞退出epoll
+        * 调用 endListen() 唤醒并 join 监听线程。
         */
         ~EpollSingle(){endListen();}
     };
@@ -2846,13 +2914,13 @@ private:
         /**
         * @brief WebSocketClient类的构造函数
         * @param TLS true：启用wss加密  false：不启用wss加密 （默认为false不启用）
-        * @param ca CA 根证书路径（若启用TLS加密则必须填这个 默认空）
+        * @param ca CA 根证书文件路径；留空时使用操作系统默认信任库。
         * @param cert 客户端证书路径（可选 默认空）
         * @param key 客户端私钥路径（可选 默认空）
         * @param passwd 私钥解密密码（可选 默认空）
         * @note 
-        * -ca用来校验对方服务器的证书是否可信（可以用操作系统自带的根证书验证）
-        * -如果启用了wss加密 ca必填 其他可选
+        * - TLS 最低版本为 1.2，并同时验证证书链和连接目标主机名。
+        * - ca 留空时使用系统默认根证书；指定时使用给定 CA 文件。
         * -如果服务端要求客户端身份认证（双向 TLS/SSL），你需要提供一个有效的客户端证书。
         */
         WebSocketClient(const bool &TLS=false,const char *ca="",const char *cert="",const char *key="",const char *passwd=""):TcpClient(TLS,ca,cert,key,passwd){}
@@ -2942,10 +3010,16 @@ private:
         */
         std::string getServerIp(){return TcpClient::getServerIP();}
         /**
-        * @brief 如果连接到了服务器 返回服务器端口
-        * @return 返回服务器端口
+        * @brief 如果连接到了服务器，以字符串返回服务器端口。
+        * @return 十进制端口字符串；未连接时为 "-1"。
+        * @note 为保持源代码兼容保留字符串返回类型；新代码建议使用 getServerPortNumber()。
         */
-        std::string getServerPort(){return TcpClient::getServerIP();}
+        std::string getServerPort(){return std::to_string(TcpClient::getServerPort());}
+        /**
+        * @brief 如果连接到了服务器，以整数返回服务器端口。
+        * @return 端口号；未连接时为 -1。
+        */
+        int getServerPortNumber(){return TcpClient::getServerPort();}
         /**
         * @brief WebSocketClient类的析构函数，销毁对象时候会优雅退出断开连接
         */    
@@ -2960,11 +3034,11 @@ private:
         /**
         * @brief 底层的socket套接字
         */
-        int fd;
+        int fd=-1;
         /**
         * @brief 连接对象fd
         */
-        uint64_t connection_obj_fd;
+        uint64_t connection_obj_fd=0;
         /**
         * @brief 请求类型
         */
@@ -3021,16 +3095,13 @@ private:
         * @param HttpInf 存放Http协议的信息
         * @param buffer_size 服务器定义的解析缓冲区的大小（单位为字节)
         * @param times 记录解析的次数，某些场景会用上
+        * @param max_header_size HTTP 请求头最大字节数，默认 64 KiB，且不会超过 buffer_size。
         * @return -1:解析失败 0:还需要继续解析 1:解析完成
-        * @note TcpInf.status
-        *
-        * 0 初始状态
-        * 1 接收请求头中
-        * 2 接收请求体中(chunk模式)
-        * 3 接收请求体中(非chunk模式)
-        * 
+        * @note 支持 Content-Length、chunked、trailers 和 HTTP/1.1 流水线；字段名大小写不敏感。
+        * @note 会拒绝重复 Content-Length、Content-Length 与 Transfer-Encoding 并存、无效 Host、
+        *       非最小长度编码及越界报文，避免常见 request smuggling 输入。
         */
-        int solveRequest(TcpFDInf &TcpInf,HttpRequestInformation &HttpInf,const unsigned long &buffer_size,const int &times=1);
+        int solveRequest(TcpFDInf &TcpInf,HttpRequestInformation &HttpInf,const unsigned long &buffer_size,const int &times=1,const unsigned long &max_header_size=64UL*1024UL);
         /**
         * @brief 发送Http/Https响应
         * @param data 装着响应体的数据的string容器
@@ -3062,15 +3133,15 @@ private:
         /**
         * @brief 底层的socket套接字
         */
-        int fd;
+        int fd=-1;
         /**
         * @brief 连接对象fd
         */
-        uint64_t connection_obj_fd;
+        uint64_t connection_obj_fd=0;
         /**
         * @brief true:发送了关闭帧  false：没有发送关闭帧
         */
-        bool closeflag;
+        bool closeflag=false;
         /**
         * @brief  握手阶段的Http/Https路径和参数
         */
@@ -3086,19 +3157,19 @@ private:
         /**
         * @brief 上次收到信息的时间
         */
-        time_t response;
+        time_t response=0;
         /**
         * @brief 待接收的长度
         */
-        size_t recv_length;
+        size_t recv_length=0;
         /**
         * @brief 已经接收的长度
         */
-        size_t have_recv_length;
+        size_t have_recv_length=0;
         /**
         * @brief 消息类型
         */
-        int message_type;
+        int message_type=0;
         /**
         * @brief 消息
         */
@@ -3106,7 +3177,11 @@ private:
         /**
         * @brief fin的状态
         */
-        bool fin;
+        bool fin=true;
+        /** 正在接收的分片消息 opcode；0 表示当前没有分片消息。 */
+        uint8_t fragmented_opcode=0;
+        /** 分片消息的累计 payload，受服务器每连接接收上限约束。 */
+        std::string fragmented_message;
         /**
         * @brief mask
         */
@@ -3129,11 +3204,11 @@ private:
         /**
         * @brief 套接字fd
         */
-        int fd;
+        int fd=-1;
         /**
         * @brief 连接对象fd
         */
-        uint64_t connection_obj_fd;
+        uint64_t connection_obj_fd=0;
         /**
         * @brief 裸数据
         */
@@ -3152,6 +3227,54 @@ private:
     };
 
     /**
+    * @brief TcpServer 运行指标的无锁快照。
+    * @note 所有计数均为进程内累计值；active_connections 与 pending_write_bytes 为当前值。
+    *       获取快照不会阻塞 Reactor，可从任意线程调用。
+    */
+    struct ServerMetricsSnapshot
+    {
+        uint64_t accepted_connections=0;       /**< 成功接收的连接总数。 */
+        uint64_t active_connections=0;         /**< 当前仍持有底层 fd 的连接数。 */
+        uint64_t closed_connections=0;         /**< 已完成底层资源释放的连接总数。 */
+        uint64_t accept_errors=0;              /**< accept4 的非暂时性失败次数。 */
+        uint64_t tls_handshake_failures=0;     /**< TLS 服务端握手失败次数。 */
+        uint64_t parsed_http_requests=0;       /**< 成功完成边界校验和解析的 HTTP 请求数。 */
+        uint64_t queued_write_bytes=0;         /**< 业务层成功提交到发送队列的累计字节数。 */
+        uint64_t sent_bytes=0;                 /**< Reactor 成功写入 socket/TLS 的累计字节数。 */
+        uint64_t pending_write_bytes=0;        /**< 所有连接当前尚未发送的队列字节数。 */
+        uint64_t write_overflows=0;            /**< 超过每连接发送高水位的次数。 */
+        uint64_t worker_queue_overflows=0;     /**< Worker 完成环形队列进入后备队列的次数。 */
+        uint64_t send_ready_queue_overflows=0; /**< 发送通知环形队列进入后备队列的次数。 */
+    };
+
+    /**
+    * @brief 单个服务端连接的有界异步发送状态。
+    * @note 由 TcpServer 创建和管理；公开定义是为了让 handler 安全持有共享状态，业务代码不应直接修改字段。
+    */
+    struct ConnectionWriteState
+    {
+        std::mutex mutex;                    /**< 保护本结构中其余可变字段。 */
+        std::deque<std::string> queue;        /**< 保持业务提交顺序的完整数据块。 */
+        size_t front_offset=0;                /**< 队首数据块已写出的偏移。 */
+        size_t queued_bytes=0;                /**< 当前尚未写出的总字节数。 */
+        size_t max_queued_bytes=4UL*1024UL*1024UL; /**< 本连接待发高水位。 */
+        int fd=-1;                            /**< 底层文件描述符。 */
+        uint64_t connection_obj_fd=0;         /**< fd 复用保护代次。 */
+        bool notification_pending=false;      /**< 是否已有 send-ready 通知在途。 */
+        bool close_requested=false;           /**< 是否请求 Reactor 关闭连接。 */
+        bool close_after_flush=false;          /**< 是否等待队列排空后关闭。 */
+        bool overflowed=false;                 /**< 是否曾超过高水位。 */
+        bool closed=false;                     /**< 状态是否已停止接受数据。 */
+    };
+
+    /** @brief 跨线程通知 Reactor 某连接有待发数据的轻量消息。 */
+    struct SendReadyMessage
+    {
+        int fd=-1;                    /**< 底层文件描述符。 */
+        uint64_t connection_obj_fd=0; /**< fd 复用保护代次。 */
+    };
+
+    /**
     * @brief 保存底层基础Tcp通道信息的结构体
     */
     struct TcpFDInf
@@ -3159,11 +3282,11 @@ private:
         /**
         * @brief 套接字fd
         */
-        int fd;
+        int fd=-1;
         /**
         * @brief 连接对象fd
         */
-        uint64_t connection_obj_fd;
+        uint64_t connection_obj_fd=0;
         /**
         * @brief 客户端ip
         */
@@ -3175,7 +3298,7 @@ private:
         /**
          * @brief 记录当前处理状态机到第几步了
          */
-        int FDStatus;
+        int FDStatus=-1;
         /**
         * @brief 等待处理的队列
         */
@@ -3183,7 +3306,7 @@ private:
         /**
         * @brief 当前fd的接收状态，用于保存接收处理机逻辑
         */
-        int status;
+        int status=0;
         /**
         * @brief 保存收到的客户端传来的数据
         */
@@ -3191,19 +3314,28 @@ private:
         /**
         * @brief 如果加密了，存放加密句柄
         */
-        SSL* ssl;
+        SSL* ssl=nullptr;
         /**
         * @brief tls状态
         */
-        TLSState tls_state;
+        TLSState tls_state=TLSState::NONE;
         /**
         * @brief 接收空间指针
         */
-        char *buffer;
+        char *buffer=nullptr;
         /**
         * @brief 接收空间位置指针
         */
-        unsigned long p_buffer_now;
+        unsigned long p_buffer_now=0;
+        /** 当前已分配的接收缓冲容量；首次收到数据时才按需分配。 */
+        unsigned long buffer_capacity=0;
+        /** 正在 WorkerPool 执行的任务数。Reactor 在归零前不复用该 fd。 */
+        size_t active_workers=0;
+        /** 对端已断开，等待在途 worker 安全退出。 */
+        bool closing=false;
+        std::shared_ptr<ConnectionWriteState> write_state;
+        bool write_interest=false;
+        bool write_waiting_for_read=false;
     };
 
     /**
@@ -3214,11 +3346,15 @@ private:
         /**
         * @brief 底层套接字
         */
-        int fd;
+        int fd=-1;
+        /** 防止 fd 关闭后被新连接复用时串线。 */
+        uint64_t connection_obj_fd=0;
         /**
         * @brief 返回值 -2:失败并且要求关闭连接 -1:失败但不需要关闭连接 1:成功
         */
-        int ret;
+        int ret=-2;
+        /** Worker 中使用的请求副本，由 Reactor 验证连接代次后合并。 */
+        std::shared_ptr<void> request;
     };
     
     
@@ -3230,14 +3366,15 @@ private:
     {
     protected:
         system::MPSCQueue<WorkerMessage> finishQueue;
-        stt::system::WorkerPool *workpool; 
+        system::MPSCQueue<SendReadyMessage> sendReadyQueue;
+        stt::system::WorkerPool *workpool=nullptr;
         unsigned long buffer_size;
         unsigned long long  maxFD;
         security::ConnectionLimiter connectionLimiter;
         //std::unordered_map<int,TcpFDInf> clientfd;
         //std::mutex lc1;
-        TcpFDInf *clientfd;
-        int flag1=true;
+        std::unordered_map<int,TcpFDInf> clientfd;
+        std::atomic<bool> flag1{false};
         //std::queue<QueueFD> *fdQueue;
         //std::mutex *lq1;
         //std::condition_variable cv1;
@@ -3252,7 +3389,15 @@ private:
         bool security_open;
         //bool flag_detect;
         //bool flag_detect_status;
-        int workerEventFD;
+        int workerEventFD=-1;
+        std::thread reactorThread;
+        std::mutex overflowFinishMutex;
+        std::queue<WorkerMessage> overflowFinishQueue;
+        std::mutex overflowSendReadyMutex;
+        std::queue<SendReadyMessage> overflowSendReadyQueue;
+        std::mutex writeRegistryMutex;
+        std::unordered_map<int,std::weak_ptr<ConnectionWriteState>> writeRegistry;
+        std::deque<SendReadyMessage> bufferedReadQueue;
         int serverType; // 1 tcp 2 http 3 websocket
         int connectionSecs;
         int connectionTimes;
@@ -3260,6 +3405,21 @@ private:
         int requestTimes;
         int checkFrequency;
         uint64_t connection_obj_fd;
+        size_t maxPendingWriteBytes=4UL*1024UL*1024UL;
+        size_t writeBudgetPerEvent=256UL*1024UL;
+        size_t maxHttpHeaderBytes=64UL*1024UL;
+        std::atomic<uint64_t> metricAcceptedConnections{0};
+        std::atomic<uint64_t> metricActiveConnections{0};
+        std::atomic<uint64_t> metricClosedConnections{0};
+        std::atomic<uint64_t> metricAcceptErrors{0};
+        std::atomic<uint64_t> metricTLSHandshakeFailures{0};
+        std::atomic<uint64_t> metricParsedHttpRequests{0};
+        std::atomic<uint64_t> metricQueuedWriteBytes{0};
+        std::atomic<uint64_t> metricSentBytes{0};
+        std::atomic<uint64_t> metricPendingWriteBytes{0};
+        std::atomic<uint64_t> metricWriteOverflows{0};
+        std::atomic<uint64_t> metricWorkerQueueOverflows{0};
+        std::atomic<uint64_t> metricSendReadyQueueOverflows{0};
     private:
         std::function<void(const int &fd)> closeFun=[](const int &fd)->void
         {
@@ -3274,14 +3434,30 @@ private:
         {inf.ctx["key"]=inf.data;return 1;};
         int fd=-1;
         int port=-1;
-        int flag=false;
-        bool flag2=false;
+        std::atomic<bool> flag{false};
+        std::atomic<bool> flag2{true};
     private:
         void epolll(const int &evsNum);
         //virtual void consumer(const int &threadID);
         virtual void handler_netevent(const int &fd);
-        virtual void handler_workerevent(const int &fd,const int &ret);
+        virtual void handler_workerevent(WorkerMessage message);
         virtual void handleHeartbeat()=0;
+        virtual void onConnectionClosed(const int &fd) {(void)fd;}
+    protected:
+        enum class WriteFlushResult { Drained, WaitWrite, WaitRead, Reschedule, Error };
+        int enqueueWrite(const std::shared_ptr<ConnectionWriteState> &state,std::string data);
+        void requestQueuedClose(const std::shared_ptr<ConnectionWriteState> &state);
+        void requestCloseAfterFlush(const int &fd,const uint64_t expectedConnection=0);
+        void publishSendReady(const std::shared_ptr<ConnectionWriteState> &state);
+        void prepareHandler(TcpFDHandler &handler,const int &fd);
+        void prepareQueuedHandler(TcpFDHandler &handler,const int &fd);
+        void prepareQueuedHandler(TcpFDHandler &handler,const int &fd,const uint64_t expectedConnection);
+        WriteFlushResult flushConnectionWrites(TcpFDInf &connection);
+        bool updateConnectionEvents(const int &epollFD,TcpFDInf &connection,const bool &wantWrite);
+        void handleSendReady(const int &epollFD,SendReadyMessage message);
+        void publishWorkerResult(WorkerMessage message);
+        /** Reactor 内延续解析已在用户态缓冲区中的 HTTP 流水线请求。 */
+        void scheduleBufferedRead(const int &fd,const uint64_t connection);
     public:
         /**
         * @brief 把一个任务放入工作线程池由工作线程完成
@@ -3326,8 +3502,11 @@ private:
         */
         TcpServer(const unsigned long long &maxFD=1000000,const int &buffer_size=256,const size_t &finishQueue_cap=65536,const bool &security_open=true,
         const int &connectionNumLimit=20,const int &connectionSecs=1,const int &connectionTimes=6,const int &requestSecs=1,const int &requestTimes=40,
-        const int &checkFrequency=60,const int &connectionTimeout=60):maxFD(maxFD),buffer_size(buffer_size*1024),finishQueue(finishQueue_cap),security_open(security_open),connectionSecs(connectionSecs),connectionTimes(connectionTimes),requestSecs(requestSecs),requestTimes(requestTimes),
-        connectionLimiter(connectionNumLimit,connectionTimeout),checkFrequency(checkFrequency){serverType=1;}
+        const int &checkFrequency=60,const int &connectionTimeout=60):
+        finishQueue(finishQueue_cap),sendReadyQueue(finishQueue_cap),buffer_size(buffer_size>0?static_cast<unsigned long>(buffer_size)*1024UL:256UL*1024UL),
+        maxFD(maxFD>0?maxFD:1'000'000ULL),connectionLimiter(connectionNumLimit,connectionTimeout),security_open(security_open),
+        serverType(1),connectionSecs(connectionSecs),connectionTimes(connectionTimes),requestSecs(requestSecs),requestTimes(requestTimes),
+        checkFrequency(checkFrequency),connection_obj_fd(1){}
         /**
         * @brief 打开Tcp服务器监听程序
         * @param port 监听的端口
@@ -3423,7 +3602,7 @@ private:
         * @note 会阻塞等待直到全部关闭完成
         * @return true：关闭成功 false：关闭失败
         */
-        bool close();
+        virtual bool close();
         /**
         * @brief 关闭某个套接字的连接
         * @param fd 需要关闭的套接字
@@ -3470,14 +3649,56 @@ private:
         * @brief 设置关闭tcp连接之后调用的函数
         */
         void setCloseFun(std::function<void(const int &fd)> closeFun){this->closeFun=closeFun;}
+        /**
+        * @brief 设置每连接待发送数据高水位。
+        * @param bytes 最大待发送字节数，必须大于 0；默认 4 MiB。
+        * @note 应在 startListen() 前设置。超过后发送返回 -101，并请求关闭慢客户端，防止无界内存增长。
+        */
+        void setMaxPendingWriteBytes(const size_t bytes){if(bytes>0)maxPendingWriteBytes=bytes;}
+        /**
+        * @brief 设置 Reactor 单次处理一个连接的最大发送字节数。
+        * @param bytes 单次预算，必须大于 0；默认 256 KiB。
+        * @note 应在 startListen() 前设置，用于限制大响应独占 Reactor，改善连接间公平性。
+        */
+        void setWriteBudgetPerEvent(const size_t bytes){if(bytes>0)writeBudgetPerEvent=bytes;}
+        /**
+        * @brief 设置 HTTP 请求和 WebSocket 握手头上限。
+        * @param bytes 最大请求头字节数，最小接受值为 1024；默认 64 KiB。
+        * @note 应在 startListen() 前设置，实际值还受服务器总接收缓冲上限约束。
+        */
+        void setMaxHttpHeaderBytes(const size_t bytes){if(bytes>=1024)maxHttpHeaderBytes=bytes;}
+        /**
+        * @brief 获取服务器运行指标快照。
+        * @return 包含连接、TLS、HTTP、发送队列及溢出计数的值对象。
+        * @note 线程安全、无锁；累计计数从服务器对象构造后开始，不会因 stopListen() 清零。
+        */
+        ServerMetricsSnapshot getMetrics() const noexcept
+        {
+            return {
+                metricAcceptedConnections.load(std::memory_order_relaxed),
+                metricActiveConnections.load(std::memory_order_relaxed),
+                metricClosedConnections.load(std::memory_order_relaxed),
+                metricAcceptErrors.load(std::memory_order_relaxed),
+                metricTLSHandshakeFailures.load(std::memory_order_relaxed),
+                metricParsedHttpRequests.load(std::memory_order_relaxed),
+                metricQueuedWriteBytes.load(std::memory_order_relaxed),
+                metricSentBytes.load(std::memory_order_relaxed),
+                metricPendingWriteBytes.load(std::memory_order_relaxed),
+                metricWriteOverflows.load(std::memory_order_relaxed),
+                metricWorkerQueueOverflows.load(std::memory_order_relaxed),
+                metricSendReadyQueueOverflows.load(std::memory_order_relaxed)
+            };
+        }
     public:
         /**
         * @brief 返回对象的监听状态
         * @return true:正在监听  false：没有在监听
         */
-        bool isListen(){return flag;}
+        bool isListen(){return flag.load(std::memory_order_acquire);}
         /**
         * @brief 查询和服务端的连接，传入套接字，返回加密的SSL句柄
+        * @warning 仅供诊断；服务运行期间不得在 Reactor 外调用 SSL_read/SSL_write/SSL_shutdown。
+        *          发送数据应使用 handler API，否则会破坏 TLS 会话的单线程所有权。
         * @return 返回加密的SSL指针； 如果不存在此fd或者没有加密 返回nullptr
         */
         SSL* getSSL(const int &fd);
@@ -3485,7 +3706,7 @@ private:
         * @brief TcpServer 类的析构函数
         * @note 会调用close函数关闭
         */
-        ~TcpServer(){close();}
+        virtual ~TcpServer(){close();}
     };
 
     
@@ -3506,14 +3727,15 @@ private:
         {inf.ctx["key"]=inf.loc;return 1;};
         //std::function<bool(const HttpRequestInformation &inf,HttpServerFDHandler &k)> fc;
         //HttpRequestInformation *HttpInf;
-        HttpRequestInformation *httpinf;
+        std::unordered_map<int,HttpRequestInformation> httpinf;
     private:
         //void consumer(const int &threadID);
         //inline void handler(const int &fd);
-        void handler_netevent(const int &fd);
-        void handler_workerevent(const int &fd,const int &ret);
-        void handleHeartbeat(){}
+        void handler_netevent(const int &fd) override;
+        void handler_workerevent(WorkerMessage message) override;
+        void handleHeartbeat() override {}
     public:
+        using TcpServer::close;
         /**
         * @brief 把一个任务放入工作线程池由工作线程完成
         * @note 应当把速度慢、会阻塞的io任务放入工作线程池
@@ -3645,23 +3867,23 @@ private:
         */
         bool startListen(const int &port,const int &threads=8)
         {
-            //HttpInf=new HttpRequestInformation[maxFD];
-            httpinf=new HttpRequestInformation[maxFD];
             return TcpServer::startListen(port,threads);
         }
+        bool close() override;
+        bool close(const int &fd) override;
         /**
         * @brief 析构函数
         */
         ~HttpServer()
         {
-            delete[] httpinf;
+            close();
         }
     };
     /**
     * @brief WebSocket协议的操作类
     * 仅传入套接字，然后使用这个类进行WebSocket的操作
     */
-    class WebSocketServerFDHandler:private TcpFDHandler
+    class WebSocketServerFDHandler:public TcpFDHandler
     {
     public:
         /**
@@ -3685,14 +3907,8 @@ private:
         * 2：心跳确认报文
         * 3：心跳报文
         * 4: 等待数据
-        * @note TcpInf.status
-        *
-        * 0 初始状态
-        * 1 确认消息类型中
-        * 2 确认消息长度中
-        * 3 接收mask中
-        * 4 接收消息中
-        * 
+        * @note 服务端严格要求客户端帧带 mask，校验 RSV/opcode/最小长度、控制帧、关闭码和 UTF-8，
+        *       并支持分片消息之间穿插 ping/pong。累计消息不会超过 buffer_size。
         */
         int getMessage(TcpFDInf &Tcpinf,WebSocketFDInformation &Websocketinf,const unsigned long &buffer_size,const int &ii=1);
         /**
@@ -3707,7 +3923,8 @@ private:
         *        - "1010" 表示 Pong 帧
         *        请根据内部约定使用，默认使用 text（文本帧）
         * 
-        * @return true：发送成功  false：发送失败
+        * @return true：帧已发送，或在服务器回调场景中已被有界队列接受；false：类型、控制帧长度或发送失败。
+        * @note 服务端帧不会加 mask；Ping、Pong、Close payload 最大 125 字节。
         */
         bool sendMessage(const std::string &msg,const std::string &type="0001");
        
@@ -3720,6 +3937,9 @@ private:
     {
     private:
         std::unordered_map<int,WebSocketFDInformation> wbclientfd;
+        std::mutex websocketRegistryMutex;
+        std::unordered_map<int,uint64_t> websocketConnections;
+        std::unordered_set<int> websocketClosing;
         std::function<void(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> securitySendBackFun=[](WebSocketServerFDHandler &k,WebSocketFDInformation &inf)->void
         {};
         //std::function<bool(const std::string &msg,WebSocketServer &k,const WebSocketFDInformation &inf)> fc=[](const std::string &message,WebSocketServer &k,const WebSocketFDInformation &inf)->bool
@@ -3739,14 +3959,16 @@ private:
         int secb=30;
 
     private:
-        void handler_netevent(const int &fd);
-        void handler_workerevent(const int &fd,const int &ret);
+        void handler_netevent(const int &fd) override;
+        void handler_workerevent(WorkerMessage message) override;
         //void consumer(const int &threadID);
         //inline void handler(const int &fd);
         void closeAck(const int &fd,const std::string &closeCodeAndMessage);
         void closeAck(const int &fd,const short &code=1000,const std::string &message="bye");
         
-        void handleHeartbeat();
+        void handleHeartbeat() override;
+        void onConnectionClosed(const int &fd) override;
+        bool sendMessageForConnection(const int &fd,const uint64_t connection,const std::string &msg,const std::string &type);
         bool closeWithoutLock(const int &fd,const std::string &closeCodeAndMessage);
         bool closeWithoutLock(const int &fd,const short &code=1000,const std::string &message="bye");
     public:
@@ -3929,7 +4151,7 @@ private:
         /**
         * @brief 发送 WebSocket 消息给某一个客户端
         * 
-        * 根据 WebSocket 协议，封装并发送一条带掩码的数据帧（客户端必须使用掩码），
+        * 根据 WebSocket 协议，封装并提交一条服务端数据帧（服务端帧不使用掩码），
         * 支持根据 payload 长度自动选择帧格式：
         * - payload <= 125 字节：使用 1 字节长度
         * - 126 <= payload <= 65535：使用 2 字节扩展长度（附加 126 标记）
@@ -3946,20 +4168,20 @@ private:
         *        - "1010" 表示 Pong 帧
         *        请根据内部约定使用，默认使用 text（文本帧）
         * 
-        * @return true 发送成功
-        * @return false 发送失败（可能因连接未建立或发送异常）
+        * @return true 帧已被该连接的有界发送队列接受。
+        * @return false 连接无效、代次已变化、类型/控制帧长度无效或队列超过高水位。
         */
-        bool sendMessage(const int &fd,const std::string &msg,const std::string &type="0001"){WebSocketServerFDHandler k;k.setFD(fd,getSSL(fd),unblock);return k.sendMessage(msg,type);}
+        bool sendMessage(const int &fd,const std::string &msg,const std::string &type="0001");
         /**
         * @brief 关闭监听和所有连接
         * @note 会阻塞直到全部关闭
         */
-        bool close();
+        bool close() override;
         /**
         * @brief 关闭某个套接字的连接
-        @ @note 多态了TcpServer的close某个套接字 直接掐掉Tcp连接 没有按照websocket协议关闭
+        * @note 直接关闭底层 TCP 连接；需要协议级关闭握手时使用 closeFD()。
         */
-        bool close(const int &fd);
+        bool close(const int &fd) override;
         /**
         * @brief 打开Websocket服务器监听程序
         * @param port 监听的端口
@@ -3976,7 +4198,7 @@ private:
         * @brief 广播发送 WebSocket 消息
         * 
         * 给全体客户端广播发送消息
-        * 根据 WebSocket 协议，封装并发送一条带掩码的数据帧（客户端必须使用掩码），
+        * 根据 WebSocket 协议，为每个仍有效的连接提交一条不带掩码的服务端帧，
         * 支持根据 payload 长度自动选择帧格式：
         * - payload <= 125 字节：使用 1 字节长度
         * - 126 <= payload <= 65535：使用 2 字节扩展长度（附加 126 标记）
@@ -3992,13 +4214,14 @@ private:
         *        - "1010" 表示 Pong 帧
         *        请根据内部约定使用，默认使用 text（文本帧）
         * 
+        * @note 单个慢客户端超过发送高水位时会被隔离关闭，不会让广播线程直接阻塞在 socket/SSL 写入上。
         */
         void sendMessage(const std::string &msg,const std::string &type="0001");
         /**
         * @brief  WebSocketServer的析构函数
         * @note 销毁对象的时候会阻塞直到全部连接和监听等全部关闭
         */
-        ~WebSocketServer(){  }
+        ~WebSocketServer(){ close(); }
     };
 
     /**
@@ -4190,19 +4413,24 @@ private:
             */
             static std::string language;
         private:
-            static void signalterminated(){std::cout<<"未捕获的异常终止"<<std::endl;if(system::ServerSetting::logfile!=nullptr){if(system::ServerSetting::language=="Chinese")system::ServerSetting::logfile->writeLog("未捕获的异常终止");else system::ServerSetting::logfile->writeLog("end for uncaught exception");}kill(getpid(),15);}
-            static void signalSIGSEGV(int signal){std::cout<<"SIGSEGV"<<std::endl;if(system::ServerSetting::logfile!=nullptr){if(system::ServerSetting::language=="Chinese")system::ServerSetting::logfile->writeLog("信号SIGSEGV");else system::ServerSetting::logfile->writeLog("signal SIGSEGV");}kill(getpid(),15);}
-            static void signalSIGABRT(int signal){std::cout<<"SIGABRT"<<std::endl;if(system::ServerSetting::logfile!=nullptr){if(system::ServerSetting::language=="Chinese")system::ServerSetting::logfile->writeLog("信号SIGABRT");else system::ServerSetting::logfile->writeLog("signal SIGABRT");}kill(getpid(),15);}
+            [[noreturn]] static void signalterminated() noexcept;
         public:
             /**
             * @brief 设置系统的信号
-            * - 屏蔽信号1-14，14-64
-            * - 收到SIGSEGV信号后发送信号15
-            * - 收到未捕获的异常后发送信号15
-            * - 收到SIGABRT信号后发送信号15
-            * - 信号15的退出方式自定义
+            * - 忽略 SIGPIPE，防止向已关闭 socket 写入时终止进程
+            * - 保留 SIGTERM/SIGINT/SIGCHLD 的正常语义
+            * - SIGSEGV/SIGABRT 等致命错误使用系统默认处理，不在不安全的 signal handler 中析构 C++ 对象
             */
             static void setExceptionHandling();
+            /**
+            * @brief 在创建任何工作线程前阻塞 SIGTERM 和 SIGINT。
+            * @note 之后应在主线程调用 waitForTerminationSignal() 同步等待退出信号。
+            */
+            static bool blockTerminationSignals();
+            /**
+            * @brief 同步等待 SIGTERM/SIGINT，返回收到的信号，失败返回 -1。
+            */
+            static int waitForTerminationSignal();
             /**
             * @brief 设置日志系统的日志文件对象
             * 传入的日志文件对象如果是没初始化的空的对象，系统自动在程序目录下生成server_log文件夹并且根据当前时间生成一个日志文件记录服务程序的网络通信
@@ -4413,6 +4641,28 @@ private:
         */
         class Process
         {
+        private:
+            static void prepareForkedChild(const bool terminateWithParent=false) noexcept
+            {
+                sigset_t emptySet;
+                sigemptyset(&emptySet);
+                pthread_sigmask(SIG_SETMASK,&emptySet,nullptr);
+                struct sigaction defaultAction{};
+                sigemptyset(&defaultAction.sa_mask);
+                defaultAction.sa_handler=SIG_DFL;
+                for(const int childSignal:{SIGTERM,SIGINT,SIGHUP,SIGQUIT,SIGCHLD,SIGPIPE})
+                    sigaction(childSignal,&defaultAction,nullptr);
+#ifdef __linux__
+                if(terminateWithParent)
+                {
+                    prctl(PR_SET_PDEATHSIG,SIGTERM);
+                    if(getppid()==1)
+                        _exit(128+SIGTERM);
+                }
+#else
+                (void)terminateWithParent;
+#endif
+            }
         public:
         
 
@@ -4421,8 +4671,8 @@ private:
             * 
             * 当 `sec == -1` 时，仅启动一次子进程；否则，会创建一个辅助子进程，定期重启该目标进程。
             * 
-            * - 定时启动时，辅助进程会屏蔽所有信号。
-            * - 启动的目标进程会屏蔽除 SIGCHLD 和 SIGTERM 的所有信号。
+            * - 不会修改调用方（父进程）的信号处置。
+            * - 定时调度进程退出时，Linux 会向其当前目标子进程发送 SIGTERM，避免孤儿服务。
             * 
             * @param Args 可变参数类型（用于传递给目标程序的 argv）
             * @param name 要执行的程序路径（如 `/usr/bin/myapp`）
@@ -4449,12 +4699,11 @@ private:
                         return true;
                     else
                     {
+                        prepareForkedChild();
                         execv(name.c_str(),const_cast<char* const*>(paramList.data()));
-                        return false;
+                        _exit(127);
                     }
                 }
-                for(int ii=1;ii<=64;ii++)
-                    signal(ii,SIG_IGN);           
                 pid_t pid=fork();
                 if(pid==-1)
                     return false;
@@ -4464,20 +4713,20 @@ private:
                 }
                 else
                 {
-                    signal(SIGCHLD,SIG_DFL);
-                    signal(15,SIG_DFL);
+                    prepareForkedChild(true);
                     while(1)
                     {
                         pid=fork();
-                        if(fork()==0)
+                        if(pid==0)
                         {
+                            prepareForkedChild(true);
                             execv(name.c_str(),const_cast<char* const*>(paramList.data()));
-                            exit(0);
+                            _exit(127);
                         }
                         else if(pid>0)
                         {
                             int sts;
-                            wait(&sts);
+                            while(waitpid(pid,&sts,0)<0&&errno==EINTR) {}
                             sleep(sec);
                         }
                         else
@@ -4519,13 +4768,12 @@ private:
                     return true;
                     else
                     {
+                        prepareForkedChild();
                         auto f=std::bind(std::forward<Fn>(fn),std::forward<Args>(args)...);
                         f();
-                        return true;
+                        _exit(EXIT_SUCCESS);
                     }
                 }
-                for(int ii=1;ii<=64;ii++)
-                    signal(ii,SIG_IGN);           
                 pid_t pid=fork();
                 if(pid==-1)
                     return false;
@@ -4535,21 +4783,21 @@ private:
                 }
                 else
                 {
-                    signal(SIGCHLD,SIG_DFL);
-                    signal(15,SIG_DFL);
+                    prepareForkedChild(true);
                     while(1)
                     {
                         pid=fork();
                         if(pid==0)
                         {
+                            prepareForkedChild(true);
                             auto f=std::bind(std::forward<Fn>(fn),std::forward<Args>(args)...);
                             f();
-                            return true;
+                            _exit(EXIT_SUCCESS);
                         }
                         else if(pid>0)
                         {
                             int sts;
-                            wait(&sts);
+                            while(waitpid(pid,&sts,0)<0&&errno==EINTR) {}
                             sleep(sec);
                         }
                         else
@@ -4617,16 +4865,19 @@ private:
             * @brief 向线程池提交一个任务
             *
             * @param task 可调用对象，函数签名为 void()
-            *
-            * 任务会被放入内部队列，并由某个工作线程异步执行。
+            * @return true：任务已提交；false：线程池已停止，任务未入队。
+            * @note 已接受的任务会在 stop() 返回前执行完；任务抛出的异常被线程池边界捕获，不会杀死工作线程。
             */
-            void submit(Task task) 
+            bool submit(Task task)
             {
                 {
                     std::lock_guard<std::mutex> lk(mtx_);
+                    if (stop_)
+                        return false;
                     tasks_.push(std::move(task));
                 }
                 cv_.notify_one();
+                return true;
             }
             /**
              * @brief 停止线程池并等待所有线程退出
@@ -4679,7 +4930,14 @@ private:
                         task = std::move(tasks_.front());
                         tasks_.pop();
                     }
-                    task(); // 执行任务
+                    try
+                    {
+                        task(); // 执行任务
+                    }
+                    catch (...)
+                    {
+                        // 单个任务的异常不应终止整个服务进程或工作线程。
+                    }
                 }
             }
 

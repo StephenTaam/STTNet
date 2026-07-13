@@ -1,18 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.5"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>STTNet: stt::network::WebSocketServer类 参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() { searchBox.OnSelectItem(0); });
-</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -20,9 +23,9 @@
 <div id="titlearea">
 <table cellspacing="0" cellpadding="0">
  <tbody>
- <tr style="height: 56px;">
-  <td style="padding-left: 0.5em;">
-   <div id="projectname">STTNet
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
    </div>
   </td>
  </tr>
@@ -30,55 +33,52 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.5 -->
+<!-- 制作者 Doxygen 1.13.2 -->
 <script type="text/javascript">
-var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
 </script>
-  <div id="navrow1" class="tabs">
-    <ul class="tablist">
-      <li><a href="index.html"><span>首页</span></a></li>
-      <li><a href="pages.html"><span>相关页面</span></a></li>
-      <li><a href="namespaces.html"><span>命名空间</span></a></li>
-      <li class="current"><a href="annotated.html"><span>类</span></a></li>
-      <li><a href="files.html"><span>文件</span></a></li>
-      <li>
-        <div id="MSearchBox" class="MSearchBoxInactive">
-        <span class="left">
-          <img id="MSearchSelect" src="search/mag_sel.png"
-               onmouseover="return searchBox.OnSearchSelectShow()"
-               onmouseout="return searchBox.OnSearchSelectHide()"
-               alt=""/>
-          <input type="text" id="MSearchField" value="搜索" accesskey="S"
-               onfocus="searchBox.OnSearchFieldFocus(true)" 
-               onblur="searchBox.OnSearchFieldFocus(false)" 
-               onkeyup="searchBox.OnSearchFieldChange(event)"/>
-          </span><span class="right">
-            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
-          </span>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div id="navrow2" class="tabs2">
-    <ul class="tablist">
-      <li><a href="annotated.html"><span>类列表</span></a></li>
-      <li><a href="classes.html"><span>类索引</span></a></li>
-      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
-      <li><a href="functions.html"><span>类成员</span></a></li>
-    </ul>
-  </div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索',false);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){ initResizable(false); });
+/* @license-end */
+</script>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>枚举</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>枚举值</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>页</a></div>
+</div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
-        name="MSearchResults" id="MSearchResults">
-</iframe>
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
 </div>
 
 <div id="nav-path" class="navpath">
@@ -86,17 +86,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <li class="navelem"><a class="el" href="namespacestt.html">stt</a></li><li class="navelem"><a class="el" href="namespacestt_1_1network.html">network</a></li><li class="navelem"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html">WebSocketServer</a></li>  </ul>
 </div>
 </div><!-- top -->
+<div id="doc-content">
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public 成员函数</a> &#124;
 <a href="classstt_1_1network_1_1WebSocketServer-members.html">所有成员列表</a>  </div>
-  <div class="headertitle">
-<div class="title">stt::network::WebSocketServer类 参考</div>  </div>
+  <div class="headertitle"><div class="title">stt::network::WebSocketServer类 参考</div></div>
 </div><!--header-->
 <div class="contents">
 
 <p>WebSocketServer服务端操作类  
- <a href="classstt_1_1network_1_1WebSocketServer.html#details">更多...</a></p>
+ <a href="#details">更多...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -105,171 +105,264 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
  <div class="center">
   <img src="classstt_1_1network_1_1WebSocketServer.png" usemap="#stt::network::WebSocketServer_map" alt=""/>
   <map id="stt::network::WebSocketServer_map" name="stt::network::WebSocketServer_map">
-<area href="classstt_1_1network_1_1TcpServer.html" title="Tcp服务端类 " alt="stt::network::TcpServer" shape="rect" coords="0,0,182,24"/>
-</map>
- </div></div>
+<area href="classstt_1_1network_1_1TcpServer.html" title="Tcp服务端类" alt="stt::network::TcpServer" shape="rect" coords="0,0,182,24"/>
+  </map>
+</div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public 成员函数</h2></td></tr>
-<tr class="memitem:a7d4b4dfd861c296a55f13566ef793b37"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a7d4b4dfd861c296a55f13566ef793b37">putTask</a> (const std::function&lt; int(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt; &amp;fun, <a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)</td></tr>
-<tr class="memdesc:a7d4b4dfd861c296a55f13566ef793b37"><td class="mdescLeft">&#160;</td><td class="mdescRight">把一个任务放入工作线程池由工作线程完成  <a href="#a7d4b4dfd861c296a55f13566ef793b37">更多...</a><br/></td></tr>
+<tr class="memitem:a7d4b4dfd861c296a55f13566ef793b37" id="r_a7d4b4dfd861c296a55f13566ef793b37"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d4b4dfd861c296a55f13566ef793b37">putTask</a> (const std::function&lt; int(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt; &amp;fun, <a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)</td></tr>
+<tr class="memdesc:a7d4b4dfd861c296a55f13566ef793b37"><td class="mdescLeft">&#160;</td><td class="mdescRight">把一个任务放入工作线程池由工作线程完成  <br /></td></tr>
 <tr class="separator:a7d4b4dfd861c296a55f13566ef793b37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a725c81385c1a347fbafb4e3e0483ba27"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a725c81385c1a347fbafb4e3e0483ba27">WebSocketServer</a> (const unsigned long long &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a71937d40d41663b3993e626b95a73ec1">maxFD</a>=1000000, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=256, const size_t &amp;finishQueue_cap=65536, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=5, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a6e0c1e70071e7f08a449860bcc3011e8">connectionSecs</a>=10, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a60b0ef61057dbda029acef08ed6fed00">connectionTimes</a>=3, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aae46831563ecec1dd25306ac3eec78ad">requestSecs</a>=1, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#ae809e4044a03a89ead5535c42e0d6162">requestTimes</a>=10, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a>=60, const int &amp;connectionTimeout=120)</td></tr>
-<tr class="memdesc:a725c81385c1a347fbafb4e3e0483ba27"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数，默认是允许最大1000000个连接，每个连接接收缓冲区最大为256kb，启用安全模块。  <a href="#a725c81385c1a347fbafb4e3e0483ba27">更多...</a><br/></td></tr>
+<tr class="memitem:a725c81385c1a347fbafb4e3e0483ba27" id="r_a725c81385c1a347fbafb4e3e0483ba27"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a725c81385c1a347fbafb4e3e0483ba27">WebSocketServer</a> (const unsigned long long &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a71937d40d41663b3993e626b95a73ec1">maxFD</a>=1000000, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=256, const size_t &amp;finishQueue_cap=65536, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=5, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a6e0c1e70071e7f08a449860bcc3011e8">connectionSecs</a>=10, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a60b0ef61057dbda029acef08ed6fed00">connectionTimes</a>=3, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aae46831563ecec1dd25306ac3eec78ad">requestSecs</a>=1, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#ae809e4044a03a89ead5535c42e0d6162">requestTimes</a>=10, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a>=60, const int &amp;connectionTimeout=120)</td></tr>
 <tr class="separator:a725c81385c1a347fbafb4e3e0483ba27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40e0bd0aa58b814e881d7a73f3cca331"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a40e0bd0aa58b814e881d7a73f3cca331">setSecuritySendBackFun</a> (std::function&lt; void(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt; fc)</td></tr>
-<tr class="memdesc:a40e0bd0aa58b814e881d7a73f3cca331"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置违反信息安全策略时候的返回函数  <a href="#a40e0bd0aa58b814e881d7a73f3cca331">更多...</a><br/></td></tr>
+<tr class="memitem:a40e0bd0aa58b814e881d7a73f3cca331" id="r_a40e0bd0aa58b814e881d7a73f3cca331"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40e0bd0aa58b814e881d7a73f3cca331">setSecuritySendBackFun</a> (std::function&lt; void(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt; fc)</td></tr>
+<tr class="memdesc:a40e0bd0aa58b814e881d7a73f3cca331"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置违反信息安全策略时候的返回函数  <br /></td></tr>
 <tr class="separator:a40e0bd0aa58b814e881d7a73f3cca331"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1aa57d1c724c6fca6fa35a9dda19a9cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a1aa57d1c724c6fca6fa35a9dda19a9cf">setGlobalSolveFunction</a> (std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt; fc)</td></tr>
-<tr class="memdesc:a1aa57d1c724c6fca6fa35a9dda19a9cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置全局备用函数  <a href="#a1aa57d1c724c6fca6fa35a9dda19a9cf">更多...</a><br/></td></tr>
+<tr class="memitem:a1aa57d1c724c6fca6fa35a9dda19a9cf" id="r_a1aa57d1c724c6fca6fa35a9dda19a9cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1aa57d1c724c6fca6fa35a9dda19a9cf">setGlobalSolveFunction</a> (std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt; fc)</td></tr>
+<tr class="memdesc:a1aa57d1c724c6fca6fa35a9dda19a9cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置全局备用函数  <br /></td></tr>
 <tr class="separator:a1aa57d1c724c6fca6fa35a9dda19a9cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abcfe3809d2fa4a22028e2cf59aa193e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#abcfe3809d2fa4a22028e2cf59aa193e0">setStartFunction</a> (std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt; fccc)</td></tr>
-<tr class="memdesc:abcfe3809d2fa4a22028e2cf59aa193e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置websocket连接成功后就执行的回调函数 注册一个回调函数  <a href="#abcfe3809d2fa4a22028e2cf59aa193e0">更多...</a><br/></td></tr>
+<tr class="memitem:abcfe3809d2fa4a22028e2cf59aa193e0" id="r_abcfe3809d2fa4a22028e2cf59aa193e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abcfe3809d2fa4a22028e2cf59aa193e0">setStartFunction</a> (std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt; fccc)</td></tr>
+<tr class="memdesc:abcfe3809d2fa4a22028e2cf59aa193e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置websocket连接成功后就执行的回调函数 注册一个回调函数  <br /></td></tr>
 <tr class="separator:abcfe3809d2fa4a22028e2cf59aa193e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8db5e5143e41cb11029680e6f271707f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a8db5e5143e41cb11029680e6f271707f">setJudgeFunction</a> (std::function&lt; bool(<a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;k)&gt; fcc)</td></tr>
-<tr class="memdesc:a8db5e5143e41cb11029680e6f271707f"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置websocket握手阶段的检查函数，只有检查通过才执行后续握手 注册一个回调函数  <a href="#a8db5e5143e41cb11029680e6f271707f">更多...</a><br/></td></tr>
+<tr class="memitem:a8db5e5143e41cb11029680e6f271707f" id="r_a8db5e5143e41cb11029680e6f271707f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8db5e5143e41cb11029680e6f271707f">setJudgeFunction</a> (std::function&lt; bool(<a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;k)&gt; fcc)</td></tr>
+<tr class="memdesc:a8db5e5143e41cb11029680e6f271707f"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置websocket握手阶段的检查函数，只有检查通过才执行后续握手 注册一个回调函数  <br /></td></tr>
 <tr class="separator:a8db5e5143e41cb11029680e6f271707f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b127ea1b64b974ac6842bdb22244925"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a9b127ea1b64b974ac6842bdb22244925">setFunction</a> (const std::string &amp;key, std::function&lt; int(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt; fc)</td></tr>
-<tr class="memdesc:a9b127ea1b64b974ac6842bdb22244925"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置key对应的收到客户端消息后的回调函数  <a href="#a9b127ea1b64b974ac6842bdb22244925">更多...</a><br/></td></tr>
+<tr class="memitem:a9b127ea1b64b974ac6842bdb22244925" id="r_a9b127ea1b64b974ac6842bdb22244925"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9b127ea1b64b974ac6842bdb22244925">setFunction</a> (const std::string &amp;key, std::function&lt; int(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt; fc)</td></tr>
+<tr class="memdesc:a9b127ea1b64b974ac6842bdb22244925"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置key对应的收到客户端消息后的回调函数  <br /></td></tr>
 <tr class="separator:a9b127ea1b64b974ac6842bdb22244925"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f0e3b4118963cec723118d3c0f4cc63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a5f0e3b4118963cec723118d3c0f4cc63">setGetKeyFunction</a> (std::function&lt; int(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt; parseKeyFun)</td></tr>
-<tr class="memdesc:a5f0e3b4118963cec723118d3c0f4cc63"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置解析出key的回调函数  <a href="#a5f0e3b4118963cec723118d3c0f4cc63">更多...</a><br/></td></tr>
+<tr class="memitem:a5f0e3b4118963cec723118d3c0f4cc63" id="r_a5f0e3b4118963cec723118d3c0f4cc63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5f0e3b4118963cec723118d3c0f4cc63">setGetKeyFunction</a> (std::function&lt; int(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt; parseKeyFun)</td></tr>
+<tr class="memdesc:a5f0e3b4118963cec723118d3c0f4cc63"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置解析出key的回调函数  <br /></td></tr>
 <tr class="separator:a5f0e3b4118963cec723118d3c0f4cc63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08093193cfbd3e08756d1c3c494baf76"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a08093193cfbd3e08756d1c3c494baf76">setTimeOutTime</a> (const int &amp;seca)</td></tr>
-<tr class="memdesc:a08093193cfbd3e08756d1c3c494baf76"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置心跳时间  <a href="#a08093193cfbd3e08756d1c3c494baf76">更多...</a><br/></td></tr>
+<tr class="memitem:a08093193cfbd3e08756d1c3c494baf76" id="r_a08093193cfbd3e08756d1c3c494baf76"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a08093193cfbd3e08756d1c3c494baf76">setTimeOutTime</a> (const int &amp;seca)</td></tr>
+<tr class="memdesc:a08093193cfbd3e08756d1c3c494baf76"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置心跳时间  <br /></td></tr>
 <tr class="separator:a08093193cfbd3e08756d1c3c494baf76"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeefa2a2130748dd40632a43c57e6aece"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#aeefa2a2130748dd40632a43c57e6aece">setHBTimeOutTime</a> (const int &amp;secb)</td></tr>
-<tr class="memdesc:aeefa2a2130748dd40632a43c57e6aece"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置发送心跳后的等待时间  <a href="#aeefa2a2130748dd40632a43c57e6aece">更多...</a><br/></td></tr>
+<tr class="memitem:aeefa2a2130748dd40632a43c57e6aece" id="r_aeefa2a2130748dd40632a43c57e6aece"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeefa2a2130748dd40632a43c57e6aece">setHBTimeOutTime</a> (const int &amp;secb)</td></tr>
+<tr class="memdesc:aeefa2a2130748dd40632a43c57e6aece"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置发送心跳后的等待时间  <br /></td></tr>
 <tr class="separator:aeefa2a2130748dd40632a43c57e6aece"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add10bbaaac7b118b4ee943f12178876c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#add10bbaaac7b118b4ee943f12178876c">closeFD</a> (const int &amp;fd, const std::string &amp;closeCodeAndMessage)</td></tr>
-<tr class="memdesc:add10bbaaac7b118b4ee943f12178876c"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送关闭帧关闭对应套接字的 WebSocket 连接（简化方式）  <a href="#add10bbaaac7b118b4ee943f12178876c">更多...</a><br/></td></tr>
+<tr class="memitem:add10bbaaac7b118b4ee943f12178876c" id="r_add10bbaaac7b118b4ee943f12178876c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#add10bbaaac7b118b4ee943f12178876c">closeFD</a> (const int &amp;fd, const std::string &amp;closeCodeAndMessage)</td></tr>
+<tr class="memdesc:add10bbaaac7b118b4ee943f12178876c"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送关闭帧关闭对应套接字的 WebSocket 连接（简化方式）  <br /></td></tr>
 <tr class="separator:add10bbaaac7b118b4ee943f12178876c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a386d2fc2754967c41895371f01d0b392"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a386d2fc2754967c41895371f01d0b392">closeFD</a> (const int &amp;fd, const short &amp;code=1000, const std::string &amp;message=&quot;bye&quot;)</td></tr>
-<tr class="memdesc:a386d2fc2754967c41895371f01d0b392"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送关闭帧关闭对应套接字的 WebSocket 连接（标准方式）  <a href="#a386d2fc2754967c41895371f01d0b392">更多...</a><br/></td></tr>
+<tr class="memitem:a386d2fc2754967c41895371f01d0b392" id="r_a386d2fc2754967c41895371f01d0b392"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a386d2fc2754967c41895371f01d0b392">closeFD</a> (const int &amp;fd, const short &amp;code=1000, const std::string &amp;message=&quot;bye&quot;)</td></tr>
+<tr class="memdesc:a386d2fc2754967c41895371f01d0b392"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送关闭帧关闭对应套接字的 WebSocket 连接（标准方式）  <br /></td></tr>
 <tr class="separator:a386d2fc2754967c41895371f01d0b392"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac41562b17bf8d20764b8ea8f2f5b8fbf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#ac41562b17bf8d20764b8ea8f2f5b8fbf">sendMessage</a> (const int &amp;fd, const std::string &amp;msg, const std::string &amp;type=&quot;0001&quot;)</td></tr>
-<tr class="memdesc:ac41562b17bf8d20764b8ea8f2f5b8fbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送 WebSocket 消息给某一个客户端  <a href="#ac41562b17bf8d20764b8ea8f2f5b8fbf">更多...</a><br/></td></tr>
+<tr class="memitem:ac41562b17bf8d20764b8ea8f2f5b8fbf" id="r_ac41562b17bf8d20764b8ea8f2f5b8fbf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac41562b17bf8d20764b8ea8f2f5b8fbf">sendMessage</a> (const int &amp;fd, const std::string &amp;msg, const std::string &amp;type=&quot;0001&quot;)</td></tr>
+<tr class="memdesc:ac41562b17bf8d20764b8ea8f2f5b8fbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送 WebSocket 消息给某一个客户端  <br /></td></tr>
 <tr class="separator:ac41562b17bf8d20764b8ea8f2f5b8fbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a699cd7d80af5ecea26626833ea007a64"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#a699cd7d80af5ecea26626833ea007a64">close</a> ()</td></tr>
-<tr class="memdesc:a699cd7d80af5ecea26626833ea007a64"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭监听和所有连接  <a href="#a699cd7d80af5ecea26626833ea007a64">更多...</a><br/></td></tr>
-<tr class="separator:a699cd7d80af5ecea26626833ea007a64"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad3bbf91532246ce96a5faba5b8cafe1b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#ad3bbf91532246ce96a5faba5b8cafe1b">close</a> (const int &amp;fd)</td></tr>
-<tr class="memdesc:ad3bbf91532246ce96a5faba5b8cafe1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭某个套接字的连接 @  <a href="#ad3bbf91532246ce96a5faba5b8cafe1b">更多...</a><br/></td></tr>
-<tr class="separator:ad3bbf91532246ce96a5faba5b8cafe1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2301633d489c53792226bfe39d06d55"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#ab2301633d489c53792226bfe39d06d55">startListen</a> (const int &amp;port, const int &amp;threads=8)</td></tr>
-<tr class="memdesc:ab2301633d489c53792226bfe39d06d55"><td class="mdescLeft">&#160;</td><td class="mdescRight">打开Websocket服务器监听程序  <a href="#ab2301633d489c53792226bfe39d06d55">更多...</a><br/></td></tr>
+<tr class="memitem:a1a7088b6297b18a37bc1af5740b12b25" id="r_a1a7088b6297b18a37bc1af5740b12b25"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a7088b6297b18a37bc1af5740b12b25">close</a> () override</td></tr>
+<tr class="memdesc:a1a7088b6297b18a37bc1af5740b12b25"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭监听和所有连接  <br /></td></tr>
+<tr class="separator:a1a7088b6297b18a37bc1af5740b12b25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f891073719100cb0e6e8b5b43c2bed7" id="r_a1f891073719100cb0e6e8b5b43c2bed7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1f891073719100cb0e6e8b5b43c2bed7">close</a> (const int &amp;fd) override</td></tr>
+<tr class="memdesc:a1f891073719100cb0e6e8b5b43c2bed7"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭某个套接字的连接  <br /></td></tr>
+<tr class="separator:a1f891073719100cb0e6e8b5b43c2bed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2301633d489c53792226bfe39d06d55" id="r_ab2301633d489c53792226bfe39d06d55"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab2301633d489c53792226bfe39d06d55">startListen</a> (const int &amp;port, const int &amp;threads=8)</td></tr>
+<tr class="memdesc:ab2301633d489c53792226bfe39d06d55"><td class="mdescLeft">&#160;</td><td class="mdescRight">打开Websocket服务器监听程序  <br /></td></tr>
 <tr class="separator:ab2301633d489c53792226bfe39d06d55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbfccb6f684213cab0e01a0ce3ec150b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#acbfccb6f684213cab0e01a0ce3ec150b">sendMessage</a> (const std::string &amp;msg, const std::string &amp;type=&quot;0001&quot;)</td></tr>
-<tr class="memdesc:acbfccb6f684213cab0e01a0ce3ec150b"><td class="mdescLeft">&#160;</td><td class="mdescRight">广播发送 WebSocket 消息  <a href="#acbfccb6f684213cab0e01a0ce3ec150b">更多...</a><br/></td></tr>
+<tr class="memitem:acbfccb6f684213cab0e01a0ce3ec150b" id="r_acbfccb6f684213cab0e01a0ce3ec150b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acbfccb6f684213cab0e01a0ce3ec150b">sendMessage</a> (const std::string &amp;msg, const std::string &amp;type=&quot;0001&quot;)</td></tr>
+<tr class="memdesc:acbfccb6f684213cab0e01a0ce3ec150b"><td class="mdescLeft">&#160;</td><td class="mdescRight">广播发送 WebSocket 消息  <br /></td></tr>
 <tr class="separator:acbfccb6f684213cab0e01a0ce3ec150b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace579b96683cb0986ae91307262e09b5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html#ace579b96683cb0986ae91307262e09b5">~WebSocketServer</a> ()</td></tr>
-<tr class="memdesc:ace579b96683cb0986ae91307262e09b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">WebSocketServer的析构函数  <a href="#ace579b96683cb0986ae91307262e09b5">更多...</a><br/></td></tr>
+<tr class="memitem:ace579b96683cb0986ae91307262e09b5" id="r_ace579b96683cb0986ae91307262e09b5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace579b96683cb0986ae91307262e09b5">~WebSocketServer</a> ()</td></tr>
+<tr class="memdesc:ace579b96683cb0986ae91307262e09b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">WebSocketServer的析构函数  <br /></td></tr>
 <tr class="separator:ace579b96683cb0986ae91307262e09b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classstt_1_1network_1_1TcpServer"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classstt_1_1network_1_1TcpServer')"><img src="closed.png" alt="-"/>&#160;Public 成员函数 继承自 <a class="el" href="classstt_1_1network_1_1TcpServer.html">stt::network::TcpServer</a></td></tr>
-<tr class="memitem:a507cdbb0c5d4dbf128c57ab5f11bafb6 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a507cdbb0c5d4dbf128c57ab5f11bafb6">putTask</a> (const std::function&lt; int(<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1TcpInformation.html">TcpInformation</a> &amp;inf)&gt; &amp;fun, <a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1TcpInformation.html">TcpInformation</a> &amp;inf)</td></tr>
-<tr class="memdesc:a507cdbb0c5d4dbf128c57ab5f11bafb6 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">把一个任务放入工作线程池由工作线程完成  <a href="#a507cdbb0c5d4dbf128c57ab5f11bafb6">更多...</a><br/></td></tr>
+<tr class="inherit_header pub_methods_classstt_1_1network_1_1TcpServer"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classstt_1_1network_1_1TcpServer')"><img src="closed.png" alt="-"/>&#160;Public 成员函数 继承自 <a class="el" href="classstt_1_1network_1_1TcpServer.html">stt::network::TcpServer</a></td></tr>
+<tr class="memitem:a507cdbb0c5d4dbf128c57ab5f11bafb6 inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_a507cdbb0c5d4dbf128c57ab5f11bafb6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a507cdbb0c5d4dbf128c57ab5f11bafb6">putTask</a> (const std::function&lt; int(<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1TcpInformation.html">TcpInformation</a> &amp;inf)&gt; &amp;fun, <a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1TcpInformation.html">TcpInformation</a> &amp;inf)</td></tr>
+<tr class="memdesc:a507cdbb0c5d4dbf128c57ab5f11bafb6 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">把一个任务放入工作线程池由工作线程完成  <br /></td></tr>
 <tr class="separator:a507cdbb0c5d4dbf128c57ab5f11bafb6 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58c35e8c268bdf9a0918f4aa4546f026 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a58c35e8c268bdf9a0918f4aa4546f026">TcpServer</a> (const unsigned long long &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a71937d40d41663b3993e626b95a73ec1">maxFD</a>=1000000, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=256, const size_t &amp;finishQueue_cap=65536, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a6e0c1e70071e7f08a449860bcc3011e8">connectionSecs</a>=1, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a60b0ef61057dbda029acef08ed6fed00">connectionTimes</a>=6, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aae46831563ecec1dd25306ac3eec78ad">requestSecs</a>=1, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#ae809e4044a03a89ead5535c42e0d6162">requestTimes</a>=40, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a>=60, const int &amp;connectionTimeout=60)</td></tr>
-<tr class="memdesc:a58c35e8c268bdf9a0918f4aa4546f026 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数，默认是允许最大1000000个连接，每个连接接收缓冲区最大为256kb，启用安全模块。  <a href="#a58c35e8c268bdf9a0918f4aa4546f026">更多...</a><br/></td></tr>
+<tr class="memitem:a58c35e8c268bdf9a0918f4aa4546f026 inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_a58c35e8c268bdf9a0918f4aa4546f026"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a58c35e8c268bdf9a0918f4aa4546f026">TcpServer</a> (const unsigned long long &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a71937d40d41663b3993e626b95a73ec1">maxFD</a>=1000000, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a>=256, const size_t &amp;finishQueue_cap=65536, const bool &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a>=true, const int &amp;connectionNumLimit=20, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a6e0c1e70071e7f08a449860bcc3011e8">connectionSecs</a>=1, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a60b0ef61057dbda029acef08ed6fed00">connectionTimes</a>=6, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aae46831563ecec1dd25306ac3eec78ad">requestSecs</a>=1, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#ae809e4044a03a89ead5535c42e0d6162">requestTimes</a>=40, const int &amp;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a>=60, const int &amp;connectionTimeout=60)</td></tr>
 <tr class="separator:a58c35e8c268bdf9a0918f4aa4546f026 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd39340be38620b1277d2881a0c8aa34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#acd39340be38620b1277d2881a0c8aa34">startListen</a> (const int &amp;port, const int &amp;threads=8)</td></tr>
-<tr class="memdesc:acd39340be38620b1277d2881a0c8aa34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">打开Tcp服务器监听程序  <a href="#acd39340be38620b1277d2881a0c8aa34">更多...</a><br/></td></tr>
+<tr class="memitem:acd39340be38620b1277d2881a0c8aa34 inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_acd39340be38620b1277d2881a0c8aa34"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#acd39340be38620b1277d2881a0c8aa34">startListen</a> (const int &amp;port, const int &amp;threads=8)</td></tr>
+<tr class="memdesc:acd39340be38620b1277d2881a0c8aa34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">打开Tcp服务器监听程序  <br /></td></tr>
 <tr class="separator:acd39340be38620b1277d2881a0c8aa34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c020c00d442fc3d47600091e9e34527 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a6c020c00d442fc3d47600091e9e34527">setTLS</a> (const char *cert, const char *key, const char *passwd, const char *ca)</td></tr>
-<tr class="memdesc:a6c020c00d442fc3d47600091e9e34527 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">启用 TLS 加密并配置服务器端证书与密钥  <a href="#a6c020c00d442fc3d47600091e9e34527">更多...</a><br/></td></tr>
+<tr class="memitem:a6c020c00d442fc3d47600091e9e34527 inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_a6c020c00d442fc3d47600091e9e34527"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a6c020c00d442fc3d47600091e9e34527">setTLS</a> (const char *cert, const char *key, const char *passwd, const char *ca)</td></tr>
+<tr class="memdesc:a6c020c00d442fc3d47600091e9e34527 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">启用 TLS 加密并配置服务器端证书与密钥  <br /></td></tr>
 <tr class="separator:a6c020c00d442fc3d47600091e9e34527 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a39d8778843209ebac1af10aae6ba1634 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a39d8778843209ebac1af10aae6ba1634">redrawTLS</a> ()</td></tr>
-<tr class="memdesc:a39d8778843209ebac1af10aae6ba1634 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">撤销TLS加密，ca证书等  <a href="#a39d8778843209ebac1af10aae6ba1634">更多...</a><br/></td></tr>
+<tr class="memitem:a39d8778843209ebac1af10aae6ba1634 inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_a39d8778843209ebac1af10aae6ba1634"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a39d8778843209ebac1af10aae6ba1634">redrawTLS</a> ()</td></tr>
+<tr class="memdesc:a39d8778843209ebac1af10aae6ba1634 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">撤销TLS加密，ca证书等  <br /></td></tr>
 <tr class="separator:a39d8778843209ebac1af10aae6ba1634 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7017299b20ecb55e97aa87a99589d03 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ac7017299b20ecb55e97aa87a99589d03">setSecuritySendBackFun</a> (std::function&lt; void(<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1TcpInformation.html">TcpInformation</a> &amp;inf)&gt; fc)</td></tr>
-<tr class="memdesc:ac7017299b20ecb55e97aa87a99589d03 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置违反信息安全策略时候的返回函数  <a href="#ac7017299b20ecb55e97aa87a99589d03">更多...</a><br/></td></tr>
+<tr class="memitem:ac7017299b20ecb55e97aa87a99589d03 inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_ac7017299b20ecb55e97aa87a99589d03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ac7017299b20ecb55e97aa87a99589d03">setSecuritySendBackFun</a> (std::function&lt; void(<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1TcpInformation.html">TcpInformation</a> &amp;inf)&gt; fc)</td></tr>
+<tr class="memdesc:ac7017299b20ecb55e97aa87a99589d03 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置违反信息安全策略时候的返回函数  <br /></td></tr>
 <tr class="separator:ac7017299b20ecb55e97aa87a99589d03 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3a99e3feaf654596b258455d7427703 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aa3a99e3feaf654596b258455d7427703">setGlobalSolveFunction</a> (std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1TcpInformation.html">TcpInformation</a> &amp;inf)&gt; fc)</td></tr>
-<tr class="memdesc:aa3a99e3feaf654596b258455d7427703 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置全局备用函数  <a href="#aa3a99e3feaf654596b258455d7427703">更多...</a><br/></td></tr>
+<tr class="memitem:aa3a99e3feaf654596b258455d7427703 inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_aa3a99e3feaf654596b258455d7427703"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aa3a99e3feaf654596b258455d7427703">setGlobalSolveFunction</a> (std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1TcpInformation.html">TcpInformation</a> &amp;inf)&gt; fc)</td></tr>
+<tr class="memdesc:aa3a99e3feaf654596b258455d7427703 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置全局备用函数  <br /></td></tr>
 <tr class="separator:aa3a99e3feaf654596b258455d7427703 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4f3a844bfa58699c8c259fa3e210a50 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ae4f3a844bfa58699c8c259fa3e210a50">setFunction</a> (const std::string &amp;key, std::function&lt; int(<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1TcpInformation.html">TcpInformation</a> &amp;inf)&gt; fc)</td></tr>
-<tr class="memdesc:ae4f3a844bfa58699c8c259fa3e210a50 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置key对应的收到客户端消息后的回调函数  <a href="#ae4f3a844bfa58699c8c259fa3e210a50">更多...</a><br/></td></tr>
+<tr class="memitem:ae4f3a844bfa58699c8c259fa3e210a50 inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_ae4f3a844bfa58699c8c259fa3e210a50"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ae4f3a844bfa58699c8c259fa3e210a50">setFunction</a> (const std::string &amp;key, std::function&lt; int(<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1TcpInformation.html">TcpInformation</a> &amp;inf)&gt; fc)</td></tr>
+<tr class="memdesc:ae4f3a844bfa58699c8c259fa3e210a50 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置key对应的收到客户端消息后的回调函数  <br /></td></tr>
 <tr class="separator:ae4f3a844bfa58699c8c259fa3e210a50 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6c96f47bf4755d4cbf0e6f4f69c5004 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ac6c96f47bf4755d4cbf0e6f4f69c5004">setGetKeyFunction</a> (std::function&lt; int(<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1TcpInformation.html">TcpInformation</a> &amp;inf)&gt; parseKeyFun)</td></tr>
-<tr class="memdesc:ac6c96f47bf4755d4cbf0e6f4f69c5004 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置解析出key的回调函数  <a href="#ac6c96f47bf4755d4cbf0e6f4f69c5004">更多...</a><br/></td></tr>
+<tr class="memitem:ac6c96f47bf4755d4cbf0e6f4f69c5004 inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_ac6c96f47bf4755d4cbf0e6f4f69c5004"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ac6c96f47bf4755d4cbf0e6f4f69c5004">setGetKeyFunction</a> (std::function&lt; int(<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1TcpInformation.html">TcpInformation</a> &amp;inf)&gt; parseKeyFun)</td></tr>
+<tr class="memdesc:ac6c96f47bf4755d4cbf0e6f4f69c5004 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置解析出key的回调函数  <br /></td></tr>
 <tr class="separator:ac6c96f47bf4755d4cbf0e6f4f69c5004 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a78a5301698be343f3834208f3875dab9 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a78a5301698be343f3834208f3875dab9">stopListen</a> ()</td></tr>
-<tr class="memdesc:a78a5301698be343f3834208f3875dab9 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">停止监听  <a href="#a78a5301698be343f3834208f3875dab9">更多...</a><br/></td></tr>
+<tr class="memitem:a78a5301698be343f3834208f3875dab9 inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_a78a5301698be343f3834208f3875dab9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a78a5301698be343f3834208f3875dab9">stopListen</a> ()</td></tr>
+<tr class="memdesc:a78a5301698be343f3834208f3875dab9 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">停止监听  <br /></td></tr>
 <tr class="separator:a78a5301698be343f3834208f3875dab9 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3de689656c2e1b106b069780f03e7847 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a3de689656c2e1b106b069780f03e7847">close</a> ()</td></tr>
-<tr class="memdesc:a3de689656c2e1b106b069780f03e7847 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭监听和所有已连接的套接字  <a href="#a3de689656c2e1b106b069780f03e7847">更多...</a><br/></td></tr>
-<tr class="separator:a3de689656c2e1b106b069780f03e7847 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7fe32ac0fab450bdfb899eb9e1bedfe3 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a7fe32ac0fab450bdfb899eb9e1bedfe3">setConnectStrategy</a> (const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">stt::security::RateLimitType</a> &amp;type)</td></tr>
-<tr class="memdesc:a7fe32ac0fab450bdfb899eb9e1bedfe3 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置“连接速率限流”所使用的策略。  <a href="#a7fe32ac0fab450bdfb899eb9e1bedfe3">更多...</a><br/></td></tr>
+<tr class="memitem:a7fe32ac0fab450bdfb899eb9e1bedfe3 inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_a7fe32ac0fab450bdfb899eb9e1bedfe3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a7fe32ac0fab450bdfb899eb9e1bedfe3">setConnectStrategy</a> (const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">stt::security::RateLimitType</a> &amp;type)</td></tr>
+<tr class="memdesc:a7fe32ac0fab450bdfb899eb9e1bedfe3 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置“连接速率限流”所使用的策略。  <br /></td></tr>
 <tr class="separator:a7fe32ac0fab450bdfb899eb9e1bedfe3 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6fadd174a08fc7c003b8f8314a0e9665 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a6fadd174a08fc7c003b8f8314a0e9665">setRequestStrategy</a> (const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">stt::security::RateLimitType</a> &amp;type)</td></tr>
-<tr class="memdesc:a6fadd174a08fc7c003b8f8314a0e9665 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置“IP 级请求限流”所使用的策略。  <a href="#a6fadd174a08fc7c003b8f8314a0e9665">更多...</a><br/></td></tr>
+<tr class="memitem:a6fadd174a08fc7c003b8f8314a0e9665 inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_a6fadd174a08fc7c003b8f8314a0e9665"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a6fadd174a08fc7c003b8f8314a0e9665">setRequestStrategy</a> (const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">stt::security::RateLimitType</a> &amp;type)</td></tr>
+<tr class="memdesc:a6fadd174a08fc7c003b8f8314a0e9665 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置“IP 级请求限流”所使用的策略。  <br /></td></tr>
 <tr class="separator:a6fadd174a08fc7c003b8f8314a0e9665 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a15a4f6892a8b344c8f59acb9a48a5c30 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a15a4f6892a8b344c8f59acb9a48a5c30">setPathStrategy</a> (const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">stt::security::RateLimitType</a> &amp;type)</td></tr>
-<tr class="memdesc:a15a4f6892a8b344c8f59acb9a48a5c30 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置“path 级请求限流”所使用的策略。  <a href="#a15a4f6892a8b344c8f59acb9a48a5c30">更多...</a><br/></td></tr>
+<tr class="memitem:a15a4f6892a8b344c8f59acb9a48a5c30 inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_a15a4f6892a8b344c8f59acb9a48a5c30"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a15a4f6892a8b344c8f59acb9a48a5c30">setPathStrategy</a> (const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">stt::security::RateLimitType</a> &amp;type)</td></tr>
+<tr class="memdesc:a15a4f6892a8b344c8f59acb9a48a5c30 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置“path 级请求限流”所使用的策略。  <br /></td></tr>
 <tr class="separator:a15a4f6892a8b344c8f59acb9a48a5c30 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2e7db08d54ad783a58b8c0bf3e915f3 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ab2e7db08d54ad783a58b8c0bf3e915f3">setPathLimit</a> (const std::string &amp;path, const int &amp;times, const int &amp;secs)</td></tr>
-<tr class="memdesc:ab2e7db08d54ad783a58b8c0bf3e915f3 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置某个路径的额外限流规则（path 级）。  <a href="#ab2e7db08d54ad783a58b8c0bf3e915f3">更多...</a><br/></td></tr>
+<tr class="memitem:ab2e7db08d54ad783a58b8c0bf3e915f3 inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_ab2e7db08d54ad783a58b8c0bf3e915f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ab2e7db08d54ad783a58b8c0bf3e915f3">setPathLimit</a> (const std::string &amp;path, const int &amp;times, const int &amp;secs)</td></tr>
+<tr class="memdesc:ab2e7db08d54ad783a58b8c0bf3e915f3 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置某个路径的额外限流规则（path 级）。  <br /></td></tr>
 <tr class="separator:ab2e7db08d54ad783a58b8c0bf3e915f3 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8f7414984fe68ee503a7838f80c2e34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#af8f7414984fe68ee503a7838f80c2e34">setCloseFun</a> (std::function&lt; void(const int &amp;fd)&gt; closeFun)</td></tr>
-<tr class="memdesc:af8f7414984fe68ee503a7838f80c2e34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置关闭tcp连接之后调用的函数  <a href="#af8f7414984fe68ee503a7838f80c2e34">更多...</a><br/></td></tr>
+<tr class="memitem:af8f7414984fe68ee503a7838f80c2e34 inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_af8f7414984fe68ee503a7838f80c2e34"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#af8f7414984fe68ee503a7838f80c2e34">setCloseFun</a> (std::function&lt; void(const int &amp;fd)&gt; closeFun)</td></tr>
+<tr class="memdesc:af8f7414984fe68ee503a7838f80c2e34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置关闭tcp连接之后调用的函数  <br /></td></tr>
 <tr class="separator:af8f7414984fe68ee503a7838f80c2e34 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaffeca105457365cc5cd117218d1b098 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aaffeca105457365cc5cd117218d1b098">isListen</a> ()</td></tr>
-<tr class="memdesc:aaffeca105457365cc5cd117218d1b098 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">返回对象的监听状态  <a href="#aaffeca105457365cc5cd117218d1b098">更多...</a><br/></td></tr>
+<tr class="memitem:a47d746d9ef479fd94cf9026c63a7732c inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_a47d746d9ef479fd94cf9026c63a7732c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a47d746d9ef479fd94cf9026c63a7732c">setMaxPendingWriteBytes</a> (const size_t bytes)</td></tr>
+<tr class="memdesc:a47d746d9ef479fd94cf9026c63a7732c inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置每连接待发送数据高水位。  <br /></td></tr>
+<tr class="separator:a47d746d9ef479fd94cf9026c63a7732c inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affe18b6172490d2e7480b469f3aee63e inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_affe18b6172490d2e7480b469f3aee63e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#affe18b6172490d2e7480b469f3aee63e">setWriteBudgetPerEvent</a> (const size_t bytes)</td></tr>
+<tr class="memdesc:affe18b6172490d2e7480b469f3aee63e inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置 Reactor 单次处理一个连接的最大发送字节数。  <br /></td></tr>
+<tr class="separator:affe18b6172490d2e7480b469f3aee63e inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6847603094d5a68cc2222c132f01fa04 inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_a6847603094d5a68cc2222c132f01fa04"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a6847603094d5a68cc2222c132f01fa04">setMaxHttpHeaderBytes</a> (const size_t bytes)</td></tr>
+<tr class="memdesc:a6847603094d5a68cc2222c132f01fa04 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置 HTTP 请求和 WebSocket 握手头上限。  <br /></td></tr>
+<tr class="separator:a6847603094d5a68cc2222c132f01fa04 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11ac0710dcfc8b2bafe2d3eb3333d89a inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_a11ac0710dcfc8b2bafe2d3eb3333d89a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structstt_1_1network_1_1ServerMetricsSnapshot.html">ServerMetricsSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a11ac0710dcfc8b2bafe2d3eb3333d89a">getMetrics</a> () const noexcept</td></tr>
+<tr class="memdesc:a11ac0710dcfc8b2bafe2d3eb3333d89a inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取服务器运行指标快照。  <br /></td></tr>
+<tr class="separator:a11ac0710dcfc8b2bafe2d3eb3333d89a inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaffeca105457365cc5cd117218d1b098 inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_aaffeca105457365cc5cd117218d1b098"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aaffeca105457365cc5cd117218d1b098">isListen</a> ()</td></tr>
+<tr class="memdesc:aaffeca105457365cc5cd117218d1b098 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">返回对象的监听状态  <br /></td></tr>
 <tr class="separator:aaffeca105457365cc5cd117218d1b098 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26a718a822a9ffddf4f13ebccb790e57 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">SSL *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a26a718a822a9ffddf4f13ebccb790e57">getSSL</a> (const int &amp;fd)</td></tr>
-<tr class="memdesc:a26a718a822a9ffddf4f13ebccb790e57 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">查询和服务端的连接，传入套接字，返回加密的SSL句柄  <a href="#a26a718a822a9ffddf4f13ebccb790e57">更多...</a><br/></td></tr>
-<tr class="separator:a26a718a822a9ffddf4f13ebccb790e57 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a293d3497aae9c899c682d903654c0e49 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a293d3497aae9c899c682d903654c0e49">~TcpServer</a> ()</td></tr>
-<tr class="memdesc:a293d3497aae9c899c682d903654c0e49 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classstt_1_1network_1_1TcpServer.html" title="Tcp服务端类 ">TcpServer</a> 类的析构函数  <a href="#a293d3497aae9c899c682d903654c0e49">更多...</a><br/></td></tr>
-<tr class="separator:a293d3497aae9c899c682d903654c0e49 inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7ba33b3df79911ecb5b4f824ef9299b inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_ab7ba33b3df79911ecb5b4f824ef9299b"><td class="memItemLeft" align="right" valign="top">SSL *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ab7ba33b3df79911ecb5b4f824ef9299b">getSSL</a> (const int &amp;fd)</td></tr>
+<tr class="memdesc:ab7ba33b3df79911ecb5b4f824ef9299b inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight">查询和服务端的连接，传入套接字，返回加密的SSL句柄  <br /></td></tr>
+<tr class="separator:ab7ba33b3df79911ecb5b4f824ef9299b inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f0757c97bd7dca76a51468684e1c41c inherit pub_methods_classstt_1_1network_1_1TcpServer" id="r_a0f0757c97bd7dca76a51468684e1c41c"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a0f0757c97bd7dca76a51468684e1c41c">~TcpServer</a> ()</td></tr>
+<tr class="memdesc:a0f0757c97bd7dca76a51468684e1c41c inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classstt_1_1network_1_1TcpServer.html" title="Tcp服务端类">TcpServer</a> 类的析构函数  <br /></td></tr>
+<tr class="separator:a0f0757c97bd7dca76a51468684e1c41c inherit pub_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 额外继承的成员函数</h2></td></tr>
-<tr class="inherit_header pro_attribs_classstt_1_1network_1_1TcpServer"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classstt_1_1network_1_1TcpServer')"><img src="closed.png" alt="-"/>&#160;Protected 属性 继承自 <a class="el" href="classstt_1_1network_1_1TcpServer.html">stt::network::TcpServer</a></td></tr>
-<tr class="memitem:a7fddafbac93c57fa716f9bac06cdbf8f inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">system::MPSCQueue</a>&lt; <a class="el" href="structstt_1_1network_1_1WorkerMessage.html">WorkerMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a7fddafbac93c57fa716f9bac06cdbf8f">finishQueue</a></td></tr>
+<tr class="inherit_header pro_types_classstt_1_1network_1_1TcpServer"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_types_classstt_1_1network_1_1TcpServer')"><img src="closed.png" alt="-"/>&#160;Protected 类型 继承自 <a class="el" href="classstt_1_1network_1_1TcpServer.html">stt::network::TcpServer</a></td></tr>
+<tr class="memitem:a534e4c4723613221fb7742dcbc676c71 inherit pro_types_classstt_1_1network_1_1TcpServer" id="r_a534e4c4723613221fb7742dcbc676c71"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a534e4c4723613221fb7742dcbc676c71">WriteFlushResult</a> { <br />
+&#160;&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a534e4c4723613221fb7742dcbc676c71a8ea1e4c68c45720d9f01e3547de4c0f1">Drained</a>
+, <a class="el" href="classstt_1_1network_1_1TcpServer.html#a534e4c4723613221fb7742dcbc676c71a29a9379fc784b5612333bcf3878fba21">WaitWrite</a>
+, <a class="el" href="classstt_1_1network_1_1TcpServer.html#a534e4c4723613221fb7742dcbc676c71a9e596ea91d8a6334b2f8e7cbb8b5a06c">WaitRead</a>
+, <a class="el" href="classstt_1_1network_1_1TcpServer.html#a534e4c4723613221fb7742dcbc676c71a4d71f6e4d505e2025e99a24491603763">Reschedule</a>
+, <br />
+&#160;&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a534e4c4723613221fb7742dcbc676c71a902b0d55fddef6f8d651fe1035b7d4bd">Error</a>
+<br />
+ }</td></tr>
+<tr class="separator:a534e4c4723613221fb7742dcbc676c71 inherit pro_types_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_classstt_1_1network_1_1TcpServer"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_methods_classstt_1_1network_1_1TcpServer')"><img src="closed.png" alt="-"/>&#160;Protected 成员函数 继承自 <a class="el" href="classstt_1_1network_1_1TcpServer.html">stt::network::TcpServer</a></td></tr>
+<tr class="memitem:a27686c4b32dc6d16171a61665a187fc9 inherit pro_methods_classstt_1_1network_1_1TcpServer" id="r_a27686c4b32dc6d16171a61665a187fc9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a27686c4b32dc6d16171a61665a187fc9">enqueueWrite</a> (const std::shared_ptr&lt; <a class="el" href="structstt_1_1network_1_1ConnectionWriteState.html">ConnectionWriteState</a> &gt; &amp;state, std::string data)</td></tr>
+<tr class="separator:a27686c4b32dc6d16171a61665a187fc9 inherit pro_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeaa7e39221df6adde616e84a73e12d06 inherit pro_methods_classstt_1_1network_1_1TcpServer" id="r_aeaa7e39221df6adde616e84a73e12d06"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aeaa7e39221df6adde616e84a73e12d06">requestQueuedClose</a> (const std::shared_ptr&lt; <a class="el" href="structstt_1_1network_1_1ConnectionWriteState.html">ConnectionWriteState</a> &gt; &amp;state)</td></tr>
+<tr class="separator:aeaa7e39221df6adde616e84a73e12d06 inherit pro_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab4f372c454970162035438b1194cb1d inherit pro_methods_classstt_1_1network_1_1TcpServer" id="r_aab4f372c454970162035438b1194cb1d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aab4f372c454970162035438b1194cb1d">requestCloseAfterFlush</a> (const int &amp;fd, const uint64_t expectedConnection=0)</td></tr>
+<tr class="separator:aab4f372c454970162035438b1194cb1d inherit pro_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd746054f3db21b33d5ac3b575899e37 inherit pro_methods_classstt_1_1network_1_1TcpServer" id="r_abd746054f3db21b33d5ac3b575899e37"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#abd746054f3db21b33d5ac3b575899e37">publishSendReady</a> (const std::shared_ptr&lt; <a class="el" href="structstt_1_1network_1_1ConnectionWriteState.html">ConnectionWriteState</a> &gt; &amp;state)</td></tr>
+<tr class="separator:abd746054f3db21b33d5ac3b575899e37 inherit pro_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39d427c9a7484ebfee32847523ccf558 inherit pro_methods_classstt_1_1network_1_1TcpServer" id="r_a39d427c9a7484ebfee32847523ccf558"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a39d427c9a7484ebfee32847523ccf558">prepareHandler</a> (<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;handler, const int &amp;fd)</td></tr>
+<tr class="separator:a39d427c9a7484ebfee32847523ccf558 inherit pro_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9948f8d2cd59e6590a13bc38ffbfd841 inherit pro_methods_classstt_1_1network_1_1TcpServer" id="r_a9948f8d2cd59e6590a13bc38ffbfd841"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a9948f8d2cd59e6590a13bc38ffbfd841">prepareQueuedHandler</a> (<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;handler, const int &amp;fd)</td></tr>
+<tr class="separator:a9948f8d2cd59e6590a13bc38ffbfd841 inherit pro_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90ec4c653bcffb8d55c04813ebb91081 inherit pro_methods_classstt_1_1network_1_1TcpServer" id="r_a90ec4c653bcffb8d55c04813ebb91081"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a90ec4c653bcffb8d55c04813ebb91081">prepareQueuedHandler</a> (<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a> &amp;handler, const int &amp;fd, const uint64_t expectedConnection)</td></tr>
+<tr class="separator:a90ec4c653bcffb8d55c04813ebb91081 inherit pro_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a322770b699938e4ef33330efdec2a2b8 inherit pro_methods_classstt_1_1network_1_1TcpServer" id="r_a322770b699938e4ef33330efdec2a2b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a534e4c4723613221fb7742dcbc676c71">WriteFlushResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a322770b699938e4ef33330efdec2a2b8">flushConnectionWrites</a> (<a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> &amp;connection)</td></tr>
+<tr class="separator:a322770b699938e4ef33330efdec2a2b8 inherit pro_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a568f29bb1f1fd63369ca488f79b55d80 inherit pro_methods_classstt_1_1network_1_1TcpServer" id="r_a568f29bb1f1fd63369ca488f79b55d80"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a568f29bb1f1fd63369ca488f79b55d80">updateConnectionEvents</a> (const int &amp;epollFD, <a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> &amp;connection, const bool &amp;wantWrite)</td></tr>
+<tr class="separator:a568f29bb1f1fd63369ca488f79b55d80 inherit pro_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe62de2fd6871043146d346fca193393 inherit pro_methods_classstt_1_1network_1_1TcpServer" id="r_afe62de2fd6871043146d346fca193393"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#afe62de2fd6871043146d346fca193393">handleSendReady</a> (const int &amp;epollFD, <a class="el" href="structstt_1_1network_1_1SendReadyMessage.html">SendReadyMessage</a> message)</td></tr>
+<tr class="separator:afe62de2fd6871043146d346fca193393 inherit pro_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af651b877a829e5620d687d405f28331d inherit pro_methods_classstt_1_1network_1_1TcpServer" id="r_af651b877a829e5620d687d405f28331d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#af651b877a829e5620d687d405f28331d">publishWorkerResult</a> (<a class="el" href="structstt_1_1network_1_1WorkerMessage.html">WorkerMessage</a> message)</td></tr>
+<tr class="separator:af651b877a829e5620d687d405f28331d inherit pro_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a953288e74c09ef74eca4d1cd9dfecb6b inherit pro_methods_classstt_1_1network_1_1TcpServer" id="r_a953288e74c09ef74eca4d1cd9dfecb6b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a953288e74c09ef74eca4d1cd9dfecb6b">scheduleBufferedRead</a> (const int &amp;fd, const uint64_t connection)</td></tr>
+<tr class="separator:a953288e74c09ef74eca4d1cd9dfecb6b inherit pro_methods_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classstt_1_1network_1_1TcpServer"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_attribs_classstt_1_1network_1_1TcpServer')"><img src="closed.png" alt="-"/>&#160;Protected 属性 继承自 <a class="el" href="classstt_1_1network_1_1TcpServer.html">stt::network::TcpServer</a></td></tr>
+<tr class="memitem:a7fddafbac93c57fa716f9bac06cdbf8f inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a7fddafbac93c57fa716f9bac06cdbf8f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">system::MPSCQueue</a>&lt; <a class="el" href="structstt_1_1network_1_1WorkerMessage.html">WorkerMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a7fddafbac93c57fa716f9bac06cdbf8f">finishQueue</a></td></tr>
 <tr class="separator:a7fddafbac93c57fa716f9bac06cdbf8f inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28af55077bc4d25649c42e6d4ffb9407 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstt_1_1system_1_1WorkerPool.html">stt::system::WorkerPool</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a28af55077bc4d25649c42e6d4ffb9407">workpool</a></td></tr>
+<tr class="memitem:a80fa10fe0ebdd758ca45ade9573db200 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a80fa10fe0ebdd758ca45ade9573db200"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">system::MPSCQueue</a>&lt; <a class="el" href="structstt_1_1network_1_1SendReadyMessage.html">SendReadyMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a80fa10fe0ebdd758ca45ade9573db200">sendReadyQueue</a></td></tr>
+<tr class="separator:a80fa10fe0ebdd758ca45ade9573db200 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28af55077bc4d25649c42e6d4ffb9407 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a28af55077bc4d25649c42e6d4ffb9407"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstt_1_1system_1_1WorkerPool.html">stt::system::WorkerPool</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a28af55077bc4d25649c42e6d4ffb9407">workpool</a> =nullptr</td></tr>
 <tr class="separator:a28af55077bc4d25649c42e6d4ffb9407 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8eeec7357b1de9f9a6a59a4a540c989b inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a></td></tr>
+<tr class="memitem:a8eeec7357b1de9f9a6a59a4a540c989b inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a8eeec7357b1de9f9a6a59a4a540c989b"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a8eeec7357b1de9f9a6a59a4a540c989b">buffer_size</a></td></tr>
 <tr class="separator:a8eeec7357b1de9f9a6a59a4a540c989b inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71937d40d41663b3993e626b95a73ec1 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">unsigned long long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a71937d40d41663b3993e626b95a73ec1">maxFD</a></td></tr>
+<tr class="memitem:a71937d40d41663b3993e626b95a73ec1 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a71937d40d41663b3993e626b95a73ec1"><td class="memItemLeft" align="right" valign="top">unsigned long long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a71937d40d41663b3993e626b95a73ec1">maxFD</a></td></tr>
 <tr class="separator:a71937d40d41663b3993e626b95a73ec1 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a879f386e01460ecd71f70ea13a725019 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html">security::ConnectionLimiter</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a879f386e01460ecd71f70ea13a725019">connectionLimiter</a></td></tr>
+<tr class="memitem:a879f386e01460ecd71f70ea13a725019 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a879f386e01460ecd71f70ea13a725019"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html">security::ConnectionLimiter</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a879f386e01460ecd71f70ea13a725019">connectionLimiter</a></td></tr>
 <tr class="separator:a879f386e01460ecd71f70ea13a725019 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab1f8c4b62b611e6557e9e52f35e8e082 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ab1f8c4b62b611e6557e9e52f35e8e082">clientfd</a></td></tr>
-<tr class="separator:ab1f8c4b62b611e6557e9e52f35e8e082 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb62cf93ae93211e7bbe9f16ed73a802 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#abb62cf93ae93211e7bbe9f16ed73a802">flag1</a> =true</td></tr>
-<tr class="separator:abb62cf93ae93211e7bbe9f16ed73a802 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2bd5da04eb74be110f91ae6ecacc94de inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a2bd5da04eb74be110f91ae6ecacc94de">unblock</a></td></tr>
+<tr class="memitem:a3c0e79a422e5bdec321e029da0bd8c84 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a3c0e79a422e5bdec321e029da0bd8c84"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; int, <a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a3c0e79a422e5bdec321e029da0bd8c84">clientfd</a></td></tr>
+<tr class="separator:a3c0e79a422e5bdec321e029da0bd8c84 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a853f49f3212d6a188ab651d6a7f76208 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a853f49f3212d6a188ab651d6a7f76208"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a853f49f3212d6a188ab651d6a7f76208">flag1</a> {false}</td></tr>
+<tr class="separator:a853f49f3212d6a188ab651d6a7f76208 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bd5da04eb74be110f91ae6ecacc94de inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a2bd5da04eb74be110f91ae6ecacc94de"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a2bd5da04eb74be110f91ae6ecacc94de">unblock</a></td></tr>
 <tr class="separator:a2bd5da04eb74be110f91ae6ecacc94de inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa26712d21ba87595fa4f6b4a108e126b inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">SSL_CTX *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aa26712d21ba87595fa4f6b4a108e126b">ctx</a> =nullptr</td></tr>
+<tr class="memitem:aa26712d21ba87595fa4f6b4a108e126b inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_aa26712d21ba87595fa4f6b4a108e126b"><td class="memItemLeft" align="right" valign="top">SSL_CTX *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aa26712d21ba87595fa4f6b4a108e126b">ctx</a> =nullptr</td></tr>
 <tr class="separator:aa26712d21ba87595fa4f6b4a108e126b inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a295aa6784cd288fdc9448d6b99d2c212 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a295aa6784cd288fdc9448d6b99d2c212">TLS</a> =false</td></tr>
+<tr class="memitem:a295aa6784cd288fdc9448d6b99d2c212 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a295aa6784cd288fdc9448d6b99d2c212"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a295aa6784cd288fdc9448d6b99d2c212">TLS</a> =false</td></tr>
 <tr class="separator:a295aa6784cd288fdc9448d6b99d2c212 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e6cde1deb1473010f4c94ef8bb45693 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a></td></tr>
+<tr class="memitem:a9e6cde1deb1473010f4c94ef8bb45693 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a9e6cde1deb1473010f4c94ef8bb45693"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a9e6cde1deb1473010f4c94ef8bb45693">security_open</a></td></tr>
 <tr class="separator:a9e6cde1deb1473010f4c94ef8bb45693 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef3a14d5e4511150dee675ed1c873756 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aef3a14d5e4511150dee675ed1c873756">workerEventFD</a></td></tr>
+<tr class="memitem:aef3a14d5e4511150dee675ed1c873756 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_aef3a14d5e4511150dee675ed1c873756"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aef3a14d5e4511150dee675ed1c873756">workerEventFD</a> =-1</td></tr>
 <tr class="separator:aef3a14d5e4511150dee675ed1c873756 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9003e1373cc473588c19add76539ac94 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a9003e1373cc473588c19add76539ac94">serverType</a></td></tr>
+<tr class="memitem:a913abddb615efa8c8b9503ae24982b18 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a913abddb615efa8c8b9503ae24982b18"><td class="memItemLeft" align="right" valign="top">std::thread&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a913abddb615efa8c8b9503ae24982b18">reactorThread</a></td></tr>
+<tr class="separator:a913abddb615efa8c8b9503ae24982b18 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1368963145af575cab415c975bda773 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_ad1368963145af575cab415c975bda773"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ad1368963145af575cab415c975bda773">overflowFinishMutex</a></td></tr>
+<tr class="separator:ad1368963145af575cab415c975bda773 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b12a5de142b425ddcee7404616c046e inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a7b12a5de142b425ddcee7404616c046e"><td class="memItemLeft" align="right" valign="top">std::queue&lt; <a class="el" href="structstt_1_1network_1_1WorkerMessage.html">WorkerMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a7b12a5de142b425ddcee7404616c046e">overflowFinishQueue</a></td></tr>
+<tr class="separator:a7b12a5de142b425ddcee7404616c046e inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2c3a0ac282d772ea353d10dfd26d0a5 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_ae2c3a0ac282d772ea353d10dfd26d0a5"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ae2c3a0ac282d772ea353d10dfd26d0a5">overflowSendReadyMutex</a></td></tr>
+<tr class="separator:ae2c3a0ac282d772ea353d10dfd26d0a5 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85a371eb404ee09a68868228c2ca237f inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a85a371eb404ee09a68868228c2ca237f"><td class="memItemLeft" align="right" valign="top">std::queue&lt; <a class="el" href="structstt_1_1network_1_1SendReadyMessage.html">SendReadyMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a85a371eb404ee09a68868228c2ca237f">overflowSendReadyQueue</a></td></tr>
+<tr class="separator:a85a371eb404ee09a68868228c2ca237f inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6168a7471851bc2be78ea3dee2fb1f07 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a6168a7471851bc2be78ea3dee2fb1f07"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a6168a7471851bc2be78ea3dee2fb1f07">writeRegistryMutex</a></td></tr>
+<tr class="separator:a6168a7471851bc2be78ea3dee2fb1f07 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bfe746abb248f6b2015c395f1f5451b inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a1bfe746abb248f6b2015c395f1f5451b"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; int, std::weak_ptr&lt; <a class="el" href="structstt_1_1network_1_1ConnectionWriteState.html">ConnectionWriteState</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a1bfe746abb248f6b2015c395f1f5451b">writeRegistry</a></td></tr>
+<tr class="separator:a1bfe746abb248f6b2015c395f1f5451b inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad41d5b9967942da6e880d97191879a1c inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_ad41d5b9967942da6e880d97191879a1c"><td class="memItemLeft" align="right" valign="top">std::deque&lt; <a class="el" href="structstt_1_1network_1_1SendReadyMessage.html">SendReadyMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ad41d5b9967942da6e880d97191879a1c">bufferedReadQueue</a></td></tr>
+<tr class="separator:ad41d5b9967942da6e880d97191879a1c inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9003e1373cc473588c19add76539ac94 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a9003e1373cc473588c19add76539ac94"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a9003e1373cc473588c19add76539ac94">serverType</a></td></tr>
 <tr class="separator:a9003e1373cc473588c19add76539ac94 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e0c1e70071e7f08a449860bcc3011e8 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a6e0c1e70071e7f08a449860bcc3011e8">connectionSecs</a></td></tr>
+<tr class="memitem:a6e0c1e70071e7f08a449860bcc3011e8 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a6e0c1e70071e7f08a449860bcc3011e8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a6e0c1e70071e7f08a449860bcc3011e8">connectionSecs</a></td></tr>
 <tr class="separator:a6e0c1e70071e7f08a449860bcc3011e8 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60b0ef61057dbda029acef08ed6fed00 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a60b0ef61057dbda029acef08ed6fed00">connectionTimes</a></td></tr>
+<tr class="memitem:a60b0ef61057dbda029acef08ed6fed00 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a60b0ef61057dbda029acef08ed6fed00"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a60b0ef61057dbda029acef08ed6fed00">connectionTimes</a></td></tr>
 <tr class="separator:a60b0ef61057dbda029acef08ed6fed00 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae46831563ecec1dd25306ac3eec78ad inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aae46831563ecec1dd25306ac3eec78ad">requestSecs</a></td></tr>
+<tr class="memitem:aae46831563ecec1dd25306ac3eec78ad inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_aae46831563ecec1dd25306ac3eec78ad"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aae46831563ecec1dd25306ac3eec78ad">requestSecs</a></td></tr>
 <tr class="separator:aae46831563ecec1dd25306ac3eec78ad inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae809e4044a03a89ead5535c42e0d6162 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ae809e4044a03a89ead5535c42e0d6162">requestTimes</a></td></tr>
+<tr class="memitem:ae809e4044a03a89ead5535c42e0d6162 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_ae809e4044a03a89ead5535c42e0d6162"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ae809e4044a03a89ead5535c42e0d6162">requestTimes</a></td></tr>
 <tr class="separator:ae809e4044a03a89ead5535c42e0d6162 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aedc126014068776e3f9cf5da4b14bb81 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a></td></tr>
+<tr class="memitem:aedc126014068776e3f9cf5da4b14bb81 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_aedc126014068776e3f9cf5da4b14bb81"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81">checkFrequency</a></td></tr>
 <tr class="separator:aedc126014068776e3f9cf5da4b14bb81 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a01cf3c8ae704de7b4c035ec9d80990c6 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a01cf3c8ae704de7b4c035ec9d80990c6">connection_obj_fd</a></td></tr>
+<tr class="memitem:a01cf3c8ae704de7b4c035ec9d80990c6 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a01cf3c8ae704de7b4c035ec9d80990c6"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a01cf3c8ae704de7b4c035ec9d80990c6">connection_obj_fd</a></td></tr>
 <tr class="separator:a01cf3c8ae704de7b4c035ec9d80990c6 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3819214cd49b1e61ef66c5f6ee3e775 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_ad3819214cd49b1e61ef66c5f6ee3e775"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ad3819214cd49b1e61ef66c5f6ee3e775">maxPendingWriteBytes</a> =4UL*1024UL*1024UL</td></tr>
+<tr class="separator:ad3819214cd49b1e61ef66c5f6ee3e775 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33d62d56a23557c7826e247875a5894e inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a33d62d56a23557c7826e247875a5894e"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a33d62d56a23557c7826e247875a5894e">writeBudgetPerEvent</a> =256UL*1024UL</td></tr>
+<tr class="separator:a33d62d56a23557c7826e247875a5894e inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad41eb04872794e75452a13f751545c58 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_ad41eb04872794e75452a13f751545c58"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ad41eb04872794e75452a13f751545c58">maxHttpHeaderBytes</a> =64UL*1024UL</td></tr>
+<tr class="separator:ad41eb04872794e75452a13f751545c58 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8cd73c25075afe1c48cb5832cfa8126 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_ab8cd73c25075afe1c48cb5832cfa8126"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ab8cd73c25075afe1c48cb5832cfa8126">metricAcceptedConnections</a> {0}</td></tr>
+<tr class="separator:ab8cd73c25075afe1c48cb5832cfa8126 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1440f50db3582b95d74837141c993034 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a1440f50db3582b95d74837141c993034"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a1440f50db3582b95d74837141c993034">metricActiveConnections</a> {0}</td></tr>
+<tr class="separator:a1440f50db3582b95d74837141c993034 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2218b5976f32c8d04ef5b5c351c99940 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a2218b5976f32c8d04ef5b5c351c99940"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a2218b5976f32c8d04ef5b5c351c99940">metricClosedConnections</a> {0}</td></tr>
+<tr class="separator:a2218b5976f32c8d04ef5b5c351c99940 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf31126c44ed9a2f2711e03c44310d6f inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_adf31126c44ed9a2f2711e03c44310d6f"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#adf31126c44ed9a2f2711e03c44310d6f">metricAcceptErrors</a> {0}</td></tr>
+<tr class="separator:adf31126c44ed9a2f2711e03c44310d6f inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0231ce8ce3da9d5c45c390fe53869b7 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_ad0231ce8ce3da9d5c45c390fe53869b7"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ad0231ce8ce3da9d5c45c390fe53869b7">metricTLSHandshakeFailures</a> {0}</td></tr>
+<tr class="separator:ad0231ce8ce3da9d5c45c390fe53869b7 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad70055646c037c629ca0a58d9c5d7635 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_ad70055646c037c629ca0a58d9c5d7635"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#ad70055646c037c629ca0a58d9c5d7635">metricParsedHttpRequests</a> {0}</td></tr>
+<tr class="separator:ad70055646c037c629ca0a58d9c5d7635 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ed99d0b7517b34937b530cfe9867dcc inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a6ed99d0b7517b34937b530cfe9867dcc"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a6ed99d0b7517b34937b530cfe9867dcc">metricQueuedWriteBytes</a> {0}</td></tr>
+<tr class="separator:a6ed99d0b7517b34937b530cfe9867dcc inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7826399f54e98256ca27693e9269cad0 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a7826399f54e98256ca27693e9269cad0"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a7826399f54e98256ca27693e9269cad0">metricSentBytes</a> {0}</td></tr>
+<tr class="separator:a7826399f54e98256ca27693e9269cad0 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add437e613213aa80e5eab76b8cee6a10 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_add437e613213aa80e5eab76b8cee6a10"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#add437e613213aa80e5eab76b8cee6a10">metricPendingWriteBytes</a> {0}</td></tr>
+<tr class="separator:add437e613213aa80e5eab76b8cee6a10 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83c1156607dae77c6bb97c407859f6b8 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a83c1156607dae77c6bb97c407859f6b8"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a83c1156607dae77c6bb97c407859f6b8">metricWriteOverflows</a> {0}</td></tr>
+<tr class="separator:a83c1156607dae77c6bb97c407859f6b8 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c1cdbd078edb58858277ad7081ae5dd inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a6c1cdbd078edb58858277ad7081ae5dd"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a6c1cdbd078edb58858277ad7081ae5dd">metricWorkerQueueOverflows</a> {0}</td></tr>
+<tr class="separator:a6c1cdbd078edb58858277ad7081ae5dd inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b239fc67fc28094cf398e3e438f46a2 inherit pro_attribs_classstt_1_1network_1_1TcpServer" id="r_a0b239fc67fc28094cf398e3e438f46a2"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html#a0b239fc67fc28094cf398e3e438f46a2">metricSendReadyQueueOverflows</a> {0}</td></tr>
+<tr class="separator:a0b239fc67fc28094cf398e3e438f46a2 inherit pro_attribs_classstt_1_1network_1_1TcpServer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>WebSocketServer服务端操作类 </p>
 </div><h2 class="groupheader">构造及析构函数说明</h2>
-<a class="anchor" id="a725c81385c1a347fbafb4e3e0483ba27"></a>
+<a id="a725c81385c1a347fbafb4e3e0483ba27" name="a725c81385c1a347fbafb4e3e0483ba27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a725c81385c1a347fbafb4e3e0483ba27">&#9670;&#160;</a></span>WebSocketServer()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -279,97 +372,78 @@ Public 成员函数</h2></td></tr>
         <tr>
           <td class="memname">stt::network::WebSocketServer::WebSocketServer </td>
           <td>(</td>
-          <td class="paramtype">const unsigned long long &amp;&#160;</td>
-          <td class="paramname"><em>maxFD</em> = <code>1000000</code>, </td>
+          <td class="paramtype">const unsigned long long &amp;</td>          <td class="paramname"><span class="paramname"><em>maxFD</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1000000</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>buffer_size</em> = <code>256</code>, </td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>buffer_size</em></span><span class="paramdefsep"> = </span><span class="paramdefval">256</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const size_t &amp;&#160;</td>
-          <td class="paramname"><em>finishQueue_cap</em> = <code>65536</code>, </td>
+          <td class="paramtype">const size_t &amp;</td>          <td class="paramname"><span class="paramname"><em>finishQueue_cap</em></span><span class="paramdefsep"> = </span><span class="paramdefval">65536</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const bool &amp;&#160;</td>
-          <td class="paramname"><em>security_open</em> = <code>true</code>, </td>
+          <td class="paramtype">const bool &amp;</td>          <td class="paramname"><span class="paramname"><em>security_open</em></span><span class="paramdefsep"> = </span><span class="paramdefval">true</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>connectionNumLimit</em> = <code>5</code>, </td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>connectionNumLimit</em></span><span class="paramdefsep"> = </span><span class="paramdefval">5</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>connectionSecs</em> = <code>10</code>, </td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>connectionSecs</em></span><span class="paramdefsep"> = </span><span class="paramdefval">10</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>connectionTimes</em> = <code>3</code>, </td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>connectionTimes</em></span><span class="paramdefsep"> = </span><span class="paramdefval">3</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>requestSecs</em> = <code>1</code>, </td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>requestSecs</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>requestTimes</em> = <code>10</code>, </td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>requestTimes</em></span><span class="paramdefsep"> = </span><span class="paramdefval">10</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>checkFrequency</em> = <code>60</code>, </td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>checkFrequency</em></span><span class="paramdefsep"> = </span><span class="paramdefval">60</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>connectionTimeout</em> = <code>120</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>connectionTimeout</em></span><span class="paramdefsep"> = </span><span class="paramdefval">120</span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>构造函数，默认是允许最大1000000个连接，每个连接接收缓冲区最大为256kb，启用安全模块。 </p>
-<pre class="fragment">      @note 打开安全模块会对性能有影响
+<pre class="fragment">      @brief 构造函数，默认是允许最大1000000个连接，每个连接接收缓冲区最大为256kb，启用安全模块。
+      @note 打开安全模块会对性能有影响
       @param maxFD 服务对象的最大接受连接数 默认为1000000
       @param buffer_size 同一个连接允许传输的最大数据量（单位为kb） 默认为256kb
       @param finishQueue_cap Worker 完成队列（Worker → Reactor）的容量，必须为 2 的幂。
 </pre><p>该队列用于承载 worker 线程已完成任务的结果，等待 reactor 线程消费。 这是主数据通路的一部分，对系统吞吐和延迟极其敏感。</p>
 <p>选型原则： finishQueue_cap &gt;= 峰值完成速率(QPS) × reactor 最坏暂停时间</p>
-<p>建议值（经验）：</p>
-<ul>
+<p>建议值（经验）：</p><ul>
 <li>低负载/轻业务： 8192 (~8k)</li>
 <li>常规高并发： 65536 (~64k) 【默认】</li>
 <li>极端突发流量： 131072(~128k)</li>
 </ul>
-<p>队列满时 请求将会丢弃，框架不会阻塞生产者。 </p>
-<dl class="params"><dt>参数</dt><dd>
+<p>队列满时 请求将会丢弃，框架不会阻塞生产者。 </p><dl class="params"><dt>参数</dt><dd>
   <table class="params">
     <tr><td class="paramname">security_open</td><td>true:开启安全模块 false：关闭安全模块 （默认为开启） </td></tr>
     <tr><td class="paramname">connectionNumLimit</td><td>同一个ip连接数目的上限（默认5） </td></tr>
@@ -385,7 +459,9 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ace579b96683cb0986ae91307262e09b5"></a>
+<a id="ace579b96683cb0986ae91307262e09b5" name="ace579b96683cb0986ae91307262e09b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace579b96683cb0986ae91307262e09b5">&#9670;&#160;</a></span>~WebSocketServer()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -395,13 +471,13 @@ Public 成员函数</h2></td></tr>
         <tr>
           <td class="memname">stt::network::WebSocketServer::~WebSocketServer </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -412,25 +488,9 @@ Public 成员函数</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">成员函数说明</h2>
-<a class="anchor" id="a699cd7d80af5ecea26626833ea007a64"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool stt::network::WebSocketServer::close </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<a id="a1a7088b6297b18a37bc1af5740b12b25" name="a1a7088b6297b18a37bc1af5740b12b25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a7088b6297b18a37bc1af5740b12b25">&#9670;&#160;</a></span>close() <span class="overload">[1/2]</span></h2>
 
-<p>关闭监听和所有连接 </p>
-<dl class="section note"><dt>注解</dt><dd>会阻塞直到全部关闭 </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="ad3bbf91532246ce96a5faba5b8cafe1b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -440,88 +500,74 @@ Public 成员函数</h2></td></tr>
         <tr>
           <td class="memname">bool stt::network::WebSocketServer::close </td>
           <td>(</td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>fd</em></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>关闭某个套接字的连接 @ </p>
-<dl class="section note"><dt>注解</dt><dd>多态了TcpServer的close某个套接字 直接掐掉Tcp连接 没有按照websocket协议关闭 </dd></dl>
+<p>关闭监听和所有连接 </p>
+<dl class="section note"><dt>注解</dt><dd>会阻塞直到全部关闭 </dd></dl>
+
+<p>重载 <a class="el" href="classstt_1_1network_1_1TcpServer.html#af80483917d88f808c219c2466f16a779">stt::network::TcpServer</a> .</p>
+
+</div>
+</div>
+<a id="a1f891073719100cb0e6e8b5b43c2bed7" name="a1f891073719100cb0e6e8b5b43c2bed7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f891073719100cb0e6e8b5b43c2bed7">&#9670;&#160;</a></span>close() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool stt::network::WebSocketServer::close </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>fd</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>关闭某个套接字的连接 </p>
+<dl class="section note"><dt>注解</dt><dd>直接关闭底层 TCP 连接；需要协议级关闭握手时使用 <a class="el" href="#add10bbaaac7b118b4ee943f12178876c" title="发送关闭帧关闭对应套接字的 WebSocket 连接（简化方式）">closeFD()</a>。 </dd></dl>
 
 <p>重载 <a class="el" href="classstt_1_1network_1_1TcpServer.html#a4145bfefbbac6e54eaf6e3905adb19bd">stt::network::TcpServer</a> .</p>
 
 </div>
 </div>
-<a class="anchor" id="add10bbaaac7b118b4ee943f12178876c"></a>
+<a id="a386d2fc2754967c41895371f01d0b392" name="a386d2fc2754967c41895371f01d0b392"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a386d2fc2754967c41895371f01d0b392">&#9670;&#160;</a></span>closeFD() <span class="overload">[1/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::network::WebSocketServer::closeFD </td>
           <td>(</td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>fd</em>, </td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>fd</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>closeCodeAndMessage</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>发送关闭帧关闭对应套接字的 WebSocket 连接（简化方式） </p>
-<p>传入套接字fd然后关闭连接 直接传入编码后的关闭 payload，其中前两字节为关闭码（big-endian）， 后续为 UTF-8 编码的关闭原因描述，用于简化调用。</p>
-<dl class="params"><dt>参数</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">fd</td><td>套接字fd </td></tr>
-    <tr><td class="paramname">closeCodeAndMessage</td><td>编码后的关闭帧 payload（2 字节关闭码 + 可选消息） </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>返回</dt><dd>true：关闭成功 false：关闭失败 </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a386d2fc2754967c41895371f01d0b392"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool stt::network::WebSocketServer::closeFD </td>
-          <td>(</td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>fd</em>, </td>
+          <td class="paramtype">const short &amp;</td>          <td class="paramname"><span class="paramname"><em>code</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1000</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const short &amp;&#160;</td>
-          <td class="paramname"><em>code</em> = <code>1000</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>message</em> = <code>&quot;bye&quot;</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>message</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;bye&quot;</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -549,32 +595,58 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a7d4b4dfd861c296a55f13566ef793b37"></a>
+<a id="add10bbaaac7b118b4ee943f12178876c" name="add10bbaaac7b118b4ee943f12178876c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add10bbaaac7b118b4ee943f12178876c">&#9670;&#160;</a></span>closeFD() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool stt::network::WebSocketServer::closeFD </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>fd</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>closeCodeAndMessage</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>发送关闭帧关闭对应套接字的 WebSocket 连接（简化方式） </p>
+<p>传入套接字fd然后关闭连接 直接传入编码后的关闭 payload，其中前两字节为关闭码（big-endian）， 后续为 UTF-8 编码的关闭原因描述，用于简化调用。</p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fd</td><td>套接字fd </td></tr>
+    <tr><td class="paramname">closeCodeAndMessage</td><td>编码后的关闭帧 payload（2 字节关闭码 + 可选消息） </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>true：关闭成功 false：关闭失败 </dd></dl>
+
+</div>
+</div>
+<a id="a7d4b4dfd861c296a55f13566ef793b37" name="a7d4b4dfd861c296a55f13566ef793b37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d4b4dfd861c296a55f13566ef793b37">&#9670;&#160;</a></span>putTask()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void stt::network::WebSocketServer::putTask </td>
           <td>(</td>
-          <td class="paramtype">const std::function&lt; int(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt; &amp;&#160;</td>
-          <td class="paramname"><em>fun</em>, </td>
+          <td class="paramtype">const std::function&lt; int(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>fun</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;&#160;</td>
-          <td class="paramname"><em>k</em>, </td>
+          <td class="paramtype"><a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>k</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;&#160;</td>
-          <td class="paramname"><em>inf</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>inf</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -584,7 +656,7 @@ Public 成员函数</h2></td></tr>
 <dl class="section warning"><dt>警告</dt><dd>可执行对象必须严格按照规定的返回值返回 </dd></dl>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
-    <tr><td class="paramname">fun</td><td>放入工作线程池的可执行对象 -参数：WebSocketServerFDHandler &amp;k - 和客户端连接的套接字的操作对象的引用 <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html" title="保存客户端WS/WSS请求信息的结构体 ">WebSocketFDInformation</a> &amp;inf - 客户端信息，保存数据，处理进度，状态机信息等 -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 1:处理成功 </td></tr>
+    <tr><td class="paramname">fun</td><td>放入工作线程池的可执行对象 -参数：WebSocketServerFDHandler &amp;k - 和客户端连接的套接字的操作对象的引用 <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html" title="保存客户端WS/WSS请求信息的结构体">WebSocketFDInformation</a> &amp;inf - 客户端信息，保存数据，处理进度，状态机信息等 -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 1:处理成功 </td></tr>
     <tr><td class="paramname">k</td><td>和客户端连接的套接字的操作对象的引用 </td></tr>
     <tr><td class="paramname">inf</td><td>客户端信息的引用，保存数据，处理进度，状态机信息等 </td></tr>
   </table>
@@ -594,47 +666,32 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ac41562b17bf8d20764b8ea8f2f5b8fbf"></a>
+<a id="ac41562b17bf8d20764b8ea8f2f5b8fbf" name="ac41562b17bf8d20764b8ea8f2f5b8fbf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac41562b17bf8d20764b8ea8f2f5b8fbf">&#9670;&#160;</a></span>sendMessage() <span class="overload">[1/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::network::WebSocketServer::sendMessage </td>
           <td>(</td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>fd</em>, </td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>fd</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>msg</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>msg</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>type</em> = <code>&quot;0001&quot;</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>type</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;0001&quot;</span>&#160;)</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>发送 WebSocket 消息给某一个客户端 </p>
-<p>根据 WebSocket 协议，封装并发送一条带掩码的数据帧（客户端必须使用掩码）， 支持根据 payload 长度自动选择帧格式：</p>
-<ul>
+<p>根据 WebSocket 协议，封装并提交一条服务端数据帧（服务端帧不使用掩码）， 支持根据 payload 长度自动选择帧格式：</p><ul>
 <li>payload &lt;= 125 字节：使用 1 字节长度</li>
 <li>126 &lt;= payload &lt;= 65535：使用 2 字节扩展长度（附加 126 标记）</li>
 <li>payload &gt; 65535：使用 8 字节扩展长度（附加 127 标记）</li>
@@ -654,39 +711,33 @@ Public 成员函数</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>返回</dt><dd>true 发送成功 </dd>
+<dl class="section return"><dt>返回</dt><dd>true 帧已被该连接的有界发送队列接受。 </dd>
 <dd>
-false 发送失败（可能因连接未建立或发送异常） </dd></dl>
+false 连接无效、代次已变化、类型/控制帧长度无效或队列超过高水位。 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="acbfccb6f684213cab0e01a0ce3ec150b"></a>
+<a id="acbfccb6f684213cab0e01a0ce3ec150b" name="acbfccb6f684213cab0e01a0ce3ec150b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbfccb6f684213cab0e01a0ce3ec150b">&#9670;&#160;</a></span>sendMessage() <span class="overload">[2/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void stt::network::WebSocketServer::sendMessage </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>msg</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>msg</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>type</em> = <code>&quot;0001&quot;</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>type</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;0001&quot;</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>广播发送 WebSocket 消息 </p>
-<p>给全体客户端广播发送消息 根据 WebSocket 协议，封装并发送一条带掩码的数据帧（客户端必须使用掩码）， 支持根据 payload 长度自动选择帧格式：</p>
-<ul>
+<p>给全体客户端广播发送消息 根据 WebSocket 协议，为每个仍有效的连接提交一条不带掩码的服务端帧， 支持根据 payload 长度自动选择帧格式：</p><ul>
 <li>payload &lt;= 125 字节：使用 1 字节长度</li>
 <li>126 &lt;= payload &lt;= 65535：使用 2 字节扩展长度（附加 126 标记）</li>
 <li>payload &gt; 65535：使用 8 字节扩展长度（附加 127 标记）</li>
@@ -699,16 +750,19 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
 <li>"0010" 表示二进制帧（Binary Frame）</li>
 <li>"1000" 表示连接关闭（Close Frame）</li>
 <li>"1001" 表示 Ping 帧</li>
-<li>"1010" 表示 Pong 帧 请根据内部约定使用，默认使用 text（文本帧） </li>
+<li>"1010" 表示 Pong 帧 请根据内部约定使用，默认使用 text（文本帧）</li>
 </ul>
 </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section note"><dt>注解</dt><dd>单个慢客户端超过发送高水位时会被隔离关闭，不会让广播线程直接阻塞在 socket/SSL 写入上。 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a9b127ea1b64b974ac6842bdb22244925"></a>
+<a id="a9b127ea1b64b974ac6842bdb22244925" name="a9b127ea1b64b974ac6842bdb22244925"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b127ea1b64b974ac6842bdb22244925">&#9670;&#160;</a></span>setFunction()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -718,24 +772,17 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
         <tr>
           <td class="memname">void stt::network::WebSocketServer::setFunction </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>key</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>key</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::function&lt; int(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt;&#160;</td>
-          <td class="paramname"><em>fc</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">std::function&lt; int(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt;</td>          <td class="paramname"><span class="paramname"><em>fc</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -746,11 +793,14 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
     <tr><td class="paramname">key</td><td>找到对应回调函数的key </td></tr>
-    <tr><td class="paramname">fc</td><td>一个函数或函数对象，用于收到客户端消息后处理逻辑 -参数：WebSocketServerFDHandler &amp;k - 和客户端连接的套接字的操作对象的引用 <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html" title="保存客户端WS/WSS请求信息的结构体 ">WebSocketFDInformation</a> &amp;inf - 客户端信息，保存数据，处理进度，状态机信息等 -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 0:处理流程已经扔入工作线程池，需要等待处理完成 1:处理成功 <div class="fragment"><div class="line">s-&gt;setFunction(<span class="stringliteral">&quot;ping&quot;</span>,[](WebSocketServerFDHandler &amp;k,WebSocketFDInformation &amp;inf)-&gt;<span class="keywordtype">int</span></div>
+    <tr><td class="paramname">fc</td><td>一个函数或函数对象，用于收到客户端消息后处理逻辑 -参数：WebSocketServerFDHandler &amp;k - 和客户端连接的套接字的操作对象的引用 <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html" title="保存客户端WS/WSS请求信息的结构体">WebSocketFDInformation</a> &amp;inf - 客户端信息，保存数据，处理进度，状态机信息等 -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 0:处理流程已经扔入工作线程池，需要等待处理完成 1:处理成功 <div class="fragment"><div class="line">s-&gt;setFunction(<span class="stringliteral">&quot;ping&quot;</span>,[](<a class="code hl_class" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k,<a class="code hl_struct" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)-&gt;<span class="keywordtype">int</span></div>
 <div class="line">         {</div>
-<div class="line">             k.sendMessage(<span class="stringliteral">&quot;pong&quot;</span>);</div>
+<div class="line">             k.<a class="code hl_function" href="classstt_1_1network_1_1WebSocketServerFDHandler.html#a2b6442cd9ac75a81063030a3c1bd7724">sendMessage</a>(<span class="stringliteral">&quot;pong&quot;</span>);</div>
 <div class="line">             <span class="keywordflow">return</span> 1;</div>
 <div class="line">         });</div>
+<div class="ttc" id="aclassstt_1_1network_1_1WebSocketServerFDHandler_html"><div class="ttname"><a href="classstt_1_1network_1_1WebSocketServerFDHandler.html">stt::network::WebSocketServerFDHandler</a></div><div class="ttdoc">WebSocket协议的操作类 仅传入套接字，然后使用这个类进行WebSocket的操作</div><div class="ttdef"><b>定义</b> sttnet.h:3887</div></div>
+<div class="ttc" id="aclassstt_1_1network_1_1WebSocketServerFDHandler_html_a2b6442cd9ac75a81063030a3c1bd7724"><div class="ttname"><a href="classstt_1_1network_1_1WebSocketServerFDHandler.html#a2b6442cd9ac75a81063030a3c1bd7724">stt::network::WebSocketServerFDHandler::sendMessage</a></div><div class="ttdeci">bool sendMessage(const std::string &amp;msg, const std::string &amp;type=&quot;0001&quot;)</div><div class="ttdoc">发送一条websocket信息</div></div>
+<div class="ttc" id="astructstt_1_1network_1_1WebSocketFDInformation_html"><div class="ttname"><a href="structstt_1_1network_1_1WebSocketFDInformation.html">stt::network::WebSocketFDInformation</a></div><div class="ttdoc">保存客户端WS/WSS请求信息的结构体</div><div class="ttdef"><b>定义</b> sttnet.h:3132</div></div>
 </div><!-- fragment --> </td></tr>
   </table>
   </dd>
@@ -758,7 +808,9 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a5f0e3b4118963cec723118d3c0f4cc63"></a>
+<a id="a5f0e3b4118963cec723118d3c0f4cc63" name="a5f0e3b4118963cec723118d3c0f4cc63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f0e3b4118963cec723118d3c0f4cc63">&#9670;&#160;</a></span>setGetKeyFunction()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -768,14 +820,13 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
         <tr>
           <td class="memname">void stt::network::WebSocketServer::setGetKeyFunction </td>
           <td>(</td>
-          <td class="paramtype">std::function&lt; int(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt;&#160;</td>
-          <td class="paramname"><em>parseKeyFun</em></td><td>)</td>
+          <td class="paramtype">std::function&lt; int(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt;</td>          <td class="paramname"><span class="paramname"><em>parseKeyFun</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -785,11 +836,13 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
 <dl class="section warning"><dt>警告</dt><dd>可执行对象必须严格按照规定的返回值返回 </dd></dl>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
-    <tr><td class="paramname">parseKeyFun</td><td>解析key的回调函数 -参数：WebSocketServerFDHandler &amp;k - 和客户端连接的套接字的操作对象的引用 <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html" title="保存客户端WS/WSS请求信息的结构体 ">WebSocketFDInformation</a> &amp;inf - 客户端信息，保存数据，处理进度，状态机信息等 -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 0:处理流程已经扔入工作线程池，需要等待处理完成 1:处理成功 <div class="fragment"><div class="line">s-&gt;setGetKeyFunction([](WebSocketServerFDHandler &amp;k,WebSocketFDInformation &amp;inf)-&gt;<span class="keywordtype">int</span></div>
+    <tr><td class="paramname">parseKeyFun</td><td>解析key的回调函数 -参数：WebSocketServerFDHandler &amp;k - 和客户端连接的套接字的操作对象的引用 <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html" title="保存客户端WS/WSS请求信息的结构体">WebSocketFDInformation</a> &amp;inf - 客户端信息，保存数据，处理进度，状态机信息等 -返回值：-2:处理失败并且需要关闭连接 -1:处理失败但不需要关闭连接 0:处理流程已经扔入工作线程池，需要等待处理完成 1:处理成功 <div class="fragment"><div class="line">s-&gt;setGetKeyFunction([](<a class="code hl_class" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k,<a class="code hl_struct" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)-&gt;<span class="keywordtype">int</span></div>
 <div class="line">         {</div>
-<div class="line">             inf.ctx[<span class="stringliteral">&quot;key&quot;</span>]=inf.message;</div>
+<div class="line">             inf.<a class="code hl_variable" href="structstt_1_1network_1_1WebSocketFDInformation.html#a108c4ec8de1ad8882c390522656abaaa">ctx</a>[<span class="stringliteral">&quot;key&quot;</span>]=inf.<a class="code hl_variable" href="structstt_1_1network_1_1WebSocketFDInformation.html#af531c538a773d596dfce63037f1e6985">message</a>;</div>
 <div class="line">             <span class="keywordflow">return</span> 1;</div>
 <div class="line">         });</div>
+<div class="ttc" id="astructstt_1_1network_1_1WebSocketFDInformation_html_a108c4ec8de1ad8882c390522656abaaa"><div class="ttname"><a href="structstt_1_1network_1_1WebSocketFDInformation.html#a108c4ec8de1ad8882c390522656abaaa">stt::network::WebSocketFDInformation::ctx</a></div><div class="ttdeci">std::unordered_map&lt; std::string, std::any &gt; ctx</div><div class="ttdoc">所需的数据仓库</div><div class="ttdef"><b>定义</b> sttnet.h:3192</div></div>
+<div class="ttc" id="astructstt_1_1network_1_1WebSocketFDInformation_html_af531c538a773d596dfce63037f1e6985"><div class="ttname"><a href="structstt_1_1network_1_1WebSocketFDInformation.html#af531c538a773d596dfce63037f1e6985">stt::network::WebSocketFDInformation::message</a></div><div class="ttdeci">std::string message</div><div class="ttdoc">消息</div><div class="ttdef"><b>定义</b> sttnet.h:3176</div></div>
 </div><!-- fragment --> </td></tr>
   </table>
   </dd>
@@ -797,7 +850,9 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a1aa57d1c724c6fca6fa35a9dda19a9cf"></a>
+<a id="a1aa57d1c724c6fca6fa35a9dda19a9cf" name="a1aa57d1c724c6fca6fa35a9dda19a9cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1aa57d1c724c6fca6fa35a9dda19a9cf">&#9670;&#160;</a></span>setGlobalSolveFunction()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -807,14 +862,13 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
         <tr>
           <td class="memname">void stt::network::WebSocketServer::setGlobalSolveFunction </td>
           <td>(</td>
-          <td class="paramtype">std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt;&#160;</td>
-          <td class="paramname"><em>fc</em></td><td>)</td>
+          <td class="paramtype">std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt;</td>          <td class="paramname"><span class="paramname"><em>fc</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -824,14 +878,16 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
     <tr><td class="paramname">key</td><td>找到对应回调函数的key </td></tr>
-    <tr><td class="paramname">fc</td><td>一个函数或函数对象，用于收到客户端消息后处理逻辑 -参数：WebSocketServerFDHandler &amp;k - 和客户端连接的套接字的操作对象的引用 <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html" title="保存客户端WS/WSS请求信息的结构体 ">WebSocketFDInformation</a> &amp;inf - 客户端信息，保存数据，处理进度，状态机信息等 -返回值：true：处理成功 false：处理失败 会关闭连接 </td></tr>
+    <tr><td class="paramname">fc</td><td>一个函数或函数对象，用于收到客户端消息后处理逻辑 -参数：WebSocketServerFDHandler &amp;k - 和客户端连接的套接字的操作对象的引用 <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html" title="保存客户端WS/WSS请求信息的结构体">WebSocketFDInformation</a> &amp;inf - 客户端信息，保存数据，处理进度，状态机信息等 -返回值：true：处理成功 false：处理失败 会关闭连接 </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a class="anchor" id="aeefa2a2130748dd40632a43c57e6aece"></a>
+<a id="aeefa2a2130748dd40632a43c57e6aece" name="aeefa2a2130748dd40632a43c57e6aece"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeefa2a2130748dd40632a43c57e6aece">&#9670;&#160;</a></span>setHBTimeOutTime()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -841,14 +897,13 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
         <tr>
           <td class="memname">void stt::network::WebSocketServer::setHBTimeOutTime </td>
           <td>(</td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>secb</em></td><td>)</td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>secb</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -864,7 +919,9 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a8db5e5143e41cb11029680e6f271707f"></a>
+<a id="a8db5e5143e41cb11029680e6f271707f" name="a8db5e5143e41cb11029680e6f271707f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8db5e5143e41cb11029680e6f271707f">&#9670;&#160;</a></span>setJudgeFunction()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -874,14 +931,13 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
         <tr>
           <td class="memname">void stt::network::WebSocketServer::setJudgeFunction </td>
           <td>(</td>
-          <td class="paramtype">std::function&lt; bool(<a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;k)&gt;&#160;</td>
-          <td class="paramname"><em>fcc</em></td><td>)</td>
+          <td class="paramtype">std::function&lt; bool(<a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;k)&gt;</td>          <td class="paramname"><span class="paramname"><em>fcc</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -889,7 +945,7 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
 <p>设置websocket握手阶段的检查函数，只有检查通过才执行后续握手 注册一个回调函数 </p>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
-    <tr><td class="paramname">fc</td><td>一个函数或函数对象，websocket连接成功后就执行 -参数：const <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html" title="保存客户端WS/WSS请求信息的结构体 ">WebSocketFDInformation</a> &amp;inf - Websocket服务端的信息 -返回值 ： true：检查通过 false：检查不通过 </td></tr>
+    <tr><td class="paramname">fc</td><td>一个函数或函数对象，websocket连接成功后就执行 -参数：const <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html" title="保存客户端WS/WSS请求信息的结构体">WebSocketFDInformation</a> &amp;inf - Websocket服务端的信息 -返回值 ： true：检查通过 false：检查不通过 </td></tr>
   </table>
   </dd>
 </dl>
@@ -899,7 +955,9 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a40e0bd0aa58b814e881d7a73f3cca331"></a>
+<a id="a40e0bd0aa58b814e881d7a73f3cca331" name="a40e0bd0aa58b814e881d7a73f3cca331"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40e0bd0aa58b814e881d7a73f3cca331">&#9670;&#160;</a></span>setSecuritySendBackFun()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -909,14 +967,13 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
         <tr>
           <td class="memname">void stt::network::WebSocketServer::setSecuritySendBackFun </td>
           <td>(</td>
-          <td class="paramtype">std::function&lt; void(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt;&#160;</td>
-          <td class="paramname"><em>fc</em></td><td>)</td>
+          <td class="paramtype">std::function&lt; void(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt;</td>          <td class="paramname"><span class="paramname"><em>fc</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -926,14 +983,16 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
     <tr><td class="paramname">key</td><td>找到对应回调函数的key </td></tr>
-    <tr><td class="paramname">fc</td><td>一个函数或函数对象，用于收到客户端消息后处理逻辑 -参数：WebSocketServerFDHandler &amp;k - 和客户端连接的套接字的操作对象的引用 <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html" title="保存客户端WS/WSS请求信息的结构体 ">WebSocketFDInformation</a> &amp;inf - 客户端信息，保存数据，处理进度，状态机信息等 -返回值：true：处理成功 false：处理失败 会关闭连接 </td></tr>
+    <tr><td class="paramname">fc</td><td>一个函数或函数对象，用于收到客户端消息后处理逻辑 -参数：WebSocketServerFDHandler &amp;k - 和客户端连接的套接字的操作对象的引用 <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html" title="保存客户端WS/WSS请求信息的结构体">WebSocketFDInformation</a> &amp;inf - 客户端信息，保存数据，处理进度，状态机信息等 -返回值：true：处理成功 false：处理失败 会关闭连接 </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a class="anchor" id="abcfe3809d2fa4a22028e2cf59aa193e0"></a>
+<a id="abcfe3809d2fa4a22028e2cf59aa193e0" name="abcfe3809d2fa4a22028e2cf59aa193e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abcfe3809d2fa4a22028e2cf59aa193e0">&#9670;&#160;</a></span>setStartFunction()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -943,14 +1002,13 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
         <tr>
           <td class="memname">void stt::network::WebSocketServer::setStartFunction </td>
           <td>(</td>
-          <td class="paramtype">std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt;&#160;</td>
-          <td class="paramname"><em>fccc</em></td><td>)</td>
+          <td class="paramtype">std::function&lt; bool(<a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;k, <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;inf)&gt;</td>          <td class="paramname"><span class="paramname"><em>fccc</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -958,7 +1016,7 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
 <p>设置websocket连接成功后就执行的回调函数 注册一个回调函数 </p>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
-    <tr><td class="paramname">fc</td><td>一个函数或函数对象，websocket连接成功后就执行 -参数：const <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html" title="保存客户端WS/WSS请求信息的结构体 ">WebSocketFDInformation</a> &amp;inf - Websocket服务端的信息 <a class="el" href="classstt_1_1network_1_1WebSocketServer.html" title="WebSocketServer服务端操作类 ">WebSocketServer</a> &amp;k - 服务端对象的引用 </td></tr>
+    <tr><td class="paramname">fc</td><td>一个函数或函数对象，websocket连接成功后就执行 -参数：const <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html" title="保存客户端WS/WSS请求信息的结构体">WebSocketFDInformation</a> &amp;inf - Websocket服务端的信息 <a class="el" href="classstt_1_1network_1_1WebSocketServer.html" title="WebSocketServer服务端操作类">WebSocketServer</a> &amp;k - 服务端对象的引用 </td></tr>
   </table>
   </dd>
 </dl>
@@ -966,7 +1024,9 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a08093193cfbd3e08756d1c3c494baf76"></a>
+<a id="a08093193cfbd3e08756d1c3c494baf76" name="a08093193cfbd3e08756d1c3c494baf76"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08093193cfbd3e08756d1c3c494baf76">&#9670;&#160;</a></span>setTimeOutTime()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -976,14 +1036,13 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
         <tr>
           <td class="memname">void stt::network::WebSocketServer::setTimeOutTime </td>
           <td>(</td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>seca</em></td><td>)</td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>seca</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -998,7 +1057,9 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="ab2301633d489c53792226bfe39d06d55"></a>
+<a id="ab2301633d489c53792226bfe39d06d55" name="ab2301633d489c53792226bfe39d06d55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2301633d489c53792226bfe39d06d55">&#9670;&#160;</a></span>startListen()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1008,24 +1069,17 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
         <tr>
           <td class="memname">bool stt::network::WebSocketServer::startListen </td>
           <td>(</td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>port</em>, </td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>port</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>threads</em> = <code>8</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>threads</em></span><span class="paramdefsep"> = </span><span class="paramdefval">8</span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1048,9 +1102,8 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-制作者 &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.5
+制作者&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
 </small></address>
+</div><!-- doc-content -->
 </body>
 </html>

@@ -1,18 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.5"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>STTNet: stt::time::DateTime类 参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() { searchBox.OnSelectItem(0); });
-</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -20,9 +23,9 @@
 <div id="titlearea">
 <table cellspacing="0" cellpadding="0">
  <tbody>
- <tr style="height: 56px;">
-  <td style="padding-left: 0.5em;">
-   <div id="projectname">STTNet
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
    </div>
   </td>
  </tr>
@@ -30,55 +33,52 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.5 -->
+<!-- 制作者 Doxygen 1.13.2 -->
 <script type="text/javascript">
-var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
 </script>
-  <div id="navrow1" class="tabs">
-    <ul class="tablist">
-      <li><a href="index.html"><span>首页</span></a></li>
-      <li><a href="pages.html"><span>相关页面</span></a></li>
-      <li><a href="namespaces.html"><span>命名空间</span></a></li>
-      <li class="current"><a href="annotated.html"><span>类</span></a></li>
-      <li><a href="files.html"><span>文件</span></a></li>
-      <li>
-        <div id="MSearchBox" class="MSearchBoxInactive">
-        <span class="left">
-          <img id="MSearchSelect" src="search/mag_sel.png"
-               onmouseover="return searchBox.OnSearchSelectShow()"
-               onmouseout="return searchBox.OnSearchSelectHide()"
-               alt=""/>
-          <input type="text" id="MSearchField" value="搜索" accesskey="S"
-               onfocus="searchBox.OnSearchFieldFocus(true)" 
-               onblur="searchBox.OnSearchFieldFocus(false)" 
-               onkeyup="searchBox.OnSearchFieldChange(event)"/>
-          </span><span class="right">
-            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
-          </span>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div id="navrow2" class="tabs2">
-    <ul class="tablist">
-      <li><a href="annotated.html"><span>类列表</span></a></li>
-      <li><a href="classes.html"><span>类索引</span></a></li>
-      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
-      <li><a href="functions.html"><span>类成员</span></a></li>
-    </ul>
-  </div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索',false);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){ initResizable(false); });
+/* @license-end */
+</script>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>枚举</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>枚举值</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>页</a></div>
+</div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
-        name="MSearchResults" id="MSearchResults">
-</iframe>
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
 </div>
 
 <div id="nav-path" class="navpath">
@@ -86,18 +86,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <li class="navelem"><a class="el" href="namespacestt.html">stt</a></li><li class="navelem"><a class="el" href="namespacestt_1_1time.html">time</a></li><li class="navelem"><a class="el" href="classstt_1_1time_1_1DateTime.html">DateTime</a></li>  </ul>
 </div>
 </div><!-- top -->
+<div id="doc-content">
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public 成员函数</a> &#124;
 <a href="#pub-static-methods">静态 Public 成员函数</a> &#124;
 <a href="classstt_1_1time_1_1DateTime-members.html">所有成员列表</a>  </div>
-  <div class="headertitle">
-<div class="title">stt::time::DateTime类 参考</div>  </div>
+  <div class="headertitle"><div class="title">stt::time::DateTime类 参考</div></div>
 </div><!--header-->
 <div class="contents">
 
 <p>时间操作、运算、计时的类  
- <a href="classstt_1_1time_1_1DateTime.html#details">更多...</a></p>
+ <a href="#details">更多...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -106,53 +106,54 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
  <div class="center">
   <img src="classstt_1_1time_1_1DateTime.png" usemap="#stt::time::DateTime_map" alt=""/>
   <map id="stt::time::DateTime_map" name="stt::time::DateTime_map">
-<area href="classstt_1_1file_1_1LogFile.html" title="日志文件操作类 " alt="stt::file::LogFile" shape="rect" coords="0,56,110,80"/>
-</map>
- </div></div>
+<area href="classstt_1_1file_1_1LogFile.html" title="日志文件操作类" alt="stt::file::LogFile" shape="rect" coords="0,56,110,80"/>
+  </map>
+</div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public 成员函数</h2></td></tr>
-<tr class="memitem:a1237839d2175024e4432c1ba018c7fa5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1time_1_1DateTime.html#a1237839d2175024e4432c1ba018c7fa5">startTiming</a> ()</td></tr>
-<tr class="memdesc:a1237839d2175024e4432c1ba018c7fa5"><td class="mdescLeft">&#160;</td><td class="mdescRight">开始计时  <a href="#a1237839d2175024e4432c1ba018c7fa5">更多...</a><br/></td></tr>
+<tr class="memitem:a1237839d2175024e4432c1ba018c7fa5" id="r_a1237839d2175024e4432c1ba018c7fa5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1237839d2175024e4432c1ba018c7fa5">startTiming</a> ()</td></tr>
+<tr class="memdesc:a1237839d2175024e4432c1ba018c7fa5"><td class="mdescLeft">&#160;</td><td class="mdescRight">开始计时  <br /></td></tr>
 <tr class="separator:a1237839d2175024e4432c1ba018c7fa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acdadf79edeb9988632c7712f3ef767dd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1time_1_1DateTime.html#acdadf79edeb9988632c7712f3ef767dd">checkTime</a> ()</td></tr>
-<tr class="memdesc:acdadf79edeb9988632c7712f3ef767dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">计时过程中检查时间  <a href="#acdadf79edeb9988632c7712f3ef767dd">更多...</a><br/></td></tr>
+<tr class="memitem:acdadf79edeb9988632c7712f3ef767dd" id="r_acdadf79edeb9988632c7712f3ef767dd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acdadf79edeb9988632c7712f3ef767dd">checkTime</a> ()</td></tr>
+<tr class="memdesc:acdadf79edeb9988632c7712f3ef767dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">计时过程中检查时间  <br /></td></tr>
 <tr class="separator:acdadf79edeb9988632c7712f3ef767dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa856a002cda3dd72ff99760b5aac5a82"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1time_1_1DateTime.html#aa856a002cda3dd72ff99760b5aac5a82">endTiming</a> ()</td></tr>
-<tr class="memdesc:aa856a002cda3dd72ff99760b5aac5a82"><td class="mdescLeft">&#160;</td><td class="mdescRight">停止计时  <a href="#aa856a002cda3dd72ff99760b5aac5a82">更多...</a><br/></td></tr>
+<tr class="memitem:aa856a002cda3dd72ff99760b5aac5a82" id="r_aa856a002cda3dd72ff99760b5aac5a82"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa856a002cda3dd72ff99760b5aac5a82">endTiming</a> ()</td></tr>
+<tr class="memdesc:aa856a002cda3dd72ff99760b5aac5a82"><td class="mdescLeft">&#160;</td><td class="mdescRight">停止计时  <br /></td></tr>
 <tr class="separator:aa856a002cda3dd72ff99760b5aac5a82"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46368d0605ff343aab7e11abbbd34383"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1time_1_1DateTime.html#a46368d0605ff343aab7e11abbbd34383">getDt</a> ()</td></tr>
-<tr class="memdesc:a46368d0605ff343aab7e11abbbd34383"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取上一次计时的时间  <a href="#a46368d0605ff343aab7e11abbbd34383">更多...</a><br/></td></tr>
+<tr class="memitem:a46368d0605ff343aab7e11abbbd34383" id="r_a46368d0605ff343aab7e11abbbd34383"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a46368d0605ff343aab7e11abbbd34383">getDt</a> ()</td></tr>
+<tr class="memdesc:a46368d0605ff343aab7e11abbbd34383"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取上一次计时的时间  <br /></td></tr>
 <tr class="separator:a46368d0605ff343aab7e11abbbd34383"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a551139c669e08ab23f2cec614be7e09e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1time_1_1DateTime.html#a551139c669e08ab23f2cec614be7e09e">isStart</a> ()</td></tr>
-<tr class="memdesc:a551139c669e08ab23f2cec614be7e09e"><td class="mdescLeft">&#160;</td><td class="mdescRight">返回本对象计时状态  <a href="#a551139c669e08ab23f2cec614be7e09e">更多...</a><br/></td></tr>
+<tr class="memitem:a551139c669e08ab23f2cec614be7e09e" id="r_a551139c669e08ab23f2cec614be7e09e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a551139c669e08ab23f2cec614be7e09e">isStart</a> ()</td></tr>
+<tr class="memdesc:a551139c669e08ab23f2cec614be7e09e"><td class="mdescLeft">&#160;</td><td class="mdescRight">返回本对象计时状态  <br /></td></tr>
 <tr class="separator:a551139c669e08ab23f2cec614be7e09e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 静态 Public 成员函数</h2></td></tr>
-<tr class="memitem:ab5d77adef08847aba04f11e9731c013d"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1time_1_1DateTime.html#ab5d77adef08847aba04f11e9731c013d">getTime</a> (std::string &amp;timeStr, const std::string &amp;format=<a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a>)</td></tr>
-<tr class="memdesc:ab5d77adef08847aba04f11e9731c013d"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取当前时间  <a href="#ab5d77adef08847aba04f11e9731c013d">更多...</a><br/></td></tr>
-<tr class="separator:ab5d77adef08847aba04f11e9731c013d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c6c3265b615781fe303239ada58527d"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1time_1_1DateTime.html#a0c6c3265b615781fe303239ada58527d">convertFormat</a> (std::string &amp;timeStr, const std::string &amp;oldFormat, const std::string &amp;newFormat=<a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a>)</td></tr>
-<tr class="memdesc:a0c6c3265b615781fe303239ada58527d"><td class="mdescLeft">&#160;</td><td class="mdescRight">转化时间字符串的格式  <a href="#a0c6c3265b615781fe303239ada58527d">更多...</a><br/></td></tr>
+<tr class="memitem:a24c982c8ebc1521ddce634e6490f2e70" id="r_a24c982c8ebc1521ddce634e6490f2e70"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24c982c8ebc1521ddce634e6490f2e70">getTime</a> (std::string &amp;timeStr, const std::string &amp;format=<a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a>)</td></tr>
+<tr class="memdesc:a24c982c8ebc1521ddce634e6490f2e70"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取当前时间  <br /></td></tr>
+<tr class="separator:a24c982c8ebc1521ddce634e6490f2e70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c6c3265b615781fe303239ada58527d" id="r_a0c6c3265b615781fe303239ada58527d"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0c6c3265b615781fe303239ada58527d">convertFormat</a> (std::string &amp;timeStr, const std::string &amp;oldFormat, const std::string &amp;newFormat=<a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a>)</td></tr>
+<tr class="memdesc:a0c6c3265b615781fe303239ada58527d"><td class="mdescLeft">&#160;</td><td class="mdescRight">转化时间字符串的格式  <br /></td></tr>
 <tr class="separator:a0c6c3265b615781fe303239ada58527d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab18f902985b0bfff310b71090f43fa86"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1time_1_1DateTime.html#ab18f902985b0bfff310b71090f43fa86">calculateTime</a> (const std::string &amp;time1, const std::string &amp;time2, <a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a> &amp;result, const std::string &amp;format1=<a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a>, const std::string &amp;format2=<a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a>)</td></tr>
-<tr class="memdesc:ab18f902985b0bfff310b71090f43fa86"><td class="mdescLeft">&#160;</td><td class="mdescRight">计算两个用字符串表示的时间相减的差值  <a href="#ab18f902985b0bfff310b71090f43fa86">更多...</a><br/></td></tr>
-<tr class="separator:ab18f902985b0bfff310b71090f43fa86"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56be7924d0421a19e2ee23b94b453b5c"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1time_1_1DateTime.html#a56be7924d0421a19e2ee23b94b453b5c">calculateTime</a> (const std::string &amp;time1, const <a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a> &amp;time2, std::string &amp;result, const std::string &amp;am, const std::string &amp;format1=<a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a>, const std::string &amp;format2=<a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a>)</td></tr>
-<tr class="memdesc:a56be7924d0421a19e2ee23b94b453b5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">一个用字符串表示的时间加上或者减去一段时间  <a href="#a56be7924d0421a19e2ee23b94b453b5c">更多...</a><br/></td></tr>
-<tr class="separator:a56be7924d0421a19e2ee23b94b453b5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3a1a08f4d16f0dc334c57f9ccf5e02b"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1time_1_1DateTime.html#ae3a1a08f4d16f0dc334c57f9ccf5e02b">compareTime</a> (const std::string &amp;time1, const std::string &amp;time2, const std::string &amp;format1=<a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a>, const std::string &amp;format2=<a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a>)</td></tr>
-<tr class="memdesc:ae3a1a08f4d16f0dc334c57f9ccf5e02b"><td class="mdescLeft">&#160;</td><td class="mdescRight">比较两个时间字符串表示的时间的大小  <a href="#ae3a1a08f4d16f0dc334c57f9ccf5e02b">更多...</a><br/></td></tr>
+<tr class="memitem:a0af9e54b4e7571eee20bd2f71092be5d" id="r_a0af9e54b4e7571eee20bd2f71092be5d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0af9e54b4e7571eee20bd2f71092be5d">calculateTime</a> (const std::string &amp;time1, const std::string &amp;time2, <a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a> &amp;result, const std::string &amp;format1=<a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a>, const std::string &amp;format2=<a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a>)</td></tr>
+<tr class="memdesc:a0af9e54b4e7571eee20bd2f71092be5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">计算两个用字符串表示的时间相减的差值  <br /></td></tr>
+<tr class="separator:a0af9e54b4e7571eee20bd2f71092be5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60118fa9d07f748c9f95aed1f053c4dc" id="r_a60118fa9d07f748c9f95aed1f053c4dc"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a60118fa9d07f748c9f95aed1f053c4dc">calculateTime</a> (const std::string &amp;time1, const <a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a> &amp;time2, std::string &amp;result, const std::string &amp;am, const std::string &amp;format1=<a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a>, const std::string &amp;format2=<a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a>)</td></tr>
+<tr class="memdesc:a60118fa9d07f748c9f95aed1f053c4dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">一个用字符串表示的时间加上或者减去一段时间  <br /></td></tr>
+<tr class="separator:a60118fa9d07f748c9f95aed1f053c4dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3a1a08f4d16f0dc334c57f9ccf5e02b" id="r_ae3a1a08f4d16f0dc334c57f9ccf5e02b"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae3a1a08f4d16f0dc334c57f9ccf5e02b">compareTime</a> (const std::string &amp;time1, const std::string &amp;time2, const std::string &amp;format1=<a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a>, const std::string &amp;format2=<a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a>)</td></tr>
+<tr class="memdesc:ae3a1a08f4d16f0dc334c57f9ccf5e02b"><td class="mdescLeft">&#160;</td><td class="mdescRight">比较两个时间字符串表示的时间的大小  <br /></td></tr>
 <tr class="separator:ae3a1a08f4d16f0dc334c57f9ccf5e02b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>时间操作、运算、计时的类 </p>
-<p>精确到毫秒 </p>
-<dl class="section warning"><dt>警告</dt><dd>只有在1970+-292年内的是确保准确的 </dd></dl>
-<dl class="bug"><dt><b><a class="el" href="bug.html#_bug000001">Bug:</a></b></dt><dd>只有1970+-292年内确保准确,待优化 </dd></dl>
+<p>精确到毫秒 </p><dl class="section warning"><dt>警告</dt><dd>只有在1970+-292年内的是确保准确的 </dd></dl>
+<dl class="bug"><dt><b><a class="el" href="bug.html#_bug000001">Bug</a></b></dt><dd>只有1970+-292年内确保准确,待优化 </dd></dl>
 </div><h2 class="groupheader">成员函数说明</h2>
-<a class="anchor" id="ab18f902985b0bfff310b71090f43fa86"></a>
+<a id="a60118fa9d07f748c9f95aed1f053c4dc" name="a60118fa9d07f748c9f95aed1f053c4dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60118fa9d07f748c9f95aed1f053c4dc">&#9670;&#160;</a></span>calculateTime() <span class="overload">[1/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -160,115 +161,39 @@ Public 成员函数</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a>&amp; stt::time::DateTime::calculateTime </td>
+          <td class="memname">static std::string &amp; stt::time::DateTime::calculateTime </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>time1</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>time1</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>time2</em>, </td>
+          <td class="paramtype">const <a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>time2</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a> &amp;&#160;</td>
-          <td class="paramname"><em>result</em>, </td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>result</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>format1</em> = <code><a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a></code>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>am</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>format2</em> = <code><a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a></code>&#160;</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>format1</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a></span>, </td>
         </tr>
         <tr>
+          <td class="paramkey"></td>
           <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>format2</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>计算两个用字符串表示的时间相减的差值 </p>
-<dl class="params"><dt>参数</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">time1</td><td>被减的时间 </td></tr>
-    <tr><td class="paramname">time2</td><td>减去的时间 </td></tr>
-    <tr><td class="paramname">result</td><td>一个接收结果的Duration容器 </td></tr>
-    <tr><td class="paramname">format1</td><td>time1的时间字符串格式 yyyy年 mm月 dd日 hh时 mi分 ss秒 sss毫秒 （默认格式为'yyyy-mm-ddThh:mi:ss',即ISO08086A标准） </td></tr>
-    <tr><td class="paramname">format2</td><td>time2的时间字符串格式 yyyy年 mm月 dd日 hh时 mi分 ss秒 sss毫秒 （默认格式为'yyyy-mm-ddThh:mi:ss',即ISO08086A标准） </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>返回</dt><dd>result的引用 </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a56be7924d0421a19e2ee23b94b453b5c"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static std::string&amp; stt::time::DateTime::calculateTime </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>time1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a> &amp;&#160;</td>
-          <td class="paramname"><em>time2</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>result</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>am</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>format1</em> = <code><a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a></code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>format2</em> = <code><a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -289,14 +214,73 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="acdadf79edeb9988632c7712f3ef767dd"></a>
+<a id="a0af9e54b4e7571eee20bd2f71092be5d" name="a0af9e54b4e7571eee20bd2f71092be5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0af9e54b4e7571eee20bd2f71092be5d">&#9670;&#160;</a></span>calculateTime() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a> &amp; stt::time::DateTime::calculateTime </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>time1</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>time2</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>result</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>format1</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>format2</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>计算两个用字符串表示的时间相减的差值 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time1</td><td>被减的时间 </td></tr>
+    <tr><td class="paramname">time2</td><td>减去的时间 </td></tr>
+    <tr><td class="paramname">result</td><td>一个接收结果的Duration容器 </td></tr>
+    <tr><td class="paramname">format1</td><td>time1的时间字符串格式 yyyy年 mm月 dd日 hh时 mi分 ss秒 sss毫秒 （默认格式为'yyyy-mm-ddThh:mi:ss',即ISO08086A标准） </td></tr>
+    <tr><td class="paramname">format2</td><td>time2的时间字符串格式 yyyy年 mm月 dd日 hh时 mi分 ss秒 sss毫秒 （默认格式为'yyyy-mm-ddThh:mi:ss',即ISO08086A标准） </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>result的引用 </dd></dl>
+
+</div>
+</div>
+<a id="acdadf79edeb9988632c7712f3ef767dd" name="acdadf79edeb9988632c7712f3ef767dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acdadf79edeb9988632c7712f3ef767dd">&#9670;&#160;</a></span>checkTime()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a> stt::time::DateTime::checkTime </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -307,7 +291,9 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae3a1a08f4d16f0dc334c57f9ccf5e02b"></a>
+<a id="ae3a1a08f4d16f0dc334c57f9ccf5e02b" name="ae3a1a08f4d16f0dc334c57f9ccf5e02b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3a1a08f4d16f0dc334c57f9ccf5e02b">&#9670;&#160;</a></span>compareTime()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -317,36 +303,27 @@ Public 成员函数</h2></td></tr>
         <tr>
           <td class="memname">static bool stt::time::DateTime::compareTime </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>time1</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>time1</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>time2</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>time2</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>format1</em> = <code><a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a></code>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>format1</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>format2</em> = <code><a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>format2</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -366,7 +343,9 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a0c6c3265b615781fe303239ada58527d"></a>
+<a id="a0c6c3265b615781fe303239ada58527d" name="a0c6c3265b615781fe303239ada58527d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c6c3265b615781fe303239ada58527d">&#9670;&#160;</a></span>convertFormat()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -376,30 +355,22 @@ Public 成员函数</h2></td></tr>
         <tr>
           <td class="memname">static bool stt::time::DateTime::convertFormat </td>
           <td>(</td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>timeStr</em>, </td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>timeStr</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>oldFormat</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>oldFormat</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>newFormat</em> = <code><a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>newFormat</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -418,14 +389,16 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aa856a002cda3dd72ff99760b5aac5a82"></a>
+<a id="aa856a002cda3dd72ff99760b5aac5a82" name="aa856a002cda3dd72ff99760b5aac5a82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa856a002cda3dd72ff99760b5aac5a82">&#9670;&#160;</a></span>endTiming()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a> stt::time::DateTime::endTiming </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -437,7 +410,9 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a46368d0605ff343aab7e11abbbd34383"></a>
+<a id="a46368d0605ff343aab7e11abbbd34383" name="a46368d0605ff343aab7e11abbbd34383"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46368d0605ff343aab7e11abbbd34383">&#9670;&#160;</a></span>getDt()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -447,13 +422,13 @@ Public 成员函数</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="structstt_1_1time_1_1Duration.html">Duration</a> stt::time::DateTime::getDt </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -463,7 +438,9 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ab5d77adef08847aba04f11e9731c013d"></a>
+<a id="a24c982c8ebc1521ddce634e6490f2e70" name="a24c982c8ebc1521ddce634e6490f2e70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24c982c8ebc1521ddce634e6490f2e70">&#9670;&#160;</a></span>getTime()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -471,26 +448,19 @@ Public 成员函数</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::string&amp; stt::time::DateTime::getTime </td>
+          <td class="memname">static std::string &amp; stt::time::DateTime::getTime </td>
           <td>(</td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>timeStr</em>, </td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>timeStr</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>format</em> = <code><a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>format</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -508,7 +478,9 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a551139c669e08ab23f2cec614be7e09e"></a>
+<a id="a551139c669e08ab23f2cec614be7e09e" name="a551139c669e08ab23f2cec614be7e09e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a551139c669e08ab23f2cec614be7e09e">&#9670;&#160;</a></span>isStart()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -518,13 +490,13 @@ Public 成员函数</h2></td></tr>
         <tr>
           <td class="memname">bool stt::time::DateTime::isStart </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -534,14 +506,16 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a1237839d2175024e4432c1ba018c7fa5"></a>
+<a id="a1237839d2175024e4432c1ba018c7fa5" name="a1237839d2175024e4432c1ba018c7fa5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1237839d2175024e4432c1ba018c7fa5">&#9670;&#160;</a></span>startTiming()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::time::DateTime::startTiming </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -558,9 +532,8 @@ Public 成员函数</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-制作者 &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.5
+制作者&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
 </small></address>
+</div><!-- doc-content -->
 </body>
 </html>

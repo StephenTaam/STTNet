@@ -15,6 +15,8 @@ WebSocketServer* wsserver = nullptr;
 
 int main(int argc, char* argv[])
 {
+    if(!ServerSetting::blockTerminationSignals())
+        return 1;
     /*
      * Initialize logfile system
      * 初始化日志系统（第二个参数指定语言，默认英文）
@@ -27,16 +29,6 @@ int main(int argc, char* argv[])
      * 创建 HTTP 服务器对象
      */
     httpserver = new HttpServer();
-
-    /*
-     * Graceful exit on signal 15 (SIGTERM)
-     * 收到 15 号信号时优雅退出
-     */
-    signal(15, [](int) {
-        delete httpserver;
-        delete wsserver;
-        delete lf;
-    });
 
     /*
      * HTTP: key extraction function
@@ -72,10 +64,7 @@ int main(int argc, char* argv[])
         [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
             httpserver->putTask(
                 [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
-                    //...
-                    cout<<"handling async..."<<endl;
-                    //...
-                    return 1;
+                    return k.sendBack("async pong") ? 1 : -2;
                 },
                 k,
                 inf
@@ -83,15 +72,6 @@ int main(int argc, char* argv[])
             return 0;  // handled asynchronously
         }
     );
-    httpserver->setFunction(
-        "/async",
-        [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
-            if(!k.sendBack("async pong"))
-                return -2;
-            return 1;  
-        }
-    );
-    
     /*
      * Start HTTP server
      * 启动 HTTP 监听（端口 8080，2 个 worker）
@@ -153,6 +133,12 @@ int main(int argc, char* argv[])
      * Block main thread
      * 阻塞主线程，Reactor 在内部运行
      */
-    pause();
+    ServerSetting::waitForTerminationSignal();
+    delete wsserver;
+    wsserver=nullptr;
+    delete httpserver;
+    httpserver=nullptr;
+    delete lf;
+    lf=nullptr;
     return 0;
 }

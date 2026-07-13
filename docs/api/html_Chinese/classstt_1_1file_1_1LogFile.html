@@ -1,18 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.5"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>STTNet: stt::file::LogFile类 参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() { searchBox.OnSelectItem(0); });
-</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -20,9 +23,9 @@
 <div id="titlearea">
 <table cellspacing="0" cellpadding="0">
  <tbody>
- <tr style="height: 56px;">
-  <td style="padding-left: 0.5em;">
-   <div id="projectname">STTNet
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
    </div>
   </td>
  </tr>
@@ -30,55 +33,52 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.5 -->
+<!-- 制作者 Doxygen 1.13.2 -->
 <script type="text/javascript">
-var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
 </script>
-  <div id="navrow1" class="tabs">
-    <ul class="tablist">
-      <li><a href="index.html"><span>首页</span></a></li>
-      <li><a href="pages.html"><span>相关页面</span></a></li>
-      <li><a href="namespaces.html"><span>命名空间</span></a></li>
-      <li class="current"><a href="annotated.html"><span>类</span></a></li>
-      <li><a href="files.html"><span>文件</span></a></li>
-      <li>
-        <div id="MSearchBox" class="MSearchBoxInactive">
-        <span class="left">
-          <img id="MSearchSelect" src="search/mag_sel.png"
-               onmouseover="return searchBox.OnSearchSelectShow()"
-               onmouseout="return searchBox.OnSearchSelectHide()"
-               alt=""/>
-          <input type="text" id="MSearchField" value="搜索" accesskey="S"
-               onfocus="searchBox.OnSearchFieldFocus(true)" 
-               onblur="searchBox.OnSearchFieldFocus(false)" 
-               onkeyup="searchBox.OnSearchFieldChange(event)"/>
-          </span><span class="right">
-            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
-          </span>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div id="navrow2" class="tabs2">
-    <ul class="tablist">
-      <li><a href="annotated.html"><span>类列表</span></a></li>
-      <li><a href="classes.html"><span>类索引</span></a></li>
-      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
-      <li><a href="functions.html"><span>类成员</span></a></li>
-    </ul>
-  </div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索',false);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){ initResizable(false); });
+/* @license-end */
+</script>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>枚举</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>枚举值</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>页</a></div>
+</div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
-        name="MSearchResults" id="MSearchResults">
-</iframe>
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
 </div>
 
 <div id="nav-path" class="navpath">
@@ -86,17 +86,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <li class="navelem"><a class="el" href="namespacestt.html">stt</a></li><li class="navelem"><a class="el" href="namespacestt_1_1file.html">file</a></li><li class="navelem"><a class="el" href="classstt_1_1file_1_1LogFile.html">LogFile</a></li>  </ul>
 </div>
 </div><!-- top -->
+<div id="doc-content">
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public 成员函数</a> &#124;
 <a href="classstt_1_1file_1_1LogFile-members.html">所有成员列表</a>  </div>
-  <div class="headertitle">
-<div class="title">stt::file::LogFile类 参考</div>  </div>
+  <div class="headertitle"><div class="title">stt::file::LogFile类 参考</div></div>
 </div><!--header-->
 <div class="contents">
 
 <p>日志文件操作类  
- <a href="classstt_1_1file_1_1LogFile.html#details">更多...</a></p>
+ <a href="#details">更多...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -105,152 +105,150 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
  <div class="center">
   <img src="classstt_1_1file_1_1LogFile.png" usemap="#stt::file::LogFile_map" alt=""/>
   <map id="stt::file::LogFile_map" name="stt::file::LogFile_map">
-<area href="classstt_1_1time_1_1DateTime.html" title="时间操作、运算、计时的类 " alt="stt::time::DateTime" shape="rect" coords="0,56,110,80"/>
-<area href="classstt_1_1file_1_1File.html" title="读写磁盘文件的类 " alt="stt::file::File" shape="rect" coords="120,56,230,80"/>
-<area href="classstt_1_1file_1_1FileTool.html" title="提供文件操作的静态函数工具类 " alt="stt::file::FileTool" shape="rect" coords="120,0,230,24"/>
-</map>
- </div></div>
+<area href="classstt_1_1time_1_1DateTime.html" title="时间操作、运算、计时的类" alt="stt::time::DateTime" shape="rect" coords="0,56,110,80"/>
+<area href="classstt_1_1file_1_1File.html" title="读写磁盘文件的类" alt="stt::file::File" shape="rect" coords="120,56,230,80"/>
+<area href="classstt_1_1file_1_1FileTool.html" title="提供文件操作的静态函数工具类" alt="stt::file::FileTool" shape="rect" coords="120,0,230,24"/>
+  </map>
+</div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public 成员函数</h2></td></tr>
-<tr class="memitem:aa143c00112aa1346eb2a1807d7ead877"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1LogFile.html#aa143c00112aa1346eb2a1807d7ead877">LogFile</a> (const size_t &amp;logQueue_cap=8192)</td></tr>
-<tr class="memdesc:aa143c00112aa1346eb2a1807d7ead877"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数，初始化消费者线程  <a href="#aa143c00112aa1346eb2a1807d7ead877">更多...</a><br/></td></tr>
+<tr class="memitem:aa143c00112aa1346eb2a1807d7ead877" id="r_aa143c00112aa1346eb2a1807d7ead877"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa143c00112aa1346eb2a1807d7ead877">LogFile</a> (const size_t &amp;logQueue_cap=8192)</td></tr>
 <tr class="separator:aa143c00112aa1346eb2a1807d7ead877"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a341a294e5f846b2942d874a482bfa64e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1LogFile.html#a341a294e5f846b2942d874a482bfa64e">openFile</a> (const std::string &amp;fileName, const std::string &amp;timeFormat=<a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a>, const std::string &amp;contentFormat=&quot;   &quot;)</td></tr>
-<tr class="memdesc:a341a294e5f846b2942d874a482bfa64e"><td class="mdescLeft">&#160;</td><td class="mdescRight">打开一个日志文件  <a href="#a341a294e5f846b2942d874a482bfa64e">更多...</a><br/></td></tr>
+<tr class="memitem:a341a294e5f846b2942d874a482bfa64e" id="r_a341a294e5f846b2942d874a482bfa64e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a341a294e5f846b2942d874a482bfa64e">openFile</a> (const std::string &amp;fileName, const std::string &amp;timeFormat=<a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a>, const std::string &amp;contentFormat=&quot;   &quot;)</td></tr>
+<tr class="memdesc:a341a294e5f846b2942d874a482bfa64e"><td class="mdescLeft">&#160;</td><td class="mdescRight">打开一个日志文件  <br /></td></tr>
 <tr class="separator:a341a294e5f846b2942d874a482bfa64e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e1b1e3d8f878f6ed4f71d0b9bb59b02"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1LogFile.html#a8e1b1e3d8f878f6ed4f71d0b9bb59b02">isOpen</a> ()</td></tr>
-<tr class="memdesc:a8e1b1e3d8f878f6ed4f71d0b9bb59b02"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取对象是否打开日志文件的状态  <a href="#a8e1b1e3d8f878f6ed4f71d0b9bb59b02">更多...</a><br/></td></tr>
+<tr class="memitem:a8e1b1e3d8f878f6ed4f71d0b9bb59b02" id="r_a8e1b1e3d8f878f6ed4f71d0b9bb59b02"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8e1b1e3d8f878f6ed4f71d0b9bb59b02">isOpen</a> ()</td></tr>
+<tr class="memdesc:a8e1b1e3d8f878f6ed4f71d0b9bb59b02"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取对象是否打开日志文件的状态  <br /></td></tr>
 <tr class="separator:a8e1b1e3d8f878f6ed4f71d0b9bb59b02"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac72f629d706bb8318db6e44777a6c91a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1LogFile.html#ac72f629d706bb8318db6e44777a6c91a">getFileName</a> ()</td></tr>
-<tr class="memdesc:ac72f629d706bb8318db6e44777a6c91a"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取对象打开的文件名  <a href="#ac72f629d706bb8318db6e44777a6c91a">更多...</a><br/></td></tr>
+<tr class="memitem:ac72f629d706bb8318db6e44777a6c91a" id="r_ac72f629d706bb8318db6e44777a6c91a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac72f629d706bb8318db6e44777a6c91a">getFileName</a> ()</td></tr>
+<tr class="memdesc:ac72f629d706bb8318db6e44777a6c91a"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取对象打开的文件名  <br /></td></tr>
 <tr class="separator:ac72f629d706bb8318db6e44777a6c91a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a663a6f76e01fa62d8966058124202192"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1LogFile.html#a663a6f76e01fa62d8966058124202192">closeFile</a> (const bool &amp;del=false)</td></tr>
-<tr class="memdesc:a663a6f76e01fa62d8966058124202192"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭对象打开的日志文件  <a href="#a663a6f76e01fa62d8966058124202192">更多...</a><br/></td></tr>
+<tr class="memitem:a663a6f76e01fa62d8966058124202192" id="r_a663a6f76e01fa62d8966058124202192"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a663a6f76e01fa62d8966058124202192">closeFile</a> (const bool &amp;del=false)</td></tr>
+<tr class="memdesc:a663a6f76e01fa62d8966058124202192"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭对象打开的日志文件  <br /></td></tr>
 <tr class="separator:a663a6f76e01fa62d8966058124202192"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a881aa4363bf12e4660205ccdc99759f5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1LogFile.html#a881aa4363bf12e4660205ccdc99759f5">writeLog</a> (const std::string &amp;data)</td></tr>
-<tr class="memdesc:a881aa4363bf12e4660205ccdc99759f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">写一行日志  <a href="#a881aa4363bf12e4660205ccdc99759f5">更多...</a><br/></td></tr>
+<tr class="memitem:a881aa4363bf12e4660205ccdc99759f5" id="r_a881aa4363bf12e4660205ccdc99759f5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a881aa4363bf12e4660205ccdc99759f5">writeLog</a> (const std::string &amp;data)</td></tr>
+<tr class="memdesc:a881aa4363bf12e4660205ccdc99759f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">写一行日志  <br /></td></tr>
 <tr class="separator:a881aa4363bf12e4660205ccdc99759f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0188c18c24eea903b27f8a5d1209791"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1LogFile.html#ae0188c18c24eea903b27f8a5d1209791">clearLog</a> ()</td></tr>
-<tr class="memdesc:ae0188c18c24eea903b27f8a5d1209791"><td class="mdescLeft">&#160;</td><td class="mdescRight">清空所有日志  <a href="#ae0188c18c24eea903b27f8a5d1209791">更多...</a><br/></td></tr>
+<tr class="memitem:ae0188c18c24eea903b27f8a5d1209791" id="r_ae0188c18c24eea903b27f8a5d1209791"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae0188c18c24eea903b27f8a5d1209791">clearLog</a> ()</td></tr>
+<tr class="memdesc:ae0188c18c24eea903b27f8a5d1209791"><td class="mdescLeft">&#160;</td><td class="mdescRight">清空所有日志  <br /></td></tr>
 <tr class="separator:ae0188c18c24eea903b27f8a5d1209791"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87014617f8e64d4184ad8ea931dc45e7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1LogFile.html#a87014617f8e64d4184ad8ea931dc45e7">deleteLogByTime</a> (const std::string &amp;date1=&quot;1&quot;, const std::string &amp;date2=&quot;2&quot;)</td></tr>
-<tr class="memdesc:a87014617f8e64d4184ad8ea931dc45e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">删除指定时间区间内的日志  <a href="#a87014617f8e64d4184ad8ea931dc45e7">更多...</a><br/></td></tr>
+<tr class="memitem:a87014617f8e64d4184ad8ea931dc45e7" id="r_a87014617f8e64d4184ad8ea931dc45e7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a87014617f8e64d4184ad8ea931dc45e7">deleteLogByTime</a> (const std::string &amp;date1=&quot;1&quot;, const std::string &amp;date2=&quot;2&quot;)</td></tr>
+<tr class="memdesc:a87014617f8e64d4184ad8ea931dc45e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">删除指定时间区间内的日志  <br /></td></tr>
 <tr class="separator:a87014617f8e64d4184ad8ea931dc45e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a532f8dd4a4d232c2946dede3462fe2eb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1LogFile.html#a532f8dd4a4d232c2946dede3462fe2eb">~LogFile</a> ()</td></tr>
-<tr class="memdesc:a532f8dd4a4d232c2946dede3462fe2eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">析构函数 写完日志 关闭消费者线程  <a href="#a532f8dd4a4d232c2946dede3462fe2eb">更多...</a><br/></td></tr>
+<tr class="memitem:a532f8dd4a4d232c2946dede3462fe2eb" id="r_a532f8dd4a4d232c2946dede3462fe2eb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a532f8dd4a4d232c2946dede3462fe2eb">~LogFile</a> ()</td></tr>
+<tr class="memdesc:a532f8dd4a4d232c2946dede3462fe2eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">析构函数 写完日志 关闭消费者线程  <br /></td></tr>
 <tr class="separator:a532f8dd4a4d232c2946dede3462fe2eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 额外继承的成员函数</h2></td></tr>
-<tr class="inherit_header pro_methods_classstt_1_1file_1_1File"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classstt_1_1file_1_1File')"><img src="closed.png" alt="-"/>&#160;Protected 成员函数 继承自 <a class="el" href="classstt_1_1file_1_1File.html">stt::file::File</a></td></tr>
-<tr class="memitem:a00aa9317ef7c1213baadcbd3f3485430 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a00aa9317ef7c1213baadcbd3f3485430">openFile</a> (const std::string &amp;fileName, const bool &amp;create=true, const int &amp;multiple=0, const size_t &amp;size=0, const mode_t &amp;mode=0666)</td></tr>
-<tr class="memdesc:a00aa9317ef7c1213baadcbd3f3485430 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">打开文件  <a href="#a00aa9317ef7c1213baadcbd3f3485430">更多...</a><br/></td></tr>
+<tr class="inherit_header pro_methods_classstt_1_1file_1_1File"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_methods_classstt_1_1file_1_1File')"><img src="closed.png" alt="-"/>&#160;Protected 成员函数 继承自 <a class="el" href="classstt_1_1file_1_1File.html">stt::file::File</a></td></tr>
+<tr class="memitem:a00aa9317ef7c1213baadcbd3f3485430 inherit pro_methods_classstt_1_1file_1_1File" id="r_a00aa9317ef7c1213baadcbd3f3485430"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a00aa9317ef7c1213baadcbd3f3485430">openFile</a> (const std::string &amp;fileName, const bool &amp;create=true, const int &amp;multiple=0, const size_t &amp;size=0, const mode_t &amp;mode=0666)</td></tr>
+<tr class="memdesc:a00aa9317ef7c1213baadcbd3f3485430 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">打开文件  <br /></td></tr>
 <tr class="separator:a00aa9317ef7c1213baadcbd3f3485430 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a246d6c564f1a85689c41a4992a788825 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a246d6c564f1a85689c41a4992a788825">closeFile</a> (const bool &amp;del=false)</td></tr>
-<tr class="memdesc:a246d6c564f1a85689c41a4992a788825 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭已打开了的文件  <a href="#a246d6c564f1a85689c41a4992a788825">更多...</a><br/></td></tr>
+<tr class="memitem:a246d6c564f1a85689c41a4992a788825 inherit pro_methods_classstt_1_1file_1_1File" id="r_a246d6c564f1a85689c41a4992a788825"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a246d6c564f1a85689c41a4992a788825">closeFile</a> (const bool &amp;del=false)</td></tr>
+<tr class="memdesc:a246d6c564f1a85689c41a4992a788825 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭已打开了的文件  <br /></td></tr>
 <tr class="separator:a246d6c564f1a85689c41a4992a788825 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a80729e4153b97094867efb4de281ffa3 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a80729e4153b97094867efb4de281ffa3">~File</a> ()</td></tr>
-<tr class="memdesc:a80729e4153b97094867efb4de281ffa3 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">析构函数  <a href="#a80729e4153b97094867efb4de281ffa3">更多...</a><br/></td></tr>
+<tr class="memitem:a80729e4153b97094867efb4de281ffa3 inherit pro_methods_classstt_1_1file_1_1File" id="r_a80729e4153b97094867efb4de281ffa3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a80729e4153b97094867efb4de281ffa3">~File</a> ()</td></tr>
+<tr class="memdesc:a80729e4153b97094867efb4de281ffa3 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">析构函数  <br /></td></tr>
 <tr class="separator:a80729e4153b97094867efb4de281ffa3 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6fb0b48e08c4dd5978affc7f712c56ea inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a6fb0b48e08c4dd5978affc7f712c56ea">isOpen</a> ()</td></tr>
-<tr class="memdesc:a6fb0b48e08c4dd5978affc7f712c56ea inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">判断对象是否打开了文件  <a href="#a6fb0b48e08c4dd5978affc7f712c56ea">更多...</a><br/></td></tr>
+<tr class="memitem:a6fb0b48e08c4dd5978affc7f712c56ea inherit pro_methods_classstt_1_1file_1_1File" id="r_a6fb0b48e08c4dd5978affc7f712c56ea"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a6fb0b48e08c4dd5978affc7f712c56ea">isOpen</a> ()</td></tr>
+<tr class="memdesc:a6fb0b48e08c4dd5978affc7f712c56ea inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">判断对象是否打开了文件  <br /></td></tr>
 <tr class="separator:a6fb0b48e08c4dd5978affc7f712c56ea inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aead14862f08ebf1bb6828d030a506eb3 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#aead14862f08ebf1bb6828d030a506eb3">isBinary</a> ()</td></tr>
-<tr class="memdesc:aead14862f08ebf1bb6828d030a506eb3 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">判断对象是否以二进制模式打开文件  <a href="#aead14862f08ebf1bb6828d030a506eb3">更多...</a><br/></td></tr>
+<tr class="memitem:aead14862f08ebf1bb6828d030a506eb3 inherit pro_methods_classstt_1_1file_1_1File" id="r_aead14862f08ebf1bb6828d030a506eb3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#aead14862f08ebf1bb6828d030a506eb3">isBinary</a> ()</td></tr>
+<tr class="memdesc:aead14862f08ebf1bb6828d030a506eb3 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">判断对象是否以二进制模式打开文件  <br /></td></tr>
 <tr class="separator:aead14862f08ebf1bb6828d030a506eb3 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ecefe63820015eda8f43b70e38a3cc5 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a2ecefe63820015eda8f43b70e38a3cc5">getFileName</a> ()</td></tr>
-<tr class="memdesc:a2ecefe63820015eda8f43b70e38a3cc5 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取打开的文件名字  <a href="#a2ecefe63820015eda8f43b70e38a3cc5">更多...</a><br/></td></tr>
+<tr class="memitem:a2ecefe63820015eda8f43b70e38a3cc5 inherit pro_methods_classstt_1_1file_1_1File" id="r_a2ecefe63820015eda8f43b70e38a3cc5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a2ecefe63820015eda8f43b70e38a3cc5">getFileName</a> ()</td></tr>
+<tr class="memdesc:a2ecefe63820015eda8f43b70e38a3cc5 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取打开的文件名字  <br /></td></tr>
 <tr class="separator:a2ecefe63820015eda8f43b70e38a3cc5 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9476ffa96f7215e28525088a000b1fa0 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a9476ffa96f7215e28525088a000b1fa0">getFileLine</a> ()</td></tr>
-<tr class="memdesc:a9476ffa96f7215e28525088a000b1fa0 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取打开的文件的行数  <a href="#a9476ffa96f7215e28525088a000b1fa0">更多...</a><br/></td></tr>
+<tr class="memitem:a9476ffa96f7215e28525088a000b1fa0 inherit pro_methods_classstt_1_1file_1_1File" id="r_a9476ffa96f7215e28525088a000b1fa0"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a9476ffa96f7215e28525088a000b1fa0">getFileLine</a> ()</td></tr>
+<tr class="memdesc:a9476ffa96f7215e28525088a000b1fa0 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取打开的文件的行数  <br /></td></tr>
 <tr class="separator:a9476ffa96f7215e28525088a000b1fa0 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad694f565a728d4bf81dc2a895459179f inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ad694f565a728d4bf81dc2a895459179f">getFileSize</a> ()</td></tr>
-<tr class="memdesc:ad694f565a728d4bf81dc2a895459179f inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取二进制打开的文件的大小  <a href="#ad694f565a728d4bf81dc2a895459179f">更多...</a><br/></td></tr>
+<tr class="memitem:ad694f565a728d4bf81dc2a895459179f inherit pro_methods_classstt_1_1file_1_1File" id="r_ad694f565a728d4bf81dc2a895459179f"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ad694f565a728d4bf81dc2a895459179f">getFileSize</a> ()</td></tr>
+<tr class="memdesc:ad694f565a728d4bf81dc2a895459179f inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取二进制打开的文件的大小  <br /></td></tr>
 <tr class="separator:ad694f565a728d4bf81dc2a895459179f inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50476ffc16616f200050d66565ccbe86 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a50476ffc16616f200050d66565ccbe86">getSize1</a> ()</td></tr>
-<tr class="memdesc:a50476ffc16616f200050d66565ccbe86 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取二进制打开的文件在内存中的大小  <a href="#a50476ffc16616f200050d66565ccbe86">更多...</a><br/></td></tr>
+<tr class="memitem:a50476ffc16616f200050d66565ccbe86 inherit pro_methods_classstt_1_1file_1_1File" id="r_a50476ffc16616f200050d66565ccbe86"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a50476ffc16616f200050d66565ccbe86">getSize1</a> ()</td></tr>
+<tr class="memdesc:a50476ffc16616f200050d66565ccbe86 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取二进制打开的文件在内存中的大小  <br /></td></tr>
 <tr class="separator:a50476ffc16616f200050d66565ccbe86 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a236fa68305d93a21f1db4397735604aa inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a236fa68305d93a21f1db4397735604aa">lockMemory</a> ()</td></tr>
-<tr class="memdesc:a236fa68305d93a21f1db4397735604aa inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">把数据从磁盘读入内存  <a href="#a236fa68305d93a21f1db4397735604aa">更多...</a><br/></td></tr>
+<tr class="memitem:a236fa68305d93a21f1db4397735604aa inherit pro_methods_classstt_1_1file_1_1File" id="r_a236fa68305d93a21f1db4397735604aa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a236fa68305d93a21f1db4397735604aa">lockMemory</a> ()</td></tr>
+<tr class="memdesc:a236fa68305d93a21f1db4397735604aa inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">把数据从磁盘读入内存  <br /></td></tr>
 <tr class="separator:a236fa68305d93a21f1db4397735604aa inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cdaefafc7c143eab21221c53929a729 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a4cdaefafc7c143eab21221c53929a729">unlockMemory</a> (const bool &amp;rec=false)</td></tr>
-<tr class="memdesc:a4cdaefafc7c143eab21221c53929a729 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">把数据从内存写入磁盘  <a href="#a4cdaefafc7c143eab21221c53929a729">更多...</a><br/></td></tr>
+<tr class="memitem:a4cdaefafc7c143eab21221c53929a729 inherit pro_methods_classstt_1_1file_1_1File" id="r_a4cdaefafc7c143eab21221c53929a729"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a4cdaefafc7c143eab21221c53929a729">unlockMemory</a> (const bool &amp;rec=false)</td></tr>
+<tr class="memdesc:a4cdaefafc7c143eab21221c53929a729 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">把数据从内存写入磁盘  <br /></td></tr>
 <tr class="separator:a4cdaefafc7c143eab21221c53929a729 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc9ebeeb54d0ff5c01b36ac3faae5b4f inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#acc9ebeeb54d0ff5c01b36ac3faae5b4f">findC</a> (const std::string &amp;targetString, const int linePos=1)</td></tr>
-<tr class="memdesc:acc9ebeeb54d0ff5c01b36ac3faae5b4f inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">查找行  <a href="#acc9ebeeb54d0ff5c01b36ac3faae5b4f">更多...</a><br/></td></tr>
+<tr class="memitem:acc9ebeeb54d0ff5c01b36ac3faae5b4f inherit pro_methods_classstt_1_1file_1_1File" id="r_acc9ebeeb54d0ff5c01b36ac3faae5b4f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#acc9ebeeb54d0ff5c01b36ac3faae5b4f">findC</a> (const std::string &amp;targetString, const int linePos=1)</td></tr>
+<tr class="memdesc:acc9ebeeb54d0ff5c01b36ac3faae5b4f inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">查找行  <br /></td></tr>
 <tr class="separator:acc9ebeeb54d0ff5c01b36ac3faae5b4f inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4f640d9d2a8b4c539e9f7d7c8a90fb7 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ab4f640d9d2a8b4c539e9f7d7c8a90fb7">appendLineC</a> (const std::string &amp;data, const int &amp;linePos=0)</td></tr>
-<tr class="memdesc:ab4f640d9d2a8b4c539e9f7d7c8a90fb7 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">插入行  <a href="#ab4f640d9d2a8b4c539e9f7d7c8a90fb7">更多...</a><br/></td></tr>
+<tr class="memitem:ab4f640d9d2a8b4c539e9f7d7c8a90fb7 inherit pro_methods_classstt_1_1file_1_1File" id="r_ab4f640d9d2a8b4c539e9f7d7c8a90fb7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ab4f640d9d2a8b4c539e9f7d7c8a90fb7">appendLineC</a> (const std::string &amp;data, const int &amp;linePos=0)</td></tr>
+<tr class="memdesc:ab4f640d9d2a8b4c539e9f7d7c8a90fb7 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">插入行  <br /></td></tr>
 <tr class="separator:ab4f640d9d2a8b4c539e9f7d7c8a90fb7 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2be039e6cfec90046c5dff15db849019 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a2be039e6cfec90046c5dff15db849019">deleteLineC</a> (const int &amp;linePos=0)</td></tr>
-<tr class="memdesc:a2be039e6cfec90046c5dff15db849019 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">删除行  <a href="#a2be039e6cfec90046c5dff15db849019">更多...</a><br/></td></tr>
+<tr class="memitem:a2be039e6cfec90046c5dff15db849019 inherit pro_methods_classstt_1_1file_1_1File" id="r_a2be039e6cfec90046c5dff15db849019"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a2be039e6cfec90046c5dff15db849019">deleteLineC</a> (const int &amp;linePos=0)</td></tr>
+<tr class="memdesc:a2be039e6cfec90046c5dff15db849019 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">删除行  <br /></td></tr>
 <tr class="separator:a2be039e6cfec90046c5dff15db849019 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae38a0b6990bf36444f4f2c4c4f944803 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ae38a0b6990bf36444f4f2c4c4f944803">deleteAllC</a> ()</td></tr>
-<tr class="memdesc:ae38a0b6990bf36444f4f2c4c4f944803 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">删除全部  <a href="#ae38a0b6990bf36444f4f2c4c4f944803">更多...</a><br/></td></tr>
+<tr class="memitem:ae38a0b6990bf36444f4f2c4c4f944803 inherit pro_methods_classstt_1_1file_1_1File" id="r_ae38a0b6990bf36444f4f2c4c4f944803"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ae38a0b6990bf36444f4f2c4c4f944803">deleteAllC</a> ()</td></tr>
+<tr class="memdesc:ae38a0b6990bf36444f4f2c4c4f944803 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">删除全部  <br /></td></tr>
 <tr class="separator:ae38a0b6990bf36444f4f2c4c4f944803 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66450c2f659f5565c66822a7d75f6688 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a66450c2f659f5565c66822a7d75f6688">chgLineC</a> (const std::string &amp;data, const int &amp;linePos=0)</td></tr>
-<tr class="memdesc:a66450c2f659f5565c66822a7d75f6688 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">修改行  <a href="#a66450c2f659f5565c66822a7d75f6688">更多...</a><br/></td></tr>
+<tr class="memitem:a66450c2f659f5565c66822a7d75f6688 inherit pro_methods_classstt_1_1file_1_1File" id="r_a66450c2f659f5565c66822a7d75f6688"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a66450c2f659f5565c66822a7d75f6688">chgLineC</a> (const std::string &amp;data, const int &amp;linePos=0)</td></tr>
+<tr class="memdesc:a66450c2f659f5565c66822a7d75f6688 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">修改行  <br /></td></tr>
 <tr class="separator:a66450c2f659f5565c66822a7d75f6688 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2eb2c502b53c69e667481f8e83efe6d5 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a2eb2c502b53c69e667481f8e83efe6d5">readLineC</a> (std::string &amp;data, const int linePos)</td></tr>
-<tr class="memdesc:a2eb2c502b53c69e667481f8e83efe6d5 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取单行  <a href="#a2eb2c502b53c69e667481f8e83efe6d5">更多...</a><br/></td></tr>
+<tr class="memitem:a2eb2c502b53c69e667481f8e83efe6d5 inherit pro_methods_classstt_1_1file_1_1File" id="r_a2eb2c502b53c69e667481f8e83efe6d5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a2eb2c502b53c69e667481f8e83efe6d5">readLineC</a> (std::string &amp;data, const int linePos)</td></tr>
+<tr class="memdesc:a2eb2c502b53c69e667481f8e83efe6d5 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取单行  <br /></td></tr>
 <tr class="separator:a2eb2c502b53c69e667481f8e83efe6d5 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5b6ef762907478aac10e4a74d208c56 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#aa5b6ef762907478aac10e4a74d208c56">readC</a> (std::string &amp;data, const int &amp;linePos, const int &amp;num)</td></tr>
-<tr class="memdesc:aa5b6ef762907478aac10e4a74d208c56 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取行  <a href="#aa5b6ef762907478aac10e4a74d208c56">更多...</a><br/></td></tr>
-<tr class="separator:aa5b6ef762907478aac10e4a74d208c56 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8f2ef283347652a44c15e273cad2950b inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a8f2ef283347652a44c15e273cad2950b">readAllC</a> (std::string &amp;data)</td></tr>
-<tr class="memdesc:a8f2ef283347652a44c15e273cad2950b inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取全部  <a href="#a8f2ef283347652a44c15e273cad2950b">更多...</a><br/></td></tr>
-<tr class="separator:a8f2ef283347652a44c15e273cad2950b inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd7761aa238c20cdb334313835be9edf inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#afd7761aa238c20cdb334313835be9edf">readC</a> (char *data, const size_t &amp;pos, const size_t &amp;size)</td></tr>
-<tr class="memdesc:afd7761aa238c20cdb334313835be9edf inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取数据块  <a href="#afd7761aa238c20cdb334313835be9edf">更多...</a><br/></td></tr>
+<tr class="memitem:ab755510894fc6fc404247d3bd21ffd52 inherit pro_methods_classstt_1_1file_1_1File" id="r_ab755510894fc6fc404247d3bd21ffd52"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ab755510894fc6fc404247d3bd21ffd52">readC</a> (std::string &amp;data, const int &amp;linePos, const int &amp;num)</td></tr>
+<tr class="memdesc:ab755510894fc6fc404247d3bd21ffd52 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取行  <br /></td></tr>
+<tr class="separator:ab755510894fc6fc404247d3bd21ffd52 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57126e58e5affaf0380dbab3a5e7c72c inherit pro_methods_classstt_1_1file_1_1File" id="r_a57126e58e5affaf0380dbab3a5e7c72c"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a57126e58e5affaf0380dbab3a5e7c72c">readAllC</a> (std::string &amp;data)</td></tr>
+<tr class="memdesc:a57126e58e5affaf0380dbab3a5e7c72c inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取全部  <br /></td></tr>
+<tr class="separator:a57126e58e5affaf0380dbab3a5e7c72c inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd7761aa238c20cdb334313835be9edf inherit pro_methods_classstt_1_1file_1_1File" id="r_afd7761aa238c20cdb334313835be9edf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#afd7761aa238c20cdb334313835be9edf">readC</a> (char *data, const size_t &amp;pos, const size_t &amp;size)</td></tr>
+<tr class="memdesc:afd7761aa238c20cdb334313835be9edf inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取数据块  <br /></td></tr>
 <tr class="separator:afd7761aa238c20cdb334313835be9edf inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a0938542769e9535826a3e68ed1ffc2 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a7a0938542769e9535826a3e68ed1ffc2">writeC</a> (const char *data, const size_t &amp;pos, const size_t &amp;size)</td></tr>
-<tr class="memdesc:a7a0938542769e9535826a3e68ed1ffc2 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">写数据块  <a href="#a7a0938542769e9535826a3e68ed1ffc2">更多...</a><br/></td></tr>
+<tr class="memitem:a7a0938542769e9535826a3e68ed1ffc2 inherit pro_methods_classstt_1_1file_1_1File" id="r_a7a0938542769e9535826a3e68ed1ffc2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a7a0938542769e9535826a3e68ed1ffc2">writeC</a> (const char *data, const size_t &amp;pos, const size_t &amp;size)</td></tr>
+<tr class="memdesc:a7a0938542769e9535826a3e68ed1ffc2 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">写数据块  <br /></td></tr>
 <tr class="separator:a7a0938542769e9535826a3e68ed1ffc2 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f9a7d7d262b4fbb0b0e9b9e9b652667 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a9f9a7d7d262b4fbb0b0e9b9e9b652667">formatC</a> ()</td></tr>
-<tr class="memdesc:a9f9a7d7d262b4fbb0b0e9b9e9b652667 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">格式化数据  <a href="#a9f9a7d7d262b4fbb0b0e9b9e9b652667">更多...</a><br/></td></tr>
+<tr class="memitem:a9f9a7d7d262b4fbb0b0e9b9e9b652667 inherit pro_methods_classstt_1_1file_1_1File" id="r_a9f9a7d7d262b4fbb0b0e9b9e9b652667"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a9f9a7d7d262b4fbb0b0e9b9e9b652667">formatC</a> ()</td></tr>
+<tr class="memdesc:a9f9a7d7d262b4fbb0b0e9b9e9b652667 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">格式化数据  <br /></td></tr>
 <tr class="separator:a9f9a7d7d262b4fbb0b0e9b9e9b652667 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e6bc48253473e70edc56099f949f1e6 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a7e6bc48253473e70edc56099f949f1e6">find</a> (const std::string &amp;targetString, const int linePos=1)</td></tr>
-<tr class="memdesc:a7e6bc48253473e70edc56099f949f1e6 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">查找行  <a href="#a7e6bc48253473e70edc56099f949f1e6">更多...</a><br/></td></tr>
+<tr class="memitem:a7e6bc48253473e70edc56099f949f1e6 inherit pro_methods_classstt_1_1file_1_1File" id="r_a7e6bc48253473e70edc56099f949f1e6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a7e6bc48253473e70edc56099f949f1e6">find</a> (const std::string &amp;targetString, const int linePos=1)</td></tr>
+<tr class="memdesc:a7e6bc48253473e70edc56099f949f1e6 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">查找行  <br /></td></tr>
 <tr class="separator:a7e6bc48253473e70edc56099f949f1e6 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb729b696a08d8f603a51d38a7a190fb inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#afb729b696a08d8f603a51d38a7a190fb">appendLine</a> (const std::string &amp;data, const int &amp;linePos=0)</td></tr>
-<tr class="memdesc:afb729b696a08d8f603a51d38a7a190fb inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">插入行  <a href="#afb729b696a08d8f603a51d38a7a190fb">更多...</a><br/></td></tr>
+<tr class="memitem:afb729b696a08d8f603a51d38a7a190fb inherit pro_methods_classstt_1_1file_1_1File" id="r_afb729b696a08d8f603a51d38a7a190fb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#afb729b696a08d8f603a51d38a7a190fb">appendLine</a> (const std::string &amp;data, const int &amp;linePos=0)</td></tr>
+<tr class="memdesc:afb729b696a08d8f603a51d38a7a190fb inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">插入行  <br /></td></tr>
 <tr class="separator:afb729b696a08d8f603a51d38a7a190fb inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6fa872c221f7c9acb049c538cff5afa4 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a6fa872c221f7c9acb049c538cff5afa4">deleteLine</a> (const int &amp;linePos=0)</td></tr>
-<tr class="memdesc:a6fa872c221f7c9acb049c538cff5afa4 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">删除行  <a href="#a6fa872c221f7c9acb049c538cff5afa4">更多...</a><br/></td></tr>
+<tr class="memitem:a6fa872c221f7c9acb049c538cff5afa4 inherit pro_methods_classstt_1_1file_1_1File" id="r_a6fa872c221f7c9acb049c538cff5afa4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a6fa872c221f7c9acb049c538cff5afa4">deleteLine</a> (const int &amp;linePos=0)</td></tr>
+<tr class="memdesc:a6fa872c221f7c9acb049c538cff5afa4 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">删除行  <br /></td></tr>
 <tr class="separator:a6fa872c221f7c9acb049c538cff5afa4 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b7acb31acc69ea29b21b33451e05a91 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a2b7acb31acc69ea29b21b33451e05a91">deleteAll</a> ()</td></tr>
-<tr class="memdesc:a2b7acb31acc69ea29b21b33451e05a91 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">删除全部  <a href="#a2b7acb31acc69ea29b21b33451e05a91">更多...</a><br/></td></tr>
+<tr class="memitem:a2b7acb31acc69ea29b21b33451e05a91 inherit pro_methods_classstt_1_1file_1_1File" id="r_a2b7acb31acc69ea29b21b33451e05a91"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a2b7acb31acc69ea29b21b33451e05a91">deleteAll</a> ()</td></tr>
+<tr class="memdesc:a2b7acb31acc69ea29b21b33451e05a91 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">删除全部  <br /></td></tr>
 <tr class="separator:a2b7acb31acc69ea29b21b33451e05a91 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae54f70a75140b27c2949772ca02b768a inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ae54f70a75140b27c2949772ca02b768a">chgLine</a> (const std::string &amp;data, const int &amp;linePos=0)</td></tr>
-<tr class="memdesc:ae54f70a75140b27c2949772ca02b768a inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">修改行  <a href="#ae54f70a75140b27c2949772ca02b768a">更多...</a><br/></td></tr>
+<tr class="memitem:ae54f70a75140b27c2949772ca02b768a inherit pro_methods_classstt_1_1file_1_1File" id="r_ae54f70a75140b27c2949772ca02b768a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ae54f70a75140b27c2949772ca02b768a">chgLine</a> (const std::string &amp;data, const int &amp;linePos=0)</td></tr>
+<tr class="memdesc:ae54f70a75140b27c2949772ca02b768a inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">修改行  <br /></td></tr>
 <tr class="separator:ae54f70a75140b27c2949772ca02b768a inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad70ee941c5438da8d7ec5b54652970ce inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ad70ee941c5438da8d7ec5b54652970ce">readLine</a> (std::string &amp;data, const int linePos)</td></tr>
-<tr class="memdesc:ad70ee941c5438da8d7ec5b54652970ce inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取单行  <a href="#ad70ee941c5438da8d7ec5b54652970ce">更多...</a><br/></td></tr>
+<tr class="memitem:ad70ee941c5438da8d7ec5b54652970ce inherit pro_methods_classstt_1_1file_1_1File" id="r_ad70ee941c5438da8d7ec5b54652970ce"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ad70ee941c5438da8d7ec5b54652970ce">readLine</a> (std::string &amp;data, const int linePos)</td></tr>
+<tr class="memdesc:ad70ee941c5438da8d7ec5b54652970ce inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取单行  <br /></td></tr>
 <tr class="separator:ad70ee941c5438da8d7ec5b54652970ce inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a860b8315f11150b659a2b272c2420516 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a860b8315f11150b659a2b272c2420516">read</a> (std::string &amp;data, const int &amp;linePos, const int &amp;num)</td></tr>
-<tr class="memdesc:a860b8315f11150b659a2b272c2420516 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取行  <a href="#a860b8315f11150b659a2b272c2420516">更多...</a><br/></td></tr>
-<tr class="separator:a860b8315f11150b659a2b272c2420516 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af883f1eb8ca2ac80ec658a5a02b09feb inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#af883f1eb8ca2ac80ec658a5a02b09feb">readAll</a> (std::string &amp;data)</td></tr>
-<tr class="memdesc:af883f1eb8ca2ac80ec658a5a02b09feb inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取全部  <a href="#af883f1eb8ca2ac80ec658a5a02b09feb">更多...</a><br/></td></tr>
-<tr class="separator:af883f1eb8ca2ac80ec658a5a02b09feb inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adbaabcd58ae0db72a4941acf9381066f inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#adbaabcd58ae0db72a4941acf9381066f">read</a> (char *data, const size_t &amp;pos, const size_t &amp;size)</td></tr>
-<tr class="memdesc:adbaabcd58ae0db72a4941acf9381066f inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取数据块  <a href="#adbaabcd58ae0db72a4941acf9381066f">更多...</a><br/></td></tr>
+<tr class="memitem:a95daa74da158ab6dd8dd5e0957624865 inherit pro_methods_classstt_1_1file_1_1File" id="r_a95daa74da158ab6dd8dd5e0957624865"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a95daa74da158ab6dd8dd5e0957624865">read</a> (std::string &amp;data, const int &amp;linePos, const int &amp;num)</td></tr>
+<tr class="memdesc:a95daa74da158ab6dd8dd5e0957624865 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取行  <br /></td></tr>
+<tr class="separator:a95daa74da158ab6dd8dd5e0957624865 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5a7981669511b378598153dc54cd50d inherit pro_methods_classstt_1_1file_1_1File" id="r_ad5a7981669511b378598153dc54cd50d"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ad5a7981669511b378598153dc54cd50d">readAll</a> (std::string &amp;data)</td></tr>
+<tr class="memdesc:ad5a7981669511b378598153dc54cd50d inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取全部  <br /></td></tr>
+<tr class="separator:ad5a7981669511b378598153dc54cd50d inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbaabcd58ae0db72a4941acf9381066f inherit pro_methods_classstt_1_1file_1_1File" id="r_adbaabcd58ae0db72a4941acf9381066f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#adbaabcd58ae0db72a4941acf9381066f">read</a> (char *data, const size_t &amp;pos, const size_t &amp;size)</td></tr>
+<tr class="memdesc:adbaabcd58ae0db72a4941acf9381066f inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取数据块  <br /></td></tr>
 <tr class="separator:adbaabcd58ae0db72a4941acf9381066f inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09f4b50edf2e77bfe6f50ca85503c534 inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a09f4b50edf2e77bfe6f50ca85503c534">write</a> (const char *data, const size_t &amp;pos, const size_t &amp;size)</td></tr>
-<tr class="memdesc:a09f4b50edf2e77bfe6f50ca85503c534 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">写数据块  <a href="#a09f4b50edf2e77bfe6f50ca85503c534">更多...</a><br/></td></tr>
+<tr class="memitem:a09f4b50edf2e77bfe6f50ca85503c534 inherit pro_methods_classstt_1_1file_1_1File" id="r_a09f4b50edf2e77bfe6f50ca85503c534"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a09f4b50edf2e77bfe6f50ca85503c534">write</a> (const char *data, const size_t &amp;pos, const size_t &amp;size)</td></tr>
+<tr class="memdesc:a09f4b50edf2e77bfe6f50ca85503c534 inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">写数据块  <br /></td></tr>
 <tr class="separator:a09f4b50edf2e77bfe6f50ca85503c534 inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a078268f697bac4b26edd8cb423ff8fdf inherit pro_methods_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a078268f697bac4b26edd8cb423ff8fdf">format</a> ()</td></tr>
-<tr class="memdesc:a078268f697bac4b26edd8cb423ff8fdf inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">格式化数据  <a href="#a078268f697bac4b26edd8cb423ff8fdf">更多...</a><br/></td></tr>
+<tr class="memitem:a078268f697bac4b26edd8cb423ff8fdf inherit pro_methods_classstt_1_1file_1_1File" id="r_a078268f697bac4b26edd8cb423ff8fdf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a078268f697bac4b26edd8cb423ff8fdf">format</a> ()</td></tr>
+<tr class="memdesc:a078268f697bac4b26edd8cb423ff8fdf inherit pro_methods_classstt_1_1file_1_1File"><td class="mdescLeft">&#160;</td><td class="mdescRight">格式化数据  <br /></td></tr>
 <tr class="separator:a078268f697bac4b26edd8cb423ff8fdf inherit pro_methods_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_classstt_1_1file_1_1File"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classstt_1_1file_1_1File')"><img src="closed.png" alt="-"/>&#160;Protected 属性 继承自 <a class="el" href="classstt_1_1file_1_1File.html">stt::file::File</a></td></tr>
-<tr class="memitem:aa51ded9dfaa3b1413fe90945a02aac1d inherit pro_attribs_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#aa51ded9dfaa3b1413fe90945a02aac1d">che</a></td></tr>
+<tr class="inherit_header pro_attribs_classstt_1_1file_1_1File"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_attribs_classstt_1_1file_1_1File')"><img src="closed.png" alt="-"/>&#160;Protected 属性 继承自 <a class="el" href="classstt_1_1file_1_1File.html">stt::file::File</a></td></tr>
+<tr class="memitem:aa51ded9dfaa3b1413fe90945a02aac1d inherit pro_attribs_classstt_1_1file_1_1File" id="r_aa51ded9dfaa3b1413fe90945a02aac1d"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#aa51ded9dfaa3b1413fe90945a02aac1d">che</a></td></tr>
 <tr class="separator:aa51ded9dfaa3b1413fe90945a02aac1d inherit pro_attribs_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_static_attribs_classstt_1_1file_1_1File"><td colspan="2" onclick="javascript:toggleInherit('pro_static_attribs_classstt_1_1file_1_1File')"><img src="closed.png" alt="-"/>&#160;静态 Protected 属性 继承自 <a class="el" href="classstt_1_1file_1_1File.html">stt::file::File</a></td></tr>
-<tr class="memitem:ac3829ea1e03d976fdfd70219d4c92442 inherit pro_static_attribs_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">static std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ac3829ea1e03d976fdfd70219d4c92442">l1</a></td></tr>
+<tr class="inherit_header pro_static_attribs_classstt_1_1file_1_1File"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_static_attribs_classstt_1_1file_1_1File')"><img src="closed.png" alt="-"/>&#160;静态 Protected 属性 继承自 <a class="el" href="classstt_1_1file_1_1File.html">stt::file::File</a></td></tr>
+<tr class="memitem:ac3829ea1e03d976fdfd70219d4c92442 inherit pro_static_attribs_classstt_1_1file_1_1File" id="r_ac3829ea1e03d976fdfd70219d4c92442"><td class="memItemLeft" align="right" valign="top">static std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ac3829ea1e03d976fdfd70219d4c92442">l1</a></td></tr>
 <tr class="separator:ac3829ea1e03d976fdfd70219d4c92442 inherit pro_static_attribs_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af491ff55ab578c4c0de6c7a35b7d9ed6 inherit pro_static_attribs_classstt_1_1file_1_1File"><td class="memItemLeft" align="right" valign="top">static std::unordered_map<br class="typebreak"/>
-&lt; std::string, <a class="el" href="structstt_1_1file_1_1FileThreadLock.html">FileThreadLock</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#af491ff55ab578c4c0de6c7a35b7d9ed6">fl2</a></td></tr>
+<tr class="memitem:af491ff55ab578c4c0de6c7a35b7d9ed6 inherit pro_static_attribs_classstt_1_1file_1_1File" id="r_af491ff55ab578c4c0de6c7a35b7d9ed6"><td class="memItemLeft" align="right" valign="top">static std::unordered_map&lt; std::string, <a class="el" href="structstt_1_1file_1_1FileThreadLock.html">FileThreadLock</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#af491ff55ab578c4c0de6c7a35b7d9ed6">fl2</a></td></tr>
 <tr class="separator:af491ff55ab578c4c0de6c7a35b7d9ed6 inherit pro_static_attribs_classstt_1_1file_1_1File"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
@@ -259,7 +257,9 @@ Public 成员函数</h2></td></tr>
 <dd>
 异步日志 会单独开一个线程进行写入操作，可以多个线程同时操作日志 </dd></dl>
 </div><h2 class="groupheader">构造及析构函数说明</h2>
-<a class="anchor" id="aa143c00112aa1346eb2a1807d7ead877"></a>
+<a id="aa143c00112aa1346eb2a1807d7ead877" name="aa143c00112aa1346eb2a1807d7ead877"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa143c00112aa1346eb2a1807d7ead877">&#9670;&#160;</a></span>LogFile()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -269,24 +269,21 @@ Public 成员函数</h2></td></tr>
         <tr>
           <td class="memname">stt::file::LogFile::LogFile </td>
           <td>(</td>
-          <td class="paramtype">const size_t &amp;&#160;</td>
-          <td class="paramname"><em>logQueue_cap</em> = <code>8192</code></td><td>)</td>
+          <td class="paramtype">const size_t &amp;</td>          <td class="paramname"><span class="paramname"><em>logQueue_cap</em></span><span class="paramdefsep"> = </span><span class="paramdefval">8192</span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>构造函数，初始化消费者线程 </p>
-<pre class="fragment">       @param logQueue_cap 异步日志队列容量（必须为 2 的幂）。
+<pre class="fragment">       @brief 构造函数，初始化消费者线程
+       @param logQueue_cap 异步日志队列容量（必须为 2 的幂）。
 </pre><p>所有线程产生的日志会先进入该无锁队列，再由独立 logger 线程批量写入文件。 日志系统不在主业务热路径上，允许在过载时丢弃，以保护核心服务性能。</p>
 <p>选型原则： logQueue_cap &gt;= 峰值日志速率 × logger 最坏暂停时间</p>
-<p>建议值（经验）：</p>
-<ul>
+<p>建议值（经验）：</p><ul>
 <li>默认：8192 (~8k)</li>
 <li>高频日志：16384 (~16k)</li>
 </ul>
@@ -294,14 +291,16 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a532f8dd4a4d232c2946dede3462fe2eb"></a>
+<a id="a532f8dd4a4d232c2946dede3462fe2eb" name="a532f8dd4a4d232c2946dede3462fe2eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a532f8dd4a4d232c2946dede3462fe2eb">&#9670;&#160;</a></span>~LogFile()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">stt::file::LogFile::~LogFile </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -312,14 +311,16 @@ Public 成员函数</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">成员函数说明</h2>
-<a class="anchor" id="ae0188c18c24eea903b27f8a5d1209791"></a>
+<a id="ae0188c18c24eea903b27f8a5d1209791" name="ae0188c18c24eea903b27f8a5d1209791"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0188c18c24eea903b27f8a5d1209791">&#9670;&#160;</a></span>clearLog()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::LogFile::clearLog </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -330,15 +331,16 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a663a6f76e01fa62d8966058124202192"></a>
+<a id="a663a6f76e01fa62d8966058124202192" name="a663a6f76e01fa62d8966058124202192"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a663a6f76e01fa62d8966058124202192">&#9670;&#160;</a></span>closeFile()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::LogFile::closeFile </td>
           <td>(</td>
-          <td class="paramtype">const bool &amp;&#160;</td>
-          <td class="paramname"><em>del</em> = <code>false</code></td><td>)</td>
+          <td class="paramtype">const bool &amp;</td>          <td class="paramname"><span class="paramname"><em>del</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -355,26 +357,21 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a87014617f8e64d4184ad8ea931dc45e7"></a>
+<a id="a87014617f8e64d4184ad8ea931dc45e7" name="a87014617f8e64d4184ad8ea931dc45e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87014617f8e64d4184ad8ea931dc45e7">&#9670;&#160;</a></span>deleteLogByTime()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::LogFile::deleteLogByTime </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>date1</em> = <code>&quot;1&quot;</code>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>date1</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;1&quot;</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>date2</em> = <code>&quot;2&quot;</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>date2</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;2&quot;</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -392,7 +389,9 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ac72f629d706bb8318db6e44777a6c91a"></a>
+<a id="ac72f629d706bb8318db6e44777a6c91a" name="ac72f629d706bb8318db6e44777a6c91a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac72f629d706bb8318db6e44777a6c91a">&#9670;&#160;</a></span>getFileName()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -402,13 +401,13 @@ Public 成员函数</h2></td></tr>
         <tr>
           <td class="memname">std::string stt::file::LogFile::getFileName </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -418,7 +417,9 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a8e1b1e3d8f878f6ed4f71d0b9bb59b02"></a>
+<a id="a8e1b1e3d8f878f6ed4f71d0b9bb59b02" name="a8e1b1e3d8f878f6ed4f71d0b9bb59b02"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e1b1e3d8f878f6ed4f71d0b9bb59b02">&#9670;&#160;</a></span>isOpen()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -428,13 +429,13 @@ Public 成员函数</h2></td></tr>
         <tr>
           <td class="memname">bool stt::file::LogFile::isOpen </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -444,32 +445,26 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a341a294e5f846b2942d874a482bfa64e"></a>
+<a id="a341a294e5f846b2942d874a482bfa64e" name="a341a294e5f846b2942d874a482bfa64e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a341a294e5f846b2942d874a482bfa64e">&#9670;&#160;</a></span>openFile()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::LogFile::openFile </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>fileName</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>fileName</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>timeFormat</em> = <code><a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a></code>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>timeFormat</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="sttnet_8h.html#a5ef63b482e3dd0e042d06df1e4d75bbe">ISO8086A</a></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>contentFormat</em> = <code>&quot;&#160;&#160;&#160;&quot;</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>contentFormat</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;&#160;&#160;&#160;&quot;</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -488,15 +483,16 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a881aa4363bf12e4660205ccdc99759f5"></a>
+<a id="a881aa4363bf12e4660205ccdc99759f5" name="a881aa4363bf12e4660205ccdc99759f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a881aa4363bf12e4660205ccdc99759f5">&#9670;&#160;</a></span>writeLog()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void stt::file::LogFile::writeLog </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>data</em></td><td>)</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -518,9 +514,8 @@ Public 成员函数</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-制作者 &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.5
+制作者&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
 </small></address>
+</div><!-- doc-content -->
 </body>
 </html>

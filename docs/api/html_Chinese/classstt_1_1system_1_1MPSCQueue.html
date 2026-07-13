@@ -1,18 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.5"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>STTNet: stt::system::MPSCQueue&lt; T &gt; 模板类 参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() { searchBox.OnSelectItem(0); });
-</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -20,9 +23,9 @@
 <div id="titlearea">
 <table cellspacing="0" cellpadding="0">
  <tbody>
- <tr style="height: 56px;">
-  <td style="padding-left: 0.5em;">
-   <div id="projectname">STTNet
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
    </div>
   </td>
  </tr>
@@ -30,55 +33,52 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.5 -->
+<!-- 制作者 Doxygen 1.13.2 -->
 <script type="text/javascript">
-var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
 </script>
-  <div id="navrow1" class="tabs">
-    <ul class="tablist">
-      <li><a href="index.html"><span>首页</span></a></li>
-      <li><a href="pages.html"><span>相关页面</span></a></li>
-      <li><a href="namespaces.html"><span>命名空间</span></a></li>
-      <li class="current"><a href="annotated.html"><span>类</span></a></li>
-      <li><a href="files.html"><span>文件</span></a></li>
-      <li>
-        <div id="MSearchBox" class="MSearchBoxInactive">
-        <span class="left">
-          <img id="MSearchSelect" src="search/mag_sel.png"
-               onmouseover="return searchBox.OnSearchSelectShow()"
-               onmouseout="return searchBox.OnSearchSelectHide()"
-               alt=""/>
-          <input type="text" id="MSearchField" value="搜索" accesskey="S"
-               onfocus="searchBox.OnSearchFieldFocus(true)" 
-               onblur="searchBox.OnSearchFieldFocus(false)" 
-               onkeyup="searchBox.OnSearchFieldChange(event)"/>
-          </span><span class="right">
-            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
-          </span>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div id="navrow2" class="tabs2">
-    <ul class="tablist">
-      <li><a href="annotated.html"><span>类列表</span></a></li>
-      <li><a href="classes.html"><span>类索引</span></a></li>
-      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
-      <li><a href="functions.html"><span>类成员</span></a></li>
-    </ul>
-  </div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索',false);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){ initResizable(false); });
+/* @license-end */
+</script>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>枚举</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>枚举值</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>页</a></div>
+</div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
-        name="MSearchResults" id="MSearchResults">
-</iframe>
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
 </div>
 
 <div id="nav-path" class="navpath">
@@ -86,69 +86,66 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <li class="navelem"><a class="el" href="namespacestt.html">stt</a></li><li class="navelem"><a class="el" href="namespacestt_1_1system.html">system</a></li><li class="navelem"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a></li>  </ul>
 </div>
 </div><!-- top -->
+<div id="doc-content">
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">类</a> &#124;
 <a href="#pub-methods">Public 成员函数</a> &#124;
 <a href="classstt_1_1system_1_1MPSCQueue-members.html">所有成员列表</a>  </div>
-  <div class="headertitle">
-<div class="title">stt::system::MPSCQueue&lt; T &gt; 模板类 参考</div>  </div>
+  <div class="headertitle"><div class="title">stt::system::MPSCQueue&lt; T &gt; 模板类 参考</div></div>
 </div><!--header-->
 <div class="contents">
 
 <p>Lock-free bounded MPSC queue (Multi-Producer Single-Consumer) 无锁有界多生产者单消费者队列（环形缓冲）  
- <a href="classstt_1_1system_1_1MPSCQueue.html#details">更多...</a></p>
+ <a href="#details">更多...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public 成员函数</h2></td></tr>
-<tr class="memitem:a661d13fbd40bd4b263ca8f383069f6ab"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#a661d13fbd40bd4b263ca8f383069f6ab">MPSCQueue</a> (std::size_t capacity_pow2)</td></tr>
+<tr class="memitem:a661d13fbd40bd4b263ca8f383069f6ab" id="r_a661d13fbd40bd4b263ca8f383069f6ab"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a661d13fbd40bd4b263ca8f383069f6ab">MPSCQueue</a> (std::size_t capacity_pow2)</td></tr>
 <tr class="separator:a661d13fbd40bd4b263ca8f383069f6ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89e130fd017b5c9260aab9e6345195e4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#a89e130fd017b5c9260aab9e6345195e4">MPSCQueue</a> (const <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a> &amp;)=delete</td></tr>
+<tr class="memitem:a89e130fd017b5c9260aab9e6345195e4" id="r_a89e130fd017b5c9260aab9e6345195e4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89e130fd017b5c9260aab9e6345195e4">MPSCQueue</a> (const <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a> &amp;)=delete</td></tr>
 <tr class="separator:a89e130fd017b5c9260aab9e6345195e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6df80f1a4186c85bd5fcdea67d5967e5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#a6df80f1a4186c85bd5fcdea67d5967e5">operator=</a> (const <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a> &amp;)=delete</td></tr>
-<tr class="separator:a6df80f1a4186c85bd5fcdea67d5967e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89a16696b120fef50b9779b855e11c7e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#a89a16696b120fef50b9779b855e11c7e">~MPSCQueue</a> ()</td></tr>
+<tr class="memitem:a088f0514e03d90e84754eb71f2c50265" id="r_a088f0514e03d90e84754eb71f2c50265"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a088f0514e03d90e84754eb71f2c50265">operator=</a> (const <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a> &amp;)=delete</td></tr>
+<tr class="separator:a088f0514e03d90e84754eb71f2c50265"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89a16696b120fef50b9779b855e11c7e" id="r_a89a16696b120fef50b9779b855e11c7e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89a16696b120fef50b9779b855e11c7e">~MPSCQueue</a> ()</td></tr>
 <tr class="separator:a89a16696b120fef50b9779b855e11c7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6b3c1b463babfc2a4e0424267439593"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#ab6b3c1b463babfc2a4e0424267439593">push</a> (T &amp;&amp;v) noexcept(std::is_nothrow_move_constructible_v&lt; T &gt;)</td></tr>
-<tr class="memdesc:ab6b3c1b463babfc2a4e0424267439593"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try push (non-blocking). Returns false if queue is full. 尝试入队（非阻塞），队列满则返回 false.  <a href="#ab6b3c1b463babfc2a4e0424267439593">更多...</a><br/></td></tr>
+<tr class="memitem:ab6b3c1b463babfc2a4e0424267439593" id="r_ab6b3c1b463babfc2a4e0424267439593"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab6b3c1b463babfc2a4e0424267439593">push</a> (T &amp;&amp;v) noexcept(std::is_nothrow_move_constructible_v&lt; T &gt;)</td></tr>
+<tr class="memdesc:ab6b3c1b463babfc2a4e0424267439593"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try push (non-blocking). Returns false if queue is full. 尝试入队（非阻塞），队列满则返回 false  <br /></td></tr>
 <tr class="separator:ab6b3c1b463babfc2a4e0424267439593"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2bc5d9ad3573d7b33a24ee4352381ac"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#aa2bc5d9ad3573d7b33a24ee4352381ac">push</a> (const T &amp;v) noexcept(std::is_nothrow_copy_constructible_v&lt; T &gt;)</td></tr>
+<tr class="memitem:aa2bc5d9ad3573d7b33a24ee4352381ac" id="r_aa2bc5d9ad3573d7b33a24ee4352381ac"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2bc5d9ad3573d7b33a24ee4352381ac">push</a> (const T &amp;v) noexcept(std::is_nothrow_copy_constructible_v&lt; T &gt;)</td></tr>
 <tr class="separator:aa2bc5d9ad3573d7b33a24ee4352381ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8e13c37c8ef183a5f95aa6b0322abcb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#ae8e13c37c8ef183a5f95aa6b0322abcb">pop</a> (T &amp;out) noexcept(std::is_nothrow_move_assignable_v&lt; T &gt; &amp;&amp;std::is_nothrow_move_constructible_v&lt; T &gt;)</td></tr>
-<tr class="memdesc:ae8e13c37c8ef183a5f95aa6b0322abcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try pop (single consumer). Returns false if empty. 尝试出队（单消费者），空则返回 false.  <a href="#ae8e13c37c8ef183a5f95aa6b0322abcb">更多...</a><br/></td></tr>
+<tr class="memitem:ae8e13c37c8ef183a5f95aa6b0322abcb" id="r_ae8e13c37c8ef183a5f95aa6b0322abcb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae8e13c37c8ef183a5f95aa6b0322abcb">pop</a> (T &amp;out) noexcept(std::is_nothrow_move_assignable_v&lt; T &gt; &amp;&amp;std::is_nothrow_move_constructible_v&lt; T &gt;)</td></tr>
+<tr class="memdesc:ae8e13c37c8ef183a5f95aa6b0322abcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try pop (single consumer). Returns false if empty. 尝试出队（单消费者），空则返回 false  <br /></td></tr>
 <tr class="separator:ae8e13c37c8ef183a5f95aa6b0322abcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad154fc408c8f7dbf32bd9b647e56157c"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html#ad154fc408c8f7dbf32bd9b647e56157c">approx_size</a> () const noexcept</td></tr>
-<tr class="memdesc:ad154fc408c8f7dbf32bd9b647e56157c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Approximate size (may be inaccurate under concurrency) 近似长度（并发下可能不精确）  <a href="#ad154fc408c8f7dbf32bd9b647e56157c">更多...</a><br/></td></tr>
+<tr class="memitem:ad154fc408c8f7dbf32bd9b647e56157c" id="r_ad154fc408c8f7dbf32bd9b647e56157c"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad154fc408c8f7dbf32bd9b647e56157c">approx_size</a> () const noexcept</td></tr>
+<tr class="memdesc:ad154fc408c8f7dbf32bd9b647e56157c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Approximate size (may be inaccurate under concurrency) 近似长度（并发下可能不精确）  <br /></td></tr>
 <tr class="separator:ad154fc408c8f7dbf32bd9b647e56157c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
-<div class="textblock"><h3>template&lt;typename T&gt;<br/>
-class stt::system::MPSCQueue&lt; T &gt;</h3>
-
-<p>Lock-free bounded MPSC queue (Multi-Producer Single-Consumer) 无锁有界多生产者单消费者队列（环形缓冲） </p>
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename T&gt;<br />
+class stt::system::MPSCQueue&lt; T &gt;</div><p>Lock-free bounded MPSC queue (Multi-Producer Single-Consumer) 无锁有界多生产者单消费者队列（环形缓冲） </p>
 <ul>
 <li>Multiple threads may push concurrently.</li>
 <li>Only ONE thread may pop.</li>
 <li>多个线程可以同时 push</li>
 <li>仅允许一个线程 pop（通常是 reactor 线程）</li>
 </ul>
-<p>Design:</p>
-<ul>
+<p>Design:</p><ul>
 <li>Fixed-size ring buffer (power-of-two capacity)</li>
 <li>Per-slot sequence number to coordinate producers/consumer</li>
 </ul>
-<p>特点：</p>
-<ul>
+<p>特点：</p><ul>
 <li>零 malloc/零 free（不为每个元素分配 Node）</li>
 <li>cache 友好</li>
 <li>push/pop 只用原子 + 轻量自旋</li>
 </ul>
-<p>IMPORTANT: ❗ Capacity must be a power of two. ❗ <a class="el" href="classstt_1_1system_1_1MPSCQueue.html#ae8e13c37c8ef183a5f95aa6b0322abcb" title="Try pop (single consumer). Returns false if empty. 尝试出队（单消费者），空则返回 false. ">pop()</a> must be called by only one thread.</p>
+<p>IMPORTANT: ❗ Capacity must be a power of two. ❗ <a class="el" href="#ae8e13c37c8ef183a5f95aa6b0322abcb" title="Try pop (single consumer). Returns false if empty. 尝试出队（单消费者），空则返回 false">pop()</a> must be called by only one thread.</p>
 <p>重要： ❗ 容量必须是 2 的幂 ❗ pop 只能由一个线程调用 </p>
 </div><h2 class="groupheader">构造及析构函数说明</h2>
-<a class="anchor" id="a661d13fbd40bd4b263ca8f383069f6ab"></a>
+<a id="a661d13fbd40bd4b263ca8f383069f6ab" name="a661d13fbd40bd4b263ca8f383069f6ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a661d13fbd40bd4b263ca8f383069f6ab">&#9670;&#160;</a></span>MPSCQueue() <span class="overload">[1/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -158,23 +155,24 @@ template&lt;typename T&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">stt::system::MPSCQueue</a>&lt; T &gt;::<a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a> </td>
+          <td class="memname"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">stt::system::MPSCQueue</a>&lt; T &gt;::MPSCQueue </td>
           <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>capacity_pow2</em></td><td>)</td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>capacity_pow2</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel explicit">explicit</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="a89e130fd017b5c9260aab9e6345195e4"></a>
+<a id="a89e130fd017b5c9260aab9e6345195e4" name="a89e130fd017b5c9260aab9e6345195e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89e130fd017b5c9260aab9e6345195e4">&#9670;&#160;</a></span>MPSCQueue() <span class="overload">[2/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -184,23 +182,24 @@ template&lt;typename T&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">stt::system::MPSCQueue</a>&lt; T &gt;::<a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a> </td>
+          <td class="memname"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">stt::system::MPSCQueue</a>&lt; T &gt;::MPSCQueue </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a>&lt; T &gt; &amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a>&lt; T &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+<span class="mlabels"><span class="mlabel delete">delete</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="a89a16696b120fef50b9779b855e11c7e"></a>
+<a id="a89a16696b120fef50b9779b855e11c7e" name="a89a16696b120fef50b9779b855e11c7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89a16696b120fef50b9779b855e11c7e">&#9670;&#160;</a></span>~MPSCQueue()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -212,13 +211,13 @@ template&lt;typename T&gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">stt::system::MPSCQueue</a>&lt; T &gt;::~<a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a> </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -226,7 +225,9 @@ template&lt;typename T&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">成员函数说明</h2>
-<a class="anchor" id="ad154fc408c8f7dbf32bd9b647e56157c"></a>
+<a id="ad154fc408c8f7dbf32bd9b647e56157c" name="ad154fc408c8f7dbf32bd9b647e56157c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad154fc408c8f7dbf32bd9b647e56157c">&#9670;&#160;</a></span>approx_size()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -238,13 +239,13 @@ template&lt;typename T&gt; </div>
         <tr>
           <td class="memname">std::size_t <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">stt::system::MPSCQueue</a>&lt; T &gt;::approx_size </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -253,7 +254,9 @@ template&lt;typename T&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a6df80f1a4186c85bd5fcdea67d5967e5"></a>
+<a id="a088f0514e03d90e84754eb71f2c50265" name="a088f0514e03d90e84754eb71f2c50265"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a088f0514e03d90e84754eb71f2c50265">&#9670;&#160;</a></span>operator=()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -263,23 +266,24 @@ template&lt;typename T&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a>&amp; <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">stt::system::MPSCQueue</a>&lt; T &gt;::operator= </td>
+          <td class="memname"><a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a> &amp; <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">stt::system::MPSCQueue</a>&lt; T &gt;::operator= </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a>&lt; T &gt; &amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">MPSCQueue</a>&lt; T &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+<span class="mlabels"><span class="mlabel delete">delete</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="ae8e13c37c8ef183a5f95aa6b0322abcb"></a>
+<a id="ae8e13c37c8ef183a5f95aa6b0322abcb" name="ae8e13c37c8ef183a5f95aa6b0322abcb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8e13c37c8ef183a5f95aa6b0322abcb">&#9670;&#160;</a></span>pop()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -291,23 +295,24 @@ template&lt;typename T&gt; </div>
         <tr>
           <td class="memname">bool <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">stt::system::MPSCQueue</a>&lt; T &gt;::pop </td>
           <td>(</td>
-          <td class="paramtype">T &amp;&#160;</td>
-          <td class="paramname"><em>out</em></td><td>)</td>
+          <td class="paramtype">T &amp;</td>          <td class="paramname"><span class="paramname"><em>out</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Try pop (single consumer). Returns false if empty. 尝试出队（单消费者），空则返回 false. </p>
+<p>Try pop (single consumer). Returns false if empty. 尝试出队（单消费者），空则返回 false </p>
 
 </div>
 </div>
-<a class="anchor" id="ab6b3c1b463babfc2a4e0424267439593"></a>
+<a id="aa2bc5d9ad3573d7b33a24ee4352381ac" name="aa2bc5d9ad3573d7b33a24ee4352381ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2bc5d9ad3573d7b33a24ee4352381ac">&#9670;&#160;</a></span>push() <span class="overload">[1/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -319,23 +324,22 @@ template&lt;typename T&gt; </div>
         <tr>
           <td class="memname">bool <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">stt::system::MPSCQueue</a>&lt; T &gt;::push </td>
           <td>(</td>
-          <td class="paramtype">T &amp;&amp;&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
+          <td class="paramtype">const T &amp;</td>          <td class="paramname"><span class="paramname"><em>v</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Try push (non-blocking). Returns false if queue is full. 尝试入队（非阻塞），队列满则返回 false. </p>
+</div>
+</div>
+<a id="ab6b3c1b463babfc2a4e0424267439593" name="ab6b3c1b463babfc2a4e0424267439593"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6b3c1b463babfc2a4e0424267439593">&#9670;&#160;</a></span>push() <span class="overload">[2/2]</span></h2>
 
-</div>
-</div>
-<a class="anchor" id="aa2bc5d9ad3573d7b33a24ee4352381ac"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -347,17 +351,18 @@ template&lt;typename T&gt; </div>
         <tr>
           <td class="memname">bool <a class="el" href="classstt_1_1system_1_1MPSCQueue.html">stt::system::MPSCQueue</a>&lt; T &gt;::push </td>
           <td>(</td>
-          <td class="paramtype">const T &amp;&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
+          <td class="paramtype">T &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>v</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Try push (non-blocking). Returns false if queue is full. 尝试入队（非阻塞），队列满则返回 false </p>
 
 </div>
 </div>
@@ -367,9 +372,8 @@ template&lt;typename T&gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-制作者 &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.5
+制作者&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
 </small></address>
+</div><!-- doc-content -->
 </body>
 </html>

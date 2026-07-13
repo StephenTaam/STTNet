@@ -1,18 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.5"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>STTNet: stt::network::WebSocketClient类 参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() { searchBox.OnSelectItem(0); });
-</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -20,9 +23,9 @@
 <div id="titlearea">
 <table cellspacing="0" cellpadding="0">
  <tbody>
- <tr style="height: 56px;">
-  <td style="padding-left: 0.5em;">
-   <div id="projectname">STTNet
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
    </div>
   </td>
  </tr>
@@ -30,55 +33,52 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.5 -->
+<!-- 制作者 Doxygen 1.13.2 -->
 <script type="text/javascript">
-var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
 </script>
-  <div id="navrow1" class="tabs">
-    <ul class="tablist">
-      <li><a href="index.html"><span>首页</span></a></li>
-      <li><a href="pages.html"><span>相关页面</span></a></li>
-      <li><a href="namespaces.html"><span>命名空间</span></a></li>
-      <li class="current"><a href="annotated.html"><span>类</span></a></li>
-      <li><a href="files.html"><span>文件</span></a></li>
-      <li>
-        <div id="MSearchBox" class="MSearchBoxInactive">
-        <span class="left">
-          <img id="MSearchSelect" src="search/mag_sel.png"
-               onmouseover="return searchBox.OnSearchSelectShow()"
-               onmouseout="return searchBox.OnSearchSelectHide()"
-               alt=""/>
-          <input type="text" id="MSearchField" value="搜索" accesskey="S"
-               onfocus="searchBox.OnSearchFieldFocus(true)" 
-               onblur="searchBox.OnSearchFieldFocus(false)" 
-               onkeyup="searchBox.OnSearchFieldChange(event)"/>
-          </span><span class="right">
-            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
-          </span>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div id="navrow2" class="tabs2">
-    <ul class="tablist">
-      <li><a href="annotated.html"><span>类列表</span></a></li>
-      <li><a href="classes.html"><span>类索引</span></a></li>
-      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
-      <li><a href="functions.html"><span>类成员</span></a></li>
-    </ul>
-  </div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索',false);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){ initResizable(false); });
+/* @license-end */
+</script>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>枚举</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>枚举值</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>页</a></div>
+</div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
-        name="MSearchResults" id="MSearchResults">
-</iframe>
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
 </div>
 
 <div id="nav-path" class="navpath">
@@ -86,17 +86,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <li class="navelem"><a class="el" href="namespacestt.html">stt</a></li><li class="navelem"><a class="el" href="namespacestt_1_1network.html">network</a></li><li class="navelem"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html">WebSocketClient</a></li>  </ul>
 </div>
 </div><!-- top -->
+<div id="doc-content">
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public 成员函数</a> &#124;
 <a href="classstt_1_1network_1_1WebSocketClient-members.html">所有成员列表</a>  </div>
-  <div class="headertitle">
-<div class="title">stt::network::WebSocketClient类 参考</div>  </div>
+  <div class="headertitle"><div class="title">stt::network::WebSocketClient类 参考</div></div>
 </div><!--header-->
 <div class="contents">
 
 <p>Websocket客户端操作的类 -如果需要重新设置TLS/Https加密的证书，目前需要销毁对象后重新构造 底层TCP默认是阻塞的  
- <a href="classstt_1_1network_1_1WebSocketClient.html#details">更多...</a></p>
+ <a href="#details">更多...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -105,50 +105,55 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
  <div class="center">
   <img src="classstt_1_1network_1_1WebSocketClient.png" usemap="#stt::network::WebSocketClient_map" alt=""/>
   <map id="stt::network::WebSocketClient_map" name="stt::network::WebSocketClient_map">
-<area href="classstt_1_1network_1_1TcpClient.html" title="tcp协议客户端操作类 " alt="stt::network::TcpClient" shape="rect" coords="0,0,175,24"/>
-</map>
- </div></div>
+<area href="classstt_1_1network_1_1TcpClient.html" title="tcp协议客户端操作类" alt="stt::network::TcpClient" shape="rect" coords="0,0,175,24"/>
+  </map>
+</div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public 成员函数</h2></td></tr>
-<tr class="memitem:a1f1b55114196078359c8a552b54925fc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#a1f1b55114196078359c8a552b54925fc">WebSocketClient</a> (const bool &amp;TLS=false, const char *ca=&quot;&quot;, const char *cert=&quot;&quot;, const char *key=&quot;&quot;, const char *passwd=&quot;&quot;)</td></tr>
-<tr class="memdesc:a1f1b55114196078359c8a552b54925fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">WebSocketClient类的构造函数  <a href="#a1f1b55114196078359c8a552b54925fc">更多...</a><br/></td></tr>
+<tr class="memitem:a1f1b55114196078359c8a552b54925fc" id="r_a1f1b55114196078359c8a552b54925fc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1f1b55114196078359c8a552b54925fc">WebSocketClient</a> (const bool &amp;TLS=false, const char *ca=&quot;&quot;, const char *cert=&quot;&quot;, const char *key=&quot;&quot;, const char *passwd=&quot;&quot;)</td></tr>
+<tr class="memdesc:a1f1b55114196078359c8a552b54925fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">WebSocketClient类的构造函数  <br /></td></tr>
 <tr class="separator:a1f1b55114196078359c8a552b54925fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3eafdfc38703408b77ce924953e54429"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#a3eafdfc38703408b77ce924953e54429">setFunction</a> (std::function&lt; bool(const std::string &amp;message, <a class="el" href="classstt_1_1network_1_1WebSocketClient.html">WebSocketClient</a> &amp;k)&gt; fc)</td></tr>
-<tr class="memdesc:a3eafdfc38703408b77ce924953e54429"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置收到服务端消息后的回调函数 注册一个回调函数  <a href="#a3eafdfc38703408b77ce924953e54429">更多...</a><br/></td></tr>
+<tr class="memitem:a3eafdfc38703408b77ce924953e54429" id="r_a3eafdfc38703408b77ce924953e54429"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3eafdfc38703408b77ce924953e54429">setFunction</a> (std::function&lt; bool(const std::string &amp;message, <a class="el" href="classstt_1_1network_1_1WebSocketClient.html">WebSocketClient</a> &amp;k)&gt; fc)</td></tr>
+<tr class="memdesc:a3eafdfc38703408b77ce924953e54429"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置收到服务端消息后的回调函数 注册一个回调函数  <br /></td></tr>
 <tr class="separator:a3eafdfc38703408b77ce924953e54429"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ad7b117d99f5750aa262519d7e445e4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#a6ad7b117d99f5750aa262519d7e445e4">connect</a> (const std::string &amp;url, const int &amp;min=20)</td></tr>
-<tr class="memdesc:a6ad7b117d99f5750aa262519d7e445e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">连接到websocket服务器  <a href="#a6ad7b117d99f5750aa262519d7e445e4">更多...</a><br/></td></tr>
+<tr class="memitem:a6ad7b117d99f5750aa262519d7e445e4" id="r_a6ad7b117d99f5750aa262519d7e445e4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ad7b117d99f5750aa262519d7e445e4">connect</a> (const std::string &amp;url, const int &amp;min=20)</td></tr>
+<tr class="memdesc:a6ad7b117d99f5750aa262519d7e445e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">连接到websocket服务器  <br /></td></tr>
 <tr class="separator:a6ad7b117d99f5750aa262519d7e445e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7053e8593f360827d2d5aaee37438fb8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#a7053e8593f360827d2d5aaee37438fb8">sendMessage</a> (const std::string &amp;message, const std::string &amp;type=&quot;0001&quot;)</td></tr>
-<tr class="memdesc:a7053e8593f360827d2d5aaee37438fb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送 WebSocket 消息  <a href="#a7053e8593f360827d2d5aaee37438fb8">更多...</a><br/></td></tr>
+<tr class="memitem:a7053e8593f360827d2d5aaee37438fb8" id="r_a7053e8593f360827d2d5aaee37438fb8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7053e8593f360827d2d5aaee37438fb8">sendMessage</a> (const std::string &amp;message, const std::string &amp;type=&quot;0001&quot;)</td></tr>
+<tr class="memdesc:a7053e8593f360827d2d5aaee37438fb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送 WebSocket 消息  <br /></td></tr>
 <tr class="separator:a7053e8593f360827d2d5aaee37438fb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46be98f860f41937c3ddb738af189b55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#a46be98f860f41937c3ddb738af189b55">close</a> (const std::string &amp;closeCodeAndMessage, const bool &amp;wait=true)</td></tr>
-<tr class="memdesc:a46be98f860f41937c3ddb738af189b55"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送关闭帧并关闭 WebSocket 连接（简化方式）  <a href="#a46be98f860f41937c3ddb738af189b55">更多...</a><br/></td></tr>
+<tr class="memitem:a46be98f860f41937c3ddb738af189b55" id="r_a46be98f860f41937c3ddb738af189b55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a46be98f860f41937c3ddb738af189b55">close</a> (const std::string &amp;closeCodeAndMessage, const bool &amp;wait=true)</td></tr>
+<tr class="memdesc:a46be98f860f41937c3ddb738af189b55"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送关闭帧并关闭 WebSocket 连接（简化方式）  <br /></td></tr>
 <tr class="separator:a46be98f860f41937c3ddb738af189b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a389d7ee7dfeebbe283b4876d258df45d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#a389d7ee7dfeebbe283b4876d258df45d">close</a> (const short &amp;code=1000, const std::string &amp;message=&quot;bye&quot;, const bool &amp;wait=true)</td></tr>
-<tr class="memdesc:a389d7ee7dfeebbe283b4876d258df45d"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送关闭帧并关闭 WebSocket 连接（标准方式）  <a href="#a389d7ee7dfeebbe283b4876d258df45d">更多...</a><br/></td></tr>
+<tr class="memitem:a389d7ee7dfeebbe283b4876d258df45d" id="r_a389d7ee7dfeebbe283b4876d258df45d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a389d7ee7dfeebbe283b4876d258df45d">close</a> (const short &amp;code=1000, const std::string &amp;message=&quot;bye&quot;, const bool &amp;wait=true)</td></tr>
+<tr class="memdesc:a389d7ee7dfeebbe283b4876d258df45d"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送关闭帧并关闭 WebSocket 连接（标准方式）  <br /></td></tr>
 <tr class="separator:a389d7ee7dfeebbe283b4876d258df45d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaadb67abf50e475f10ce6e8e8988808b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#aaadb67abf50e475f10ce6e8e8988808b">isConnect</a> ()</td></tr>
-<tr class="memdesc:aaadb67abf50e475f10ce6e8e8988808b"><td class="mdescLeft">&#160;</td><td class="mdescRight">返回连接状态  <a href="#aaadb67abf50e475f10ce6e8e8988808b">更多...</a><br/></td></tr>
+<tr class="memitem:aaadb67abf50e475f10ce6e8e8988808b" id="r_aaadb67abf50e475f10ce6e8e8988808b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaadb67abf50e475f10ce6e8e8988808b">isConnect</a> ()</td></tr>
+<tr class="memdesc:aaadb67abf50e475f10ce6e8e8988808b"><td class="mdescLeft">&#160;</td><td class="mdescRight">返回连接状态  <br /></td></tr>
 <tr class="separator:aaadb67abf50e475f10ce6e8e8988808b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58028db6105b2bf9b9a21706e5b3665a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#a58028db6105b2bf9b9a21706e5b3665a">getUrl</a> ()</td></tr>
-<tr class="memdesc:a58028db6105b2bf9b9a21706e5b3665a"><td class="mdescLeft">&#160;</td><td class="mdescRight">如果连接到了服务器 返回url  <a href="#a58028db6105b2bf9b9a21706e5b3665a">更多...</a><br/></td></tr>
+<tr class="memitem:a58028db6105b2bf9b9a21706e5b3665a" id="r_a58028db6105b2bf9b9a21706e5b3665a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a58028db6105b2bf9b9a21706e5b3665a">getUrl</a> ()</td></tr>
+<tr class="memdesc:a58028db6105b2bf9b9a21706e5b3665a"><td class="mdescLeft">&#160;</td><td class="mdescRight">如果连接到了服务器 返回url  <br /></td></tr>
 <tr class="separator:a58028db6105b2bf9b9a21706e5b3665a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c7809bacd31a7ef921cae0646f228fe"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#a1c7809bacd31a7ef921cae0646f228fe">getServerIp</a> ()</td></tr>
-<tr class="memdesc:a1c7809bacd31a7ef921cae0646f228fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">如果连接到了服务器 返回服务器ip  <a href="#a1c7809bacd31a7ef921cae0646f228fe">更多...</a><br/></td></tr>
+<tr class="memitem:a1c7809bacd31a7ef921cae0646f228fe" id="r_a1c7809bacd31a7ef921cae0646f228fe"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c7809bacd31a7ef921cae0646f228fe">getServerIp</a> ()</td></tr>
+<tr class="memdesc:a1c7809bacd31a7ef921cae0646f228fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">如果连接到了服务器 返回服务器ip  <br /></td></tr>
 <tr class="separator:a1c7809bacd31a7ef921cae0646f228fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08728b637612a8420eb25e21390037a3"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#a08728b637612a8420eb25e21390037a3">getServerPort</a> ()</td></tr>
-<tr class="memdesc:a08728b637612a8420eb25e21390037a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">如果连接到了服务器 返回服务器端口  <a href="#a08728b637612a8420eb25e21390037a3">更多...</a><br/></td></tr>
+<tr class="memitem:a08728b637612a8420eb25e21390037a3" id="r_a08728b637612a8420eb25e21390037a3"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a08728b637612a8420eb25e21390037a3">getServerPort</a> ()</td></tr>
+<tr class="memdesc:a08728b637612a8420eb25e21390037a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">如果连接到了服务器，以字符串返回服务器端口。  <br /></td></tr>
 <tr class="separator:a08728b637612a8420eb25e21390037a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63caa68697957381788d3885d9ed5648"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html#a63caa68697957381788d3885d9ed5648">~WebSocketClient</a> ()</td></tr>
-<tr class="memdesc:a63caa68697957381788d3885d9ed5648"><td class="mdescLeft">&#160;</td><td class="mdescRight">WebSocketClient类的析构函数，销毁对象时候会优雅退出断开连接  <a href="#a63caa68697957381788d3885d9ed5648">更多...</a><br/></td></tr>
+<tr class="memitem:a2d502b89880a504a395667842a1eb60a" id="r_a2d502b89880a504a395667842a1eb60a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d502b89880a504a395667842a1eb60a">getServerPortNumber</a> ()</td></tr>
+<tr class="memdesc:a2d502b89880a504a395667842a1eb60a"><td class="mdescLeft">&#160;</td><td class="mdescRight">如果连接到了服务器，以整数返回服务器端口。  <br /></td></tr>
+<tr class="separator:a2d502b89880a504a395667842a1eb60a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63caa68697957381788d3885d9ed5648" id="r_a63caa68697957381788d3885d9ed5648"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a63caa68697957381788d3885d9ed5648">~WebSocketClient</a> ()</td></tr>
+<tr class="memdesc:a63caa68697957381788d3885d9ed5648"><td class="mdescLeft">&#160;</td><td class="mdescRight">WebSocketClient类的析构函数，销毁对象时候会优雅退出断开连接  <br /></td></tr>
 <tr class="separator:a63caa68697957381788d3885d9ed5648"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>Websocket客户端操作的类 -如果需要重新设置TLS/Https加密的证书，目前需要销毁对象后重新构造 底层TCP默认是阻塞的 </p>
 </div><h2 class="groupheader">构造及析构函数说明</h2>
-<a class="anchor" id="a1f1b55114196078359c8a552b54925fc"></a>
+<a id="a1f1b55114196078359c8a552b54925fc" name="a1f1b55114196078359c8a552b54925fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f1b55114196078359c8a552b54925fc">&#9670;&#160;</a></span>WebSocketClient()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -158,42 +163,32 @@ Public 成员函数</h2></td></tr>
         <tr>
           <td class="memname">stt::network::WebSocketClient::WebSocketClient </td>
           <td>(</td>
-          <td class="paramtype">const bool &amp;&#160;</td>
-          <td class="paramname"><em>TLS</em> = <code>false</code>, </td>
+          <td class="paramtype">const bool &amp;</td>          <td class="paramname"><span class="paramname"><em>TLS</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>ca</em> = <code>&quot;&quot;</code>, </td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>ca</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;&quot;</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>cert</em> = <code>&quot;&quot;</code>, </td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>cert</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;&quot;</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>key</em> = <code>&quot;&quot;</code>, </td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>key</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;&quot;</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>passwd</em> = <code>&quot;&quot;</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>passwd</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;&quot;</span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -202,25 +197,31 @@ Public 成员函数</h2></td></tr>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
     <tr><td class="paramname">TLS</td><td>true：启用wss加密 false：不启用wss加密 （默认为false不启用） </td></tr>
-    <tr><td class="paramname">ca</td><td>CA 根证书路径（若启用TLS加密则必须填这个 默认空） </td></tr>
+    <tr><td class="paramname">ca</td><td>CA 根证书文件路径；留空时使用操作系统默认信任库。 </td></tr>
     <tr><td class="paramname">cert</td><td>客户端证书路径（可选 默认空） </td></tr>
     <tr><td class="paramname">key</td><td>客户端私钥路径（可选 默认空） </td></tr>
     <tr><td class="paramname">passwd</td><td>私钥解密密码（可选 默认空） </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section note"><dt>注解</dt><dd>-ca用来校验对方服务器的证书是否可信（可以用操作系统自带的根证书验证） -如果启用了wss加密 ca必填 其他可选 -如果服务端要求客户端身份认证（双向 TLS/SSL），你需要提供一个有效的客户端证书。 </dd></dl>
+<dl class="section note"><dt>注解</dt><dd><ul>
+<li>TLS 最低版本为 1.2，并同时验证证书链和连接目标主机名。</li>
+<li>ca 留空时使用系统默认根证书；指定时使用给定 CA 文件。 -如果服务端要求客户端身份认证（双向 TLS/SSL），你需要提供一个有效的客户端证书。 </li>
+</ul>
+</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a63caa68697957381788d3885d9ed5648"></a>
+<a id="a63caa68697957381788d3885d9ed5648" name="a63caa68697957381788d3885d9ed5648"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63caa68697957381788d3885d9ed5648">&#9670;&#160;</a></span>~WebSocketClient()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">stt::network::WebSocketClient::~WebSocketClient </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -231,68 +232,26 @@ Public 成员函数</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">成员函数说明</h2>
-<a class="anchor" id="a46be98f860f41937c3ddb738af189b55"></a>
+<a id="a389d7ee7dfeebbe283b4876d258df45d" name="a389d7ee7dfeebbe283b4876d258df45d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a389d7ee7dfeebbe283b4876d258df45d">&#9670;&#160;</a></span>close() <span class="overload">[1/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void stt::network::WebSocketClient::close </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>closeCodeAndMessage</em>, </td>
+          <td class="paramtype">const short &amp;</td>          <td class="paramname"><span class="paramname"><em>code</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1000</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const bool &amp;&#160;</td>
-          <td class="paramname"><em>wait</em> = <code>true</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>发送关闭帧并关闭 WebSocket 连接（简化方式） </p>
-<p>直接传入编码后的关闭 payload，其中前两字节为关闭码（big-endian）， 后续为 UTF-8 编码的关闭原因描述，用于简化调用。</p>
-<dl class="params"><dt>参数</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">closeCodeAndMessage</td><td>编码后的关闭帧 payload（2 字节关闭码 + 可选消息） </td></tr>
-    <tr><td class="paramname">wait</td><td>是否等待底层监听线程/epoll事件处理后退出 </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="a389d7ee7dfeebbe283b4876d258df45d"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void stt::network::WebSocketClient::close </td>
-          <td>(</td>
-          <td class="paramtype">const short &amp;&#160;</td>
-          <td class="paramname"><em>code</em> = <code>1000</code>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>message</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;bye&quot;</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>message</em> = <code>&quot;bye&quot;</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const bool &amp;&#160;</td>
-          <td class="paramname"><em>wait</em> = <code>true</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const bool &amp;</td>          <td class="paramname"><span class="paramname"><em>wait</em></span><span class="paramdefsep"> = </span><span class="paramdefval">true</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -319,26 +278,52 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a6ad7b117d99f5750aa262519d7e445e4"></a>
+<a id="a46be98f860f41937c3ddb738af189b55" name="a46be98f860f41937c3ddb738af189b55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46be98f860f41937c3ddb738af189b55">&#9670;&#160;</a></span>close() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stt::network::WebSocketClient::close </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>closeCodeAndMessage</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool &amp;</td>          <td class="paramname"><span class="paramname"><em>wait</em></span><span class="paramdefsep"> = </span><span class="paramdefval">true</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>发送关闭帧并关闭 WebSocket 连接（简化方式） </p>
+<p>直接传入编码后的关闭 payload，其中前两字节为关闭码（big-endian）， 后续为 UTF-8 编码的关闭原因描述，用于简化调用。</p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">closeCodeAndMessage</td><td>编码后的关闭帧 payload（2 字节关闭码 + 可选消息） </td></tr>
+    <tr><td class="paramname">wait</td><td>是否等待底层监听线程/epoll事件处理后退出 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6ad7b117d99f5750aa262519d7e445e4" name="a6ad7b117d99f5750aa262519d7e445e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ad7b117d99f5750aa262519d7e445e4">&#9670;&#160;</a></span>connect()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::network::WebSocketClient::connect </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>url</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>url</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>min</em> = <code>20</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>min</em></span><span class="paramdefsep"> = </span><span class="paramdefval">20</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -355,7 +340,9 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a1c7809bacd31a7ef921cae0646f228fe"></a>
+<a id="a1c7809bacd31a7ef921cae0646f228fe" name="a1c7809bacd31a7ef921cae0646f228fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c7809bacd31a7ef921cae0646f228fe">&#9670;&#160;</a></span>getServerIp()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -365,13 +352,13 @@ Public 成员函数</h2></td></tr>
         <tr>
           <td class="memname">std::string stt::network::WebSocketClient::getServerIp </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -381,7 +368,9 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a08728b637612a8420eb25e21390037a3"></a>
+<a id="a08728b637612a8420eb25e21390037a3" name="a08728b637612a8420eb25e21390037a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08728b637612a8420eb25e21390037a3">&#9670;&#160;</a></span>getServerPort()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -391,23 +380,54 @@ Public 成员函数</h2></td></tr>
         <tr>
           <td class="memname">std::string stt::network::WebSocketClient::getServerPort </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>如果连接到了服务器 返回服务器端口 </p>
-<dl class="section return"><dt>返回</dt><dd>返回服务器端口 </dd></dl>
+<p>如果连接到了服务器，以字符串返回服务器端口。 </p>
+<dl class="section return"><dt>返回</dt><dd>十进制端口字符串；未连接时为 "-1"。 </dd></dl>
+<dl class="section note"><dt>注解</dt><dd>为保持源代码兼容保留字符串返回类型；新代码建议使用 <a class="el" href="#a2d502b89880a504a395667842a1eb60a" title="如果连接到了服务器，以整数返回服务器端口。">getServerPortNumber()</a>。 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a58028db6105b2bf9b9a21706e5b3665a"></a>
+<a id="a2d502b89880a504a395667842a1eb60a" name="a2d502b89880a504a395667842a1eb60a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d502b89880a504a395667842a1eb60a">&#9670;&#160;</a></span>getServerPortNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int stt::network::WebSocketClient::getServerPortNumber </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>如果连接到了服务器，以整数返回服务器端口。 </p>
+<dl class="section return"><dt>返回</dt><dd>端口号；未连接时为 -1。 </dd></dl>
+
+</div>
+</div>
+<a id="a58028db6105b2bf9b9a21706e5b3665a" name="a58028db6105b2bf9b9a21706e5b3665a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a58028db6105b2bf9b9a21706e5b3665a">&#9670;&#160;</a></span>getUrl()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -417,13 +437,13 @@ Public 成员函数</h2></td></tr>
         <tr>
           <td class="memname">std::string stt::network::WebSocketClient::getUrl </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -433,7 +453,9 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aaadb67abf50e475f10ce6e8e8988808b"></a>
+<a id="aaadb67abf50e475f10ce6e8e8988808b" name="aaadb67abf50e475f10ce6e8e8988808b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaadb67abf50e475f10ce6e8e8988808b">&#9670;&#160;</a></span>isConnect()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -443,13 +465,13 @@ Public 成员函数</h2></td></tr>
         <tr>
           <td class="memname">bool stt::network::WebSocketClient::isConnect </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -459,33 +481,27 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a7053e8593f360827d2d5aaee37438fb8"></a>
+<a id="a7053e8593f360827d2d5aaee37438fb8" name="a7053e8593f360827d2d5aaee37438fb8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7053e8593f360827d2d5aaee37438fb8">&#9670;&#160;</a></span>sendMessage()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::network::WebSocketClient::sendMessage </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>message</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>message</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>type</em> = <code>&quot;0001&quot;</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>type</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;0001&quot;</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>发送 WebSocket 消息 </p>
-<p>根据 WebSocket 协议，封装并发送一条带掩码的数据帧（客户端必须使用掩码）， 支持根据 payload 长度自动选择帧格式：</p>
-<ul>
+<p>根据 WebSocket 协议，封装并发送一条带掩码的数据帧（客户端必须使用掩码）， 支持根据 payload 长度自动选择帧格式：</p><ul>
 <li>payload &lt;= 125 字节：使用 1 字节长度</li>
 <li>126 &lt;= payload &lt;= 65535：使用 2 字节扩展长度（附加 126 标记）</li>
 <li>payload &gt; 65535：使用 8 字节扩展长度（附加 127 标记）</li>
@@ -510,7 +526,9 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a3eafdfc38703408b77ce924953e54429"></a>
+<a id="a3eafdfc38703408b77ce924953e54429" name="a3eafdfc38703408b77ce924953e54429"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3eafdfc38703408b77ce924953e54429">&#9670;&#160;</a></span>setFunction()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -520,14 +538,13 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
         <tr>
           <td class="memname">void stt::network::WebSocketClient::setFunction </td>
           <td>(</td>
-          <td class="paramtype">std::function&lt; bool(const std::string &amp;message, <a class="el" href="classstt_1_1network_1_1WebSocketClient.html">WebSocketClient</a> &amp;k)&gt;&#160;</td>
-          <td class="paramname"><em>fc</em></td><td>)</td>
+          <td class="paramtype">std::function&lt; bool(const std::string &amp;message, <a class="el" href="classstt_1_1network_1_1WebSocketClient.html">WebSocketClient</a> &amp;k)&gt;</td>          <td class="paramname"><span class="paramname"><em>fc</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -551,9 +568,8 @@ false 发送失败（可能因连接未建立或发送异常） </dd></dl>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-制作者 &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.5
+制作者&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
 </small></address>
+</div><!-- doc-content -->
 </body>
 </html>

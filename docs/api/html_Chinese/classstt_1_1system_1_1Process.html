@@ -1,18 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.5"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>STTNet: stt::system::Process类 参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() { searchBox.OnSelectItem(0); });
-</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -20,9 +23,9 @@
 <div id="titlearea">
 <table cellspacing="0" cellpadding="0">
  <tbody>
- <tr style="height: 56px;">
-  <td style="padding-left: 0.5em;">
-   <div id="projectname">STTNet
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
    </div>
   </td>
  </tr>
@@ -30,55 +33,52 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.5 -->
+<!-- 制作者 Doxygen 1.13.2 -->
 <script type="text/javascript">
-var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
 </script>
-  <div id="navrow1" class="tabs">
-    <ul class="tablist">
-      <li><a href="index.html"><span>首页</span></a></li>
-      <li><a href="pages.html"><span>相关页面</span></a></li>
-      <li><a href="namespaces.html"><span>命名空间</span></a></li>
-      <li class="current"><a href="annotated.html"><span>类</span></a></li>
-      <li><a href="files.html"><span>文件</span></a></li>
-      <li>
-        <div id="MSearchBox" class="MSearchBoxInactive">
-        <span class="left">
-          <img id="MSearchSelect" src="search/mag_sel.png"
-               onmouseover="return searchBox.OnSearchSelectShow()"
-               onmouseout="return searchBox.OnSearchSelectHide()"
-               alt=""/>
-          <input type="text" id="MSearchField" value="搜索" accesskey="S"
-               onfocus="searchBox.OnSearchFieldFocus(true)" 
-               onblur="searchBox.OnSearchFieldFocus(false)" 
-               onkeyup="searchBox.OnSearchFieldChange(event)"/>
-          </span><span class="right">
-            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
-          </span>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div id="navrow2" class="tabs2">
-    <ul class="tablist">
-      <li><a href="annotated.html"><span>类列表</span></a></li>
-      <li><a href="classes.html"><span>类索引</span></a></li>
-      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
-      <li><a href="functions.html"><span>类成员</span></a></li>
-    </ul>
-  </div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索',false);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){ initResizable(false); });
+/* @license-end */
+</script>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>枚举</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>枚举值</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>页</a></div>
+</div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
-        name="MSearchResults" id="MSearchResults">
-</iframe>
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
 </div>
 
 <div id="nav-path" class="navpath">
@@ -86,38 +86,37 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <li class="navelem"><a class="el" href="namespacestt.html">stt</a></li><li class="navelem"><a class="el" href="namespacestt_1_1system.html">system</a></li><li class="navelem"><a class="el" href="classstt_1_1system_1_1Process.html">Process</a></li>  </ul>
 </div>
 </div><!-- top -->
+<div id="doc-content">
 <div class="header">
   <div class="summary">
 <a href="#pub-static-methods">静态 Public 成员函数</a> &#124;
 <a href="classstt_1_1system_1_1Process-members.html">所有成员列表</a>  </div>
-  <div class="headertitle">
-<div class="title">stt::system::Process类 参考</div>  </div>
+  <div class="headertitle"><div class="title">stt::system::Process类 参考</div></div>
 </div><!--header-->
 <div class="contents">
 
 <p>进程管理的静态工具类  
- <a href="classstt_1_1system_1_1Process.html#details">更多...</a></p>
+ <a href="#details">更多...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 静态 Public 成员函数</h2></td></tr>
-<tr class="memitem:a0f63fb33d461ee4a2c5709a66269854e"><td class="memTemplParams" colspan="2">template&lt;class... Args&gt; </td></tr>
-<tr class="memitem:a0f63fb33d461ee4a2c5709a66269854e"><td class="memTemplItemLeft" align="right" valign="top">static bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1Process.html#a0f63fb33d461ee4a2c5709a66269854e">startProcess</a> (const std::string &amp;name, const int &amp;sec=-1, Args...args)</td></tr>
-<tr class="memdesc:a0f63fb33d461ee4a2c5709a66269854e"><td class="mdescLeft">&#160;</td><td class="mdescRight">启动一个新进程（可选择是否定时重启）  <a href="#a0f63fb33d461ee4a2c5709a66269854e">更多...</a><br/></td></tr>
-<tr class="separator:a0f63fb33d461ee4a2c5709a66269854e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ddc807b5ed422744b21ad6ea805734c"><td class="memTemplParams" colspan="2">template&lt;class Fn , class... Args&gt; </td></tr>
-<tr class="memitem:a7ddc807b5ed422744b21ad6ea805734c"><td class="memTemplItemLeft" align="right" valign="top">static std::enable_if<br class="typebreak"/>
-&lt;!std::is_convertible&lt; Fn, <br class="typebreak"/>
-std::string &gt;::value, bool &gt;<br class="typebreak"/>
-::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classstt_1_1system_1_1Process.html#a7ddc807b5ed422744b21ad6ea805734c">startProcess</a> (Fn &amp;&amp;fn, const int &amp;sec=-1, Args &amp;&amp;...args)</td></tr>
-<tr class="memdesc:a7ddc807b5ed422744b21ad6ea805734c"><td class="mdescLeft">&#160;</td><td class="mdescRight">通过函数创建子进程（可选择是否定时重启）  <a href="#a7ddc807b5ed422744b21ad6ea805734c">更多...</a><br/></td></tr>
-<tr class="separator:a7ddc807b5ed422744b21ad6ea805734c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7baaf76c98cc1187b63a6428f7b53a9c" id="r_a7baaf76c98cc1187b63a6428f7b53a9c"><td class="memTemplParams" colspan="2">template&lt;class... Args&gt; </td></tr>
+<tr class="memitem:a7baaf76c98cc1187b63a6428f7b53a9c"><td class="memTemplItemLeft" align="right" valign="top">static bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a7baaf76c98cc1187b63a6428f7b53a9c">startProcess</a> (const std::string &amp;name, const int &amp;sec=-1, Args ...args)</td></tr>
+<tr class="memdesc:a7baaf76c98cc1187b63a6428f7b53a9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">启动一个新进程（可选择是否定时重启）  <br /></td></tr>
+<tr class="separator:a7baaf76c98cc1187b63a6428f7b53a9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a126e7f9867167c8828f57745e521e3ea" id="r_a126e7f9867167c8828f57745e521e3ea"><td class="memTemplParams" colspan="2">template&lt;class Fn, class... Args&gt; </td></tr>
+<tr class="memitem:a126e7f9867167c8828f57745e521e3ea"><td class="memTemplItemLeft" align="right" valign="top">static std::enable_if&lt;!std::is_convertible&lt; Fn, std::string &gt;::value, bool &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a126e7f9867167c8828f57745e521e3ea">startProcess</a> (Fn &amp;&amp;fn, const int &amp;sec=-1, Args &amp;&amp;...args)</td></tr>
+<tr class="memdesc:a126e7f9867167c8828f57745e521e3ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">通过函数创建子进程（可选择是否定时重启）  <br /></td></tr>
+<tr class="separator:a126e7f9867167c8828f57745e521e3ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>进程管理的静态工具类 </p>
 </div><h2 class="groupheader">成员函数说明</h2>
-<a class="anchor" id="a0f63fb33d461ee4a2c5709a66269854e"></a>
+<a id="a7baaf76c98cc1187b63a6428f7b53a9c" name="a7baaf76c98cc1187b63a6428f7b53a9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7baaf76c98cc1187b63a6428f7b53a9c">&#9670;&#160;</a></span>startProcess() <span class="overload">[1/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -129,30 +128,22 @@ template&lt;class... Args&gt; </div>
         <tr>
           <td class="memname">static bool stt::system::Process::startProcess </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>sec</em> = <code>-1</code>, </td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>sec</em></span><span class="paramdefsep"> = </span><span class="paramdefval">-1</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Args...&#160;</td>
-          <td class="paramname"><em>args</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">Args ...</td>          <td class="paramname"><span class="paramname"><em>args</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -160,8 +151,8 @@ template&lt;class... Args&gt; </div>
 <p>启动一个新进程（可选择是否定时重启） </p>
 <p>当 <code>sec == -1</code> 时，仅启动一次子进程；否则，会创建一个辅助子进程，定期重启该目标进程。</p>
 <ul>
-<li>定时启动时，辅助进程会屏蔽所有信号。</li>
-<li>启动的目标进程会屏蔽除 SIGCHLD 和 SIGTERM 的所有信号。</li>
+<li>不会修改调用方（父进程）的信号处置。</li>
+<li>定时调度进程退出时，Linux 会向其当前目标子进程发送 SIGTERM，避免孤儿服务。</li>
 </ul>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
@@ -184,42 +175,36 @@ false fork 或 execv 出错时返回 false</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a7ddc807b5ed422744b21ad6ea805734c"></a>
+<a id="a126e7f9867167c8828f57745e521e3ea" name="a126e7f9867167c8828f57745e521e3ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a126e7f9867167c8828f57745e521e3ea">&#9670;&#160;</a></span>startProcess() <span class="overload">[2/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Fn , class... Args&gt; </div>
+template&lt;class Fn, class... Args&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::enable_if&lt;!std::is_convertible&lt;Fn, std::string&gt;::value, bool&gt;::type stt::system::Process::startProcess </td>
+          <td class="memname">static std::enable_if&lt;!std::is_convertible&lt; Fn, std::string &gt;::value, bool &gt;::type stt::system::Process::startProcess </td>
           <td>(</td>
-          <td class="paramtype">Fn &amp;&amp;&#160;</td>
-          <td class="paramname"><em>fn</em>, </td>
+          <td class="paramtype">Fn &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>fn</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>sec</em> = <code>-1</code>, </td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>sec</em></span><span class="paramdefsep"> = </span><span class="paramdefval">-1</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Args &amp;&amp;...&#160;</td>
-          <td class="paramname"><em>args</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">Args &amp;&amp;...</td>          <td class="paramname"><span class="paramname"><em>args</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -258,9 +243,8 @@ false 创建进程失败</dd></dl>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-制作者 &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.5
+制作者&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
 </small></address>
+</div><!-- doc-content -->
 </body>
 </html>

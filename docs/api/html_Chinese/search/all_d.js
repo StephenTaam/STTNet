@@ -1,12 +1,18 @@
 var searchData=
 [
-  ['openfile',['openFile',['../classstt_1_1file_1_1File.html#a00aa9317ef7c1213baadcbd3f3485430',1,'stt::file::File::openFile()'],['../classstt_1_1file_1_1LogFile.html#a341a294e5f846b2942d874a482bfa64e',1,'stt::file::LogFile::openFile()']]],
-  ['operator_2b',['operator+',['../structstt_1_1time_1_1Duration.html#a1dd579ea9e02cf8e89544cf14de7dce5',1,'stt::time::Duration']]],
-  ['operator_2d',['operator-',['../structstt_1_1time_1_1Duration.html#a5e61bfb427eb568c4a8500f491ff6ce3',1,'stt::time::Duration']]],
-  ['operator_3c',['operator&lt;',['../structstt_1_1time_1_1Duration.html#a679a3924941b7d6ed256238fa37be26e',1,'stt::time::Duration']]],
-  ['operator_3c_3c',['operator&lt;&lt;',['../namespacestt_1_1time.html#a25ddd12f207513b18ce95137f92bdc8b',1,'stt::time']]],
-  ['operator_3c_3d',['operator&lt;=',['../structstt_1_1time_1_1Duration.html#a04cd0d3f24d7f130d8b5110689836051',1,'stt::time::Duration']]],
-  ['operator_3d_3d',['operator==',['../structstt_1_1time_1_1Duration.html#a2e68b1c9d6ffa3be29b4c11da6cfcd7a',1,'stt::time::Duration']]],
-  ['operator_3e',['operator&gt;',['../structstt_1_1time_1_1Duration.html#a18a63d08686488be8d3336a3a25da31c',1,'stt::time::Duration']]],
-  ['operator_3e_3d',['operator&gt;=',['../structstt_1_1time_1_1Duration.html#a28f25902fc3911b21ffbfb5446e103ac',1,'stt::time::Duration']]]
+  ['openfile_0',['openFile',['../classstt_1_1file_1_1File.html#a00aa9317ef7c1213baadcbd3f3485430',1,'stt::file::File::openFile()'],['../classstt_1_1file_1_1LogFile.html#a341a294e5f846b2942d874a482bfa64e',1,'stt::file::LogFile::openFile()']]],
+  ['operator_2b_1',['operator+',['../structstt_1_1time_1_1Duration.html#a1dd579ea9e02cf8e89544cf14de7dce5',1,'stt::time::Duration']]],
+  ['operator_2d_2',['operator-',['../structstt_1_1time_1_1Duration.html#a5e61bfb427eb568c4a8500f491ff6ce3',1,'stt::time::Duration']]],
+  ['operator_3c_3',['operator&lt;',['../structstt_1_1time_1_1Duration.html#a679a3924941b7d6ed256238fa37be26e',1,'stt::time::Duration']]],
+  ['operator_3c_3c_4',['operator&lt;&lt;',['../namespacestt_1_1time.html#a2b5102bdcb5b85e161261fda22074f23',1,'stt::time']]],
+  ['operator_3c_3d_5',['operator&lt;=',['../structstt_1_1time_1_1Duration.html#a04cd0d3f24d7f130d8b5110689836051',1,'stt::time::Duration']]],
+  ['operator_3d_6',['operator=',['../classstt_1_1system_1_1MPSCQueue.html#a088f0514e03d90e84754eb71f2c50265',1,'stt::system::MPSCQueue']]],
+  ['operator_3d_3d_7',['operator==',['../structstt_1_1time_1_1Duration.html#a2e68b1c9d6ffa3be29b4c11da6cfcd7a',1,'stt::time::Duration']]],
+  ['operator_3e_8',['operator&gt;',['../structstt_1_1time_1_1Duration.html#a18a63d08686488be8d3336a3a25da31c',1,'stt::time::Duration']]],
+  ['operator_3e_3d_9',['operator&gt;=',['../structstt_1_1time_1_1Duration.html#a28f25902fc3911b21ffbfb5446e103ac',1,'stt::time::Duration']]],
+  ['overflowed_10',['overflowed',['../structstt_1_1network_1_1ConnectionWriteState.html#a88140647b1ad2f1ddc86e97c53c433cf',1,'stt::network::ConnectionWriteState']]],
+  ['overflowfinishmutex_11',['overflowFinishMutex',['../classstt_1_1network_1_1TcpServer.html#ad1368963145af575cab415c975bda773',1,'stt::network::TcpServer']]],
+  ['overflowfinishqueue_12',['overflowFinishQueue',['../classstt_1_1network_1_1TcpServer.html#a7b12a5de142b425ddcee7404616c046e',1,'stt::network::TcpServer']]],
+  ['overflowsendreadymutex_13',['overflowSendReadyMutex',['../classstt_1_1network_1_1TcpServer.html#ae2c3a0ac282d772ea353d10dfd26d0a5',1,'stt::network::TcpServer']]],
+  ['overflowsendreadyqueue_14',['overflowSendReadyQueue',['../classstt_1_1network_1_1TcpServer.html#a85a371eb404ee09a68868228c2ca237f',1,'stt::network::TcpServer']]]
 ];

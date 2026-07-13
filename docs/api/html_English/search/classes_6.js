@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ipinformation',['IPInformation',['../structstt_1_1security_1_1IPInformation.html',1,'stt::security']]]
+  ['ipinformation_0',['IPInformation',['../structstt_1_1security_1_1IPInformation.html',1,'stt::security']]]
 ];

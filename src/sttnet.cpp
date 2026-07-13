@@ -1127,8 +1127,8 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
 
     stt::file::LogFile::~LogFile()
     {
-        consumerGuard=false;
-        //queueCV.notify_all();
+        consumerGuard.store(false, std::memory_order_release);
+        queueCV.notify_one();
         if(consumerThread.joinable())
             consumerThread.join();
     }
@@ -1140,13 +1140,16 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
     }
     void stt::file::LogFile::writeLog(const string &data)
     {
+        if(!consumerGuard.load(std::memory_order_acquire))
+            return;
         //string content;
         //getTime(content,timeFormat);
         //content+=contentFormat+data;
         
         //{
         //    std::lock_guard<std::mutex> lock(queueMutex);
-            logQueue.push(std::move(data));
+            if (logQueue.push(data))
+                queueCV.notify_one();
         //}
         //queueCV.notify_all();
         /*
@@ -1834,14 +1837,14 @@ string& stt::data::WebsocketStringUtil::transfer_websocket_key(string &str)
     
 string& stt::data::NumberStringConvertUtil::strto16(const string &ori_str,string &result)//字符串转化为16进制字符串
 {
-    int size=ori_str.length();
-    const char *buffer1;
-    char buffer2[2*size+1];
-    buffer2[2*size]=0;
-    buffer1=ori_str.c_str();
-    for(int i=0;i<size;i++)
-        snprintf(buffer2+i*2,3,"%02x",buffer1[i]);
-    result.assign(buffer2);
+    static constexpr char hex[]="0123456789abcdef";
+    result.resize(ori_str.size()*2);
+    for(size_t i=0;i<ori_str.size();++i)
+    {
+        const unsigned char value=static_cast<unsigned char>(ori_str[i]);
+        result[i*2]=hex[value>>4];
+        result[i*2+1]=hex[value&0x0f];
+    }
     return result;
 }
     int& stt::data::NumberStringConvertUtil::str16toInt(const string_view&ori_str,int &result,const int &i)
@@ -2128,7 +2131,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     void stt::network::TcpFDHandler::blockSet(const int &sec)
     {
         int flags=fcntl(fd,F_GETFL,0);//获取当前标志
-        fcntl(fd,F_GETFL,flags&~O_NONBLOCK);
+        if(flags>=0)
+            (void)fcntl(fd,F_SETFL,flags&~O_NONBLOCK);
         flag1=false;
         if(sec!=-1)
         {
@@ -2137,13 +2141,15 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             tv.tv_usec = 0;
 
             setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
+            setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv));
         }
         this->sec=sec;
     }
     void stt::network::UdpFDHandler::blockSet(const int &sec)
     {
         int flags=fcntl(fd,F_GETFL,0);//获取当前标志
-        fcntl(fd,F_GETFL,flags&~O_NONBLOCK);
+        if(flags>=0)
+            (void)fcntl(fd,F_SETFL,flags&~O_NONBLOCK);
         flag1=false;
         if(sec!=-1)
         {
@@ -2152,20 +2158,21 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             tv.tv_usec = 0;
 
             setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
+            setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv));
         }
         this->sec=sec;
     }
     void stt::network::TcpFDHandler::unblockSet()
     {
         int flags=fcntl(fd,F_GETFL,0);//获取当前标志
-        fcntl(fd,F_SETFL,flags|O_NONBLOCK);
-        flag1=true;
+        if(flags>=0&&fcntl(fd,F_SETFL,flags|O_NONBLOCK)==0)
+            flag1=true;
     }
     void stt::network::UdpFDHandler::unblockSet()
     {
         int flags=fcntl(fd,F_GETFL,0);//获取当前标志
-        fcntl(fd,F_SETFL,flags|O_NONBLOCK);
-        flag1=true;
+        if(flags>=0&&fcntl(fd,F_SETFL,flags|O_NONBLOCK)==0)
+            flag1=true;
     }
     bool stt::network::TcpFDHandler::multiUseSet()
     {
@@ -2174,7 +2181,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             opt=1;
         else
             opt=0;
-        if(setsockopt(fd,SOL_SOCKET,SO_REUSEADDR|SO_REUSEPORT,&opt,sizeof(opt))<0)
+        if(setsockopt(fd,SOL_SOCKET,SO_REUSEADDR,&opt,sizeof(opt))<0||
+           setsockopt(fd,SOL_SOCKET,SO_REUSEPORT,&opt,sizeof(opt))<0)
         {
             cerr<<"set multi failed"<<endl;
             perror("setsockopt");
@@ -2190,7 +2198,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             opt=1;
         else
             opt=0;
-        if(setsockopt(fd,SOL_SOCKET,SO_REUSEADDR|SO_REUSEPORT,&opt,sizeof(opt))<0)
+        if(setsockopt(fd,SOL_SOCKET,SO_REUSEADDR,&opt,sizeof(opt))<0||
+           setsockopt(fd,SOL_SOCKET,SO_REUSEPORT,&opt,sizeof(opt))<0)
         {
             cerr<<"set multi failed"<<endl;
             perror("setsockopt");
@@ -2205,9 +2214,6 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         this->flag1=flag1;
         this->flag2=flag2;
         this->ssl=ssl;
-        if(ssl!=nullptr)
-            signal(SIGPIPE,SIG_IGN);
-        
     }
     void stt::network::UdpFDHandler::setFD(const int &fd,const bool &flag1,const int &sec,const bool &flag2)
     {
@@ -2223,10 +2229,13 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     }
     void stt::network::TcpFDHandler::close(const bool &cle)
     {
-        
         flag1=false;
         flag2=false;
-        if(cle)
+        if(cle&&queuedCloseFunction)
+        {
+            queuedCloseFunction();
+        }
+        else if(cle)
         {
             if(ssl!=nullptr)
             {
@@ -2237,6 +2246,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         }
         ssl=nullptr;
         fd=-1;
+        queuedSendFunction={};
+        queuedCloseFunction={};
     }
     void stt::network::UdpFDHandler::close(const bool &cle)
     {
@@ -2252,7 +2263,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     bool stt::network::TcpClient::createFD()
     {
         //准备socket
-        fd=socket(AF_INET,SOCK_STREAM,0);
+        fd=socket(AF_INET,SOCK_STREAM|SOCK_CLOEXEC,0);
         if(fd<0)
         {
             perror("socket");
@@ -2266,9 +2277,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         if(TLS)
         {
             this->TLS=true;
-            if(!initCTX(ca,cert,passwd))
+            if(!initCTX(ca,cert,key,passwd))
             {
                 this->TLS=false;
+                ::close(fd);
+                fd=-1;
                 return false;
             }
             ssl=SSL_new(ctx);
@@ -2277,6 +2290,13 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 perror("new ssl wrong");
                 ERR_print_errors_fp(stderr);
                 this->TLS=false;
+                if(ctx!=nullptr)
+                {
+                    SSL_CTX_free(ctx);
+                    ctx=nullptr;
+                }
+                ::close(fd);
+                fd=-1;
                 return false;
             }
         }
@@ -2295,7 +2315,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             SSL_free(ssl);
             ssl=nullptr;
         }
-        ::close(fd);
+        if(fd>=0)
+        {
+            ::close(fd);
+            fd=-1;
+        }
         if(ctx!=nullptr)
         {
             SSL_CTX_free(ctx);
@@ -2308,7 +2332,6 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         SSLeay_add_ssl_algorithms();
         OpenSSL_add_all_algorithms();
         SSL_load_error_strings();
-        ERR_load_BIO_strings();
         //SSL_library_init();
 
         // 我们使用SSL V3,V2
@@ -2319,35 +2342,45 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         if((ctx = SSL_CTX_new(TLS_client_method())) == NULL)
             return false;
         #endif
+        SSL_CTX_set_min_proto_version(ctx,TLS1_2_VERSION);
         //校验对方证书，使用系统自带的权威的ca证书
         SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
-        if(SSL_CTX_load_verify_locations(ctx, ca, NULL)<=0)
+        const bool hasExplicitCA=ca!=nullptr&&ca[0]!='\0';
+        if((hasExplicitCA&&SSL_CTX_load_verify_locations(ctx,ca,nullptr)<=0)||
+           (!hasExplicitCA&&SSL_CTX_set_default_verify_paths(ctx)<=0))
         {
             cerr<<"ca false"<<endl;
+            SSL_CTX_free(ctx);
+            ctx=nullptr;
             return false;
         }
         //可能的话加载自己的证书和私钥
-        if(cert!=""&&passwd!="")
+        if(cert!=nullptr&&cert[0]!='\0'&&key!=nullptr&&key[0]!='\0')
         {
             if(SSL_CTX_use_certificate_chain_file(ctx, cert) <=0)
             {
                 cerr<<"加载证书失败"<<endl;
+                SSL_CTX_free(ctx);
+                ctx=nullptr;
                 return false;
             }
             SSL_CTX_set_default_passwd_cb_userdata(ctx, (void*)passwd);
             if(SSL_CTX_use_PrivateKey_file(ctx, key, SSL_FILETYPE_PEM) <=0)
             {
                 cerr<<"密码失败"<<endl;
+                SSL_CTX_free(ctx);
+                ctx=nullptr;
                 return false;
             }
             //判断私钥是否正确
             if(!SSL_CTX_check_private_key(ctx))
             {
                 cerr<<"密码错误"<<endl;
+                SSL_CTX_free(ctx);
+                ctx=nullptr;
                 return false;
             }
         }
-        signal(SIGPIPE,SIG_IGN);
         return true;
     }
     stt::network::TcpClient::TcpClient(const bool &TLS,const char *ca,const char *cert,const char *key,const char *passwd)
@@ -2374,38 +2407,57 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
           if(!close())
             return false;
         }
-        //connect
-        hostent *k1;
-        k1=gethostbyname(ip.c_str());//DNS解析
-        if(k1==nullptr)
+        if(fd<0||port<0||port>65535)
+            return false;
+        addrinfo hints{};
+        hints.ai_family=AF_INET;
+        hints.ai_socktype=SOCK_STREAM;
+        hints.ai_protocol=IPPROTO_TCP;
+        addrinfo *addresses=nullptr;
+        const string service=to_string(port);
+        if(getaddrinfo(ip.c_str(),service.c_str(),&hints,&addresses)!=0)
         {
-            cerr<<"get host by name failed"<<endl;
             close();
             return false;
         }
-        struct sockaddr_in k2;
-        memset(&k2,0,sizeof(k2));
-        k2.sin_family=AF_INET;
-        k2.sin_port=htons(port);
-        memcpy(&k2.sin_addr,k1->h_addr,k1->h_length);
-        if(::connect(fd,(struct sockaddr*)&k2,sizeof(k2))!=0)
+        bool connected=false;
+        for(addrinfo *address=addresses;address!=nullptr;address=address->ai_next)
         {
-            perror("connect");
+            if(::connect(fd,address->ai_addr,address->ai_addrlen)==0)
+            {
+                connected=true;
+                break;
+            }
+        }
+        freeaddrinfo(addresses);
+        if(!connected)
+        {
             close();
             return false;
         }
         if(TLS)//套上TLS加密
         {
+            if(ssl==nullptr)
+            {
+                close();
+                return false;
+            }
+            if(SSL_set_tlsext_host_name(ssl,ip.c_str())!=1||SSL_set1_host(ssl,ip.c_str())!=1)
+            {
+                close();
+                return false;
+            }
             SSL_set_connect_state(ssl);
             SSL_set_fd(ssl,fd);
             int ret=SSL_connect(ssl);
             if(ret != 1)
             {
-                printf("%s\n", SSL_state_string_long(ssl));
-                printf("ret = %d, ssl get error %d\n", ret, SSL_get_error(ssl, ret));
+                close();
                 return false;
             }
         }
+        serverIP=ip;
+        serverPort=port;
         flag=true;
         return true;
     }
@@ -2416,279 +2468,110 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     }
     int stt::network::TcpFDHandler::sendData(const string &data,const bool &block)
     {
-        if(!isConnect())
-            return -99;
-        int size=data.size();
-        int totalSize=0;
-        int pos=0;
-        int result;
-        if(block)
-        {
-            if(ssl==nullptr)
-            {
-                while((result=::send(fd,data.substr(pos).c_str(),size-totalSize,MSG_NOSIGNAL)))
-                {
-                    if(result==0)
-                    {
-                        flag3=0;
-                        break;
-                    }
-                    else if(result<0)
-                    {
-                        if(errno==EAGAIN||errno==EWOULDBLOCK)
-                            continue;
-                        //perror("send");
-                        break;
-                    }
-                    else
-                    {
-                        totalSize+=result;
-                        pos=totalSize-1;
-                        if(totalSize>=size)
-                            break;
-                    }
-                }
-            }
-            else
-            {
-                while((result=SSL_write(ssl,data.substr(pos).c_str(),size-totalSize)))
-                {
-                    if(result==0)
-                    {
-                        flag3=0;
-                        break;
-                    }
-                    else if(result<0)
-                    {
-                        if(errno==EAGAIN||errno==EWOULDBLOCK)
-                            continue;
-                        //perror("send");
-                        break;
-                    }
-                    else
-                    {
-                        totalSize+=result;
-                        pos=totalSize-1;
-                        if(totalSize>=size)
-                            break;
-                    }
-                }
-            }
-        }
-        else
-        {
-            if(ssl==nullptr)
-            {
-                totalSize=::send(fd,data.c_str(),data.size(),MSG_NOSIGNAL);
-                if(totalSize<0)
-                {
-                    if(errno==EAGAIN||errno==EWOULDBLOCK)
-                        totalSize=-100;
-                }
-            }
-            else
-            {
-                totalSize=SSL_write(ssl,data.c_str(),data.size());
-                if(totalSize<0)
-                {
-                    if(errno==EAGAIN||errno==EWOULDBLOCK)
-                        totalSize=-100;
-                }
-            }
-        }
-        
-        return totalSize;
+        if(queuedSendFunction)
+            return queuedSendFunction(data);
+        return sendData(data.data(),data.size(),block);
     }
     
     int stt::network::UdpFDHandler::sendData(const string &data,const string &ip,const int &port,const bool &block)
     {
-        if(fd==-1)
-            return -99;
-        //填充目标信息
-        hostent *k1;
-        k1=gethostbyname(ip.c_str());//DNS解析
-        if(k1==nullptr)
-        {
-            cerr<<"get host by name failed"<<endl;
-            return -98;
-        }
-        struct sockaddr_in k2;
-        memset(&k2,0,sizeof(k2));
-        k2.sin_family=AF_INET;
-        k2.sin_port=htons(port);
-        memcpy(&k2.sin_addr,k1->h_addr,k1->h_length);
-        //发送
-        int size=data.size();
-        int totalSize=0;
-        int pos=0;
-        int result;
-        if(block)
-        {
-            while((result=::sendto(fd,data.substr(pos).c_str(),size-totalSize,MSG_NOSIGNAL,(struct sockaddr*)&k2,sizeof(k2))))
-            {
-                if(result<0)
-                {
-                    if(errno==EAGAIN||errno==EWOULDBLOCK)
-                        continue;
-                    //perror("send");
-                    break;
-                }
-                else
-                {
-                    totalSize+=result;
-                    pos=totalSize-1;
-                    if(totalSize>=size)
-                        break;
-                }
-            }
-        }
-        else
-        {
-            totalSize=::sendto(fd,data.c_str(),data.size(),MSG_NOSIGNAL,(struct sockaddr*)&k2,sizeof(k2));
-            if(totalSize<0)
-            {
-                if(errno==EAGAIN||errno==EWOULDBLOCK)
-                    totalSize=-100;
-            }
-        }
-        return totalSize;
+        return sendData(data.data(),data.size(),ip,port,block);
     }
     
     int stt::network::TcpFDHandler::sendData(const char *data,const uint64_t &length,const bool &block)
     {
         if(!isConnect())
             return -99;
-        int totalSize=0;
-        int pos=0;
-        int result;
-        if(block)
+        if(data==nullptr||length>static_cast<uint64_t>(std::numeric_limits<int>::max()))
+            return -98;
+        if(queuedSendFunction)
+            return queuedSendFunction(std::string(data,static_cast<size_t>(length)));
+
+        size_t totalSize=0;
+        do
         {
+            int result=0;
+            int waitEvents=POLLOUT;
             if(ssl==nullptr)
             {
-                while((result=::send(fd,data+pos,length-totalSize,MSG_NOSIGNAL)))
+                result=static_cast<int>(::send(fd,data+totalSize,length-totalSize,MSG_NOSIGNAL));
+                if(result<0)
                 {
-                    if(result==0)
-                    {
-                        flag3=0;
-                        break;
-                    }
-                    else if(result<0)
-                    {
-                        if(errno==EAGAIN||errno==EWOULDBLOCK)
-                            continue;
-                        //perror("send");
-                        break;
-                    }
-                    else
-                    {
-                        totalSize+=result;
-                        pos=totalSize-1;
-                        if(totalSize>=length)
-                            break;
-                    }
+                    if(errno==EINTR)
+                        continue;
+                    if(errno!=EAGAIN&&errno!=EWOULDBLOCK)
+                        return totalSize==0?result:static_cast<int>(totalSize);
+                    result=-1;
                 }
             }
             else
             {
-                while((result=::SSL_write(ssl,data+pos,length-totalSize)))
+                result=SSL_write(ssl,data+totalSize,static_cast<int>(length-totalSize));
+                if(result<=0)
                 {
-                    if(result==0)
-                    {
-                        flag3=0;
-                        break;
-                    }
-                    else if(result<0)
-                    {
-                        if(errno==EAGAIN||errno==EWOULDBLOCK)
-                            continue;
-                        //perror("send");
-                        break;
-                    }
-                    else
-                    {
-                        totalSize+=result;
-                        pos=totalSize-1;
-                        if(totalSize>=length)
-                            break;
-                    }
+                    const int sslError=SSL_get_error(ssl,result);
+                    if(sslError==SSL_ERROR_WANT_READ)
+                        waitEvents=POLLIN;
+                    else if(sslError!=SSL_ERROR_WANT_WRITE)
+                        return totalSize==0?result:static_cast<int>(totalSize);
+                    result=-1;
                 }
             }
-        }
-        else
-        {
-            if(ssl==nullptr)
+
+            if(result>0)
             {
-                totalSize=::send(fd,data,length,MSG_NOSIGNAL);
-                if(totalSize<0)
-                {
-                    if(errno==EAGAIN||errno==EWOULDBLOCK)
-                        totalSize=-100;
-                }
+                totalSize+=static_cast<size_t>(result);
+                if(!block)
+                    break;
+                continue;
             }
-            else
-            {
-                totalSize=SSL_write(ssl,data,length);
-                if(totalSize<0)
-                {
-                    if(errno==EAGAIN||errno==EWOULDBLOCK)
-                        totalSize=-100;
-                }
-            }
+            if(!block)
+                return totalSize==0?-100:static_cast<int>(totalSize);
+
+            pollfd writable{fd,static_cast<short>(waitEvents),0};
+            int pollResult;
+            do { pollResult=::poll(&writable,1,-1); }
+            while(pollResult<0&&errno==EINTR);
+            if(pollResult<=0)
+                return totalSize==0?-1:static_cast<int>(totalSize);
         }
-        return totalSize;
+        while(totalSize<length);
+
+        return static_cast<int>(totalSize);
     }
     
     int stt::network::UdpFDHandler::sendData(const char *data,const uint64_t &length,const string &ip,const int &port,const bool &block)
     {
         if(fd==-1)
             return -99;
-        //填充目标信息
-        hostent *k1;
-        k1=gethostbyname(ip.c_str());//DNS解析
-        if(k1==nullptr)
-        {
-            cerr<<"get host by name failed"<<endl;
+        if(data==nullptr||length>static_cast<uint64_t>(std::numeric_limits<int>::max())||port<0||port>65535)
             return -98;
-        }
-        struct sockaddr_in k2;
-        memset(&k2,0,sizeof(k2));
-        k2.sin_family=AF_INET;
-        k2.sin_port=htons(port);
-        memcpy(&k2.sin_addr,k1->h_addr,k1->h_length);
-        //发送
-        int totalSize=0;
-        int pos=0;
+
+        addrinfo hints{};
+        hints.ai_family=AF_INET;
+        hints.ai_socktype=SOCK_DGRAM;
+        addrinfo *addresses=nullptr;
+        const string service=to_string(port);
+        if(getaddrinfo(ip.c_str(),service.c_str(),&hints,&addresses)!=0)
+            return -98;
+
         int result;
-        if(block)
+        do
         {
-            while((result=::sendto(fd,data+pos,length-totalSize,MSG_NOSIGNAL,(struct sockaddr*)&k2,sizeof(k2))))
-            {
-                if(result<0)
-                {
-                    if(errno==EAGAIN||errno==EWOULDBLOCK)
-                        continue;
-                    //perror("send");
-                    break;
-                }
-                else
-                {
-                    totalSize+=result;
-                    pos=totalSize-1;
-                    if(totalSize>=length)
-                        break;
-                }
-            }
+            result=static_cast<int>(::sendto(fd,data,length,MSG_NOSIGNAL,addresses->ai_addr,addresses->ai_addrlen));
+            if(result>=0||(errno!=EAGAIN&&errno!=EWOULDBLOCK)||!block)
+                break;
+            pollfd writable{fd,POLLOUT,0};
+            do { result=::poll(&writable,1,-1); }
+            while(result<0&&errno==EINTR);
+            if(result<=0)
+                break;
         }
-        else
-        {
-            totalSize=::sendto(fd,data,length,MSG_NOSIGNAL,(struct sockaddr*)&k2,sizeof(k2));
-            if(totalSize<0)
-            {
-                if(errno==EAGAIN||errno==EWOULDBLOCK)
-                    totalSize=-100;
-            }
-        }
-        return totalSize;
+        while(true);
+        freeaddrinfo(addresses);
+        if(result<0&&(errno==EAGAIN||errno==EWOULDBLOCK))
+            return -100;
+        return result;
     }
     
     int stt::network::TcpFDHandler::recvDataByLength(string &data,const uint64_t &length,const int &sec)
@@ -2914,6 +2797,14 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             size=SSL_read(ssl,buffer.get(),length);
         if(size>0)
             data=string(buffer.get(),size);
+        else if(ssl!=nullptr)
+        {
+            const int sslError=SSL_get_error(ssl,size);
+            if(sslError==SSL_ERROR_WANT_READ||sslError==SSL_ERROR_WANT_WRITE)
+                return -100;
+            if(sslError==SSL_ERROR_ZERO_RETURN)
+                return 0;
+        }
         else
         {
             if(flag1==true&&size<0&&(errno==EAGAIN||errno==EWOULDBLOCK))
@@ -2954,6 +2845,15 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             size=::recv(fd,data,length,0);
         else
             size=SSL_read(ssl,data,length);
+        if(size<=0&&ssl!=nullptr)
+        {
+            const int sslError=SSL_get_error(ssl,size);
+            if(sslError==SSL_ERROR_WANT_READ||sslError==SSL_ERROR_WANT_WRITE)
+                return -100;
+            if(sslError==SSL_ERROR_ZERO_RETURN)
+                return 0;
+            return -1;
+        }
         if(size<0)
         {
             if(flag1==true&&(errno==EAGAIN||errno==EWOULDBLOCK))
@@ -3046,7 +2946,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
 	        k.sin_family=AF_INET;
 	        k.sin_addr.s_addr=htonl(INADDR_ANY);
 	        k.sin_port=htons(port);
-	        if(bind(fd,(struct sockaddr*)&k,sizeof(k))!=0)//成
+	        if(::bind(fd,(struct sockaddr*)&k,sizeof(k))!=0)//成
 	        {
 		        perror("bind");
 		        close(fd);
@@ -3080,7 +2980,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
 	        k.sin_family=AF_INET;
 	        k.sin_addr.s_addr=htonl(INADDR_ANY);
 	        k.sin_port=htons(port);
-	        if(bind(fd,(struct sockaddr*)&k,sizeof(k))!=0)//成
+	        if(::bind(fd,(struct sockaddr*)&k,sizeof(k))!=0)//成
 	        {
 		        perror("bind");
 		        close(fd);
@@ -3225,7 +3125,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             {
                 if(ssize-hasReceived<=0)
                 {
-                    body=totalRecv.substr(pos);
+                    body=totalRecv.substr(pos+4);
                     totalRecv.erase(pos);
                     this->header=totalRecv;
                     flag=true;
@@ -3244,7 +3144,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     else
                     {
                         totalRecv+=recv;
-                        body=totalRecv.substr(pos);
+                        body=totalRecv.substr(pos+4);
                         totalRecv.erase(pos);
                         this->header=totalRecv;
                         flag=true;
@@ -3372,7 +3272,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             {
                 if(ssize-hasReceived<=0)
                 {
-                    body=totalRecv.substr(pos);
+                    body=totalRecv.substr(pos+4);
                     totalRecv.erase(pos);
                     this->header=totalRecv;
                     flag=true;
@@ -3391,7 +3291,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     else
                     {
                         totalRecv+=recv;
-                        body=totalRecv.substr(pos);
+                        body=totalRecv.substr(pos+4);
                         totalRecv.erase(pos);
                         this->header=totalRecv;
                         flag=true;
@@ -3450,7 +3350,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         //接收
         string totalRecv="";
         string recv;
-        while(recv.find("\r\n\r\n")==string::npos)
+        while(totalRecv.find("\r\n\r\n")==string::npos)
         {
             if(recvData(recv,1024)<=0)
             {
@@ -3539,7 +3439,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             {
                 if(ssize-hasReceived<=0)
                 {
-                    this->body=totalRecv.substr(pos);
+                    this->body=totalRecv.substr(pos+4);
                     totalRecv.erase(pos);
                     this->header=totalRecv;
                     flag=true;
@@ -3558,7 +3458,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     else
                     {
                         totalRecv+=recv;
-                        this->body=totalRecv.substr(pos);
+                        this->body=totalRecv.substr(pos+4);
                         totalRecv.erase(pos);
                         this->header=totalRecv;
                         flag=true;
@@ -3599,7 +3499,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         //接收
         string totalRecv="";
         string recv;
-        while(recv.find("\r\n\r\n")==string::npos)
+        while(totalRecv.find("\r\n\r\n")==string::npos)
         {
             if(k.recvData(recv,1024)<=0)
             {
@@ -3688,7 +3588,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             {
                 if(ssize-hasReceived<=0)
                 {
-                    this->body=totalRecv.substr(pos);
+                    this->body=totalRecv.substr(pos+4);
                     totalRecv.erase(pos);
                     this->header=totalRecv;
                     flag=true;
@@ -3707,7 +3607,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     else
                     {
                         totalRecv+=recv;
-                        this->body=totalRecv.substr(pos);
+                        this->body=totalRecv.substr(pos+4);
                         totalRecv.erase(pos);
                         this->header=totalRecv;
                         flag=true;
@@ -3717,57 +3617,339 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
         }
     }
+    void stt::network::TcpServer::publishWorkerResult(WorkerMessage message)
+    {
+        if (!finishQueue.push(std::move(message)))
+        {
+            metricWorkerQueueOverflows.fetch_add(1,std::memory_order_relaxed);
+            std::lock_guard<std::mutex> lock(overflowFinishMutex);
+            overflowFinishQueue.push(std::move(message));
+        }
+        const uint64_t one = 1;
+        if (workerEventFD >= 0)
+            (void)::write(workerEventFD, &one, sizeof(one));
+    }
+
+    void stt::network::TcpServer::scheduleBufferedRead(const int &fd,const uint64_t connection)
+    {
+        bufferedReadQueue.push_back({fd,connection});
+    }
+
+    void stt::network::TcpServer::publishSendReady(const std::shared_ptr<ConnectionWriteState> &state)
+    {
+        if(!state)
+            return;
+        SendReadyMessage message;
+        {
+            std::lock_guard<std::mutex> lock(state->mutex);
+            if(state->closed||state->notification_pending)
+                return;
+            state->notification_pending=true;
+            message={state->fd,state->connection_obj_fd};
+        }
+        if(!sendReadyQueue.push(std::move(message)))
+        {
+            metricSendReadyQueueOverflows.fetch_add(1,std::memory_order_relaxed);
+            std::lock_guard<std::mutex> lock(overflowSendReadyMutex);
+            overflowSendReadyQueue.push(std::move(message));
+        }
+        const uint64_t one=1;
+        if(workerEventFD>=0)
+            (void)::write(workerEventFD,&one,sizeof(one));
+    }
+
+    int stt::network::TcpServer::enqueueWrite(const std::shared_ptr<ConnectionWriteState> &state,std::string data)
+    {
+        if(!state)
+            return -99;
+        if(data.size()>static_cast<size_t>(std::numeric_limits<int>::max()))
+            return -98;
+        const int acceptedBytes=static_cast<int>(data.size());
+        bool accepted=true;
+        {
+            std::lock_guard<std::mutex> lock(state->mutex);
+            if(state->closed||state->close_requested)
+                return -99;
+            if(data.size()>state->max_queued_bytes||state->queued_bytes>state->max_queued_bytes-data.size())
+            {
+                state->overflowed=true;
+                state->close_requested=true;
+                metricWriteOverflows.fetch_add(1,std::memory_order_relaxed);
+                accepted=false;
+            }
+            else if(!data.empty())
+            {
+                state->queued_bytes+=data.size();
+                state->queue.push_back(std::move(data));
+                metricQueuedWriteBytes.fetch_add(static_cast<uint64_t>(acceptedBytes),std::memory_order_relaxed);
+                metricPendingWriteBytes.fetch_add(static_cast<uint64_t>(acceptedBytes),std::memory_order_relaxed);
+            }
+        }
+        publishSendReady(state);
+        return accepted?acceptedBytes:-101;
+    }
+
+    void stt::network::TcpServer::requestQueuedClose(const std::shared_ptr<ConnectionWriteState> &state)
+    {
+        if(!state)
+            return;
+        {
+            std::lock_guard<std::mutex> lock(state->mutex);
+            if(state->closed)
+                return;
+            state->close_requested=true;
+        }
+        publishSendReady(state);
+    }
+
+    void stt::network::TcpServer::requestCloseAfterFlush(const int &fd,const uint64_t expectedConnection)
+    {
+        std::shared_ptr<ConnectionWriteState> state;
+        {
+            std::lock_guard<std::mutex> lock(writeRegistryMutex);
+            const auto stateIt=writeRegistry.find(fd);
+            if(stateIt!=writeRegistry.end())
+                state=stateIt->second.lock();
+        }
+        if(!state||(expectedConnection!=0&&state->connection_obj_fd!=expectedConnection))
+            return;
+        {
+            std::lock_guard<std::mutex> lock(state->mutex);
+            if(state->closed)
+                return;
+            state->close_after_flush=true;
+        }
+        publishSendReady(state);
+    }
+
+    void stt::network::TcpServer::prepareHandler(TcpFDHandler &handler,const int &fd)
+    {
+        auto connectionIt=clientfd.find(fd);
+        if(connectionIt==clientfd.end()||connectionIt->second.fd!=fd||connectionIt->second.closing)
+        {
+            handler.setFD(-1,nullptr,true);
+            return;
+        }
+        TcpFDInf &connection=connectionIt->second;
+        handler.setFD(fd,connection.ssl,unblock);
+        const std::weak_ptr<ConnectionWriteState> weakState=connection.write_state;
+        handler.setTransportFunctions(
+            [this,weakState](std::string data) {
+                return enqueueWrite(weakState.lock(),std::move(data));
+            },
+            [this,weakState] {
+                requestQueuedClose(weakState.lock());
+            }
+        );
+    }
+
+    void stt::network::TcpServer::prepareQueuedHandler(TcpFDHandler &handler,const int &fd)
+    {
+        prepareQueuedHandler(handler,fd,0);
+    }
+
+    void stt::network::TcpServer::prepareQueuedHandler(TcpFDHandler &handler,const int &fd,const uint64_t expectedConnection)
+    {
+        std::shared_ptr<ConnectionWriteState> state;
+        {
+            std::lock_guard<std::mutex> lock(writeRegistryMutex);
+            auto stateIt=writeRegistry.find(fd);
+            if(stateIt!=writeRegistry.end())
+                state=stateIt->second.lock();
+        }
+        if(!state||(expectedConnection!=0&&state->connection_obj_fd!=expectedConnection))
+        {
+            handler.setFD(-1,nullptr,true);
+            return;
+        }
+        handler.setFD(fd,nullptr,true);
+        const std::weak_ptr<ConnectionWriteState> weakState=state;
+        handler.setTransportFunctions(
+            [this,weakState](std::string data) {
+                return enqueueWrite(weakState.lock(),std::move(data));
+            },
+            [this,weakState] {
+                requestQueuedClose(weakState.lock());
+            }
+        );
+    }
+
+    bool stt::network::TcpServer::updateConnectionEvents(const int &epollFD,TcpFDInf &connection,const bool &wantWrite)
+    {
+        if(connection.fd<0||connection.write_interest==wantWrite)
+            return true;
+        epoll_event event{};
+        event.data.fd=connection.fd;
+        event.events=EPOLLIN|EPOLLERR|EPOLLHUP|EPOLLRDHUP|EPOLLET;
+        if(wantWrite)
+            event.events|=EPOLLOUT;
+        if(epoll_ctl(epollFD,EPOLL_CTL_MOD,connection.fd,&event)<0)
+            return false;
+        connection.write_interest=wantWrite;
+        return true;
+    }
+
+    stt::network::TcpServer::WriteFlushResult stt::network::TcpServer::flushConnectionWrites(TcpFDInf &connection)
+    {
+        const auto state=connection.write_state;
+        if(!state)
+            return WriteFlushResult::Error;
+        size_t sentThisTurn=0;
+        while(sentThisTurn<writeBudgetPerEvent)
+        {
+            std::lock_guard<std::mutex> lock(state->mutex);
+            if(state->closed||state->close_requested||state->overflowed)
+                return WriteFlushResult::Error;
+            if(state->queue.empty())
+            {
+                state->front_offset=0;
+                return state->close_after_flush?WriteFlushResult::Error:WriteFlushResult::Drained;
+            }
+
+            std::string &front=state->queue.front();
+            const size_t remaining=front.size()-state->front_offset;
+            const size_t allowance=std::min(remaining,writeBudgetPerEvent-sentThisTurn);
+            int result=0;
+            if(connection.ssl==nullptr)
+            {
+                result=static_cast<int>(::send(connection.fd,front.data()+state->front_offset,allowance,MSG_NOSIGNAL));
+                if(result<0)
+                {
+                    if(errno==EINTR)
+                        continue;
+                    if(errno==EAGAIN||errno==EWOULDBLOCK)
+                        return WriteFlushResult::WaitWrite;
+                    return WriteFlushResult::Error;
+                }
+            }
+            else
+            {
+                result=SSL_write(connection.ssl,front.data()+state->front_offset,static_cast<int>(allowance));
+                if(result<=0)
+                {
+                    const int sslError=SSL_get_error(connection.ssl,result);
+                    if(sslError==SSL_ERROR_WANT_WRITE)
+                        return WriteFlushResult::WaitWrite;
+                    if(sslError==SSL_ERROR_WANT_READ)
+                        return WriteFlushResult::WaitRead;
+                    return WriteFlushResult::Error;
+                }
+            }
+            if(result==0)
+                return WriteFlushResult::Error;
+
+            const size_t written=static_cast<size_t>(result);
+            state->front_offset+=written;
+            state->queued_bytes-=written;
+            metricSentBytes.fetch_add(written,std::memory_order_relaxed);
+            metricPendingWriteBytes.fetch_sub(written,std::memory_order_relaxed);
+            sentThisTurn+=written;
+            if(state->front_offset==front.size())
+            {
+                state->queue.pop_front();
+                state->front_offset=0;
+            }
+        }
+        return WriteFlushResult::Reschedule;
+    }
+
+    void stt::network::TcpServer::handleSendReady(const int &epollFD,SendReadyMessage message)
+    {
+        auto connectionIt=clientfd.find(message.fd);
+        if(connectionIt==clientfd.end()||connectionIt->second.fd!=message.fd||
+           connectionIt->second.connection_obj_fd!=message.connection_obj_fd)
+            return;
+        TcpFDInf &connection=connectionIt->second;
+        const auto state=connection.write_state;
+        if(!state)
+            return;
+        {
+            std::lock_guard<std::mutex> lock(state->mutex);
+            state->notification_pending=false;
+            if(state->closed)
+                return;
+        }
+
+        const WriteFlushResult result=flushConnectionWrites(connection);
+        connection.write_waiting_for_read=result==WriteFlushResult::WaitRead;
+        if(result==WriteFlushResult::Error)
+        {
+            TcpServer::close(message.fd);
+            return;
+        }
+        if(!updateConnectionEvents(epollFD,connection,result==WriteFlushResult::WaitWrite))
+        {
+            TcpServer::close(message.fd);
+            return;
+        }
+        if(result==WriteFlushResult::Reschedule)
+            publishSendReady(state);
+    }
     void stt::network::TcpServer::putTask(const std::function<int(TcpFDHandler &k,TcpInformation &inf)> &fun,TcpFDHandler &k,TcpInformation &inf)
     {
-        workpool->submit([this,&k,&inf,fun]()->void
+        auto connectionIt=clientfd.find(inf.fd);
+        if(connectionIt==clientfd.end()||connectionIt->second.closing||
+           connectionIt->second.connection_obj_fd!=inf.connection_obj_fd)
+            return;
+        ++connectionIt->second.active_workers;
+        auto request=std::make_shared<TcpInformation>(inf);
+        TcpFDHandler handler=k;
+        if(workpool==nullptr||!workpool->submit([this,handler,request,fun]() mutable ->void
         {
-            int ret=fun(k,inf);
-            //入队
-            this->finishQueue.push({inf.fd,ret});
-            //按钟
-            uint64_t one = 1;
-            write(this->workerEventFD, &one, sizeof(one));
-        });
+            int ret=-2;
+            try { ret=fun(handler,*request); }
+            catch (...) { ret=-2; }
+            publishWorkerResult({request->fd,request->connection_obj_fd,ret,request});
+        }))
+            publishWorkerResult({request->fd,request->connection_obj_fd,-2,request});
     }
     void stt::network::HttpServer::putTask(const std::function<int(HttpServerFDHandler &k,HttpRequestInformation &inf)> &fun,HttpServerFDHandler &k,HttpRequestInformation &inf)
     {
-        workpool->submit([this,&k,&inf,fun]()->void
+        auto connectionIt=clientfd.find(inf.fd);
+        if(connectionIt==clientfd.end()||connectionIt->second.closing||
+           connectionIt->second.connection_obj_fd!=inf.connection_obj_fd)
+            return;
+        auto request=std::make_shared<HttpRequestInformation>(inf);
+        ++connectionIt->second.active_workers;
+        HttpServerFDHandler handler=k;
+        if(workpool==nullptr||!workpool->submit([this,handler,request,fun]() mutable ->void
         {
-            int ret=fun(k,inf);
-            //入队
-            
-            this->finishQueue.push({inf.fd,ret});
-            //按钟
-            uint64_t one = 1;
-            
-            write(this->workerEventFD, &one, sizeof(one));
-            
-        });
+            int ret=-2;
+            try { ret=fun(handler,*request); }
+            catch (...) { ret=-2; }
+            publishWorkerResult({request->fd,request->connection_obj_fd,ret,request});
+        }))
+            publishWorkerResult({request->fd,request->connection_obj_fd,-2,request});
     }
     void stt::network::WebSocketServer::putTask(const std::function<int(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> &fun,WebSocketServerFDHandler &k,WebSocketFDInformation &inf)
     {
-        workpool->submit([this,&k,&inf,fun]()->void
+        auto connectionIt=clientfd.find(inf.fd);
+        if(connectionIt==clientfd.end()||connectionIt->second.closing||
+           connectionIt->second.connection_obj_fd!=inf.connection_obj_fd)
+            return;
+        auto request=std::make_shared<WebSocketFDInformation>(inf);
+        ++connectionIt->second.active_workers;
+        WebSocketServerFDHandler handler=k;
+        if(workpool==nullptr||!workpool->submit([this,handler,request,fun]() mutable ->void
         {
-            int ret=fun(k,inf);
-            //入队
-            this->finishQueue.push({inf.fd,ret});
-
-            //按钟
-            uint64_t one = 1;
-            write(this->workerEventFD, &one, sizeof(one));
-        });
+            int ret=-2;
+            try { ret=fun(handler,*request); }
+            catch (...) { ret=-2; }
+            publishWorkerResult({request->fd,request->connection_obj_fd,ret,request});
+        }))
+            publishWorkerResult({request->fd,request->connection_obj_fd,-2,request});
     }
     bool stt::network::TcpServer::setTLS(const char *cacert,const char *key,const char *passwd,const char *ca)
     {
+        if(cacert==nullptr||cacert[0]=='\0'||key==nullptr||key[0]=='\0'||ca==nullptr||ca[0]=='\0')
+            return false;
         if(TLS)
             redrawTLS();
         // 初始化
         SSLeay_add_ssl_algorithms();
         OpenSSL_add_all_algorithms();
         SSL_load_error_strings();
-        ERR_load_BIO_strings();
-        // 我们使用SSL V3,V2
-        if((ctx = SSL_CTX_new(SSLv23_method())) == NULL)
+        if((ctx = SSL_CTX_new(TLS_server_method())) == NULL)
         {
             cerr<<"new ctx wrong"<<endl;
             return false;
@@ -3775,39 +3957,49 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
 
         // 要求校验对方证书，这里建议使用SSL_VERIFY_FAIL_IF_NO_PEER_CERT，详见https://blog.csdn.net/u013919153/article/details/78616737
         //对于服务器端来说如果使用的是SSL_VERIFY_PEER且服务器端没有考虑对方没交证书的情况，会出现只能访问一次，第二次访问就失败的情况。
-        SSL_CTX_set_verify(ctx, SSL_VERIFY_FAIL_IF_NO_PEER_CERT, NULL);
+        SSL_CTX_set_min_proto_version(ctx, TLS1_2_VERSION);
+        SSL_CTX_set_options(ctx, SSL_OP_NO_COMPRESSION);
+        SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER | SSL_VERIFY_FAIL_IF_NO_PEER_CERT, NULL);
 
         // 加载CA的证书
         if(!SSL_CTX_load_verify_locations(ctx, ca, NULL))
         {
             cerr<<"load ca wrong"<<endl;
+            SSL_CTX_free(ctx);
+            ctx=nullptr;
             return false;
         }
         // 加载自己的证书
         if(SSL_CTX_use_certificate_chain_file(ctx, cacert) <= 0)
         {
             cerr<<"load cert wrong"<<endl;
+            SSL_CTX_free(ctx);
+            ctx=nullptr;
             return false;
         }
         //assert(SSL_CTX_use_certificate_file(ctx, "cacert.pem", SSL_FILETYPE_PEM) > 0);
-        // 加载自己的私钥 
-        if(passwd!="")
-            SSL_CTX_set_default_passwd_cb_userdata(ctx, (void*)passwd);
+        // 加载自己的私钥
+        if(passwd!=nullptr&&passwd[0]!='\0')
+            if(passwd!=nullptr&&passwd[0]!='\0')
+                SSL_CTX_set_default_passwd_cb_userdata(ctx, (void*)passwd);
         if(SSL_CTX_use_PrivateKey_file(ctx, key, SSL_FILETYPE_PEM) <= 0)
         {
             cerr<<"load key wrong"<<endl;
+            SSL_CTX_free(ctx);
+            ctx=nullptr;
             return false;
         }
- 
-        // 判定私钥是否正确  
+
+        // 判定私钥是否正确
         if(!SSL_CTX_check_private_key(ctx))
         {
             cerr<<"key wrong"<<endl;
+            SSL_CTX_free(ctx);
+            ctx=nullptr;
             return false;
         }
 
         TLS=true;
-        signal(SIGPIPE,SIG_IGN);
         return true;
     }
     void stt::network::TcpServer::redrawTLS()
@@ -3815,6 +4007,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         if(TLS)
         {
             SSL_CTX_free(ctx);
+            ctx=nullptr;
             TLS=false;
         }
     }
@@ -3829,20 +4022,21 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 return true;
             else
             {
-                stopListen();
-                flag=false;
+                if(!close())
+                    return false;
             }
         }
         //this->logfile=logfile;
         //memset(solvingFD,0,sizeof(int)*maxFD);
-        //clientfd=new TcpFDInf[maxFD];
-        
         //fdQueue=new queue<QueueFD>[threads];
         //cv=new condition_variable[threads];
         //lq1=new mutex[threads];
-        clientfd=new TcpFDInf[maxFD];
-        for(int ii=0;ii<maxFD;ii++)
-            clientfd[ii].fd=-1;
+        clientfd.clear();
+        {
+            std::lock_guard<std::mutex> lock(writeRegistryMutex);
+            writeRegistry.clear();
+        }
+        clientfd.reserve(4096);
         //socket准备
         fd=socket(AF_INET,SOCK_STREAM,0);
         if(fd<0)
@@ -3851,15 +4045,25 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             return false;
         }
         //设置unblock和mutiuse
-        int flags=fcntl(fd,F_GETFL,0);//获取当前标志
-        fcntl(fd,F_SETFL,flags|O_NONBLOCK);
         int opt=1;
-        if(setsockopt(fd,SOL_SOCKET,SO_REUSEADDR|SO_REUSEPORT,&opt,sizeof(opt))<0)
+        if(setsockopt(fd,SOL_SOCKET,SO_REUSEADDR,&opt,sizeof(opt))<0)
         {
-            cerr<<"set multi failed"<<endl;
+            cerr<<"set SO_REUSEADDR failed"<<endl;
             perror("setsockopt");
+            ::close(fd);
+            fd=-1;
             return false;
         }
+#ifdef SO_REUSEPORT
+        if(setsockopt(fd,SOL_SOCKET,SO_REUSEPORT,&opt,sizeof(opt))<0)
+        {
+            cerr<<"set SO_REUSEPORT failed"<<endl;
+            perror("setsockopt");
+            ::close(fd);
+            fd=-1;
+            return false;
+        }
+#endif
         //bind
         struct sockaddr_in k;
         memset(&k,0,sizeof(k));
@@ -3867,10 +4071,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         k.sin_port=htons(port);
         this->port=port;
         k.sin_addr.s_addr=htonl(INADDR_ANY);
-        if(bind(fd,(struct sockaddr*)&k,sizeof(k))!=0)
+        if(::bind(fd,(struct sockaddr*)&k,sizeof(k))!=0)
         {
             perror("bind");
             ::close(fd);
+            fd=-1;
             return false;
         }
         //listen
@@ -3884,39 +4089,61 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         {
             perror("listen");
             ::close(fd);
+            fd=-1;
             return false;
         }
         //this->logfile=logfile;
-        flag1=true;
-        flag2=false;
         this->unblock=true;
         
         workpool=new WorkerPool(threads);
         //for(int sj=0;sj<threads;sj++)
         //    thread(&TcpServer::consumer,this,sj).detach();
-        thread(&TcpServer::epolll,this,maxFD+10).detach();
+        flag1.store(true, std::memory_order_release);
+        flag2.store(false, std::memory_order_release);
+        flag.store(true, std::memory_order_release);
+        reactorThread=thread(&TcpServer::epolll,this,4096);
         //flag_detect=true;
         //thread(&security::ConnectionLimiter::connectionDetect,&connectionLimiter).detach();
         //this->consumerNum=threads;
 
-        connection_obj_fd=1;
-        flag=true;
         //this->logfile=logfile;
         return true;
     }
     bool stt::network::TcpServer::stopListen()
     {
-        if(!isListen())
+        if(!isListen()&&!reactorThread.joinable()&&workpool==nullptr&&fd<0)
         {
             return true;
         }
-        shutdown(fd,SHUT_RDWR);
-        ::close(fd);
-        //随后取消掉几个监听和消费线程
-        do
+        flag1.store(false, std::memory_order_release);
+        if(fd>=0)
         {
-            flag1=false;
-        }while(!flag2);
+            shutdown(fd,SHUT_RDWR);
+            ::close(fd);
+            fd=-1;
+        }
+        if(reactorThread.joinable())
+            reactorThread.join();
+        // Interrupt blocking socket/TLS operations before joining workers.
+        // Resource ownership stays intact until WorkerPool has fully stopped.
+        for(auto &entry:clientfd)
+        {
+            TcpFDInf &connection=entry.second;
+            if(connection.fd>=0)
+            {
+                connection.closing=true;
+                if(connection.write_state)
+                {
+                    std::lock_guard<std::mutex> lock(connection.write_state->mutex);
+                    const size_t discardedBytes=connection.write_state->queued_bytes;
+                    connection.write_state->closed=true;
+                    connection.write_state->queue.clear();
+                    connection.write_state->queued_bytes=0;
+                    metricPendingWriteBytes.fetch_sub(discardedBytes,std::memory_order_relaxed);
+                }
+                shutdown(connection.fd,SHUT_RDWR);
+            }
+        }
         //for(int ii=0;ii<consumerNum;ii++)
         //    cv[ii].notify_all();
         //while(consumerNum!=0||!flag2)
@@ -3925,8 +4152,13 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         //    for(int ii=0;ii<consumerNum;ii++)
         //        cv[ii].notify_all();
         //}
-        workpool->stop();
-        flag=false;
+        if(workpool!=nullptr)
+        {
+            workpool->stop();
+            delete workpool;
+            workpool=nullptr;
+        }
+        flag.store(false, std::memory_order_release);
         //关闭监听连接的消息活动的线程
         //do
         //{
@@ -3937,40 +4169,75 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     bool stt::network::TcpServer::close()
     {
  
-        if(isListen())
+        if(isListen()||reactorThread.joinable()||workpool!=nullptr||fd>=0)
         {
             if(!stopListen())
                 return false;
         }
+
+        WorkerMessage discardedMessage;
+        while(finishQueue.pop(discardedMessage)) {}
+        SendReadyMessage discardedSendReady;
+        while(sendReadyQueue.pop(discardedSendReady)) {}
+        {
+            std::lock_guard<std::mutex> lock(overflowFinishMutex);
+            overflowFinishQueue=std::queue<WorkerMessage>();
+        }
+        {
+            std::lock_guard<std::mutex> lock(overflowSendReadyMutex);
+            overflowSendReadyQueue=std::queue<SendReadyMessage>();
+        }
+        bufferedReadQueue.clear();
   
         //unique_lock<mutex> lock2(lc1);
         //unique_lock<mutex> lock1(ltl1);
-        for(int ii=0;ii<maxFD;ii++)
+        for(auto &entry:clientfd)
         {
-
-            if(clientfd[ii].fd!=-1)
+            const int ii=entry.first;
+            TcpFDInf &connection=entry.second;
+            if(connection.fd!=-1)
             {
+            onConnectionClosed(ii);
+
+            if(connection.write_state)
+            {
+                std::lock_guard<std::mutex> lock(connection.write_state->mutex);
+                const size_t discardedBytes=connection.write_state->queued_bytes;
+                connection.write_state->closed=true;
+                connection.write_state->queue.clear();
+                connection.write_state->queued_bytes=0;
+                metricPendingWriteBytes.fetch_sub(discardedBytes,std::memory_order_relaxed);
+            }
 
             if(this->security_open)
-                connectionLimiter.clearIP(clientfd[ii].ip,ii);
+                connectionLimiter.clearIP(connection.ip,ii);
             //auto jj=tlsfd.find(ii.first);
 
-            if(clientfd[ii].ssl!=nullptr)//这个套接字启用了tls
+            if(connection.ssl!=nullptr)//这个套接字启用了tls
             {
-                SSL_shutdown(clientfd[ii].ssl);
-                SSL_free(clientfd[ii].ssl);
+                SSL_shutdown(connection.ssl);
+                SSL_free(connection.ssl);
+                connection.ssl=nullptr;
             }
   
             shutdown(ii,SHUT_RDWR);
             ::close(ii);
+            metricActiveConnections.fetch_sub(1,std::memory_order_relaxed);
+            metricClosedConnections.fetch_add(1,std::memory_order_relaxed);
             //clientfd[ii].fd=-1;
             //clientfd[ii].pendindQueue.clear();
-            delete[] clientfd[ii].buffer;
+            delete[] connection.buffer;
+            connection.buffer=nullptr;
+            connection.buffer_capacity=0;
             //delete clientfd[ii];
             }
         }
         //std::cout<<"tcp died"<<std::endl;
-        delete[] clientfd;
+        clientfd.clear();
+        {
+            std::lock_guard<std::mutex> lock(writeRegistryMutex);
+            writeRegistry.clear();
+        }
         //delete[] fdQueue;
         //delete[] lq1;
         //delete[] cv;
@@ -3987,7 +4254,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         //unique_lock<mutex> lock1(ltl1);
         //auto ii=clientfd.find(fd);
         
-        if(fd>=maxFD||clientfd[fd].fd==-1)
+        auto connectionIt=clientfd.find(fd);
+        if(fd<0||static_cast<unsigned long long>(fd)>=maxFD||connectionIt==clientfd.end()||connectionIt->second.fd==-1)
         {
             
             return false;
@@ -3995,29 +4263,58 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         else
         {
             
+            TcpFDInf &connection=connectionIt->second;
+            if(connection.closing)
+                return true;
+            {
+                std::lock_guard<std::mutex> lock(writeRegistryMutex);
+                writeRegistry.erase(fd);
+            }
+            if(connection.write_state)
+            {
+                std::lock_guard<std::mutex> lock(connection.write_state->mutex);
+                const size_t discardedBytes=connection.write_state->queued_bytes;
+                connection.write_state->closed=true;
+                connection.write_state->queue.clear();
+                connection.write_state->queued_bytes=0;
+                metricPendingWriteBytes.fetch_sub(discardedBytes,std::memory_order_relaxed);
+            }
+            if(connection.active_workers>0)
+            {
+                connection.closing=true;
+                shutdown(connection.fd,SHUT_RDWR);
+                return true;
+            }
             if(this->security_open)
-                connectionLimiter.clearIP(clientfd[fd].ip,clientfd[fd].fd);
+                connectionLimiter.clearIP(connection.ip,connection.fd);
             
             //auto jj=tlsfd.find(fd);
             
-            if(clientfd[fd].ssl!=nullptr)
+            if(connection.ssl!=nullptr)
             {
-                if(clientfd[fd].tls_state != TLSState::HANDSHAKING)
+                if(connection.tls_state != TLSState::HANDSHAKING)
                 {
-                    SSL_shutdown(clientfd[fd].ssl);
+                    SSL_shutdown(connection.ssl);
                 }
-                SSL_free(clientfd[fd].ssl);
+                SSL_free(connection.ssl);
+                connection.ssl=nullptr;
             }
             
-            ::close(clientfd[fd].fd);
+            const int closedFD=connection.fd;
+            ::close(closedFD);
+            metricActiveConnections.fetch_sub(1,std::memory_order_relaxed);
+            metricClosedConnections.fetch_add(1,std::memory_order_relaxed);
 
-            closeFun(clientfd[fd].fd);
+            onConnectionClosed(closedFD);
+            closeFun(closedFD);
             
-            clientfd[fd].fd=-1;
+            connection.fd=-1;
             
-            delete[] clientfd[fd].buffer;
+            delete[] connection.buffer;
+            connection.buffer=nullptr;
+            connection.buffer_capacity=0;
             
-            clientfd[fd].pendindQueue= std::queue<std::any>();
+            connection.pendindQueue= std::queue<std::any>();
             
         }
         
@@ -4032,18 +4329,38 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     void stt::network::TcpServer::epolll(const int &evsNum)
     {
     
-        int epollFD=epoll_create(1);//创建epoll句柄
+        int epollFD=epoll_create1(EPOLL_CLOEXEC);//创建epoll句柄
+        if(epollFD<0)
+        {
+            flag2.store(true, std::memory_order_release);
+            flag.store(false, std::memory_order_release);
+            return;
+        }
         epoll_event ev;//epoll事件的数据结构
         ev.data.fd=fd;
         ev.events=EPOLLIN|EPOLLET;//边缘触发
-        epoll_ctl(epollFD,EPOLL_CTL_ADD,fd,&ev);//把事件放入epoll中
+        if(epoll_ctl(epollFD,EPOLL_CTL_ADD,fd,&ev)<0)
+        {
+            ::close(epollFD);
+            flag2.store(true, std::memory_order_release);
+            flag.store(false, std::memory_order_release);
+            return;
+        }
 
         //加入worker线程fd
         workerEventFD = eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
         ev.events = EPOLLIN;
         ev.data.fd = workerEventFD;
 
-        epoll_ctl(epollFD, EPOLL_CTL_ADD, workerEventFD, &ev);
+        if(workerEventFD<0||epoll_ctl(epollFD, EPOLL_CTL_ADD, workerEventFD, &ev)<0)
+        {
+            if(workerEventFD>=0) ::close(workerEventFD);
+            workerEventFD=-1;
+            ::close(epollFD);
+            flag2.store(true, std::memory_order_release);
+            flag.store(false, std::memory_order_release);
+            return;
+        }
 
         //加入时间事件fd
         int hbTimerFD=-1;
@@ -4061,7 +4378,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             epoll_ctl(epollFD, EPOLL_CTL_ADD, hbTimerFD, &ev);
         }
         int securityTimerFD=-1;
-        if(this->security_open)//加入信息安全的时间事件
+        if(this->security_open && this->checkFrequency>0)//加入信息安全的时间事件
         {
             securityTimerFD = timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
             itimerspec its{};
@@ -4078,31 +4395,30 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
 
         //检查连接表里面是不是有套接字，有的话加入
        
-        for(int ii=0;ii<maxFD;ii++)
+        for(auto &entry:clientfd)
         {
             //unique_lock<mutex> lock6(lc1);
-
-                if(clientfd[ii].fd!=-1)
+                TcpFDInf &connection=entry.second;
+                if(connection.fd!=-1)
                 {
-                //cout<<"has:"<<clientfd[ii].fd<<endl;
-                ev.data.fd=clientfd[ii].fd;
+                //cout<<"has:"<<connection.fd<<endl;
+                ev.data.fd=connection.fd;
                 
                     ev.events=EPOLLIN|EPOLLERR | EPOLLHUP | EPOLLRDHUP|EPOLLET;//边缘触发
 
-                epoll_ctl(epollFD,EPOLL_CTL_ADD,clientfd[ii].fd,&ev);//把事件放入epoll中
+                epoll_ctl(epollFD,EPOLL_CTL_ADD,connection.fd,&ev);//把事件放入epoll中
                 }
         }
        //cout<<"ok"<<endl;
        
-        epoll_event *evs=new epoll_event[evsNum];//存放epoll返回的事件
+        const int maxEvents=evsNum<64?64:(evsNum>4096?4096:evsNum);
+        std::vector<epoll_event> evs(static_cast<size_t>(maxEvents));//存放epoll返回的事件
 
         //用来accept的
         struct sockaddr_in k;
         socklen_t k_len=sizeof(k);
         //用来加密accept的
         SSL *ssl;
-        int ret;
-        
         if(stt::system::ServerSetting::logfile!=nullptr)
         {
             if(stt::system::ServerSetting::language=="Chinese")
@@ -4114,9 +4430,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         while(flag1)
         {
             //监听等待，一秒钟检查一次flag条件是否满足
-            int infds=epoll_wait(epollFD,evs,evsNum,1000);
+            int infds=epoll_wait(epollFD,evs.data(),maxEvents,bufferedReadQueue.empty()?1000:0);
             if(infds<=0)//<0失败=0超时
             {
+                if(infds<0&&errno!=EINTR&&flag1.load(std::memory_order_acquire))
+                    perror("epoll_wait");
                 continue;
             }
             else//有事发生
@@ -4129,21 +4447,24 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         {  
 
                             k_len = sizeof(k);
-                            int cfd=accept(fd,(struct sockaddr*)&k,&k_len);
+                            int cfd=accept4(fd,(struct sockaddr*)&k,&k_len,SOCK_NONBLOCK|SOCK_CLOEXEC);
                             if(cfd<0)
                             {
                                 if(errno==EAGAIN||errno==EWOULDBLOCK)
                                     break;//全部连接都accept了
+                                if(errno==EINTR)
+                                    continue;
                                 else//真的失败
                                 {
+                                    metricAcceptErrors.fetch_add(1,std::memory_order_relaxed);
                                     if(stt::system::ServerSetting::logfile!=nullptr)
                                     {
                                         if(stt::system::ServerSetting::language=="Chinese")
-                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll:accept错误 error="+errno);
+                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll:accept错误 error="+to_string(errno));
                                         else
-                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll:accept failed error="+errno);
+                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll:accept failed error="+to_string(errno));
                                     }
-                                    continue;
+                                    break;
                                 }
                             }
                             string ip(inet_ntoa(k.sin_addr));//获取客户端的ip
@@ -4177,33 +4498,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 continue;
                                 }
                             }
-                            int flags=fcntl(cfd,F_GETFL,0);
-                            if(flags==-1)
-                            {
-                                ::close(cfd);
-                                //cout<<"The non-blocking mode setting failed"<<endl;
-                                if(stt::system::ServerSetting::logfile!=nullptr)
-                                {
-                                        if(stt::system::ServerSetting::language=="Chinese")
-                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll:fd="+to_string(cfd)+" ip="+ip+" 非阻塞模式设置失败");
-                                        else
-                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll:fd="+to_string(cfd)+" ip="+ip+" The non-blocking mode setting failed");
-                                }
-                                continue;
-                            }
-                            if(fcntl(cfd,F_SETFL,flags|O_NONBLOCK)==-1)
-                            {
-                                ::close(cfd);
-                                if(stt::system::ServerSetting::logfile!=nullptr)
-                                {
-                                        if(stt::system::ServerSetting::language=="Chinese")
-                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll:fd="+to_string(cfd)+" ip="+ip+" 非阻塞模式设置失败");
-                                        else
-                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll:fd="+to_string(cfd)+" ip="+ip+" The non-blocking mode setting failed");
-                                }
-                                continue;
-                            }
-                            
+                            TcpFDInf &connection=clientfd[cfd];
+                            connection=TcpFDInf{};
                             if(TLS)//加密accept
                             {
                                 ssl=SSL_new(ctx);
@@ -4217,7 +4513,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 //关联这个fd和ss
                                 SSL_set_fd(ssl,cfd);
 
-                                clientfd[cfd].tls_state = TLSState::HANDSHAKING;
+                                connection.tls_state = TLSState::HANDSHAKING;
                                 
                                 //unique_lock<mutex> lock1(ltl1);
                                 //tlsfd.emplace(cfd,ssl);//emplace???erase???
@@ -4226,29 +4522,50 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             else
                             {
                                 ssl=nullptr;
-                                clientfd[cfd].tls_state = TLSState::NONE;
+                                connection.tls_state = TLSState::NONE;
                             }
-                            clientfd[cfd].ssl=ssl;
+                            connection.ssl=ssl;
                             //cout<<"ok"<<endl;
                             //epoll注册
                             ev.data.fd=cfd;
                             
                                 ev.events=EPOLLIN|EPOLLERR | EPOLLHUP | EPOLLRDHUP|EPOLLET;//边缘触发
 
-                            epoll_ctl(epollFD,EPOLL_CTL_ADD,cfd,&ev);
+                            if(epoll_ctl(epollFD,EPOLL_CTL_ADD,cfd,&ev)<0)
+                            {
+                                if(ssl!=nullptr) SSL_free(ssl);
+                                connection.ssl=nullptr;
+                                if(this->security_open) connectionLimiter.clearIP(ip,cfd);
+                                ::close(cfd);
+                                continue;
+                            }
                             //cout<<"listen:"<<cfd<<endl;
                             //对象表注册
-                            string port=to_string(k.sin_port);//获取客户端的端口
+                            string port=to_string(ntohs(k.sin_port));//获取客户端的端口
                             //string ip(inet_ntoa(k.sin_addr));//获取客户端的ip
-                            clientfd[cfd].fd=cfd;
-                            clientfd[cfd].ip=ip;
-                            clientfd[cfd].port=port;
-                            clientfd[cfd].status=0;
-                            clientfd[cfd].data="";
-                            clientfd[cfd].buffer=new char[buffer_size];
-                            clientfd[cfd].p_buffer_now=0;
-                            clientfd[cfd].FDStatus=-1;
-                            clientfd[cfd].connection_obj_fd=this->connection_obj_fd++;
+                            connection.fd=cfd;
+                            connection.ip=ip;
+                            connection.port=port;
+                            connection.status=0;
+                            connection.data="";
+                            connection.buffer=nullptr;
+                            connection.buffer_capacity=0;
+                            connection.p_buffer_now=0;
+                            connection.FDStatus=-1;
+                            connection.connection_obj_fd=this->connection_obj_fd++;
+                            connection.write_state=std::make_shared<ConnectionWriteState>();
+                            connection.write_state->fd=cfd;
+                            connection.write_state->connection_obj_fd=connection.connection_obj_fd;
+                            connection.write_state->max_queued_bytes=maxPendingWriteBytes;
+                            connection.write_interest=false;
+                            connection.write_waiting_for_read=false;
+                            metricAcceptedConnections.fetch_add(1,std::memory_order_relaxed);
+                            metricActiveConnections.fetch_add(1,std::memory_order_relaxed);
+                            if(!TLS)
+                            {
+                                std::lock_guard<std::mutex> lock(writeRegistryMutex);
+                                writeRegistry[cfd]=connection.write_state;
+                            }
                             //clientfd[cfd].p_request_now=0;
                             //unique_lock<mutex> lock6(lc1);
                             //clientfd.emplace(cfd,inf);
@@ -4276,11 +4593,14 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         uint64_t exp;
                         read(securityTimerFD, &exp, sizeof(exp)); // 必须读，清事件
                         //遍历判断所有
-                        for(int i=0;i<maxFD;i++)
+                        std::vector<int> timedOutFDs;
+                        for(auto &entry:clientfd)
                         {
-                            if(clientfd[i].fd!=-1)
+                            const int i=entry.first;
+                            TcpFDInf &connection=entry.second;
+                            if(connection.fd!=-1)
                             {
-                                if(this->connectionLimiter.connectionDetect(clientfd[i].ip,i))//超时 是僵尸连接
+                                if(this->connectionLimiter.connectionDetect(connection.ip,i))//超时 是僵尸连接
                                 {
                                     
                                     if(stt::system::ServerSetting::logfile!=nullptr)
@@ -4290,7 +4610,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                         else
                                             stt::system::ServerSetting::logfile->writeLog("tcp server epoll : has detected a zoombie connection : fd= "+to_string(i)+" and it has been closed");
                                     }
-                                    close(i);
+                                    timedOutFDs.push_back(i);
                                     
                                     
 
@@ -4298,6 +4618,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 }
                             }
                         }
+                        for(const int timedOutFD:timedOutFDs)
+                            close(timedOutFD);
                     }
                     else if(evs[ii].data.fd==workerEventFD)//worker事件
                     {
@@ -4307,13 +4629,40 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         // 一口气处理完队列
                         while(finishQueue.pop(wm))
                         {
-                            handler_workerevent(wm.fd,wm.ret);
+                            handler_workerevent(std::move(wm));
+                        }
+                        std::queue<WorkerMessage> overflow;
+                        {
+                            std::lock_guard<std::mutex> lock(overflowFinishMutex);
+                            overflow.swap(overflowFinishQueue);
+                        }
+                        while(!overflow.empty())
+                        {
+                            handler_workerevent(std::move(overflow.front()));
+                            overflow.pop();
+                        }
+                        SendReadyMessage sendReady;
+                        while(sendReadyQueue.pop(sendReady))
+                            handleSendReady(epollFD,std::move(sendReady));
+                        std::queue<SendReadyMessage> overflowSendReady;
+                        {
+                            std::lock_guard<std::mutex> lock(overflowSendReadyMutex);
+                            overflowSendReady.swap(overflowSendReadyQueue);
+                        }
+                        while(!overflowSendReady.empty())
+                        {
+                            handleSendReady(epollFD,std::move(overflowSendReady.front()));
+                            overflowSendReady.pop();
                         }
                     }
                     else//有数据上来了
                     {
+                        auto eventConnection=clientfd.find(evs[ii].data.fd);
+                        if(eventConnection==clientfd.end()||eventConnection->second.fd!=evs[ii].data.fd)
+                            continue;
                        //start=chrono::high_resolution_clock::now();
-                        if(evs[ii].events&(EPOLLERR | EPOLLHUP | EPOLLRDHUP))
+                        if((evs[ii].events&(EPOLLERR | EPOLLHUP | EPOLLRDHUP))&&
+                           !(evs[ii].events&(EPOLLIN|EPOLLOUT)))
                         {
 
                                 
@@ -4345,6 +4694,14 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 if (ret == 1) 
                                 {
                                     clientfd[evs[ii].data.fd].tls_state = TLSState::ESTABLISHED;
+                                    {
+                                        std::lock_guard<std::mutex> lock(writeRegistryMutex);
+                                        writeRegistry[evs[ii].data.fd]=clientfd[evs[ii].data.fd].write_state;
+                                    }
+                                    epoll_event tlsEvent{};
+                                    tlsEvent.data.fd=evs[ii].data.fd;
+                                    tlsEvent.events=EPOLLIN|EPOLLERR|EPOLLHUP|EPOLLRDHUP|EPOLLET;
+                                    epoll_ctl(epollFD,EPOLL_CTL_MOD,evs[ii].data.fd,&tlsEvent);
                                     // TLS 握手完成
                                     if(stt::system::ServerSetting::logfile!=nullptr)
                                     {
@@ -4364,11 +4721,14 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                     } 
                                     else if (err == SSL_ERROR_WANT_WRITE) 
                                     {
-                                        // 确保监听 EPOLLOUT
-                                        
+                                        epoll_event tlsEvent{};
+                                        tlsEvent.data.fd=evs[ii].data.fd;
+                                        tlsEvent.events=EPOLLIN|EPOLLOUT|EPOLLERR|EPOLLHUP|EPOLLRDHUP|EPOLLET;
+                                        epoll_ctl(epollFD,EPOLL_CTL_MOD,evs[ii].data.fd,&tlsEvent);
                                     }
                                     else 
                                     {
+                                        metricTLSHandshakeFailures.fetch_add(1,std::memory_order_relaxed);
                                         // 真错误
                                         //printf("SSL_accept error: %s\n", ERR_error_string(ERR_get_error(), nullptr));
     	                                //printf("SSL_accept returned %d, SSL error code: %d\n", ret, SSL_get_error(ssl, ret));
@@ -4385,15 +4745,57 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 }
                                 continue;
                             }
-                            //普通数据
-                            if(stt::system::ServerSetting::logfile!=nullptr)
+                            TcpFDInf &eventState=eventConnection->second;
+                            if(evs[ii].events&EPOLLOUT)
                             {
-                                if(stt::system::ServerSetting::language=="Chinese")
-                                    stt::system::ServerSetting::logfile->writeLog("tcp server epoll:收到新数据：fd= "+to_string(evs[ii].data.fd));
-                                else
-                                    stt::system::ServerSetting::logfile->writeLog("tcp server epoll:has received new data: fd= "+to_string(evs[ii].data.fd));
+                                const WriteFlushResult writeResult=flushConnectionWrites(eventState);
+                                eventState.write_waiting_for_read=writeResult==WriteFlushResult::WaitRead;
+                                if(writeResult==WriteFlushResult::Error)
+                                {
+                                    close(evs[ii].data.fd);
+                                    continue;
+                                }
+                                if(!updateConnectionEvents(epollFD,eventState,writeResult==WriteFlushResult::WaitWrite))
+                                {
+                                    close(evs[ii].data.fd);
+                                    continue;
+                                }
+                                if(writeResult==WriteFlushResult::Reschedule)
+                                    publishSendReady(eventState.write_state);
                             }
-                            handler_netevent(evs[ii].data.fd);
+
+                            if(evs[ii].events&EPOLLIN)
+                            {
+                                //普通数据
+                                if(stt::system::ServerSetting::logfile!=nullptr)
+                                {
+                                    if(stt::system::ServerSetting::language=="Chinese")
+                                        stt::system::ServerSetting::logfile->writeLog("tcp server epoll:收到新数据：fd= "+to_string(evs[ii].data.fd));
+                                    else
+                                        stt::system::ServerSetting::logfile->writeLog("tcp server epoll:has received new data: fd= "+to_string(evs[ii].data.fd));
+                                }
+                                handler_netevent(evs[ii].data.fd);
+                            }
+
+                            auto afterRead=clientfd.find(evs[ii].data.fd);
+                            if(afterRead!=clientfd.end()&&afterRead->second.fd==evs[ii].data.fd&&afterRead->second.write_waiting_for_read)
+                            {
+                                TcpFDInf &connectionAfterRead=afterRead->second;
+                                const WriteFlushResult writeResult=flushConnectionWrites(connectionAfterRead);
+                                connectionAfterRead.write_waiting_for_read=writeResult==WriteFlushResult::WaitRead;
+                                if(writeResult==WriteFlushResult::Error)
+                                {
+                                    close(evs[ii].data.fd);
+                                    continue;
+                                }
+                                if(!updateConnectionEvents(epollFD,connectionAfterRead,writeResult==WriteFlushResult::WaitWrite))
+                                {
+                                    close(evs[ii].data.fd);
+                                    continue;
+                                }
+                                if(writeResult==WriteFlushResult::Reschedule)
+                                    publishSendReady(connectionAfterRead.write_state);
+                            }
                              //{
                              //   std::lock_guard<std::mutex> lock(lq1[evs[ii].data.fd%consumerNum]);
                              //   fdQueue[evs[ii].data.fd%consumerNum].push(QueueFD{evs[ii].data.fd,false});
@@ -4405,9 +4807,24 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         //cout<<"入队用时"<<duration.count()<<endl;
                     }
                 }
+                size_t continuationBudget=64;
+                while(continuationBudget>0&&!bufferedReadQueue.empty())
+                {
+                    const SendReadyMessage continuation=bufferedReadQueue.front();
+                    bufferedReadQueue.pop_front();
+                    const auto continuationIt=clientfd.find(continuation.fd);
+                    if(continuationIt!=clientfd.end()&&continuationIt->second.fd==continuation.fd&&
+                       continuationIt->second.connection_obj_fd==continuation.connection_obj_fd)
+                        handler_netevent(continuation.fd);
+                    --continuationBudget;
+                }
             }
         }
-        delete[] evs;
+        if(hbTimerFD>=0) ::close(hbTimerFD);
+        if(securityTimerFD>=0) ::close(securityTimerFD);
+        if(workerEventFD>=0) ::close(workerEventFD);
+        workerEventFD=-1;
+        ::close(epollFD);
         if(stt::system::ServerSetting::logfile!=nullptr)
         {
             if(stt::system::ServerSetting::language=="Chinese")
@@ -4416,10 +4833,32 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 stt::system::ServerSetting::logfile->writeLog("tcp server's listening epoll quit");
         }
         //cout<<"epoll quit"<<endl;
-        flag2=true;
+        flag2.store(true, std::memory_order_release);
     }
-    void stt::network::TcpServer::handler_workerevent(const int &fd,const int &ret)
+    void stt::network::TcpServer::handler_workerevent(WorkerMessage message)
     {
+        const int fd=message.fd;
+        const int ret=message.ret;
+        auto connectionIt=clientfd.find(fd);
+        if(connectionIt==clientfd.end()||connectionIt->second.fd!=fd||
+           connectionIt->second.connection_obj_fd!=message.connection_obj_fd)
+            return;
+        if(connectionIt->second.active_workers>0)
+            --connectionIt->second.active_workers;
+        if(connectionIt->second.closing)
+        {
+            if(connectionIt->second.active_workers==0)
+            {
+                connectionIt->second.closing=false;
+                TcpServer::close(fd);
+            }
+            return;
+        }
+        if(ret>=0&&message.request&&!connectionIt->second.pendindQueue.empty())
+        {
+            auto request=std::static_pointer_cast<TcpInformation>(message.request);
+            std::any_cast<TcpInformation&>(connectionIt->second.pendindQueue.front())=std::move(*request);
+        }
         if(ret==-2)
         {
             TcpServer::close(fd);
@@ -4433,7 +4872,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             return;
         }
         TcpFDHandler k;
-        k.setFD(fd,clientfd[fd].ssl,unblock);
+        prepareHandler(k,fd);
         if(ret==-1)
         {
             clientfd[fd].pendindQueue.pop();
@@ -4548,7 +4987,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             clientfd[fd].pendindQueue.pop();
         }
 
-        TcpFDInf Tcpinf=clientfd[fd];
+        TcpFDInf &Tcpinf=clientfd[fd];
         //检查是否有下一轮
         if(Tcpinf.pendindQueue.size()>=1)//只有一个 说明没有任务没做完 直接执行
             {
@@ -4683,6 +5122,26 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
 
     }
+    static bool ensureReceiveBuffer(stt::network::TcpFDInf &connection,const unsigned long maxCapacity,const unsigned long requiredCapacity)
+    {
+        if(requiredCapacity>maxCapacity)
+            return false;
+        if(connection.buffer_capacity>=requiredCapacity)
+            return true;
+        unsigned long newCapacity=connection.buffer_capacity==0?std::min(8192UL,maxCapacity):connection.buffer_capacity;
+        while(newCapacity<requiredCapacity)
+            newCapacity=std::min(maxCapacity,newCapacity*2UL);
+        char *newBuffer=new(std::nothrow) char[newCapacity];
+        if(newBuffer==nullptr)
+            return false;
+        if(connection.buffer!=nullptr&&connection.p_buffer_now>0)
+            memcpy(newBuffer,connection.buffer,connection.p_buffer_now);
+        delete[] connection.buffer;
+        connection.buffer=newBuffer;
+        connection.buffer_capacity=newCapacity;
+        return true;
+    }
+
     void stt::network::TcpServer::handler_netevent(const int &fd)
     {
         TcpFDHandler k;
@@ -4699,17 +5158,27 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 }
             
             TcpFDInf &Tcpinf=clientfd[fd];
-            k.setFD(fd,clientfd[fd].ssl,unblock);
+            prepareHandler(k,fd);
             
             int ret=1;
             Tcpinf.p_buffer_now=0;
-            while(ret>0&&buffer_size-Tcpinf.p_buffer_now>0)
+            if(!ensureReceiveBuffer(Tcpinf,buffer_size,std::min(8192UL,buffer_size)))
             {
-                ret=k.recvData(Tcpinf.buffer+Tcpinf.p_buffer_now,buffer_size-Tcpinf.p_buffer_now);
+                TcpServer::close(fd);
+                return;
+            }
+            while(ret>0)
+            {
+                if(Tcpinf.p_buffer_now==Tcpinf.buffer_capacity)
+                {
+                    if(Tcpinf.buffer_capacity>=buffer_size||!ensureReceiveBuffer(Tcpinf,buffer_size,Tcpinf.buffer_capacity+1))
+                        break;
+                }
+                ret=k.recvData(Tcpinf.buffer+Tcpinf.p_buffer_now,Tcpinf.buffer_capacity-Tcpinf.p_buffer_now);
                 if(ret>0)
                     Tcpinf.p_buffer_now+=ret;
             }
-            if(buffer_size-Tcpinf.p_buffer_now<=0)
+            if(Tcpinf.p_buffer_now>=buffer_size)
             {
                 TcpServer::close(fd);
                 if(stt::system::ServerSetting::logfile!=nullptr)
@@ -4747,7 +5216,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             //开始处理
                 //入队
             
-            Tcpinf.pendindQueue.push(move(inf));
+            Tcpinf.pendindQueue.push(std::move(inf));
             
             if(Tcpinf.pendindQueue.size()==1)//只有一个 说明没有任务没做完 直接执行
             {
@@ -4985,7 +5454,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     else
                         stt::system::ServerSetting::logfile->writeLog("tcp server consumer "+to_string(threadID)+" :now handleing fd= "+to_string(cclientfd.fd));
                 }
-                k.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
+                prepareHandler(k,cclientfd.fd);
                 TcpFDInf &Tcpinf=clientfd[cclientfd.fd];
             //lock6.unlock();
             
@@ -5029,12 +5498,23 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     */
     bool stt::network::HttpServerFDHandler::sendBack(const string &data,const string &header,const string &code,const string &header1)
     {
-
-        string result="HTTP/1.1 "+code+"\r\nContent-Length: "+\
-             to_string(data.length())+"\r\n"+\
-             header1+\
-             header+"\r\n"+\
-             data;
+        string result;
+        result.reserve(data.size()+header.size()+header1.size()+96);
+        result="HTTP/1.1 "+code+"\r\nContent-Length: "+to_string(data.length())+"\r\n";
+        if(!header1.empty())
+        {
+            result+=header1;
+            if(header1.size()<2||header1.compare(header1.size()-2,2,"\r\n")!=0)
+                result+="\r\n";
+        }
+        if(!header.empty())
+        {
+            result+=header;
+            if(header.size()<2||header.compare(header.size()-2,2,"\r\n")!=0)
+                result+="\r\n";
+        }
+        result+="\r\n";
+        result+=data;
         
         if(sendData(result)!=result.length())
         {
@@ -5045,349 +5525,274 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     
     bool stt::network::HttpServerFDHandler::sendBack(const char *data,const size_t &length,const char *header,const char *code,const char *header1,const size_t &header_length)
     {
-         
-        /*
-        string ii="HTTP/1.1 "+code+"\r\nContent-Length: "+\
-             to_string(length)+"\r\n"+\
-             header1+\
-             header+"\r\n";
-        char *buffer=new char[length+ii.length()];
-        memcpy(buffer,ii.c_str(),ii.length());
-        memcpy(buffer+ii.length(),data,length);
-        if(sendData(buffer,length+ii.length())!=length+ii.length())
-        {
-            delete buffer;
+        (void)header_length;
+        if(data==nullptr||header==nullptr||code==nullptr||header1==nullptr)
             return false;
-        }
-        delete buffer;
-        */
-        char *buffer=new char[length+header_length+4+1];       
-        size_t ret=snprintf(buffer,length+header_length+4+1,"HTTP/1.1 %s\r\nContent-Length: %zu\r\n%s%s\r\n%s",code,length,header,header1,data);
-        if(ret<length+header_length+4+1)
-        {
-            if(sendData(buffer,ret)!=ret)
-            {
-                delete[] buffer;
-                return false;
-            }
-            delete[] buffer;
-            return true;
-        }
-        else
-        {
-            delete[] buffer;
-            return false;
-        }
+        string body(data,length);
+        return sendBack(body,header,code,header1);
     }
-    
-    int stt::network::HttpServerFDHandler::solveRequest(TcpFDInf &TcpInf,HttpRequestInformation &HttpInf,const unsigned long &buffer_size,const int &times)
-    {
 
+    static int parseHttpRequestBuffer(stt::network::TcpFDInf &tcp,
+                                      stt::network::HttpRequestInformation &request,
+                                      const size_t bufferLimit,
+                                      const size_t configuredHeaderLimit)
+    {
+        if(tcp.p_buffer_now==0)
+            return 0;
+        if(tcp.buffer==nullptr||tcp.p_buffer_now>bufferLimit)
+            return -1;
+        const std::string_view input(tcp.buffer,tcp.p_buffer_now);
+        const size_t headerLimit=std::min(bufferLimit,configuredHeaderLimit);
+        const size_t headerEnd=input.find("\r\n\r\n");
+        if(headerEnd==std::string_view::npos)
+            return input.size()>=headerLimit?-1:0;
+        const size_t headerBytes=headerEnd+4;
+        if(headerBytes>headerLimit)
+            return -1;
+
+        const auto isToken=[](const char character) {
+            const unsigned char value=static_cast<unsigned char>(character);
+            if(std::isalnum(value)) return true;
+            switch(character)
+            {
+                case '!': case '#': case '$': case '%': case '&': case '\'':
+                case '*': case '+': case '-': case '.': case '^': case '_':
+                case '`': case '|': case '~': return true;
+                default: return false;
+            }
+        };
+        const auto trim=[](std::string_view value) {
+            while(!value.empty()&&(value.front()==' '||value.front()=='\t')) value.remove_prefix(1);
+            while(!value.empty()&&(value.back()==' '||value.back()=='\t')) value.remove_suffix(1);
+            return value;
+        };
+        const auto lower=[](std::string_view value) {
+            std::string result(value);
+            std::transform(result.begin(),result.end(),result.begin(),[](const unsigned char character) {
+                return static_cast<char>(std::tolower(character));
+            });
+            return result;
+        };
+        const auto parseDecimal=[](std::string_view value,size_t &result) {
+            if(value.empty()) return false;
+            result=0;
+            for(const char character:value)
+            {
+                if(character<'0'||character>'9') return false;
+                const size_t digit=static_cast<size_t>(character-'0');
+                if(result>(std::numeric_limits<size_t>::max()-digit)/10) return false;
+                result=result*10+digit;
+            }
+            return true;
+        };
+        const auto parseHex=[](std::string_view value,size_t &result) {
+            if(value.empty()) return false;
+            result=0;
+            for(const char character:value)
+            {
+                unsigned int digit=0;
+                if(character>='0'&&character<='9') digit=static_cast<unsigned int>(character-'0');
+                else if(character>='a'&&character<='f') digit=static_cast<unsigned int>(character-'a'+10);
+                else if(character>='A'&&character<='F') digit=static_cast<unsigned int>(character-'A'+10);
+                else return false;
+                if(result>(std::numeric_limits<size_t>::max()-digit)/16) return false;
+                result=result*16+digit;
+            }
+            return true;
+        };
+        const auto validValue=[](const std::string_view value) {
+            for(const char character:value)
+            {
+                const unsigned char byte=static_cast<unsigned char>(character);
+                if((byte<0x20&&character!='\t')||byte==0x7f) return false;
+            }
+            return true;
+        };
+
+        const size_t requestLineEnd=input.find("\r\n");
+        if(requestLineEnd==std::string_view::npos||requestLineEnd==0||requestLineEnd>headerEnd)
+            return -1;
+        const std::string_view requestLine=input.substr(0,requestLineEnd);
+        const size_t firstSpace=requestLine.find(' ');
+        const size_t secondSpace=firstSpace==std::string_view::npos?std::string_view::npos:requestLine.find(' ',firstSpace+1);
+        if(firstSpace==std::string_view::npos||secondSpace==std::string_view::npos||
+           firstSpace==0||secondSpace==firstSpace+1||requestLine.find(' ',secondSpace+1)!=std::string_view::npos)
+            return -1;
+        const std::string_view method=requestLine.substr(0,firstSpace);
+        const std::string_view target=requestLine.substr(firstSpace+1,secondSpace-firstSpace-1);
+        const std::string_view version=requestLine.substr(secondSpace+1);
+        if(!std::all_of(method.begin(),method.end(),isToken)||target.empty()||
+           (version!="HTTP/1.1"&&version!="HTTP/1.0"))
+            return -1;
+        for(const char character:target)
+            if(static_cast<unsigned char>(character)<=0x20||character==0x7f)
+                return -1;
+
+        bool hasHost=false;
+        bool hasContentLength=false;
+        size_t contentLength=0;
+        bool hasTransferEncoding=false;
+        std::vector<std::string> transferCodings;
+        size_t lineStart=requestLineEnd+2;
+        while(lineStart<headerEnd)
+        {
+            const size_t lineEnd=input.find("\r\n",lineStart);
+            if(lineEnd==std::string_view::npos||lineEnd>headerEnd||lineEnd==lineStart)
+                return -1;
+            const std::string_view line=input.substr(lineStart,lineEnd-lineStart);
+            if(line.front()==' '||line.front()=='\t')
+                return -1;
+            const size_t colon=line.find(':');
+            if(colon==std::string_view::npos||colon==0)
+                return -1;
+            const std::string_view name=line.substr(0,colon);
+            const std::string_view value=trim(line.substr(colon+1));
+            if(!std::all_of(name.begin(),name.end(),isToken)||!validValue(value))
+                return -1;
+            const std::string normalizedName=lower(name);
+            if(normalizedName=="host")
+            {
+                if(hasHost||value.empty()) return -1;
+                hasHost=true;
+            }
+            else if(normalizedName=="content-length")
+            {
+                size_t parsedLength=0;
+                if(hasContentLength||!parseDecimal(value,parsedLength)) return -1;
+                hasContentLength=true;
+                contentLength=parsedLength;
+            }
+            else if(normalizedName=="transfer-encoding")
+            {
+                if(hasTransferEncoding) return -1;
+                hasTransferEncoding=true;
+                size_t tokenStart=0;
+                while(tokenStart<=value.size())
+                {
+                    const size_t comma=value.find(',',tokenStart);
+                    const std::string_view coding=trim(value.substr(tokenStart,comma==std::string_view::npos?value.size()-tokenStart:comma-tokenStart));
+                    if(coding.empty()) return -1;
+                    transferCodings.push_back(lower(coding));
+                    if(comma==std::string_view::npos) break;
+                    tokenStart=comma+1;
+                }
+            }
+            lineStart=lineEnd+2;
+        }
+        if(version=="HTTP/1.1"&&!hasHost)
+            return -1;
+        if(hasContentLength&&hasTransferEncoding)
+            return -1;
+        if(hasTransferEncoding&&(transferCodings.size()!=1||transferCodings.front()!="chunked"))
+            return -1;
+
+        size_t consumed=headerBytes;
+        std::string decodedBody;
+        if(hasTransferEncoding)
+        {
+            size_t cursor=headerBytes;
+            while(true)
+            {
+                const size_t sizeLineEnd=input.find("\r\n",cursor);
+                if(sizeLineEnd==std::string_view::npos)
+                    return input.size()>=bufferLimit?-1:0;
+                std::string_view sizeText=input.substr(cursor,sizeLineEnd-cursor);
+                if(!validValue(sizeText)) return -1;
+                const size_t extension=sizeText.find(';');
+                if(extension!=std::string_view::npos) sizeText=sizeText.substr(0,extension);
+                sizeText=trim(sizeText);
+                size_t chunkSize=0;
+                if(!parseHex(sizeText,chunkSize)||decodedBody.size()>bufferLimit||chunkSize>bufferLimit-decodedBody.size())
+                    return -1;
+                cursor=sizeLineEnd+2;
+                if(chunkSize==0)
+                {
+                    while(true)
+                    {
+                        const size_t trailerEnd=input.find("\r\n",cursor);
+                        if(trailerEnd==std::string_view::npos)
+                            return input.size()>=bufferLimit?-1:0;
+                        if(trailerEnd==cursor)
+                        {
+                            consumed=cursor+2;
+                            break;
+                        }
+                        const std::string_view trailer=input.substr(cursor,trailerEnd-cursor);
+                        const size_t colon=trailer.find(':');
+                        if(colon==std::string_view::npos||colon==0||
+                           !std::all_of(trailer.begin(),trailer.begin()+static_cast<std::ptrdiff_t>(colon),isToken)||
+                           !validValue(trim(trailer.substr(colon+1))))
+                            return -1;
+                        cursor=trailerEnd+2;
+                    }
+                    break;
+                }
+                if(chunkSize>input.size()-cursor||input.size()-cursor-chunkSize<2)
+                    return input.size()>=bufferLimit?-1:0;
+                if(input.substr(cursor+chunkSize,2)!="\r\n")
+                    return -1;
+                decodedBody.append(input.data()+cursor,chunkSize);
+                cursor+=chunkSize+2;
+            }
+        }
+        else if(hasContentLength)
+        {
+            if(headerBytes>bufferLimit||contentLength>bufferLimit-headerBytes)
+                return -1;
+            consumed=headerBytes+contentLength;
+            if(input.size()<consumed)
+                return input.size()>=bufferLimit?-1:0;
+        }
+
+        request.type.assign(method);
+        request.locPara.assign(target);
+        HttpStringUtil::get_location_str(request.locPara,request.loc);
+        HttpStringUtil::getPara(request.locPara,request.para);
+        request.header.assign(input.data(),headerEnd);
+        request.body.clear();
+        request.body_chunked.clear();
+        request.ctx.clear();
+        if(hasTransferEncoding)
+            request.body_chunked=std::move(decodedBody);
+        else if(hasContentLength&&contentLength>0)
+            request.body.assign(input.data()+headerBytes,contentLength);
+
+        const size_t remaining=input.size()-consumed;
+        if(remaining>0)
+            memmove(tcp.buffer,tcp.buffer+consumed,remaining);
+        tcp.p_buffer_now=remaining;
+        tcp.data={};
+        tcp.status=0;
+        return 1;
+    }
+
+    int stt::network::HttpServerFDHandler::solveRequest(TcpFDInf &TcpInf,HttpRequestInformation &HttpInf,const unsigned long &buffer_size,const int &times,const unsigned long &max_header_size)
+    {
+        if(buffer_size==0||max_header_size==0)
+            return -1;
+        int receiveResult=-100;
         if(times==1)
         {
-            
-            //unsigned long long p_buffer_now_backup=TcpInf.p_buffer_now;
-            int ret=1;
-            while(ret>0&&buffer_size-TcpInf.p_buffer_now>0)
-            {
-                
-                ret=recvData(TcpInf.buffer+TcpInf.p_buffer_now,buffer_size-TcpInf.p_buffer_now);
-                if(ret>0)
-                    TcpInf.p_buffer_now+=ret;
-            }
-            if(buffer_size-TcpInf.p_buffer_now<=0)
-            {
-                if(stt::system::ServerSetting::logfile!=nullptr)
-                    {
-                        if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("http server : 缓冲区容量不足 读取数据fd= "+to_string(fd)+" 失败，已经关闭连接");
-                        else
-                            stt::system::ServerSetting::logfile->writeLog("http server : buffer size is not enough,read data from fd= "+to_string(fd)+" fail,now has closed this connection");
-                    }
+            if(!ensureReceiveBuffer(TcpInf,buffer_size,std::min(8192UL,buffer_size)))
                 return -1;
-            }
-            if(ret<=0)
+            receiveResult=1;
+            while(receiveResult>0)
             {
-                
-                if(ret!=-100)
-                    return -1;
-                
+                if(TcpInf.p_buffer_now==TcpInf.buffer_capacity)
+                {
+                    if(TcpInf.buffer_capacity>=buffer_size||
+                       !ensureReceiveBuffer(TcpInf,buffer_size,TcpInf.buffer_capacity+1))
+                        break;
+                }
+                receiveResult=recvData(TcpInf.buffer+TcpInf.p_buffer_now,TcpInf.buffer_capacity-TcpInf.p_buffer_now);
+                if(receiveResult>0)
+                    TcpInf.p_buffer_now+=static_cast<unsigned long>(receiveResult);
             }
-            //TcpInf.data=string_view(TcpInf.buffer+p_buffer_now_backup,TcpInf.p_buffer_now);
-            TcpInf.data=string_view(TcpInf.buffer,TcpInf.p_buffer_now);
-            //cout<<TcpInf.data<<endl;
         }
-        //cout<<TcpInf.data<<endl;
-        //endd=chrono::high_resolution_clock::now();
-        //                duration=chrono::duration_cast<chrono::microseconds>(endd-start);
-        //                cout<<"接受完数据用时"<<duration.count()<<endl;
-        //数据准备完成，开始判断
-        
-        if(TcpInf.status==0||TcpInf.status==1)
-        {
-            auto pos=TcpInf.data.find("\r\n\r\n");
-            if(pos==string::npos)
-            {
-                if(TcpInf.status==0)
-                    TcpInf.status=1;
-                //memcpy(TcpInf.buffer,TcpInf.buffer+TcpInf.p_buffer_now-TcpInf.data.length(),TcpInf.data.length());
-                //TcpInf.p_buffer_now=TcpInf.data.length();
-                
-                return 0;
-            }
-            
-            //转到状态2或者3
-            HttpInf.header=TcpInf.data.substr(0,pos);
-            
-            
-            if(HttpInf.header.find("Transfer-Encoding: chunked")!=string::npos)//状态2
-            {
-                TcpInf.status=2;
-                
-                if(TcpInf.data.find("0\r\n\r\n")==string::npos)
-                {
-                    //memcpy(TcpInf.buffer,TcpInf.buffer+TcpInf.p_buffer_now-TcpInf.data.length(),TcpInf.data.length());
-                    HttpInf.header=string(TcpInf.buffer,pos);
-                    //TcpInf.p_buffer_now=TcpInf.data.length();
-                    return 0;
-                }
-                string_view size;
-                int ssize;
-                size_t ppos=0;
-                TcpInf.data=TcpInf.data.substr(2+HttpInf.header.length());
-                while(1)
-                {
-                    HttpStringUtil::get_split_str(TcpInf.data,size,"\r\n","\r\n",ppos);
-                    
-                    ppos=TcpInf.data.find("\r\n",ppos+2);
-                    NumberStringConvertUtil::str16toInt(string(size),ssize);
-                    if(ssize==-1)
-                    {
-                        
-                        return -1;
-                    }
-                    else if(ssize==0)
-                    {
-                        //TcpInf.data=TcpInf.data.substr(ppos+5);
-                        TcpInf.status=0;
-                        //if(TcpInf.data.length()==ppos+2)
-                        //    TcpInf.data={};
-                        //else
-                        //    TcpInf.data=TcpInf.data.substr(ppos+2);
-                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
-                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
-                        HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
-                        HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
-                        memcpy(TcpInf.buffer,TcpInf.buffer+ppos+2,TcpInf.p_buffer_now-(ppos+2));
-                        TcpInf.p_buffer_now=TcpInf.p_buffer_now-(ppos+2);
-                        return 1;
-                    }
-                    else//读取数据
-                    {
-                        HttpInf.body_chunked+=TcpInf.data.substr(ppos+2,ssize);
-                        ppos=ppos+2+ssize;
-                    }
-                }
-            }
-            else//状态3
-            {
-                 //endd=chrono::high_resolution_clock::now();
-                 //       duration=chrono::duration_cast<chrono::microseconds>(endd-start);
-                 //       cout<<"状态3用时"<<duration.count()<<endl;
-                TcpInf.status=3;
-                string_view size;
-                long ssize;
+        if(TcpInf.p_buffer_now==0&&receiveResult!=-100)
+            return -1;
+        return parseHttpRequestBuffer(TcpInf,HttpInf,buffer_size,max_header_size);
 
-                HttpStringUtil::get_split_str(HttpInf.header,size,"Content-Length: ","\r\n");
-                 //endd=chrono::high_resolution_clock::now();
-                //        duration=chrono::duration_cast<chrono::microseconds>(endd-start);
-                 //       cout<<"split完用时"<<duration.count()<<endl;
-                NumberStringConvertUtil::toLong(string(size),ssize);
-                // endd=chrono::high_resolution_clock::now();
-                //        duration=chrono::duration_cast<chrono::microseconds>(endd-start);
-                //        cout<<"tolong完用时"<<duration.count()<<endl;
-                if(ssize==-1)
-                {
-                    
-                    //if(HttpInf.header.find("GET")!=string::npos)
-                    //{
-                        TcpInf.status=0;
-                        //if(TcpInf.data.length()-4-HttpInf.header.length()==0)
-                        //    TcpInf.data={};
-                        //else
-                        //    TcpInf.data=TcpInf.data.substr(HttpInf.header.length()+4);
-                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
-                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
-                        HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
-                        HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
-                        memcpy(TcpInf.buffer,TcpInf.buffer+HttpInf.header.length()+4,TcpInf.p_buffer_now-(HttpInf.header.length()+4));
-                        TcpInf.p_buffer_now=TcpInf.p_buffer_now-(HttpInf.header.length()+4);
-                        return 1;
-                    //}
-                    //else
-                    //    return -1;
-                }
-                else if(ssize==0)
-                {
-                    TcpInf.status=0;
-                    //if(TcpInf.data.length()-4-HttpInf.header.length()==0)
-                    //    TcpInf.data={};
-                    //else
-                    //    TcpInf.data=TcpInf.data.substr(HttpInf.header.length()+4);
-                    HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
-                    HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
-                    HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
-                    HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
-                    memcpy(TcpInf.buffer,TcpInf.buffer+HttpInf.header.length()+4,TcpInf.p_buffer_now-(HttpInf.header.length()+4));
-                    TcpInf.p_buffer_now=TcpInf.p_buffer_now-(HttpInf.header.length()+4);
-                    return 1;
-                }
-                else if(ssize>0)
-                {
-                    if(TcpInf.data.length()-4-HttpInf.header.length()>=ssize)
-                    {
-                        HttpInf.body=TcpInf.data.substr(4+HttpInf.header.length(),ssize);
-                        //if(TcpInf.data.length()-4-HttpInf.header.length()==ssize)
-                        //    TcpInf.data={};
-                        //else
-                        //    TcpInf.data=TcpInf.data.substr(4+HttpInf.header.length()+ssize);
-                        TcpInf.status=0;
-                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
-                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
-                        HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
-                        HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
-                        memcpy(TcpInf.buffer,TcpInf.buffer+4+HttpInf.header.length()+ssize,TcpInf.p_buffer_now-(4+HttpInf.header.length()+ssize));
-                        TcpInf.p_buffer_now=TcpInf.p_buffer_now-(4+HttpInf.header.length()+ssize);
-                        return 1;
-                    }
-                    else
-                    {
-                        memcpy(TcpInf.buffer,TcpInf.buffer+TcpInf.p_buffer_now-TcpInf.data.length(),TcpInf.data.length());
-                        HttpInf.header=string(TcpInf.buffer,pos);
-                        TcpInf.p_buffer_now=TcpInf.data.length();
-                        return 0;
-                    }
-                }
-            }
-        }
-        else if(TcpInf.status==2)
-        {
-            if(TcpInf.data.find("0\r\n\r\n")==string::npos)
-                {
-                    memcpy(TcpInf.buffer,TcpInf.buffer+TcpInf.p_buffer_now-TcpInf.data.length(),TcpInf.data.length());
-                    TcpInf.p_buffer_now=TcpInf.data.length();
-                    return 0;
-                }
-                string_view size;
-                int ssize;
-                size_t ppos=0;
-                TcpInf.data=TcpInf.data.substr(2+HttpInf.header.length());
-                while(1)
-                {
-                    HttpStringUtil::get_split_str(TcpInf.data,size,"\r\n","\r\n",ppos);
-                    
-                    ppos=TcpInf.data.find("\r\n",ppos+2);
-                    NumberStringConvertUtil::str16toInt(string(size),ssize);
-                    if(ssize==-1)
-                    {
-                        
-                        return -1;
-                    }
-                    else if(ssize==0)
-                    {
-                        //TcpInf.data=TcpInf.data.substr(ppos+5);
-                        TcpInf.status=0;
-                        //if(TcpInf.data.length()==ppos+2)
-                        //    TcpInf.data={};
-                        //else
-                        //    TcpInf.data=TcpInf.data.substr(ppos+2);
-                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
-                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
-                        HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
-                        HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
-                        memcpy(TcpInf.buffer,TcpInf.buffer+ppos+2,TcpInf.p_buffer_now-(ppos+2));
-                        TcpInf.p_buffer_now=TcpInf.p_buffer_now-(ppos+2);
-                        return 1;
-                    }
-                    else//读取数据
-                    {
-                        HttpInf.body_chunked+=TcpInf.data.substr(ppos+2,ssize);
-                        ppos=ppos+2+ssize;
-                    }
-                }
-        }   
-        else if(TcpInf.status==3)
-        {
-                TcpInf.status=3;
-                string_view size;
-                long ssize;
-                HttpStringUtil::get_split_str(HttpInf.header,size,"Content-Length: ","\r\n");
-                NumberStringConvertUtil::toLong(string(size),ssize);
-
-                if(ssize==-1)
-                {
-                    
-                    //if(HttpInf.header.find("GET")!=string::npos)
-                    //{
-                        TcpInf.status=0;
-                        //if(TcpInf.data.length()-4-HttpInf.header.length()==0)
-                        //    TcpInf.data={};
-                        //else
-                        //    TcpInf.data=TcpInf.data.substr(HttpInf.header.length()+4);
-                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
-                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
-                        HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
-                        HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
-                        memcpy(TcpInf.buffer,TcpInf.buffer+4+HttpInf.header.length(),TcpInf.p_buffer_now-(4+HttpInf.header.length()));
-                        TcpInf.p_buffer_now=TcpInf.p_buffer_now-(4+HttpInf.header.length());
-                        return 1;
-                    //}
-                    //else
-                    //    return -1;
-                }
-                else if(ssize==0)
-                {
-                    TcpInf.status=0;
-                    //if(TcpInf.data.length()-4-HttpInf.header.length()==0)
-                    //    TcpInf.data={};
-                    //else
-                    //    TcpInf.data=TcpInf.data.substr(HttpInf.header.length()+4);
-                    HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
-                    HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
-                    HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
-                    HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
-                    memcpy(TcpInf.buffer,TcpInf.buffer+4+HttpInf.header.length(),TcpInf.p_buffer_now-(4+HttpInf.header.length()));
-                    TcpInf.p_buffer_now=TcpInf.p_buffer_now-(4+HttpInf.header.length());
-                    return 1;
-                }
-                else if(ssize>0)
-                {
-                    if(TcpInf.data.length()-4-HttpInf.header.length()>=ssize)
-                    {
-                        HttpInf.body=TcpInf.data.substr(4+HttpInf.header.length(),ssize);
-                        //if(TcpInf.data.length()-4-HttpInf.header.length()==ssize)
-                         //   TcpInf.data={};
-                        //else
-                        //    TcpInf.data=TcpInf.data.substr(4+HttpInf.header.length()+ssize);
-                        TcpInf.status=0;
-                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.type,""," ");
-                        HttpStringUtil::get_split_str(HttpInf.header,HttpInf.locPara," "," ");
-                        HttpStringUtil::get_location_str(HttpInf.locPara,HttpInf.loc);
-                        HttpStringUtil::getPara(HttpInf.locPara,HttpInf.para);
-                        memcpy(TcpInf.buffer,TcpInf.buffer+4+HttpInf.header.length()+ssize,TcpInf.p_buffer_now-(4+HttpInf.header.length()+ssize));
-                        TcpInf.p_buffer_now=TcpInf.p_buffer_now-(4+HttpInf.header.length()+ssize);
-                        return 1;
-                    }
-                    else
-                    {
-                        memcpy(TcpInf.buffer,TcpInf.buffer+TcpInf.p_buffer_now-TcpInf.data.length(),TcpInf.data.length());
-                        TcpInf.p_buffer_now=TcpInf.data.length();
-                        return 0;
-                    }
-                }
-        }
-        
-        return -1;
 
     }
     void stt::network::HttpServer::handler_netevent(const int &fd)
@@ -5405,13 +5810,13 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         stt::system::ServerSetting::logfile->writeLog("http server : now handleing fd= "+to_string(fd));
                 }
             TcpFDInf &Tcpinf=clientfd[fd];
-            k.setFD(fd,clientfd[fd].ssl,unblock);
+            prepareHandler(k,fd);
             
             int ret=1;
             httpinf[fd].fd=fd;
             httpinf[fd].connection_obj_fd=clientfd[fd].connection_obj_fd;
             
-            ret=k.solveRequest(Tcpinf,httpinf[fd],buffer_size,1);
+            ret=k.solveRequest(Tcpinf,httpinf[fd],buffer_size,1,maxHttpHeaderBytes);
             
             if(ret==-1)
             {
@@ -5427,6 +5832,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
             else if(ret==1)
             {
+                metricParsedHttpRequests.fetch_add(1,std::memory_order_relaxed);
                 
                 if(stt::system::ServerSetting::logfile!=nullptr)
                 {
@@ -5466,7 +5872,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             //lock6.unlock();
             //开始处理
                 //入队
-            Tcpinf.pendindQueue.push(move(httpinf[fd]));
+            Tcpinf.pendindQueue.push(std::move(httpinf[fd]));
             
             if(Tcpinf.pendindQueue.size()==1)//只有一个 说明没有任务没做完 直接执行
             {
@@ -5506,8 +5912,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             if(stt::system::ServerSetting::language=="Chinese")
                                 stt::system::ServerSetting::logfile->writeLog("http server : parsekey的时候失败 fd= "+to_string(fd)+" ，已扔掉本次任务并且发回错误信息");
                             else
-                                stt::system::ServerSetting::logfile->writeLog("http server : parsekey fail fd= "+to_string(fd)+",now has throwed this task and send back error message");
+                                    stt::system::ServerSetting::logfile->writeLog("http server : parsekey fail fd= "+to_string(fd)+",now has throwed this task and send back error message");
                         }
+                        Tcpinf.pendindQueue.pop();
+                        if(Tcpinf.p_buffer_now>0)
+                            scheduleBufferedRead(fd,Tcpinf.connection_obj_fd);
                     }
                     return;
                 }
@@ -5537,6 +5946,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 else
                                     stt::system::ServerSetting::logfile->writeLog("http server : fd="+to_string(fd)+"request are too frequent,now has ignored this request");
                             }
+                            Tcpinf.pendindQueue.pop();
+                            if(Tcpinf.p_buffer_now>0)
+                                scheduleBufferedRead(fd,Tcpinf.connection_obj_fd);
                         }
                         return;
                     }
@@ -5615,7 +6027,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                     else
                                         stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(Tcpinf.FDStatus)+"times.");
                                 }
-                                //Tcpinf.pendindQueue.pop();
+                                Tcpinf.pendindQueue.pop();
+                                if(Tcpinf.p_buffer_now>0)
+                                    scheduleBufferedRead(fd,Tcpinf.connection_obj_fd);
                                 return;
                             }
                             else
@@ -5673,7 +6087,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 else
                                     stt::system::ServerSetting::logfile->writeLog("http server : handled fd= "+to_string(fd)+" fail.It's the "+to_string(Tcpinf.FDStatus)+"times.");
                             }
-                            //Tcpinf.pendindQueue.pop();
+                            Tcpinf.pendindQueue.pop();
+                            if(Tcpinf.p_buffer_now>0)
+                                scheduleBufferedRead(fd,Tcpinf.connection_obj_fd);
                             return;
                         }
                         else
@@ -5702,12 +6118,47 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
                 
             }
-            
+            if(Tcpinf.fd==fd&&Tcpinf.pendindQueue.empty()&&Tcpinf.p_buffer_now>0)
+                scheduleBufferedRead(fd,Tcpinf.connection_obj_fd);
         }
     }
-     void stt::network::HttpServer::handler_workerevent(const int &fd,const int &ret)
+    bool stt::network::HttpServer::close()
     {
-       
+        const bool result=TcpServer::close();
+        httpinf.clear();
+        return result;
+    }
+
+    bool stt::network::HttpServer::close(const int &fd)
+    {
+        httpinf.erase(fd);
+        return TcpServer::close(fd);
+    }
+
+     void stt::network::HttpServer::handler_workerevent(WorkerMessage message)
+    {
+        const int fd=message.fd;
+        const int ret=message.ret;
+        auto connectionIt=clientfd.find(fd);
+        if(connectionIt==clientfd.end()||connectionIt->second.fd!=fd||
+           connectionIt->second.connection_obj_fd!=message.connection_obj_fd)
+            return;
+        if(connectionIt->second.active_workers>0)
+            --connectionIt->second.active_workers;
+        if(connectionIt->second.closing)
+        {
+            if(connectionIt->second.active_workers==0)
+            {
+                connectionIt->second.closing=false;
+                TcpServer::close(fd);
+            }
+            return;
+        }
+        if(ret>=0&&message.request&&!connectionIt->second.pendindQueue.empty())
+        {
+            auto request=std::static_pointer_cast<HttpRequestInformation>(message.request);
+            std::any_cast<HttpRequestInformation&>(connectionIt->second.pendindQueue.front())=std::move(*request);
+        }
         if(ret==-2)
         {
             TcpServer::close(fd);
@@ -5721,7 +6172,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             return;
         }
         HttpServerFDHandler k;
-        k.setFD(fd,clientfd[fd].ssl,unblock);
+        prepareHandler(k,fd);
         
         if(ret==-1)
         {
@@ -5895,7 +6346,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
         }
      
-        TcpFDInf Tcpinf=clientfd[fd];
+        TcpFDInf &Tcpinf=clientfd[fd];
         //检查是否有下一轮
         if(Tcpinf.pendindQueue.size()>=1)//只有一个 说明没有任务没做完 直接执行
             {
@@ -6097,7 +6548,81 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
                 
             }
+        const auto bufferedConnection=clientfd.find(fd);
+        if(bufferedConnection!=clientfd.end()&&bufferedConnection->second.fd==fd&&
+           bufferedConnection->second.pendindQueue.empty()&&bufferedConnection->second.p_buffer_now>0)
+            scheduleBufferedRead(fd,bufferedConnection->second.connection_obj_fd);
+    }
 
+    static bool validateWebSocketUpgrade(const stt::network::HttpRequestInformation &request,std::string &key)
+    {
+        if(request.type!="GET")
+            return false;
+        const auto trim=[](std::string_view value) {
+            while(!value.empty()&&(value.front()==' '||value.front()=='\t')) value.remove_prefix(1);
+            while(!value.empty()&&(value.back()==' '||value.back()=='\t')) value.remove_suffix(1);
+            return value;
+        };
+        const auto lower=[](std::string_view value) {
+            std::string result(value);
+            std::transform(result.begin(),result.end(),result.begin(),[](const unsigned char character) {
+                return static_cast<char>(std::tolower(character));
+            });
+            return result;
+        };
+        std::unordered_map<std::string,std::string> headers;
+        size_t cursor=request.header.find("\r\n");
+        if(cursor==std::string::npos)
+            return false;
+        cursor+=2;
+        while(cursor<request.header.size())
+        {
+            const size_t end=request.header.find("\r\n",cursor);
+            const size_t lineEnd=end==std::string::npos?request.header.size():end;
+            const std::string_view line(request.header.data()+cursor,lineEnd-cursor);
+            const size_t colon=line.find(':');
+            if(colon==std::string_view::npos||colon==0)
+                return false;
+            const std::string name=lower(line.substr(0,colon));
+            if(headers.find(name)!=headers.end())
+                return false;
+            headers.emplace(name,std::string(trim(line.substr(colon+1))));
+            if(end==std::string::npos) break;
+            cursor=end+2;
+        }
+        const auto upgrade=headers.find("upgrade");
+        const auto connection=headers.find("connection");
+        const auto version=headers.find("sec-websocket-version");
+        const auto requestKey=headers.find("sec-websocket-key");
+        if(upgrade==headers.end()||connection==headers.end()||version==headers.end()||requestKey==headers.end()||
+           lower(trim(upgrade->second))!="websocket"||trim(version->second)!="13")
+            return false;
+        bool hasUpgradeToken=false;
+        std::string_view connectionValue(connection->second);
+        size_t tokenStart=0;
+        while(tokenStart<=connectionValue.size())
+        {
+            const size_t comma=connectionValue.find(',',tokenStart);
+            const std::string_view token=trim(connectionValue.substr(tokenStart,comma==std::string_view::npos?connectionValue.size()-tokenStart:comma-tokenStart));
+            if(lower(token)=="upgrade") hasUpgradeToken=true;
+            if(comma==std::string_view::npos) break;
+            tokenStart=comma+1;
+        }
+        if(!hasUpgradeToken)
+            return false;
+        key=std::string(trim(requestKey->second));
+        if(key.size()!=24)
+            return false;
+        unsigned char decoded[32]{};
+        const int decodedLength=EVP_DecodeBlock(decoded,
+                                                reinterpret_cast<const unsigned char*>(key.data()),
+                                                static_cast<int>(key.size()));
+        if(decodedLength<0)
+            return false;
+        size_t padding=0;
+        if(!key.empty()&&key.back()=='=') ++padding;
+        if(key.size()>1&&key[key.size()-2]=='=') ++padding;
+        return static_cast<size_t>(decodedLength)>=padding&&static_cast<size_t>(decodedLength)-padding==16;
     }
 
     void stt::network::WebSocketServer::handler_netevent(const int &fd)
@@ -6123,7 +6648,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             {
                 
                 HttpServerFDHandler k;
-                k.setFD(fd,clientfd[fd].ssl,unblock);
+                prepareHandler(k,fd);
                 //k1.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
                 //unique_lock<mutex> lock(lwb);
                 if(stt::system::ServerSetting::logfile!=nullptr)
@@ -6138,7 +6663,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 winf.closeflag=false;
                 
                 //HttpRequestInformation HttpInf;
-                int ret=k.solveRequest(Tcpinf,winf.httpinf,buffer_size,1);
+                int ret=k.solveRequest(Tcpinf,winf.httpinf,buffer_size,1,maxHttpHeaderBytes);
                 if(ret==-1)
                 {
                     //k.close();
@@ -6170,8 +6695,16 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 }
                 else if(ret==1)
                 {
+                    metricParsedHttpRequests.fetch_add(1,std::memory_order_relaxed);
                     winf.locPara=winf.httpinf.locPara;
                     winf.header=winf.httpinf.header;
+                    string keyy;
+                    if(!validateWebSocketUpgrade(winf.httpinf,keyy))
+                    {
+                        (void)k.sendBack("","Connection: close","400 Bad Request");
+                        requestCloseAfterFlush(fd);
+                        return;
+                    }
                     //cout<<winf.header<<endl;
                     if(security_open)
                     {
@@ -6218,19 +6751,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         //continue;
                         return;
                     }
-                    string_view key;
-                    string keyy;
-                    HttpStringUtil::get_value_header(winf.httpinf.header,key,"Sec-WebSocket-Key");
-                    keyy.assign(key);
                     keyy+="258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
                     string result="";
                     CryptoUtil::sha1(string(keyy),result);
                     keyy=EncodingUtil::base64_encode(result);
                     result=HttpStringUtil::createHeader("Upgrade","websocket","Connection","Upgrade","Sec-WebSocket-Accept",keyy);
-                    //清理接收缓冲区可能的数据遗漏
-                    //Tcpinf.data={};
-                    memset(Tcpinf.buffer,0,buffer_size);
-                    
                     if(!k.sendBack("",result,"101 Switching Protocols"))
                     {
                         //k.close();
@@ -6250,6 +6775,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     winf.response=::time(0);
                     winf.HBTime=0;
                     wbclientfd.emplace(fd,winf);
+                    {
+                        std::lock_guard<std::mutex> lock(websocketRegistryMutex);
+                        websocketConnections[fd]=Tcpinf.connection_obj_fd;
+                        websocketClosing.erase(fd);
+                    }
                     if(stt::system::ServerSetting::logfile!=nullptr)
                     {
                             if(stt::system::ServerSetting::language=="Chinese")
@@ -6259,7 +6789,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
                     //thread(fccc,winf,ref(*this)).detach();
                     WebSocketServerFDHandler kk;
-                    kk.setFD(fd,clientfd[fd].ssl,unblock);
+                    prepareHandler(kk,fd);
                     if(!fccc(kk,winf))
                     {
                         closeWithoutLock(fd);
@@ -6272,6 +6802,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         }
                         return;
                     }
+                    if(Tcpinf.p_buffer_now>0)
+                        scheduleBufferedRead(fd,Tcpinf.connection_obj_fd);
                     
                 }
                 //sleep(10);
@@ -6285,7 +6817,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 //lock.unlock();
                 WebSocketServerFDHandler k;
                 
-            k.setFD(fd,clientfd[fd].ssl,unblock);
+            prepareHandler(k,fd);
             
             int ret=1;
             jj->second.fd=fd;
@@ -6317,6 +6849,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" has received closed confirm fin:"+ jj->second.message);
                         }
                         TcpServer::close(fd);
+                        return;
                     }
                     else//收到关闭
                     {
@@ -6329,9 +6862,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         }
                         
                         closeAck(fd,jj->second.message);
+                        wbclientfd.erase(jj);
+                        return;
                     }
-                    wbclientfd.erase(jj);
-                    return;
             }
             else if(ret==2)
             {
@@ -6348,6 +6881,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     //记录心跳确认
 
                     jj->second.message="";
+                    if(Tcpinf.p_buffer_now>0)
+                        scheduleBufferedRead(fd,Tcpinf.connection_obj_fd);
                     return;
             }
             else if(ret==3)
@@ -6360,16 +6895,20 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             stt::system::ServerSetting::logfile->writeLog("websocket server consumer  : fd= "+to_string(fd)+" has received heartbeat:"+ jj->second.message);
                     }
                     jj->second.response=::time(0);
-                    if(!sendMessage(jj->first,"心跳","1010"))//发送心跳失败直接关闭
+                    const string pingPayload=jj->second.message;
+                    if(!sendMessage(jj->first,pingPayload,"1010"))//Pong 必须回显 Ping payload
                     {
+                        const int failedFD=jj->first;
                         wbclientfd.erase(jj);
-                        TcpServer::close(jj->first);
+                        TcpServer::close(failedFD);
                         return;
                     }
          
                     //心跳
                     else
                         jj->second.message="";
+                    if(Tcpinf.p_buffer_now>0)
+                        scheduleBufferedRead(fd,Tcpinf.connection_obj_fd);
                     return;
             }
             else if(ret==4)
@@ -6408,7 +6947,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             //lock6.unlock();
             //开始处理
                 //入队
-            Tcpinf.pendindQueue.push(move(jj->second));
+            Tcpinf.pendindQueue.push(std::move(jj->second));
             
             if(Tcpinf.pendindQueue.size()==1)//只有一个 说明没有任务没做完 直接执行
             {
@@ -6581,13 +7120,35 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
                 
             }
-            
+            if(Tcpinf.fd==fd&&Tcpinf.pendindQueue.empty()&&Tcpinf.p_buffer_now>0)
+                scheduleBufferedRead(fd,Tcpinf.connection_obj_fd);
             }
         }
     }
-    void stt::network::WebSocketServer::handler_workerevent(const int &fd,const int &ret)
+    void stt::network::WebSocketServer::handler_workerevent(WorkerMessage message)
     {
-       
+        const int fd=message.fd;
+        const int ret=message.ret;
+        auto connectionIt=clientfd.find(fd);
+        if(connectionIt==clientfd.end()||connectionIt->second.fd!=fd||
+           connectionIt->second.connection_obj_fd!=message.connection_obj_fd)
+            return;
+        if(connectionIt->second.active_workers>0)
+            --connectionIt->second.active_workers;
+        if(connectionIt->second.closing)
+        {
+            if(connectionIt->second.active_workers==0)
+            {
+                connectionIt->second.closing=false;
+                TcpServer::close(fd);
+            }
+            return;
+        }
+        if(ret>=0&&message.request&&!connectionIt->second.pendindQueue.empty())
+        {
+            auto request=std::static_pointer_cast<WebSocketFDInformation>(message.request);
+            std::any_cast<WebSocketFDInformation&>(connectionIt->second.pendindQueue.front())=std::move(*request);
+        }
         if(ret==-2)
         {
             closeFD(fd);
@@ -6601,7 +7162,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             return;
         }
         WebSocketServerFDHandler k;
-        k.setFD(fd,clientfd[fd].ssl,unblock);
+        prepareHandler(k,fd);
         
         if(ret==-1)
         {
@@ -6723,7 +7284,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
         }
      
-        TcpFDInf Tcpinf=clientfd[fd];
+        TcpFDInf &Tcpinf=clientfd[fd];
         //检查是否有下一轮
         if(Tcpinf.pendindQueue.size()>=1)//只有一个 说明没有任务没做完 直接执行
             {
@@ -6860,8 +7421,10 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
                 
             }
-
-
+        const auto bufferedConnection=clientfd.find(fd);
+        if(bufferedConnection!=clientfd.end()&&bufferedConnection->second.fd==fd&&
+           bufferedConnection->second.pendindQueue.empty()&&bufferedConnection->second.p_buffer_now>0)
+            scheduleBufferedRead(fd,bufferedConnection->second.connection_obj_fd);
     }
     /*
     void stt::network::HttpServer::consumer(const int &threadID)
@@ -6948,7 +7511,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             //            cout<<"开始处理用时"<<duration.count()<<endl;
              int ret=1;
              int ii=1;
-             k.setFD(cclientfd,clientfd[cclientfd].ssl,unblock);
+             prepareHandler(k,cclientfd);
             //cout<<"fd="<<cclientfd<<endl;
             while(ret==1)
             {
@@ -7056,85 +7619,154 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     
     bool stt::network::EpollSingle::endListen()
     {
-        flag1=false;
-        while(flag2);
+        endListenWithSignal();
+        if(listenerThread.joinable()&&listenerThread.get_id()!=std::this_thread::get_id())
+            listenerThread.join();
+        if(controlFD>=0&&!listenerThread.joinable())
+        {
+            ::close(controlFD);
+            controlFD=-1;
+        }
         return true;
     }
+
+    void stt::network::EpollSingle::endListenWithSignal()
+    {
+        flag1.store(false,std::memory_order_release);
+        const uint64_t one=1;
+        if(controlFD>=0)
+            (void)::write(controlFD,&one,sizeof(one));
+    }
+
     void stt::network::EpollSingle::epolll()
     {
-        int epollFD=epoll_create(1);
-        epoll_event ev;
+        const int epollFD=epoll_create1(EPOLL_CLOEXEC);
+        if(epollFD<0)
+        {
+            flag2.store(false,std::memory_order_release);
+            return;
+        }
+        epoll_event ev{};
         ev.data.fd=fd;
         if(flag==false)
-            ev.events=EPOLLIN|EPOLLET;
+            ev.events=EPOLLIN|EPOLLET|EPOLLERR|EPOLLHUP;
         else
-            ev.events=EPOLLIN;
-        epoll_ctl(epollFD,EPOLL_CTL_ADD,fd,&ev);
-        epoll_event evs;
+            ev.events=EPOLLIN|EPOLLERR|EPOLLHUP;
+        if(epoll_ctl(epollFD,EPOLL_CTL_ADD,fd,&ev)<0)
+        {
+            ::close(epollFD);
+            flag2.store(false,std::memory_order_release);
+            return;
+        }
+        epoll_event controlEvent{};
+        controlEvent.data.fd=controlFD;
+        controlEvent.events=EPOLLIN;
+        if(controlFD<0||epoll_ctl(epollFD,EPOLL_CTL_ADD,controlFD,&controlEvent)<0)
+        {
+            ::close(epollFD);
+            flag2.store(false,std::memory_order_release);
+            return;
+        }
+        epoll_event events[2]{};
 
         DateTime timer1;
         Duration dt;
         DateTime timer2;
         Duration t;
-        while(flag1)
+        while(flag1.load(std::memory_order_acquire))
         {
             if(!timer1.isStart())
                 timer1.startTiming();
-            int infds=epoll_wait(epollFD,&evs,1,1000);
+            const int infds=epoll_wait(epollFD,events,2,1000);
             if(infds<0)
-                continue;
-            else if(infds==0)
             {
-                if(!flag3)
+                if(errno==EINTR) continue;
+                break;
+            }
+            bool stopEvent=false;
+            bool dataEvent=false;
+            for(int index=0;index<infds;++index)
+            {
+                if(events[index].data.fd==controlFD)
+                {
+                    uint64_t value=0;
+                    (void)::read(controlFD,&value,sizeof(value));
+                    stopEvent=true;
+                }
+                else if(events[index].data.fd==fd)
+                    dataEvent=true;
+            }
+            if(stopEvent||!flag1.load(std::memory_order_acquire))
+                break;
+            if(infds==0)
+            {
+                if(!flag3.load(std::memory_order_acquire))
                 {
                     dt=timer1.checkTime();
                     if(dt>=this->dt)
                     {
-                        if(!fcTimeOut(fd))
-                            break;
+                        std::function<bool(const int&)> timeoutFunction;
+                        {
+                            std::lock_guard<std::mutex> lock(callbackMutex);
+                            timeoutFunction=fcTimeOut;
+                        }
+                        if(!timeoutFunction(fd)) break;
                     }
                 }
                 else
                 {
-                    if(!timer2.startTiming())//说明已经不是第一次，而是在计时中了
+                    if(!timer2.startTiming())
                     {
-                        t=timer2.checkTime();
-                        if(t>=this->t)
-                            break;
+                        {
+                            std::lock_guard<std::mutex> lock(countdownMutex);
+                            t=this->t;
+                        }
+                        if(timer2.checkTime()>=t) break;
                     }
                 }
+                continue;
             }
-            else//有事件发生了
+            if(dataEvent)
             {
-                if(flag3)//打开了退出倒计时
+                if(flag3.exchange(false,std::memory_order_acq_rel))
                 {
-                    flag3=false;
                     timer2.endTiming();
                 }
                 timer1.endTiming();
-                if(!fc(fd))
-                    break;
+                std::function<bool(const int&)> dataFunction;
+                {
+                    std::lock_guard<std::mutex> lock(callbackMutex);
+                    dataFunction=fc;
+                }
+                if(!dataFunction(fd)) break;
             }
         }
-        //只要跳出了这个循环就意味着要退出了
-        //cout<<"epoll quit"<<endl;
-        fcEnd(fd);
-        dt=Duration{0,20,0,0,0};
-        flag1=true;
-        flag3=false;
-        flag2=false;
+        std::function<void(const int&)> endFunction;
+        {
+            std::lock_guard<std::mutex> lock(callbackMutex);
+            endFunction=fcEnd;
+        }
+        endFunction(fd);
+        ::close(epollFD);
+        flag3.store(false,std::memory_order_release);
+        flag2.store(false,std::memory_order_release);
     }
     void stt::network::EpollSingle::startListen(const int &fd,const bool &flag,const Duration &dt)
     {
-        if(isListen())
-        {
-            endListen();
-        }
+        endListen();
+        // A callback executes on listenerThread. It may request shutdown, but it
+        // must not overwrite the still-joinable std::thread with a restart.
+        if(listenerThread.joinable())
+            return;
         this->fd=fd;
         this->flag=flag;
         this->dt=dt;
-        thread(&EpollSingle::epolll,this).detach();
-        flag2=true;
+        controlFD=eventfd(0,EFD_NONBLOCK|EFD_CLOEXEC);
+        if(fd<0||controlFD<0)
+            return;
+        flag1.store(true,std::memory_order_release);
+        flag2.store(true,std::memory_order_release);
+        listenerThread=thread(&EpollSingle::epolll,this);
     }
     
     /*
@@ -7168,8 +7800,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     {
         if(!isConnect())//没有连接 何来关闭
             return;
+        const uint16_t networkCode=htons(static_cast<uint16_t>(code));
         char ccode[2];
-        memcpy(ccode,&code,2);
+        memcpy(ccode,&networkCode,2);
         string codee(ccode,2);
         codee+=message;
         if(!sendMessage(codee,"1000"))//如果发送失败 说明连接可能断了或者有其他错误 自行终止本方连接就ok了,否则等待epoll那边收到关闭帧再关闭
@@ -7393,6 +8026,124 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         this->k.startListen(TcpFDHandler::getFD(),true,Duration{0,0,min,0,0});
         return this->k.isListen();
     }
+    static bool isValidWebSocketUtf8(std::string_view value);
+
+    static bool buildWebSocketFrame(const std::string &message,const std::string &type,const bool masked,std::string &frame)
+    {
+        uint8_t opcode=0;
+        if(type=="0001") opcode=0x1;
+        else if(type=="0010") opcode=0x2;
+        else if(type=="1000") opcode=0x8;
+        else if(type=="1001") opcode=0x9;
+        else if(type=="1010") opcode=0xA;
+        else return false;
+        if(opcode>=0x8&&message.size()>125)
+            return false;
+        if(opcode==0x1&&!isValidWebSocketUtf8(message))
+            return false;
+        if(opcode==0x8)
+        {
+            if(message.size()==1)
+                return false;
+            if(message.size()>=2)
+            {
+                const uint16_t closeCode=(static_cast<uint16_t>(static_cast<uint8_t>(message[0]))<<8)|
+                                         static_cast<uint8_t>(message[1]);
+                if(closeCode<1000||closeCode>=5000||closeCode==1004||closeCode==1005||
+                   closeCode==1006||closeCode==1015||(closeCode>=1016&&closeCode<=2999)||
+                   (message.size()>2&&!isValidWebSocketUtf8(std::string_view(message).substr(2))))
+                    return false;
+            }
+        }
+
+        const uint64_t length=message.size();
+        frame.clear();
+        frame.reserve(message.size()+14);
+        frame.push_back(static_cast<char>(0x80U|opcode));
+        const uint8_t maskBit=masked?0x80U:0U;
+        if(length<=125)
+        {
+            frame.push_back(static_cast<char>(maskBit|static_cast<uint8_t>(length)));
+        }
+        else if(length<=65535)
+        {
+            frame.push_back(static_cast<char>(maskBit|126U));
+            frame.push_back(static_cast<char>((length>>8)&0xffU));
+            frame.push_back(static_cast<char>(length&0xffU));
+        }
+        else
+        {
+            frame.push_back(static_cast<char>(maskBit|127U));
+            for(int shift=56;shift>=0;shift-=8)
+                frame.push_back(static_cast<char>((length>>shift)&0xffU));
+        }
+        if(!masked)
+        {
+            frame.append(message);
+            return true;
+        }
+        std::string mask;
+        EncodingUtil::generateMask_4(mask);
+        if(mask.size()!=4)
+            return false;
+        frame.append(mask);
+        const size_t payloadStart=frame.size();
+        frame.resize(payloadStart+message.size());
+        for(size_t index=0;index<message.size();++index)
+            frame[payloadStart+index]=static_cast<char>(static_cast<unsigned char>(message[index])^
+                                                        static_cast<unsigned char>(mask[index%4]));
+        return true;
+    }
+
+    static bool isValidWebSocketUtf8(const std::string_view value)
+    {
+        size_t index=0;
+        const auto continuation=[&value](const size_t position) {
+            return position<value.size()&&
+                   (static_cast<uint8_t>(value[position])&0xC0U)==0x80U;
+        };
+        while(index<value.size())
+        {
+            const uint8_t first=static_cast<uint8_t>(value[index]);
+            if(first<=0x7fU)
+            {
+                ++index;
+                continue;
+            }
+            if(first>=0xC2U&&first<=0xDFU)
+            {
+                if(!continuation(index+1)) return false;
+                index+=2;
+                continue;
+            }
+            if(first>=0xE0U&&first<=0xEFU)
+            {
+                if(index+2>=value.size()||!continuation(index+2)) return false;
+                const uint8_t second=static_cast<uint8_t>(value[index+1]);
+                if((first==0xE0U&&(second<0xA0U||second>0xBFU))||
+                   (first==0xEDU&&(second<0x80U||second>0x9FU))||
+                   (first!=0xE0U&&first!=0xEDU&&!continuation(index+1)))
+                    return false;
+                index+=3;
+                continue;
+            }
+            if(first>=0xF0U&&first<=0xF4U)
+            {
+                if(index+3>=value.size()||!continuation(index+2)||!continuation(index+3))
+                    return false;
+                const uint8_t second=static_cast<uint8_t>(value[index+1]);
+                if((first==0xF0U&&(second<0x90U||second>0xBFU))||
+                   (first==0xF4U&&(second<0x80U||second>0x8FU))||
+                   (first!=0xF0U&&first!=0xF4U&&!continuation(index+1)))
+                    return false;
+                index+=4;
+                continue;
+            }
+            return false;
+        }
+        return true;
+    }
+
     bool stt::network::WebSocketClient::sendMessage(const string &message,const string &type)
     {
         if(!isConnect())
@@ -7400,389 +8151,173 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             cerr<<"websocket对象没有连接,发送失败"<<endl;
             return false;
         }
-        string typee="1000"+type;
-        string mess=message;
-        unsigned long size=message.length();//生成extern payload len前的东西,默认一片长度为8的数据帧发完数据
-
-        if(size<=125)
-        {
-            //cout<<"send1+size="<<size<<"+::"<<message<<endl;
-            string header;
-            BitUtil::toBit(typee,header);
-
-            char cc;
-            memcpy(&cc,&size,1);
-            cc=cc|'z'+6;
-        
-            //设置mask
-            string mask;
-            EncodingUtil::generateMask_4(mask);
-        
-            //mask处理数据
-            EncodingUtil::maskCalculate(mess,mask);
-            //拼接数据帧
-            mess=header+cc+mask+mess;
-        }
-        else if(size<=65535)
-        {
-            //cout<<"send2+size="<<size<<"+::"<<message<<endl;
-            unsigned short tt=(unsigned short)size;
-            tt=htons(tt);
-            string header;
-            BitUtil::toBit(typee+"11111110",header);
-            char ss[2];//把int数据转换成char，底层二进制数据不变，用指针复制内存的办法
-            memcpy(ss,&tt,2);
-            //设置mask
-            string mask;
-            EncodingUtil::generateMask_4(mask);
-            EncodingUtil::maskCalculate(mess,mask);
-            //拼接数据帧
-            mess=header+string(ss,2)+mask+mess;
-        }
-        else
-        {
-            //cout<<"send3+size="<<size<<"+::"<<message<<endl;
-            NetworkOrderUtil::htonl_ntohl_64(size);
-            string header;
-            BitUtil::toBit(typee+"11111111",header);
-            char ss[8];//把int数据转换成char，底层二进制数据不变，用指针复制内存的办法
-            memcpy(ss,&size,sizeof(size));
-            //设置mask
-            string mask;
-            EncodingUtil::generateMask_4(mask);
-            //mask处理数据
-            EncodingUtil::maskCalculate(mess,mask);
-            //拼接数据帧
-            mess=header+string(ss,8)+mask+mess;
-        }
-    
-
-        //发送数据帧
-        if(sendData(mess)!=mess.length())
-        {
-            cout<<"send failed"<<endl;
+        string frame;
+        if(!buildWebSocketFrame(message,type,true,frame))
             return false;
-        }
-        return true;
+        return sendData(frame)==static_cast<int>(frame.size());
+
     }
     
     int stt::network::WebSocketServerFDHandler::getMessage(TcpFDInf &Tcpinf,WebSocketFDInformation &Websocketinf,const unsigned long &buffer_size,const int &ii)
     {
-        /*
-            string recv="";
-            int ret=1;
-            while(ret>0)
-            {
-                Tcpinf.data+=recv;
-                recv.clear();
-                ret=recvData(recv,8192);
-            }
-            if(ret<=0&&ret!=-100)
+        if(buffer_size<6)
+            return -1;
+        int receiveResult=-100;
+        if(ii==1)
+        {
+            if(!ensureReceiveBuffer(Tcpinf,buffer_size,std::min(8192UL,buffer_size)))
                 return -1;
-            
-            */
-
-         //   if(ii==1)
-        //{
-
-            int ret=1;
-            unsigned long long p_buffer_now_backup=Tcpinf.p_buffer_now;
-            
-            
-            while(ret>0&&buffer_size-Tcpinf.p_buffer_now>0)
+            receiveResult=1;
+            while(receiveResult>0)
             {
-                ret=recvData(Tcpinf.buffer+Tcpinf.p_buffer_now,buffer_size-Tcpinf.p_buffer_now);
-                if(ret>0)
-                    Tcpinf.p_buffer_now+=ret;
-                
+                if(Tcpinf.p_buffer_now==Tcpinf.buffer_capacity)
+                {
+                    if(Tcpinf.buffer_capacity>=buffer_size||
+                       !ensureReceiveBuffer(Tcpinf,buffer_size,Tcpinf.buffer_capacity+1))
+                        break;
+                }
+                receiveResult=recvData(Tcpinf.buffer+Tcpinf.p_buffer_now,Tcpinf.buffer_capacity-Tcpinf.p_buffer_now);
+                if(receiveResult>0)
+                    Tcpinf.p_buffer_now+=static_cast<unsigned long>(receiveResult);
             }
-            if(buffer_size-Tcpinf.p_buffer_now<=0)
-            {
-                if(stt::system::ServerSetting::logfile!=nullptr)
-                    {
-                        if(stt::system::ServerSetting::language=="Chinese")
-                            stt::system::ServerSetting::logfile->writeLog("websocket server : 缓冲区容量不足 读取数据fd= "+to_string(fd)+" 失败，已经关闭连接");
-                        else
-                            stt::system::ServerSetting::logfile->writeLog("websocket server : buffer size is not enough,read data from fd= "+to_string(fd)+" fail,now has closed this connection");
-                    }
+        }
+        if(Tcpinf.p_buffer_now==0)
+            return receiveResult==-100?4:-1;
+
+        while(true)
+        {
+            const std::string_view input(Tcpinf.buffer,Tcpinf.p_buffer_now);
+            if(input.size()<2)
+                return input.size()>=buffer_size?-1:4;
+            const uint8_t first=static_cast<uint8_t>(input[0]);
+            const uint8_t second=static_cast<uint8_t>(input[1]);
+            const bool fin=(first&0x80U)!=0;
+            const uint8_t opcode=first&0x0fU;
+            if((first&0x70U)!=0||(second&0x80U)==0)
                 return -1;
-            }
-            if(ret<=0)
+            if(opcode!=0x0&&opcode!=0x1&&opcode!=0x2&&opcode!=0x8&&opcode!=0x9&&opcode!=0xA)
+                return -1;
+
+            uint64_t payloadLength=second&0x7fU;
+            size_t cursor=2;
+            if(payloadLength==126)
             {
-                if(ret!=-100)
+                if(input.size()<4) return input.size()>=buffer_size?-1:4;
+                payloadLength=(static_cast<uint64_t>(static_cast<uint8_t>(input[2]))<<8)|
+                              static_cast<uint8_t>(input[3]);
+                if(payloadLength<126) return -1;
+                cursor=4;
+            }
+            else if(payloadLength==127)
+            {
+                if(input.size()<10) return input.size()>=buffer_size?-1:4;
+                if((static_cast<uint8_t>(input[2])&0x80U)!=0) return -1;
+                payloadLength=0;
+                for(size_t index=2;index<10;++index)
+                    payloadLength=(payloadLength<<8)|static_cast<uint8_t>(input[index]);
+                if(payloadLength<=65535) return -1;
+                cursor=10;
+            }
+            const bool controlFrame=opcode>=0x8;
+            if(controlFrame&&(!fin||payloadLength>125))
+                return -1;
+            if(payloadLength>buffer_size||cursor>buffer_size-4)
+                return -1;
+            const size_t payloadSize=static_cast<size_t>(payloadLength);
+            const size_t frameSize=cursor+4+payloadSize;
+            if(frameSize>buffer_size)
+                return -1;
+            if(input.size()<frameSize)
+                return input.size()>=buffer_size?-1:4;
+
+            Websocketinf.mask.assign(input.data()+cursor,4);
+            cursor+=4;
+            std::string payload(input.data()+cursor,payloadSize);
+            for(size_t index=0;index<payload.size();++index)
+                payload[index]=static_cast<char>(static_cast<unsigned char>(payload[index])^
+                                                 static_cast<unsigned char>(Websocketinf.mask[index%4]));
+            const size_t remaining=input.size()-frameSize;
+            if(remaining>0)
+                memmove(Tcpinf.buffer,Tcpinf.buffer+frameSize,remaining);
+            Tcpinf.p_buffer_now=remaining;
+            Tcpinf.data={};
+            Tcpinf.status=0;
+            Websocketinf.fin=fin;
+
+            if(opcode==0x8)
+            {
+                if(payload.size()==1) return -1;
+                if(payload.size()>=2)
+                {
+                    const uint16_t closeCode=(static_cast<uint16_t>(static_cast<uint8_t>(payload[0]))<<8)|
+                                             static_cast<uint8_t>(payload[1]);
+                    if(closeCode<1000||closeCode>=5000||closeCode==1004||closeCode==1005||
+                       closeCode==1006||closeCode==1015||(closeCode>=1016&&closeCode<=2999))
+                        return -1;
+                    if(payload.size()>2&&!isValidWebSocketUtf8(std::string_view(payload).substr(2)))
+                        return -1;
+                }
+                Websocketinf.message=std::move(payload);
+                Websocketinf.message_type=1;
+                return 1;
+            }
+            if(opcode==0x9)
+            {
+                Websocketinf.message=std::move(payload);
+                Websocketinf.message_type=3;
+                return 3;
+            }
+            if(opcode==0xA)
+            {
+                Websocketinf.message=std::move(payload);
+                Websocketinf.message_type=2;
+                return 2;
+            }
+            if(opcode==0x0)
+            {
+                if(Websocketinf.fragmented_opcode==0||Websocketinf.fragmented_message.size()>buffer_size||
+                   payload.size()>buffer_size-Websocketinf.fragmented_message.size())
                     return -1;
+                Websocketinf.fragmented_message+=payload;
+                if(fin)
+                {
+                    const uint8_t messageOpcode=Websocketinf.fragmented_opcode;
+                    Websocketinf.message=std::move(Websocketinf.fragmented_message);
+                    Websocketinf.fragmented_message.clear();
+                    Websocketinf.fragmented_opcode=0;
+                    if(messageOpcode==0x1&&!isValidWebSocketUtf8(Websocketinf.message))
+                        return -1;
+                    Websocketinf.message_type=0;
+                    return 0;
+                }
             }
-        //}
-        
-        
-        Tcpinf.data=string_view(Tcpinf.buffer+p_buffer_now_backup,Tcpinf.p_buffer_now);
-        
-        //cout<<Tcpinf.data<<endl;
-            //数据接收完，开始处理
-            
-            while(1)
+            else
             {
-                //第一个字节
-                if(Tcpinf.status==0||Tcpinf.status==1)
+                if(Websocketinf.fragmented_opcode!=0)
+                    return -1;
+                if(fin)
                 {
-                    Websocketinf.recv_length=0;
-                    Websocketinf.have_recv_length=0;
-
-                    if(Tcpinf.status==0)
-                        Tcpinf.status=1;
-                    if(Tcpinf.data.length()<1)
-                        return 4;
-                    char b1=Tcpinf.data[0];
-                    string code;
-                    BitUtil::bitOutput(b1,code);
-                    if(code.substr(0,1)=="1")
-                    {
-                        
-                        Websocketinf.fin=true;
-                    }
-                    else
-                    {
-                        
-                        Websocketinf.fin=false;
-                    }
-                    code=code.substr(4);
-
-                    if(code=="1000")
-                    {
-                        Websocketinf.message_type=1;
-                    }
-                    else if(code=="1001")
-                    {
-                        Websocketinf.message_type=3;
-                    }
-                    else if(code=="1010")
-                    {
-                        Websocketinf.message_type=2;
-                    }
-                    else
-                       Websocketinf.message_type=0;
-
-                    ++Websocketinf.have_recv_length;
-                    Tcpinf.status=2;
-                    if(Tcpinf.data.length()>1)
-                        Tcpinf.data=Tcpinf.data.substr(1);
-                    else
-                    {
-                        //Tcpinf.data={};
-                        return 4;
-                    }
-                    Websocketinf.recv_length=1;
-                    
+                    Websocketinf.message=std::move(payload);
+                    if(opcode==0x1&&!isValidWebSocketUtf8(Websocketinf.message))
+                        return -1;
+                    Websocketinf.message_type=0;
+                    return 0;
                 }
-                //长度
-                if(Tcpinf.status==2)
-                {
-                    
-                    unsigned long sizee;//payload len
-                    if(Websocketinf.recv_length==1)
-                    {
-                        if(Tcpinf.data.length()<1)
-                            return 4;
-                        char b2=Tcpinf.data[0];
-                        ++Websocketinf.have_recv_length;
-                        string ssize;
-                        BitUtil::bitOutput(b2,ssize);
-                        ssize=ssize.substr(1);
-                        BitUtil::bitStrToNumber(ssize,sizee);//单字节里的是大端序 
-                        if(sizee==126)
-                            Websocketinf.recv_length=2;
-                        else if(sizee==127)
-                            Websocketinf.recv_length=8;
-                        else
-                        {
-                            Tcpinf.status=3;
-                            Websocketinf.recv_length=sizee;
-                            if(Tcpinf.data.length()<=1)
-                            {
-                                //Tcpinf.data={};
-                                return 4;
-                            }
-                            else
-                                Tcpinf.data=Tcpinf.data.substr(1);
-                        }
-                    }
-                    if(Websocketinf.recv_length==2&&Tcpinf.status==2)
-                    {
-                    
-                        if(Tcpinf.data.length()<=1)
-                        {
-                           // Tcpinf.data={};
-                            return 4;
-                        }
-                        Tcpinf.data=Tcpinf.data.substr(1);
-                        sizee=BitUtil::bitToNumber(string(Tcpinf.data.substr(0,2)),sizee);
-                        Tcpinf.status=3;
-                        Websocketinf.recv_length=sizee;
-                        if(Tcpinf.data.length()<=2)
-                        {
-                            //Tcpinf.data={};
-                            return 4;
-                        }
-                        else
-                            Tcpinf.data=Tcpinf.data.substr(2);
-                        Websocketinf.have_recv_length=Websocketinf.have_recv_length+2;
-                    }
-                    else if(Websocketinf.recv_length==8&&Tcpinf.status==2)
-                    {
-                        
-                        if(Tcpinf.data.length()<=1)
-                        {
-                            //Tcpinf.data={};
-                            return 4;
-                        }
-                        Tcpinf.data=Tcpinf.data.substr(1);
-                        sizee=BitUtil::bitToNumber(string(Tcpinf.data.substr(0,8)),sizee);
-                        Tcpinf.status=3;
-                        Websocketinf.recv_length=sizee;
-                        if(Tcpinf.data.length()<=8)
-                        {
-                            //Tcpinf.data={};
-                            return 4;
-                        }
-                        else
-                            Tcpinf.data=Tcpinf.data.substr(8);
-                        Websocketinf.have_recv_length=Websocketinf.have_recv_length+8;
-                    }
-                    
-                    
-                }
-
-                //接收mask
-                if(Tcpinf.status==3)
-                {
-                    
-                    if(Tcpinf.data.length()<4)
-                        return 4;
-                    Websocketinf.mask=Tcpinf.data.substr(0,4);
-
-                    Tcpinf.status=4;
-
-                    if(Tcpinf.data.length()<5)
-                    {
-                        if(Websocketinf.recv_length!=0)
-                        {
-                            //Tcpinf.data={};
-                            return 4;
-                        }
-                    }
-                    Tcpinf.data=Tcpinf.data.substr(4);
-                    Websocketinf.have_recv_length=Websocketinf.have_recv_length+4;
-                }
-
-                //接收数据
-                if(Tcpinf.status==4)
-                {
-                    if(Websocketinf.recv_length!=0)
-                    {
-                    if(Tcpinf.data.length()<1)
-                        return 4;
-
-                    string a;
-                    if(Tcpinf.data.length()<=Websocketinf.recv_length)
-                    {
-                        a=Tcpinf.data;
-                        Websocketinf.recv_length=Websocketinf.recv_length-Tcpinf.data.length();
-                        //Tcpinf.data={};
-                    }
-                    else
-                    {
-                        a=Tcpinf.data.substr(0,Websocketinf.recv_length);
-                        Tcpinf.data=Tcpinf.data.substr(Websocketinf.recv_length);
-                        Websocketinf.have_recv_length=Websocketinf.have_recv_length+Websocketinf.recv_length;
-                        //搬内存
-                        memcpy(Tcpinf.buffer,Tcpinf.buffer+Websocketinf.have_recv_length,Websocketinf.have_recv_length);
-                        Tcpinf.p_buffer_now=Tcpinf.p_buffer_now-Websocketinf.have_recv_length;
-                        Websocketinf.recv_length=0;
-                        Websocketinf.have_recv_length=0;
-                    }
-                    EncodingUtil::maskCalculate(a,Websocketinf.mask);
-                    Websocketinf.message+=a;
-                    //cout<<Websocketinf.message<<endl;
-                    if(Websocketinf.recv_length!=0)
-                        return 4;
-                    }
-                    //cout<<Websocketinf.message<<endl;
-
-                    Tcpinf.status=0;
-                    if(Websocketinf.message_type==1)
-                    {
-                        //cout<<"收到对端关闭帧";
-
-                        return 1;
-                    }
-                    else if(Websocketinf.message_type==2)
-                    {
-                        //cout<<"收到对端心跳响应"<<endl;
-                        return 2;
-                    }
-                    else if(Websocketinf.message_type==3)
-                    {
-                        //cout<<"收到对端心跳:"<<Websocketinf.message<<endl;
-                        sendMessage(Websocketinf.message,"1010");
-                        return 3;
-                    }
-                    else
-                    {
-                        if(Websocketinf.fin)                         
-                            break;   
-                    }
-                    
-                    
-                }
+                Websocketinf.fragmented_opcode=opcode;
+                Websocketinf.fragmented_message=std::move(payload);
             }
- 
-             return Websocketinf.message_type;
+            if(Tcpinf.p_buffer_now==0)
+                return 4;
+        }
+
     }
     bool stt::network::WebSocketServerFDHandler::sendMessage(const string &msg,const string &type)
     {
-        string typee="1000"+type;
-        string mess=msg;
-        unsigned long size=msg.length();//生成extern payload len前的东西,默认一片长度为8的数据帧发完数据
-
-        if(size<=125)
-        {
-            string header;
-            BitUtil::toBit(typee,header);
-
-            char cc;
-            memcpy(&cc,&size,1);
-            cc=cc&'z'+5;
-        
-        
-            //拼接数据帧
-            mess=header+cc+mess;
-        }
-        else if(size<=65535)
-        {
-            unsigned short tt=(unsigned short)size;
-            tt=htons(tt);
-            string header;
-            BitUtil::toBit(typee+"01111110",header);
-            char ss[2];//把int数据转换成char，底层二进制数据不变，用指针复制内存的办法
-            memcpy(ss,&tt,2);
-        
-            //拼接数据帧
-            mess=header+string(ss,2)+mess;
-        }
-        else
-        {
-            NetworkOrderUtil::htonl_ntohl_64(size);
-            string header;
-            BitUtil::toBit(typee+"01111111",header);
-            char ss[8];//把int数据转换成char，底层二进制数据不变，用指针复制内存的办法
-            memcpy(ss,&size,sizeof(size));
-            //拼接数据帧
-            mess=header+string(ss,8)+mess;
-        }
-        //发送数据帧
-        if(sendData(mess,false)!=mess.length())
+        string frame;
+        if(!buildWebSocketFrame(msg,type,false,frame))
             return false;
-        return true;
+        return sendData(frame,false)==static_cast<int>(frame.size());
+
     }
     /*
     void WebSocketServerFDHandler::closeAck(const string &closeCodeAndMessage)
@@ -7802,110 +8337,92 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     */
     void stt::network::WebSocketServer::closeAck(const int &fd,const string &closeCodeAndMessage)
     {
-        sendMessage(fd,closeCodeAndMessage,"1000");
-        TcpServer::close(fd);
+        uint64_t connection=0;
+        {
+            std::lock_guard<std::mutex> lock(websocketRegistryMutex);
+            const auto connectionIt=websocketConnections.find(fd);
+            if(connectionIt==websocketConnections.end())
+                return;
+            connection=connectionIt->second;
+            websocketClosing.insert(fd);
+        }
+        sendMessageForConnection(fd,connection,closeCodeAndMessage,"1000");
+        requestCloseAfterFlush(fd,connection);
     }
     void stt::network::WebSocketServer::closeAck(const int &fd,const short &code,const string &message)
     {
+        uint64_t connection=0;
+        {
+            std::lock_guard<std::mutex> lock(websocketRegistryMutex);
+            const auto connectionIt=websocketConnections.find(fd);
+            if(connectionIt==websocketConnections.end())
+                return;
+            connection=connectionIt->second;
+            websocketClosing.insert(fd);
+        }
+        const uint16_t networkCode=htons(static_cast<uint16_t>(code));
         char ccode[2];
-        memcpy(ccode,&code,2);
+        memcpy(ccode,&networkCode,2);
         string codee(ccode,2);
         codee+=message;
-        sendMessage(fd,codee,"1000");
-        TcpServer::close(fd);
+        sendMessageForConnection(fd,connection,codee,"1000");
+        requestCloseAfterFlush(fd,connection);
     }
     bool stt::network::WebSocketServer::closeFD(const int &fd,const string &closeCodeAndMessage)
     {
-       
-        //unique_lock<mutex> lock(lwb);
-        auto ii=wbclientfd.find(fd);
-
-        if(ii==wbclientfd.end()||ii->second.closeflag==true)
+        uint64_t connection=0;
         {
-            
+            std::lock_guard<std::mutex> lock(websocketRegistryMutex);
+            const auto connectionIt=websocketConnections.find(fd);
+            if(connectionIt==websocketConnections.end()||
+               !websocketClosing.insert(fd).second)
+                return false;
+            connection=connectionIt->second;
+        }
+        if(!sendMessageForConnection(fd,connection,closeCodeAndMessage,"1000"))
+        {
+            std::lock_guard<std::mutex> lock(websocketRegistryMutex);
+            websocketClosing.erase(fd);
             return false;
         }
-        else
-        {
-            
-            //lock.unlock();
-            WebSocketServerFDHandler k;
-            k.setFD(fd,getSSL(fd),unblock);
-            if(!k.sendMessage(closeCodeAndMessage,"1000"))
-            {
-                
-                
-                    //lock.lock();
-                    auto ii=wbclientfd.find(fd);
-                    if(ii!=wbclientfd.end())
-                    {
-                        TcpServer::close(fd);
-                        wbclientfd.erase(ii);
-                    }
-                    //lock.unlock();
-                
-                
-                return true;
-            }
-            ii->second.closeflag=true;
-            return true;
-        }
+        requestCloseAfterFlush(fd,connection);
+        return true;
     }
     
     bool stt::network::WebSocketServer::closeFD(const int &fd,const short &code,const string &message)
     {
-        
-        //unique_lock<mutex> lock(lwb);
-        auto ii=wbclientfd.find(fd);
-        
-        if(ii==wbclientfd.end()||ii->second.closeflag==true)//找不到或者已经发送过了
+        uint64_t connection=0;
         {
-            
+            std::lock_guard<std::mutex> lock(websocketRegistryMutex);
+            const auto connectionIt=websocketConnections.find(fd);
+            if(connectionIt==websocketConnections.end()||
+               !websocketClosing.insert(fd).second)
+                return false;
+            connection=connectionIt->second;
+        }
+        const uint16_t networkCode=htons(static_cast<uint16_t>(code));
+        char ccode[2];
+        memcpy(ccode,&networkCode,2);
+        string codee(ccode,2);
+        codee+=message;
+        if(!sendMessageForConnection(fd,connection,codee,"1000"))
+        {
+            std::lock_guard<std::mutex> lock(websocketRegistryMutex);
+            websocketClosing.erase(fd);
             return false;
         }
-        else
-        {
-            
-            //lock.unlock();
-            char ccode[2];
-            memcpy(ccode,&code,2);
-            string codee(ccode,2);
-            codee+=message;
-            WebSocketServerFDHandler k;
-            k.setFD(fd,getSSL(fd),unblock);
-            if(!k.sendMessage(codee,"1000"))//发送失败会自动删除在记录表里的
-            {
-                
-                    //lock.lock();
-                    auto ii=wbclientfd.find(fd);
-                    if(ii!=wbclientfd.end())
-                    {
-                        TcpServer::close(fd);
-                        wbclientfd.erase(ii);
-                    }
-                    //lock.unlock();
-                
-                return true;
-            }
-            ii->second.closeflag=true;
-            return true;
-        }
+        requestCloseAfterFlush(fd,connection);
+        return true;
     }
     
     bool stt::network::WebSocketServer::close(const int &fd)
     {
-
-                    //unique_lock<mutex> lock(lwb);
-                    auto ii=wbclientfd.find(fd);
-                    if(ii!=wbclientfd.end())
-                    {
-                        TcpServer::close(fd);
-                        wbclientfd.erase(ii);
-                    }
-                    
-                
-                return true;
-            
+        WebSocketServerFDHandler handler;
+        prepareQueuedHandler(handler,fd);
+        if(handler.getFD()<0)
+            return false;
+        handler.close();
+        return true;
     }
     bool stt::network::WebSocketServer::closeWithoutLock(const int &fd,const string &closeCodeAndMessage)
     {
@@ -7917,14 +8434,17 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         else
         {
             WebSocketServerFDHandler k;
-            k.setFD(fd,getSSL(fd),unblock);
+            prepareHandler(k,fd);
             if(!k.sendMessage(closeCodeAndMessage,"1000"))
             {
                 TcpServer::close(fd);
-                wbclientfd.erase(ii);
                 return false;
             }
             ii->second.closeflag=true;
+            {
+                std::lock_guard<std::mutex> lock(websocketRegistryMutex);
+                websocketClosing.insert(fd);
+            }
             return true;
         }
     }
@@ -7937,19 +8457,23 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         }
         else
         {
+            const uint16_t networkCode=htons(static_cast<uint16_t>(code));
             char ccode[2];
-            memcpy(ccode,&code,2);
+            memcpy(ccode,&networkCode,2);
             string codee(ccode,2);
             codee+=message;
             WebSocketServerFDHandler k;
-            k.setFD(fd,getSSL(fd),unblock);
+            prepareHandler(k,fd);
             if(!k.sendMessage(codee,"1000"))//发送失败会自动删除在记录表里的
             {
                 TcpServer::close(fd);
-                wbclientfd.erase(ii);
                 return false;
             }
             ii->second.closeflag=true;
+            {
+                std::lock_guard<std::mutex> lock(websocketRegistryMutex);
+                websocketClosing.insert(fd);
+            }
             return true;
         }
     }
@@ -7991,7 +8515,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             auto jj=wbclientfd.find(fd);
             if(jj==wbclientfd.end())//没有进行wb握手
             {
-                k.setFD(fd,clientfd[fd].ssl,unblock);
+                prepareHandler(k,fd);
 
                 if(stt::system::ServerSetting::logfile!=nullptr)
                 {
@@ -8099,7 +8623,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             else//已经进行了握手操作
             {
                 //k.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
-                k1.setFD(fd,clientfd[fd].ssl,unblock);
+                prepareHandler(k1,fd);
             int r=1;
             
             
@@ -8329,7 +8853,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             auto jj=wbclientfd.find(cclientfd.fd);
             if(jj==wbclientfd.end())//没有进行wb握手
             {
-                k.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
+                prepareHandler(k,cclientfd.fd);
                 //k1.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
                 //unique_lock<mutex> lock(lwb);
                 if(stt::system::ServerSetting::logfile!=nullptr)
@@ -8438,7 +8962,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             else//已经进行了握手操作
             {
                 //k.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
-                k1.setFD(cclientfd.fd,clientfd[cclientfd.fd].ssl,unblock);
+                prepareHandler(k1,cclientfd.fd);
             int r=1;
              int ii=1;
             while(r!=-1&&r!=4)
@@ -8610,9 +9134,10 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         //    ssl=ii->second;
         //unique_lock<mutex> lock1(lc1);
         //auto ii=clientfd.find(fd);
-        if(fd>=maxFD||clientfd[fd].fd==-1)
+        auto connectionIt=clientfd.find(fd);
+        if(fd<0||static_cast<unsigned long long>(fd)>=maxFD||connectionIt==clientfd.end()||connectionIt->second.fd==-1)
             return nullptr;
-        return clientfd[fd].ssl;
+        return connectionIt->second.ssl;
     }
     void stt::network::WebSocketServer::handleHeartbeat()
     {
@@ -8630,20 +9155,25 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     {
                         if(ii->second.closeflag!=true)
                         {
-                            short code=1000;
+                            const uint16_t code=htons(1000);
                             char ccode[2];
                             memcpy(ccode,&code,2);
                             string codee(ccode,2);
                             codee+="bye";
                             WebSocketServerFDHandler k;
-                            k.setFD(ii->first,getSSL(ii->first),unblock);
+                            prepareHandler(k,ii->first);
                             if(!k.sendMessage(codee,"1000"))//发送失败会自动删除在记录表里的
                             {
-                                TcpServer::close(ii->first);
-                                ii=wbclientfd.erase(ii);
+                                const int failedFD=ii->first;
+                                ++ii;
+                                TcpServer::close(failedFD);
                                 continue;
                             }
                             ii->second.closeflag=true;
+                            {
+                                std::lock_guard<std::mutex> lock(websocketRegistryMutex);
+                                websocketClosing.insert(ii->first);
+                            }
                         }
                     }
                 }
@@ -8654,8 +9184,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         //cout<<"send"<<endl;
                         if(!sendMessage(ii->first,"心跳","1001"))//发送心跳失败直接关闭
                         {
+                            const int failedFD=ii->first;
                             ii=wbclientfd.erase(ii);
-                            TcpServer::close(ii->first);
+                            TcpServer::close(failedFD);
                             continue;
                         }
                         ii->second.HBTime=now;
@@ -8668,25 +9199,62 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     }
     bool stt::network::WebSocketServer::close()
     {
-        if(!TcpServer::close())
-            return false;
+        const bool result=TcpServer::close();
+        wbclientfd.clear();
+        {
+            std::lock_guard<std::mutex> lock(websocketRegistryMutex);
+            websocketConnections.clear();
+            websocketClosing.clear();
+        }
         //HBflag1=false;
         //while(HBflag);
-        return true;
+        return result;
     }
+
+    void stt::network::WebSocketServer::onConnectionClosed(const int &fd)
+    {
+        {
+            std::lock_guard<std::mutex> lock(websocketRegistryMutex);
+            websocketConnections.erase(fd);
+            websocketClosing.erase(fd);
+        }
+        // Physical close always runs on the reactor (or after it has stopped), so
+        // the protocol state map remains reactor-owned and needs no cross-thread lock.
+        wbclientfd.erase(fd);
+    }
+
+    bool stt::network::WebSocketServer::sendMessageForConnection(const int &fd,const uint64_t connection,const string &msg,const string &type)
+    {
+        WebSocketServerFDHandler handler;
+        prepareQueuedHandler(handler,fd,connection);
+        return handler.sendMessage(msg,type);
+    }
+
+    bool stt::network::WebSocketServer::sendMessage(const int &fd,const string &msg,const string &type)
+    {
+        uint64_t connection=0;
+        {
+            std::lock_guard<std::mutex> lock(websocketRegistryMutex);
+            const auto connectionIt=websocketConnections.find(fd);
+            if(connectionIt==websocketConnections.end()||websocketClosing.find(fd)!=websocketClosing.end())
+                return false;
+            connection=connectionIt->second;
+        }
+        return sendMessageForConnection(fd,connection,msg,type);
+    }
+
     void stt::network::WebSocketServer::sendMessage(const string &msg,const string &type)
     {
-        //unique_lock<mutex> lock(lwb);
-        for(auto ii=wbclientfd.begin();ii!=wbclientfd.end();)
+        std::vector<std::pair<int,uint64_t>> recipients;
         {
-            if(!sendMessage(ii->first,msg,type))//发送失败直接关闭
-            {
-                ii=wbclientfd.erase(ii);
-                TcpServer::close(ii->first);
-                continue;
-            }
-            ++ii;
+            std::lock_guard<std::mutex> lock(websocketRegistryMutex);
+            recipients.reserve(websocketConnections.size());
+            for(const auto &connection:websocketConnections)
+                if(websocketClosing.find(connection.first)==websocketClosing.end())
+                    recipients.push_back(connection);
         }
+        for(const auto &connection:recipients)
+            (void)sendMessageForConnection(connection.first,connection.second,msg,type);
     }
     
 bool stt::system::csemp::init(key_t key,unsigned short value,short sem_flg)
@@ -8792,16 +9360,45 @@ stt::system::csemp::~csemp()
 //string stt::system::ServerSetting::logName;
 stt::file::LogFile* stt::system::ServerSetting::logfile=nullptr;
 string stt::system::ServerSetting::language="English";
+void stt::system::ServerSetting::signalterminated() noexcept
+{
+    static constexpr char message[]="STTNet: terminate called after an uncaught exception\n";
+    (void)::write(STDERR_FILENO,message,sizeof(message)-1);
+    std::abort();
+}
 void stt::system::ServerSetting::setExceptionHandling()
 {
-    for(int ii=0;ii<=64;ii++)
-        signal(ii,SIG_IGN);
-    //SIGSEGV
-    signal(SIGSEGV,signalSIGSEGV);
-    //SIGABRT
-    signal(SIGABRT,signalSIGABRT);
-    //terminate全局终止函数
-    set_terminate(signalterminated);
+    struct sigaction ignoreAction{};
+    sigemptyset(&ignoreAction.sa_mask);
+    ignoreAction.sa_handler=SIG_IGN;
+    sigaction(SIGPIPE,&ignoreAction,nullptr);
+
+    struct sigaction defaultAction{};
+    sigemptyset(&defaultAction.sa_mask);
+    defaultAction.sa_handler=SIG_DFL;
+    for(const int fatalSignal:{SIGSEGV,SIGABRT,SIGBUS,SIGILL,SIGFPE})
+        sigaction(fatalSignal,&defaultAction,nullptr);
+
+    std::set_terminate(signalterminated);
+}
+
+bool stt::system::ServerSetting::blockTerminationSignals()
+{
+    sigset_t waitSet;
+    sigemptyset(&waitSet);
+    sigaddset(&waitSet,SIGTERM);
+    sigaddset(&waitSet,SIGINT);
+    return pthread_sigmask(SIG_BLOCK,&waitSet,nullptr)==0;
+}
+
+int stt::system::ServerSetting::waitForTerminationSignal()
+{
+    sigset_t waitSet;
+    sigemptyset(&waitSet);
+    sigaddset(&waitSet,SIGTERM);
+    sigaddset(&waitSet,SIGINT);
+    int receivedSignal=0;
+    return sigwait(&waitSet,&receivedSignal)==0?receivedSignal:-1;
 }
 
 void stt::system::ServerSetting::setLogFile(LogFile *logfile,const string &language)
@@ -8883,10 +9480,10 @@ bool stt::system::HBSystem::join(const char *name,const char *argv0,const char *
         {
             p[ii].pid=pid;
             p[ii].lastTime=now;
-            memcpy(p[ii].name,name,MAX_PROCESS_NAME);
-            memcpy(p[ii].argv0,argv0,20);
-            memcpy(p[ii].argv1,argv1,20);
-            memcpy(p[ii].argv2,argv2,20);
+            std::snprintf(p[ii].name,sizeof(p[ii].name),"%s",name==nullptr?"":name);
+            std::snprintf(p[ii].argv0,sizeof(p[ii].argv0),"%s",argv0==nullptr?"":argv0);
+            std::snprintf(p[ii].argv1,sizeof(p[ii].argv1),"%s",argv1==nullptr?"":argv1);
+            std::snprintf(p[ii].argv2,sizeof(p[ii].argv2),"%s",argv2==nullptr?"":argv2);
             first=true;
             break;
         }
@@ -8979,30 +9576,67 @@ bool stt::system::HBSystem::HBCheck(const int &sec)
         //超时
         if((now-p[ii].lastTime)>=sec)
         {
-            //检查是否存在
-                //发送信号杀死
-                //检查是否杀死
-                int sec=0;
-                while(kill(p[ii].pid,0)!=-1&&sec<=7)
+            const pid_t targetPid=p[ii].pid;
+            const string processName(p[ii].name,strnlen(p[ii].name,sizeof(p[ii].name)));
+            const string argv0(p[ii].argv0,strnlen(p[ii].argv0,sizeof(p[ii].argv0)));
+            const string argv1(p[ii].argv1,strnlen(p[ii].argv1,sizeof(p[ii].argv1)));
+            const string argv2(p[ii].argv2,strnlen(p[ii].argv2,sizeof(p[ii].argv2)));
+            int processFD=-1;
+#if defined(__linux__) && defined(SYS_pidfd_open)
+            processFD=static_cast<int>(syscall(SYS_pidfd_open,targetPid,0));
+#endif
+            auto processExists=[targetPid,processFD]() {
+                if(processFD>=0)
                 {
-                    kill(p[ii].pid,15);
-                    sleep(1);
-                    sec++;
+                    pollfd watchedProcess{processFD,POLLIN,0};
+                    return ::poll(&watchedProcess,1,0)==0;
                 }
+                if(kill(targetPid,0)==0)
+                    return true;
+                return errno==EPERM;
+            };
+            auto sendSignal=[targetPid,processFD](const int signalNumber) {
+#if defined(__linux__) && defined(SYS_pidfd_send_signal)
+                if(processFD>=0)
+                    return static_cast<int>(syscall(SYS_pidfd_send_signal,processFD,signalNumber,nullptr,0));
+#endif
+                return kill(targetPid,signalNumber);
+            };
 
-                while(kill(p[ii].pid,0)!=-1)
+            if(processExists())
+                sendSignal(SIGTERM);
+            for(int waited=0;waited<8&&processExists();++waited)
+                sleep(1);
+            if(processExists())
+            {
+                sendSignal(SIGKILL);
+                for(int waited=0;waited<2&&processExists();++waited)
                 {
-                    kill(p[ii].pid,9);
+                    int status=0;
+                    if(waitpid(targetPid,&status,WNOHANG)==targetPid)
+                        break;
                     sleep(1);
                 }
-            
+            }
+            if(processExists())
+            {
+                if(processFD>=0)
+                    ::close(processFD);
+                return false;
+            }
+            if(processFD>=0)
+                ::close(processFD);
+
             //清理信息
             plock.wait();
-            p[ii].pid=0;
-            p[ii].lastTime=0;
+            if(p[ii].pid==targetPid)
+            {
+                p[ii].pid=0;
+                p[ii].lastTime=0;
+            }
             plock.post();
             //重新启动
-            Process::startProcess(p[ii].name,-1,p[ii].argv0,p[ii].argv1,p[ii].argv2);
+            Process::startProcess(processName,-1,argv0.c_str(),argv1.c_str(),argv2.c_str());
         }
     }
     return true;

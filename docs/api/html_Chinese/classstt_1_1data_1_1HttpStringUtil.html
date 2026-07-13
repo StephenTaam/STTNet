@@ -1,18 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.5"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>STTNet: stt::data::HttpStringUtil类 参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() { searchBox.OnSelectItem(0); });
-</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -20,9 +23,9 @@
 <div id="titlearea">
 <table cellspacing="0" cellpadding="0">
  <tbody>
- <tr style="height: 56px;">
-  <td style="padding-left: 0.5em;">
-   <div id="projectname">STTNet
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
    </div>
   </td>
  </tr>
@@ -30,55 +33,52 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.5 -->
+<!-- 制作者 Doxygen 1.13.2 -->
 <script type="text/javascript">
-var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
 </script>
-  <div id="navrow1" class="tabs">
-    <ul class="tablist">
-      <li><a href="index.html"><span>首页</span></a></li>
-      <li><a href="pages.html"><span>相关页面</span></a></li>
-      <li><a href="namespaces.html"><span>命名空间</span></a></li>
-      <li class="current"><a href="annotated.html"><span>类</span></a></li>
-      <li><a href="files.html"><span>文件</span></a></li>
-      <li>
-        <div id="MSearchBox" class="MSearchBoxInactive">
-        <span class="left">
-          <img id="MSearchSelect" src="search/mag_sel.png"
-               onmouseover="return searchBox.OnSearchSelectShow()"
-               onmouseout="return searchBox.OnSearchSelectHide()"
-               alt=""/>
-          <input type="text" id="MSearchField" value="搜索" accesskey="S"
-               onfocus="searchBox.OnSearchFieldFocus(true)" 
-               onblur="searchBox.OnSearchFieldFocus(false)" 
-               onkeyup="searchBox.OnSearchFieldChange(event)"/>
-          </span><span class="right">
-            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
-          </span>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div id="navrow2" class="tabs2">
-    <ul class="tablist">
-      <li><a href="annotated.html"><span>类列表</span></a></li>
-      <li><a href="classes.html"><span>类索引</span></a></li>
-      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
-      <li><a href="functions.html"><span>类成员</span></a></li>
-    </ul>
-  </div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索',false);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){ initResizable(false); });
+/* @license-end */
+</script>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>枚举</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>枚举值</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>页</a></div>
+</div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
-        name="MSearchResults" id="MSearchResults">
-</iframe>
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
 </div>
 
 <div id="nav-path" class="navpath">
@@ -86,76 +86,78 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <li class="navelem"><a class="el" href="namespacestt.html">stt</a></li><li class="navelem"><a class="el" href="namespacestt_1_1data.html">data</a></li><li class="navelem"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html">HttpStringUtil</a></li>  </ul>
 </div>
 </div><!-- top -->
+<div id="doc-content">
 <div class="header">
   <div class="summary">
 <a href="#pub-static-methods">静态 Public 成员函数</a> &#124;
 <a href="classstt_1_1data_1_1HttpStringUtil-members.html">所有成员列表</a>  </div>
-  <div class="headertitle">
-<div class="title">stt::data::HttpStringUtil类 参考</div>  </div>
+  <div class="headertitle"><div class="title">stt::data::HttpStringUtil类 参考</div></div>
 </div><!--header-->
 <div class="contents">
 
 <p>负责Http字符串和URL解析 包括从 URL 或请求报文中提取参数、IP、端口、请求头字段等功能。  
- <a href="classstt_1_1data_1_1HttpStringUtil.html#details">更多...</a></p>
+ <a href="#details">更多...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 静态 Public 成员函数</h2></td></tr>
-<tr class="memitem:a6be62780b21c58b8844a3ddcb7cd27dd"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a6be62780b21c58b8844a3ddcb7cd27dd">get_split_str</a> (const std::string_view &amp;ori_str, std::string_view &amp;str, const std::string_view &amp;a, const std::string_view &amp;b, const size_t &amp;pos=0)</td></tr>
-<tr class="memdesc:a6be62780b21c58b8844a3ddcb7cd27dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">从原始字符串中提取两个标记之间的子串。  <a href="#a6be62780b21c58b8844a3ddcb7cd27dd">更多...</a><br/></td></tr>
+<tr class="memitem:a6be62780b21c58b8844a3ddcb7cd27dd" id="r_a6be62780b21c58b8844a3ddcb7cd27dd"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6be62780b21c58b8844a3ddcb7cd27dd">get_split_str</a> (const std::string_view &amp;ori_str, std::string_view &amp;str, const std::string_view &amp;a, const std::string_view &amp;b, const size_t &amp;pos=0)</td></tr>
+<tr class="memdesc:a6be62780b21c58b8844a3ddcb7cd27dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">从原始字符串中提取两个标记之间的子串。  <br /></td></tr>
 <tr class="separator:a6be62780b21c58b8844a3ddcb7cd27dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02d7f6b05fb9ca9a9966440502044c8f"><td class="memItemLeft" align="right" valign="top">static std::string_view &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a02d7f6b05fb9ca9a9966440502044c8f">get_value_str</a> (const std::string_view &amp;ori_str, std::string_view &amp;str, const std::string &amp;name)</td></tr>
-<tr class="memdesc:a02d7f6b05fb9ca9a9966440502044c8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">从 URL 查询参数中提取指定 key 的值。  <a href="#a02d7f6b05fb9ca9a9966440502044c8f">更多...</a><br/></td></tr>
-<tr class="separator:a02d7f6b05fb9ca9a9966440502044c8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad41047959d86d2f7da0ecd6c9ad5bc0c"><td class="memItemLeft" align="right" valign="top">static std::string_view &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#ad41047959d86d2f7da0ecd6c9ad5bc0c">get_value_header</a> (const std::string_view &amp;ori_str, std::string_view &amp;str, const std::string &amp;name)</td></tr>
-<tr class="memdesc:ad41047959d86d2f7da0ecd6c9ad5bc0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">从 HTTP 请求头中提取指定字段的值。  <a href="#ad41047959d86d2f7da0ecd6c9ad5bc0c">更多...</a><br/></td></tr>
-<tr class="separator:ad41047959d86d2f7da0ecd6c9ad5bc0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2f2f3fe18389bf443a43ba4f624bcd8"><td class="memItemLeft" align="right" valign="top">static std::string_view &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#ac2f2f3fe18389bf443a43ba4f624bcd8">get_location_str</a> (const std::string_view &amp;ori_str, std::string_view &amp;str)</td></tr>
-<tr class="memdesc:ac2f2f3fe18389bf443a43ba4f624bcd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">提取 URL 中 path 和 query 部分。  <a href="#ac2f2f3fe18389bf443a43ba4f624bcd8">更多...</a><br/></td></tr>
-<tr class="separator:ac2f2f3fe18389bf443a43ba4f624bcd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac170689cf6dc2278e9f93498246234f"><td class="memItemLeft" align="right" valign="top">static std::string_view &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#aac170689cf6dc2278e9f93498246234f">getLocPara</a> (const std::string_view &amp;url, std::string_view &amp;locPara)</td></tr>
-<tr class="memdesc:aac170689cf6dc2278e9f93498246234f"><td class="mdescLeft">&#160;</td><td class="mdescRight">提取 URL 的 path 部分（不含 query）。  <a href="#aac170689cf6dc2278e9f93498246234f">更多...</a><br/></td></tr>
-<tr class="separator:aac170689cf6dc2278e9f93498246234f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09424306207aeab3e8411eb0ba5343e3"><td class="memItemLeft" align="right" valign="top">static std::string_view &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a09424306207aeab3e8411eb0ba5343e3">getPara</a> (const std::string_view &amp;url, std::string_view &amp;para)</td></tr>
-<tr class="memdesc:a09424306207aeab3e8411eb0ba5343e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取 URL 中的查询参数字符串（包括 ?）。  <a href="#a09424306207aeab3e8411eb0ba5343e3">更多...</a><br/></td></tr>
-<tr class="separator:a09424306207aeab3e8411eb0ba5343e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2566c38ff3fb53247b5d8c98173504aa"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a2566c38ff3fb53247b5d8c98173504aa">get_split_str</a> (const std::string_view &amp;ori_str, std::string &amp;str, const std::string_view &amp;a, const std::string_view &amp;b, const size_t &amp;pos=0)</td></tr>
-<tr class="memdesc:a2566c38ff3fb53247b5d8c98173504aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">从原始字符串中提取两个标记之间的子串。  <a href="#a2566c38ff3fb53247b5d8c98173504aa">更多...</a><br/></td></tr>
+<tr class="memitem:ab5a08a3b6f1df603efb2953f7b5cca21" id="r_ab5a08a3b6f1df603efb2953f7b5cca21"><td class="memItemLeft" align="right" valign="top">static std::string_view &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5a08a3b6f1df603efb2953f7b5cca21">get_value_str</a> (const std::string_view &amp;ori_str, std::string_view &amp;str, const std::string &amp;name)</td></tr>
+<tr class="memdesc:ab5a08a3b6f1df603efb2953f7b5cca21"><td class="mdescLeft">&#160;</td><td class="mdescRight">从 URL 查询参数中提取指定 key 的值。  <br /></td></tr>
+<tr class="separator:ab5a08a3b6f1df603efb2953f7b5cca21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af624e8f2293fcbd2e3336098f8d98e44" id="r_af624e8f2293fcbd2e3336098f8d98e44"><td class="memItemLeft" align="right" valign="top">static std::string_view &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af624e8f2293fcbd2e3336098f8d98e44">get_value_header</a> (const std::string_view &amp;ori_str, std::string_view &amp;str, const std::string &amp;name)</td></tr>
+<tr class="memdesc:af624e8f2293fcbd2e3336098f8d98e44"><td class="mdescLeft">&#160;</td><td class="mdescRight">从 HTTP 请求头中提取指定字段的值。  <br /></td></tr>
+<tr class="separator:af624e8f2293fcbd2e3336098f8d98e44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6ca9ca9273b96dbe484a47c9358611a" id="r_aa6ca9ca9273b96dbe484a47c9358611a"><td class="memItemLeft" align="right" valign="top">static std::string_view &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa6ca9ca9273b96dbe484a47c9358611a">get_location_str</a> (const std::string_view &amp;ori_str, std::string_view &amp;str)</td></tr>
+<tr class="memdesc:aa6ca9ca9273b96dbe484a47c9358611a"><td class="mdescLeft">&#160;</td><td class="mdescRight">提取 URL 中 path 和 query 部分。  <br /></td></tr>
+<tr class="separator:aa6ca9ca9273b96dbe484a47c9358611a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3f7445ce854412fa440407e89cd61b1" id="r_ad3f7445ce854412fa440407e89cd61b1"><td class="memItemLeft" align="right" valign="top">static std::string_view &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3f7445ce854412fa440407e89cd61b1">getLocPara</a> (const std::string_view &amp;url, std::string_view &amp;locPara)</td></tr>
+<tr class="memdesc:ad3f7445ce854412fa440407e89cd61b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">提取 URL 的 path 部分（不含 query）。  <br /></td></tr>
+<tr class="separator:ad3f7445ce854412fa440407e89cd61b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51658be70d96f3a3a3a72819208129ec" id="r_a51658be70d96f3a3a3a72819208129ec"><td class="memItemLeft" align="right" valign="top">static std::string_view &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a51658be70d96f3a3a3a72819208129ec">getPara</a> (const std::string_view &amp;url, std::string_view &amp;para)</td></tr>
+<tr class="memdesc:a51658be70d96f3a3a3a72819208129ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取 URL 中的查询参数字符串（包括 ?）。  <br /></td></tr>
+<tr class="separator:a51658be70d96f3a3a3a72819208129ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2566c38ff3fb53247b5d8c98173504aa" id="r_a2566c38ff3fb53247b5d8c98173504aa"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2566c38ff3fb53247b5d8c98173504aa">get_split_str</a> (const std::string_view &amp;ori_str, std::string &amp;str, const std::string_view &amp;a, const std::string_view &amp;b, const size_t &amp;pos=0)</td></tr>
+<tr class="memdesc:a2566c38ff3fb53247b5d8c98173504aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">从原始字符串中提取两个标记之间的子串。  <br /></td></tr>
 <tr class="separator:a2566c38ff3fb53247b5d8c98173504aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a904906ac8010ece1c306d4338809b49f"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a904906ac8010ece1c306d4338809b49f">get_value_str</a> (const std::string &amp;ori_str, std::string &amp;str, const std::string &amp;name)</td></tr>
-<tr class="memdesc:a904906ac8010ece1c306d4338809b49f"><td class="mdescLeft">&#160;</td><td class="mdescRight">从 URL 查询参数中提取指定 key 的值。  <a href="#a904906ac8010ece1c306d4338809b49f">更多...</a><br/></td></tr>
-<tr class="separator:a904906ac8010ece1c306d4338809b49f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a500a4e33d6ad797d915bb42291d5dca4"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a500a4e33d6ad797d915bb42291d5dca4">get_value_header</a> (const std::string &amp;ori_str, std::string &amp;str, const std::string &amp;name)</td></tr>
-<tr class="memdesc:a500a4e33d6ad797d915bb42291d5dca4"><td class="mdescLeft">&#160;</td><td class="mdescRight">从 HTTP 请求头中提取指定字段的值。  <a href="#a500a4e33d6ad797d915bb42291d5dca4">更多...</a><br/></td></tr>
-<tr class="separator:a500a4e33d6ad797d915bb42291d5dca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3e71e9b5662949f0069127660588bcd"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#ae3e71e9b5662949f0069127660588bcd">get_location_str</a> (const std::string &amp;ori_str, std::string &amp;str)</td></tr>
-<tr class="memdesc:ae3e71e9b5662949f0069127660588bcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">提取 URL 中 path 和 query 部分。  <a href="#ae3e71e9b5662949f0069127660588bcd">更多...</a><br/></td></tr>
-<tr class="separator:ae3e71e9b5662949f0069127660588bcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a693fcfba7f7df1295d245389d2528695"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a693fcfba7f7df1295d245389d2528695">getLocPara</a> (const std::string &amp;url, std::string &amp;locPara)</td></tr>
-<tr class="memdesc:a693fcfba7f7df1295d245389d2528695"><td class="mdescLeft">&#160;</td><td class="mdescRight">提取 URL 的 path 部分（不含 query）。  <a href="#a693fcfba7f7df1295d245389d2528695">更多...</a><br/></td></tr>
-<tr class="separator:a693fcfba7f7df1295d245389d2528695"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ca0971f2dfdf015c8cdd20177424ff4"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a7ca0971f2dfdf015c8cdd20177424ff4">getPara</a> (const std::string &amp;url, std::string &amp;para)</td></tr>
-<tr class="memdesc:a7ca0971f2dfdf015c8cdd20177424ff4"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取 URL 中的查询参数字符串（包括 ?）。  <a href="#a7ca0971f2dfdf015c8cdd20177424ff4">更多...</a><br/></td></tr>
-<tr class="separator:a7ca0971f2dfdf015c8cdd20177424ff4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23d8fe01488654d7889a9bf4478c6aab"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a23d8fe01488654d7889a9bf4478c6aab">getIP</a> (const std::string &amp;url, std::string &amp;IP)</td></tr>
-<tr class="memdesc:a23d8fe01488654d7889a9bf4478c6aab"><td class="mdescLeft">&#160;</td><td class="mdescRight">从 URL 中提取主机 IP 或域名。  <a href="#a23d8fe01488654d7889a9bf4478c6aab">更多...</a><br/></td></tr>
-<tr class="separator:a23d8fe01488654d7889a9bf4478c6aab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d9894e4283bbd3acdfbcf65dc318b76"><td class="memItemLeft" align="right" valign="top">static int &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a5d9894e4283bbd3acdfbcf65dc318b76">getPort</a> (const std::string &amp;url, int &amp;port)</td></tr>
-<tr class="memdesc:a5d9894e4283bbd3acdfbcf65dc318b76"><td class="mdescLeft">&#160;</td><td class="mdescRight">从 URL 中提取端口号。  <a href="#a5d9894e4283bbd3acdfbcf65dc318b76">更多...</a><br/></td></tr>
-<tr class="separator:a5d9894e4283bbd3acdfbcf65dc318b76"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8256f33455b1299cfc1ccf46a7d9ea5"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#ad8256f33455b1299cfc1ccf46a7d9ea5">createHeader</a> (const std::string &amp;first, const std::string &amp;second)</td></tr>
-<tr class="memdesc:ad8256f33455b1299cfc1ccf46a7d9ea5"><td class="mdescLeft">&#160;</td><td class="mdescRight">创建一个 HTTP 请求头字段字符串。  <a href="#ad8256f33455b1299cfc1ccf46a7d9ea5">更多...</a><br/></td></tr>
+<tr class="memitem:a18943aa9b74ea7a842d1876a75a16706" id="r_a18943aa9b74ea7a842d1876a75a16706"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18943aa9b74ea7a842d1876a75a16706">get_value_str</a> (const std::string &amp;ori_str, std::string &amp;str, const std::string &amp;name)</td></tr>
+<tr class="memdesc:a18943aa9b74ea7a842d1876a75a16706"><td class="mdescLeft">&#160;</td><td class="mdescRight">从 URL 查询参数中提取指定 key 的值。  <br /></td></tr>
+<tr class="separator:a18943aa9b74ea7a842d1876a75a16706"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affc51def9fbdeb6cdcc3f2a05b1b8f6f" id="r_affc51def9fbdeb6cdcc3f2a05b1b8f6f"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#affc51def9fbdeb6cdcc3f2a05b1b8f6f">get_value_header</a> (const std::string &amp;ori_str, std::string &amp;str, const std::string &amp;name)</td></tr>
+<tr class="memdesc:affc51def9fbdeb6cdcc3f2a05b1b8f6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">从 HTTP 请求头中提取指定字段的值。  <br /></td></tr>
+<tr class="separator:affc51def9fbdeb6cdcc3f2a05b1b8f6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a942f56d2fffa2b3335567d9841477666" id="r_a942f56d2fffa2b3335567d9841477666"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a942f56d2fffa2b3335567d9841477666">get_location_str</a> (const std::string &amp;ori_str, std::string &amp;str)</td></tr>
+<tr class="memdesc:a942f56d2fffa2b3335567d9841477666"><td class="mdescLeft">&#160;</td><td class="mdescRight">提取 URL 中 path 和 query 部分。  <br /></td></tr>
+<tr class="separator:a942f56d2fffa2b3335567d9841477666"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae57fda150ec91207922a217dfb243260" id="r_ae57fda150ec91207922a217dfb243260"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae57fda150ec91207922a217dfb243260">getLocPara</a> (const std::string &amp;url, std::string &amp;locPara)</td></tr>
+<tr class="memdesc:ae57fda150ec91207922a217dfb243260"><td class="mdescLeft">&#160;</td><td class="mdescRight">提取 URL 的 path 部分（不含 query）。  <br /></td></tr>
+<tr class="separator:ae57fda150ec91207922a217dfb243260"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a330321e183db4cfd93bccecd9b1d17f8" id="r_a330321e183db4cfd93bccecd9b1d17f8"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a330321e183db4cfd93bccecd9b1d17f8">getPara</a> (const std::string &amp;url, std::string &amp;para)</td></tr>
+<tr class="memdesc:a330321e183db4cfd93bccecd9b1d17f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取 URL 中的查询参数字符串（包括 ?）。  <br /></td></tr>
+<tr class="separator:a330321e183db4cfd93bccecd9b1d17f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab0a27f35832cc024758a7a451da65bf" id="r_aab0a27f35832cc024758a7a451da65bf"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab0a27f35832cc024758a7a451da65bf">getIP</a> (const std::string &amp;url, std::string &amp;IP)</td></tr>
+<tr class="memdesc:aab0a27f35832cc024758a7a451da65bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">从 URL 中提取主机 IP 或域名。  <br /></td></tr>
+<tr class="separator:aab0a27f35832cc024758a7a451da65bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f2d936c56846079bb56c36db351d690" id="r_a4f2d936c56846079bb56c36db351d690"><td class="memItemLeft" align="right" valign="top">static int &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4f2d936c56846079bb56c36db351d690">getPort</a> (const std::string &amp;url, int &amp;port)</td></tr>
+<tr class="memdesc:a4f2d936c56846079bb56c36db351d690"><td class="mdescLeft">&#160;</td><td class="mdescRight">从 URL 中提取端口号。  <br /></td></tr>
+<tr class="separator:a4f2d936c56846079bb56c36db351d690"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8256f33455b1299cfc1ccf46a7d9ea5" id="r_ad8256f33455b1299cfc1ccf46a7d9ea5"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad8256f33455b1299cfc1ccf46a7d9ea5">createHeader</a> (const std::string &amp;first, const std::string &amp;second)</td></tr>
+<tr class="memdesc:ad8256f33455b1299cfc1ccf46a7d9ea5"><td class="mdescLeft">&#160;</td><td class="mdescRight">创建一个 HTTP 请求头字段字符串。  <br /></td></tr>
 <tr class="separator:ad8256f33455b1299cfc1ccf46a7d9ea5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b6431edf84792cbd2a9134b219747ea"><td class="memTemplParams" colspan="2">template&lt;class... Args&gt; </td></tr>
-<tr class="memitem:a5b6431edf84792cbd2a9134b219747ea"><td class="memTemplItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1HttpStringUtil.html#a5b6431edf84792cbd2a9134b219747ea">createHeader</a> (const std::string &amp;first, const std::string &amp;second, Args...args)</td></tr>
-<tr class="memdesc:a5b6431edf84792cbd2a9134b219747ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">递归构造多个 HTTP 请求头字段。  <a href="#a5b6431edf84792cbd2a9134b219747ea">更多...</a><br/></td></tr>
-<tr class="separator:a5b6431edf84792cbd2a9134b219747ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a348649d2263b30a197bc1499747d6d52" id="r_a348649d2263b30a197bc1499747d6d52"><td class="memTemplParams" colspan="2">template&lt;class... Args&gt; </td></tr>
+<tr class="memitem:a348649d2263b30a197bc1499747d6d52"><td class="memTemplItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a348649d2263b30a197bc1499747d6d52">createHeader</a> (const std::string &amp;first, const std::string &amp;second, Args... args)</td></tr>
+<tr class="memdesc:a348649d2263b30a197bc1499747d6d52"><td class="mdescLeft">&#160;</td><td class="mdescRight">递归构造多个 HTTP 请求头字段。  <br /></td></tr>
+<tr class="separator:a348649d2263b30a197bc1499747d6d52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>负责Http字符串和URL解析 包括从 URL 或请求报文中提取参数、IP、端口、请求头字段等功能。 </p>
 </div><h2 class="groupheader">成员函数说明</h2>
-<a class="anchor" id="ad8256f33455b1299cfc1ccf46a7d9ea5"></a>
+<a id="ad8256f33455b1299cfc1ccf46a7d9ea5" name="ad8256f33455b1299cfc1ccf46a7d9ea5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8256f33455b1299cfc1ccf46a7d9ea5">&#9670;&#160;</a></span>createHeader() <span class="overload">[1/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -165,24 +167,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
         <tr>
           <td class="memname">static std::string stt::data::HttpStringUtil::createHeader </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>first</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>first</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>second</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>second</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -200,7 +195,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 
 </div>
 </div>
-<a class="anchor" id="a5b6431edf84792cbd2a9134b219747ea"></a>
+<a id="a348649d2263b30a197bc1499747d6d52" name="a348649d2263b30a197bc1499747d6d52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a348649d2263b30a197bc1499747d6d52">&#9670;&#160;</a></span>createHeader() <span class="overload">[2/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -212,39 +209,30 @@ template&lt;class... Args&gt; </div>
         <tr>
           <td class="memname">static std::string stt::data::HttpStringUtil::createHeader </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>first</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>first</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>second</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>second</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Args...&#160;</td>
-          <td class="paramname"><em>args</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">Args...</td>          <td class="paramname"><span class="paramname"><em>args</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>递归构造多个 HTTP 请求头字段。 </p>
-<p>支持多个字段名和值的构造，用法为： </p>
-<div class="fragment"><div class="line">std::string headers = <a class="code" href="classstt_1_1data_1_1HttpStringUtil.html#ad8256f33455b1299cfc1ccf46a7d9ea5">createHeader</a>(<span class="stringliteral">&quot;Host&quot;</span>, <span class="stringliteral">&quot;example.com&quot;</span>, <span class="stringliteral">&quot;Connection&quot;</span>, <span class="stringliteral">&quot;keep-alive,&quot;</span>Content-Type<span class="stringliteral">&quot;,&quot;</span>charset=UTF-8<span class="stringliteral">&quot;);</span></div>
-</div><!-- fragment --><p> 最终生成： </p>
-<div class="fragment"><div class="line">Host: example.com\r\n</div>
+<p>支持多个字段名和值的构造，用法为： </p><div class="fragment"><div class="line">std::string headers = <a class="code hl_function" href="#ad8256f33455b1299cfc1ccf46a7d9ea5">createHeader</a>(<span class="stringliteral">&quot;Host&quot;</span>, <span class="stringliteral">&quot;example.com&quot;</span>, <span class="stringliteral">&quot;Connection&quot;</span>, <span class="stringliteral">&quot;keep-alive,&quot;</span>Content-Type<span class="stringliteral">&quot;,&quot;</span>charset=UTF-8<span class="stringliteral">&quot;);</span></div>
+<div class="ttc" id="aclassstt_1_1data_1_1HttpStringUtil_html_ad8256f33455b1299cfc1ccf46a7d9ea5"><div class="ttname"><a href="#ad8256f33455b1299cfc1ccf46a7d9ea5">stt::data::HttpStringUtil::createHeader</a></div><div class="ttdeci">static std::string createHeader(const std::string &amp;first, const std::string &amp;second)</div><div class="ttdoc">创建一个 HTTP 请求头字段字符串。</div></div>
+</div><!-- fragment --><p> 最终生成： </p><div class="fragment"><div class="line">Host: example.com\r\n</div>
 <div class="line">Connection: keep-alive\r\n</div>
 <div class="line">Content-Type: charset=UTF-8\r\n</div>
 </div><!-- fragment --><dl class="params"><dt>参数</dt><dd>
@@ -260,7 +248,9 @@ template&lt;class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ac2f2f3fe18389bf443a43ba4f624bcd8"></a>
+<a id="a942f56d2fffa2b3335567d9841477666" name="a942f56d2fffa2b3335567d9841477666"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a942f56d2fffa2b3335567d9841477666">&#9670;&#160;</a></span>get_location_str() <span class="overload">[1/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -268,26 +258,19 @@ template&lt;class... Args&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::string_view&amp; stt::data::HttpStringUtil::get_location_str </td>
+          <td class="memname">static std::string &amp; stt::data::HttpStringUtil::get_location_str </td>
           <td>(</td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>ori_str</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>ori_str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>str</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>str</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -305,7 +288,9 @@ template&lt;class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ae3e71e9b5662949f0069127660588bcd"></a>
+<a id="aa6ca9ca9273b96dbe484a47c9358611a" name="aa6ca9ca9273b96dbe484a47c9358611a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6ca9ca9273b96dbe484a47c9358611a">&#9670;&#160;</a></span>get_location_str() <span class="overload">[2/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -313,26 +298,19 @@ template&lt;class... Args&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::string&amp; stt::data::HttpStringUtil::get_location_str </td>
+          <td class="memname">static std::string_view &amp; stt::data::HttpStringUtil::get_location_str </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>ori_str</em>, </td>
+          <td class="paramtype">const std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>ori_str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>str</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>str</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -350,7 +328,9 @@ template&lt;class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a6be62780b21c58b8844a3ddcb7cd27dd"></a>
+<a id="a2566c38ff3fb53247b5d8c98173504aa" name="a2566c38ff3fb53247b5d8c98173504aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2566c38ff3fb53247b5d8c98173504aa">&#9670;&#160;</a></span>get_split_str() <span class="overload">[1/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -360,42 +340,32 @@ template&lt;class... Args&gt; </div>
         <tr>
           <td class="memname">static size_t stt::data::HttpStringUtil::get_split_str </td>
           <td>(</td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>ori_str</em>, </td>
+          <td class="paramtype">const std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>ori_str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>a</em>, </td>
+          <td class="paramtype">const std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>a</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>b</em>, </td>
+          <td class="paramtype">const std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>b</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const size_t &amp;&#160;</td>
-          <td class="paramname"><em>pos</em> = <code>0</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const size_t &amp;</td>          <td class="paramname"><span class="paramname"><em>pos</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -417,7 +387,9 @@ template&lt;class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a2566c38ff3fb53247b5d8c98173504aa"></a>
+<a id="a6be62780b21c58b8844a3ddcb7cd27dd" name="a6be62780b21c58b8844a3ddcb7cd27dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6be62780b21c58b8844a3ddcb7cd27dd">&#9670;&#160;</a></span>get_split_str() <span class="overload">[2/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -427,42 +399,32 @@ template&lt;class... Args&gt; </div>
         <tr>
           <td class="memname">static size_t stt::data::HttpStringUtil::get_split_str </td>
           <td>(</td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>ori_str</em>, </td>
+          <td class="paramtype">const std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>ori_str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
+          <td class="paramtype">std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>a</em>, </td>
+          <td class="paramtype">const std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>a</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>b</em>, </td>
+          <td class="paramtype">const std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>b</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const size_t &amp;&#160;</td>
-          <td class="paramname"><em>pos</em> = <code>0</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const size_t &amp;</td>          <td class="paramname"><span class="paramname"><em>pos</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -484,7 +446,9 @@ template&lt;class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ad41047959d86d2f7da0ecd6c9ad5bc0c"></a>
+<a id="affc51def9fbdeb6cdcc3f2a05b1b8f6f" name="affc51def9fbdeb6cdcc3f2a05b1b8f6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affc51def9fbdeb6cdcc3f2a05b1b8f6f">&#9670;&#160;</a></span>get_value_header() <span class="overload">[1/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -492,32 +456,24 @@ template&lt;class... Args&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::string_view&amp; stt::data::HttpStringUtil::get_value_header </td>
+          <td class="memname">static std::string &amp; stt::data::HttpStringUtil::get_value_header </td>
           <td>(</td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>ori_str</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>ori_str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>name</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -535,7 +491,9 @@ template&lt;class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a500a4e33d6ad797d915bb42291d5dca4"></a>
+<a id="af624e8f2293fcbd2e3336098f8d98e44" name="af624e8f2293fcbd2e3336098f8d98e44"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af624e8f2293fcbd2e3336098f8d98e44">&#9670;&#160;</a></span>get_value_header() <span class="overload">[2/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -543,32 +501,24 @@ template&lt;class... Args&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::string&amp; stt::data::HttpStringUtil::get_value_header </td>
+          <td class="memname">static std::string_view &amp; stt::data::HttpStringUtil::get_value_header </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>ori_str</em>, </td>
+          <td class="paramtype">const std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>ori_str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
+          <td class="paramtype">std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>name</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -586,7 +536,9 @@ template&lt;class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a02d7f6b05fb9ca9a9966440502044c8f"></a>
+<a id="a18943aa9b74ea7a842d1876a75a16706" name="a18943aa9b74ea7a842d1876a75a16706"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18943aa9b74ea7a842d1876a75a16706">&#9670;&#160;</a></span>get_value_str() <span class="overload">[1/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -594,38 +546,30 @@ template&lt;class... Args&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::string_view&amp; stt::data::HttpStringUtil::get_value_str </td>
+          <td class="memname">static std::string &amp; stt::data::HttpStringUtil::get_value_str </td>
           <td>(</td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>ori_str</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>ori_str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>name</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>从 URL 查询参数中提取指定 key 的值。 </p>
-<dl class="section note"><dt>注解</dt><dd>url不需要完整也行 例如从 <code>?id=123&amp;name=abc</code>提取 <code>id</code> 的值和从<code><a href="http://xxxx/?id=123&name=abc">http://xxxx/?id=123&amp;name=abc</a></code>提取 <code>id</code> 的值是一样的。</dd></dl>
+<dl class="section note"><dt>注解</dt><dd>url不需要完整也行 例如从 <code>?id=123&amp;name=abc</code>提取 <code>id</code> 的值和从<code><a href="http://xxxx/?id=123">http://xxxx/?id=123</a>&amp;name=abc</code>提取 <code>id</code> 的值是一样的。</dd></dl>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
     <tr><td class="paramname">ori_str</td><td>原始 URL 字符串。 </td></tr>
@@ -638,7 +582,9 @@ template&lt;class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a904906ac8010ece1c306d4338809b49f"></a>
+<a id="ab5a08a3b6f1df603efb2953f7b5cca21" name="ab5a08a3b6f1df603efb2953f7b5cca21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5a08a3b6f1df603efb2953f7b5cca21">&#9670;&#160;</a></span>get_value_str() <span class="overload">[2/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -646,38 +592,30 @@ template&lt;class... Args&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::string&amp; stt::data::HttpStringUtil::get_value_str </td>
+          <td class="memname">static std::string_view &amp; stt::data::HttpStringUtil::get_value_str </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>ori_str</em>, </td>
+          <td class="paramtype">const std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>ori_str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
+          <td class="paramtype">std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>name</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>从 URL 查询参数中提取指定 key 的值。 </p>
-<dl class="section note"><dt>注解</dt><dd>url不需要完整也行 例如从 <code>?id=123&amp;name=abc</code>提取 <code>id</code> 的值和从<code><a href="http://xxxx/?id=123&name=abc">http://xxxx/?id=123&amp;name=abc</a></code>提取 <code>id</code> 的值是一样的。</dd></dl>
+<dl class="section note"><dt>注解</dt><dd>url不需要完整也行 例如从 <code>?id=123&amp;name=abc</code>提取 <code>id</code> 的值和从<code><a href="http://xxxx/?id=123">http://xxxx/?id=123</a>&amp;name=abc</code>提取 <code>id</code> 的值是一样的。</dd></dl>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
     <tr><td class="paramname">ori_str</td><td>原始 URL 字符串。 </td></tr>
@@ -690,7 +628,9 @@ template&lt;class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a23d8fe01488654d7889a9bf4478c6aab"></a>
+<a id="aab0a27f35832cc024758a7a451da65bf" name="aab0a27f35832cc024758a7a451da65bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab0a27f35832cc024758a7a451da65bf">&#9670;&#160;</a></span>getIP()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -698,26 +638,19 @@ template&lt;class... Args&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::string&amp; stt::data::HttpStringUtil::getIP </td>
+          <td class="memname">static std::string &amp; stt::data::HttpStringUtil::getIP </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>url</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>url</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>IP</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>IP</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -736,7 +669,9 @@ template&lt;class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="aac170689cf6dc2278e9f93498246234f"></a>
+<a id="ae57fda150ec91207922a217dfb243260" name="ae57fda150ec91207922a217dfb243260"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae57fda150ec91207922a217dfb243260">&#9670;&#160;</a></span>getLocPara() <span class="overload">[1/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -744,26 +679,19 @@ template&lt;class... Args&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::string_view&amp; stt::data::HttpStringUtil::getLocPara </td>
+          <td class="memname">static std::string &amp; stt::data::HttpStringUtil::getLocPara </td>
           <td>(</td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>url</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>url</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>locPara</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>locPara</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -781,7 +709,9 @@ template&lt;class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a693fcfba7f7df1295d245389d2528695"></a>
+<a id="ad3f7445ce854412fa440407e89cd61b1" name="ad3f7445ce854412fa440407e89cd61b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3f7445ce854412fa440407e89cd61b1">&#9670;&#160;</a></span>getLocPara() <span class="overload">[2/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -789,26 +719,19 @@ template&lt;class... Args&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::string&amp; stt::data::HttpStringUtil::getLocPara </td>
+          <td class="memname">static std::string_view &amp; stt::data::HttpStringUtil::getLocPara </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>url</em>, </td>
+          <td class="paramtype">const std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>url</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>locPara</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>locPara</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -826,7 +749,9 @@ template&lt;class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a09424306207aeab3e8411eb0ba5343e3"></a>
+<a id="a330321e183db4cfd93bccecd9b1d17f8" name="a330321e183db4cfd93bccecd9b1d17f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a330321e183db4cfd93bccecd9b1d17f8">&#9670;&#160;</a></span>getPara() <span class="overload">[1/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -834,26 +759,19 @@ template&lt;class... Args&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::string_view&amp; stt::data::HttpStringUtil::getPara </td>
+          <td class="memname">static std::string &amp; stt::data::HttpStringUtil::getPara </td>
           <td>(</td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>url</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>url</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>para</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>para</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -871,7 +789,9 @@ template&lt;class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a7ca0971f2dfdf015c8cdd20177424ff4"></a>
+<a id="a51658be70d96f3a3a3a72819208129ec" name="a51658be70d96f3a3a3a72819208129ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51658be70d96f3a3a3a72819208129ec">&#9670;&#160;</a></span>getPara() <span class="overload">[2/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -879,26 +799,19 @@ template&lt;class... Args&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::string&amp; stt::data::HttpStringUtil::getPara </td>
+          <td class="memname">static std::string_view &amp; stt::data::HttpStringUtil::getPara </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>url</em>, </td>
+          <td class="paramtype">const std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>url</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>para</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>para</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -916,7 +829,9 @@ template&lt;class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a5d9894e4283bbd3acdfbcf65dc318b76"></a>
+<a id="a4f2d936c56846079bb56c36db351d690" name="a4f2d936c56846079bb56c36db351d690"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f2d936c56846079bb56c36db351d690">&#9670;&#160;</a></span>getPort()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -924,26 +839,19 @@ template&lt;class... Args&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static int&amp; stt::data::HttpStringUtil::getPort </td>
+          <td class="memname">static int &amp; stt::data::HttpStringUtil::getPort </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>url</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>url</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int &amp;&#160;</td>
-          <td class="paramname"><em>port</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">int &amp;</td>          <td class="paramname"><span class="paramname"><em>port</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -968,9 +876,8 @@ template&lt;class... Args&gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-制作者 &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.5
+制作者&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
 </small></address>
+</div><!-- doc-content -->
 </body>
 </html>

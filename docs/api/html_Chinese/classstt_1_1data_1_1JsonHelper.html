@@ -1,18 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.5"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>STTNet: stt::data::JsonHelper类 参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() { searchBox.OnSelectItem(0); });
-</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -20,9 +23,9 @@
 <div id="titlearea">
 <table cellspacing="0" cellpadding="0">
  <tbody>
- <tr style="height: 56px;">
-  <td style="padding-left: 0.5em;">
-   <div id="projectname">STTNet
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
    </div>
   </td>
  </tr>
@@ -30,55 +33,52 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.5 -->
+<!-- 制作者 Doxygen 1.13.2 -->
 <script type="text/javascript">
-var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
 </script>
-  <div id="navrow1" class="tabs">
-    <ul class="tablist">
-      <li><a href="index.html"><span>首页</span></a></li>
-      <li><a href="pages.html"><span>相关页面</span></a></li>
-      <li><a href="namespaces.html"><span>命名空间</span></a></li>
-      <li class="current"><a href="annotated.html"><span>类</span></a></li>
-      <li><a href="files.html"><span>文件</span></a></li>
-      <li>
-        <div id="MSearchBox" class="MSearchBoxInactive">
-        <span class="left">
-          <img id="MSearchSelect" src="search/mag_sel.png"
-               onmouseover="return searchBox.OnSearchSelectShow()"
-               onmouseout="return searchBox.OnSearchSelectHide()"
-               alt=""/>
-          <input type="text" id="MSearchField" value="搜索" accesskey="S"
-               onfocus="searchBox.OnSearchFieldFocus(true)" 
-               onblur="searchBox.OnSearchFieldFocus(false)" 
-               onkeyup="searchBox.OnSearchFieldChange(event)"/>
-          </span><span class="right">
-            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
-          </span>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div id="navrow2" class="tabs2">
-    <ul class="tablist">
-      <li><a href="annotated.html"><span>类列表</span></a></li>
-      <li><a href="classes.html"><span>类索引</span></a></li>
-      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
-      <li><a href="functions.html"><span>类成员</span></a></li>
-    </ul>
-  </div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索',false);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){ initResizable(false); });
+/* @license-end */
+</script>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>枚举</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>枚举值</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>页</a></div>
+</div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
-        name="MSearchResults" id="MSearchResults">
-</iframe>
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
 </div>
 
 <div id="nav-path" class="navpath">
@@ -86,65 +86,67 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <li class="navelem"><a class="el" href="namespacestt.html">stt</a></li><li class="navelem"><a class="el" href="namespacestt_1_1data.html">data</a></li><li class="navelem"><a class="el" href="classstt_1_1data_1_1JsonHelper.html">JsonHelper</a></li>  </ul>
 </div>
 </div><!-- top -->
+<div id="doc-content">
 <div class="header">
   <div class="summary">
 <a href="#pub-static-methods">静态 Public 成员函数</a> &#124;
 <a href="classstt_1_1data_1_1JsonHelper-members.html">所有成员列表</a>  </div>
-  <div class="headertitle">
-<div class="title">stt::data::JsonHelper类 参考</div>  </div>
+  <div class="headertitle"><div class="title">stt::data::JsonHelper类 参考</div></div>
 </div><!--header-->
 <div class="contents">
 
 <p>json数据操作类  
- <a href="classstt_1_1data_1_1JsonHelper.html#details">更多...</a></p>
+ <a href="#details">更多...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 静态 Public 成员函数</h2></td></tr>
-<tr class="memitem:a5198deea9a0dcddc31c4164bcbe0e637"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1JsonHelper.html#a5198deea9a0dcddc31c4164bcbe0e637">getValue</a> (const std::string &amp;oriStr, std::string &amp;result, const std::string &amp;type=&quot;value&quot;, const std::string &amp;name=&quot;a&quot;, const int &amp;num=0)</td></tr>
-<tr class="memdesc:a5198deea9a0dcddc31c4164bcbe0e637"><td class="mdescLeft">&#160;</td><td class="mdescRight">提取 JSON 字符串中指定字段的值或嵌套结构。  <a href="#a5198deea9a0dcddc31c4164bcbe0e637">更多...</a><br/></td></tr>
+<tr class="memitem:a5198deea9a0dcddc31c4164bcbe0e637" id="r_a5198deea9a0dcddc31c4164bcbe0e637"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5198deea9a0dcddc31c4164bcbe0e637">getValue</a> (const std::string &amp;oriStr, std::string &amp;result, const std::string &amp;type=&quot;value&quot;, const std::string &amp;name=&quot;a&quot;, const int &amp;num=0)</td></tr>
+<tr class="memdesc:a5198deea9a0dcddc31c4164bcbe0e637"><td class="mdescLeft">&#160;</td><td class="mdescRight">提取 JSON 字符串中指定字段的值或嵌套结构。  <br /></td></tr>
 <tr class="separator:a5198deea9a0dcddc31c4164bcbe0e637"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a416fa5e4965944ea9e4e9443170cae5f"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1JsonHelper.html#a416fa5e4965944ea9e4e9443170cae5f">toString</a> (const Json::Value &amp;val)</td></tr>
-<tr class="memdesc:a416fa5e4965944ea9e4e9443170cae5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">将 Json::Value 转换为字符串。  <a href="#a416fa5e4965944ea9e4e9443170cae5f">更多...</a><br/></td></tr>
+<tr class="memitem:a416fa5e4965944ea9e4e9443170cae5f" id="r_a416fa5e4965944ea9e4e9443170cae5f"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a416fa5e4965944ea9e4e9443170cae5f">toString</a> (const Json::Value &amp;val)</td></tr>
+<tr class="memdesc:a416fa5e4965944ea9e4e9443170cae5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">将 Json::Value 转换为字符串。  <br /></td></tr>
 <tr class="separator:a416fa5e4965944ea9e4e9443170cae5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e94bc57dcef5b5a0bd49d8a23ac5551"><td class="memItemLeft" align="right" valign="top">static Json::Value&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1JsonHelper.html#a1e94bc57dcef5b5a0bd49d8a23ac5551">toJsonArray</a> (const std::string &amp;str)</td></tr>
-<tr class="memdesc:a1e94bc57dcef5b5a0bd49d8a23ac5551"><td class="mdescLeft">&#160;</td><td class="mdescRight">解析 JSON 字符串为 Json::Value。  <a href="#a1e94bc57dcef5b5a0bd49d8a23ac5551">更多...</a><br/></td></tr>
+<tr class="memitem:a1e94bc57dcef5b5a0bd49d8a23ac5551" id="r_a1e94bc57dcef5b5a0bd49d8a23ac5551"><td class="memItemLeft" align="right" valign="top">static Json::Value&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e94bc57dcef5b5a0bd49d8a23ac5551">toJsonArray</a> (const std::string &amp;str)</td></tr>
+<tr class="memdesc:a1e94bc57dcef5b5a0bd49d8a23ac5551"><td class="mdescLeft">&#160;</td><td class="mdescRight">解析 JSON 字符串为 Json::Value。  <br /></td></tr>
 <tr class="separator:a1e94bc57dcef5b5a0bd49d8a23ac5551"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe9c549ce3e2d9428f30537b6aa61801"><td class="memTemplParams" colspan="2">template&lt;class T1 , class T2 &gt; </td></tr>
-<tr class="memitem:afe9c549ce3e2d9428f30537b6aa61801"><td class="memTemplItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1JsonHelper.html#afe9c549ce3e2d9428f30537b6aa61801">createJson</a> (T1 first, T2 second)</td></tr>
-<tr class="memdesc:afe9c549ce3e2d9428f30537b6aa61801"><td class="mdescLeft">&#160;</td><td class="mdescRight">创建仅包含一个键值对的 JSON 字符串。  <a href="#afe9c549ce3e2d9428f30537b6aa61801">更多...</a><br/></td></tr>
+<tr class="memitem:afe9c549ce3e2d9428f30537b6aa61801" id="r_afe9c549ce3e2d9428f30537b6aa61801"><td class="memTemplParams" colspan="2">template&lt;class T1, class T2&gt; </td></tr>
+<tr class="memitem:afe9c549ce3e2d9428f30537b6aa61801"><td class="memTemplItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#afe9c549ce3e2d9428f30537b6aa61801">createJson</a> (T1 first, T2 second)</td></tr>
+<tr class="memdesc:afe9c549ce3e2d9428f30537b6aa61801"><td class="mdescLeft">&#160;</td><td class="mdescRight">创建仅包含一个键值对的 JSON 字符串。  <br /></td></tr>
 <tr class="separator:afe9c549ce3e2d9428f30537b6aa61801"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7b102a30893577c6eb7bb2aff05b791"><td class="memTemplParams" colspan="2">template&lt;class T1 , class T2 , class... Args&gt; </td></tr>
-<tr class="memitem:ae7b102a30893577c6eb7bb2aff05b791"><td class="memTemplItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1JsonHelper.html#ae7b102a30893577c6eb7bb2aff05b791">createJson</a> (T1 first, T2 second, Args...args)</td></tr>
-<tr class="memdesc:ae7b102a30893577c6eb7bb2aff05b791"><td class="mdescLeft">&#160;</td><td class="mdescRight">创建多个键值对组成的 JSON 字符串（递归变参模板）。  <a href="#ae7b102a30893577c6eb7bb2aff05b791">更多...</a><br/></td></tr>
-<tr class="separator:ae7b102a30893577c6eb7bb2aff05b791"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21a540d41ee055d43fe24df288bb4074"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a21a540d41ee055d43fe24df288bb4074"><td class="memTemplItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1JsonHelper.html#a21a540d41ee055d43fe24df288bb4074">createArray</a> (T first)</td></tr>
-<tr class="memdesc:a21a540d41ee055d43fe24df288bb4074"><td class="mdescLeft">&#160;</td><td class="mdescRight">创建只包含一个元素的 JSON 数组字符串。  <a href="#a21a540d41ee055d43fe24df288bb4074">更多...</a><br/></td></tr>
+<tr class="memitem:ae05bc7aa49dc88be5e13a22f8487a4f1" id="r_ae05bc7aa49dc88be5e13a22f8487a4f1"><td class="memTemplParams" colspan="2">template&lt;class T1, class T2, class... Args&gt; </td></tr>
+<tr class="memitem:ae05bc7aa49dc88be5e13a22f8487a4f1"><td class="memTemplItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#ae05bc7aa49dc88be5e13a22f8487a4f1">createJson</a> (T1 first, T2 second, Args... args)</td></tr>
+<tr class="memdesc:ae05bc7aa49dc88be5e13a22f8487a4f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">创建多个键值对组成的 JSON 字符串（递归变参模板）。  <br /></td></tr>
+<tr class="separator:ae05bc7aa49dc88be5e13a22f8487a4f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21a540d41ee055d43fe24df288bb4074" id="r_a21a540d41ee055d43fe24df288bb4074"><td class="memTemplParams" colspan="2">template&lt;class T&gt; </td></tr>
+<tr class="memitem:a21a540d41ee055d43fe24df288bb4074"><td class="memTemplItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a21a540d41ee055d43fe24df288bb4074">createArray</a> (T first)</td></tr>
+<tr class="memdesc:a21a540d41ee055d43fe24df288bb4074"><td class="mdescLeft">&#160;</td><td class="mdescRight">创建只包含一个元素的 JSON 数组字符串。  <br /></td></tr>
 <tr class="separator:a21a540d41ee055d43fe24df288bb4074"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4eba2c0267494cdb5bb2d05d91aeca08"><td class="memTemplParams" colspan="2">template&lt;class T , class... Args&gt; </td></tr>
-<tr class="memitem:a4eba2c0267494cdb5bb2d05d91aeca08"><td class="memTemplItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1JsonHelper.html#a4eba2c0267494cdb5bb2d05d91aeca08">createArray</a> (T first, Args...args)</td></tr>
-<tr class="memdesc:a4eba2c0267494cdb5bb2d05d91aeca08"><td class="mdescLeft">&#160;</td><td class="mdescRight">创建多个元素组成的 JSON 数组字符串（递归变参模板）。  <a href="#a4eba2c0267494cdb5bb2d05d91aeca08">更多...</a><br/></td></tr>
-<tr class="separator:a4eba2c0267494cdb5bb2d05d91aeca08"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a34772c7681f10f1ab9c6a6be8f06af8d"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1JsonHelper.html#a34772c7681f10f1ab9c6a6be8f06af8d">jsonAdd</a> (const std::string &amp;a, const std::string &amp;b)</td></tr>
-<tr class="memdesc:a34772c7681f10f1ab9c6a6be8f06af8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">将两个 JSON 字符串拼接为一个有效的 JSON（适用于对象或数组拼接）。  <a href="#a34772c7681f10f1ab9c6a6be8f06af8d">更多...</a><br/></td></tr>
+<tr class="memitem:a734e32e1626282bb903623efbf1a7916" id="r_a734e32e1626282bb903623efbf1a7916"><td class="memTemplParams" colspan="2">template&lt;class T, class... Args&gt; </td></tr>
+<tr class="memitem:a734e32e1626282bb903623efbf1a7916"><td class="memTemplItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a734e32e1626282bb903623efbf1a7916">createArray</a> (T first, Args... args)</td></tr>
+<tr class="memdesc:a734e32e1626282bb903623efbf1a7916"><td class="mdescLeft">&#160;</td><td class="mdescRight">创建多个元素组成的 JSON 数组字符串（递归变参模板）。  <br /></td></tr>
+<tr class="separator:a734e32e1626282bb903623efbf1a7916"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34772c7681f10f1ab9c6a6be8f06af8d" id="r_a34772c7681f10f1ab9c6a6be8f06af8d"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a34772c7681f10f1ab9c6a6be8f06af8d">jsonAdd</a> (const std::string &amp;a, const std::string &amp;b)</td></tr>
+<tr class="memdesc:a34772c7681f10f1ab9c6a6be8f06af8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">将两个 JSON 字符串拼接为一个有效的 JSON（适用于对象或数组拼接）。  <br /></td></tr>
 <tr class="separator:a34772c7681f10f1ab9c6a6be8f06af8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9b3cb4750470c47bceb6d0c5a0a8115"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1JsonHelper.html#af9b3cb4750470c47bceb6d0c5a0a8115">jsonFormatify</a> (const std::string &amp;a, std::string &amp;b)</td></tr>
-<tr class="memdesc:af9b3cb4750470c47bceb6d0c5a0a8115"><td class="mdescLeft">&#160;</td><td class="mdescRight">将格式化后的 JSON 字符串去除缩进、空格等变成紧凑格式。  <a href="#af9b3cb4750470c47bceb6d0c5a0a8115">更多...</a><br/></td></tr>
-<tr class="separator:af9b3cb4750470c47bceb6d0c5a0a8115"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc3267d7d66111eb3bc6fc7e2c576353"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1JsonHelper.html#abc3267d7d66111eb3bc6fc7e2c576353">jsonToUTF8</a> (const std::string &amp;input, std::string &amp;output)</td></tr>
-<tr class="memdesc:abc3267d7d66111eb3bc6fc7e2c576353"><td class="mdescLeft">&#160;</td><td class="mdescRight">将 JSON 字符串中的  转换为 UTF-8 字符。  <a href="#abc3267d7d66111eb3bc6fc7e2c576353">更多...</a><br/></td></tr>
-<tr class="separator:abc3267d7d66111eb3bc6fc7e2c576353"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ae29bdd3607470f84372c23754195b8" id="r_a2ae29bdd3607470f84372c23754195b8"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2ae29bdd3607470f84372c23754195b8">jsonFormatify</a> (const std::string &amp;a, std::string &amp;b)</td></tr>
+<tr class="memdesc:a2ae29bdd3607470f84372c23754195b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">将格式化后的 JSON 字符串去除缩进、空格等变成紧凑格式。  <br /></td></tr>
+<tr class="separator:a2ae29bdd3607470f84372c23754195b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44538681a6fd9919f2dd42ba90da279d" id="r_a44538681a6fd9919f2dd42ba90da279d"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a44538681a6fd9919f2dd42ba90da279d">jsonToUTF8</a> (const std::string &amp;input, std::string &amp;output)</td></tr>
+<tr class="memdesc:a44538681a6fd9919f2dd42ba90da279d"><td class="mdescLeft">&#160;</td><td class="mdescRight">将 JSON 字符串中的 \uXXXX 转换为 UTF-8 字符。  <br /></td></tr>
+<tr class="separator:a44538681a6fd9919f2dd42ba90da279d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>json数据操作类 </p>
 </div><h2 class="groupheader">成员函数说明</h2>
-<a class="anchor" id="a21a540d41ee055d43fe24df288bb4074"></a>
+<a id="a21a540d41ee055d43fe24df288bb4074" name="a21a540d41ee055d43fe24df288bb4074"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21a540d41ee055d43fe24df288bb4074">&#9670;&#160;</a></span>createArray() <span class="overload">[1/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class T &gt; </div>
+template&lt;class T&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -152,14 +154,13 @@ template&lt;class T &gt; </div>
         <tr>
           <td class="memname">static std::string stt::data::JsonHelper::createArray </td>
           <td>(</td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>first</em></td><td>)</td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>first</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -176,11 +177,13 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a4eba2c0267494cdb5bb2d05d91aeca08"></a>
+<a id="a734e32e1626282bb903623efbf1a7916" name="a734e32e1626282bb903623efbf1a7916"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a734e32e1626282bb903623efbf1a7916">&#9670;&#160;</a></span>createArray() <span class="overload">[2/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class T , class... Args&gt; </div>
+template&lt;class T, class... Args&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -188,24 +191,17 @@ template&lt;class T , class... Args&gt; </div>
         <tr>
           <td class="memname">static std::string stt::data::JsonHelper::createArray </td>
           <td>(</td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>first</em>, </td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>first</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Args...&#160;</td>
-          <td class="paramname"><em>args</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">Args...</td>          <td class="paramname"><span class="paramname"><em>args</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -224,11 +220,13 @@ template&lt;class T , class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="afe9c549ce3e2d9428f30537b6aa61801"></a>
+<a id="afe9c549ce3e2d9428f30537b6aa61801" name="afe9c549ce3e2d9428f30537b6aa61801"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe9c549ce3e2d9428f30537b6aa61801">&#9670;&#160;</a></span>createJson() <span class="overload">[1/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class T1 , class T2 &gt; </div>
+template&lt;class T1, class T2&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -236,24 +234,17 @@ template&lt;class T1 , class T2 &gt; </div>
         <tr>
           <td class="memname">static std::string stt::data::JsonHelper::createJson </td>
           <td>(</td>
-          <td class="paramtype">T1&#160;</td>
-          <td class="paramname"><em>first</em>, </td>
+          <td class="paramtype">T1</td>          <td class="paramname"><span class="paramname"><em>first</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">T2&#160;</td>
-          <td class="paramname"><em>second</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">T2</td>          <td class="paramname"><span class="paramname"><em>second</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -272,11 +263,13 @@ template&lt;class T1 , class T2 &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ae7b102a30893577c6eb7bb2aff05b791"></a>
+<a id="ae05bc7aa49dc88be5e13a22f8487a4f1" name="ae05bc7aa49dc88be5e13a22f8487a4f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae05bc7aa49dc88be5e13a22f8487a4f1">&#9670;&#160;</a></span>createJson() <span class="overload">[2/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class T1 , class T2 , class... Args&gt; </div>
+template&lt;class T1, class T2, class... Args&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -284,30 +277,22 @@ template&lt;class T1 , class T2 , class... Args&gt; </div>
         <tr>
           <td class="memname">static std::string stt::data::JsonHelper::createJson </td>
           <td>(</td>
-          <td class="paramtype">T1&#160;</td>
-          <td class="paramname"><em>first</em>, </td>
+          <td class="paramtype">T1</td>          <td class="paramname"><span class="paramname"><em>first</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">T2&#160;</td>
-          <td class="paramname"><em>second</em>, </td>
+          <td class="paramtype">T2</td>          <td class="paramname"><span class="paramname"><em>second</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Args...&#160;</td>
-          <td class="paramname"><em>args</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">Args...</td>          <td class="paramname"><span class="paramname"><em>args</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -328,7 +313,9 @@ template&lt;class T1 , class T2 , class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a5198deea9a0dcddc31c4164bcbe0e637"></a>
+<a id="a5198deea9a0dcddc31c4164bcbe0e637" name="a5198deea9a0dcddc31c4164bcbe0e637"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5198deea9a0dcddc31c4164bcbe0e637">&#9670;&#160;</a></span>getValue()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -338,42 +325,32 @@ template&lt;class T1 , class T2 , class... Args&gt; </div>
         <tr>
           <td class="memname">static int stt::data::JsonHelper::getValue </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>oriStr</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>oriStr</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>result</em>, </td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>result</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>type</em> = <code>&quot;value&quot;</code>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>type</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;value&quot;</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>name</em> = <code>&quot;a&quot;</code>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;a&quot;</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>num</em> = <code>0</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>num</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -393,7 +370,9 @@ template&lt;class T1 , class T2 , class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a34772c7681f10f1ab9c6a6be8f06af8d"></a>
+<a id="a34772c7681f10f1ab9c6a6be8f06af8d" name="a34772c7681f10f1ab9c6a6be8f06af8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34772c7681f10f1ab9c6a6be8f06af8d">&#9670;&#160;</a></span>jsonAdd()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -403,24 +382,17 @@ template&lt;class T1 , class T2 , class... Args&gt; </div>
         <tr>
           <td class="memname">static std::string stt::data::JsonHelper::jsonAdd </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>a</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>a</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>b</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>b</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -437,7 +409,9 @@ template&lt;class T1 , class T2 , class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="af9b3cb4750470c47bceb6d0c5a0a8115"></a>
+<a id="a2ae29bdd3607470f84372c23754195b8" name="a2ae29bdd3607470f84372c23754195b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ae29bdd3607470f84372c23754195b8">&#9670;&#160;</a></span>jsonFormatify()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -445,26 +419,19 @@ template&lt;class T1 , class T2 , class... Args&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::string&amp; stt::data::JsonHelper::jsonFormatify </td>
+          <td class="memname">static std::string &amp; stt::data::JsonHelper::jsonFormatify </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>a</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>a</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>b</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>b</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -481,7 +448,9 @@ template&lt;class T1 , class T2 , class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="abc3267d7d66111eb3bc6fc7e2c576353"></a>
+<a id="a44538681a6fd9919f2dd42ba90da279d" name="a44538681a6fd9919f2dd42ba90da279d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44538681a6fd9919f2dd42ba90da279d">&#9670;&#160;</a></span>jsonToUTF8()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -489,31 +458,24 @@ template&lt;class T1 , class T2 , class... Args&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::string&amp; stt::data::JsonHelper::jsonToUTF8 </td>
+          <td class="memname">static std::string &amp; stt::data::JsonHelper::jsonToUTF8 </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>input</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>input</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>output</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>output</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>将 JSON 字符串中的  转换为 UTF-8 字符。 </p>
+<p>将 JSON 字符串中的 \uXXXX 转换为 UTF-8 字符。 </p>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
     <tr><td class="paramname">input</td><td>含有 Unicode 编码的 JSON 字符串。 </td></tr>
@@ -525,7 +487,9 @@ template&lt;class T1 , class T2 , class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a1e94bc57dcef5b5a0bd49d8a23ac5551"></a>
+<a id="a1e94bc57dcef5b5a0bd49d8a23ac5551" name="a1e94bc57dcef5b5a0bd49d8a23ac5551"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e94bc57dcef5b5a0bd49d8a23ac5551">&#9670;&#160;</a></span>toJsonArray()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -535,14 +499,13 @@ template&lt;class T1 , class T2 , class... Args&gt; </div>
         <tr>
           <td class="memname">static Json::Value stt::data::JsonHelper::toJsonArray </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>str</em></td><td>)</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>str</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -558,7 +521,9 @@ template&lt;class T1 , class T2 , class... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a416fa5e4965944ea9e4e9443170cae5f"></a>
+<a id="a416fa5e4965944ea9e4e9443170cae5f" name="a416fa5e4965944ea9e4e9443170cae5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a416fa5e4965944ea9e4e9443170cae5f">&#9670;&#160;</a></span>toString()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -568,14 +533,13 @@ template&lt;class T1 , class T2 , class... Args&gt; </div>
         <tr>
           <td class="memname">static std::string stt::data::JsonHelper::toString </td>
           <td>(</td>
-          <td class="paramtype">const Json::Value &amp;&#160;</td>
-          <td class="paramname"><em>val</em></td><td>)</td>
+          <td class="paramtype">const Json::Value &amp;</td>          <td class="paramname"><span class="paramname"><em>val</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -597,9 +561,8 @@ template&lt;class T1 , class T2 , class... Args&gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-制作者 &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.5
+制作者&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
 </small></address>
+</div><!-- doc-content -->
 </body>
 </html>

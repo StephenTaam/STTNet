@@ -1,0 +1,39 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        build:
+          - name: release
+            type: Release
+            sanitizers: OFF
+          - name: sanitizers
+            type: Debug
+            sanitizers: ON
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build doxygen libjsoncpp-dev libssl-dev
+      - name: Configure
+        run: >-
+          cmake -S . -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=${{ matrix.build.type }}
+          -DSTTNET_BUILD_DOCS=ON
+          -DSTTNET_ENABLE_SANITIZERS=${{ matrix.build.sanitizers }}
+      - name: Build
+        run: cmake --build build --parallel 2
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+      - name: Validate Doxygen
+        if: matrix.build.name == 'release'
+        run: cmake --build build --target sttnet_docs
+      - name: HTTP smoke test
+        if: matrix.build.name == 'release'
+        run: bash tests/graceful_shutdown.sh ./build/sttnet_example

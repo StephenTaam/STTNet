@@ -1,18 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.5"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>STTNet: stt::network 命名空间参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() { searchBox.OnSelectItem(0); });
-</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -20,9 +23,9 @@
 <div id="titlearea">
 <table cellspacing="0" cellpadding="0">
  <tbody>
- <tr style="height: 56px;">
-  <td style="padding-left: 0.5em;">
-   <div id="projectname">STTNet
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
    </div>
   </td>
  </tr>
@@ -30,53 +33,52 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.5 -->
+<!-- 制作者 Doxygen 1.13.2 -->
 <script type="text/javascript">
-var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
 </script>
-  <div id="navrow1" class="tabs">
-    <ul class="tablist">
-      <li><a href="index.html"><span>首页</span></a></li>
-      <li><a href="pages.html"><span>相关页面</span></a></li>
-      <li class="current"><a href="namespaces.html"><span>命名空间</span></a></li>
-      <li><a href="annotated.html"><span>类</span></a></li>
-      <li><a href="files.html"><span>文件</span></a></li>
-      <li>
-        <div id="MSearchBox" class="MSearchBoxInactive">
-        <span class="left">
-          <img id="MSearchSelect" src="search/mag_sel.png"
-               onmouseover="return searchBox.OnSearchSelectShow()"
-               onmouseout="return searchBox.OnSearchSelectHide()"
-               alt=""/>
-          <input type="text" id="MSearchField" value="搜索" accesskey="S"
-               onfocus="searchBox.OnSearchFieldFocus(true)" 
-               onblur="searchBox.OnSearchFieldFocus(false)" 
-               onkeyup="searchBox.OnSearchFieldChange(event)"/>
-          </span><span class="right">
-            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
-          </span>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div id="navrow2" class="tabs2">
-    <ul class="tablist">
-      <li><a href="namespaces.html"><span>命名空间列表</span></a></li>
-      <li><a href="namespacemembers.html"><span>命名空间成员</span></a></li>
-    </ul>
-  </div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索',false);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){ initResizable(false); });
+/* @license-end */
+</script>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>枚举</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>枚举值</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>页</a></div>
+</div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
-        name="MSearchResults" id="MSearchResults">
-</iframe>
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
 </div>
 
 <div id="nav-path" class="navpath">
@@ -84,88 +86,99 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <li class="navelem"><a class="el" href="namespacestt.html">stt</a></li><li class="navelem"><a class="el" href="namespacestt_1_1network.html">network</a></li>  </ul>
 </div>
 </div><!-- top -->
+<div id="doc-content">
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">类</a> &#124;
 <a href="#enum-members">枚举</a>  </div>
-  <div class="headertitle">
-<div class="title">stt::network 命名空间参考</div>  </div>
+  <div class="headertitle"><div class="title">stt::network 命名空间参考</div></div>
 </div><!--header-->
 <div class="contents">
 
 <p>网络框架，协议，通信，io多路复用相关  
 <a href="#details">更多...</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 类</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">tcp协议的套接字操作类  <a href="classstt_1_1network_1_1TcpFDHandler.html#details">更多...</a><br/></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpClient.html">TcpClient</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">tcp协议客户端操作类  <a href="classstt_1_1network_1_1TcpClient.html#details">更多...</a><br/></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html">HttpClient</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Http/Https客户端操作类  <a href="classstt_1_1network_1_1HttpClient.html#details">更多...</a><br/></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1ConnectionWriteState.html">ConnectionWriteState</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">单个服务端连接的有界异步发送状态。  <a href="structstt_1_1network_1_1ConnectionWriteState.html#details">更多...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1EpollSingle.html">EpollSingle</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">用epoll监听单个句柄  <a href="classstt_1_1network_1_1EpollSingle.html#details">更多...</a><br/></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">用独立、可 join 的 Reactor 线程监听单个 Linux 文件描述符。  <a href="classstt_1_1network_1_1EpollSingle.html#details">更多...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html">WebSocketClient</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Websocket客户端操作的类 -如果需要重新设置TLS/Https加密的证书，目前需要销毁对象后重新构造 底层TCP默认是阻塞的  <a href="classstt_1_1network_1_1WebSocketClient.html#details">更多...</a><br/></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpClient.html">HttpClient</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Http/Https客户端操作类  <a href="classstt_1_1network_1_1HttpClient.html#details">更多...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存HTTP/HTTPS请求信息的结构体  <a href="structstt_1_1network_1_1HttpRequestInformation.html#details">更多...</a><br/></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">解析，响应Http/https请求的操作类 仅传入套接字，然后使用这个类进行Http的操作  <a href="classstt_1_1network_1_1HttpServerFDHandler.html#details">更多...</a><br/></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存客户端WS/WSS请求信息的结构体  <a href="structstt_1_1network_1_1WebSocketFDInformation.html#details">更多...</a><br/></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpInformation.html">TcpInformation</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存Tcp客户端的信息  <a href="structstt_1_1network_1_1TcpInformation.html#details">更多...</a><br/></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存底层基础Tcp通道信息的结构体  <a href="structstt_1_1network_1_1TcpFDInf.html#details">更多...</a><br/></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WorkerMessage.html">WorkerMessage</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">工作现场完成任务后压入完成队列的数据结构  <a href="structstt_1_1network_1_1WorkerMessage.html#details">更多...</a><br/></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html">TcpServer</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tcp服务端类  <a href="classstt_1_1network_1_1TcpServer.html#details">更多...</a><br/></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存HTTP/HTTPS请求信息的结构体  <a href="structstt_1_1network_1_1HttpRequestInformation.html#details">更多...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServer.html">HttpServer</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Http/HttpServer 服务端操作类  <a href="classstt_1_1network_1_1HttpServer.html#details">更多...</a><br/></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Http/HttpServer 服务端操作类  <a href="classstt_1_1network_1_1HttpServer.html#details">更多...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">WebSocket协议的操作类 仅传入套接字，然后使用这个类进行WebSocket的操作  <a href="classstt_1_1network_1_1WebSocketServerFDHandler.html#details">更多...</a><br/></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">解析，响应Http/https请求的操作类 仅传入套接字，然后使用这个类进行Http的操作  <a href="classstt_1_1network_1_1HttpServerFDHandler.html#details">更多...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html">WebSocketServer</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">WebSocketServer服务端操作类  <a href="classstt_1_1network_1_1WebSocketServer.html#details">更多...</a><br/></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1SendReadyMessage.html">SendReadyMessage</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">跨线程通知 Reactor 某连接有待发数据的轻量消息。  <a href="structstt_1_1network_1_1SendReadyMessage.html#details">更多...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpFDHandler.html">UdpFDHandler</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">UDP操作的类 传入套接字进行UDP协议的操作  <a href="classstt_1_1network_1_1UdpFDHandler.html#details">更多...</a><br/></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1ServerMetricsSnapshot.html">ServerMetricsSnapshot</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classstt_1_1network_1_1TcpServer.html" title="Tcp服务端类">TcpServer</a> 运行指标的无锁快照。  <a href="structstt_1_1network_1_1ServerMetricsSnapshot.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpClient.html">TcpClient</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">tcp协议客户端操作类  <a href="classstt_1_1network_1_1TcpClient.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpFDHandler.html">TcpFDHandler</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">tcp协议的套接字操作类  <a href="classstt_1_1network_1_1TcpFDHandler.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpFDInf.html">TcpFDInf</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存底层基础Tcp通道信息的结构体  <a href="structstt_1_1network_1_1TcpFDInf.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1TcpInformation.html">TcpInformation</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存Tcp客户端的信息  <a href="structstt_1_1network_1_1TcpInformation.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpServer.html">TcpServer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tcp服务端类  <a href="classstt_1_1network_1_1TcpServer.html#details">更多...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpClient.html">UdpClient</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">udp客户端的操作类  <a href="classstt_1_1network_1_1UdpClient.html#details">更多...</a><br/></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">udp客户端的操作类  <a href="classstt_1_1network_1_1UdpClient.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpFDHandler.html">UdpFDHandler</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">UDP操作的类 传入套接字进行UDP协议的操作  <a href="classstt_1_1network_1_1UdpFDHandler.html#details">更多...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1UdpServer.html">UdpServer</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">udp服务端的操作类  <a href="classstt_1_1network_1_1UdpServer.html#details">更多...</a><br/></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">udp服务端的操作类  <a href="classstt_1_1network_1_1UdpServer.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketClient.html">WebSocketClient</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Websocket客户端操作的类 -如果需要重新设置TLS/Https加密的证书，目前需要销毁对象后重新构造 底层TCP默认是阻塞的  <a href="classstt_1_1network_1_1WebSocketClient.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存客户端WS/WSS请求信息的结构体  <a href="structstt_1_1network_1_1WebSocketFDInformation.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServer.html">WebSocketServer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">WebSocketServer服务端操作类  <a href="classstt_1_1network_1_1WebSocketServer.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">WebSocket协议的操作类 仅传入套接字，然后使用这个类进行WebSocket的操作  <a href="classstt_1_1network_1_1WebSocketServerFDHandler.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WorkerMessage.html">WorkerMessage</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">工作现场完成任务后压入完成队列的数据结构  <a href="structstt_1_1network_1_1WorkerMessage.html#details">更多...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 枚举</h2></td></tr>
-<tr class="memitem:a2de10f23ed7aa5e5ca07d6fb2a11eaad"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1network.html#a2de10f23ed7aa5e5ca07d6fb2a11eaad">TLSState</a> : uint8_t { <a class="el" href="namespacestt_1_1network.html#a2de10f23ed7aa5e5ca07d6fb2a11eaadab50339a10e1de285ac99d4c3990b8693">TLSState::NONE</a> = 0, 
-<a class="el" href="namespacestt_1_1network.html#a2de10f23ed7aa5e5ca07d6fb2a11eaadadab8e39d14f245d48fad05ee46d7be9e">TLSState::HANDSHAKING</a>, 
-<a class="el" href="namespacestt_1_1network.html#a2de10f23ed7aa5e5ca07d6fb2a11eaada7640f170af693e00a6c91df543aa2b76">TLSState::ESTABLISHED</a>, 
-<a class="el" href="namespacestt_1_1network.html#a2de10f23ed7aa5e5ca07d6fb2a11eaadabb1ca97ec761fc37101737ba0aa2e7c5">TLSState::ERROR</a>
+<tr class="memitem:a2de10f23ed7aa5e5ca07d6fb2a11eaad" id="r_a2de10f23ed7aa5e5ca07d6fb2a11eaad"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2de10f23ed7aa5e5ca07d6fb2a11eaad">TLSState</a> : uint8_t { <a class="el" href="#a2de10f23ed7aa5e5ca07d6fb2a11eaadab50339a10e1de285ac99d4c3990b8693">NONE</a> = 0
+, <a class="el" href="#a2de10f23ed7aa5e5ca07d6fb2a11eaadadab8e39d14f245d48fad05ee46d7be9e">HANDSHAKING</a>
+, <a class="el" href="#a2de10f23ed7aa5e5ca07d6fb2a11eaada7640f170af693e00a6c91df543aa2b76">ESTABLISHED</a>
+, <a class="el" href="#a2de10f23ed7aa5e5ca07d6fb2a11eaadabb1ca97ec761fc37101737ba0aa2e7c5">ERROR</a>
  }</td></tr>
 <tr class="separator:a2de10f23ed7aa5e5ca07d6fb2a11eaad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>网络框架，协议，通信，io多路复用相关 </p>
 </div><h2 class="groupheader">枚举类型说明</h2>
-<a class="anchor" id="a2de10f23ed7aa5e5ca07d6fb2a11eaad"></a>
+<a id="a2de10f23ed7aa5e5ca07d6fb2a11eaad" name="a2de10f23ed7aa5e5ca07d6fb2a11eaad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2de10f23ed7aa5e5ca07d6fb2a11eaad">&#9670;&#160;</a></span>TLSState</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -173,24 +186,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="namespacestt_1_1network.html#a2de10f23ed7aa5e5ca07d6fb2a11eaad">stt::network::TLSState</a> : uint8_t</td>
+          <td class="memname">enum class <a class="el" href="#a2de10f23ed7aa5e5ca07d6fb2a11eaad">stt::network::TLSState</a> : uint8_t</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+<span class="mlabels"><span class="mlabel strong">strong</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">枚举值</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a2de10f23ed7aa5e5ca07d6fb2a11eaadab50339a10e1de285ac99d4c3990b8693"></a>NONE</em>&nbsp;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a2de10f23ed7aa5e5ca07d6fb2a11eaadadab8e39d14f245d48fad05ee46d7be9e"></a>HANDSHAKING</em>&nbsp;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a2de10f23ed7aa5e5ca07d6fb2a11eaada7640f170af693e00a6c91df543aa2b76"></a>ESTABLISHED</em>&nbsp;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a2de10f23ed7aa5e5ca07d6fb2a11eaadabb1ca97ec761fc37101737ba0aa2e7c5"></a>ERROR</em>&nbsp;</td><td class="fielddoc">
-</td></tr>
+<tr><th colspan="2">枚举值</th></tr><tr><td class="fieldname"><a id="a2de10f23ed7aa5e5ca07d6fb2a11eaadab50339a10e1de285ac99d4c3990b8693" name="a2de10f23ed7aa5e5ca07d6fb2a11eaadab50339a10e1de285ac99d4c3990b8693"></a>NONE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a2de10f23ed7aa5e5ca07d6fb2a11eaadadab8e39d14f245d48fad05ee46d7be9e" name="a2de10f23ed7aa5e5ca07d6fb2a11eaadadab8e39d14f245d48fad05ee46d7be9e"></a>HANDSHAKING&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a2de10f23ed7aa5e5ca07d6fb2a11eaada7640f170af693e00a6c91df543aa2b76" name="a2de10f23ed7aa5e5ca07d6fb2a11eaada7640f170af693e00a6c91df543aa2b76"></a>ESTABLISHED&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a2de10f23ed7aa5e5ca07d6fb2a11eaadabb1ca97ec761fc37101737ba0aa2e7c5" name="a2de10f23ed7aa5e5ca07d6fb2a11eaadabb1ca97ec761fc37101737ba0aa2e7c5"></a>ERROR&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
@@ -198,9 +207,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-制作者 &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.5
+制作者&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
 </small></address>
+</div><!-- doc-content -->
 </body>
 </html>

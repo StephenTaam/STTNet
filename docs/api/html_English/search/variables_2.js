@@ -1,13 +1,20 @@
 var searchData=
 [
-  ['che',['che',['../classstt_1_1file_1_1File.html#aa51ded9dfaa3b1413fe90945a02aac1d',1,'stt::file::File']]],
-  ['checkfrequency',['checkFrequency',['../classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81',1,'stt::network::TcpServer']]],
-  ['clientfd',['clientfd',['../classstt_1_1network_1_1TcpServer.html#ab1f8c4b62b611e6557e9e52f35e8e082',1,'stt::network::TcpServer']]],
-  ['close',['close',['../structstt_1_1network_1_1QueueFD.html#a4e1703e1b1ef7c242202c59410a1f845',1,'stt::network::QueueFD']]],
-  ['closeflag',['closeflag',['../structstt_1_1network_1_1WebSocketFDInformation.html#a1a19058806c56ca8eb8b292c173d4bb6',1,'stt::network::WebSocketFDInformation']]],
-  ['connection',['connection',['../structstt_1_1security_1_1IPInformation.html#a22cb8aa50f4271fd9eb20f1b93ba4f74',1,'stt::security::IPInformation']]],
-  ['connectionlimiter',['connectionLimiter',['../classstt_1_1network_1_1TcpServer.html#a879f386e01460ecd71f70ea13a725019',1,'stt::network::TcpServer']]],
-  ['consumernum',['consumerNum',['../classstt_1_1network_1_1TcpServer.html#a6529b1505d47bc417f4ff614e7d70dfd',1,'stt::network::TcpServer']]],
-  ['ctx',['ctx',['../classstt_1_1network_1_1TcpServer.html#aa26712d21ba87595fa4f6b4a108e126b',1,'stt::network::TcpServer']]],
-  ['cv',['cv',['../classstt_1_1network_1_1TcpServer.html#a542f5eb7a7fa5d644886dee30d265267',1,'stt::network::TcpServer']]]
+  ['che_0',['che',['../classstt_1_1file_1_1File.html#aa51ded9dfaa3b1413fe90945a02aac1d',1,'stt::file::File']]],
+  ['checkfrequency_1',['checkFrequency',['../classstt_1_1network_1_1TcpServer.html#aedc126014068776e3f9cf5da4b14bb81',1,'stt::network::TcpServer']]],
+  ['clientfd_2',['clientfd',['../classstt_1_1network_1_1TcpServer.html#a3c0e79a422e5bdec321e029da0bd8c84',1,'stt::network::TcpServer']]],
+  ['close_5fafter_5fflush_3',['close_after_flush',['../structstt_1_1network_1_1ConnectionWriteState.html#a89a3e0e8728fbc3f42c0da95a19fe0d4',1,'stt::network::ConnectionWriteState']]],
+  ['close_5frequested_4',['close_requested',['../structstt_1_1network_1_1ConnectionWriteState.html#abfaa3ef5d0389962adceb8e630705ece',1,'stt::network::ConnectionWriteState']]],
+  ['closed_5',['closed',['../structstt_1_1network_1_1ConnectionWriteState.html#aa49f998c7ab88c1e1e77ac0485778af0',1,'stt::network::ConnectionWriteState']]],
+  ['closed_5fconnections_6',['closed_connections',['../structstt_1_1network_1_1ServerMetricsSnapshot.html#a6714980d286f25ee65884892f9b4718a',1,'stt::network::ServerMetricsSnapshot']]],
+  ['closeflag_7',['closeflag',['../structstt_1_1network_1_1WebSocketFDInformation.html#a1a19058806c56ca8eb8b292c173d4bb6',1,'stt::network::WebSocketFDInformation']]],
+  ['closing_8',['closing',['../structstt_1_1network_1_1TcpFDInf.html#a736ab95d5edfe4e845f4d567b64f0137',1,'stt::network::TcpFDInf']]],
+  ['connection_5fobj_5ffd_9',['connection_obj_fd',['../structstt_1_1network_1_1HttpRequestInformation.html#a7654759c014a9841b27d24072f08687b',1,'stt::network::HttpRequestInformation::connection_obj_fd'],['../structstt_1_1network_1_1WebSocketFDInformation.html#afe2932043af4ab420a9630d213db35bc',1,'stt::network::WebSocketFDInformation::connection_obj_fd'],['../structstt_1_1network_1_1TcpInformation.html#a55361c34ef092962fb5b5b863c126841',1,'stt::network::TcpInformation::connection_obj_fd'],['../structstt_1_1network_1_1ConnectionWriteState.html#a4a1bb0c08ade7695d03b2614b929dab4',1,'stt::network::ConnectionWriteState::connection_obj_fd'],['../structstt_1_1network_1_1SendReadyMessage.html#a58ad40d43008736187fa98678249f30b',1,'stt::network::SendReadyMessage::connection_obj_fd'],['../structstt_1_1network_1_1TcpFDInf.html#ae1bab0e34c783259e783784cdb9c8811',1,'stt::network::TcpFDInf::connection_obj_fd'],['../structstt_1_1network_1_1WorkerMessage.html#aa209e6ccae93968907aae9b82b421551',1,'stt::network::WorkerMessage::connection_obj_fd'],['../classstt_1_1network_1_1TcpServer.html#a01cf3c8ae704de7b4c035ec9d80990c6',1,'stt::network::TcpServer::connection_obj_fd']]],
+  ['connectionlimiter_10',['connectionLimiter',['../classstt_1_1network_1_1TcpServer.html#a879f386e01460ecd71f70ea13a725019',1,'stt::network::TcpServer']]],
+  ['connectionsecs_11',['connectionSecs',['../classstt_1_1network_1_1TcpServer.html#a6e0c1e70071e7f08a449860bcc3011e8',1,'stt::network::TcpServer']]],
+  ['connectiontimes_12',['connectionTimes',['../classstt_1_1network_1_1TcpServer.html#a60b0ef61057dbda029acef08ed6fed00',1,'stt::network::TcpServer']]],
+  ['connectrate_13',['connectRate',['../structstt_1_1security_1_1IPInformation.html#ad373ab2e43a107f63d44e99beaf47b2f',1,'stt::security::IPInformation']]],
+  ['conns_14',['conns',['../structstt_1_1security_1_1IPInformation.html#a64849d02dd9da2a5cc260e8db2cc6fe8',1,'stt::security::IPInformation']]],
+  ['counter_15',['counter',['../structstt_1_1security_1_1RateState.html#aadb7f1612649338b2a10fb361a85e3ed',1,'stt::security::RateState']]],
+  ['ctx_16',['ctx',['../structstt_1_1network_1_1HttpRequestInformation.html#a07e84d8af95db24ecbc8e059b0cead17',1,'stt::network::HttpRequestInformation::ctx'],['../structstt_1_1network_1_1WebSocketFDInformation.html#a108c4ec8de1ad8882c390522656abaaa',1,'stt::network::WebSocketFDInformation::ctx'],['../structstt_1_1network_1_1TcpInformation.html#a613b41c84de5379edb6b0230d7b583fa',1,'stt::network::TcpInformation::ctx'],['../classstt_1_1network_1_1TcpServer.html#aa26712d21ba87595fa4f6b4a108e126b',1,'stt::network::TcpServer::ctx']]]
 ];

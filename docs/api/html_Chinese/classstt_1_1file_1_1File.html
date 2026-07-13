@@ -1,18 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.5"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>STTNet: stt::file::File类 参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() { searchBox.OnSelectItem(0); });
-</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -20,9 +23,9 @@
 <div id="titlearea">
 <table cellspacing="0" cellpadding="0">
  <tbody>
- <tr style="height: 56px;">
-  <td style="padding-left: 0.5em;">
-   <div id="projectname">STTNet
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
    </div>
   </td>
  </tr>
@@ -30,55 +33,52 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.5 -->
+<!-- 制作者 Doxygen 1.13.2 -->
 <script type="text/javascript">
-var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
 </script>
-  <div id="navrow1" class="tabs">
-    <ul class="tablist">
-      <li><a href="index.html"><span>首页</span></a></li>
-      <li><a href="pages.html"><span>相关页面</span></a></li>
-      <li><a href="namespaces.html"><span>命名空间</span></a></li>
-      <li class="current"><a href="annotated.html"><span>类</span></a></li>
-      <li><a href="files.html"><span>文件</span></a></li>
-      <li>
-        <div id="MSearchBox" class="MSearchBoxInactive">
-        <span class="left">
-          <img id="MSearchSelect" src="search/mag_sel.png"
-               onmouseover="return searchBox.OnSearchSelectShow()"
-               onmouseout="return searchBox.OnSearchSelectHide()"
-               alt=""/>
-          <input type="text" id="MSearchField" value="搜索" accesskey="S"
-               onfocus="searchBox.OnSearchFieldFocus(true)" 
-               onblur="searchBox.OnSearchFieldFocus(false)" 
-               onkeyup="searchBox.OnSearchFieldChange(event)"/>
-          </span><span class="right">
-            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
-          </span>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div id="navrow2" class="tabs2">
-    <ul class="tablist">
-      <li><a href="annotated.html"><span>类列表</span></a></li>
-      <li><a href="classes.html"><span>类索引</span></a></li>
-      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
-      <li><a href="functions.html"><span>类成员</span></a></li>
-    </ul>
-  </div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索',false);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){ initResizable(false); });
+/* @license-end */
+</script>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>枚举</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>枚举值</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>页</a></div>
+</div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
-        name="MSearchResults" id="MSearchResults">
-</iframe>
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
 </div>
 
 <div id="nav-path" class="navpath">
@@ -86,19 +86,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <li class="navelem"><a class="el" href="namespacestt.html">stt</a></li><li class="navelem"><a class="el" href="namespacestt_1_1file.html">file</a></li><li class="navelem"><a class="el" href="classstt_1_1file_1_1File.html">File</a></li>  </ul>
 </div>
 </div><!-- top -->
+<div id="doc-content">
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public 成员函数</a> &#124;
 <a href="#pro-attribs">Protected 属性</a> &#124;
 <a href="#pro-static-attribs">静态 Protected 属性</a> &#124;
 <a href="classstt_1_1file_1_1File-members.html">所有成员列表</a>  </div>
-  <div class="headertitle">
-<div class="title">stt::file::File类 参考</div>  </div>
+  <div class="headertitle"><div class="title">stt::file::File类 参考</div></div>
 </div><!--header-->
 <div class="contents">
 
 <p>读写磁盘文件的类  
- <a href="classstt_1_1file_1_1File.html#details">更多...</a></p>
+ <a href="#details">更多...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -107,128 +107,127 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
  <div class="center">
   <img src="classstt_1_1file_1_1File.png" usemap="#stt::file::File_map" alt=""/>
   <map id="stt::file::File_map" name="stt::file::File_map">
-<area href="classstt_1_1file_1_1FileTool.html" title="提供文件操作的静态函数工具类 " alt="stt::file::FileTool" shape="rect" coords="0,0,98,24"/>
-<area href="classstt_1_1file_1_1LogFile.html" title="日志文件操作类 " alt="stt::file::LogFile" shape="rect" coords="0,112,98,136"/>
-</map>
- </div></div>
+<area href="classstt_1_1file_1_1FileTool.html" title="提供文件操作的静态函数工具类" alt="stt::file::FileTool" shape="rect" coords="0,0,98,24"/>
+<area href="classstt_1_1file_1_1LogFile.html" title="日志文件操作类" alt="stt::file::LogFile" shape="rect" coords="0,112,98,136"/>
+  </map>
+</div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public 成员函数</h2></td></tr>
-<tr class="memitem:a00aa9317ef7c1213baadcbd3f3485430"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a00aa9317ef7c1213baadcbd3f3485430">openFile</a> (const std::string &amp;fileName, const bool &amp;create=true, const int &amp;multiple=0, const size_t &amp;size=0, const mode_t &amp;mode=0666)</td></tr>
-<tr class="memdesc:a00aa9317ef7c1213baadcbd3f3485430"><td class="mdescLeft">&#160;</td><td class="mdescRight">打开文件  <a href="#a00aa9317ef7c1213baadcbd3f3485430">更多...</a><br/></td></tr>
+<tr class="memitem:a00aa9317ef7c1213baadcbd3f3485430" id="r_a00aa9317ef7c1213baadcbd3f3485430"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00aa9317ef7c1213baadcbd3f3485430">openFile</a> (const std::string &amp;fileName, const bool &amp;create=true, const int &amp;multiple=0, const size_t &amp;size=0, const mode_t &amp;mode=0666)</td></tr>
+<tr class="memdesc:a00aa9317ef7c1213baadcbd3f3485430"><td class="mdescLeft">&#160;</td><td class="mdescRight">打开文件  <br /></td></tr>
 <tr class="separator:a00aa9317ef7c1213baadcbd3f3485430"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a246d6c564f1a85689c41a4992a788825"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a246d6c564f1a85689c41a4992a788825">closeFile</a> (const bool &amp;del=false)</td></tr>
-<tr class="memdesc:a246d6c564f1a85689c41a4992a788825"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭已打开了的文件  <a href="#a246d6c564f1a85689c41a4992a788825">更多...</a><br/></td></tr>
+<tr class="memitem:a246d6c564f1a85689c41a4992a788825" id="r_a246d6c564f1a85689c41a4992a788825"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a246d6c564f1a85689c41a4992a788825">closeFile</a> (const bool &amp;del=false)</td></tr>
+<tr class="memdesc:a246d6c564f1a85689c41a4992a788825"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭已打开了的文件  <br /></td></tr>
 <tr class="separator:a246d6c564f1a85689c41a4992a788825"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a80729e4153b97094867efb4de281ffa3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a80729e4153b97094867efb4de281ffa3">~File</a> ()</td></tr>
-<tr class="memdesc:a80729e4153b97094867efb4de281ffa3"><td class="mdescLeft">&#160;</td><td class="mdescRight">析构函数  <a href="#a80729e4153b97094867efb4de281ffa3">更多...</a><br/></td></tr>
+<tr class="memitem:a80729e4153b97094867efb4de281ffa3" id="r_a80729e4153b97094867efb4de281ffa3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80729e4153b97094867efb4de281ffa3">~File</a> ()</td></tr>
+<tr class="memdesc:a80729e4153b97094867efb4de281ffa3"><td class="mdescLeft">&#160;</td><td class="mdescRight">析构函数  <br /></td></tr>
 <tr class="separator:a80729e4153b97094867efb4de281ffa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6fb0b48e08c4dd5978affc7f712c56ea"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a6fb0b48e08c4dd5978affc7f712c56ea">isOpen</a> ()</td></tr>
-<tr class="memdesc:a6fb0b48e08c4dd5978affc7f712c56ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">判断对象是否打开了文件  <a href="#a6fb0b48e08c4dd5978affc7f712c56ea">更多...</a><br/></td></tr>
+<tr class="memitem:a6fb0b48e08c4dd5978affc7f712c56ea" id="r_a6fb0b48e08c4dd5978affc7f712c56ea"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6fb0b48e08c4dd5978affc7f712c56ea">isOpen</a> ()</td></tr>
+<tr class="memdesc:a6fb0b48e08c4dd5978affc7f712c56ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">判断对象是否打开了文件  <br /></td></tr>
 <tr class="separator:a6fb0b48e08c4dd5978affc7f712c56ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aead14862f08ebf1bb6828d030a506eb3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#aead14862f08ebf1bb6828d030a506eb3">isBinary</a> ()</td></tr>
-<tr class="memdesc:aead14862f08ebf1bb6828d030a506eb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">判断对象是否以二进制模式打开文件  <a href="#aead14862f08ebf1bb6828d030a506eb3">更多...</a><br/></td></tr>
+<tr class="memitem:aead14862f08ebf1bb6828d030a506eb3" id="r_aead14862f08ebf1bb6828d030a506eb3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aead14862f08ebf1bb6828d030a506eb3">isBinary</a> ()</td></tr>
+<tr class="memdesc:aead14862f08ebf1bb6828d030a506eb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">判断对象是否以二进制模式打开文件  <br /></td></tr>
 <tr class="separator:aead14862f08ebf1bb6828d030a506eb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ecefe63820015eda8f43b70e38a3cc5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a2ecefe63820015eda8f43b70e38a3cc5">getFileName</a> ()</td></tr>
-<tr class="memdesc:a2ecefe63820015eda8f43b70e38a3cc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取打开的文件名字  <a href="#a2ecefe63820015eda8f43b70e38a3cc5">更多...</a><br/></td></tr>
+<tr class="memitem:a2ecefe63820015eda8f43b70e38a3cc5" id="r_a2ecefe63820015eda8f43b70e38a3cc5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2ecefe63820015eda8f43b70e38a3cc5">getFileName</a> ()</td></tr>
+<tr class="memdesc:a2ecefe63820015eda8f43b70e38a3cc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取打开的文件名字  <br /></td></tr>
 <tr class="separator:a2ecefe63820015eda8f43b70e38a3cc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9476ffa96f7215e28525088a000b1fa0"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a9476ffa96f7215e28525088a000b1fa0">getFileLine</a> ()</td></tr>
-<tr class="memdesc:a9476ffa96f7215e28525088a000b1fa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取打开的文件的行数  <a href="#a9476ffa96f7215e28525088a000b1fa0">更多...</a><br/></td></tr>
+<tr class="memitem:a9476ffa96f7215e28525088a000b1fa0" id="r_a9476ffa96f7215e28525088a000b1fa0"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9476ffa96f7215e28525088a000b1fa0">getFileLine</a> ()</td></tr>
+<tr class="memdesc:a9476ffa96f7215e28525088a000b1fa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取打开的文件的行数  <br /></td></tr>
 <tr class="separator:a9476ffa96f7215e28525088a000b1fa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad694f565a728d4bf81dc2a895459179f"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ad694f565a728d4bf81dc2a895459179f">getFileSize</a> ()</td></tr>
-<tr class="memdesc:ad694f565a728d4bf81dc2a895459179f"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取二进制打开的文件的大小  <a href="#ad694f565a728d4bf81dc2a895459179f">更多...</a><br/></td></tr>
+<tr class="memitem:ad694f565a728d4bf81dc2a895459179f" id="r_ad694f565a728d4bf81dc2a895459179f"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad694f565a728d4bf81dc2a895459179f">getFileSize</a> ()</td></tr>
+<tr class="memdesc:ad694f565a728d4bf81dc2a895459179f"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取二进制打开的文件的大小  <br /></td></tr>
 <tr class="separator:ad694f565a728d4bf81dc2a895459179f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50476ffc16616f200050d66565ccbe86"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a50476ffc16616f200050d66565ccbe86">getSize1</a> ()</td></tr>
-<tr class="memdesc:a50476ffc16616f200050d66565ccbe86"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取二进制打开的文件在内存中的大小  <a href="#a50476ffc16616f200050d66565ccbe86">更多...</a><br/></td></tr>
+<tr class="memitem:a50476ffc16616f200050d66565ccbe86" id="r_a50476ffc16616f200050d66565ccbe86"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a50476ffc16616f200050d66565ccbe86">getSize1</a> ()</td></tr>
+<tr class="memdesc:a50476ffc16616f200050d66565ccbe86"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取二进制打开的文件在内存中的大小  <br /></td></tr>
 <tr class="separator:a50476ffc16616f200050d66565ccbe86"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a236fa68305d93a21f1db4397735604aa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a236fa68305d93a21f1db4397735604aa">lockMemory</a> ()</td></tr>
-<tr class="memdesc:a236fa68305d93a21f1db4397735604aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">把数据从磁盘读入内存  <a href="#a236fa68305d93a21f1db4397735604aa">更多...</a><br/></td></tr>
+<tr class="memitem:a236fa68305d93a21f1db4397735604aa" id="r_a236fa68305d93a21f1db4397735604aa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a236fa68305d93a21f1db4397735604aa">lockMemory</a> ()</td></tr>
+<tr class="memdesc:a236fa68305d93a21f1db4397735604aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">把数据从磁盘读入内存  <br /></td></tr>
 <tr class="separator:a236fa68305d93a21f1db4397735604aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cdaefafc7c143eab21221c53929a729"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a4cdaefafc7c143eab21221c53929a729">unlockMemory</a> (const bool &amp;rec=false)</td></tr>
-<tr class="memdesc:a4cdaefafc7c143eab21221c53929a729"><td class="mdescLeft">&#160;</td><td class="mdescRight">把数据从内存写入磁盘  <a href="#a4cdaefafc7c143eab21221c53929a729">更多...</a><br/></td></tr>
+<tr class="memitem:a4cdaefafc7c143eab21221c53929a729" id="r_a4cdaefafc7c143eab21221c53929a729"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4cdaefafc7c143eab21221c53929a729">unlockMemory</a> (const bool &amp;rec=false)</td></tr>
+<tr class="memdesc:a4cdaefafc7c143eab21221c53929a729"><td class="mdescLeft">&#160;</td><td class="mdescRight">把数据从内存写入磁盘  <br /></td></tr>
 <tr class="separator:a4cdaefafc7c143eab21221c53929a729"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">操作内存中的数据的函数-文本模式</div></td></tr>
-<tr class="memitem:acc9ebeeb54d0ff5c01b36ac3faae5b4f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#acc9ebeeb54d0ff5c01b36ac3faae5b4f">findC</a> (const std::string &amp;targetString, const int linePos=1)</td></tr>
-<tr class="memdesc:acc9ebeeb54d0ff5c01b36ac3faae5b4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">查找行  <a href="#acc9ebeeb54d0ff5c01b36ac3faae5b4f">更多...</a><br/></td></tr>
+<tr class="memitem:acc9ebeeb54d0ff5c01b36ac3faae5b4f" id="r_acc9ebeeb54d0ff5c01b36ac3faae5b4f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acc9ebeeb54d0ff5c01b36ac3faae5b4f">findC</a> (const std::string &amp;targetString, const int linePos=1)</td></tr>
+<tr class="memdesc:acc9ebeeb54d0ff5c01b36ac3faae5b4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">查找行  <br /></td></tr>
 <tr class="separator:acc9ebeeb54d0ff5c01b36ac3faae5b4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4f640d9d2a8b4c539e9f7d7c8a90fb7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ab4f640d9d2a8b4c539e9f7d7c8a90fb7">appendLineC</a> (const std::string &amp;data, const int &amp;linePos=0)</td></tr>
-<tr class="memdesc:ab4f640d9d2a8b4c539e9f7d7c8a90fb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">插入行  <a href="#ab4f640d9d2a8b4c539e9f7d7c8a90fb7">更多...</a><br/></td></tr>
+<tr class="memitem:ab4f640d9d2a8b4c539e9f7d7c8a90fb7" id="r_ab4f640d9d2a8b4c539e9f7d7c8a90fb7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab4f640d9d2a8b4c539e9f7d7c8a90fb7">appendLineC</a> (const std::string &amp;data, const int &amp;linePos=0)</td></tr>
+<tr class="memdesc:ab4f640d9d2a8b4c539e9f7d7c8a90fb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">插入行  <br /></td></tr>
 <tr class="separator:ab4f640d9d2a8b4c539e9f7d7c8a90fb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2be039e6cfec90046c5dff15db849019"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a2be039e6cfec90046c5dff15db849019">deleteLineC</a> (const int &amp;linePos=0)</td></tr>
-<tr class="memdesc:a2be039e6cfec90046c5dff15db849019"><td class="mdescLeft">&#160;</td><td class="mdescRight">删除行  <a href="#a2be039e6cfec90046c5dff15db849019">更多...</a><br/></td></tr>
+<tr class="memitem:a2be039e6cfec90046c5dff15db849019" id="r_a2be039e6cfec90046c5dff15db849019"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2be039e6cfec90046c5dff15db849019">deleteLineC</a> (const int &amp;linePos=0)</td></tr>
+<tr class="memdesc:a2be039e6cfec90046c5dff15db849019"><td class="mdescLeft">&#160;</td><td class="mdescRight">删除行  <br /></td></tr>
 <tr class="separator:a2be039e6cfec90046c5dff15db849019"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae38a0b6990bf36444f4f2c4c4f944803"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ae38a0b6990bf36444f4f2c4c4f944803">deleteAllC</a> ()</td></tr>
-<tr class="memdesc:ae38a0b6990bf36444f4f2c4c4f944803"><td class="mdescLeft">&#160;</td><td class="mdescRight">删除全部  <a href="#ae38a0b6990bf36444f4f2c4c4f944803">更多...</a><br/></td></tr>
+<tr class="memitem:ae38a0b6990bf36444f4f2c4c4f944803" id="r_ae38a0b6990bf36444f4f2c4c4f944803"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae38a0b6990bf36444f4f2c4c4f944803">deleteAllC</a> ()</td></tr>
+<tr class="memdesc:ae38a0b6990bf36444f4f2c4c4f944803"><td class="mdescLeft">&#160;</td><td class="mdescRight">删除全部  <br /></td></tr>
 <tr class="separator:ae38a0b6990bf36444f4f2c4c4f944803"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66450c2f659f5565c66822a7d75f6688"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a66450c2f659f5565c66822a7d75f6688">chgLineC</a> (const std::string &amp;data, const int &amp;linePos=0)</td></tr>
-<tr class="memdesc:a66450c2f659f5565c66822a7d75f6688"><td class="mdescLeft">&#160;</td><td class="mdescRight">修改行  <a href="#a66450c2f659f5565c66822a7d75f6688">更多...</a><br/></td></tr>
+<tr class="memitem:a66450c2f659f5565c66822a7d75f6688" id="r_a66450c2f659f5565c66822a7d75f6688"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a66450c2f659f5565c66822a7d75f6688">chgLineC</a> (const std::string &amp;data, const int &amp;linePos=0)</td></tr>
+<tr class="memdesc:a66450c2f659f5565c66822a7d75f6688"><td class="mdescLeft">&#160;</td><td class="mdescRight">修改行  <br /></td></tr>
 <tr class="separator:a66450c2f659f5565c66822a7d75f6688"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2eb2c502b53c69e667481f8e83efe6d5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a2eb2c502b53c69e667481f8e83efe6d5">readLineC</a> (std::string &amp;data, const int linePos)</td></tr>
-<tr class="memdesc:a2eb2c502b53c69e667481f8e83efe6d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取单行  <a href="#a2eb2c502b53c69e667481f8e83efe6d5">更多...</a><br/></td></tr>
+<tr class="memitem:a2eb2c502b53c69e667481f8e83efe6d5" id="r_a2eb2c502b53c69e667481f8e83efe6d5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2eb2c502b53c69e667481f8e83efe6d5">readLineC</a> (std::string &amp;data, const int linePos)</td></tr>
+<tr class="memdesc:a2eb2c502b53c69e667481f8e83efe6d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取单行  <br /></td></tr>
 <tr class="separator:a2eb2c502b53c69e667481f8e83efe6d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5b6ef762907478aac10e4a74d208c56"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#aa5b6ef762907478aac10e4a74d208c56">readC</a> (std::string &amp;data, const int &amp;linePos, const int &amp;num)</td></tr>
-<tr class="memdesc:aa5b6ef762907478aac10e4a74d208c56"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取行  <a href="#aa5b6ef762907478aac10e4a74d208c56">更多...</a><br/></td></tr>
-<tr class="separator:aa5b6ef762907478aac10e4a74d208c56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8f2ef283347652a44c15e273cad2950b"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a8f2ef283347652a44c15e273cad2950b">readAllC</a> (std::string &amp;data)</td></tr>
-<tr class="memdesc:a8f2ef283347652a44c15e273cad2950b"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取全部  <a href="#a8f2ef283347652a44c15e273cad2950b">更多...</a><br/></td></tr>
-<tr class="separator:a8f2ef283347652a44c15e273cad2950b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab755510894fc6fc404247d3bd21ffd52" id="r_ab755510894fc6fc404247d3bd21ffd52"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab755510894fc6fc404247d3bd21ffd52">readC</a> (std::string &amp;data, const int &amp;linePos, const int &amp;num)</td></tr>
+<tr class="memdesc:ab755510894fc6fc404247d3bd21ffd52"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取行  <br /></td></tr>
+<tr class="separator:ab755510894fc6fc404247d3bd21ffd52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57126e58e5affaf0380dbab3a5e7c72c" id="r_a57126e58e5affaf0380dbab3a5e7c72c"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a57126e58e5affaf0380dbab3a5e7c72c">readAllC</a> (std::string &amp;data)</td></tr>
+<tr class="memdesc:a57126e58e5affaf0380dbab3a5e7c72c"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取全部  <br /></td></tr>
+<tr class="separator:a57126e58e5affaf0380dbab3a5e7c72c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">操作内存中的数据的函数-二进制模式</div></td></tr>
-<tr class="memitem:afd7761aa238c20cdb334313835be9edf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#afd7761aa238c20cdb334313835be9edf">readC</a> (char *data, const size_t &amp;pos, const size_t &amp;size)</td></tr>
-<tr class="memdesc:afd7761aa238c20cdb334313835be9edf"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取数据块  <a href="#afd7761aa238c20cdb334313835be9edf">更多...</a><br/></td></tr>
+<tr class="memitem:afd7761aa238c20cdb334313835be9edf" id="r_afd7761aa238c20cdb334313835be9edf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd7761aa238c20cdb334313835be9edf">readC</a> (char *data, const size_t &amp;pos, const size_t &amp;size)</td></tr>
+<tr class="memdesc:afd7761aa238c20cdb334313835be9edf"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取数据块  <br /></td></tr>
 <tr class="separator:afd7761aa238c20cdb334313835be9edf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a0938542769e9535826a3e68ed1ffc2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a7a0938542769e9535826a3e68ed1ffc2">writeC</a> (const char *data, const size_t &amp;pos, const size_t &amp;size)</td></tr>
-<tr class="memdesc:a7a0938542769e9535826a3e68ed1ffc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">写数据块  <a href="#a7a0938542769e9535826a3e68ed1ffc2">更多...</a><br/></td></tr>
+<tr class="memitem:a7a0938542769e9535826a3e68ed1ffc2" id="r_a7a0938542769e9535826a3e68ed1ffc2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7a0938542769e9535826a3e68ed1ffc2">writeC</a> (const char *data, const size_t &amp;pos, const size_t &amp;size)</td></tr>
+<tr class="memdesc:a7a0938542769e9535826a3e68ed1ffc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">写数据块  <br /></td></tr>
 <tr class="separator:a7a0938542769e9535826a3e68ed1ffc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f9a7d7d262b4fbb0b0e9b9e9b652667"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a9f9a7d7d262b4fbb0b0e9b9e9b652667">formatC</a> ()</td></tr>
-<tr class="memdesc:a9f9a7d7d262b4fbb0b0e9b9e9b652667"><td class="mdescLeft">&#160;</td><td class="mdescRight">格式化数据  <a href="#a9f9a7d7d262b4fbb0b0e9b9e9b652667">更多...</a><br/></td></tr>
+<tr class="memitem:a9f9a7d7d262b4fbb0b0e9b9e9b652667" id="r_a9f9a7d7d262b4fbb0b0e9b9e9b652667"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9f9a7d7d262b4fbb0b0e9b9e9b652667">formatC</a> ()</td></tr>
+<tr class="memdesc:a9f9a7d7d262b4fbb0b0e9b9e9b652667"><td class="mdescLeft">&#160;</td><td class="mdescRight">格式化数据  <br /></td></tr>
 <tr class="separator:a9f9a7d7d262b4fbb0b0e9b9e9b652667"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">直接操作磁盘数据的函数-文本模式</div></td></tr>
-<tr class="memitem:a7e6bc48253473e70edc56099f949f1e6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a7e6bc48253473e70edc56099f949f1e6">find</a> (const std::string &amp;targetString, const int linePos=1)</td></tr>
-<tr class="memdesc:a7e6bc48253473e70edc56099f949f1e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">查找行  <a href="#a7e6bc48253473e70edc56099f949f1e6">更多...</a><br/></td></tr>
+<tr class="memitem:a7e6bc48253473e70edc56099f949f1e6" id="r_a7e6bc48253473e70edc56099f949f1e6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7e6bc48253473e70edc56099f949f1e6">find</a> (const std::string &amp;targetString, const int linePos=1)</td></tr>
+<tr class="memdesc:a7e6bc48253473e70edc56099f949f1e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">查找行  <br /></td></tr>
 <tr class="separator:a7e6bc48253473e70edc56099f949f1e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb729b696a08d8f603a51d38a7a190fb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#afb729b696a08d8f603a51d38a7a190fb">appendLine</a> (const std::string &amp;data, const int &amp;linePos=0)</td></tr>
-<tr class="memdesc:afb729b696a08d8f603a51d38a7a190fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">插入行  <a href="#afb729b696a08d8f603a51d38a7a190fb">更多...</a><br/></td></tr>
+<tr class="memitem:afb729b696a08d8f603a51d38a7a190fb" id="r_afb729b696a08d8f603a51d38a7a190fb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afb729b696a08d8f603a51d38a7a190fb">appendLine</a> (const std::string &amp;data, const int &amp;linePos=0)</td></tr>
+<tr class="memdesc:afb729b696a08d8f603a51d38a7a190fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">插入行  <br /></td></tr>
 <tr class="separator:afb729b696a08d8f603a51d38a7a190fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6fa872c221f7c9acb049c538cff5afa4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a6fa872c221f7c9acb049c538cff5afa4">deleteLine</a> (const int &amp;linePos=0)</td></tr>
-<tr class="memdesc:a6fa872c221f7c9acb049c538cff5afa4"><td class="mdescLeft">&#160;</td><td class="mdescRight">删除行  <a href="#a6fa872c221f7c9acb049c538cff5afa4">更多...</a><br/></td></tr>
+<tr class="memitem:a6fa872c221f7c9acb049c538cff5afa4" id="r_a6fa872c221f7c9acb049c538cff5afa4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6fa872c221f7c9acb049c538cff5afa4">deleteLine</a> (const int &amp;linePos=0)</td></tr>
+<tr class="memdesc:a6fa872c221f7c9acb049c538cff5afa4"><td class="mdescLeft">&#160;</td><td class="mdescRight">删除行  <br /></td></tr>
 <tr class="separator:a6fa872c221f7c9acb049c538cff5afa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b7acb31acc69ea29b21b33451e05a91"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a2b7acb31acc69ea29b21b33451e05a91">deleteAll</a> ()</td></tr>
-<tr class="memdesc:a2b7acb31acc69ea29b21b33451e05a91"><td class="mdescLeft">&#160;</td><td class="mdescRight">删除全部  <a href="#a2b7acb31acc69ea29b21b33451e05a91">更多...</a><br/></td></tr>
+<tr class="memitem:a2b7acb31acc69ea29b21b33451e05a91" id="r_a2b7acb31acc69ea29b21b33451e05a91"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b7acb31acc69ea29b21b33451e05a91">deleteAll</a> ()</td></tr>
+<tr class="memdesc:a2b7acb31acc69ea29b21b33451e05a91"><td class="mdescLeft">&#160;</td><td class="mdescRight">删除全部  <br /></td></tr>
 <tr class="separator:a2b7acb31acc69ea29b21b33451e05a91"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae54f70a75140b27c2949772ca02b768a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ae54f70a75140b27c2949772ca02b768a">chgLine</a> (const std::string &amp;data, const int &amp;linePos=0)</td></tr>
-<tr class="memdesc:ae54f70a75140b27c2949772ca02b768a"><td class="mdescLeft">&#160;</td><td class="mdescRight">修改行  <a href="#ae54f70a75140b27c2949772ca02b768a">更多...</a><br/></td></tr>
+<tr class="memitem:ae54f70a75140b27c2949772ca02b768a" id="r_ae54f70a75140b27c2949772ca02b768a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae54f70a75140b27c2949772ca02b768a">chgLine</a> (const std::string &amp;data, const int &amp;linePos=0)</td></tr>
+<tr class="memdesc:ae54f70a75140b27c2949772ca02b768a"><td class="mdescLeft">&#160;</td><td class="mdescRight">修改行  <br /></td></tr>
 <tr class="separator:ae54f70a75140b27c2949772ca02b768a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad70ee941c5438da8d7ec5b54652970ce"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ad70ee941c5438da8d7ec5b54652970ce">readLine</a> (std::string &amp;data, const int linePos)</td></tr>
-<tr class="memdesc:ad70ee941c5438da8d7ec5b54652970ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取单行  <a href="#ad70ee941c5438da8d7ec5b54652970ce">更多...</a><br/></td></tr>
+<tr class="memitem:ad70ee941c5438da8d7ec5b54652970ce" id="r_ad70ee941c5438da8d7ec5b54652970ce"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad70ee941c5438da8d7ec5b54652970ce">readLine</a> (std::string &amp;data, const int linePos)</td></tr>
+<tr class="memdesc:ad70ee941c5438da8d7ec5b54652970ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取单行  <br /></td></tr>
 <tr class="separator:ad70ee941c5438da8d7ec5b54652970ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a860b8315f11150b659a2b272c2420516"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a860b8315f11150b659a2b272c2420516">read</a> (std::string &amp;data, const int &amp;linePos, const int &amp;num)</td></tr>
-<tr class="memdesc:a860b8315f11150b659a2b272c2420516"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取行  <a href="#a860b8315f11150b659a2b272c2420516">更多...</a><br/></td></tr>
-<tr class="separator:a860b8315f11150b659a2b272c2420516"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af883f1eb8ca2ac80ec658a5a02b09feb"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#af883f1eb8ca2ac80ec658a5a02b09feb">readAll</a> (std::string &amp;data)</td></tr>
-<tr class="memdesc:af883f1eb8ca2ac80ec658a5a02b09feb"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取全部  <a href="#af883f1eb8ca2ac80ec658a5a02b09feb">更多...</a><br/></td></tr>
-<tr class="separator:af883f1eb8ca2ac80ec658a5a02b09feb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95daa74da158ab6dd8dd5e0957624865" id="r_a95daa74da158ab6dd8dd5e0957624865"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a95daa74da158ab6dd8dd5e0957624865">read</a> (std::string &amp;data, const int &amp;linePos, const int &amp;num)</td></tr>
+<tr class="memdesc:a95daa74da158ab6dd8dd5e0957624865"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取行  <br /></td></tr>
+<tr class="separator:a95daa74da158ab6dd8dd5e0957624865"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5a7981669511b378598153dc54cd50d" id="r_ad5a7981669511b378598153dc54cd50d"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad5a7981669511b378598153dc54cd50d">readAll</a> (std::string &amp;data)</td></tr>
+<tr class="memdesc:ad5a7981669511b378598153dc54cd50d"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取全部  <br /></td></tr>
+<tr class="separator:ad5a7981669511b378598153dc54cd50d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">直接操作磁盘数据的函数-二进制模式</div></td></tr>
-<tr class="memitem:adbaabcd58ae0db72a4941acf9381066f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#adbaabcd58ae0db72a4941acf9381066f">read</a> (char *data, const size_t &amp;pos, const size_t &amp;size)</td></tr>
-<tr class="memdesc:adbaabcd58ae0db72a4941acf9381066f"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取数据块  <a href="#adbaabcd58ae0db72a4941acf9381066f">更多...</a><br/></td></tr>
+<tr class="memitem:adbaabcd58ae0db72a4941acf9381066f" id="r_adbaabcd58ae0db72a4941acf9381066f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adbaabcd58ae0db72a4941acf9381066f">read</a> (char *data, const size_t &amp;pos, const size_t &amp;size)</td></tr>
+<tr class="memdesc:adbaabcd58ae0db72a4941acf9381066f"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取数据块  <br /></td></tr>
 <tr class="separator:adbaabcd58ae0db72a4941acf9381066f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09f4b50edf2e77bfe6f50ca85503c534"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a09f4b50edf2e77bfe6f50ca85503c534">write</a> (const char *data, const size_t &amp;pos, const size_t &amp;size)</td></tr>
-<tr class="memdesc:a09f4b50edf2e77bfe6f50ca85503c534"><td class="mdescLeft">&#160;</td><td class="mdescRight">写数据块  <a href="#a09f4b50edf2e77bfe6f50ca85503c534">更多...</a><br/></td></tr>
+<tr class="memitem:a09f4b50edf2e77bfe6f50ca85503c534" id="r_a09f4b50edf2e77bfe6f50ca85503c534"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a09f4b50edf2e77bfe6f50ca85503c534">write</a> (const char *data, const size_t &amp;pos, const size_t &amp;size)</td></tr>
+<tr class="memdesc:a09f4b50edf2e77bfe6f50ca85503c534"><td class="mdescLeft">&#160;</td><td class="mdescRight">写数据块  <br /></td></tr>
 <tr class="separator:a09f4b50edf2e77bfe6f50ca85503c534"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a078268f697bac4b26edd8cb423ff8fdf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#a078268f697bac4b26edd8cb423ff8fdf">format</a> ()</td></tr>
-<tr class="memdesc:a078268f697bac4b26edd8cb423ff8fdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">格式化数据  <a href="#a078268f697bac4b26edd8cb423ff8fdf">更多...</a><br/></td></tr>
+<tr class="memitem:a078268f697bac4b26edd8cb423ff8fdf" id="r_a078268f697bac4b26edd8cb423ff8fdf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a078268f697bac4b26edd8cb423ff8fdf">format</a> ()</td></tr>
+<tr class="memdesc:a078268f697bac4b26edd8cb423ff8fdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">格式化数据  <br /></td></tr>
 <tr class="separator:a078268f697bac4b26edd8cb423ff8fdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected 属性</h2></td></tr>
-<tr class="memitem:aa51ded9dfaa3b1413fe90945a02aac1d"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#aa51ded9dfaa3b1413fe90945a02aac1d">che</a></td></tr>
+<tr class="memitem:aa51ded9dfaa3b1413fe90945a02aac1d" id="r_aa51ded9dfaa3b1413fe90945a02aac1d"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa51ded9dfaa3b1413fe90945a02aac1d">che</a></td></tr>
 <tr class="separator:aa51ded9dfaa3b1413fe90945a02aac1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-attribs"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-static-attribs" name="pro-static-attribs"></a>
 静态 Protected 属性</h2></td></tr>
-<tr class="memitem:ac3829ea1e03d976fdfd70219d4c92442"><td class="memItemLeft" align="right" valign="top">static std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#ac3829ea1e03d976fdfd70219d4c92442">l1</a></td></tr>
+<tr class="memitem:ac3829ea1e03d976fdfd70219d4c92442" id="r_ac3829ea1e03d976fdfd70219d4c92442"><td class="memItemLeft" align="right" valign="top">static std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac3829ea1e03d976fdfd70219d4c92442">l1</a></td></tr>
 <tr class="separator:ac3829ea1e03d976fdfd70219d4c92442"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af491ff55ab578c4c0de6c7a35b7d9ed6"><td class="memItemLeft" align="right" valign="top">static std::unordered_map<br class="typebreak"/>
-&lt; std::string, <a class="el" href="structstt_1_1file_1_1FileThreadLock.html">FileThreadLock</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1file_1_1File.html#af491ff55ab578c4c0de6c7a35b7d9ed6">fl2</a></td></tr>
+<tr class="memitem:af491ff55ab578c4c0de6c7a35b7d9ed6" id="r_af491ff55ab578c4c0de6c7a35b7d9ed6"><td class="memItemLeft" align="right" valign="top">static std::unordered_map&lt; std::string, <a class="el" href="structstt_1_1file_1_1FileThreadLock.html">FileThreadLock</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af491ff55ab578c4c0de6c7a35b7d9ed6">fl2</a></td></tr>
 <tr class="separator:af491ff55ab578c4c0de6c7a35b7d9ed6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
@@ -239,7 +238,9 @@ Protected 属性</h2></td></tr>
 <dd>
 3、这个类操作文件的时候有两种模式：1，读取磁盘+操作内存的数据+保存到磁盘；这三步分开做，适合自定义复杂操作的场景。 2，把三步操作合并成一步操作完成 </dd></dl>
 </div><h2 class="groupheader">构造及析构函数说明</h2>
-<a class="anchor" id="a80729e4153b97094867efb4de281ffa3"></a>
+<a id="a80729e4153b97094867efb4de281ffa3" name="a80729e4153b97094867efb4de281ffa3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80729e4153b97094867efb4de281ffa3">&#9670;&#160;</a></span>~File()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -249,13 +250,13 @@ Protected 属性</h2></td></tr>
         <tr>
           <td class="memname">stt::file::File::~File </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -266,26 +267,21 @@ Protected 属性</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">成员函数说明</h2>
-<a class="anchor" id="afb729b696a08d8f603a51d38a7a190fb"></a>
+<a id="afb729b696a08d8f603a51d38a7a190fb" name="afb729b696a08d8f603a51d38a7a190fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb729b696a08d8f603a51d38a7a190fb">&#9670;&#160;</a></span>appendLine()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::File::appendLine </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>linePos</em> = <code>0</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>linePos</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -307,26 +303,21 @@ false 插入失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="ab4f640d9d2a8b4c539e9f7d7c8a90fb7"></a>
+<a id="ab4f640d9d2a8b4c539e9f7d7c8a90fb7" name="ab4f640d9d2a8b4c539e9f7d7c8a90fb7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4f640d9d2a8b4c539e9f7d7c8a90fb7">&#9670;&#160;</a></span>appendLineC()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::File::appendLineC </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>linePos</em> = <code>0</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>linePos</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -348,26 +339,21 @@ false 插入失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="ae54f70a75140b27c2949772ca02b768a"></a>
+<a id="ae54f70a75140b27c2949772ca02b768a" name="ae54f70a75140b27c2949772ca02b768a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae54f70a75140b27c2949772ca02b768a">&#9670;&#160;</a></span>chgLine()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::File::chgLine </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>linePos</em> = <code>0</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>linePos</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -389,26 +375,21 @@ false 修改失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a66450c2f659f5565c66822a7d75f6688"></a>
+<a id="a66450c2f659f5565c66822a7d75f6688" name="a66450c2f659f5565c66822a7d75f6688"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66450c2f659f5565c66822a7d75f6688">&#9670;&#160;</a></span>chgLineC()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::File::chgLineC </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>linePos</em> = <code>0</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>linePos</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -430,23 +411,23 @@ false 修改失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a246d6c564f1a85689c41a4992a788825"></a>
+<a id="a246d6c564f1a85689c41a4992a788825" name="a246d6c564f1a85689c41a4992a788825"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a246d6c564f1a85689c41a4992a788825">&#9670;&#160;</a></span>closeFile()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::File::closeFile </td>
           <td>(</td>
-          <td class="paramtype">const bool &amp;&#160;</td>
-          <td class="paramname"><em>del</em> = <code>false</code></td><td>)</td>
+          <td class="paramtype">const bool &amp;</td>          <td class="paramname"><span class="paramname"><em>del</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>关闭已打开了的文件 </p>
-<p>关闭文件 </p>
-<dl class="params"><dt>参数</dt><dd>
+<p>关闭文件 </p><dl class="params"><dt>参数</dt><dd>
   <table class="params">
     <tr><td class="paramname">del</td><td>true:删除文件 false：不删除文件 （默认为false） </td></tr>
   </table>
@@ -456,14 +437,16 @@ false 修改失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a2b7acb31acc69ea29b21b33451e05a91"></a>
+<a id="a2b7acb31acc69ea29b21b33451e05a91" name="a2b7acb31acc69ea29b21b33451e05a91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b7acb31acc69ea29b21b33451e05a91">&#9670;&#160;</a></span>deleteAll()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::File::deleteAll </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -477,14 +460,16 @@ false 删除失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="ae38a0b6990bf36444f4f2c4c4f944803"></a>
+<a id="ae38a0b6990bf36444f4f2c4c4f944803" name="ae38a0b6990bf36444f4f2c4c4f944803"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae38a0b6990bf36444f4f2c4c4f944803">&#9670;&#160;</a></span>deleteAllC()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::File::deleteAllC </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -498,15 +483,16 @@ false 删除失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a6fa872c221f7c9acb049c538cff5afa4"></a>
+<a id="a6fa872c221f7c9acb049c538cff5afa4" name="a6fa872c221f7c9acb049c538cff5afa4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6fa872c221f7c9acb049c538cff5afa4">&#9670;&#160;</a></span>deleteLine()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::File::deleteLine </td>
           <td>(</td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>linePos</em> = <code>0</code></td><td>)</td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>linePos</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -528,15 +514,16 @@ false 删除失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a2be039e6cfec90046c5dff15db849019"></a>
+<a id="a2be039e6cfec90046c5dff15db849019" name="a2be039e6cfec90046c5dff15db849019"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2be039e6cfec90046c5dff15db849019">&#9670;&#160;</a></span>deleteLineC()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::File::deleteLineC </td>
           <td>(</td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>linePos</em> = <code>0</code></td><td>)</td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>linePos</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -558,26 +545,21 @@ false 删除失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a7e6bc48253473e70edc56099f949f1e6"></a>
+<a id="a7e6bc48253473e70edc56099f949f1e6" name="a7e6bc48253473e70edc56099f949f1e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e6bc48253473e70edc56099f949f1e6">&#9670;&#160;</a></span>find()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">int stt::file::File::find </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>targetString</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>targetString</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int&#160;</td>
-          <td class="paramname"><em>linePos</em> = <code>1</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int</td>          <td class="paramname"><span class="paramname"><em>linePos</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -599,26 +581,21 @@ false 删除失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="acc9ebeeb54d0ff5c01b36ac3faae5b4f"></a>
+<a id="acc9ebeeb54d0ff5c01b36ac3faae5b4f" name="acc9ebeeb54d0ff5c01b36ac3faae5b4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc9ebeeb54d0ff5c01b36ac3faae5b4f">&#9670;&#160;</a></span>findC()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">int stt::file::File::findC </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>targetString</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>targetString</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int&#160;</td>
-          <td class="paramname"><em>linePos</em> = <code>1</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int</td>          <td class="paramname"><span class="paramname"><em>linePos</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -640,14 +617,16 @@ false 删除失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a078268f697bac4b26edd8cb423ff8fdf"></a>
+<a id="a078268f697bac4b26edd8cb423ff8fdf" name="a078268f697bac4b26edd8cb423ff8fdf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a078268f697bac4b26edd8cb423ff8fdf">&#9670;&#160;</a></span>format()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void stt::file::File::format </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -658,14 +637,16 @@ false 删除失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a9f9a7d7d262b4fbb0b0e9b9e9b652667"></a>
+<a id="a9f9a7d7d262b4fbb0b0e9b9e9b652667" name="a9f9a7d7d262b4fbb0b0e9b9e9b652667"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f9a7d7d262b4fbb0b0e9b9e9b652667">&#9670;&#160;</a></span>formatC()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::File::formatC </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -676,7 +657,9 @@ false 删除失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a9476ffa96f7215e28525088a000b1fa0"></a>
+<a id="a9476ffa96f7215e28525088a000b1fa0" name="a9476ffa96f7215e28525088a000b1fa0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9476ffa96f7215e28525088a000b1fa0">&#9670;&#160;</a></span>getFileLine()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -686,13 +669,13 @@ false 删除失败 </dd></dl>
         <tr>
           <td class="memname">uint64_t stt::file::File::getFileLine </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -708,7 +691,9 @@ false 删除失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a2ecefe63820015eda8f43b70e38a3cc5"></a>
+<a id="a2ecefe63820015eda8f43b70e38a3cc5" name="a2ecefe63820015eda8f43b70e38a3cc5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ecefe63820015eda8f43b70e38a3cc5">&#9670;&#160;</a></span>getFileName()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -718,13 +703,13 @@ false 删除失败 </dd></dl>
         <tr>
           <td class="memname">std::string stt::file::File::getFileName </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -734,7 +719,9 @@ false 删除失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="ad694f565a728d4bf81dc2a895459179f"></a>
+<a id="ad694f565a728d4bf81dc2a895459179f" name="ad694f565a728d4bf81dc2a895459179f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad694f565a728d4bf81dc2a895459179f">&#9670;&#160;</a></span>getFileSize()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -744,13 +731,13 @@ false 删除失败 </dd></dl>
         <tr>
           <td class="memname">size_t stt::file::File::getFileSize </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -766,7 +753,9 @@ false 删除失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a50476ffc16616f200050d66565ccbe86"></a>
+<a id="a50476ffc16616f200050d66565ccbe86" name="a50476ffc16616f200050d66565ccbe86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50476ffc16616f200050d66565ccbe86">&#9670;&#160;</a></span>getSize1()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -776,13 +765,13 @@ false 删除失败 </dd></dl>
         <tr>
           <td class="memname">size_t stt::file::File::getSize1 </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -798,7 +787,9 @@ false 删除失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="aead14862f08ebf1bb6828d030a506eb3"></a>
+<a id="aead14862f08ebf1bb6828d030a506eb3" name="aead14862f08ebf1bb6828d030a506eb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aead14862f08ebf1bb6828d030a506eb3">&#9670;&#160;</a></span>isBinary()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -808,13 +799,13 @@ false 删除失败 </dd></dl>
         <tr>
           <td class="memname">bool stt::file::File::isBinary </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -824,7 +815,9 @@ false 删除失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a6fb0b48e08c4dd5978affc7f712c56ea"></a>
+<a id="a6fb0b48e08c4dd5978affc7f712c56ea" name="a6fb0b48e08c4dd5978affc7f712c56ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6fb0b48e08c4dd5978affc7f712c56ea">&#9670;&#160;</a></span>isOpen()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -834,13 +827,13 @@ false 删除失败 </dd></dl>
         <tr>
           <td class="memname">bool stt::file::File::isOpen </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -850,14 +843,16 @@ false 删除失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a236fa68305d93a21f1db4397735604aa"></a>
+<a id="a236fa68305d93a21f1db4397735604aa" name="a236fa68305d93a21f1db4397735604aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a236fa68305d93a21f1db4397735604aa">&#9670;&#160;</a></span>lockMemory()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::File::lockMemory </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -870,44 +865,36 @@ false 操作失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a00aa9317ef7c1213baadcbd3f3485430"></a>
+<a id="a00aa9317ef7c1213baadcbd3f3485430" name="a00aa9317ef7c1213baadcbd3f3485430"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00aa9317ef7c1213baadcbd3f3485430">&#9670;&#160;</a></span>openFile()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::File::openFile </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>fileName</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>fileName</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const bool &amp;&#160;</td>
-          <td class="paramname"><em>create</em> = <code>true</code>, </td>
+          <td class="paramtype">const bool &amp;</td>          <td class="paramname"><span class="paramname"><em>create</em></span><span class="paramdefsep"> = </span><span class="paramdefval">true</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>multiple</em> = <code>0</code>, </td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>multiple</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const size_t &amp;&#160;</td>
-          <td class="paramname"><em>size</em> = <code>0</code>, </td>
+          <td class="paramtype">const size_t &amp;</td>          <td class="paramname"><span class="paramname"><em>size</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const mode_t &amp;&#160;</td>
-          <td class="paramname"><em>mode</em> = <code>0666</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const mode_t &amp;</td>          <td class="paramname"><span class="paramname"><em>mode</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0666</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -929,92 +916,42 @@ false:打开失败 </dd></dl>
 <dl class="section note"><dt>注解</dt><dd>任何操作都需要先打开文件 </dd></dl>
 <dl class="section warning"><dt>警告</dt><dd>如果二进制模式下预留的空间太小，可能会导致段错误</dd></dl>
 <p>示例代码 1： 文本模式打开和程序同一路径下名为"test"的文件</p>
-<div class="fragment"><div class="line">File f; </div>
-<div class="line">f.openFile(<span class="stringliteral">&quot;test&quot;</span>);</div>
+<div class="fragment"><div class="line"><a class="code hl_class" href="classstt_1_1file_1_1File.html">File</a> f; </div>
+<div class="line">f.<a class="code hl_function" href="#a00aa9317ef7c1213baadcbd3f3485430">openFile</a>(<span class="stringliteral">&quot;test&quot;</span>);</div>
+<div class="ttc" id="aclassstt_1_1file_1_1File_html"><div class="ttname"><a href="classstt_1_1file_1_1File.html">stt::file::File</a></div><div class="ttdoc">读写磁盘文件的类</div><div class="ttdef"><b>定义</b> sttnet.h:356</div></div>
+<div class="ttc" id="aclassstt_1_1file_1_1File_html_a00aa9317ef7c1213baadcbd3f3485430"><div class="ttname"><a href="#a00aa9317ef7c1213baadcbd3f3485430">stt::file::File::openFile</a></div><div class="ttdeci">bool openFile(const std::string &amp;fileName, const bool &amp;create=true, const int &amp;multiple=0, const size_t &amp;size=0, const mode_t &amp;mode=0666)</div><div class="ttdoc">打开文件</div></div>
 </div><!-- fragment --><p>示例代码 2： 二进制模式下打开和程序同一路径下名为"test"的文件,计划只读</p>
-<div class="fragment"><div class="line">File f; </div>
-<div class="line">f.openFile(<span class="stringliteral">&quot;test&quot;</span>,<span class="keyword">true</span>,1); <span class="comment">//只读说明预留空间是原来的一倍（和原来一样）即可 </span></div>
+<div class="fragment"><div class="line"><a class="code hl_class" href="classstt_1_1file_1_1File.html">File</a> f; </div>
+<div class="line">f.<a class="code hl_function" href="#a00aa9317ef7c1213baadcbd3f3485430">openFile</a>(<span class="stringliteral">&quot;test&quot;</span>,<span class="keyword">true</span>,1); <span class="comment">//只读说明预留空间是原来的一倍（和原来一样）即可 </span></div>
 </div><!-- fragment --><p>示例代码 3： 二进制模式下打开和程序同一路径下名为"test"的文件,预计会写入数据，写入后大小不大于原来文件大小的两倍</p>
-<div class="fragment"><div class="line">File f; </div>
-<div class="line">f.openFile(<span class="stringliteral">&quot;test&quot;</span>,<span class="keyword">true</span>,2); <span class="comment">//留出两倍的空间</span></div>
+<div class="fragment"><div class="line"><a class="code hl_class" href="classstt_1_1file_1_1File.html">File</a> f; </div>
+<div class="line">f.<a class="code hl_function" href="#a00aa9317ef7c1213baadcbd3f3485430">openFile</a>(<span class="stringliteral">&quot;test&quot;</span>,<span class="keyword">true</span>,2); <span class="comment">//留出两倍的空间</span></div>
 </div><!-- fragment --><p>示例代码 4： 二进制模式下打开和程序同一路径下名为"test"的文件,预计会写入数据，写入大小不大于1024字节，原文件大小为0</p>
-<div class="fragment"><div class="line">File f; </div>
-<div class="line">f.openFile(<span class="stringliteral">&quot;test&quot;</span>,<span class="keyword">true</span>,1,1024);<span class="comment">//由于文件大小为0，代表倍数的第三个参数multiple填入多少都是无效的，需要手动指定大小</span></div>
+<div class="fragment"><div class="line"><a class="code hl_class" href="classstt_1_1file_1_1File.html">File</a> f; </div>
+<div class="line">f.<a class="code hl_function" href="#a00aa9317ef7c1213baadcbd3f3485430">openFile</a>(<span class="stringliteral">&quot;test&quot;</span>,<span class="keyword">true</span>,1,1024);<span class="comment">//由于文件大小为0，代表倍数的第三个参数multiple填入多少都是无效的，需要手动指定大小</span></div>
 </div><!-- fragment --> 
 </div>
 </div>
-<a class="anchor" id="a860b8315f11150b659a2b272c2420516"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string&amp; stt::file::File::read </td>
-          <td>(</td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>linePos</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>num</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<a id="adbaabcd58ae0db72a4941acf9381066f" name="adbaabcd58ae0db72a4941acf9381066f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbaabcd58ae0db72a4941acf9381066f">&#9670;&#160;</a></span>read() <span class="overload">[1/2]</span></h2>
 
-<p>读取行 </p>
-<dl class="section note"><dt>注解</dt><dd>1、连续读取文件中的n行 </dd>
-<dd>
-2、行数从1开始 </dd></dl>
-<dl class="params"><dt>参数</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">data</td><td>接收数据的字符串容器 </td></tr>
-    <tr><td class="paramname">linePos</td><td>读取的起始位置 </td></tr>
-    <tr><td class="paramname">num</td><td>读取的行的数量 </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>返回</dt><dd>字符串参数data的引用 </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="adbaabcd58ae0db72a4941acf9381066f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::File::read </td>
           <td>(</td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
+          <td class="paramtype">char *</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const size_t &amp;&#160;</td>
-          <td class="paramname"><em>pos</em>, </td>
+          <td class="paramtype">const size_t &amp;</td>          <td class="paramname"><span class="paramname"><em>pos</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const size_t &amp;&#160;</td>
-          <td class="paramname"><em>size</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const size_t &amp;</td>          <td class="paramname"><span class="paramname"><em>size</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1037,15 +974,56 @@ false 读取失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="af883f1eb8ca2ac80ec658a5a02b09feb"></a>
+<a id="a95daa74da158ab6dd8dd5e0957624865" name="a95daa74da158ab6dd8dd5e0957624865"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95daa74da158ab6dd8dd5e0957624865">&#9670;&#160;</a></span>read() <span class="overload">[2/2]</span></h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::string&amp; stt::file::File::readAll </td>
+          <td class="memname">std::string &amp; stt::file::File::read </td>
           <td>(</td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>data</em></td><td>)</td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>linePos</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>num</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>读取行 </p>
+<dl class="section note"><dt>注解</dt><dd>1、连续读取文件中的n行 </dd>
+<dd>
+2、行数从1开始 </dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>接收数据的字符串容器 </td></tr>
+    <tr><td class="paramname">linePos</td><td>读取的起始位置 </td></tr>
+    <tr><td class="paramname">num</td><td>读取的行的数量 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>字符串参数data的引用 </dd></dl>
+
+</div>
+</div>
+<a id="ad5a7981669511b378598153dc54cd50d" name="ad5a7981669511b378598153dc54cd50d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5a7981669511b378598153dc54cd50d">&#9670;&#160;</a></span>readAll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string &amp; stt::file::File::readAll </td>
+          <td>(</td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1063,15 +1041,16 @@ false 读取失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a8f2ef283347652a44c15e273cad2950b"></a>
+<a id="a57126e58e5affaf0380dbab3a5e7c72c" name="a57126e58e5affaf0380dbab3a5e7c72c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57126e58e5affaf0380dbab3a5e7c72c">&#9670;&#160;</a></span>readAllC()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::string&amp; stt::file::File::readAllC </td>
+          <td class="memname">std::string &amp; stt::file::File::readAllC </td>
           <td>(</td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>data</em></td><td>)</td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1089,78 +1068,26 @@ false 读取失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="aa5b6ef762907478aac10e4a74d208c56"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string&amp; stt::file::File::readC </td>
-          <td>(</td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>linePos</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>num</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<a id="afd7761aa238c20cdb334313835be9edf" name="afd7761aa238c20cdb334313835be9edf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd7761aa238c20cdb334313835be9edf">&#9670;&#160;</a></span>readC() <span class="overload">[1/2]</span></h2>
 
-<p>读取行 </p>
-<dl class="section note"><dt>注解</dt><dd>1、连续读取文件导入内存的数据中的n行 </dd>
-<dd>
-2、行数从1开始 </dd></dl>
-<dl class="params"><dt>参数</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">data</td><td>接收数据的字符串容器 </td></tr>
-    <tr><td class="paramname">linePos</td><td>读取的起始位置 </td></tr>
-    <tr><td class="paramname">num</td><td>读取的行的数量 </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>返回</dt><dd>字符串参数data的引用 </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="afd7761aa238c20cdb334313835be9edf"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::File::readC </td>
           <td>(</td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
+          <td class="paramtype">char *</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const size_t &amp;&#160;</td>
-          <td class="paramname"><em>pos</em>, </td>
+          <td class="paramtype">const size_t &amp;</td>          <td class="paramname"><span class="paramname"><em>pos</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const size_t &amp;&#160;</td>
-          <td class="paramname"><em>size</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const size_t &amp;</td>          <td class="paramname"><span class="paramname"><em>size</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1183,26 +1110,61 @@ false 读取失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="ad70ee941c5438da8d7ec5b54652970ce"></a>
+<a id="ab755510894fc6fc404247d3bd21ffd52" name="ab755510894fc6fc404247d3bd21ffd52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab755510894fc6fc404247d3bd21ffd52">&#9670;&#160;</a></span>readC() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string &amp; stt::file::File::readC </td>
+          <td>(</td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>linePos</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>num</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>读取行 </p>
+<dl class="section note"><dt>注解</dt><dd>1、连续读取文件导入内存的数据中的n行 </dd>
+<dd>
+2、行数从1开始 </dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>接收数据的字符串容器 </td></tr>
+    <tr><td class="paramname">linePos</td><td>读取的起始位置 </td></tr>
+    <tr><td class="paramname">num</td><td>读取的行的数量 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>字符串参数data的引用 </dd></dl>
+
+</div>
+</div>
+<a id="ad70ee941c5438da8d7ec5b54652970ce" name="ad70ee941c5438da8d7ec5b54652970ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad70ee941c5438da8d7ec5b54652970ce">&#9670;&#160;</a></span>readLine()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::File::readLine </td>
           <td>(</td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int&#160;</td>
-          <td class="paramname"><em>linePos</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int</td>          <td class="paramname"><span class="paramname"><em>linePos</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1224,26 +1186,21 @@ false 读取失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a2eb2c502b53c69e667481f8e83efe6d5"></a>
+<a id="a2eb2c502b53c69e667481f8e83efe6d5" name="a2eb2c502b53c69e667481f8e83efe6d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2eb2c502b53c69e667481f8e83efe6d5">&#9670;&#160;</a></span>readLineC()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::File::readLineC </td>
           <td>(</td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int&#160;</td>
-          <td class="paramname"><em>linePos</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int</td>          <td class="paramname"><span class="paramname"><em>linePos</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1265,15 +1222,16 @@ false 读取失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a4cdaefafc7c143eab21221c53929a729"></a>
+<a id="a4cdaefafc7c143eab21221c53929a729" name="a4cdaefafc7c143eab21221c53929a729"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4cdaefafc7c143eab21221c53929a729">&#9670;&#160;</a></span>unlockMemory()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::File::unlockMemory </td>
           <td>(</td>
-          <td class="paramtype">const bool &amp;&#160;</td>
-          <td class="paramname"><em>rec</em> = <code>false</code></td><td>)</td>
+          <td class="paramtype">const bool &amp;</td>          <td class="paramname"><span class="paramname"><em>rec</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1293,32 +1251,26 @@ false 操作失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a09f4b50edf2e77bfe6f50ca85503c534"></a>
+<a id="a09f4b50edf2e77bfe6f50ca85503c534" name="a09f4b50edf2e77bfe6f50ca85503c534"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09f4b50edf2e77bfe6f50ca85503c534">&#9670;&#160;</a></span>write()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::File::write </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const size_t &amp;&#160;</td>
-          <td class="paramname"><em>pos</em>, </td>
+          <td class="paramtype">const size_t &amp;</td>          <td class="paramname"><span class="paramname"><em>pos</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const size_t &amp;&#160;</td>
-          <td class="paramname"><em>size</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const size_t &amp;</td>          <td class="paramname"><span class="paramname"><em>size</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1341,32 +1293,26 @@ false 写入失败 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a7a0938542769e9535826a3e68ed1ffc2"></a>
+<a id="a7a0938542769e9535826a3e68ed1ffc2" name="a7a0938542769e9535826a3e68ed1ffc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a0938542769e9535826a3e68ed1ffc2">&#9670;&#160;</a></span>writeC()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::file::File::writeC </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const size_t &amp;&#160;</td>
-          <td class="paramname"><em>pos</em>, </td>
+          <td class="paramtype">const size_t &amp;</td>          <td class="paramname"><span class="paramname"><em>pos</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const size_t &amp;&#160;</td>
-          <td class="paramname"><em>size</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const size_t &amp;</td>          <td class="paramname"><span class="paramname"><em>size</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1390,7 +1336,9 @@ false 写入失败 </dd></dl>
 </div>
 </div>
 <h2 class="groupheader">类成员变量说明</h2>
-<a class="anchor" id="aa51ded9dfaa3b1413fe90945a02aac1d"></a>
+<a id="aa51ded9dfaa3b1413fe90945a02aac1d" name="aa51ded9dfaa3b1413fe90945a02aac1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa51ded9dfaa3b1413fe90945a02aac1d">&#9670;&#160;</a></span>che</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1403,14 +1351,16 @@ false 写入失败 </dd></dl>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="af491ff55ab578c4c0de6c7a35b7d9ed6"></a>
+<a id="af491ff55ab578c4c0de6c7a35b7d9ed6" name="af491ff55ab578c4c0de6c7a35b7d9ed6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af491ff55ab578c4c0de6c7a35b7d9ed6">&#9670;&#160;</a></span>fl2</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1423,14 +1373,16 @@ false 写入失败 </dd></dl>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel protected">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="ac3829ea1e03d976fdfd70219d4c92442"></a>
+<a id="ac3829ea1e03d976fdfd70219d4c92442" name="ac3829ea1e03d976fdfd70219d4c92442"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3829ea1e03d976fdfd70219d4c92442">&#9670;&#160;</a></span>l1</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1443,7 +1395,7 @@ false 写入失败 </dd></dl>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel protected">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1456,9 +1408,8 @@ false 写入失败 </dd></dl>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-制作者 &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.5
+制作者&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
 </small></address>
+</div><!-- doc-content -->
 </body>
 </html>

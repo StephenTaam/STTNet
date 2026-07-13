@@ -1,19 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.11"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>STTNet: 类成员</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() { init_search(); });
-</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -21,9 +23,9 @@
 <div id="titlearea">
 <table cellspacing="0" cellpadding="0">
  <tbody>
- <tr style="height: 56px;">
-  <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">STTNet
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
    </div>
   </td>
  </tr>
@@ -31,76 +33,35 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.11 -->
+<!-- 制作者 Doxygen 1.13.2 -->
 <script type="text/javascript">
-var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
 </script>
-  <div id="navrow1" class="tabs">
-    <ul class="tablist">
-      <li><a href="index.html"><span>首页</span></a></li>
-      <li><a href="pages.html"><span>相关页面</span></a></li>
-      <li><a href="namespaces.html"><span>命名空间</span></a></li>
-      <li class="current"><a href="annotated.html"><span>类</span></a></li>
-      <li><a href="files.html"><span>文件</span></a></li>
-      <li>
-        <div id="MSearchBox" class="MSearchBoxInactive">
-        <span class="left">
-          <img id="MSearchSelect" src="search/mag_sel.png"
-               onmouseover="return searchBox.OnSearchSelectShow()"
-               onmouseout="return searchBox.OnSearchSelectHide()"
-               alt=""/>
-          <input type="text" id="MSearchField" value="搜索" accesskey="S"
-               onfocus="searchBox.OnSearchFieldFocus(true)" 
-               onblur="searchBox.OnSearchFieldFocus(false)" 
-               onkeyup="searchBox.OnSearchFieldChange(event)"/>
-          </span><span class="right">
-            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
-          </span>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div id="navrow2" class="tabs2">
-    <ul class="tablist">
-      <li><a href="annotated.html"><span>类列表</span></a></li>
-      <li><a href="classes.html"><span>类索引</span></a></li>
-      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
-      <li class="current"><a href="functions.html"><span>类成员</span></a></li>
-    </ul>
-  </div>
-  <div id="navrow3" class="tabs2">
-    <ul class="tablist">
-      <li class="current"><a href="functions.html"><span>全部</span></a></li>
-      <li><a href="functions_func.html"><span>函数</span></a></li>
-      <li><a href="functions_vars.html"><span>变量</span></a></li>
-    </ul>
-  </div>
-  <div id="navrow4" class="tabs3">
-    <ul class="tablist">
-      <li><a href="functions.html#index_a"><span>a</span></a></li>
-      <li><a href="functions_b.html#index_b"><span>b</span></a></li>
-      <li><a href="functions_c.html#index_c"><span>c</span></a></li>
-      <li><a href="functions_d.html#index_d"><span>d</span></a></li>
-      <li><a href="functions_e.html#index_e"><span>e</span></a></li>
-      <li><a href="functions_f.html#index_f"><span>f</span></a></li>
-      <li><a href="functions_g.html#index_g"><span>g</span></a></li>
-      <li><a href="functions_h.html#index_h"><span>h</span></a></li>
-      <li><a href="functions_i.html#index_i"><span>i</span></a></li>
-      <li><a href="functions_j.html#index_j"><span>j</span></a></li>
-      <li><a href="functions_l.html#index_l"><span>l</span></a></li>
-      <li><a href="functions_m.html#index_m"><span>m</span></a></li>
-      <li><a href="functions_n.html#index_n"><span>n</span></a></li>
-      <li><a href="functions_o.html#index_o"><span>o</span></a></li>
-      <li><a href="functions_p.html#index_p"><span>p</span></a></li>
-      <li class="current"><a href="functions_r.html#index_r"><span>r</span></a></li>
-      <li><a href="functions_s.html#index_s"><span>s</span></a></li>
-      <li><a href="functions_t.html#index_t"><span>t</span></a></li>
-      <li><a href="functions_u.html#index_u"><span>u</span></a></li>
-      <li><a href="functions_w.html#index_w"><span>w</span></a></li>
-      <li><a href="functions_0x7e.html#index_0x7e"><span>~</span></a></li>
-    </ul>
-  </div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索',false);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
 </div><!-- top -->
+<div id="doc-content">
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){ initResizable(false); });
+/* @license-end */
+</script>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -110,68 +71,50 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
-        name="MSearchResults" id="MSearchResults">
-</iframe>
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
 </div>
 
 <div class="contents">
 <div class="textblock">这里列出了所有类成员，并附带类的详细说明:</div>
 
-<h3><a class="anchor" id="index_r"></a>- r -</h3><ul>
-<li>read()
-: <a class="el" href="classstt_1_1file_1_1File.html#a860b8315f11150b659a2b272c2420516">stt::file::File</a>
-</li>
-<li>readAll()
-: <a class="el" href="classstt_1_1file_1_1File.html#af883f1eb8ca2ac80ec658a5a02b09feb">stt::file::File</a>
-</li>
-<li>readAllC()
-: <a class="el" href="classstt_1_1file_1_1File.html#a8f2ef283347652a44c15e273cad2950b">stt::file::File</a>
-</li>
-<li>readC()
-: <a class="el" href="classstt_1_1file_1_1File.html#aa5b6ef762907478aac10e4a74d208c56">stt::file::File</a>
-</li>
-<li>readLine()
-: <a class="el" href="classstt_1_1file_1_1File.html#ad70ee941c5438da8d7ec5b54652970ce">stt::file::File</a>
-</li>
-<li>readLineC()
-: <a class="el" href="classstt_1_1file_1_1File.html#a2eb2c502b53c69e667481f8e83efe6d5">stt::file::File</a>
-</li>
-<li>recoverForm()
-: <a class="el" href="structstt_1_1time_1_1Duration.html#a867741939eefe81b9760da90bea5df06">stt::time::Duration</a>
-</li>
-<li>recv_length
-: <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a1d9e6b29271923079bc27244a97ab213">stt::network::WebSocketFDInformation</a>
-</li>
-<li>recvData()
-: <a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a9e302132d955321d11fd0198fd93b968">stt::network::TcpFDHandler</a>
-, <a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#a286c2af9fa01db9e9365c5453d97d7eb">stt::network::UdpFDHandler</a>
-</li>
-<li>recvDataByLength()
-: <a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a4d12a36453b01e460373633ad9b09ed7">stt::network::TcpFDHandler</a>
-</li>
-<li>redrawTLS()
-: <a class="el" href="classstt_1_1network_1_1TcpServer.html#a39d8778843209ebac1af10aae6ba1634">stt::network::TcpServer</a>
-</li>
-<li>renew()
-: <a class="el" href="classstt_1_1system_1_1HBSystem.html#a645bb7b07ae96a735f8564c0dc92a165">stt::system::HBSystem</a>
-</li>
-<li>request
-: <a class="el" href="structstt_1_1security_1_1IPInformation.html#ad25a4cdd6d4c844e8cdc3bb4b8486d7b">stt::security::IPInformation</a>
-</li>
-<li>resetCTX()
-: <a class="el" href="classstt_1_1network_1_1TcpClient.html#ab4f4257567d6aaeebd07225263409445">stt::network::TcpClient</a>
-</li>
-<li>response
-: <a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a29b72edd9475c8c94c91affb5bfc7ad1">stt::network::WebSocketFDInformation</a>
-</li>
+<h3><a id="index_r" name="index_r"></a>- r -</h3><ul>
+<li>reactorThread&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a913abddb615efa8c8b9503ae24982b18">stt::network::TcpServer</a></li>
+<li>read()&#160;:&#160;<a class="el" href="classstt_1_1file_1_1File.html#a95daa74da158ab6dd8dd5e0957624865">stt::file::File</a></li>
+<li>readAll()&#160;:&#160;<a class="el" href="classstt_1_1file_1_1File.html#ad5a7981669511b378598153dc54cd50d">stt::file::File</a></li>
+<li>readAllC()&#160;:&#160;<a class="el" href="classstt_1_1file_1_1File.html#a57126e58e5affaf0380dbab3a5e7c72c">stt::file::File</a></li>
+<li>readC()&#160;:&#160;<a class="el" href="classstt_1_1file_1_1File.html#ab755510894fc6fc404247d3bd21ffd52">stt::file::File</a></li>
+<li>readLine()&#160;:&#160;<a class="el" href="classstt_1_1file_1_1File.html#ad70ee941c5438da8d7ec5b54652970ce">stt::file::File</a></li>
+<li>readLineC()&#160;:&#160;<a class="el" href="classstt_1_1file_1_1File.html#a2eb2c502b53c69e667481f8e83efe6d5">stt::file::File</a></li>
+<li>recoverForm()&#160;:&#160;<a class="el" href="structstt_1_1time_1_1Duration.html#a867741939eefe81b9760da90bea5df06">stt::time::Duration</a></li>
+<li>recv_length&#160;:&#160;<a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a1d9e6b29271923079bc27244a97ab213">stt::network::WebSocketFDInformation</a></li>
+<li>recvData()&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a9e302132d955321d11fd0198fd93b968">stt::network::TcpFDHandler</a>, <a class="el" href="classstt_1_1network_1_1UdpFDHandler.html#a286c2af9fa01db9e9365c5453d97d7eb">stt::network::UdpFDHandler</a></li>
+<li>recvDataByLength()&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpFDHandler.html#a4d12a36453b01e460373633ad9b09ed7">stt::network::TcpFDHandler</a></li>
+<li>redrawTLS()&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a39d8778843209ebac1af10aae6ba1634">stt::network::TcpServer</a></li>
+<li>renew()&#160;:&#160;<a class="el" href="classstt_1_1system_1_1HBSystem.html#a645bb7b07ae96a735f8564c0dc92a165">stt::system::HBSystem</a></li>
+<li>request&#160;:&#160;<a class="el" href="structstt_1_1network_1_1WorkerMessage.html#a74e154d57c2208b593bae46cb3b4e648">stt::network::WorkerMessage</a></li>
+<li>requestCloseAfterFlush()&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aab4f372c454970162035438b1194cb1d">stt::network::TcpServer</a></li>
+<li>requestQueuedClose()&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aeaa7e39221df6adde616e84a73e12d06">stt::network::TcpServer</a></li>
+<li>requestRate&#160;:&#160;<a class="el" href="structstt_1_1security_1_1ConnectionState.html#a235594ec24ebaa125a8409561869f21f">stt::security::ConnectionState</a></li>
+<li>requestSecs&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aae46831563ecec1dd25306ac3eec78ad">stt::network::TcpServer</a></li>
+<li>requestTimes&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#ae809e4044a03a89ead5535c42e0d6162">stt::network::TcpServer</a></li>
+<li>resetCTX()&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpClient.html#ab4f4257567d6aaeebd07225263409445">stt::network::TcpClient</a></li>
+<li>response&#160;:&#160;<a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a29b72edd9475c8c94c91affb5bfc7ad1">stt::network::WebSocketFDInformation</a></li>
+<li>ret&#160;:&#160;<a class="el" href="structstt_1_1network_1_1WorkerMessage.html#ac7b55b9614c33f6a53eb38a947d0d2ba">stt::network::WorkerMessage</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-制作者 &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.11
+制作者&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
 </small></address>
+</div><!-- doc-content -->
 </body>
 </html>

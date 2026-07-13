@@ -3,17 +3,17 @@
 
 STTNet 是一个**C++17标准** 的轻量级高性能服务器框架，采用 Reactor 事件驱动模型与 epoll 实现高并发非阻塞网络通信，具备完整的 **高性能网络通信能力**，支持 **TCP/UDP/HTTP/WebSocket 及其加密变种（TLS+TCP、HTTPS、WSS）**。支持文件操作，时间操作，日志操作，常见的数据处理，json格式的数据处理，加解密，信号管理，进程管理,信息安全等常用服务端功能。并内置了日志系统、epoll高并发模型事件驱动、多线程处理、线程安全、心跳监控、异常和信号处理等功能。
 
-案例：在4核4G内存的小型开发板上压测这个框架编写的http服务程序，达到了每秒6.5万的吞吐量，时延平均2-3ms。
+历史案例：旧版本曾在 4 核 4G 小型开发板上记录约 6.5 万请求/秒、平均 2–3 ms。该数据不是 0.6.0 的同机复测结果；当前性能请按仓库 benchmark 在目标 Linux 环境复测。
 
 > 作者：StephenTaam（1356597983@qq.com）
-> 语言：C++11  
+> 语言：C++17
 > 平台：Linux  
 > 依赖：OpenSSL、JsonCpp、pthread
 
 ---
 
 ## 📦 框架核心特性一览
-- ✅ 基于C++11现代标准
+- ✅ 基于 C++17
 - ✅ 简单易用，接口清晰
 # 🔌 通信功能
 - ✅ epoll + 多线程消费者模型，高并发处理
@@ -97,12 +97,25 @@ sudo pacman -S --noconfirm jsoncpp openssl base-devel
 ### 🛠️ 编译
 
 ```bash
-g++ -std=c++11 -o main main.cpp src/sttnet.cpp -ljsoncpp -lssl -lcrypto -lpthread
+g++ -std=c++17 -o main main.cpp src/sttnet.cpp -ljsoncpp -lssl -lcrypto -lpthread
 
 或使用 `make` 管理项目构建。
 ```
 
 （`main.cpp` 是这个文件示例中调用这个框架写的实际应用入口）
+
+推荐使用 CMake 构建并运行并发回归测试：
+
+```bash
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
+```
+
+性能与并发优化的设计、验证方法及后续路线见 [`docs/OPTIMIZATION_Chinese.md`](docs/OPTIMIZATION_Chinese.md)。
+服务进程的 SIGTERM/SIGINT/SIGKILL 处理约定见 [`docs/SIGNALS_Chinese.md`](docs/SIGNALS_Chinese.md)。
+能力边界、框架对比与 API/ABI 兼容说明见 [`docs/CAPABILITY_Chinese.md`](docs/CAPABILITY_Chinese.md)。
+本轮完整改动和可直接使用的 commit 文案见 [`docs/CHANGELOG_2026-07-13_Chinese.md`](docs/CHANGELOG_2026-07-13_Chinese.md)。
 
 ---
 
@@ -127,6 +140,13 @@ WebSocketServer* wsserver = nullptr;
 int main(int argc, char* argv[])
 {
     /*
+     * Block SIGTERM/SIGINT before creating any worker thread.
+     * 在创建任何线程前阻塞退出信号。
+     */
+    if(!ServerSetting::blockTerminationSignals())
+        return 1;
+
+    /*
      * Initialize logfile system
      * 初始化日志系统（第二个参数指定语言，默认英文）
      */
@@ -138,16 +158,6 @@ int main(int argc, char* argv[])
      * 创建 HTTP 服务器对象
      */
     httpserver = new HttpServer();
-
-    /*
-     * Graceful exit on signal 15 (SIGTERM)
-     * 收到 15 号信号时优雅退出
-     */
-    signal(15, [](int) {
-        delete httpserver;
-        delete wsserver;
-        delete lf;
-    });
 
     /*
      * HTTP: key extraction function
@@ -251,10 +261,13 @@ int main(int argc, char* argv[])
     wsserver->startListen(5050, 2);
 
     /*
-     * Block main thread
-     * 阻塞主线程，Reactor 在内部运行
+     * Wait synchronously; cleanup is performed in normal thread context.
+     * 同步等待 kill -15/Ctrl-C，然后在正常线程上优雅清理。
      */
-    pause();
+    ServerSetting::waitForTerminationSignal();
+    delete wsserver;
+    delete httpserver;
+    delete lf;
     return 0;
 }
 

@@ -1,18 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.5"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>STTNet: stt::data::NumberStringConvertUtil类 参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() { searchBox.OnSelectItem(0); });
-</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -20,9 +23,9 @@
 <div id="titlearea">
 <table cellspacing="0" cellpadding="0">
  <tbody>
- <tr style="height: 56px;">
-  <td style="padding-left: 0.5em;">
-   <div id="projectname">STTNet
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
    </div>
   </td>
  </tr>
@@ -30,55 +33,52 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.5 -->
+<!-- 制作者 Doxygen 1.13.2 -->
 <script type="text/javascript">
-var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
 </script>
-  <div id="navrow1" class="tabs">
-    <ul class="tablist">
-      <li><a href="index.html"><span>首页</span></a></li>
-      <li><a href="pages.html"><span>相关页面</span></a></li>
-      <li><a href="namespaces.html"><span>命名空间</span></a></li>
-      <li class="current"><a href="annotated.html"><span>类</span></a></li>
-      <li><a href="files.html"><span>文件</span></a></li>
-      <li>
-        <div id="MSearchBox" class="MSearchBoxInactive">
-        <span class="left">
-          <img id="MSearchSelect" src="search/mag_sel.png"
-               onmouseover="return searchBox.OnSearchSelectShow()"
-               onmouseout="return searchBox.OnSearchSelectHide()"
-               alt=""/>
-          <input type="text" id="MSearchField" value="搜索" accesskey="S"
-               onfocus="searchBox.OnSearchFieldFocus(true)" 
-               onblur="searchBox.OnSearchFieldFocus(false)" 
-               onkeyup="searchBox.OnSearchFieldChange(event)"/>
-          </span><span class="right">
-            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
-          </span>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div id="navrow2" class="tabs2">
-    <ul class="tablist">
-      <li><a href="annotated.html"><span>类列表</span></a></li>
-      <li><a href="classes.html"><span>类索引</span></a></li>
-      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
-      <li><a href="functions.html"><span>类成员</span></a></li>
-    </ul>
-  </div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索',false);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){ initResizable(false); });
+/* @license-end */
+</script>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>枚举</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>枚举值</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>页</a></div>
+</div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
-        name="MSearchResults" id="MSearchResults">
-</iframe>
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
 </div>
 
 <div id="nav-path" class="navpath">
@@ -86,48 +86,50 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <li class="navelem"><a class="el" href="namespacestt.html">stt</a></li><li class="navelem"><a class="el" href="namespacestt_1_1data.html">data</a></li><li class="navelem"><a class="el" href="classstt_1_1data_1_1NumberStringConvertUtil.html">NumberStringConvertUtil</a></li>  </ul>
 </div>
 </div><!-- top -->
+<div id="doc-content">
 <div class="header">
   <div class="summary">
 <a href="#pub-static-methods">静态 Public 成员函数</a> &#124;
 <a href="classstt_1_1data_1_1NumberStringConvertUtil-members.html">所有成员列表</a>  </div>
-  <div class="headertitle">
-<div class="title">stt::data::NumberStringConvertUtil类 参考</div>  </div>
+  <div class="headertitle"><div class="title">stt::data::NumberStringConvertUtil类 参考</div></div>
 </div><!--header-->
 <div class="contents">
 
 <p>负责字符串和数字的转化  
- <a href="classstt_1_1data_1_1NumberStringConvertUtil.html#details">更多...</a></p>
+ <a href="#details">更多...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 静态 Public 成员函数</h2></td></tr>
-<tr class="memitem:a95fbc5cb1b16d4011f375f775f57ccf6"><td class="memItemLeft" align="right" valign="top">static int &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1NumberStringConvertUtil.html#a95fbc5cb1b16d4011f375f775f57ccf6">toInt</a> (const std::string_view &amp;ori_str, int &amp;result, const int &amp;i=-1)</td></tr>
-<tr class="memdesc:a95fbc5cb1b16d4011f375f775f57ccf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">string转化为int类型  <a href="#a95fbc5cb1b16d4011f375f775f57ccf6">更多...</a><br/></td></tr>
-<tr class="separator:a95fbc5cb1b16d4011f375f775f57ccf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59cafea09499fa4683cd8652b3f0a9e2"><td class="memItemLeft" align="right" valign="top">static int &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1NumberStringConvertUtil.html#a59cafea09499fa4683cd8652b3f0a9e2">str16toInt</a> (const std::string_view &amp;ori_str, int &amp;result, const int &amp;i=-1)</td></tr>
-<tr class="memdesc:a59cafea09499fa4683cd8652b3f0a9e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">16进制数字的字符串表示转化为10进制int类型数字  <a href="#a59cafea09499fa4683cd8652b3f0a9e2">更多...</a><br/></td></tr>
-<tr class="separator:a59cafea09499fa4683cd8652b3f0a9e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43ba965999656897ca5ee14c7923c1ce"><td class="memItemLeft" align="right" valign="top">static long &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1NumberStringConvertUtil.html#a43ba965999656897ca5ee14c7923c1ce">toLong</a> (const std::string_view &amp;ori_str, long &amp;result, const long &amp;i=-1)</td></tr>
-<tr class="memdesc:a43ba965999656897ca5ee14c7923c1ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">string转化为long类型  <a href="#a43ba965999656897ca5ee14c7923c1ce">更多...</a><br/></td></tr>
-<tr class="separator:a43ba965999656897ca5ee14c7923c1ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf0ffbc63ce96afe0ccfa738a2cc40a6"><td class="memItemLeft" align="right" valign="top">static float &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1NumberStringConvertUtil.html#acf0ffbc63ce96afe0ccfa738a2cc40a6">toFloat</a> (const std::string &amp;ori_str, float &amp;result, const float &amp;i=-1)</td></tr>
-<tr class="memdesc:acf0ffbc63ce96afe0ccfa738a2cc40a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">string转化为float类型  <a href="#acf0ffbc63ce96afe0ccfa738a2cc40a6">更多...</a><br/></td></tr>
-<tr class="separator:acf0ffbc63ce96afe0ccfa738a2cc40a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0cec82e2b580aadeb0ee8b60eec87b5f"><td class="memItemLeft" align="right" valign="top">static double &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1NumberStringConvertUtil.html#a0cec82e2b580aadeb0ee8b60eec87b5f">toDouble</a> (const std::string &amp;ori_str, double &amp;result, const double &amp;i=-1)</td></tr>
-<tr class="memdesc:a0cec82e2b580aadeb0ee8b60eec87b5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">string转化为double类型  <a href="#a0cec82e2b580aadeb0ee8b60eec87b5f">更多...</a><br/></td></tr>
-<tr class="separator:a0cec82e2b580aadeb0ee8b60eec87b5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91cc86f739080d47bf0871f5e4030825"><td class="memItemLeft" align="right" valign="top">static bool &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1NumberStringConvertUtil.html#a91cc86f739080d47bf0871f5e4030825">toBool</a> (const std::string_view &amp;ori_str, bool &amp;result)</td></tr>
-<tr class="memdesc:a91cc86f739080d47bf0871f5e4030825"><td class="mdescLeft">&#160;</td><td class="mdescRight">string转化为bool类型  <a href="#a91cc86f739080d47bf0871f5e4030825">更多...</a><br/></td></tr>
-<tr class="separator:a91cc86f739080d47bf0871f5e4030825"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d83c11fcbca72014b8a22dd266e5cf7"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1NumberStringConvertUtil.html#a5d83c11fcbca72014b8a22dd266e5cf7">strto16</a> (const std::string &amp;ori_str, std::string &amp;result)</td></tr>
-<tr class="memdesc:a5d83c11fcbca72014b8a22dd266e5cf7"><td class="mdescLeft">&#160;</td><td class="mdescRight">将普通字符串转化为对应的十六进制表示字符串（hex string）。  <a href="#a5d83c11fcbca72014b8a22dd266e5cf7">更多...</a><br/></td></tr>
-<tr class="separator:a5d83c11fcbca72014b8a22dd266e5cf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18d7d9bbc85b7e84f98fa42a2cb42760" id="r_a18d7d9bbc85b7e84f98fa42a2cb42760"><td class="memItemLeft" align="right" valign="top">static int &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18d7d9bbc85b7e84f98fa42a2cb42760">toInt</a> (const std::string_view &amp;ori_str, int &amp;result, const int &amp;i=-1)</td></tr>
+<tr class="memdesc:a18d7d9bbc85b7e84f98fa42a2cb42760"><td class="mdescLeft">&#160;</td><td class="mdescRight">string转化为int类型  <br /></td></tr>
+<tr class="separator:a18d7d9bbc85b7e84f98fa42a2cb42760"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a816a912a1c778b7f7d39c948864fc7cf" id="r_a816a912a1c778b7f7d39c948864fc7cf"><td class="memItemLeft" align="right" valign="top">static int &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a816a912a1c778b7f7d39c948864fc7cf">str16toInt</a> (const std::string_view &amp;ori_str, int &amp;result, const int &amp;i=-1)</td></tr>
+<tr class="memdesc:a816a912a1c778b7f7d39c948864fc7cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">16进制数字的字符串表示转化为10进制int类型数字  <br /></td></tr>
+<tr class="separator:a816a912a1c778b7f7d39c948864fc7cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9174ac0c1335f8a096a06496a01a472c" id="r_a9174ac0c1335f8a096a06496a01a472c"><td class="memItemLeft" align="right" valign="top">static long &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9174ac0c1335f8a096a06496a01a472c">toLong</a> (const std::string_view &amp;ori_str, long &amp;result, const long &amp;i=-1)</td></tr>
+<tr class="memdesc:a9174ac0c1335f8a096a06496a01a472c"><td class="mdescLeft">&#160;</td><td class="mdescRight">string转化为long类型  <br /></td></tr>
+<tr class="separator:a9174ac0c1335f8a096a06496a01a472c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65928b7e33b2603d9791ec2f5dd9108c" id="r_a65928b7e33b2603d9791ec2f5dd9108c"><td class="memItemLeft" align="right" valign="top">static float &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65928b7e33b2603d9791ec2f5dd9108c">toFloat</a> (const std::string &amp;ori_str, float &amp;result, const float &amp;i=-1)</td></tr>
+<tr class="memdesc:a65928b7e33b2603d9791ec2f5dd9108c"><td class="mdescLeft">&#160;</td><td class="mdescRight">string转化为float类型  <br /></td></tr>
+<tr class="separator:a65928b7e33b2603d9791ec2f5dd9108c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8dba3148ca68bf12d345eef469321ea9" id="r_a8dba3148ca68bf12d345eef469321ea9"><td class="memItemLeft" align="right" valign="top">static double &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8dba3148ca68bf12d345eef469321ea9">toDouble</a> (const std::string &amp;ori_str, double &amp;result, const double &amp;i=-1)</td></tr>
+<tr class="memdesc:a8dba3148ca68bf12d345eef469321ea9"><td class="mdescLeft">&#160;</td><td class="mdescRight">string转化为double类型  <br /></td></tr>
+<tr class="separator:a8dba3148ca68bf12d345eef469321ea9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b159e43dd935dcceaaa6912b8f7fdf0" id="r_a4b159e43dd935dcceaaa6912b8f7fdf0"><td class="memItemLeft" align="right" valign="top">static bool &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4b159e43dd935dcceaaa6912b8f7fdf0">toBool</a> (const std::string_view &amp;ori_str, bool &amp;result)</td></tr>
+<tr class="memdesc:a4b159e43dd935dcceaaa6912b8f7fdf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">string转化为bool类型  <br /></td></tr>
+<tr class="separator:a4b159e43dd935dcceaaa6912b8f7fdf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13673a3f9529e905c2fb897ea4ef71e6" id="r_a13673a3f9529e905c2fb897ea4ef71e6"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a13673a3f9529e905c2fb897ea4ef71e6">strto16</a> (const std::string &amp;ori_str, std::string &amp;result)</td></tr>
+<tr class="memdesc:a13673a3f9529e905c2fb897ea4ef71e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">将普通字符串转化为对应的十六进制表示字符串（hex string）。  <br /></td></tr>
+<tr class="separator:a13673a3f9529e905c2fb897ea4ef71e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>负责字符串和数字的转化 </p>
 </div><h2 class="groupheader">成员函数说明</h2>
-<a class="anchor" id="a59cafea09499fa4683cd8652b3f0a9e2"></a>
+<a id="a816a912a1c778b7f7d39c948864fc7cf" name="a816a912a1c778b7f7d39c948864fc7cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a816a912a1c778b7f7d39c948864fc7cf">&#9670;&#160;</a></span>str16toInt()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -135,32 +137,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static int&amp; stt::data::NumberStringConvertUtil::str16toInt </td>
+          <td class="memname">static int &amp; stt::data::NumberStringConvertUtil::str16toInt </td>
           <td>(</td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>ori_str</em>, </td>
+          <td class="paramtype">const std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>ori_str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int &amp;&#160;</td>
-          <td class="paramname"><em>result</em>, </td>
+          <td class="paramtype">int &amp;</td>          <td class="paramname"><span class="paramname"><em>result</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>i</em> = <code>-1</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>i</em></span><span class="paramdefsep"> = </span><span class="paramdefval">-1</span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -177,7 +171,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 
 </div>
 </div>
-<a class="anchor" id="a5d83c11fcbca72014b8a22dd266e5cf7"></a>
+<a id="a13673a3f9529e905c2fb897ea4ef71e6" name="a13673a3f9529e905c2fb897ea4ef71e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13673a3f9529e905c2fb897ea4ef71e6">&#9670;&#160;</a></span>strto16()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -185,26 +181,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::string&amp; stt::data::NumberStringConvertUtil::strto16 </td>
+          <td class="memname">static std::string &amp; stt::data::NumberStringConvertUtil::strto16 </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>ori_str</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>ori_str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>result</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>result</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -219,11 +208,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
   </dd>
 </dl>
 <dl class="section return"><dt>返回</dt><dd>转换后的十六进制字符串 result 的引用。 </dd></dl>
-<dl class="bug"><dt><b><a class="el" href="bug.html#_bug000002">Bug:</a></b></dt><dd>有bug待修复 </dd></dl>
+<dl class="bug"><dt><b><a class="el" href="bug.html#_bug000002">Bug</a></b></dt><dd>有bug待修复 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a91cc86f739080d47bf0871f5e4030825"></a>
+<a id="a4b159e43dd935dcceaaa6912b8f7fdf0" name="a4b159e43dd935dcceaaa6912b8f7fdf0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b159e43dd935dcceaaa6912b8f7fdf0">&#9670;&#160;</a></span>toBool()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -231,26 +222,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static bool&amp; stt::data::NumberStringConvertUtil::toBool </td>
+          <td class="memname">static bool &amp; stt::data::NumberStringConvertUtil::toBool </td>
           <td>(</td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>ori_str</em>, </td>
+          <td class="paramtype">const std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>ori_str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool &amp;&#160;</td>
-          <td class="paramname"><em>result</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">bool &amp;</td>          <td class="paramname"><span class="paramname"><em>result</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -268,7 +252,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 
 </div>
 </div>
-<a class="anchor" id="a0cec82e2b580aadeb0ee8b60eec87b5f"></a>
+<a id="a8dba3148ca68bf12d345eef469321ea9" name="a8dba3148ca68bf12d345eef469321ea9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8dba3148ca68bf12d345eef469321ea9">&#9670;&#160;</a></span>toDouble()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -276,32 +262,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static double&amp; stt::data::NumberStringConvertUtil::toDouble </td>
+          <td class="memname">static double &amp; stt::data::NumberStringConvertUtil::toDouble </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>ori_str</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>ori_str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double &amp;&#160;</td>
-          <td class="paramname"><em>result</em>, </td>
+          <td class="paramtype">double &amp;</td>          <td class="paramname"><span class="paramname"><em>result</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const double &amp;&#160;</td>
-          <td class="paramname"><em>i</em> = <code>-1</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const double &amp;</td>          <td class="paramname"><span class="paramname"><em>i</em></span><span class="paramdefsep"> = </span><span class="paramdefval">-1</span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -320,7 +298,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 
 </div>
 </div>
-<a class="anchor" id="acf0ffbc63ce96afe0ccfa738a2cc40a6"></a>
+<a id="a65928b7e33b2603d9791ec2f5dd9108c" name="a65928b7e33b2603d9791ec2f5dd9108c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65928b7e33b2603d9791ec2f5dd9108c">&#9670;&#160;</a></span>toFloat()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -328,32 +308,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static float&amp; stt::data::NumberStringConvertUtil::toFloat </td>
+          <td class="memname">static float &amp; stt::data::NumberStringConvertUtil::toFloat </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>ori_str</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>ori_str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float &amp;&#160;</td>
-          <td class="paramname"><em>result</em>, </td>
+          <td class="paramtype">float &amp;</td>          <td class="paramname"><span class="paramname"><em>result</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const float &amp;&#160;</td>
-          <td class="paramname"><em>i</em> = <code>-1</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const float &amp;</td>          <td class="paramname"><span class="paramname"><em>i</em></span><span class="paramdefsep"> = </span><span class="paramdefval">-1</span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -372,7 +344,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 
 </div>
 </div>
-<a class="anchor" id="a95fbc5cb1b16d4011f375f775f57ccf6"></a>
+<a id="a18d7d9bbc85b7e84f98fa42a2cb42760" name="a18d7d9bbc85b7e84f98fa42a2cb42760"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18d7d9bbc85b7e84f98fa42a2cb42760">&#9670;&#160;</a></span>toInt()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -380,32 +354,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static int&amp; stt::data::NumberStringConvertUtil::toInt </td>
+          <td class="memname">static int &amp; stt::data::NumberStringConvertUtil::toInt </td>
           <td>(</td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>ori_str</em>, </td>
+          <td class="paramtype">const std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>ori_str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int &amp;&#160;</td>
-          <td class="paramname"><em>result</em>, </td>
+          <td class="paramtype">int &amp;</td>          <td class="paramname"><span class="paramname"><em>result</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>i</em> = <code>-1</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>i</em></span><span class="paramdefsep"> = </span><span class="paramdefval">-1</span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -424,7 +390,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 
 </div>
 </div>
-<a class="anchor" id="a43ba965999656897ca5ee14c7923c1ce"></a>
+<a id="a9174ac0c1335f8a096a06496a01a472c" name="a9174ac0c1335f8a096a06496a01a472c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9174ac0c1335f8a096a06496a01a472c">&#9670;&#160;</a></span>toLong()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -432,32 +400,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static long&amp; stt::data::NumberStringConvertUtil::toLong </td>
+          <td class="memname">static long &amp; stt::data::NumberStringConvertUtil::toLong </td>
           <td>(</td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>ori_str</em>, </td>
+          <td class="paramtype">const std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>ori_str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">long &amp;&#160;</td>
-          <td class="paramname"><em>result</em>, </td>
+          <td class="paramtype">long &amp;</td>          <td class="paramname"><span class="paramname"><em>result</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const long &amp;&#160;</td>
-          <td class="paramname"><em>i</em> = <code>-1</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const long &amp;</td>          <td class="paramname"><span class="paramname"><em>i</em></span><span class="paramdefsep"> = </span><span class="paramdefval">-1</span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -482,9 +442,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-制作者 &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.5
+制作者&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
 </small></address>
+</div><!-- doc-content -->
 </body>
 </html>

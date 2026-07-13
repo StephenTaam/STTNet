@@ -1,0 +1,324 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>STTNet: stt::network::ServerMetricsSnapshot结构体 参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.13.2 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索',false);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){ initResizable(false); });
+/* @license-end */
+</script>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespacestt.html">stt</a></li><li class="navelem"><a class="el" href="namespacestt_1_1network.html">network</a></li><li class="navelem"><a class="el" href="structstt_1_1network_1_1ServerMetricsSnapshot.html">ServerMetricsSnapshot</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-attribs">Public 属性</a> &#124;
+<a href="structstt_1_1network_1_1ServerMetricsSnapshot-members.html">所有成员列表</a>  </div>
+  <div class="headertitle"><div class="title">stt::network::ServerMetricsSnapshot结构体 参考</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><a class="el" href="classstt_1_1network_1_1TcpServer.html" title="Tcp服务端类">TcpServer</a> 运行指标的无锁快照。  
+ <a href="#details">更多...</a></p>
+
+<p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public 属性</h2></td></tr>
+<tr class="memitem:a01e44d7a6ab1c52e200cdace7413b2f6" id="r_a01e44d7a6ab1c52e200cdace7413b2f6"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01e44d7a6ab1c52e200cdace7413b2f6">accepted_connections</a> =0</td></tr>
+<tr class="separator:a01e44d7a6ab1c52e200cdace7413b2f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0dd7339e13e01df3a5cb6cffbc6bb13e" id="r_a0dd7339e13e01df3a5cb6cffbc6bb13e"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0dd7339e13e01df3a5cb6cffbc6bb13e">active_connections</a> =0</td></tr>
+<tr class="separator:a0dd7339e13e01df3a5cb6cffbc6bb13e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6714980d286f25ee65884892f9b4718a" id="r_a6714980d286f25ee65884892f9b4718a"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6714980d286f25ee65884892f9b4718a">closed_connections</a> =0</td></tr>
+<tr class="separator:a6714980d286f25ee65884892f9b4718a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9527da879c28c885fc7f730026b6ffd4" id="r_a9527da879c28c885fc7f730026b6ffd4"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9527da879c28c885fc7f730026b6ffd4">accept_errors</a> =0</td></tr>
+<tr class="separator:a9527da879c28c885fc7f730026b6ffd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ea6a2a5e3fd2d33e8b7be494b349cc2" id="r_a1ea6a2a5e3fd2d33e8b7be494b349cc2"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ea6a2a5e3fd2d33e8b7be494b349cc2">tls_handshake_failures</a> =0</td></tr>
+<tr class="separator:a1ea6a2a5e3fd2d33e8b7be494b349cc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b86a234c448873ead35f69acd78aa99" id="r_a5b86a234c448873ead35f69acd78aa99"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5b86a234c448873ead35f69acd78aa99">parsed_http_requests</a> =0</td></tr>
+<tr class="separator:a5b86a234c448873ead35f69acd78aa99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b7922b4ce40dbebb684ef92ded0e580" id="r_a2b7922b4ce40dbebb684ef92ded0e580"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b7922b4ce40dbebb684ef92ded0e580">queued_write_bytes</a> =0</td></tr>
+<tr class="separator:a2b7922b4ce40dbebb684ef92ded0e580"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2dd29a2fb2e0d026b6a855386bc6c2cc" id="r_a2dd29a2fb2e0d026b6a855386bc6c2cc"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2dd29a2fb2e0d026b6a855386bc6c2cc">sent_bytes</a> =0</td></tr>
+<tr class="separator:a2dd29a2fb2e0d026b6a855386bc6c2cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab8ab47e74ba3ecbe4ea357db3e2cda8" id="r_aab8ab47e74ba3ecbe4ea357db3e2cda8"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab8ab47e74ba3ecbe4ea357db3e2cda8">pending_write_bytes</a> =0</td></tr>
+<tr class="separator:aab8ab47e74ba3ecbe4ea357db3e2cda8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0cc02d3482ad787d796bdd74cc64c8a7" id="r_a0cc02d3482ad787d796bdd74cc64c8a7"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0cc02d3482ad787d796bdd74cc64c8a7">write_overflows</a> =0</td></tr>
+<tr class="separator:a0cc02d3482ad787d796bdd74cc64c8a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96def715cb84d74574d05cf48143351d" id="r_a96def715cb84d74574d05cf48143351d"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a96def715cb84d74574d05cf48143351d">worker_queue_overflows</a> =0</td></tr>
+<tr class="separator:a96def715cb84d74574d05cf48143351d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3208328f8b7762df0eafd749fec617f" id="r_af3208328f8b7762df0eafd749fec617f"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3208328f8b7762df0eafd749fec617f">send_ready_queue_overflows</a> =0</td></tr>
+<tr class="separator:af3208328f8b7762df0eafd749fec617f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<div class="textblock"><p><a class="el" href="classstt_1_1network_1_1TcpServer.html" title="Tcp服务端类">TcpServer</a> 运行指标的无锁快照。 </p>
+<dl class="section note"><dt>注解</dt><dd>所有计数均为进程内累计值；active_connections 与 pending_write_bytes 为当前值。 获取快照不会阻塞 Reactor，可从任意线程调用。 </dd></dl>
+</div><h2 class="groupheader">类成员变量说明</h2>
+<a id="a9527da879c28c885fc7f730026b6ffd4" name="a9527da879c28c885fc7f730026b6ffd4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9527da879c28c885fc7f730026b6ffd4">&#9670;&#160;</a></span>accept_errors</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::accept_errors =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>accept4 的非暂时性失败次数。 </p>
+
+</div>
+</div>
+<a id="a01e44d7a6ab1c52e200cdace7413b2f6" name="a01e44d7a6ab1c52e200cdace7413b2f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01e44d7a6ab1c52e200cdace7413b2f6">&#9670;&#160;</a></span>accepted_connections</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::accepted_connections =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>成功接收的连接总数。 </p>
+
+</div>
+</div>
+<a id="a0dd7339e13e01df3a5cb6cffbc6bb13e" name="a0dd7339e13e01df3a5cb6cffbc6bb13e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0dd7339e13e01df3a5cb6cffbc6bb13e">&#9670;&#160;</a></span>active_connections</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::active_connections =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>当前仍持有底层 fd 的连接数。 </p>
+
+</div>
+</div>
+<a id="a6714980d286f25ee65884892f9b4718a" name="a6714980d286f25ee65884892f9b4718a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6714980d286f25ee65884892f9b4718a">&#9670;&#160;</a></span>closed_connections</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::closed_connections =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>已完成底层资源释放的连接总数。 </p>
+
+</div>
+</div>
+<a id="a5b86a234c448873ead35f69acd78aa99" name="a5b86a234c448873ead35f69acd78aa99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b86a234c448873ead35f69acd78aa99">&#9670;&#160;</a></span>parsed_http_requests</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::parsed_http_requests =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>成功完成边界校验和解析的 HTTP 请求数。 </p>
+
+</div>
+</div>
+<a id="aab8ab47e74ba3ecbe4ea357db3e2cda8" name="aab8ab47e74ba3ecbe4ea357db3e2cda8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab8ab47e74ba3ecbe4ea357db3e2cda8">&#9670;&#160;</a></span>pending_write_bytes</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::pending_write_bytes =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>所有连接当前尚未发送的队列字节数。 </p>
+
+</div>
+</div>
+<a id="a2b7922b4ce40dbebb684ef92ded0e580" name="a2b7922b4ce40dbebb684ef92ded0e580"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b7922b4ce40dbebb684ef92ded0e580">&#9670;&#160;</a></span>queued_write_bytes</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::queued_write_bytes =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>业务层成功提交到发送队列的累计字节数。 </p>
+
+</div>
+</div>
+<a id="af3208328f8b7762df0eafd749fec617f" name="af3208328f8b7762df0eafd749fec617f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3208328f8b7762df0eafd749fec617f">&#9670;&#160;</a></span>send_ready_queue_overflows</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::send_ready_queue_overflows =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>发送通知环形队列进入后备队列的次数。 </p>
+
+</div>
+</div>
+<a id="a2dd29a2fb2e0d026b6a855386bc6c2cc" name="a2dd29a2fb2e0d026b6a855386bc6c2cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2dd29a2fb2e0d026b6a855386bc6c2cc">&#9670;&#160;</a></span>sent_bytes</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::sent_bytes =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Reactor 成功写入 socket/TLS 的累计字节数。 </p>
+
+</div>
+</div>
+<a id="a1ea6a2a5e3fd2d33e8b7be494b349cc2" name="a1ea6a2a5e3fd2d33e8b7be494b349cc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ea6a2a5e3fd2d33e8b7be494b349cc2">&#9670;&#160;</a></span>tls_handshake_failures</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::tls_handshake_failures =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>TLS 服务端握手失败次数。 </p>
+
+</div>
+</div>
+<a id="a96def715cb84d74574d05cf48143351d" name="a96def715cb84d74574d05cf48143351d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96def715cb84d74574d05cf48143351d">&#9670;&#160;</a></span>worker_queue_overflows</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::worker_queue_overflows =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Worker 完成环形队列进入后备队列的次数。 </p>
+
+</div>
+</div>
+<a id="a0cc02d3482ad787d796bdd74cc64c8a7" name="a0cc02d3482ad787d796bdd74cc64c8a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0cc02d3482ad787d796bdd74cc64c8a7">&#9670;&#160;</a></span>write_overflows</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::write_overflows =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>超过每连接发送高水位的次数。 </p>
+
+</div>
+</div>
+<hr/>该结构体的文档由以下文件生成:<ul>
+<li>include/<a class="el" href="sttnet_8h_source.html">sttnet.h</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
+</small></address>
+</div><!-- doc-content -->
+</body>
+</html>

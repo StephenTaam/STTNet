@@ -1,18 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.5"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>STTNet: stt::data::RandomUtil类 参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() { searchBox.OnSelectItem(0); });
-</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -20,9 +23,9 @@
 <div id="titlearea">
 <table cellspacing="0" cellpadding="0">
  <tbody>
- <tr style="height: 56px;">
-  <td style="padding-left: 0.5em;">
-   <div id="projectname">STTNet
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
    </div>
   </td>
  </tr>
@@ -30,55 +33,52 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.5 -->
+<!-- 制作者 Doxygen 1.13.2 -->
 <script type="text/javascript">
-var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
 </script>
-  <div id="navrow1" class="tabs">
-    <ul class="tablist">
-      <li><a href="index.html"><span>首页</span></a></li>
-      <li><a href="pages.html"><span>相关页面</span></a></li>
-      <li><a href="namespaces.html"><span>命名空间</span></a></li>
-      <li class="current"><a href="annotated.html"><span>类</span></a></li>
-      <li><a href="files.html"><span>文件</span></a></li>
-      <li>
-        <div id="MSearchBox" class="MSearchBoxInactive">
-        <span class="left">
-          <img id="MSearchSelect" src="search/mag_sel.png"
-               onmouseover="return searchBox.OnSearchSelectShow()"
-               onmouseout="return searchBox.OnSearchSelectHide()"
-               alt=""/>
-          <input type="text" id="MSearchField" value="搜索" accesskey="S"
-               onfocus="searchBox.OnSearchFieldFocus(true)" 
-               onblur="searchBox.OnSearchFieldFocus(false)" 
-               onkeyup="searchBox.OnSearchFieldChange(event)"/>
-          </span><span class="right">
-            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
-          </span>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div id="navrow2" class="tabs2">
-    <ul class="tablist">
-      <li><a href="annotated.html"><span>类列表</span></a></li>
-      <li><a href="classes.html"><span>类索引</span></a></li>
-      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
-      <li><a href="functions.html"><span>类成员</span></a></li>
-    </ul>
-  </div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索',false);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){ initResizable(false); });
+/* @license-end */
+</script>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>枚举</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>枚举值</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>页</a></div>
+</div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
-        name="MSearchResults" id="MSearchResults">
-</iframe>
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
 </div>
 
 <div id="nav-path" class="navpath">
@@ -86,36 +86,38 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <li class="navelem"><a class="el" href="namespacestt.html">stt</a></li><li class="navelem"><a class="el" href="namespacestt_1_1data.html">data</a></li><li class="navelem"><a class="el" href="classstt_1_1data_1_1RandomUtil.html">RandomUtil</a></li>  </ul>
 </div>
 </div><!-- top -->
+<div id="doc-content">
 <div class="header">
   <div class="summary">
 <a href="#pub-static-methods">静态 Public 成员函数</a> &#124;
 <a href="classstt_1_1data_1_1RandomUtil-members.html">所有成员列表</a>  </div>
-  <div class="headertitle">
-<div class="title">stt::data::RandomUtil类 参考</div>  </div>
+  <div class="headertitle"><div class="title">stt::data::RandomUtil类 参考</div></div>
 </div><!--header-->
 <div class="contents">
 
 <p>随机数，字符串生成相关  
- <a href="classstt_1_1data_1_1RandomUtil.html#details">更多...</a></p>
+ <a href="#details">更多...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 静态 Public 成员函数</h2></td></tr>
-<tr class="memitem:ad1f857168d793ee72bf295f945581690"><td class="memItemLeft" align="right" valign="top">static long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1RandomUtil.html#ad1f857168d793ee72bf295f945581690">getRandomNumber</a> (const long &amp;a, const long &amp;b)</td></tr>
-<tr class="memdesc:ad1f857168d793ee72bf295f945581690"><td class="mdescLeft">&#160;</td><td class="mdescRight">生成一个随机整数  <a href="#ad1f857168d793ee72bf295f945581690">更多...</a><br/></td></tr>
+<tr class="memitem:ad1f857168d793ee72bf295f945581690" id="r_ad1f857168d793ee72bf295f945581690"><td class="memItemLeft" align="right" valign="top">static long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1f857168d793ee72bf295f945581690">getRandomNumber</a> (const long &amp;a, const long &amp;b)</td></tr>
+<tr class="memdesc:ad1f857168d793ee72bf295f945581690"><td class="mdescLeft">&#160;</td><td class="mdescRight">生成一个随机整数  <br /></td></tr>
 <tr class="separator:ad1f857168d793ee72bf295f945581690"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7744c11215a4158164fd96cae3bc061"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1RandomUtil.html#ae7744c11215a4158164fd96cae3bc061">getRandomStr_base64</a> (std::string &amp;str, const int &amp;length)</td></tr>
-<tr class="memdesc:ae7744c11215a4158164fd96cae3bc061"><td class="mdescLeft">&#160;</td><td class="mdescRight">生成一个规定长度的“Base64 字符集内的伪随机字符串”，并在末尾用 '=' 补齐至符合 Base64 字符串格式  <a href="#ae7744c11215a4158164fd96cae3bc061">更多...</a><br/></td></tr>
-<tr class="separator:ae7744c11215a4158164fd96cae3bc061"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f1beb3198a7c0c21af2a1918561c6c3"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1data_1_1RandomUtil.html#a2f1beb3198a7c0c21af2a1918561c6c3">generateMask_4</a> (std::string &amp;mask)</td></tr>
-<tr class="memdesc:a2f1beb3198a7c0c21af2a1918561c6c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">生成一个 32 位（4 字节）的随机掩码。  <a href="#a2f1beb3198a7c0c21af2a1918561c6c3">更多...</a><br/></td></tr>
-<tr class="separator:a2f1beb3198a7c0c21af2a1918561c6c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e95cd1b465c1f0bb02a6a919272918c" id="r_a4e95cd1b465c1f0bb02a6a919272918c"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e95cd1b465c1f0bb02a6a919272918c">getRandomStr_base64</a> (std::string &amp;str, const int &amp;length)</td></tr>
+<tr class="memdesc:a4e95cd1b465c1f0bb02a6a919272918c"><td class="mdescLeft">&#160;</td><td class="mdescRight">生成一个规定长度的“Base64 字符集内的伪随机字符串”，并在末尾用 '=' 补齐至符合 Base64 字符串格式  <br /></td></tr>
+<tr class="separator:a4e95cd1b465c1f0bb02a6a919272918c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc99aee7a54ba32dfbebca53251e0caf" id="r_abc99aee7a54ba32dfbebca53251e0caf"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc99aee7a54ba32dfbebca53251e0caf">generateMask_4</a> (std::string &amp;mask)</td></tr>
+<tr class="memdesc:abc99aee7a54ba32dfbebca53251e0caf"><td class="mdescLeft">&#160;</td><td class="mdescRight">生成一个 32 位（4 字节）的随机掩码。  <br /></td></tr>
+<tr class="separator:abc99aee7a54ba32dfbebca53251e0caf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>随机数，字符串生成相关 </p>
 </div><h2 class="groupheader">成员函数说明</h2>
-<a class="anchor" id="a2f1beb3198a7c0c21af2a1918561c6c3"></a>
+<a id="abc99aee7a54ba32dfbebca53251e0caf" name="abc99aee7a54ba32dfbebca53251e0caf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc99aee7a54ba32dfbebca53251e0caf">&#9670;&#160;</a></span>generateMask_4()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -123,22 +125,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::string&amp; stt::data::RandomUtil::generateMask_4 </td>
+          <td class="memname">static std::string &amp; stt::data::RandomUtil::generateMask_4 </td>
           <td>(</td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>mask</em></td><td>)</td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>mask</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>生成一个 32 位（4 字节）的随机掩码。 </p>
-<p>该函数先随机生成一个由 '0' 和 '1' 组成的 32 位字符串（例如："010110..."）， 然后通过内部的 <code><a class="el" href="classstt_1_1data_1_1BitUtil.html#aacf5e390259a13c73a0013e54d52d0fd" title="将最多 8 位的 &quot;01&quot; 字符串压缩成 1 个字节（char）。 ">BitUtil::toBit()</a></code> 函数将其转换为对应的 4 字节二进制数据。</p>
+<p>该函数先随机生成一个由 '0' 和 '1' 组成的 32 位字符串（例如："010110..."）， 然后通过内部的 <code><a class="el" href="classstt_1_1data_1_1BitUtil.html#adb4b9d5dbccd056dd692c0a00e2dfffa" title="将最多 8 位的 &quot;01&quot; 字符串压缩成 1 个字节（char）。">BitUtil::toBit()</a></code> 函数将其转换为对应的 4 字节二进制数据。</p>
 <p>转换结果通过 mask 参数返回，通常用于生成数据包掩码、加密掩码、位图掩码等。</p>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
@@ -147,11 +148,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
   </dd>
 </dl>
 <dl class="section return"><dt>返回</dt><dd>返回 mask 的引用。</dd></dl>
-<dl class="section note"><dt>注解</dt><dd>内部依赖函数 <code><a class="el" href="classstt_1_1data_1_1BitUtil.html#a85d6f7ef16305e9b9ada82784cfadf0e" title="将任意长度的 &quot;01&quot; 字符串压缩为二进制数据，每 8 位为一个字节。 ">BitUtil::toBit(const std::string&amp;, std::string&amp;)</a></code>，用于将 32 位二进制字符串压缩为 4 字节。 </dd></dl>
+<dl class="section note"><dt>注解</dt><dd>内部依赖函数 <code><a class="el" href="classstt_1_1data_1_1BitUtil.html#adb4b9d5dbccd056dd692c0a00e2dfffa" title="将最多 8 位的 &quot;01&quot; 字符串压缩成 1 个字节（char）。">BitUtil::toBit</a>(const std::string&amp;, std::string&amp;)</code>，用于将 32 位二进制字符串压缩为 4 字节。 </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="ad1f857168d793ee72bf295f945581690"></a>
+<a id="ad1f857168d793ee72bf295f945581690" name="ad1f857168d793ee72bf295f945581690"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1f857168d793ee72bf295f945581690">&#9670;&#160;</a></span>getRandomNumber()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -161,24 +164,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
         <tr>
           <td class="memname">static long stt::data::RandomUtil::getRandomNumber </td>
           <td>(</td>
-          <td class="paramtype">const long &amp;&#160;</td>
-          <td class="paramname"><em>a</em>, </td>
+          <td class="paramtype">const long &amp;</td>          <td class="paramname"><span class="paramname"><em>a</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const long &amp;&#160;</td>
-          <td class="paramname"><em>b</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const long &amp;</td>          <td class="paramname"><span class="paramname"><em>b</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -196,7 +192,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 
 </div>
 </div>
-<a class="anchor" id="ae7744c11215a4158164fd96cae3bc061"></a>
+<a id="a4e95cd1b465c1f0bb02a6a919272918c" name="a4e95cd1b465c1f0bb02a6a919272918c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e95cd1b465c1f0bb02a6a919272918c">&#9670;&#160;</a></span>getRandomStr_base64()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -204,26 +202,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::string&amp; stt::data::RandomUtil::getRandomStr_base64 </td>
+          <td class="memname">static std::string &amp; stt::data::RandomUtil::getRandomStr_base64 </td>
           <td>(</td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>str</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>length</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>length</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -246,9 +237,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-制作者 &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.5
+制作者&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
 </small></address>
+</div><!-- doc-content -->
 </body>
 </html>

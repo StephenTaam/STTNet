@@ -1,18 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.5"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>STTNet: stt::network::WebSocketFDInformation结构体 参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() { searchBox.OnSelectItem(0); });
-</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -20,9 +23,9 @@
 <div id="titlearea">
 <table cellspacing="0" cellpadding="0">
  <tbody>
- <tr style="height: 56px;">
-  <td style="padding-left: 0.5em;">
-   <div id="projectname">STTNet
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
    </div>
   </td>
  </tr>
@@ -30,55 +33,52 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.5 -->
+<!-- 制作者 Doxygen 1.13.2 -->
 <script type="text/javascript">
-var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
 </script>
-  <div id="navrow1" class="tabs">
-    <ul class="tablist">
-      <li><a href="index.html"><span>首页</span></a></li>
-      <li><a href="pages.html"><span>相关页面</span></a></li>
-      <li><a href="namespaces.html"><span>命名空间</span></a></li>
-      <li class="current"><a href="annotated.html"><span>类</span></a></li>
-      <li><a href="files.html"><span>文件</span></a></li>
-      <li>
-        <div id="MSearchBox" class="MSearchBoxInactive">
-        <span class="left">
-          <img id="MSearchSelect" src="search/mag_sel.png"
-               onmouseover="return searchBox.OnSearchSelectShow()"
-               onmouseout="return searchBox.OnSearchSelectHide()"
-               alt=""/>
-          <input type="text" id="MSearchField" value="搜索" accesskey="S"
-               onfocus="searchBox.OnSearchFieldFocus(true)" 
-               onblur="searchBox.OnSearchFieldFocus(false)" 
-               onkeyup="searchBox.OnSearchFieldChange(event)"/>
-          </span><span class="right">
-            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
-          </span>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div id="navrow2" class="tabs2">
-    <ul class="tablist">
-      <li><a href="annotated.html"><span>类列表</span></a></li>
-      <li><a href="classes.html"><span>类索引</span></a></li>
-      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
-      <li><a href="functions.html"><span>类成员</span></a></li>
-    </ul>
-  </div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索',false);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){ initResizable(false); });
+/* @license-end */
+</script>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>枚举</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>枚举值</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>页</a></div>
+</div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
-        name="MSearchResults" id="MSearchResults">
-</iframe>
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
 </div>
 
 <div id="nav-path" class="navpath">
@@ -86,78 +86,83 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <li class="navelem"><a class="el" href="namespacestt.html">stt</a></li><li class="navelem"><a class="el" href="namespacestt_1_1network.html">network</a></li><li class="navelem"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a></li>  </ul>
 </div>
 </div><!-- top -->
+<div id="doc-content">
 <div class="header">
   <div class="summary">
 <a href="#pub-attribs">Public 属性</a> &#124;
 <a href="structstt_1_1network_1_1WebSocketFDInformation-members.html">所有成员列表</a>  </div>
-  <div class="headertitle">
-<div class="title">stt::network::WebSocketFDInformation结构体 参考</div>  </div>
+  <div class="headertitle"><div class="title">stt::network::WebSocketFDInformation结构体 参考</div></div>
 </div><!--header-->
 <div class="contents">
 
 <p>保存客户端WS/WSS请求信息的结构体  
- <a href="structstt_1_1network_1_1WebSocketFDInformation.html#details">更多...</a></p>
+ <a href="#details">更多...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public 属性</h2></td></tr>
-<tr class="memitem:a6c32efe22e81d136d469dd993a6b4adc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a6c32efe22e81d136d469dd993a6b4adc">fd</a></td></tr>
-<tr class="memdesc:a6c32efe22e81d136d469dd993a6b4adc"><td class="mdescLeft">&#160;</td><td class="mdescRight">底层的socket套接字  <a href="#a6c32efe22e81d136d469dd993a6b4adc">更多...</a><br/></td></tr>
+<tr class="memitem:a6c32efe22e81d136d469dd993a6b4adc" id="r_a6c32efe22e81d136d469dd993a6b4adc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6c32efe22e81d136d469dd993a6b4adc">fd</a> =-1</td></tr>
+<tr class="memdesc:a6c32efe22e81d136d469dd993a6b4adc"><td class="mdescLeft">&#160;</td><td class="mdescRight">底层的socket套接字  <br /></td></tr>
 <tr class="separator:a6c32efe22e81d136d469dd993a6b4adc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe2932043af4ab420a9630d213db35bc"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#afe2932043af4ab420a9630d213db35bc">connection_obj_fd</a></td></tr>
-<tr class="memdesc:afe2932043af4ab420a9630d213db35bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">连接对象fd  <a href="#afe2932043af4ab420a9630d213db35bc">更多...</a><br/></td></tr>
+<tr class="memitem:afe2932043af4ab420a9630d213db35bc" id="r_afe2932043af4ab420a9630d213db35bc"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe2932043af4ab420a9630d213db35bc">connection_obj_fd</a> =0</td></tr>
+<tr class="memdesc:afe2932043af4ab420a9630d213db35bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">连接对象fd  <br /></td></tr>
 <tr class="separator:afe2932043af4ab420a9630d213db35bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a19058806c56ca8eb8b292c173d4bb6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a1a19058806c56ca8eb8b292c173d4bb6">closeflag</a></td></tr>
-<tr class="memdesc:a1a19058806c56ca8eb8b292c173d4bb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">true:发送了关闭帧 false：没有发送关闭帧  <a href="#a1a19058806c56ca8eb8b292c173d4bb6">更多...</a><br/></td></tr>
+<tr class="memitem:a1a19058806c56ca8eb8b292c173d4bb6" id="r_a1a19058806c56ca8eb8b292c173d4bb6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a19058806c56ca8eb8b292c173d4bb6">closeflag</a> =false</td></tr>
+<tr class="memdesc:a1a19058806c56ca8eb8b292c173d4bb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">true:发送了关闭帧 false：没有发送关闭帧  <br /></td></tr>
 <tr class="separator:a1a19058806c56ca8eb8b292c173d4bb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97d0c483c33d236c5d2af3504b74857e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a97d0c483c33d236c5d2af3504b74857e">locPara</a></td></tr>
-<tr class="memdesc:a97d0c483c33d236c5d2af3504b74857e"><td class="mdescLeft">&#160;</td><td class="mdescRight">握手阶段的Http/Https路径和参数  <a href="#a97d0c483c33d236c5d2af3504b74857e">更多...</a><br/></td></tr>
+<tr class="memitem:a97d0c483c33d236c5d2af3504b74857e" id="r_a97d0c483c33d236c5d2af3504b74857e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a97d0c483c33d236c5d2af3504b74857e">locPara</a></td></tr>
+<tr class="memdesc:a97d0c483c33d236c5d2af3504b74857e"><td class="mdescLeft">&#160;</td><td class="mdescRight">握手阶段的Http/Https路径和参数  <br /></td></tr>
 <tr class="separator:a97d0c483c33d236c5d2af3504b74857e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89c6fe126299d265755996feb3c62a8f"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a89c6fe126299d265755996feb3c62a8f">header</a></td></tr>
-<tr class="memdesc:a89c6fe126299d265755996feb3c62a8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">握手阶段的Http/Https请求头  <a href="#a89c6fe126299d265755996feb3c62a8f">更多...</a><br/></td></tr>
+<tr class="memitem:a89c6fe126299d265755996feb3c62a8f" id="r_a89c6fe126299d265755996feb3c62a8f"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89c6fe126299d265755996feb3c62a8f">header</a></td></tr>
+<tr class="memdesc:a89c6fe126299d265755996feb3c62a8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">握手阶段的Http/Https请求头  <br /></td></tr>
 <tr class="separator:a89c6fe126299d265755996feb3c62a8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a95e048347ab679cdc329db1ddfcf423d"><td class="memItemLeft" align="right" valign="top">time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a95e048347ab679cdc329db1ddfcf423d">HBTime</a> =0</td></tr>
-<tr class="memdesc:a95e048347ab679cdc329db1ddfcf423d"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送心跳的时间（没有发送过就填0） (检查完又要清空为0)  <a href="#a95e048347ab679cdc329db1ddfcf423d">更多...</a><br/></td></tr>
+<tr class="memitem:a95e048347ab679cdc329db1ddfcf423d" id="r_a95e048347ab679cdc329db1ddfcf423d"><td class="memItemLeft" align="right" valign="top">time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a95e048347ab679cdc329db1ddfcf423d">HBTime</a> =0</td></tr>
+<tr class="memdesc:a95e048347ab679cdc329db1ddfcf423d"><td class="mdescLeft">&#160;</td><td class="mdescRight">发送心跳的时间（没有发送过就填0） (检查完又要清空为0)  <br /></td></tr>
 <tr class="separator:a95e048347ab679cdc329db1ddfcf423d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29b72edd9475c8c94c91affb5bfc7ad1"><td class="memItemLeft" align="right" valign="top">time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a29b72edd9475c8c94c91affb5bfc7ad1">response</a></td></tr>
-<tr class="memdesc:a29b72edd9475c8c94c91affb5bfc7ad1"><td class="mdescLeft">&#160;</td><td class="mdescRight">上次收到信息的时间  <a href="#a29b72edd9475c8c94c91affb5bfc7ad1">更多...</a><br/></td></tr>
+<tr class="memitem:a29b72edd9475c8c94c91affb5bfc7ad1" id="r_a29b72edd9475c8c94c91affb5bfc7ad1"><td class="memItemLeft" align="right" valign="top">time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29b72edd9475c8c94c91affb5bfc7ad1">response</a> =0</td></tr>
+<tr class="memdesc:a29b72edd9475c8c94c91affb5bfc7ad1"><td class="mdescLeft">&#160;</td><td class="mdescRight">上次收到信息的时间  <br /></td></tr>
 <tr class="separator:a29b72edd9475c8c94c91affb5bfc7ad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d9e6b29271923079bc27244a97ab213"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a1d9e6b29271923079bc27244a97ab213">recv_length</a></td></tr>
-<tr class="memdesc:a1d9e6b29271923079bc27244a97ab213"><td class="mdescLeft">&#160;</td><td class="mdescRight">待接收的长度  <a href="#a1d9e6b29271923079bc27244a97ab213">更多...</a><br/></td></tr>
+<tr class="memitem:a1d9e6b29271923079bc27244a97ab213" id="r_a1d9e6b29271923079bc27244a97ab213"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1d9e6b29271923079bc27244a97ab213">recv_length</a> =0</td></tr>
+<tr class="memdesc:a1d9e6b29271923079bc27244a97ab213"><td class="mdescLeft">&#160;</td><td class="mdescRight">待接收的长度  <br /></td></tr>
 <tr class="separator:a1d9e6b29271923079bc27244a97ab213"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae72efb7961dab9d184b72c3ae666f681"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#ae72efb7961dab9d184b72c3ae666f681">have_recv_length</a></td></tr>
-<tr class="memdesc:ae72efb7961dab9d184b72c3ae666f681"><td class="mdescLeft">&#160;</td><td class="mdescRight">已经接收的长度  <a href="#ae72efb7961dab9d184b72c3ae666f681">更多...</a><br/></td></tr>
+<tr class="memitem:ae72efb7961dab9d184b72c3ae666f681" id="r_ae72efb7961dab9d184b72c3ae666f681"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae72efb7961dab9d184b72c3ae666f681">have_recv_length</a> =0</td></tr>
+<tr class="memdesc:ae72efb7961dab9d184b72c3ae666f681"><td class="mdescLeft">&#160;</td><td class="mdescRight">已经接收的长度  <br /></td></tr>
 <tr class="separator:ae72efb7961dab9d184b72c3ae666f681"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9c4f50ef624980430aed039534781c4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#aa9c4f50ef624980430aed039534781c4">message_type</a></td></tr>
-<tr class="memdesc:aa9c4f50ef624980430aed039534781c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">消息类型  <a href="#aa9c4f50ef624980430aed039534781c4">更多...</a><br/></td></tr>
+<tr class="memitem:aa9c4f50ef624980430aed039534781c4" id="r_aa9c4f50ef624980430aed039534781c4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9c4f50ef624980430aed039534781c4">message_type</a> =0</td></tr>
+<tr class="memdesc:aa9c4f50ef624980430aed039534781c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">消息类型  <br /></td></tr>
 <tr class="separator:aa9c4f50ef624980430aed039534781c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af531c538a773d596dfce63037f1e6985"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#af531c538a773d596dfce63037f1e6985">message</a> =&quot;&quot;</td></tr>
-<tr class="memdesc:af531c538a773d596dfce63037f1e6985"><td class="mdescLeft">&#160;</td><td class="mdescRight">消息  <a href="#af531c538a773d596dfce63037f1e6985">更多...</a><br/></td></tr>
+<tr class="memitem:af531c538a773d596dfce63037f1e6985" id="r_af531c538a773d596dfce63037f1e6985"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af531c538a773d596dfce63037f1e6985">message</a> =&quot;&quot;</td></tr>
+<tr class="memdesc:af531c538a773d596dfce63037f1e6985"><td class="mdescLeft">&#160;</td><td class="mdescRight">消息  <br /></td></tr>
 <tr class="separator:af531c538a773d596dfce63037f1e6985"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a291990a2a4b4198a0112057434082fa9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a291990a2a4b4198a0112057434082fa9">fin</a></td></tr>
-<tr class="memdesc:a291990a2a4b4198a0112057434082fa9"><td class="mdescLeft">&#160;</td><td class="mdescRight">fin的状态  <a href="#a291990a2a4b4198a0112057434082fa9">更多...</a><br/></td></tr>
+<tr class="memitem:a291990a2a4b4198a0112057434082fa9" id="r_a291990a2a4b4198a0112057434082fa9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a291990a2a4b4198a0112057434082fa9">fin</a> =true</td></tr>
+<tr class="memdesc:a291990a2a4b4198a0112057434082fa9"><td class="mdescLeft">&#160;</td><td class="mdescRight">fin的状态  <br /></td></tr>
 <tr class="separator:a291990a2a4b4198a0112057434082fa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1068105fd815f6972b1261c219d86ad"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#ae1068105fd815f6972b1261c219d86ad">mask</a></td></tr>
-<tr class="memdesc:ae1068105fd815f6972b1261c219d86ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">mask  <a href="#ae1068105fd815f6972b1261c219d86ad">更多...</a><br/></td></tr>
+<tr class="memitem:a03e8073559e5fd92b482c4142360dded" id="r_a03e8073559e5fd92b482c4142360dded"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a03e8073559e5fd92b482c4142360dded">fragmented_opcode</a> =0</td></tr>
+<tr class="separator:a03e8073559e5fd92b482c4142360dded"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d6616c01bba56ec83a8d1a712385da2" id="r_a9d6616c01bba56ec83a8d1a712385da2"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9d6616c01bba56ec83a8d1a712385da2">fragmented_message</a></td></tr>
+<tr class="separator:a9d6616c01bba56ec83a8d1a712385da2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1068105fd815f6972b1261c219d86ad" id="r_ae1068105fd815f6972b1261c219d86ad"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae1068105fd815f6972b1261c219d86ad">mask</a></td></tr>
+<tr class="memdesc:ae1068105fd815f6972b1261c219d86ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">mask  <br /></td></tr>
 <tr class="separator:ae1068105fd815f6972b1261c219d86ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a108c4ec8de1ad8882c390522656abaaa"><td class="memItemLeft" align="right" valign="top">std::unordered_map<br class="typebreak"/>
-&lt; std::string, std::any &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a108c4ec8de1ad8882c390522656abaaa">ctx</a></td></tr>
-<tr class="memdesc:a108c4ec8de1ad8882c390522656abaaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">所需的数据仓库  <a href="#a108c4ec8de1ad8882c390522656abaaa">更多...</a><br/></td></tr>
+<tr class="memitem:a108c4ec8de1ad8882c390522656abaaa" id="r_a108c4ec8de1ad8882c390522656abaaa"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::any &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a108c4ec8de1ad8882c390522656abaaa">ctx</a></td></tr>
+<tr class="memdesc:a108c4ec8de1ad8882c390522656abaaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">所需的数据仓库  <br /></td></tr>
 <tr class="separator:a108c4ec8de1ad8882c390522656abaaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a304661b91e961a8b68b6f75b8daf5ffe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#a304661b91e961a8b68b6f75b8daf5ffe">httpinf</a></td></tr>
-<tr class="memdesc:a304661b91e961a8b68b6f75b8daf5ffe"><td class="mdescLeft">&#160;</td><td class="mdescRight">握手阶段保存的http信息  <a href="#a304661b91e961a8b68b6f75b8daf5ffe">更多...</a><br/></td></tr>
+<tr class="memitem:a304661b91e961a8b68b6f75b8daf5ffe" id="r_a304661b91e961a8b68b6f75b8daf5ffe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a304661b91e961a8b68b6f75b8daf5ffe">httpinf</a></td></tr>
+<tr class="memdesc:a304661b91e961a8b68b6f75b8daf5ffe"><td class="mdescLeft">&#160;</td><td class="mdescRight">握手阶段保存的http信息  <br /></td></tr>
 <tr class="separator:a304661b91e961a8b68b6f75b8daf5ffe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>保存客户端WS/WSS请求信息的结构体 </p>
 </div><h2 class="groupheader">类成员变量说明</h2>
-<a class="anchor" id="a1a19058806c56ca8eb8b292c173d4bb6"></a>
+<a id="a1a19058806c56ca8eb8b292c173d4bb6" name="a1a19058806c56ca8eb8b292c173d4bb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a19058806c56ca8eb8b292c173d4bb6">&#9670;&#160;</a></span>closeflag</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool stt::network::WebSocketFDInformation::closeflag</td>
+          <td class="memname">bool stt::network::WebSocketFDInformation::closeflag =false</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -166,12 +171,14 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="afe2932043af4ab420a9630d213db35bc"></a>
+<a id="afe2932043af4ab420a9630d213db35bc" name="afe2932043af4ab420a9630d213db35bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe2932043af4ab420a9630d213db35bc">&#9670;&#160;</a></span>connection_obj_fd</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint64_t stt::network::WebSocketFDInformation::connection_obj_fd</td>
+          <td class="memname">uint64_t stt::network::WebSocketFDInformation::connection_obj_fd =0</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -180,7 +187,9 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a108c4ec8de1ad8882c390522656abaaa"></a>
+<a id="a108c4ec8de1ad8882c390522656abaaa" name="a108c4ec8de1ad8882c390522656abaaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a108c4ec8de1ad8882c390522656abaaa">&#9670;&#160;</a></span>ctx</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -194,12 +203,14 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a6c32efe22e81d136d469dd993a6b4adc"></a>
+<a id="a6c32efe22e81d136d469dd993a6b4adc" name="a6c32efe22e81d136d469dd993a6b4adc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c32efe22e81d136d469dd993a6b4adc">&#9670;&#160;</a></span>fd</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int stt::network::WebSocketFDInformation::fd</td>
+          <td class="memname">int stt::network::WebSocketFDInformation::fd =-1</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -208,12 +219,14 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a291990a2a4b4198a0112057434082fa9"></a>
+<a id="a291990a2a4b4198a0112057434082fa9" name="a291990a2a4b4198a0112057434082fa9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a291990a2a4b4198a0112057434082fa9">&#9670;&#160;</a></span>fin</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool stt::network::WebSocketFDInformation::fin</td>
+          <td class="memname">bool stt::network::WebSocketFDInformation::fin =true</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -222,12 +235,44 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae72efb7961dab9d184b72c3ae666f681"></a>
+<a id="a9d6616c01bba56ec83a8d1a712385da2" name="a9d6616c01bba56ec83a8d1a712385da2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d6616c01bba56ec83a8d1a712385da2">&#9670;&#160;</a></span>fragmented_message</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">size_t stt::network::WebSocketFDInformation::have_recv_length</td>
+          <td class="memname">std::string stt::network::WebSocketFDInformation::fragmented_message</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>分片消息的累计 payload，受服务器每连接接收上限约束。 </p>
+
+</div>
+</div>
+<a id="a03e8073559e5fd92b482c4142360dded" name="a03e8073559e5fd92b482c4142360dded"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03e8073559e5fd92b482c4142360dded">&#9670;&#160;</a></span>fragmented_opcode</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t stt::network::WebSocketFDInformation::fragmented_opcode =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>正在接收的分片消息 opcode；0 表示当前没有分片消息。 </p>
+
+</div>
+</div>
+<a id="ae72efb7961dab9d184b72c3ae666f681" name="ae72efb7961dab9d184b72c3ae666f681"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae72efb7961dab9d184b72c3ae666f681">&#9670;&#160;</a></span>have_recv_length</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t stt::network::WebSocketFDInformation::have_recv_length =0</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -236,7 +281,9 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a95e048347ab679cdc329db1ddfcf423d"></a>
+<a id="a95e048347ab679cdc329db1ddfcf423d" name="a95e048347ab679cdc329db1ddfcf423d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95e048347ab679cdc329db1ddfcf423d">&#9670;&#160;</a></span>HBTime</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -250,7 +297,9 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a89c6fe126299d265755996feb3c62a8f"></a>
+<a id="a89c6fe126299d265755996feb3c62a8f" name="a89c6fe126299d265755996feb3c62a8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89c6fe126299d265755996feb3c62a8f">&#9670;&#160;</a></span>header</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -264,7 +313,9 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a304661b91e961a8b68b6f75b8daf5ffe"></a>
+<a id="a304661b91e961a8b68b6f75b8daf5ffe" name="a304661b91e961a8b68b6f75b8daf5ffe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a304661b91e961a8b68b6f75b8daf5ffe">&#9670;&#160;</a></span>httpinf</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -278,7 +329,9 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a97d0c483c33d236c5d2af3504b74857e"></a>
+<a id="a97d0c483c33d236c5d2af3504b74857e" name="a97d0c483c33d236c5d2af3504b74857e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97d0c483c33d236c5d2af3504b74857e">&#9670;&#160;</a></span>locPara</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -292,7 +345,9 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae1068105fd815f6972b1261c219d86ad"></a>
+<a id="ae1068105fd815f6972b1261c219d86ad" name="ae1068105fd815f6972b1261c219d86ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1068105fd815f6972b1261c219d86ad">&#9670;&#160;</a></span>mask</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -306,7 +361,9 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="af531c538a773d596dfce63037f1e6985"></a>
+<a id="af531c538a773d596dfce63037f1e6985" name="af531c538a773d596dfce63037f1e6985"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af531c538a773d596dfce63037f1e6985">&#9670;&#160;</a></span>message</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -320,12 +377,14 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aa9c4f50ef624980430aed039534781c4"></a>
+<a id="aa9c4f50ef624980430aed039534781c4" name="aa9c4f50ef624980430aed039534781c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9c4f50ef624980430aed039534781c4">&#9670;&#160;</a></span>message_type</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int stt::network::WebSocketFDInformation::message_type</td>
+          <td class="memname">int stt::network::WebSocketFDInformation::message_type =0</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -334,12 +393,14 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a1d9e6b29271923079bc27244a97ab213"></a>
+<a id="a1d9e6b29271923079bc27244a97ab213" name="a1d9e6b29271923079bc27244a97ab213"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d9e6b29271923079bc27244a97ab213">&#9670;&#160;</a></span>recv_length</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">size_t stt::network::WebSocketFDInformation::recv_length</td>
+          <td class="memname">size_t stt::network::WebSocketFDInformation::recv_length =0</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -348,12 +409,14 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a29b72edd9475c8c94c91affb5bfc7ad1"></a>
+<a id="a29b72edd9475c8c94c91affb5bfc7ad1" name="a29b72edd9475c8c94c91affb5bfc7ad1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29b72edd9475c8c94c91affb5bfc7ad1">&#9670;&#160;</a></span>response</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">time_t stt::network::WebSocketFDInformation::response</td>
+          <td class="memname">time_t stt::network::WebSocketFDInformation::response =0</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -368,9 +431,8 @@ Public 属性</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-制作者 &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.5
+制作者&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
 </small></address>
+</div><!-- doc-content -->
 </body>
 </html>

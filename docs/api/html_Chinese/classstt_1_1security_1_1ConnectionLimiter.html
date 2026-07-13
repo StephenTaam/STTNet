@@ -1,18 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.5"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>STTNet: stt::security::ConnectionLimiter类 参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() { searchBox.OnSelectItem(0); });
-</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -20,9 +23,9 @@
 <div id="titlearea">
 <table cellspacing="0" cellpadding="0">
  <tbody>
- <tr style="height: 56px;">
-  <td style="padding-left: 0.5em;">
-   <div id="projectname">STTNet
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
    </div>
   </td>
  </tr>
@@ -30,55 +33,52 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.5 -->
+<!-- 制作者 Doxygen 1.13.2 -->
 <script type="text/javascript">
-var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
 </script>
-  <div id="navrow1" class="tabs">
-    <ul class="tablist">
-      <li><a href="index.html"><span>首页</span></a></li>
-      <li><a href="pages.html"><span>相关页面</span></a></li>
-      <li><a href="namespaces.html"><span>命名空间</span></a></li>
-      <li class="current"><a href="annotated.html"><span>类</span></a></li>
-      <li><a href="files.html"><span>文件</span></a></li>
-      <li>
-        <div id="MSearchBox" class="MSearchBoxInactive">
-        <span class="left">
-          <img id="MSearchSelect" src="search/mag_sel.png"
-               onmouseover="return searchBox.OnSearchSelectShow()"
-               onmouseout="return searchBox.OnSearchSelectHide()"
-               alt=""/>
-          <input type="text" id="MSearchField" value="搜索" accesskey="S"
-               onfocus="searchBox.OnSearchFieldFocus(true)" 
-               onblur="searchBox.OnSearchFieldFocus(false)" 
-               onkeyup="searchBox.OnSearchFieldChange(event)"/>
-          </span><span class="right">
-            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
-          </span>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div id="navrow2" class="tabs2">
-    <ul class="tablist">
-      <li><a href="annotated.html"><span>类列表</span></a></li>
-      <li><a href="classes.html"><span>类索引</span></a></li>
-      <li><a href="hierarchy.html"><span>类继承关系</span></a></li>
-      <li><a href="functions.html"><span>类成员</span></a></li>
-    </ul>
-  </div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索',false);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){ initResizable(false); });
+/* @license-end */
+</script>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>命名空间</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>文件</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>枚举</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>枚举值</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>宏定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>页</a></div>
+</div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
-        name="MSearchResults" id="MSearchResults">
-</iframe>
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
 </div>
 
 <div id="nav-path" class="navpath">
@@ -86,64 +86,64 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <li class="navelem"><a class="el" href="namespacestt.html">stt</a></li><li class="navelem"><a class="el" href="namespacestt_1_1security.html">security</a></li><li class="navelem"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html">ConnectionLimiter</a></li>  </ul>
 </div>
 </div><!-- top -->
+<div id="doc-content">
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public 成员函数</a> &#124;
 <a href="classstt_1_1security_1_1ConnectionLimiter-members.html">所有成员列表</a>  </div>
-  <div class="headertitle">
-<div class="title">stt::security::ConnectionLimiter类 参考</div>  </div>
+  <div class="headertitle"><div class="title">stt::security::ConnectionLimiter类 参考</div></div>
 </div><!--header-->
 <div class="contents">
 
 <p>统一的连接与请求安全裁决器（IP 级 + fd 级，多策略限流 + 黑名单）。  
- <a href="classstt_1_1security_1_1ConnectionLimiter.html#details">更多...</a></p>
+ <a href="#details">更多...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sttnet_8h_source.html">sttnet.h</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public 成员函数</h2></td></tr>
-<tr class="memitem:a56573d9a58787ed48e873cf21c746e89"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a56573d9a58787ed48e873cf21c746e89">ConnectionLimiter</a> (const int &amp;maxConn=20, const int &amp;idleTimeout=60)</td></tr>
-<tr class="memdesc:a56573d9a58787ed48e873cf21c746e89"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数。  <a href="#a56573d9a58787ed48e873cf21c746e89">更多...</a><br/></td></tr>
+<tr class="memitem:a56573d9a58787ed48e873cf21c746e89" id="r_a56573d9a58787ed48e873cf21c746e89"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a56573d9a58787ed48e873cf21c746e89">ConnectionLimiter</a> (const int &amp;maxConn=20, const int &amp;idleTimeout=60)</td></tr>
+<tr class="memdesc:a56573d9a58787ed48e873cf21c746e89"><td class="mdescLeft">&#160;</td><td class="mdescRight">构造函数。  <br /></td></tr>
 <tr class="separator:a56573d9a58787ed48e873cf21c746e89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9c354300218b12ffca35735a013d7a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#ae9c354300218b12ffca35735a013d7a4">setConnectStrategy</a> (const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;type)</td></tr>
-<tr class="memdesc:ae9c354300218b12ffca35735a013d7a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置“连接速率限流”所使用的策略。  <a href="#ae9c354300218b12ffca35735a013d7a4">更多...</a><br/></td></tr>
+<tr class="memitem:ae9c354300218b12ffca35735a013d7a4" id="r_ae9c354300218b12ffca35735a013d7a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae9c354300218b12ffca35735a013d7a4">setConnectStrategy</a> (const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;type)</td></tr>
+<tr class="memdesc:ae9c354300218b12ffca35735a013d7a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置“连接速率限流”所使用的策略。  <br /></td></tr>
 <tr class="separator:ae9c354300218b12ffca35735a013d7a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21e0362f97ee4492ccfdc5860a2b3be0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a21e0362f97ee4492ccfdc5860a2b3be0">setRequestStrategy</a> (const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;type)</td></tr>
-<tr class="memdesc:a21e0362f97ee4492ccfdc5860a2b3be0"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置“IP 级请求限流”所使用的策略。  <a href="#a21e0362f97ee4492ccfdc5860a2b3be0">更多...</a><br/></td></tr>
+<tr class="memitem:a21e0362f97ee4492ccfdc5860a2b3be0" id="r_a21e0362f97ee4492ccfdc5860a2b3be0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a21e0362f97ee4492ccfdc5860a2b3be0">setRequestStrategy</a> (const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;type)</td></tr>
+<tr class="memdesc:a21e0362f97ee4492ccfdc5860a2b3be0"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置“IP 级请求限流”所使用的策略。  <br /></td></tr>
 <tr class="separator:a21e0362f97ee4492ccfdc5860a2b3be0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89dbb769f1f6cf90c233c182fe3e37d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a89dbb769f1f6cf90c233c182fe3e37d0">setPathStrategy</a> (const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;type)</td></tr>
-<tr class="memdesc:a89dbb769f1f6cf90c233c182fe3e37d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置“path 级请求限流”所使用的策略。  <a href="#a89dbb769f1f6cf90c233c182fe3e37d0">更多...</a><br/></td></tr>
+<tr class="memitem:a89dbb769f1f6cf90c233c182fe3e37d0" id="r_a89dbb769f1f6cf90c233c182fe3e37d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89dbb769f1f6cf90c233c182fe3e37d0">setPathStrategy</a> (const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;type)</td></tr>
+<tr class="memdesc:a89dbb769f1f6cf90c233c182fe3e37d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置“path 级请求限流”所使用的策略。  <br /></td></tr>
 <tr class="separator:a89dbb769f1f6cf90c233c182fe3e37d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdd3f927d82c9a3337e3de33882851fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#abdd3f927d82c9a3337e3de33882851fe">setPathLimit</a> (const std::string &amp;path, const int &amp;times, const int &amp;secs)</td></tr>
-<tr class="memdesc:abdd3f927d82c9a3337e3de33882851fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置某个路径的额外限流规则（path 级）。  <a href="#abdd3f927d82c9a3337e3de33882851fe">更多...</a><br/></td></tr>
+<tr class="memitem:abdd3f927d82c9a3337e3de33882851fe" id="r_abdd3f927d82c9a3337e3de33882851fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abdd3f927d82c9a3337e3de33882851fe">setPathLimit</a> (const std::string &amp;path, const int &amp;times, const int &amp;secs)</td></tr>
+<tr class="memdesc:abdd3f927d82c9a3337e3de33882851fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置某个路径的额外限流规则（path 级）。  <br /></td></tr>
 <tr class="separator:abdd3f927d82c9a3337e3de33882851fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7592517efd375f6b303c71a2753d43f1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">DefenseDecision</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a7592517efd375f6b303c71a2753d43f1">allowConnect</a> (const std::string &amp;ip, const int &amp;fd, const int &amp;times, const int &amp;secs)</td></tr>
-<tr class="memdesc:a7592517efd375f6b303c71a2753d43f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">对新建立的连接进行安全裁决（IP 级）。  <a href="#a7592517efd375f6b303c71a2753d43f1">更多...</a><br/></td></tr>
+<tr class="memitem:a7592517efd375f6b303c71a2753d43f1" id="r_a7592517efd375f6b303c71a2753d43f1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">DefenseDecision</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7592517efd375f6b303c71a2753d43f1">allowConnect</a> (const std::string &amp;ip, const int &amp;fd, const int &amp;times, const int &amp;secs)</td></tr>
+<tr class="memdesc:a7592517efd375f6b303c71a2753d43f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">对新建立的连接进行安全裁决（IP 级）。  <br /></td></tr>
 <tr class="separator:a7592517efd375f6b303c71a2753d43f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27d47a3590738d92a426adb8d1b1f136"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">DefenseDecision</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a27d47a3590738d92a426adb8d1b1f136">allowRequest</a> (const std::string &amp;ip, const int &amp;fd, const std::string_view &amp;path, const int &amp;times, const int &amp;secs)</td></tr>
-<tr class="memdesc:a27d47a3590738d92a426adb8d1b1f136"><td class="mdescLeft">&#160;</td><td class="mdescRight">对已建立连接的一次请求进行安全裁决。  <a href="#a27d47a3590738d92a426adb8d1b1f136">更多...</a><br/></td></tr>
+<tr class="memitem:a27d47a3590738d92a426adb8d1b1f136" id="r_a27d47a3590738d92a426adb8d1b1f136"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">DefenseDecision</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a27d47a3590738d92a426adb8d1b1f136">allowRequest</a> (const std::string &amp;ip, const int &amp;fd, const std::string_view &amp;path, const int &amp;times, const int &amp;secs)</td></tr>
+<tr class="memdesc:a27d47a3590738d92a426adb8d1b1f136"><td class="mdescLeft">&#160;</td><td class="mdescRight">对已建立连接的一次请求进行安全裁决。  <br /></td></tr>
 <tr class="separator:a27d47a3590738d92a426adb8d1b1f136"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab63d6e85a83e95fed038fd4ea49b1be0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#ab63d6e85a83e95fed038fd4ea49b1be0">clearIP</a> (const std::string &amp;ip, const int &amp;fd)</td></tr>
-<tr class="memdesc:ab63d6e85a83e95fed038fd4ea49b1be0"><td class="mdescLeft">&#160;</td><td class="mdescRight">在连接断开时回收对应 fd 的状态。  <a href="#ab63d6e85a83e95fed038fd4ea49b1be0">更多...</a><br/></td></tr>
+<tr class="memitem:ab63d6e85a83e95fed038fd4ea49b1be0" id="r_ab63d6e85a83e95fed038fd4ea49b1be0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab63d6e85a83e95fed038fd4ea49b1be0">clearIP</a> (const std::string &amp;ip, const int &amp;fd)</td></tr>
+<tr class="memdesc:ab63d6e85a83e95fed038fd4ea49b1be0"><td class="mdescLeft">&#160;</td><td class="mdescRight">在连接断开时回收对应 fd 的状态。  <br /></td></tr>
 <tr class="separator:ab63d6e85a83e95fed038fd4ea49b1be0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68cadfcc8107f14483ffb4c4df020a60"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a68cadfcc8107f14483ffb4c4df020a60">connectionDetect</a> (const std::string &amp;ip, const int &amp;fd)</td></tr>
-<tr class="memdesc:a68cadfcc8107f14483ffb4c4df020a60"><td class="mdescLeft">&#160;</td><td class="mdescRight">检测并清理僵尸连接（fd 级）。  <a href="#a68cadfcc8107f14483ffb4c4df020a60">更多...</a><br/></td></tr>
+<tr class="memitem:a68cadfcc8107f14483ffb4c4df020a60" id="r_a68cadfcc8107f14483ffb4c4df020a60"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68cadfcc8107f14483ffb4c4df020a60">connectionDetect</a> (const std::string &amp;ip, const int &amp;fd)</td></tr>
+<tr class="memdesc:a68cadfcc8107f14483ffb4c4df020a60"><td class="mdescLeft">&#160;</td><td class="mdescRight">检测并清理僵尸连接（fd 级）。  <br /></td></tr>
 <tr class="separator:a68cadfcc8107f14483ffb4c4df020a60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc01144137996fcc040763e77354717e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#acc01144137996fcc040763e77354717e">banIP</a> (const std::string &amp;ip, int banSeconds, const std::string &amp;reasonCN, const std::string &amp;reasonEN)</td></tr>
-<tr class="memdesc:acc01144137996fcc040763e77354717e"><td class="mdescLeft">&#160;</td><td class="mdescRight">立即将指定 IP 加入黑名单（直接封禁）。  <a href="#acc01144137996fcc040763e77354717e">更多...</a><br/></td></tr>
+<tr class="memitem:acc01144137996fcc040763e77354717e" id="r_acc01144137996fcc040763e77354717e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acc01144137996fcc040763e77354717e">banIP</a> (const std::string &amp;ip, int banSeconds, const std::string &amp;reasonCN, const std::string &amp;reasonEN)</td></tr>
+<tr class="memdesc:acc01144137996fcc040763e77354717e"><td class="mdescLeft">&#160;</td><td class="mdescRight">立即将指定 IP 加入黑名单（直接封禁）。  <br /></td></tr>
 <tr class="separator:acc01144137996fcc040763e77354717e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afff60c7b0c0ee5a5786b0563e74f2864"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#afff60c7b0c0ee5a5786b0563e74f2864">unbanIP</a> (const std::string &amp;ip)</td></tr>
-<tr class="memdesc:afff60c7b0c0ee5a5786b0563e74f2864"><td class="mdescLeft">&#160;</td><td class="mdescRight">手动解除某个 IP 的黑名单。  <a href="#afff60c7b0c0ee5a5786b0563e74f2864">更多...</a><br/></td></tr>
+<tr class="memitem:afff60c7b0c0ee5a5786b0563e74f2864" id="r_afff60c7b0c0ee5a5786b0563e74f2864"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afff60c7b0c0ee5a5786b0563e74f2864">unbanIP</a> (const std::string &amp;ip)</td></tr>
+<tr class="memdesc:afff60c7b0c0ee5a5786b0563e74f2864"><td class="mdescLeft">&#160;</td><td class="mdescRight">手动解除某个 IP 的黑名单。  <br /></td></tr>
 <tr class="separator:afff60c7b0c0ee5a5786b0563e74f2864"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93ebf30684cba4ac4e6fd06b49b23957"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html#a93ebf30684cba4ac4e6fd06b49b23957">isBanned</a> (const std::string &amp;ip) const </td></tr>
-<tr class="memdesc:a93ebf30684cba4ac4e6fd06b49b23957"><td class="mdescLeft">&#160;</td><td class="mdescRight">判断某ip是否被封禁  <a href="#a93ebf30684cba4ac4e6fd06b49b23957">更多...</a><br/></td></tr>
-<tr class="separator:a93ebf30684cba4ac4e6fd06b49b23957"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2ae5677874ed36b38ed01e7f5878da8" id="r_ae2ae5677874ed36b38ed01e7f5878da8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae2ae5677874ed36b38ed01e7f5878da8">isBanned</a> (const std::string &amp;ip) const</td></tr>
+<tr class="memdesc:ae2ae5677874ed36b38ed01e7f5878da8"><td class="mdescLeft">&#160;</td><td class="mdescRight">判断某ip是否被封禁  <br /></td></tr>
+<tr class="separator:ae2ae5677874ed36b38ed01e7f5878da8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>统一的连接与请求安全裁决器（IP 级 + fd 级，多策略限流 + 黑名单）。 </p>
-<p><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html" title="统一的连接与请求安全裁决器（IP 级 + fd 级，多策略限流 + 黑名单）。 ">ConnectionLimiter</a> 是一个“安全门（Security Gate）”， 所有连接建立与请求处理在进入业务逻辑前，都必须经过该类的裁决。</p>
-<p>本类不直接执行业务行为（如 close / send / sleep）， 而是返回一个 <a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">DefenseDecision</a> 结果，由外层统一执行。 </p>
-<hr/>
+<p><a class="el" href="classstt_1_1security_1_1ConnectionLimiter.html" title="统一的连接与请求安全裁决器（IP 级 + fd 级，多策略限流 + 黑名单）。">ConnectionLimiter</a> 是一个“安全门（Security Gate）”， 所有连接建立与请求处理在进入业务逻辑前，都必须经过该类的裁决。</p>
+<p>本类不直接执行业务行为（如 close / send / sleep）， 而是返回一个 <a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">DefenseDecision</a> 结果，由外层统一执行。</p>
+<hr  />
  <h1><a class="anchor" id="design_overview"></a>
 设计概览</h1>
 <p>本类实现的是一个分层防御模型：</p>
@@ -158,12 +158,12 @@ Public 成员函数</h2></td></tr>
 <li>fd 级防御：<ul>
 <li>请求速率限制（requestRate）</li>
 <li>path 级额外限流（pathRate）</li>
-<li>连接活动时间记录（lastActivity） <hr/>
- </li>
+<li>连接活动时间记录（lastActivity）</li>
 </ul>
 </li>
 </ul>
-<h1><a class="anchor" id="defense_decision"></a>
+<hr  />
+ <h1><a class="anchor" id="defense_decision"></a>
 防御裁决语义</h1>
 <p>allowConnect / allowRequest 的返回值为 DefenseDecision：</p>
 <ul>
@@ -184,11 +184,11 @@ Public 成员函数</h2></td></tr>
 </ul>
 <dl class="section note"><dt>注解</dt><dd><ul>
 <li>connect 阶段由于 TCP 连接已建立，通常只使用 ALLOW / CLOSE</li>
-<li>DROP 主要用于 request 阶段（fd 已存在时） <hr/>
- </li>
+<li>DROP 主要用于 request 阶段（fd 已存在时）</li>
 </ul>
 </dd></dl>
-<h1><a class="anchor" id="rate_limit"></a>
+<hr  />
+ <h1><a class="anchor" id="rate_limit"></a>
 策略与限流</h1>
 <p>本类支持多种限流策略（见 RateLimitType）：</p>
 <ul>
@@ -201,17 +201,17 @@ Public 成员函数</h2></td></tr>
 <ul>
 <li>建连速率：connectStrategy（默认 Cooldown）</li>
 <li>fd 级请求速率：requestStrategy（默认 SlidingWindow）</li>
-<li>path 级请求速率：pathStrategy（默认 SlidingWindow） <hr/>
- </li>
+<li>path 级请求速率：pathStrategy（默认 SlidingWindow）</li>
 </ul>
-<h1><a class="anchor" id="thread_safety"></a>
+<hr  />
+ <h1><a class="anchor" id="thread_safety"></a>
 线程安全</h1>
 <dl class="section warning"><dt>警告</dt><dd>本类本身不包含锁：<ul>
-<li>table / pathConfig / blacklist 的并发安全 需由上层保证（如事件循环线程、外部互斥锁等）。 <hr/>
- </li>
+<li>table / pathConfig / blacklist 的并发安全 需由上层保证（如事件循环线程、外部互斥锁等）。</li>
 </ul>
 </dd></dl>
-<h1><a class="anchor" id="lifecycle"></a>
+<hr  />
+ <h1><a class="anchor" id="lifecycle"></a>
 生命周期说明</h1>
 <ul>
 <li>allowConnect：<ul>
@@ -233,7 +233,9 @@ Public 成员函数</h2></td></tr>
 </li>
 </ul>
 </div><h2 class="groupheader">构造及析构函数说明</h2>
-<a class="anchor" id="a56573d9a58787ed48e873cf21c746e89"></a>
+<a id="a56573d9a58787ed48e873cf21c746e89" name="a56573d9a58787ed48e873cf21c746e89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56573d9a58787ed48e873cf21c746e89">&#9670;&#160;</a></span>ConnectionLimiter()</h2>
+
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -243,24 +245,17 @@ Public 成员函数</h2></td></tr>
         <tr>
           <td class="memname">stt::security::ConnectionLimiter::ConnectionLimiter </td>
           <td>(</td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>maxConn</em> = <code>20</code>, </td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>maxConn</em></span><span class="paramdefsep"> = </span><span class="paramdefval">20</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>idleTimeout</em> = <code>60</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>idleTimeout</em></span><span class="paramdefsep"> = </span><span class="paramdefval">60</span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -277,38 +272,31 @@ Public 成员函数</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">成员函数说明</h2>
-<a class="anchor" id="a7592517efd375f6b303c71a2753d43f1"></a>
+<a id="a7592517efd375f6b303c71a2753d43f1" name="a7592517efd375f6b303c71a2753d43f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7592517efd375f6b303c71a2753d43f1">&#9670;&#160;</a></span>allowConnect()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">DefenseDecision</a> stt::security::ConnectionLimiter::allowConnect </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>ip</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>ip</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>fd</em>, </td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>fd</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>times</em>, </td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>times</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>secs</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>secs</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -323,7 +311,7 @@ Public 成员函数</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>返回</dt><dd>DefenseDecision<ul>
+<dl class="section return"><dt>返回</dt><dd><a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55" title="安全裁决结果（由 ConnectionLimiter 返回）。">DefenseDecision</a><ul>
 <li>ALLOW：允许该连接进入应用层（fd 将被登记）</li>
 <li>CLOSE：拒绝并应立即断开连接</li>
 </ul>
@@ -336,44 +324,36 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a27d47a3590738d92a426adb8d1b1f136"></a>
+<a id="a27d47a3590738d92a426adb8d1b1f136" name="a27d47a3590738d92a426adb8d1b1f136"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27d47a3590738d92a426adb8d1b1f136">&#9670;&#160;</a></span>allowRequest()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55">DefenseDecision</a> stt::security::ConnectionLimiter::allowRequest </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>ip</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>ip</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>fd</em>, </td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>fd</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>path</em>, </td>
+          <td class="paramtype">const std::string_view &amp;</td>          <td class="paramname"><span class="paramname"><em>path</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>times</em>, </td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>times</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>secs</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>secs</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -389,7 +369,7 @@ Public 成员函数</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>返回</dt><dd>DefenseDecision<ul>
+<dl class="section return"><dt>返回</dt><dd><a class="el" href="namespacestt_1_1security.html#ab5e52ee574240b0d41a48d326f6a9d55" title="安全裁决结果（由 ConnectionLimiter 返回）。">DefenseDecision</a><ul>
 <li>ALLOW：正常处理请求</li>
 <li>DROP：无视本次请求（不回应）</li>
 <li>CLOSE：断开连接 </li>
@@ -398,46 +378,38 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="acc01144137996fcc040763e77354717e"></a>
+<a id="acc01144137996fcc040763e77354717e" name="acc01144137996fcc040763e77354717e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc01144137996fcc040763e77354717e">&#9670;&#160;</a></span>banIP()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void stt::security::ConnectionLimiter::banIP </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>ip</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>ip</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>banSeconds</em>, </td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>banSeconds</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>reasonCN</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>reasonCN</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>reasonEN</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>reasonEN</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>立即将指定 IP 加入黑名单（直接封禁）。 </p>
 <p>该接口用于在检测到“明确恶意行为”时，绕过评分与渐进惩罚， 直接对 IP 进行封禁（写入黑名单）。</p>
-<p>封禁语义说明：</p>
-<ul>
+<p>封禁语义说明：</p><ul>
 <li>若 IP 当前不在黑名单中：直接加入；</li>
 <li>若 IP 已在黑名单中：<b>刷新（覆盖）封禁到期时间；</b> </li>
 <li>若 banSeconds &lt; 0：表示永久封禁（使用 time_point::max）。</li>
@@ -470,26 +442,21 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ab63d6e85a83e95fed038fd4ea49b1be0"></a>
+<a id="ab63d6e85a83e95fed038fd4ea49b1be0" name="ab63d6e85a83e95fed038fd4ea49b1be0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab63d6e85a83e95fed038fd4ea49b1be0">&#9670;&#160;</a></span>clearIP()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void stt::security::ConnectionLimiter::clearIP </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>ip</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>ip</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>fd</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>fd</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -510,26 +477,21 @@ Public 成员函数</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a68cadfcc8107f14483ffb4c4df020a60"></a>
+<a id="a68cadfcc8107f14483ffb4c4df020a60" name="a68cadfcc8107f14483ffb4c4df020a60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68cadfcc8107f14483ffb4c4df020a60">&#9670;&#160;</a></span>connectionDetect()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::security::ConnectionLimiter::connectionDetect </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>ip</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>ip</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>fd</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>fd</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -553,15 +515,16 @@ false 未超时或不存在</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a93ebf30684cba4ac4e6fd06b49b23957"></a>
+<a id="ae2ae5677874ed36b38ed01e7f5878da8" name="ae2ae5677874ed36b38ed01e7f5878da8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2ae5677874ed36b38ed01e7f5878da8">&#9670;&#160;</a></span>isBanned()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool stt::security::ConnectionLimiter::isBanned </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>ip</em></td><td>)</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>ip</em></span></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -571,15 +534,16 @@ false 未超时或不存在</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="ae9c354300218b12ffca35735a013d7a4"></a>
+<a id="ae9c354300218b12ffca35735a013d7a4" name="ae9c354300218b12ffca35735a013d7a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9c354300218b12ffca35735a013d7a4">&#9670;&#160;</a></span>setConnectStrategy()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void stt::security::ConnectionLimiter::setConnectStrategy </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;&#160;</td>
-          <td class="paramname"><em>type</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>type</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -596,32 +560,26 @@ false 未超时或不存在</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="abdd3f927d82c9a3337e3de33882851fe"></a>
+<a id="abdd3f927d82c9a3337e3de33882851fe" name="abdd3f927d82c9a3337e3de33882851fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abdd3f927d82c9a3337e3de33882851fe">&#9670;&#160;</a></span>setPathLimit()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void stt::security::ConnectionLimiter::setPathLimit </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>path</em>, </td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>path</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>times</em>, </td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>times</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>secs</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">const int &amp;</td>          <td class="paramname"><span class="paramname"><em>secs</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -644,15 +602,16 @@ false 未超时或不存在</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a89dbb769f1f6cf90c233c182fe3e37d0"></a>
+<a id="a89dbb769f1f6cf90c233c182fe3e37d0" name="a89dbb769f1f6cf90c233c182fe3e37d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89dbb769f1f6cf90c233c182fe3e37d0">&#9670;&#160;</a></span>setPathStrategy()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void stt::security::ConnectionLimiter::setPathStrategy </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;&#160;</td>
-          <td class="paramname"><em>type</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>type</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -669,15 +628,16 @@ false 未超时或不存在</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a21e0362f97ee4492ccfdc5860a2b3be0"></a>
+<a id="a21e0362f97ee4492ccfdc5860a2b3be0" name="a21e0362f97ee4492ccfdc5860a2b3be0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21e0362f97ee4492ccfdc5860a2b3be0">&#9670;&#160;</a></span>setRequestStrategy()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void stt::security::ConnectionLimiter::setRequestStrategy </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;&#160;</td>
-          <td class="paramname"><em>type</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53c">RateLimitType</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>type</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -694,15 +654,16 @@ false 未超时或不存在</dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="afff60c7b0c0ee5a5786b0563e74f2864"></a>
+<a id="afff60c7b0c0ee5a5786b0563e74f2864" name="afff60c7b0c0ee5a5786b0563e74f2864"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afff60c7b0c0ee5a5786b0563e74f2864">&#9670;&#160;</a></span>unbanIP()</h2>
+
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void stt::security::ConnectionLimiter::unbanIP </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>ip</em></td><td>)</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>ip</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -718,9 +679,8 @@ false 未超时或不存在</dd></dl>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-制作者 &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.5
+制作者&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
 </small></address>
+</div><!-- doc-content -->
 </body>
 </html>
