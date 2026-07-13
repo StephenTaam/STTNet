@@ -1,0 +1,70 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第 12 章：信号与优雅退出 · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>章节</h3><a class="" href="index.html">指导手册首页</a><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、构建与运行</a><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由与回调返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool</a><a class="" href="07-websocket.html">第 7 章：WebSocket</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS 与 WSS</a><a class="active" href="08-signals.html">第 12 章：信号与优雅退出</a><a class="" href="09-settings.html">第 13 章：系统设置与生产配置</a><a class="" href="10-production.html">第 14 章：项目接入与上线检查</a><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 12 章：信号与优雅退出</h1><p class="lead">用同步等待模型处理 SIGINT、SIGTERM 和 SIGPIPE，在正常线程中安全清理。</p>
+<h2>1. 为什么不直接注册异步 signal handler</h2><p>异步信号上下文里只能安全调用极少数 async-signal-safe 函数。C++ 析构、日志、锁、内存分配和 OpenSSL 清理都不安全。STTNet 推荐先屏蔽信号，再在正常线程中同步等待。</p>
+<h2>2. 完整 Demo</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>#include &lt;sttnet.h&gt;
+
+#include &lt;csignal&gt;
+#include &lt;iostream&gt;
+
+int main()
+{
+    using namespace stt::network;
+    using stt::system::ServerSetting;
+
+    // Configure STTNet&#x27;s safe process-level signal defaults.
+    // In particular, SIGPIPE is ignored so a closed socket cannot kill the process.
+    ServerSetting::setExceptionHandling();
+
+    // Block graceful-termination signals before any framework threads are created.
+    // The same signal mask is inherited by the Reactor and Worker threads.
+    if(!ServerSetting::blockTerminationSignals())
+    {
+        std::cerr &lt;&lt; &quot;failed to block SIGINT/SIGTERM\n&quot;;
+        return 1;
+    }
+
+    HttpServer server;
+    server.setFunction(&quot;/ping&quot;,
+        [](HttpServerFDHandler &amp;client, HttpRequestInformation &amp;) {
+            return client.sendText(&quot;pong&quot;) ? 1 : -2;
+        });
+
+    // Allow up to five seconds for in-flight work and queued responses to drain.
+    server.setGracefulShutdownTimeout(5000);
+
+    if(!server.startListen(8083))
+    {
+        std::cerr &lt;&lt; &quot;failed to listen on port 8083\n&quot;;
+        return 2;
+    }
+
+    std::cout &lt;&lt; &quot;Signal demo listening on http://127.0.0.1:8083\n&quot;
+              &lt;&lt; &quot;Press Ctrl-C or run: kill -15 &quot; &lt;&lt; ::getpid() &lt;&lt; &quot;\n&quot;;
+
+    // sigwait-style synchronous waiting keeps cleanup out of an async signal handler.
+    const int receivedSignal = ServerSetting::waitForTerminationSignal();
+    if(receivedSignal &lt; 0)
+    {
+        std::cerr &lt;&lt; &quot;failed while waiting for termination signal\n&quot;;
+        return 3;
+    }
+
+    std::cout &lt;&lt; &quot;received &quot;
+              &lt;&lt; (receivedSignal == SIGINT ? &quot;SIGINT&quot; : &quot;SIGTERM&quot;)
+              &lt;&lt; &quot;, starting graceful shutdown\n&quot;;
+
+    // Never delete or close the server inside an asynchronous signal handler.
+    return server.close() ? 0 : 4;
+}</code></pre></div>
+<h2>3. 正确顺序</h2><ol class="steps"><li>在创建 Server 和线程前调用 <code>blockTerminationSignals()</code>。</li><li>启动服务。</li><li>主线程调用 <code>waitForTerminationSignal()</code>。</li><li>收到 SIGINT/SIGTERM 后，在主线程调用 <code>server.close()</code>。</li></ol>
+<h2>4. 信号边界</h2><div class="table-wrap"><table><thead><tr><th>信号</th><th>建议</th></tr></thead><tbody><tr><td>SIGINT / SIGTERM</td><td>同步等待并执行优雅退出。</td></tr><tr><td>SIGPIPE</td><td>由初始化逻辑忽略；发送失败通过返回值处理。</td></tr><tr><td>SIGSEGV / SIGABRT</td><td>保留默认致命行为和 core dump，不要假装可以安全恢复。</td></tr><tr><td>SIGKILL</td><td>无法捕获、阻塞或优雅处理。</td></tr></tbody></table></div>
+<h2>5. 验证</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>./build/examples/sttnet_signal_shutdown &amp;
+pid=$!
+curl http://127.0.0.1:8083/ping
+kill -TERM &quot;$pid&quot;
+wait &quot;$pid&quot;
+echo $?</code></pre></div>
+<div class="expected"><strong>预期：</strong>先返回 <code>pong</code>，收到 SIGTERM 后打印退出信息，最终退出码为 0。</div>
+<div class="pager"><a href="11-tls.html">← 第 11 章：TLS、HTTPS 与 WSS</a><a href="09-settings.html">第 13 章：系统设置与生产配置 →</a></div></article></main></div>
+<footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

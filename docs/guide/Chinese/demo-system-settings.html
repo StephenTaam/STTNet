@@ -1,0 +1,86 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Demo：System and production settings · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>章节</h3><a class="" href="index.html">指导手册首页</a><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、构建与运行</a><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由与回调返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool</a><a class="" href="07-websocket.html">第 7 章：WebSocket</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS 与 WSS</a><a class="" href="08-signals.html">第 12 章：信号与优雅退出</a><a class="" href="09-settings.html">第 13 章：系统设置与生产配置</a><a class="" href="10-production.html">第 14 章：项目接入与上线检查</a><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>Demo：System and production settings</h1><p class="lead">完整源码、构建命令、运行步骤、测试方法和预期结果：System and production settings。</p><h2>1. 这个 Demo 教什么</h2><p>代码中的关键调用都带有注释。请先运行，再修改一个参数或回调观察行为，不要只复制不理解。</p><h2>2. 构建和运行</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>cmake --build build --target sttnet_system_settings --parallel
+./build/examples/sttnet_system_settings</code></pre></div><h2>3. 测试</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>curl http://127.0.0.1:8084/metrics</code></pre></div><div class="expected"><strong>预期：</strong>Metrics JSON and log output</div><h2>4. 完整源码</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>#include &lt;sttnet.h&gt;
+
+#include &lt;iostream&gt;
+
+int main()
+{
+    using namespace stt::network;
+    using stt::system::ServerSetting;
+
+    // Signal blocking must happen before the logger, Reactor, or Worker threads exist.
+    if(!ServerSetting::blockTerminationSignals())
+    {
+        std::cerr &lt;&lt; &quot;failed to block termination signals\n&quot;;
+        return 1;
+    }
+
+    // Create an asynchronous logger with a 16K-entry queue.
+    // openFile() creates missing directories when possible.
+    stt::file::LogFile log(16384);
+    if(!log.openFile(&quot;logs/sttnet.log&quot;))
+    {
+        std::cerr &lt;&lt; &quot;failed to open logs/sttnet.log\n&quot;;
+        return 2;
+    }
+
+    // init() configures safe signal defaults and connects the logger to STTNet.
+    // Use &quot;Chinese&quot; for Chinese framework log messages; other values use English.
+    ServerSetting::init(&amp;log, &quot;English&quot;);
+
+    // Constructor settings define capacity and built-in protection defaults.
+    HttpServer server(
+        100000, // Maximum simultaneously tracked connections.
+        64,     // Maximum receive buffer per connection, in KiB.
+        65536,  // Worker-completion queue capacity; use a power of two.
+        true    // Enable the built-in connection/request security limiter.
+    );
+
+    ServerSocketOptions socketOptions;
+    socketOptions.tcp_no_delay = true;          // Reduce latency for small responses.
+    socketOptions.keep_alive = true;            // Enable kernel TCP keepalive.
+    socketOptions.keep_alive_idle_seconds = 60; // Probe after 60 seconds of idleness.
+    socketOptions.keep_alive_interval_seconds = 10;
+    socketOptions.keep_alive_probe_count = 3;
+    socketOptions.listen_backlog = 4096;
+    server.setSocketOptions(socketOptions);
+
+    // Bound memory used by slow clients and prevent one connection from monopolizing I/O.
+    server.setMaxPendingWriteBytes(4 * 1024 * 1024);
+    server.setWriteBudgetPerEvent(256 * 1024);
+
+    // Bound request/header and WorkerPool pressure.
+    server.setMaxHttpHeaderBytes(64 * 1024);
+    server.setMaxPendingWorkerTasks(32768);
+
+    // Allow five seconds for graceful network draining during close().
+    server.setGracefulShutdownTimeout(5000);
+
+    server.setFunction(&quot;/metrics&quot;,
+        [&amp;server](HttpServerFDHandler &amp;client, HttpRequestInformation &amp;) {
+            // Metrics are lock-free snapshots and may be read from any thread.
+            const ServerMetricsSnapshot metrics = server.getMetrics();
+
+            Json::Value response;
+            response[&quot;active_connections&quot;] = Json::UInt64(metrics.active_connections);
+            response[&quot;parsed_http_requests&quot;] = Json::UInt64(metrics.parsed_http_requests);
+            response[&quot;pending_write_bytes&quot;] = Json::UInt64(metrics.pending_write_bytes);
+            response[&quot;worker_task_rejections&quot;] = Json::UInt64(metrics.worker_task_rejections);
+            return client.sendJson(response) ? 1 : -2;
+        });
+
+    if(!server.startListen(8084, 8))
+    {
+        std::cerr &lt;&lt; &quot;failed to listen on port 8084\n&quot;;
+        return 3;
+    }
+
+    std::cout &lt;&lt; &quot;Configured server listening on http://127.0.0.1:8084\n&quot;;
+    ServerSetting::waitForTerminationSignal();
+
+    // The LogFile object remains alive until after the server finishes closing.
+    return server.close() ? 0 : 4;
+}</code></pre></div><div class="pager"><a href="demos.html">← 完整注释 Demo</a><span></span></div></article></main></div>
+<footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

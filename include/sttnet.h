@@ -3066,6 +3066,8 @@ private:
         * @param url ws/wss的完整url（注意需要显式指定端口和路径） 如：wss://google.com 要写成wss://google.com:443/ (补全:443和/)
         * @param min 心跳时间，单位分钟 （默认为20分钟）
         * @warning 需要ws/wss的完整url（注意需要显式指定端口和路径） 如：wss://google.com 要写成wss://google.com:443/ (补全:443和/) 
+        * @note 客户端会生成符合 RFC 6455 的 16 字节随机握手 Key，并校验服务端返回的
+        *       HTTP 101、Upgrade、Connection 与 Sec-WebSocket-Accept。
         */
         bool connect(const std::string &url,const int &min=20);
         /**
@@ -4578,7 +4580,7 @@ private:
         * @param data 接收数据的数据容器（string类型）
         * @param length 最大接收长度
         * @param ip 记录发送来源的ip
-        * @param port 记录发送来源的断开
+        * @param port 记录发送来源的端口（主机字节序，可直接传给 sendData）
         * @return 
         * - 返回值 > 0：成功接收的字节数；
         * - 返回值 = 0：连接已关闭；
@@ -4593,7 +4595,7 @@ private:
         * @param data 接收数据的数据容器（char*类型）
         * @param length 最大接收长度
         * @param ip 记录发送来源的ip
-        * @param port 记录发送来源的断开
+        * @param port 记录发送来源的端口（主机字节序，可直接传给 sendData）
         * @return 
         * - 返回值 > 0：成功接收的字节数；
         * - 返回值 = 0：连接已关闭；

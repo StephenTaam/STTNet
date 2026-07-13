@@ -1,0 +1,24 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chapter 4: Requests, JSON, Responses · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">Chapters</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Commented Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Page</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>Chapters</h3><a class="" href="index.html">Guide Home</a><a class="" href="01-understand.html">Chapter 1: Understand STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Build, Run</a><a class="" href="03-http.html">Chapter 3: First HTTP Server</a><a class="active" href="04-request-response.html">Chapter 4: Requests, JSON, Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing and Callback Results</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool</a><a class="" href="07-websocket.html">Chapter 7: WebSocket</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS</a><a class="" href="08-signals.html">Chapter 12: Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 13: System and Production Settings</a><a class="" href="10-production.html">Chapter 14: Integration and Production</a><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Chapter 4: Requests, JSON, Responses</h1><p class="lead">Read method, path, query, headers, and body correctly, then return text, JSON, errors, and redirects.</p>
+<h2>1. Request fields</h2><div class="table-wrap"><table><thead><tr><th>Field / method</th><th>Meaning</th></tr></thead><tbody><tr><td><code>type</code></td><td>HTTP method such as GET or POST.</td></tr><tr><td><code>locPara</code></td><td>Original path plus query, for example /users?id=7.</td></tr><tr><td><code>loc</code></td><td>Path only, for example /users.</td></tr><tr><td><code>para</code></td><td>Raw query beginning with ?, for example ?id=7. It is not URL-decoded and is not a key/value map.</td></tr><tr><td><code>header</code></td><td>The complete request-header string.</td></tr><tr><td><code>headerValue(name)</code></td><td>Case-insensitive lookup returning a non-owning string_view.</td></tr><tr><td><code>bodyView()</code></td><td>Unified Content-Length/chunked body view, also non-owning.</td></tr></tbody></table></div>
+<h2>2. Copy views before asynchronous use</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>const std::string_view temporary = request.bodyView();
+const std::string ownedBody(request.bodyView()); // Safe to retain or move.</code></pre></div>
+<h2>3. Parse client JSON</h2><p><code>examples/http_json.cpp</code> demonstrates method validation, JsonCpp parsing, a 400 syntax response, a 422 field response, and a 201 success response.</p><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>const std::string body(request.bodyView());
+Json::CharReaderBuilder builder;
+auto reader = std::unique_ptr&lt;Json::CharReader&gt;(builder.newCharReader());
+Json::Value input;
+std::string error;
+if(!reader-&gt;parse(body.data(), body.data() + body.size(), &amp;input, &amp;error))
+    return client.sendJson(makeError(&quot;invalid JSON&quot;), &quot;400 Bad Request&quot;) ? 1 : -2;</code></pre></div>
+<h2>4. Response helpers</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>client.sendText(&quot;created&quot;, &quot;201 Created&quot;);
+client.sendJson(value, &quot;200 OK&quot;);
+client.redirect(&quot;/login&quot;, &quot;302 Found&quot;);</code></pre></div>
+<h2>5. Run the demo</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>./build/examples/sttnet_http_json
+curl -i -X POST http://127.0.0.1:8081/json \
+  -H &#x27;Content-Type: application/json&#x27; \
+  --data &#x27;{&quot;name&quot;:&quot;Stephen&quot;}&#x27;
+curl -i -X POST http://127.0.0.1:8081/json \
+  -H &#x27;Content-Type: application/json&#x27; --data &#x27;{bad json}&#x27;</code></pre></div>
+<div class="pager"><a href="03-http.html">← Chapter 3: First HTTP Server</a><a href="05-routing-callbacks.html">Chapter 5: Routing and Callback Results →</a></div></article></main></div>
+<footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

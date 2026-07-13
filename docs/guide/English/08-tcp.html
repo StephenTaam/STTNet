@@ -1,0 +1,56 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chapter 8: Raw TCP · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">Chapters</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Commented Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Page</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>Chapters</h3><a class="" href="index.html">Guide Home</a><a class="" href="01-understand.html">Chapter 1: Understand STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Build, Run</a><a class="" href="03-http.html">Chapter 3: First HTTP Server</a><a class="" href="04-request-response.html">Chapter 4: Requests, JSON, Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing and Callback Results</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool</a><a class="" href="07-websocket.html">Chapter 7: WebSocket</a><a class="active" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS</a><a class="" href="08-signals.html">Chapter 12: Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 13: System and Production Settings</a><a class="" href="10-production.html">Chapter 14: Integration and Production</a><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Chapter 8: Raw TCP</h1><p class="lead">Start from byte-stream semantics and add explicit framing for custom protocols.</p>
+<h2>1. TCP has no message boundaries</h2><p>TCP is an ordered byte stream. One send may be split across receives, and multiple sends may be merged. <code>TcpInformation::data</code> is the current received chunk, not necessarily one application message.</p><div class="warning">A real custom protocol needs framing: fixed size, length prefix, delimiter, or an explicit state machine.</div>
+<h2>2. Minimal echo demo</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>#include &lt;sttnet.h&gt;
+
+#include &lt;iostream&gt;
+
+class EchoTcpServer final : public stt::network::TcpServer
+{
+protected:
+    // TcpServer leaves heartbeat policy to derived protocols.
+    // This byte-echo demo does not need application-level heartbeat.
+    void handleHeartbeat() override {}
+};
+
+int main()
+{
+    using namespace stt::network;
+    using stt::system::ServerSetting;
+
+    if(!ServerSetting::blockTerminationSignals())
+        return 1;
+
+    EchoTcpServer server;
+
+    // Raw TCP is a byte stream: one callback is one received chunk, not
+    // necessarily one complete application message. Real protocols must add
+    // framing such as a fixed header, a length prefix, or a delimiter.
+    server.setGlobalSolveFunction(
+        [](TcpFDHandler &amp;client, TcpInformation &amp;info) {
+            // In a server callback, sendData() submits bytes to the bounded
+            // Reactor write queue; it does not block on the peer&#x27;s network.
+            return client.sendData(info.data) &gt; 0;
+        });
+
+    if(!server.startListen(6060))
+    {
+        std::cerr &lt;&lt; &quot;failed to listen on port 6060\n&quot;;
+        return 2;
+    }
+
+    std::cout &lt;&lt; &quot;TCP echo listening on 127.0.0.1:6060\n&quot;;
+    ServerSetting::waitForTerminationSignal();
+    return server.close() ? 0 : 3;
+}</code></pre></div>
+<h2>3. Routing raw data</h2><p>The default TCP key is the current data. Use <code>setGlobalSolveFunction()</code> for arbitrary payloads, or parse a command/length header in <code>setGetKeyFunction()</code> and write the key to <code>info.ctx["key"]</code>.</p>
+<h2>4. Length-prefix parser outline</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>// 1. Append new bytes to a per-connection buffer.
+// 2. Wait until at least four length bytes exist.
+// 3. Decode and validate the payload length.
+// 4. Wait until 4 + length bytes are buffered.
+// 5. Extract one message and loop because one read may contain many.</code></pre></div>
+<h2>5. Test</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>./build/examples/sttnet_tcp_echo
+printf &#x27;hello TCP&#x27; | nc 127.0.0.1 6060</code></pre></div>
+<div class="pager"><a href="07-websocket.html">← Chapter 7: WebSocket</a><a href="09-udp.html">Chapter 9: UDP →</a></div></article></main></div>
+<footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

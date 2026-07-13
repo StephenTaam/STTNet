@@ -1,0 +1,20 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第 14 章：项目接入与上线检查 · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>章节</h3><a class="" href="index.html">指导手册首页</a><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、构建与运行</a><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由与回调返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool</a><a class="" href="07-websocket.html">第 7 章：WebSocket</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS 与 WSS</a><a class="" href="08-signals.html">第 12 章：信号与优雅退出</a><a class="" href="09-settings.html">第 13 章：系统设置与生产配置</a><a class="active" href="10-production.html">第 14 章：项目接入与上线检查</a><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 14 章：项目接入与上线检查</h1><p class="lead">把示例代码变成可维护、可观测、能安全退出的生产服务。</p>
+<h2>1. 项目接入</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>add_subdirectory(third_party/STTNet)
+add_executable(app src/main.cpp)
+target_link_libraries(app PRIVATE STTNet::sttnet)</code></pre></div>
+<h2>2. 推荐目录</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>app/
+├── CMakeLists.txt
+├── src/
+│   ├── main.cpp          # 进程生命周期与 Server 构造
+│   ├── routes.cpp        # 路由注册
+│   ├── handlers.cpp      # 业务处理
+│   └── shutdown.cpp      # 信号和控制线程
+├── config/
+└── third_party/STTNet/</code></pre></div>
+<h2>3. 上线检查</h2><ul class="checklist"><li>所有依赖、编译器和 C++17 ABI 已确认。</li><li><code>ulimit -n</code>、systemd LimitNOFILE 和容器限制与 maxFD 匹配。</li><li>每个数据库、RPC、文件和锁等待都有有限超时。</li><li>Worker 和发送队列都有上限，并监控 rejection/overflow 指标。</li><li>TLS 证书覆盖实际域名，私钥权限最小化，客户端校验未被关闭。</li><li>SIGTERM 能走完优雅退出；超时后也能收敛。</li><li>安全限流参数按真实业务调整，并区分压测环境。</li><li>日志不会无限增长，敏感数据不会写入日志。</li><li>健康检查不执行昂贵业务，也不依赖不稳定外部系统。</li><li>压测包含 keep-alive、慢客户端、大响应和 Worker 队列压力，而不只测空 /ping。</li></ul>
+<h2>4. 性能数据怎么描述</h2><p>历史 6.5 万 QPS、2–3 ms 只能作为特定硬件、内核、连接方式和业务逻辑下的测试结果。公开材料应同时说明环境与方法，不应承诺任意机器、任意处理器都能达到相同数字。</p>
+<h2>5. 下一步查什么</h2><p>指导手册负责建立正确模型。需要完整构造参数、成员函数和错误码时，进入 <a href="../../api/html_Chinese/index.html">中文 API 参考</a>；需要复制完整程序时，进入 <a href="demos.html">注释 Demo</a>。</p>
+<div class="pager"><a href="09-settings.html">← 第 13 章：系统设置与生产配置</a><a href="demos.html">完整注释 Demo →</a></div></article></main></div>
+<footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

@@ -1,0 +1,63 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第 9 章：UDP · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>章节</h3><a class="" href="index.html">指导手册首页</a><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、构建与运行</a><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由与回调返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool</a><a class="" href="07-websocket.html">第 7 章：WebSocket</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="active" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS 与 WSS</a><a class="" href="08-signals.html">第 12 章：信号与优雅退出</a><a class="" href="09-settings.html">第 13 章：系统设置与生产配置</a><a class="" href="10-production.html">第 14 章：项目接入与上线检查</a><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 9 章：UDP</h1><p class="lead">理解 datagram 边界、超时、退出和 UDP 自己不提供的可靠性。</p>
+<h2>1. UDP 与 TCP 的核心差异</h2><div class="table-wrap"><table><thead><tr><th>UDP</th><th>TCP</th></tr></thead><tbody><tr><td>保留 datagram 边界</td><td>只提供字节流</td></tr><tr><td>无连接握手，可能丢包、乱序、重复</td><td>可靠、有序，但存在队头阻塞</td></tr><tr><td>一次 sendData 对应一个 datagram</td><td>一次 send 不对应一次 recv</td></tr><tr><td>适合遥测、发现、实时容忍丢包场景</td><td>适合需要可靠传输的协议</td></tr></tbody></table></div>
+<h2>2. 完整 UDP Echo</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>#include &lt;sttnet.h&gt;
+
+#include &lt;atomic&gt;
+#include &lt;iostream&gt;
+#include &lt;thread&gt;
+
+int main()
+{
+    using namespace stt::network;
+    using stt::system::ServerSetting;
+
+    if(!ServerSetting::blockTerminationSignals())
+        return 1;
+
+    // Blocking UDP socket with a one-second receive timeout. The timeout lets
+    // the loop notice the shutdown flag without unsafe asynchronous handlers.
+    UdpServer server(7070, false, 1, true);
+    if(server.getFD() &lt; 0)
+    {
+        std::cerr &lt;&lt; &quot;failed to bind UDP port 7070\n&quot;;
+        return 2;
+    }
+
+    std::atomic&lt;bool&gt; running{true};
+    std::thread signalThread([&amp;running] {
+        ServerSetting::waitForTerminationSignal();
+        running.store(false, std::memory_order_release);
+    });
+
+    std::cout &lt;&lt; &quot;UDP echo listening on 127.0.0.1:7070\n&quot;;
+
+    while(running.load(std::memory_order_acquire))
+    {
+        std::string data;
+        std::string peerIP;
+        int peerPort = 0;
+
+        const int received = server.recvData(data, 64 * 1024, peerIP, peerPort);
+        if(received == -100)
+            continue; // Receive timeout: check the shutdown flag again.
+        if(received &lt;= 0)
+            continue;
+
+        // UDP preserves datagram boundaries. Echo this datagram to its sender.
+        const int sent = server.sendData(data, peerIP, peerPort);
+        if(sent &lt;= 0)
+            std::cerr &lt;&lt; &quot;failed to reply to &quot; &lt;&lt; peerIP &lt;&lt; &#x27;:&#x27; &lt;&lt; peerPort &lt;&lt; &#x27;\n&#x27;;
+    }
+
+    server.close();
+    signalThread.join();
+    return 0;
+}</code></pre></div>
+<h2>3. 为什么 Demo 使用接收超时</h2><p>UDP 示例是显式循环，不使用 STTNet Server Reactor。它把 SIGINT/SIGTERM 阻塞后交给一个同步等待线程，并把 Socket 接收超时设为 1 秒，让循环能定期检查退出标志。</p>
+<h2>4. 测试</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>./build/examples/sttnet_udp_echo
+printf &#x27;hello UDP&#x27; | nc -u -w 2 127.0.0.1 7070</code></pre></div>
+<h2>5. 生产注意事项</h2><ul><li>不要假设 datagram 一定到达，也不要假设只到达一次。</li><li>业务需要可靠性时，自行增加序号、重试、去重和超时。</li><li>限制单个报文大小，避免 IP 分片和内存滥用。</li><li>对来源地址做认证时，注意 UDP 地址可伪造。</li></ul>
+<div class="pager"><a href="08-tcp.html">← 第 8 章：原始 TCP</a><a href="10-clients.html">第 10 章：客户端 →</a></div></article></main></div>
+<footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

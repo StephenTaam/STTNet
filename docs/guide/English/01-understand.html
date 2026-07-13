@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chapter 1: Understand STTNet · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">Chapters</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Commented Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Page</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>Chapters</h3><a class="" href="index.html">Guide Home</a><a class="active" href="01-understand.html">Chapter 1: Understand STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Build, Run</a><a class="" href="03-http.html">Chapter 3: First HTTP Server</a><a class="" href="04-request-response.html">Chapter 4: Requests, JSON, Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing and Callback Results</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool</a><a class="" href="07-websocket.html">Chapter 7: WebSocket</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS</a><a class="" href="08-signals.html">Chapter 12: Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 13: System and Production Settings</a><a class="" href="10-production.html">Chapter 14: Integration and Production</a><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Chapter 1: Understand STTNet</h1><p class="lead">Learn threads, ownership, lifetimes, and send semantics before memorizing APIs.</p>
+<h2>1. What STTNet owns</h2><p>STTNet wraps Linux <code>epoll</code>, non-blocking sockets, connection state, HTTP framing, WebSocket frames, TLS ownership, cross-thread response queues, backpressure, and graceful shutdown. Application code is centered on callbacks.</p>
+<div class="table-wrap"><table><thead><tr><th>Object</th><th>Responsibility</th></tr></thead><tbody><tr><td>HttpServer / WebSocketServer / TcpServer</td><td>Listening socket, one main Reactor, connection table, WorkerPool, and metrics.</td></tr><tr><td>Handler</td><td>Operations for the current connection. Do not retain it after the processing flow.</td></tr><tr><td>Request / Information</td><td>Parsed request or message data, normally scoped to one flow.</td></tr><tr><td>WorkerPool</td><td>Database, filesystem, RPC, compression, or other blocking work.</td></tr><tr><td>ServerSetting</td><td>Process-level logging, signal blocking, and synchronous termination wait.</td></tr></tbody></table></div>
+<h2>2. Reactor versus Worker</h2><p>One Server instance is primarily driven by one Reactor thread. The second argument of <code>startListen(port, threads)</code> is the number of WorkerPool threads, not the number of Reactors.</p>
+<div class="warning">Never block a Reactor callback with database queries, file I/O, sleep, external RPC, or unpredictable lock waits. One stalled callback delays network progress for other connections.</div>
+<h2>3. What a successful send means</h2><p>In a server callback, a successful <code>sendText()</code>, <code>sendJson()</code>, <code>sendData()</code>, or <code>sendMessage()</code> means the payload was accepted by a bounded STTNet write queue. It does not mean the peer has received it.</p>
+<h2>4. Lifetime rules</h2><ul><li>Do not retain handler references.</li><li><code>headerValue()</code> and <code>bodyView()</code> return non-owning views; copy them before asynchronous or long-lived use.</li><li>Use the information object's <code>ctx</code> for small per-flow state shared by processing stages.</li><li>Call service-level <code>close()</code> from a main/control thread, not from a synchronous Reactor callback.</li></ul>
+<h2>5. maxFD is not an OS limit</h2><p><code>HttpServer server(100000)</code> only configures STTNet's connection capacity. Check process, systemd, and container limits separately:</p><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>ulimit -n</code></pre></div>
+<h2>6. Minimal complete program</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>#include &lt;sttnet.h&gt;
+#include &lt;iostream&gt;
+
+int main()
+{
+    using namespace stt::network;
+    using stt::system::ServerSetting;
+
+    // Block termination signals before framework threads are created.
+    if(!ServerSetting::blockTerminationSignals())
+        return 1;
+
+    HttpServer server;
+
+    server.setFunction(&quot;/ping&quot;,
+        [](HttpServerFDHandler &amp;client, HttpRequestInformation &amp;) {
+            // 1: stage succeeded; -2: send failed and close the connection.
+            return client.sendText(&quot;pong&quot;) ? 1 : -2;
+        });
+
+    if(!server.startListen(8080))
+        return 2;
+
+    std::cout &lt;&lt; &quot;http://127.0.0.1:8080/ping\n&quot;;
+    ServerSetting::waitForTerminationSignal();
+    return server.close() ? 0 : 3;
+}</code></pre></div>
+<div class="pager"><a href="index.html">← Guide Home</a><a href="02-build.html">Chapter 2: Download, Build, Run →</a></div></article></main></div>
+<footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

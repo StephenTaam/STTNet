@@ -1,0 +1,81 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第 10 章：客户端 · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>章节</h3><a class="" href="index.html">指导手册首页</a><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、构建与运行</a><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由与回调返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool</a><a class="" href="07-websocket.html">第 7 章：WebSocket</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="active" href="10-clients.html">第 10 章：客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS 与 WSS</a><a class="" href="08-signals.html">第 12 章：信号与优雅退出</a><a class="" href="09-settings.html">第 13 章：系统设置与生产配置</a><a class="" href="10-production.html">第 14 章：项目接入与上线检查</a><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 10 章：客户端</h1><p class="lead">使用 HTTP、WebSocket、TCP 和 UDP 客户端，并避免把阻塞客户端放进 Reactor。</p>
+<h2>1. 客户端是同步还是异步</h2><div class="table-wrap"><table><thead><tr><th>客户端</th><th>模型</th></tr></thead><tbody><tr><td>TcpClient</td><td>默认阻塞；连接、发送、接收都应设置合理超时。</td></tr><tr><td>HttpClient</td><td>同步请求；发送成功后还要检查 isReturn()。</td></tr><tr><td>WebSocketClient</td><td>连接和发送接口配合内部监听线程，消息回调异步执行。</td></tr><tr><td>UdpClient</td><td>直接发送/接收 datagram，可选择阻塞或非阻塞。</td></tr></tbody></table></div>
+<div class="warning">不要在 Server 的 Reactor 回调里直接执行阻塞 HttpClient/TcpClient 请求。需要调用外部服务时，把它放入 WorkerPool，并设置有限超时。</div>
+<h2>2. HTTP Client Demo</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>#include &lt;sttnet.h&gt;
+
+#include &lt;iostream&gt;
+
+int main()
+{
+    using stt::network::HttpClient;
+
+    // HttpClient is a synchronous client. Use a finite timeout in production
+    // and run it outside an STTNet Reactor callback.
+    HttpClient client;
+
+    if(!client.getRequest(&quot;http://127.0.0.1:8080/ping&quot;, &quot;&quot;,
+                          &quot;Connection: close&quot;, 5))
+    {
+        std::cerr &lt;&lt; &quot;request could not be sent\n&quot;;
+        return 1;
+    }
+
+    // Sending successfully is not the same as receiving a complete response.
+    if(!client.isReturn())
+    {
+        std::cerr &lt;&lt; &quot;server did not return a complete HTTP response\n&quot;;
+        return 2;
+    }
+
+    std::cout &lt;&lt; &quot;--- response headers ---\n&quot; &lt;&lt; client.header
+              &lt;&lt; &quot;\n--- response body ---\n&quot; &lt;&lt; client.body &lt;&lt; &#x27;\n&#x27;;
+    return 0;
+}</code></pre></div>
+<p>先运行 <code>sttnet_http_hello</code>，再运行客户端：</p><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>./build/examples/sttnet_http_hello
+# 另一终端
+./build/examples/sttnet_http_client</code></pre></div>
+<h2>3. WebSocket Client Demo</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>#include &lt;sttnet.h&gt;
+
+#include &lt;chrono&gt;
+#include &lt;iostream&gt;
+#include &lt;thread&gt;
+
+int main()
+{
+    using stt::network::WebSocketClient;
+
+    WebSocketClient client;
+
+    // The callback runs on the client&#x27;s internal listening thread.
+    client.setFunction(
+        [](const std::string &amp;message, WebSocketClient &amp;) {
+            std::cout &lt;&lt; &quot;received: &quot; &lt;&lt; message &lt;&lt; &#x27;\n&#x27;;
+            return true; // false closes the WebSocket connection.
+        });
+
+    if(!client.connect(&quot;ws://127.0.0.1:5050/echo&quot;))
+    {
+        std::cerr &lt;&lt; &quot;WebSocket connection failed\n&quot;;
+        return 1;
+    }
+
+    if(!client.sendMessage(&quot;hello from STTNet client&quot;))
+    {
+        std::cerr &lt;&lt; &quot;send failed\n&quot;;
+        client.close(1011, &quot;send failed&quot;);
+        return 2;
+    }
+
+    // Give the asynchronous receive callback time to print the echo.
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    client.close(1000, &quot;demo complete&quot;);
+    return 0;
+}</code></pre></div>
+<p>先运行 WebSocket 服务，再运行客户端：</p><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>./build/examples/sttnet_websocket_echo
+# 另一终端
+./build/examples/sttnet_websocket_client</code></pre></div>
+<h2>4. URL 必须完整</h2><p>客户端 URL 要显式包含协议、端口和路径，例如 <code>https://example.com:443/</code>、<code>ws://127.0.0.1:5050/echo</code>。TLS 客户端会进行证书链和主机名校验。</p>
+<div class="pager"><a href="09-udp.html">← 第 9 章：UDP</a><a href="11-tls.html">第 11 章：TLS、HTTPS 与 WSS →</a></div></article></main></div>
+<footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

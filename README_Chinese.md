@@ -2,11 +2,20 @@
 
 **面向 Linux 的轻量级高性能 C++17 网络框架。**
 
-[English](README_English.md) · [在线手册](https://sttnet.pages.dev/) · [中文 API](docs/api/html_Chinese/index.html) · [English API](docs/api/html_English/index.html)
+[English](README_English.md) · [在线文档](https://sttnet.pages.dev/) · [中文指导手册](docs/guide/Chinese/index.html) · [完整注释 Demo](docs/guide/Chinese/demos.html) · [中文 API](docs/api/html_Chinese/index.html)
 
 STTNet 基于 Linux `epoll` 和 Reactor 事件驱动架构，统一提供 TCP、UDP、HTTP/1.1、WebSocket、TLS、HTTPS 与 WSS 能力。框架负责连接管理、协议解析、事件循环和并发调度，业务代码主要围绕清晰的回调 API 编写。
 
 适合轻量 API 服务、网关、IoT 接入、实时通信、游戏服务端，以及嵌入现有 C++ 工程的网络模块。
+
+## 文档与示例
+
+- 在线指导手册：`docs/guide/Chinese/index.html`（14 章，从构建到生产部署）
+- 完整注释 Demo：`docs/guide/Chinese/demos.html`
+- 中文 API 参考：`docs/api/html_Chinese/index.html`
+- 英文指导手册：`docs/guide/English/index.html`
+
+仓库提供 11 个 CMake 示例目标：HTTP、JSON、WorkerPool、WebSocket、TCP、UDP、HTTP Client、WebSocket Client、TLS、信号退出和系统设置。
 
 ## 主要特点
 
@@ -84,20 +93,27 @@ int main()
     using namespace stt::network;
     using stt::system::ServerSetting;
 
+    // 在 Reactor / Worker 线程创建前阻塞 SIGINT 和 SIGTERM。
     if (!ServerSetting::blockTerminationSignals())
         return 1;
 
+    // 创建服务对象并注册 URL path 为 /ping 的处理函数。
     HttpServer server;
     server.setFunction("/ping",
         [](HttpServerFDHandler &client,
            HttpRequestInformation &) {
+            // 响应成功返回 1；发送失败返回 -2 并关闭连接。
             return client.sendText("pong") ? 1 : -2;
         });
 
+    // 开始监听 8080 端口。
     if (!server.startListen(8080))
         return 2;
 
+    // 主线程同步等待 Ctrl-C 或 kill -15。
     ServerSetting::waitForTerminationSignal();
+
+    // 在正常线程上下文中执行优雅关闭。
     return server.close() ? 0 : 3;
 }
 ```
@@ -161,10 +177,10 @@ server.setFunction("/slow",
 
 | 返回值 | 含义 |
 |---:|---|
-| `1` | 处理成功 |
-| `0` | 已投递 WorkerPool |
-| `-1` | 处理失败，但不要求关闭连接 |
-| `-2` | 处理失败并关闭连接 |
+| `1` | 当前阶段成功；如果还有后续阶段则继续执行 |
+| `0` | 当前阶段已投递 WorkerPool；任务完成后从下一阶段继续 |
+| `-1` | 停止当前请求的剩余阶段，但不要求关闭连接 |
+| `-2` | 停止处理并要求关闭连接 |
 
 ## 最小 WebSocket Echo 服务
 
@@ -180,9 +196,12 @@ int main()
         return 1;
 
     WebSocketServer server;
+
+    // 没有自定义消息 key 时，所有消息都会进入这个回调。
     server.setGlobalSolveFunction(
         [](WebSocketServerFDHandler &client,
            WebSocketFDInformation &message) {
+            // 将客户端消息原样发送回当前连接。
             return client.sendMessage(message.message);
         });
 
@@ -194,10 +213,20 @@ int main()
 }
 ```
 
-仓库内包含可直接构建的示例：
+仓库内包含 11 个可直接构建的完整注释示例：
 
-- `examples/http_hello.cpp`
-- `examples/websocket_echo.cpp`
+- `examples/http_hello.cpp`：最小 HTTP 路由、404、信号等待和优雅退出
+- `examples/http_json.cpp`：解析客户端 JSON，处理 400/422/201 响应
+- `examples/worker_pool.cpp`：安全投递阻塞任务、请求快照和队列上限
+- `examples/websocket_echo.cpp`：握手检查、文本/二进制帧 Echo 和心跳
+- `examples/tcp_echo.cpp`：派生 `TcpServer` 编写原始 TCP Echo
+- `examples/udp_echo.cpp`：接收并回发 UDP 数据报
+- `examples/http_client.cpp`：同步 HTTP Client、超时和完整响应判断
+- `examples/websocket_client.cpp`：WebSocket Client 连接、发送、回调和关闭
+- `examples/tls_https.cpp`：加载证书并启动 HTTPS 服务
+- `examples/signal_shutdown.cpp`：信号设置、同步等待和安全关闭
+- `examples/system_settings.cpp`：日志、Socket、背压、Worker 上限和指标
+详细的逐章说明见 [`docs/guide/Chinese/index.html`](docs/guide/Chinese/index.html)。
 
 ## 接入现有 CMake 项目
 

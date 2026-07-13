@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chapter 5: Routing and Callback Results · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">Chapters</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Commented Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Page</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>Chapters</h3><a class="" href="index.html">Guide Home</a><a class="" href="01-understand.html">Chapter 1: Understand STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Build, Run</a><a class="" href="03-http.html">Chapter 3: First HTTP Server</a><a class="" href="04-request-response.html">Chapter 4: Requests, JSON, Responses</a><a class="active" href="05-routing-callbacks.html">Chapter 5: Routing and Callback Results</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool</a><a class="" href="07-websocket.html">Chapter 7: WebSocket</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS</a><a class="" href="08-signals.html">Chapter 12: Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 13: System and Production Settings</a><a class="" href="10-production.html">Chapter 14: Integration and Production</a><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Chapter 5: Routing and Callback Results</h1><p class="lead">Separate route keys, HTTP status codes, processing stages, and STTNet flow control.</p>
+<h2>1. Default routing does not separate methods</h2><p><code>setFunction("/users", ...)</code> uses <code>request.loc</code> by default, so GET, POST, and DELETE /users share the same key. Validate the method in the callback or create a custom key.</p>
+<h2>2. Multiple stages on one route</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>server.setFunction(&quot;/admin&quot;,
+    [](HttpServerFDHandler &amp;client, HttpRequestInformation &amp;request) {
+        if(request.headerValue(&quot;authorization&quot;).empty())
+            // Reply, then stop later stages without closing keep-alive.
+            return client.sendText(&quot;unauthorized&quot;, &quot;401 Unauthorized&quot;) ? -1 : -2;
+        return 1; // Authentication passed; continue.
+    });
+
+server.setFunction(&quot;/admin&quot;,
+    [](HttpServerFDHandler &amp;client, HttpRequestInformation &amp;) {
+        return client.sendText(&quot;admin area&quot;) ? 1 : -2;
+    });</code></pre></div>
+<div class="danger"><strong>Do not return 1 after sending the 401.</strong> It would continue into the business stage and could produce a second response or bypass the intended gate.</div>
+<h2>3. Synchronous and Worker completion semantics</h2><div class="table-wrap"><table><thead><tr><th>Result</th><th>Behavior</th></tr></thead><tbody><tr><td>1</td><td>Continue to the next stage; finish when no stage remains.</td></tr><tr><td>0</td><td>Wait for a previously submitted Worker task.</td></tr><tr><td>-1</td><td>Discard remaining stages for this flow and keep the connection.</td></tr><tr><td>-2</td><td>Stop and close the connection.</td></tr></tbody></table></div>
+<h2>4. Method + path keys</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>server.setGetKeyFunction(
+    [](HttpServerFDHandler &amp;, HttpRequestInformation &amp;request) {
+        request.ctx[&quot;key&quot;] = request.type + &quot; &quot; + request.loc;
+        return 1;
+    });
+server.setFunction(&quot;GET /users&quot;, getUsers);
+server.setFunction(&quot;POST /users&quot;, createUser);</code></pre></div>
+<div class="pager"><a href="04-request-response.html">← Chapter 4: Requests, JSON, Responses</a><a href="06-workerpool.html">Chapter 6: WorkerPool →</a></div></article></main></div>
+<footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

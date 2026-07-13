@@ -2,11 +2,20 @@
 
 **A lightweight, high-performance C++17 network framework for Linux.**
 
-[中文说明](README_Chinese.md) · [Online documentation](https://sttnet.pages.dev/) · [Chinese API](docs/api/html_Chinese/index.html) · [English API](docs/api/html_English/index.html)
+[中文说明](README_Chinese.md) · [Online documentation](https://sttnet.pages.dev/) · [Programming Guide](docs/guide/English/index.html) · [Commented Demos](docs/guide/English/demos.html) · [English API](docs/api/html_English/index.html)
 
 STTNet is built around Linux `epoll` and a Reactor event-driven architecture. It provides TCP, UDP, HTTP/1.1, WebSocket, TLS, HTTPS, and WSS support while keeping application code centered on small callback-based APIs.
 
 It is designed for lightweight API services, gateways, IoT access, real-time communication, game backends, and networking modules embedded in existing C++ applications.
+
+## Documentation and examples
+
+- Programming guide: `docs/guide/English/index.html` (14 chapters, build through production)
+- Fully commented demos: `docs/guide/English/demos.html`
+- English core API quick reference: `docs/guide/English/api-quick-reference.html`
+- Complete generated API tree: `docs/api/html_English/index.html`
+
+The repository includes 11 CMake example targets covering HTTP, JSON, WorkerPool, WebSocket, TCP, UDP, HTTP Client, WebSocket Client, TLS, signals, and system settings.
 
 ## Highlights
 
@@ -84,20 +93,27 @@ int main()
     using namespace stt::network;
     using stt::system::ServerSetting;
 
+    // Block SIGINT and SIGTERM before Reactor or Worker threads exist.
     if (!ServerSetting::blockTerminationSignals())
         return 1;
 
+    // Create the server and register the /ping path.
     HttpServer server;
     server.setFunction("/ping",
         [](HttpServerFDHandler &client,
            HttpRequestInformation &) {
+            // Return 1 on success, or -2 to close after send failure.
             return client.sendText("pong") ? 1 : -2;
         });
 
+    // Start listening on TCP port 8080.
     if (!server.startListen(8080))
         return 2;
 
+    // Wait synchronously for Ctrl-C or kill -15.
     ServerSetting::waitForTerminationSignal();
+
+    // Perform graceful cleanup from normal thread context.
     return server.close() ? 0 : 3;
 }
 ```
@@ -161,10 +177,10 @@ Callback return values:
 
 | Value | Meaning |
 |---:|---|
-| `1` | Handled successfully |
-| `0` | Work was submitted to the WorkerPool |
-| `-1` | Failed without requesting connection close |
-| `-2` | Failed and close the connection |
+| `1` | The current stage succeeded; continue when another stage exists |
+| `0` | The current stage was submitted to WorkerPool; resume at the next stage |
+| `-1` | Stop the remaining stages without requesting connection close |
+| `-2` | Stop processing and request connection close |
 
 ## Minimal WebSocket echo server
 
@@ -180,9 +196,12 @@ int main()
         return 1;
 
     WebSocketServer server;
+
+    // Messages without a custom key route are handled here.
     server.setGlobalSolveFunction(
         [](WebSocketServerFDHandler &client,
            WebSocketFDInformation &message) {
+            // Echo the received payload to the same connection.
             return client.sendMessage(message.message);
         });
 
@@ -194,10 +213,20 @@ int main()
 }
 ```
 
-The repository includes runnable examples:
+The repository includes 11 fully commented, buildable examples:
 
-- `examples/http_hello.cpp`
-- `examples/websocket_echo.cpp`
+- `examples/http_hello.cpp`: minimal HTTP route, fallback, signal wait, graceful close
+- `examples/http_json.cpp`: parse client JSON and return 400/422/201 responses
+- `examples/worker_pool.cpp`: safe blocking work, request snapshots, bounded queues
+- `examples/websocket_echo.cpp`: handshake checks, text/binary echo, heartbeat
+- `examples/tcp_echo.cpp`: derive from `TcpServer` and implement a raw TCP echo
+- `examples/udp_echo.cpp`: receive and echo complete UDP datagrams
+- `examples/http_client.cpp`: synchronous HTTP client, timeout, complete-response check
+- `examples/websocket_client.cpp`: connect, send, receive callback, and close
+- `examples/tls_https.cpp`: load a certificate and start HTTPS
+- `examples/signal_shutdown.cpp`: signal setup, synchronous wait, safe close
+- `examples/system_settings.cpp`: logging, sockets, backpressure, Worker limits, metrics
+See the chapter-by-chapter [`Programming Guide`](docs/guide/English/index.html).
 
 ## Use STTNet in another CMake project
 

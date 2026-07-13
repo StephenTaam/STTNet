@@ -1,0 +1,19 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>STTNet 编程指导手册 · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>章节</h3><a class="active" href="index.html">指导手册首页</a><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、构建与运行</a><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由与回调返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool</a><a class="" href="07-websocket.html">第 7 章：WebSocket</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS 与 WSS</a><a class="" href="08-signals.html">第 12 章：信号与优雅退出</a><a class="" href="09-settings.html">第 13 章：系统设置与生产配置</a><a class="" href="10-production.html">第 14 章：项目接入与上线检查</a><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>STTNet 编程指导手册</h1><p class="lead">从安装到生产部署，逐章理解并写出 HTTP、WebSocket、TCP、UDP、客户端和 TLS 程序。</p>
+<p>这套手册不是 API 名称列表，而是一条可以跟着做的学习路径。建议第一次使用时按章节顺序阅读；已经熟悉网络编程时，可以直接跳到对应协议章节。</p>
+<div class="cards">
+<a class="card" href="01-understand.html"><strong>先理解运行模型</strong><span>Reactor、Handler、请求对象、WorkerPool 和所有权。</span></a>
+<a class="card" href="03-http.html"><strong>HTTP 入门</strong><span>从 /ping 到 JSON、路由和错误处理。</span></a>
+<a class="card" href="06-workerpool.html"><strong>阻塞任务</strong><span>把数据库、文件和 RPC 移出 Reactor。</span></a>
+<a class="card" href="07-websocket.html"><strong>WebSocket</strong><span>握手检查、文本/二进制帧、心跳和 WSS。</span></a>
+<a class="card" href="08-tcp.html"><strong>TCP / UDP</strong><span>理解字节流、报文边界和自定义协议。</span></a>
+<a class="card" href="10-clients.html"><strong>客户端</strong><span>HTTP、WebSocket、TCP 和 UDP 客户端。</span></a>
+<a class="card" href="08-signals.html"><strong>信号与退出</strong><span>SIGINT、SIGTERM、SIGPIPE 和安全清理。</span></a>
+<a class="card" href="09-settings.html"><strong>生产配置</strong><span>日志、Socket、背压、限流、指标和超时。</span></a>
+<a class="card" href="demos.html"><strong>完整注释 Demo</strong><span>11 个与仓库同步、可构建、可验证的示例。</span></a>
+<a class="card" href="../../api/html_Chinese/index.html"><strong>API 参考</strong><span>知道要用哪个类后，再查询签名和全部成员。</span></a>
+</div>
+<div class="tip"><strong>阅读方式：</strong>指导手册解释为什么这样写；Demo 给出完整程序；API 参考负责查所有方法。三者各司其职。</div>
+<div class="pager"><span></span><a href="01-understand.html">第 1 章：理解 STTNet →</a></div></article></main></div>
+<footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

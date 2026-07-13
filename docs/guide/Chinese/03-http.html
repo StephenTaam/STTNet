@@ -1,0 +1,41 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第 3 章：第一个 HTTP 服务 · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>章节</h3><a class="" href="index.html">指导手册首页</a><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、构建与运行</a><a class="active" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由与回调返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool</a><a class="" href="07-websocket.html">第 7 章：WebSocket</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS 与 WSS</a><a class="" href="08-signals.html">第 12 章：信号与优雅退出</a><a class="" href="09-settings.html">第 13 章：系统设置与生产配置</a><a class="" href="10-production.html">第 14 章：项目接入与上线检查</a><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 3 章：第一个 HTTP 服务</h1><p class="lead">写出 /ping，理解服务对象、路由、Handler、请求对象和返回值约定。</p>
+<h2>1. 完整程序</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>#include &lt;sttnet.h&gt;
+#include &lt;iostream&gt;
+
+int main()
+{
+    using namespace stt::network;
+    using stt::system::ServerSetting;
+
+    // 必须在线程创建前阻塞退出信号。
+    if(!ServerSetting::blockTerminationSignals())
+        return 1;
+
+    HttpServer server;
+
+    server.setFunction(&quot;/ping&quot;,
+        [](HttpServerFDHandler &amp;client, HttpRequestInformation &amp;) {
+            // 1：本阶段成功；-2：发送失败并关闭连接。
+            return client.sendText(&quot;pong&quot;) ? 1 : -2;
+        });
+
+    if(!server.startListen(8080))
+        return 2;
+
+    std::cout &lt;&lt; &quot;http://127.0.0.1:8080/ping\n&quot;;
+    ServerSetting::waitForTerminationSignal();
+    return server.close() ? 0 : 3;
+}</code></pre></div>
+<h2>2. 一行一行理解</h2>
+<ol class="steps"><li><code>blockTerminationSignals()</code> 必须在线程创建前调用，为后面的安全退出做好准备。</li><li>构造 <code>HttpServer</code>。默认开启安全模块，并创建合理的连接、接收和队列上限。</li><li><code>setFunction("/ping", ...)</code> 注册 path 路由。默认路由 key 是 <code>request.loc</code>。</li><li>Handler 负责当前连接的发送操作，请求对象保存 method、path、header 和 body。</li><li><code>startListen(8080)</code> 启动监听和 Reactor。返回 false 时不要继续假装服务已经启动。</li><li>主线程等待 SIGINT/SIGTERM，然后在正常线程上下文中调用 <code>server.close()</code>。</li></ol>
+<h2>3. 回调返回值概览</h2>
+<div class="table-wrap"><table><thead><tr><th>值</th><th>准确含义</th></tr></thead><tbody><tr><td><code>1</code></td><td>当前阶段成功；如果同一路由还有后续阶段，继续执行下一阶段。</td></tr><tr><td><code>0</code></td><td>当前阶段已交给 WorkerPool；Worker 完成后从下一阶段继续。</td></tr><tr><td><code>-1</code></td><td>停止本次请求/消息的后续阶段，但不主动要求关闭连接。</td></tr><tr><td><code>-2</code></td><td>停止处理并要求关闭连接。</td></tr></tbody></table></div>
+<div class="warning">这些值是 STTNet 的流程控制，不是 HTTP 状态码。HTTP 404 要通过 <code>sendText(..., "404 Not Found")</code> 或 <code>sendJson()</code> 发送，不能 <code>return 404</code>。</div>
+<h2>4. 路由找不到时</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>server.setGlobalSolveFunction(
+    [](HttpServerFDHandler &amp;client, HttpRequestInformation &amp;) {
+        return client.sendText(&quot;not found&quot;, &quot;404 Not Found&quot;) ? 1 : -2;
+    });</code></pre></div>
+<div class="pager"><a href="02-build.html">← 第 2 章：下载、构建与运行</a><a href="04-request-response.html">第 4 章：请求、JSON 与响应 →</a></div></article></main></div>
+<footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

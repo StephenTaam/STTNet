@@ -1,0 +1,22 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chapter 2: Download, Build, Run · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">Chapters</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Commented Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Page</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>Chapters</h3><a class="" href="index.html">Guide Home</a><a class="" href="01-understand.html">Chapter 1: Understand STTNet</a><a class="active" href="02-build.html">Chapter 2: Download, Build, Run</a><a class="" href="03-http.html">Chapter 3: First HTTP Server</a><a class="" href="04-request-response.html">Chapter 4: Requests, JSON, Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing and Callback Results</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool</a><a class="" href="07-websocket.html">Chapter 7: WebSocket</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS</a><a class="" href="08-signals.html">Chapter 12: Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 13: System and Production Settings</a><a class="" href="10-production.html">Chapter 14: Integration and Production</a><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Chapter 2: Download, Build, Run</h1><p class="lead">Complete the full path from dependencies and cloning to build, launch, and curl verification.</p>
+<h2>1. Install dependencies</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>sudo apt-get update
+sudo apt-get install -y build-essential cmake pkg-config libjsoncpp-dev libssl-dev</code></pre></div>
+<h2>2. Clone the repository</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>git clone https://github.com/StephenTaam/STTNet.git
+cd STTNet</code></pre></div>
+<h2>3. Configure and build</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
+  -DSTTNET_BUILD_EXAMPLE=ON \
+  -DSTTNET_BUILD_TESTS=OFF \
+  -DSTTNET_BUILD_BENCHMARK=OFF
+cmake --build build --parallel</code></pre></div>
+<h2>4. Run and verify</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>./build/examples/sttnet_http_hello
+# In another terminal:
+curl -i http://127.0.0.1:8080/ping</code></pre></div>
+<div class="expected"><strong>Expected:</strong> HTTP 200 with body <code>pong</code>. Press Ctrl-C and verify a clean exit.</div>
+<h2>5. Common failures</h2><div class="table-wrap"><table><thead><tr><th>Symptom</th><th>Check</th></tr></thead><tbody><tr><td>json/json.h not found</td><td>Install libjsoncpp-dev and reconfigure a clean build directory.</td></tr><tr><td>OpenSSL not found</td><td>Install libssl-dev and confirm the correct architecture is selected.</td></tr><tr><td>Bind failed</td><td>Check that the port is free; avoid privileged ports as an unprivileged user.</td></tr><tr><td>Built but cannot start</td><td>Inspect stderr/logs and verify certificate, permission, port, and fd settings.</td></tr></tbody></table></div>
+<h2>6. Link STTNet into your CMake project</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>add_subdirectory(third_party/STTNet)
+add_executable(my_server main.cpp)
+target_link_libraries(my_server PRIVATE STTNet::sttnet)</code></pre></div>
+<div class="pager"><a href="01-understand.html">← Chapter 1: Understand STTNet</a><a href="03-http.html">Chapter 3: First HTTP Server →</a></div></article></main></div>
+<footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

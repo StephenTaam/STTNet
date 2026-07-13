@@ -1,4 +1,5 @@
 #include"../include/sttnet.h"
+#include <openssl/rand.h>
 using namespace std;
 using namespace stt::file;
 using namespace stt::time;
@@ -12,6 +13,89 @@ void recordAtomicMaximum(std::atomic<uint64_t> &target,const uint64_t value) noe
     uint64_t current=target.load(std::memory_order_relaxed);
     while(current<value&&!target.compare_exchange_weak(
           current,value,std::memory_order_relaxed,std::memory_order_relaxed)) {}
+}
+
+char asciiLower(const char value) noexcept
+{
+    return value>='A'&&value<='Z'?static_cast<char>(value-'A'+'a'):value;
+}
+
+bool asciiCaseEqual(const std::string_view left,const std::string_view right) noexcept
+{
+    if(left.size()!=right.size())
+        return false;
+    for(size_t index=0;index<left.size();++index)
+    {
+        if(asciiLower(left[index])!=asciiLower(right[index]))
+            return false;
+    }
+    return true;
+}
+
+std::string_view trimHttpWhitespace(std::string_view value) noexcept
+{
+    while(!value.empty()&&(value.front()==' '||value.front()=='\t'))
+        value.remove_prefix(1);
+    while(!value.empty()&&(value.back()==' '||value.back()=='\t'))
+        value.remove_suffix(1);
+    return value;
+}
+
+bool getHttpHeaderValueCaseInsensitive(const std::string &header,const std::string_view name,std::string &value)
+{
+    value.clear();
+    size_t lineStart=header.find("\r\n");
+    if(lineStart==std::string::npos)
+        return false;
+    lineStart+=2;
+    while(lineStart<header.size())
+    {
+        size_t lineEnd=header.find("\r\n",lineStart);
+        if(lineEnd==std::string::npos)
+            lineEnd=header.size();
+        if(lineEnd==lineStart)
+            break;
+        const std::string_view line(header.data()+lineStart,lineEnd-lineStart);
+        const size_t colon=line.find(':');
+        if(colon!=std::string_view::npos&&
+           asciiCaseEqual(trimHttpWhitespace(line.substr(0,colon)),name))
+        {
+            const std::string_view fieldValue=trimHttpWhitespace(line.substr(colon+1));
+            value.assign(fieldValue.data(),fieldValue.size());
+            return true;
+        }
+        if(lineEnd==header.size())
+            break;
+        lineStart=lineEnd+2;
+    }
+    return false;
+}
+
+bool httpHeaderContainsToken(const std::string_view value,const std::string_view expected) noexcept
+{
+    size_t tokenStart=0;
+    while(tokenStart<=value.size())
+    {
+        size_t tokenEnd=value.find(',',tokenStart);
+        if(tokenEnd==std::string_view::npos)
+            tokenEnd=value.size();
+        if(asciiCaseEqual(trimHttpWhitespace(value.substr(tokenStart,tokenEnd-tokenStart)),expected))
+            return true;
+        if(tokenEnd==value.size())
+            break;
+        tokenStart=tokenEnd+1;
+    }
+    return false;
+}
+
+bool isSwitchingProtocolsStatus(const std::string_view statusLine) noexcept
+{
+    constexpr std::string_view prefix="HTTP/1.1 ";
+    return statusLine.size()>=prefix.size()+3&&
+           statusLine.substr(0,prefix.size())==prefix&&
+           statusLine.substr(prefix.size(),3)=="101"&&
+           (statusLine.size()==prefix.size()+3||statusLine[prefix.size()+3]==' '||
+            statusLine[prefix.size()+3]=='\t');
 }
 }
 
@@ -1368,39 +1452,37 @@ string& stt::data::CryptoUtil::sha11(const string &ori_str,string &result)
 string& stt::data::BitUtil::bitOutput(char input,string &result)
 {
     result.clear();
-    for(int i=1;i<=8;i++)
+    uint8_t value=static_cast<uint8_t>(input);
+    for(int i=0;i<8;i++)
     {
-        if((input&'z'+6)=='z'+6)
-            result+='1';
-        else
-            result+='0';
-        input=input<<1;
+        result+=(value&0x80U)?'1':'0';
+        value=static_cast<uint8_t>(value<<1);
     }
     return result;
 }
 string& stt::data::BitUtil::bitOutput(const string &input,string &result)
 {
     result.clear();
-    for(char cc:input)
+    for(const char byte:input)
     {
-        for(int i=1;i<=8;i++)
+        uint8_t value=static_cast<uint8_t>(byte);
+        for(int i=0;i<8;i++)
         {
-            if((cc&'z'+6)=='z'+6)
-                result+='1';
-            else
-                result+='0';
-            cc=cc<<1;
+            result+=(value&0x80U)?'1':'0';
+            value=static_cast<uint8_t>(value<<1);
         }
     }
     return result;
 }
 char& stt::data::BitUtil::bitOutput_bit(char input,const int pos,char &result)
 {
-    input=input<<(pos-1);
-    if((input&'z'+6)=='z'+6)
-        result='1';
-    else
+    if(pos<1||pos>8)
+    {
         result='0';
+        return result;
+    }
+    const uint8_t value=static_cast<uint8_t>(input);
+    result=(value&(0x80U>>(pos-1)))?'1':'0';
     return result;
 }
 unsigned long& stt::data::BitUtil::bitStrToNumber(const string &input,unsigned long &result)
@@ -2905,10 +2987,10 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         struct sockaddr_in chenfan;
 	    socklen_t tanziliang=sizeof(chenfan);
         size=::recvfrom(fd,buffer.get(),length,0,(struct sockaddr*)&chenfan,&tanziliang);
-        if(size>0)
+        if(size>=0)
         {
-            data=string(buffer.get(),size);
-            port=chenfan.sin_port;
+            data.assign(buffer.get(),static_cast<size_t>(size));
+            port=ntohs(chenfan.sin_port);
 	        ip.assign(inet_ntoa(chenfan.sin_addr));
         }
         else
@@ -2958,8 +3040,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             if((errno==EAGAIN||errno==EWOULDBLOCK))
                 return -100;
             //perror("recv()");
+            return size;
         }
-        port=chenfan.sin_port;
+        port=ntohs(chenfan.sin_port);
 	    ip.assign(inet_ntoa(chenfan.sin_addr));
         return size;
     }
@@ -8520,18 +8603,52 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             }
         }
         //进行websocket握手
+        const auto handshakeFailed=[this]() {
+            flag4=false;
+            flag5=false;
+            (void)TcpClient::close();
+            return false;
+        };
+
         string httpURL=url;
-        auto pos=httpURL.find("ws");
-        httpURL.replace(pos,2,"http");
-        string wbKey;
-        RandomUtil::getRandomStr_base64(wbKey,24);
+        if(httpURL.rfind("ws://",0)==0||httpURL.rfind("wss://",0)==0)
+            httpURL.replace(0,2,"http");
+        else
+            return handshakeFailed();
+
+        // RFC 6455: Sec-WebSocket-Key 必须是 16 字节随机值的 Base64 编码。
+        unsigned char nonce[16]{};
+        if(RAND_bytes(nonce,static_cast<int>(sizeof(nonce)))!=1)
+            return handshakeFailed();
+        string wbKey=EncodingUtil::base64_encode(
+            string(reinterpret_cast<const char*>(nonce),sizeof(nonce)));
+
         HttpClient k;
         if(!k.getRequestFromFD(TcpFDHandler::getFD(),TcpFDHandler::ssl,httpURL,HttpStringUtil::createHeader("Upgrade","websocket","Connection","Upgrade","Sec-WebSocket-Key",wbKey),"Sec-WebSocket-Version: 13"))
-            return false;
-        if(!k.isReturn())
-            return false;
-        if(k.header.find("HTTP/1.1 101")==string::npos)
-            return false;
+            return handshakeFailed();
+        const size_t statusLineEnd=k.header.find("\r\n");
+        const string_view statusLine(k.header.data(),
+            statusLineEnd==string::npos?k.header.size():statusLineEnd);
+        if(!k.isReturn()||!isSwitchingProtocolsStatus(statusLine))
+            return handshakeFailed();
+
+        // HTTP 字段名和 Upgrade/Connection token 均不区分 ASCII 大小写。
+        string upgradeValue;
+        string connectionValue;
+        string acceptValue;
+        if(!getHttpHeaderValueCaseInsensitive(k.header,"Upgrade",upgradeValue)||
+           !httpHeaderContainsToken(upgradeValue,"websocket")||
+           !getHttpHeaderValueCaseInsensitive(k.header,"Connection",connectionValue)||
+           !httpHeaderContainsToken(connectionValue,"Upgrade")||
+           !getHttpHeaderValueCaseInsensitive(k.header,"Sec-WebSocket-Accept",acceptValue))
+            return handshakeFailed();
+
+        string expectedAccept=wbKey+"258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+        string digest;
+        CryptoUtil::sha1(expectedAccept,digest);
+        expectedAccept=EncodingUtil::base64_encode(digest);
+        if(acceptValue!=expectedAccept)
+            return handshakeFailed();
         //连接完毕
         this->url=url;
         flag4=true;

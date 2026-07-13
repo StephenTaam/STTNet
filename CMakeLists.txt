@@ -9,7 +9,7 @@ if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
   set(STTNET_TOP_LEVEL_DEFAULT ON)
 endif()
 
-option(STTNET_BUILD_EXAMPLE "Build the example HTTP/WebSocket servers" ${STTNET_TOP_LEVEL_DEFAULT})
+option(STTNET_BUILD_EXAMPLE "Build the runnable STTNet examples" ${STTNET_TOP_LEVEL_DEFAULT})
 option(STTNET_BUILD_TESTS "Build regression tests" ${STTNET_TOP_LEVEL_DEFAULT})
 option(STTNET_BUILD_BENCHMARK "Build the HTTP benchmark server" OFF)
 option(STTNET_BUILD_DOCS "Add the Chinese and English Doxygen target" OFF)
@@ -64,6 +64,9 @@ if(STTNET_BUILD_TESTS)
   add_executable(sttnet_file_tests tests/file_tests.cpp)
   target_link_libraries(sttnet_file_tests PRIVATE sttnet)
   add_test(NAME sttnet_file_tests COMMAND sttnet_file_tests)
+  add_executable(sttnet_protocol_interop_tests tests/protocol_interop_tests.cpp)
+  target_link_libraries(sttnet_protocol_interop_tests PRIVATE sttnet)
+  add_test(NAME sttnet_protocol_interop_tests COMMAND sttnet_protocol_interop_tests)
 endif()
 
 if(STTNET_ENABLE_INSTALL)
@@ -105,6 +108,8 @@ if(STTNET_ENABLE_INSTALL)
       "${CMAKE_CURRENT_SOURCE_DIR}/docs/*.md")
     install(FILES ${STTNET_MARKDOWN_DOCUMENTATION}
       DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/doc/STTNet")
+    install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/docs/guide/"
+      DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/doc/STTNet/guide")
   endif()
 endif()
 

@@ -1,0 +1,46 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第 1 章：理解 STTNet · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>章节</h3><a class="" href="index.html">指导手册首页</a><a class="active" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、构建与运行</a><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由与回调返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool</a><a class="" href="07-websocket.html">第 7 章：WebSocket</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS 与 WSS</a><a class="" href="08-signals.html">第 12 章：信号与优雅退出</a><a class="" href="09-settings.html">第 13 章：系统设置与生产配置</a><a class="" href="10-production.html">第 14 章：项目接入与上线检查</a><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 1 章：理解 STTNet</h1><p class="lead">先理解线程、对象生命周期和发送语义，再开始记 API。</p>
+<h2>1. STTNet 帮你管理什么</h2>
+<p>STTNet 封装 Linux <code>epoll</code>、非阻塞 Socket、连接状态、HTTP 报文边界、WebSocket 帧、TLS 对象、跨线程响应队列、背压和优雅退出。应用代码主要围绕“注册回调并处理请求”展开。</p>
+<div class="table-wrap"><table><thead><tr><th>对象</th><th>职责</th></tr></thead><tbody><tr><td>HttpServer / WebSocketServer / TcpServer</td><td>拥有监听 Socket、Reactor 线程、连接表、WorkerPool 和运行指标。</td></tr><tr><td>Handler</td><td>当前连接的操作入口，例如发送响应、发送帧或关闭连接。不要长期保存它。</td></tr><tr><td>Request / Information</td><td>当前请求或消息的解析结果。生命周期通常只覆盖本次处理流程。</td></tr><tr><td>WorkerPool</td><td>执行数据库、文件、RPC、压缩等可能阻塞或耗时的任务。</td></tr><tr><td>ServerSetting</td><td>进程级日志、信号屏蔽、同步等待退出信号等初始化。</td></tr></tbody></table></div>
+<h2>2. Reactor 与 Worker 的分工</h2>
+<p>每个 Server 对象主要由一个 Reactor 线程推进网络事件。<code>startListen(port, threads)</code> 的第二个参数是 <strong>WorkerPool 线程数量</strong>，不是 Reactor 数量。</p>
+<div class="warning">Reactor 回调中不要执行数据库查询、文件读写、<code>sleep</code>、外部 RPC 或不可预测的锁等待。一个回调卡住，其他连接的网络事件也会被延迟。</div>
+<h2>3. 发送成功代表什么</h2>
+<p>服务端回调中的 <code>sendText()</code>、<code>sendJson()</code>、<code>sendData()</code> 和 <code>sendMessage()</code> 成功，表示数据已经被 STTNet 的<strong>有界发送队列接受</strong>，并不表示已经写入内核，更不表示对端已经收到。</p>
+<h2>4. 生命周期和所有权</h2>
+<ul><li>不要把 Handler 引用保存到回调之外。</li><li><code>headerValue()</code> 和 <code>bodyView()</code> 返回非拥有 <code>string_view</code>；跨线程或长期保存前必须复制。</li><li>需要跨阶段保存少量请求状态时，可以使用信息结构体中的 <code>ctx</code>。</li><li>服务级 <code>close()</code> 应由主线程或控制线程调用，不要在 Reactor 同步回调里直接做全局销毁。</li></ul>
+<h2>5. maxFD 与系统限制</h2>
+<p><code>HttpServer server(100000)</code> 只表示框架最多跟踪多少连接，不会替你提高 Linux 文件描述符限制。部署前仍要检查：</p>
+<div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>ulimit -n</code></pre></div>
+<p>容器、systemd 和进程用户也可能分别设置限制。</p>
+<h2>6. 先看一个完整最小程序</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>#include &lt;sttnet.h&gt;
+#include &lt;iostream&gt;
+
+int main()
+{
+    using namespace stt::network;
+    using stt::system::ServerSetting;
+
+    // 必须在线程创建前阻塞退出信号。
+    if(!ServerSetting::blockTerminationSignals())
+        return 1;
+
+    HttpServer server;
+
+    server.setFunction(&quot;/ping&quot;,
+        [](HttpServerFDHandler &amp;client, HttpRequestInformation &amp;) {
+            // 1：本阶段成功；-2：发送失败并关闭连接。
+            return client.sendText(&quot;pong&quot;) ? 1 : -2;
+        });
+
+    if(!server.startListen(8080))
+        return 2;
+
+    std::cout &lt;&lt; &quot;http://127.0.0.1:8080/ping\n&quot;;
+    ServerSetting::waitForTerminationSignal();
+    return server.close() ? 0 : 3;
+}</code></pre></div>
+<div class="pager"><a href="index.html">← 指导手册首页</a><a href="02-build.html">第 2 章：下载、构建与运行 →</a></div></article></main></div>
+<footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

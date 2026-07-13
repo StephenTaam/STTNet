@@ -1,0 +1,63 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Demo: WebSocket echo · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">Chapters</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Commented Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Page</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>Chapters</h3><a class="" href="index.html">Guide Home</a><a class="" href="01-understand.html">Chapter 1: Understand STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Build, Run</a><a class="" href="03-http.html">Chapter 3: First HTTP Server</a><a class="" href="04-request-response.html">Chapter 4: Requests, JSON, Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing and Callback Results</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool</a><a class="" href="07-websocket.html">Chapter 7: WebSocket</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS</a><a class="" href="08-signals.html">Chapter 12: Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 13: System and Production Settings</a><a class="" href="10-production.html">Chapter 14: Integration and Production</a><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Demo: WebSocket echo</h1><p class="lead">Complete source, build command, run steps, verification, and expected result for WebSocket echo.</p><h2>1. Learning goal</h2><p>Important calls are commented. Run the program, then change one setting or callback and observe the behavior instead of copying blindly.</p><h2>2. Build and run</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>cmake --build build --target sttnet_websocket_echo --parallel
+./build/examples/sttnet_websocket_echo</code></pre></div><h2>3. Verify</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>websocat ws://127.0.0.1:5050/echo</code></pre></div><div class="expected"><strong>Expected:</strong> Echoed text or binary messages</div><h2>4. Complete source</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>#include &lt;sttnet.h&gt;
+
+#include &lt;iostream&gt;
+#include &lt;string_view&gt;
+
+int main()
+{
+    using namespace stt::network;
+    using namespace stt::data;
+    using stt::system::ServerSetting;
+
+    if(!ServerSetting::blockTerminationSignals())
+    {
+        std::cerr &lt;&lt; &quot;failed to block termination signals\n&quot;;
+        return 1;
+    }
+
+    WebSocketServer server;
+
+    // Check the HTTP upgrade request before accepting the WebSocket handshake.
+    // This demo accepts only /echo and an optional query string.
+    server.setJudgeFunction(
+        [](WebSocketFDInformation &amp;connection) {
+            const bool correctPath =
+                connection.locPara == &quot;/echo&quot; ||
+                connection.locPara.rfind(&quot;/echo?&quot;, 0) == 0;
+
+            // A real service may also inspect connection.header here, for
+            // example with HttpStringUtil::get_value_header().
+            return correctPath;
+        });
+
+    // The global callback receives messages that do not use a custom key route.
+    // It returns bool: false tells STTNet that message handling failed.
+    server.setGlobalSolveFunction(
+        [](WebSocketServerFDHandler &amp;client,
+           WebSocketFDInformation &amp;message) {
+            // RFC 6455 opcode 1 is text and opcode 2 is binary.
+            const std::string frameType =
+                message.message_type == 2 ? &quot;0010&quot; : &quot;0001&quot;;
+
+            // Echo the payload using the same text/binary frame type.
+            return client.sendMessage(message.message, frameType);
+        });
+
+    // Close idle connections and require a heartbeat response within 30 seconds.
+    server.setTimeOutTime(20);   // Idle timeout in minutes.
+    server.setHBTimeOutTime(30); // Heartbeat response timeout in seconds.
+
+    if(!server.startListen(5050))
+    {
+        std::cerr &lt;&lt; &quot;failed to listen on port 5050\n&quot;;
+        return 2;
+    }
+
+    std::cout &lt;&lt; &quot;WebSocket echo listening on ws://127.0.0.1:5050/echo\n&quot;;
+    ServerSetting::waitForTerminationSignal();
+    return server.close() ? 0 : 3;
+}</code></pre></div><div class="pager"><a href="demos.html">← Fully Commented Demos</a><span></span></div></article></main></div>
+<footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

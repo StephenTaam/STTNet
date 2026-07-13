@@ -1,0 +1,26 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第 2 章：下载、构建与运行 · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>章节</h3><a class="" href="index.html">指导手册首页</a><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="active" href="02-build.html">第 2 章：下载、构建与运行</a><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由与回调返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool</a><a class="" href="07-websocket.html">第 7 章：WebSocket</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS 与 WSS</a><a class="" href="08-signals.html">第 12 章：信号与优雅退出</a><a class="" href="09-settings.html">第 13 章：系统设置与生产配置</a><a class="" href="10-production.html">第 14 章：项目接入与上线检查</a><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 2 章：下载、构建与运行</h1><p class="lead">完成依赖安装、源码下载、构建、启动和 curl 验证的完整闭环。</p>
+<h2>1. 安装依赖</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>sudo apt-get update
+sudo apt-get install -y build-essential cmake pkg-config libjsoncpp-dev libssl-dev</code></pre></div>
+<p>STTNet 需要 C++17、线程库、JsonCpp 和 OpenSSL。不同发行版的软件包名称可能不同。</p>
+<h2>2. 下载源码</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>git clone https://github.com/StephenTaam/STTNet.git
+cd STTNet</code></pre></div>
+<h2>3. 使用 CMake 构建</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
+  -DSTTNET_BUILD_EXAMPLE=ON \
+  -DSTTNET_BUILD_TESTS=OFF \
+  -DSTTNET_BUILD_BENCHMARK=OFF
+cmake --build build --parallel</code></pre></div>
+<h2>4. 运行并验证</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>./build/examples/sttnet_http_hello
+# 另开终端
+curl -i http://127.0.0.1:8080/ping</code></pre></div>
+<div class="expected"><strong>预期：</strong>状态为 <code>HTTP/1.1 200 OK</code>，响应体为 <code>pong</code>。按 <kbd>Ctrl</kbd>+<kbd>C</kbd> 后程序应正常退出。</div>
+<h2>5. 常见构建问题</h2>
+<div class="table-wrap"><table><thead><tr><th>现象</th><th>检查</th></tr></thead><tbody><tr><td>找不到 json/json.h</td><td>安装 libjsoncpp-dev，删除旧 build 目录后重新配置。</td></tr><tr><td>找不到 OpenSSL</td><td>安装 libssl-dev，并确认 CMake 找到正确架构的库。</td></tr><tr><td>端口绑定失败</td><td>确认端口未占用；普通用户避免使用 1024 以下端口。</td></tr><tr><td>程序能编译但启动失败</td><td>查看标准错误和日志，检查证书、权限、端口与 fd 限制。</td></tr></tbody></table></div>
+<h2>6. 将 STTNet 接入自己的 CMake 项目</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>add_subdirectory(third_party/STTNet)
+
+add_executable(my_server main.cpp)
+target_link_libraries(my_server PRIVATE STTNet::sttnet)</code></pre></div>
+<p>不要手工复制若干源文件并猜链接参数。使用导出的 CMake 目标可以继承 include 路径和依赖。</p>
+<div class="pager"><a href="01-understand.html">← 第 1 章：理解 STTNet</a><a href="03-http.html">第 3 章：第一个 HTTP 服务 →</a></div></article></main></div>
+<footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

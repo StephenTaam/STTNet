@@ -1,0 +1,59 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Demo: Signals and graceful shutdown · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">Chapters</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Commented Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Page</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>Chapters</h3><a class="" href="index.html">Guide Home</a><a class="" href="01-understand.html">Chapter 1: Understand STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Build, Run</a><a class="" href="03-http.html">Chapter 3: First HTTP Server</a><a class="" href="04-request-response.html">Chapter 4: Requests, JSON, Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing and Callback Results</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool</a><a class="" href="07-websocket.html">Chapter 7: WebSocket</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS</a><a class="" href="08-signals.html">Chapter 12: Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 13: System and Production Settings</a><a class="" href="10-production.html">Chapter 14: Integration and Production</a><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Demo: Signals and graceful shutdown</h1><p class="lead">Complete source, build command, run steps, verification, and expected result for Signals and graceful shutdown.</p><h2>1. Learning goal</h2><p>Important calls are commented. Run the program, then change one setting or callback and observe the behavior instead of copying blindly.</p><h2>2. Build and run</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>cmake --build build --target sttnet_signal_shutdown --parallel
+./build/examples/sttnet_signal_shutdown</code></pre></div><h2>3. Verify</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>kill -TERM &lt;pid&gt;</code></pre></div><div class="expected"><strong>Expected:</strong> Clean exit after SIGTERM</div><h2>4. Complete source</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>#include &lt;sttnet.h&gt;
+
+#include &lt;csignal&gt;
+#include &lt;iostream&gt;
+
+int main()
+{
+    using namespace stt::network;
+    using stt::system::ServerSetting;
+
+    // Configure STTNet&#x27;s safe process-level signal defaults.
+    // In particular, SIGPIPE is ignored so a closed socket cannot kill the process.
+    ServerSetting::setExceptionHandling();
+
+    // Block graceful-termination signals before any framework threads are created.
+    // The same signal mask is inherited by the Reactor and Worker threads.
+    if(!ServerSetting::blockTerminationSignals())
+    {
+        std::cerr &lt;&lt; &quot;failed to block SIGINT/SIGTERM\n&quot;;
+        return 1;
+    }
+
+    HttpServer server;
+    server.setFunction(&quot;/ping&quot;,
+        [](HttpServerFDHandler &amp;client, HttpRequestInformation &amp;) {
+            return client.sendText(&quot;pong&quot;) ? 1 : -2;
+        });
+
+    // Allow up to five seconds for in-flight work and queued responses to drain.
+    server.setGracefulShutdownTimeout(5000);
+
+    if(!server.startListen(8083))
+    {
+        std::cerr &lt;&lt; &quot;failed to listen on port 8083\n&quot;;
+        return 2;
+    }
+
+    std::cout &lt;&lt; &quot;Signal demo listening on http://127.0.0.1:8083\n&quot;
+              &lt;&lt; &quot;Press Ctrl-C or run: kill -15 &quot; &lt;&lt; ::getpid() &lt;&lt; &quot;\n&quot;;
+
+    // sigwait-style synchronous waiting keeps cleanup out of an async signal handler.
+    const int receivedSignal = ServerSetting::waitForTerminationSignal();
+    if(receivedSignal &lt; 0)
+    {
+        std::cerr &lt;&lt; &quot;failed while waiting for termination signal\n&quot;;
+        return 3;
+    }
+
+    std::cout &lt;&lt; &quot;received &quot;
+              &lt;&lt; (receivedSignal == SIGINT ? &quot;SIGINT&quot; : &quot;SIGTERM&quot;)
+              &lt;&lt; &quot;, starting graceful shutdown\n&quot;;
+
+    // Never delete or close the server inside an asynchronous signal handler.
+    return server.close() ? 0 : 4;
+}</code></pre></div><div class="pager"><a href="demos.html">← Fully Commented Demos</a><span></span></div></article></main></div>
+<footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>
