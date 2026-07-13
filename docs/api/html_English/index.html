@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.13.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>STTNet: STTNet：简单、可嵌入的 C++17 网络框架</title>
+<title>STTNet: Getting Started and API Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -17,6 +17,16 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+
+<style type="text/css">
+.stt-hero{padding:30px 34px;margin:0 0 22px;border:1px solid #d7e2f0;border-radius:14px;background:linear-gradient(135deg,#f7fbff 0%,#eef5ff 100%)}
+.stt-hero h2{font-size:28px;margin:0 0 12px;color:#17365d}.stt-hero p{font-size:16px;line-height:1.75;margin:8px 0;color:#334155}
+.stt-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.stt-button{display:inline-block;padding:9px 15px;border-radius:8px;text-decoration:none!important;font-weight:600;background:#2563a9;color:#fff!important;border:1px solid #2563a9}.stt-button.secondary{background:#fff;color:#245b93!important}.stt-button:hover{filter:brightness(.96)}
+.stt-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:18px 0 28px}.stt-card{border:1px solid #d9e2ec;border-radius:12px;padding:18px;background:#fff}.stt-card h3{font-size:18px;margin:0 0 8px;color:#183b56}.stt-card p{margin:0;line-height:1.65;color:#475569}
+.stt-section{margin:30px 0}.stt-section h2{font-size:24px;border-bottom:1px solid #dbe5ef;padding-bottom:8px;color:#17365d}.stt-section h3{font-size:19px;color:#214f7b}.stt-section p,.stt-section li{font-size:15px;line-height:1.75}.stt-code{position:relative;margin:12px 0 20px}.stt-code pre{margin:0;padding:18px;border-radius:10px;background:#172033;color:#eef4ff;overflow:auto;line-height:1.55;font-size:13px}.stt-code code{color:inherit;background:transparent}.stt-note{padding:14px 16px;border-left:4px solid #3b82c4;background:#f2f8fd;border-radius:6px;line-height:1.7}.stt-perf{padding:15px 18px;border:1px solid #ead8a4;background:#fffaf0;border-radius:10px;line-height:1.7}.stt-api-links{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.stt-api-links a{display:block;border:1px solid #d5e0eb;border-radius:10px;padding:15px;text-decoration:none!important;background:#fff;font-weight:600}.stt-api-links small{display:block;margin-top:5px;font-weight:400;color:#64748b;line-height:1.5}
+@media(max-width:900px){.stt-grid{grid-template-columns:1fr}.stt-api-links{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.stt-hero{padding:22px 18px}.stt-hero h2{font-size:24px}.stt-api-links{grid-template-columns:1fr}.stt-button{width:100%;box-sizing:border-box;text-align:center}}
+</style>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -83,103 +93,164 @@ $(function(){ initResizable(false); });
 </div>
 </div>
 
+
 <div><div class="header">
-  <div class="headertitle"><div class="title">STTNet：简单、可嵌入的 C++17 网络框架 </div></div>
+  <div class="headertitle"><div class="title">STTNet Getting Started and API Reference</div></div>
 </div><!--header-->
-<div class="contents">
-<div class="textblock"><dl class="section author"><dt>Author</dt><dd>StephenTaam(<a href="#" onclick="location.href='mai'+'lto:'+'135'+'65'+'979'+'83'+'@qq'+'.c'+'om'; return false;">13565<span class="obfuscator">.nosp@m.</span>9798<span class="obfuscator">.nosp@m.</span>3@qq.<span class="obfuscator">.nosp@m.</span>com</a>) </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.7.0 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>2026-07-13</dd></dl>
-<p>STTNet 用少量 API 提供 Linux epoll TCP、HTTP/1.1、WebSocket、TLS、WorkerPool、 背压和优雅退出。最常见的服务只需要三步：创建 Server、注册回调、开始监听。</p>
-<h1><a class="anchor" id="integration"></a>
-引入项目</h1>
-<p>安装后的 CMake 用户只需链接规范目标： </p><div class="fragment"><div class="line">find_package(STTNet 0.7 CONFIG REQUIRED)</div>
-<div class="line">target_link_libraries(my_server PRIVATE STTNet::sttnet)</div>
-</div><!-- fragment --><p> 也可使用 <code>add_subdirectory</code> 或 FetchContent；全部方式都使用 <code>&lt;<a class="el" href="sttnet_8h.html">sttnet.h</a>&gt;</code> 和 <code>STTNet::sttnet</code>。完整说明见 <code>docs/GETTING_STARTED_Chinese.md</code>。</p>
-<h1><a class="anchor" id="quick_http"></a>
-20 行启动 HTTP 服务</h1>
-<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="sttnet_8h.html">sttnet.h</a>&gt;</span></div>
-<div class="line"><span class="keyword">using namespace </span><a class="code hl_namespace" href="namespacestt_1_1network.html">stt::network</a>;</div>
-<div class="line"><span class="keyword">using </span><a class="code hl_class" href="classstt_1_1system_1_1ServerSetting.html">stt::system::ServerSetting</a>;</div>
-<div class="line"> </div>
-<div class="line"><span class="keywordtype">int</span> main()</div>
-<div class="line">{</div>
-<div class="line">    <span class="keywordflow">if</span>(!ServerSetting::blockTerminationSignals()) <span class="keywordflow">return</span> 1;</div>
-<div class="line">    <a class="code hl_class" href="classstt_1_1network_1_1HttpServer.html">HttpServer</a> server;</div>
-<div class="line">    server.<a class="code hl_function" href="classstt_1_1network_1_1HttpServer.html#a707fcaeab33ef5592300c1f37548ae9b">setFunction</a>(<span class="stringliteral">&quot;/ping&quot;</span>,[](<a class="code hl_class" href="classstt_1_1network_1_1HttpServerFDHandler.html">HttpServerFDHandler</a> &amp;client,</div>
-<div class="line">                                   <a class="code hl_struct" href="structstt_1_1network_1_1HttpRequestInformation.html">HttpRequestInformation</a> &amp;) {</div>
-<div class="line">        <span class="keywordflow">return</span> client.<a class="code hl_function" href="classstt_1_1network_1_1HttpServerFDHandler.html#addb3010c562bd566043e611ef9debc69">sendText</a>(<span class="stringliteral">&quot;pong&quot;</span>) ? 1 : -2;</div>
-<div class="line">    });</div>
-<div class="line">    <span class="keywordflow">if</span>(!server.<a class="code hl_function" href="classstt_1_1network_1_1HttpServer.html#a6c4bd6e14e2ab5db1e7d8ff5181a7d0c">startListen</a>(8080)) <span class="keywordflow">return</span> 2;</div>
-<div class="line">    ServerSetting::waitForTerminationSignal(); <span class="comment">// kill -15 或 Ctrl-C</span></div>
-<div class="line">    <span class="keywordflow">return</span> server.<a class="code hl_function" href="classstt_1_1network_1_1HttpServer.html#ad039fc7d80cbfb0635fed870fe60f884">close</a>() ? 0 : 3;</div>
-<div class="line">}</div>
-<div class="ttc" id="aclassstt_1_1network_1_1HttpServerFDHandler_html"><div class="ttname"><a href="classstt_1_1network_1_1HttpServerFDHandler.html">stt::network::HttpServerFDHandler</a></div><div class="ttdoc">解析，响应Http/https请求的操作类 仅传入套接字，然后使用这个类进行Http的操作</div><div class="ttdef"><b>Definition</b> sttnet.h:3222</div></div>
-<div class="ttc" id="aclassstt_1_1network_1_1HttpServerFDHandler_html_addb3010c562bd566043e611ef9debc69"><div class="ttname"><a href="classstt_1_1network_1_1HttpServerFDHandler.html#addb3010c562bd566043e611ef9debc69">stt::network::HttpServerFDHandler::sendText</a></div><div class="ttdeci">bool sendText(const std::string &amp;data, const std::string &amp;code=&quot;200 OK&quot;, const std::string &amp;contentType=&quot;text/plain; charset=utf-8&quot;, const std::string &amp;extraHeaders=&quot;&quot;)</div><div class="ttdoc">发送文本响应，自动补充 Content-Type 和 Content-Length。</div></div>
-<div class="ttc" id="aclassstt_1_1network_1_1HttpServer_html"><div class="ttname"><a href="classstt_1_1network_1_1HttpServer.html">stt::network::HttpServer</a></div><div class="ttdoc">Http/HttpServer 服务端操作类</div><div class="ttdef"><b>Definition</b> sttnet.h:4008</div></div>
-<div class="ttc" id="aclassstt_1_1network_1_1HttpServer_html_a6c4bd6e14e2ab5db1e7d8ff5181a7d0c"><div class="ttname"><a href="classstt_1_1network_1_1HttpServer.html#a6c4bd6e14e2ab5db1e7d8ff5181a7d0c">stt::network::HttpServer::startListen</a></div><div class="ttdeci">bool startListen(const int &amp;port, const int &amp;threads=8)</div><div class="ttdoc">打开Http服务器监听程序</div><div class="ttdef"><b>Definition</b> sttnet.h:4144</div></div>
-<div class="ttc" id="aclassstt_1_1network_1_1HttpServer_html_a707fcaeab33ef5592300c1f37548ae9b"><div class="ttname"><a href="classstt_1_1network_1_1HttpServer.html#a707fcaeab33ef5592300c1f37548ae9b">stt::network::HttpServer::setFunction</a></div><div class="ttdeci">void setFunction(const std::string &amp;key, std::function&lt; int(HttpServerFDHandler &amp;k, HttpRequestInformation &amp;inf)&gt; fc)</div><div class="ttdoc">设置key对应的收到客户端消息后的回调函数</div><div class="ttdef"><b>Definition</b> sttnet.h:4117</div></div>
-<div class="ttc" id="aclassstt_1_1network_1_1HttpServer_html_ad039fc7d80cbfb0635fed870fe60f884"><div class="ttname"><a href="classstt_1_1network_1_1HttpServer.html#ad039fc7d80cbfb0635fed870fe60f884">stt::network::HttpServer::close</a></div><div class="ttdeci">bool close() override</div><div class="ttdoc">关闭监听和所有已连接的套接字</div></div>
-<div class="ttc" id="aclassstt_1_1system_1_1ServerSetting_html"><div class="ttname"><a href="classstt_1_1system_1_1ServerSetting.html">stt::system::ServerSetting</a></div><div class="ttdoc">初始化服务系统的类</div><div class="ttdef"><b>Definition</b> sttnet.h:4674</div></div>
-<div class="ttc" id="anamespacestt_1_1network_html"><div class="ttname"><a href="namespacestt_1_1network.html">stt::network</a></div><div class="ttdoc">网络框架，协议，通信，io多路复用相关</div></div>
-<div class="ttc" id="astructstt_1_1network_1_1HttpRequestInformation_html"><div class="ttname"><a href="structstt_1_1network_1_1HttpRequestInformation.html">stt::network::HttpRequestInformation</a></div><div class="ttdoc">保存HTTP/HTTPS请求信息的结构体</div><div class="ttdef"><b>Definition</b> sttnet.h:3159</div></div>
-<div class="ttc" id="asttnet_8h_html"><div class="ttname"><a href="sttnet_8h.html">sttnet.h</a></div></div>
-</div><!-- fragment --><p>测试：<code>curl <a href="http://127.0.0.1:8080/ping">http://127.0.0.1:8080/ping</a></code>。默认路由 key 就是 HTTP path， 因此这个最小示例不需要额外配置解析函数。</p>
-<h1><a class="anchor" id="http_helpers"></a>
-常用 HTTP 操作</h1>
-<div class="fragment"><div class="line"><span class="keyword">auto</span> contentType=request.headerValue(<span class="stringliteral">&quot;content-type&quot;</span>);</div>
-<div class="line"><span class="keyword">auto</span> body=request.bodyView();</div>
-<div class="line">client.<a class="code hl_function" href="classstt_1_1network_1_1HttpServerFDHandler.html#addb3010c562bd566043e611ef9debc69">sendText</a>(<span class="stringliteral">&quot;created&quot;</span>, <span class="stringliteral">&quot;201 Created&quot;</span>);</div>
-<div class="line">Json::Value value;</div>
-<div class="line">value[<span class="stringliteral">&quot;ok&quot;</span>]=<span class="keyword">true</span>;</div>
-<div class="line">client.<a class="code hl_function" href="classstt_1_1network_1_1HttpServerFDHandler.html#a9ee623da02e90cdd57939d597143981e">sendJson</a>(value);</div>
-<div class="line">client.<a class="code hl_function" href="classstt_1_1network_1_1HttpServerFDHandler.html#a3ae6dbb78e4a8613ca47284c74a361c4">redirect</a>(<span class="stringliteral">&quot;/login&quot;</span>);</div>
-<div class="ttc" id="aclassstt_1_1network_1_1HttpServerFDHandler_html_a3ae6dbb78e4a8613ca47284c74a361c4"><div class="ttname"><a href="classstt_1_1network_1_1HttpServerFDHandler.html#a3ae6dbb78e4a8613ca47284c74a361c4">stt::network::HttpServerFDHandler::redirect</a></div><div class="ttdeci">bool redirect(const std::string &amp;location, const std::string &amp;code=&quot;302 Found&quot;)</div><div class="ttdoc">发送 HTTP 重定向响应。</div></div>
-<div class="ttc" id="aclassstt_1_1network_1_1HttpServerFDHandler_html_a9ee623da02e90cdd57939d597143981e"><div class="ttname"><a href="classstt_1_1network_1_1HttpServerFDHandler.html#a9ee623da02e90cdd57939d597143981e">stt::network::HttpServerFDHandler::sendJson</a></div><div class="ttdeci">bool sendJson(const Json::Value &amp;data, const std::string &amp;code=&quot;200 OK&quot;, const std::string &amp;extraHeaders=&quot;&quot;)</div><div class="ttdoc">序列化 Json::Value 并发送 application/json UTF-8 响应。</div></div>
-</div><!-- fragment --><h1><a class="anchor" id="quick_websocket"></a>
-最小 WebSocket Echo 服务</h1>
-<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="sttnet_8h.html">sttnet.h</a>&gt;</span></div>
-<div class="line"><span class="keyword">using namespace </span><a class="code hl_namespace" href="namespacestt_1_1network.html">stt::network</a>;</div>
-<div class="line"><span class="keyword">using </span><a class="code hl_class" href="classstt_1_1system_1_1ServerSetting.html">stt::system::ServerSetting</a>;</div>
-<div class="line"> </div>
-<div class="line"><span class="keywordtype">int</span> main()</div>
-<div class="line">{</div>
-<div class="line">    <span class="keywordflow">if</span>(!ServerSetting::blockTerminationSignals()) <span class="keywordflow">return</span> 1;</div>
-<div class="line">    <a class="code hl_class" href="classstt_1_1network_1_1WebSocketServer.html">WebSocketServer</a> server;</div>
-<div class="line">    server.<a class="code hl_function" href="classstt_1_1network_1_1WebSocketServer.html#a1aa57d1c724c6fca6fa35a9dda19a9cf">setGlobalSolveFunction</a>([](<a class="code hl_class" href="classstt_1_1network_1_1WebSocketServerFDHandler.html">WebSocketServerFDHandler</a> &amp;client,</div>
-<div class="line">                                     <a class="code hl_struct" href="structstt_1_1network_1_1WebSocketFDInformation.html">WebSocketFDInformation</a> &amp;message) {</div>
-<div class="line">        <span class="keywordflow">return</span> client.<a class="code hl_function" href="classstt_1_1network_1_1WebSocketServerFDHandler.html#a2b6442cd9ac75a81063030a3c1bd7724">sendMessage</a>(message.<a class="code hl_variable" href="structstt_1_1network_1_1WebSocketFDInformation.html#af531c538a773d596dfce63037f1e6985">message</a>); <span class="comment">// 原样回显</span></div>
-<div class="line">    });</div>
-<div class="line">    <span class="keywordflow">if</span>(!server.<a class="code hl_function" href="classstt_1_1network_1_1WebSocketServer.html#ab2301633d489c53792226bfe39d06d55">startListen</a>(5050)) <span class="keywordflow">return</span> 2;</div>
-<div class="line">    ServerSetting::waitForTerminationSignal();</div>
-<div class="line">    <span class="keywordflow">return</span> server.<a class="code hl_function" href="classstt_1_1network_1_1WebSocketServer.html#a1a7088b6297b18a37bc1af5740b12b25">close</a>() ? 0 : 3;</div>
-<div class="line">}</div>
-<div class="ttc" id="aclassstt_1_1network_1_1WebSocketServerFDHandler_html"><div class="ttname"><a href="classstt_1_1network_1_1WebSocketServerFDHandler.html">stt::network::WebSocketServerFDHandler</a></div><div class="ttdoc">WebSocket协议的操作类 仅传入套接字，然后使用这个类进行WebSocket的操作</div><div class="ttdef"><b>Definition</b> sttnet.h:4163</div></div>
-<div class="ttc" id="aclassstt_1_1network_1_1WebSocketServerFDHandler_html_a2b6442cd9ac75a81063030a3c1bd7724"><div class="ttname"><a href="classstt_1_1network_1_1WebSocketServerFDHandler.html#a2b6442cd9ac75a81063030a3c1bd7724">stt::network::WebSocketServerFDHandler::sendMessage</a></div><div class="ttdeci">bool sendMessage(const std::string &amp;msg, const std::string &amp;type=&quot;0001&quot;)</div><div class="ttdoc">发送一条websocket信息</div></div>
-<div class="ttc" id="aclassstt_1_1network_1_1WebSocketServer_html"><div class="ttname"><a href="classstt_1_1network_1_1WebSocketServer.html">stt::network::WebSocketServer</a></div><div class="ttdoc">WebSocketServer服务端操作类</div><div class="ttdef"><b>Definition</b> sttnet.h:4214</div></div>
-<div class="ttc" id="aclassstt_1_1network_1_1WebSocketServer_html_a1a7088b6297b18a37bc1af5740b12b25"><div class="ttname"><a href="classstt_1_1network_1_1WebSocketServer.html#a1a7088b6297b18a37bc1af5740b12b25">stt::network::WebSocketServer::close</a></div><div class="ttdeci">bool close() override</div><div class="ttdoc">关闭监听和所有连接</div></div>
-<div class="ttc" id="aclassstt_1_1network_1_1WebSocketServer_html_a1aa57d1c724c6fca6fa35a9dda19a9cf"><div class="ttname"><a href="classstt_1_1network_1_1WebSocketServer.html#a1aa57d1c724c6fca6fa35a9dda19a9cf">stt::network::WebSocketServer::setGlobalSolveFunction</a></div><div class="ttdeci">void setGlobalSolveFunction(std::function&lt; bool(WebSocketServerFDHandler &amp;k, WebSocketFDInformation &amp;inf)&gt; fc)</div><div class="ttdoc">设置全局备用函数</div><div class="ttdef"><b>Definition</b> sttnet.h:4313</div></div>
-<div class="ttc" id="aclassstt_1_1network_1_1WebSocketServer_html_ab2301633d489c53792226bfe39d06d55"><div class="ttname"><a href="classstt_1_1network_1_1WebSocketServer.html#ab2301633d489c53792226bfe39d06d55">stt::network::WebSocketServer::startListen</a></div><div class="ttdeci">bool startListen(const int &amp;port, const int &amp;threads=8)</div><div class="ttdoc">打开Websocket服务器监听程序</div><div class="ttdef"><b>Definition</b> sttnet.h:4454</div></div>
-<div class="ttc" id="astructstt_1_1network_1_1WebSocketFDInformation_html"><div class="ttname"><a href="structstt_1_1network_1_1WebSocketFDInformation.html">stt::network::WebSocketFDInformation</a></div><div class="ttdoc">保存客户端WS/WSS请求信息的结构体</div><div class="ttdef"><b>Definition</b> sttnet.h:3295</div></div>
-<div class="ttc" id="astructstt_1_1network_1_1WebSocketFDInformation_html_af531c538a773d596dfce63037f1e6985"><div class="ttname"><a href="structstt_1_1network_1_1WebSocketFDInformation.html#af531c538a773d596dfce63037f1e6985">stt::network::WebSocketFDInformation::message</a></div><div class="ttdeci">std::string message</div><div class="ttdoc">消息</div><div class="ttdef"><b>Definition</b> sttnet.h:3339</div></div>
-</div><!-- fragment --><h1><a class="anchor" id="quick_options"></a>
-常用生产配置</h1>
-<div class="fragment"><div class="line"><a class="code hl_struct" href="structstt_1_1network_1_1ServerSocketOptions.html">ServerSocketOptions</a> options;</div>
-<div class="line">options.<a class="code hl_variable" href="structstt_1_1network_1_1ServerSocketOptions.html#a315df17a7a19099e0b4c1aa405d7d29d">tcp_no_delay</a>=<span class="keyword">true</span>;</div>
-<div class="line">options.<a class="code hl_variable" href="structstt_1_1network_1_1ServerSocketOptions.html#a4038669dc0fcfd64f27d5fa0680d5ffa">keep_alive</a>=<span class="keyword">true</span>;</div>
-<div class="line">options.<a class="code hl_variable" href="structstt_1_1network_1_1ServerSocketOptions.html#afcb04f96a5fac61b07a7dcb6106ec8f3">listen_backlog</a>=4096;</div>
-<div class="line">server.<a class="code hl_function" href="classstt_1_1network_1_1TcpServer.html#ade0f3671ed660da491cb5966453fe77e">setSocketOptions</a>(options);</div>
-<div class="line">server.<a class="code hl_function" href="classstt_1_1network_1_1TcpServer.html#a47d746d9ef479fd94cf9026c63a7732c">setMaxPendingWriteBytes</a>(4 * 1024 * 1024);</div>
-<div class="line">server.<a class="code hl_function" href="classstt_1_1network_1_1TcpServer.html#a87df5bbd4092afab3eb2c4e96cc2937c">setGracefulShutdownTimeout</a>(5000);</div>
-<div class="line"><span class="comment">// 普通 HTTPS/WSS：server.setTLS(&quot;server.crt&quot;, &quot;server.key&quot;);</span></div>
-<div class="ttc" id="aclassstt_1_1network_1_1TcpServer_html_a47d746d9ef479fd94cf9026c63a7732c"><div class="ttname"><a href="classstt_1_1network_1_1TcpServer.html#a47d746d9ef479fd94cf9026c63a7732c">stt::network::TcpServer::setMaxPendingWriteBytes</a></div><div class="ttdeci">void setMaxPendingWriteBytes(const size_t bytes)</div><div class="ttdoc">设置每连接待发送数据高水位。</div><div class="ttdef"><b>Definition</b> sttnet.h:3887</div></div>
-<div class="ttc" id="aclassstt_1_1network_1_1TcpServer_html_a87df5bbd4092afab3eb2c4e96cc2937c"><div class="ttname"><a href="classstt_1_1network_1_1TcpServer.html#a87df5bbd4092afab3eb2c4e96cc2937c">stt::network::TcpServer::setGracefulShutdownTimeout</a></div><div class="ttdeci">void setGracefulShutdownTimeout(const size_t milliseconds)</div><div class="ttdoc">设置 close()/stopListen() 等待在途请求和发送队列排空的最长时间。</div><div class="ttdef"><b>Definition</b> sttnet.h:3940</div></div>
-<div class="ttc" id="aclassstt_1_1network_1_1TcpServer_html_ade0f3671ed660da491cb5966453fe77e"><div class="ttname"><a href="classstt_1_1network_1_1TcpServer.html#ade0f3671ed660da491cb5966453fe77e">stt::network::TcpServer::setSocketOptions</a></div><div class="ttdeci">void setSocketOptions(const ServerSocketOptions &amp;options)</div><div class="ttdoc">设置新接收 TCP 连接的常用套接字参数。</div><div class="ttdef"><b>Definition</b> sttnet.h:3922</div></div>
-<div class="ttc" id="astructstt_1_1network_1_1ServerSocketOptions_html"><div class="ttname"><a href="structstt_1_1network_1_1ServerSocketOptions.html">stt::network::ServerSocketOptions</a></div><div class="ttdoc">新连接的常用 TCP 套接字调优参数。</div><div class="ttdef"><b>Definition</b> sttnet.h:3437</div></div>
-<div class="ttc" id="astructstt_1_1network_1_1ServerSocketOptions_html_a315df17a7a19099e0b4c1aa405d7d29d"><div class="ttname"><a href="structstt_1_1network_1_1ServerSocketOptions.html#a315df17a7a19099e0b4c1aa405d7d29d">stt::network::ServerSocketOptions::tcp_no_delay</a></div><div class="ttdeci">bool tcp_no_delay</div><div class="ttdef"><b>Definition</b> sttnet.h:3438</div></div>
-<div class="ttc" id="astructstt_1_1network_1_1ServerSocketOptions_html_a4038669dc0fcfd64f27d5fa0680d5ffa"><div class="ttname"><a href="structstt_1_1network_1_1ServerSocketOptions.html#a4038669dc0fcfd64f27d5fa0680d5ffa">stt::network::ServerSocketOptions::keep_alive</a></div><div class="ttdeci">bool keep_alive</div><div class="ttdef"><b>Definition</b> sttnet.h:3439</div></div>
-<div class="ttc" id="astructstt_1_1network_1_1ServerSocketOptions_html_afcb04f96a5fac61b07a7dcb6106ec8f3"><div class="ttname"><a href="structstt_1_1network_1_1ServerSocketOptions.html#afcb04f96a5fac61b07a7dcb6106ec8f3">stt::network::ServerSocketOptions::listen_backlog</a></div><div class="ttdeci">int listen_backlog</div><div class="ttdef"><b>Definition</b> sttnet.h:3448</div></div>
-</div><!-- fragment --><dl class="section note"><dt>Note</dt><dd>必须在创建 Worker/Reactor 线程前调用 blockTerminationSignals()。 不要在异步 signal handler 中 delete Server；SIGKILL (<code>kill -9</code>) 无法优雅处理。 </dd></dl>
+<div class="contents"><div class="textblock">
+
+<div class="stt-hero">
+  <h2>A lightweight, direct C++17 networking framework for Linux servers</h2>
+  <p>STTNet is built on epoll and the Reactor event-driven model. It provides TCP, UDP, HTTP/1.1, WebSocket, TLS, HTTPS, and WSS support while keeping application code centered on clear callbacks.</p>
+  <p>It is suitable for lightweight API services, real-time communication, gateways, IoT access, game backends, and networking components embedded in existing C++ applications.</p>
+  <div class="stt-actions">
+    <a class="stt-button" href="#quick-start">Getting Started</a>
+    <a class="stt-button secondary" href="#http-demo">HTTP Demo</a>
+    <a class="stt-button secondary" href="#websocket-demo">WebSocket Demo</a>
+    <a class="stt-button secondary" href="#api-reference">API Reference</a>
+    <a class="stt-button secondary" href="../html_Chinese/index.html">中文</a>
+    <a class="stt-button secondary" href="../../index.html">Language Page</a>
+  </div>
+</div>
+
+<div class="stt-grid">
+  <div class="stt-card"><h3>Lightweight and embeddable</h3><p>The core targets C++17, exposes a compact interface through <code>sttnet.h</code>, and can be installed with CMake or added directly to an existing project.</p></div>
+  <div class="stt-card"><h3>High-concurrency I/O</h3><p>epoll, non-blocking I/O, and a one-loop-per-thread Reactor design are combined with multiple event loops, WorkerPool dispatch, bounded send queues, and backpressure.</p></div>
+  <div class="stt-card"><h3>Practical protocol support</h3><p>TCP, UDP, HTTP, WebSocket, and encrypted variants are available alongside JSON, logging, file, signal, and common server-side utilities.</p></div>
+</div>
+
+<div class="stt-perf"><b>Performance note:</b> an older build recorded about 65,000 requests per second with 2–3 ms average latency on a 4-core/4GB development board. This is a historical case, not a fixed result for every machine or the current release. Benchmark the target Linux environment for meaningful numbers.</div>
+
+<div class="stt-section" id="quick-start">
+<h2>Getting Started</h2>
+<h3>Requirements</h3>
+<ul>
+  <li>Linux, because the event loop uses epoll</li>
+  <li>A C++17-capable GCC or Clang compiler</li>
+  <li>CMake 3.16 or newer</li>
+  <li>OpenSSL, JsonCpp, and pthread</li>
+</ul>
+
+<h3>CMake integration</h3>
+<p>For a system-installed package:</p>
+<div class="stt-code"><pre><code>find_package(STTNet 0.7 CONFIG REQUIRED)
+target_link_libraries(my_server PRIVATE STTNet::sttnet)</code></pre></div>
+
+<p>When STTNet is included as a project subdirectory:</p>
+<div class="stt-code"><pre><code>add_subdirectory(STTNet)
+target_link_libraries(my_server PRIVATE STTNet::sttnet)</code></pre></div>
+
+<p>Application code includes the public header:</p>
+<div class="stt-code"><pre><code>#include &lt;sttnet.h&gt;</code></pre></div>
+</div>
+
+<div class="stt-section" id="http-demo">
+<h2>Minimal HTTP Server</h2>
+<p>This program registers <code>/ping</code> and returns <code>pong</code>:</p>
+<div class="stt-code"><pre><code>#include &lt;sttnet.h&gt;
+
+using namespace stt::network;
+using stt::system::ServerSetting;
+
+int main()
+{
+    if (!ServerSetting::blockTerminationSignals())
+        return 1;
+
+    HttpServer server;
+
+    server.setFunction("/ping",
+        [](HttpServerFDHandler &amp;client,
+           HttpRequestInformation &amp;request) {
+            (void)request;
+            return client.sendText("pong") ? 1 : -2;
+        });
+
+    if (!server.startListen(8080))
+        return 2;
+
+    ServerSetting::waitForTerminationSignal();
+    return server.close() ? 0 : 3;
+}</code></pre></div>
+
+<p>After compiling and starting the program, open <code>http://127.0.0.1:8080/ping</code> or use:</p>
+<div class="stt-code"><pre><code>curl http://127.0.0.1:8080/ping</code></pre></div>
+
+<h3>Read a request and return JSON</h3>
+<div class="stt-code"><pre><code>server.setFunction("/user",
+    [](HttpServerFDHandler &amp;client,
+       HttpRequestInformation &amp;request) {
+        auto contentType = request.headerValue("content-type");
+        auto body = request.bodyView();
+
+        Json::Value result;
+        result["ok"] = true;
+        result["content_type"] = contentType;
+        result["body_size"] = static_cast&lt;Json::UInt64&gt;(body.size());
+
+        return client.sendJson(result) ? 1 : -2;
+    });</code></pre></div>
+</div>
+
+<div class="stt-section" id="websocket-demo">
+<h2>Minimal WebSocket Echo Server</h2>
+<div class="stt-code"><pre><code>#include &lt;sttnet.h&gt;
+
+using namespace stt::network;
+using stt::system::ServerSetting;
+
+int main()
+{
+    if (!ServerSetting::blockTerminationSignals())
+        return 1;
+
+    WebSocketServer server;
+
+    server.setGlobalSolveFunction(
+        [](WebSocketServerFDHandler &amp;client,
+           WebSocketFDInformation &amp;message) {
+            return client.sendMessage(message.message);
+        });
+
+    if (!server.startListen(5050))
+        return 2;
+
+    ServerSetting::waitForTerminationSignal();
+    return server.close() ? 0 : 3;
+}</code></pre></div>
+<p>A client connected to <code>ws://127.0.0.1:5050</code> receives each text message back unchanged. HTTPS and WSS can load a certificate and private key through the server TLS configuration API.</p>
+</div>
+
+<div class="stt-section">
+<h2>Concurrency and production settings</h2>
+<p>Reactor threads handle network I/O. Expensive application work can be dispatched to a WorkerPool so it does not block an event loop. A bounded pending-write limit provides backpressure for slow clients and prevents unbounded send queues.</p>
+<div class="stt-code"><pre><code>ServerSocketOptions options;
+options.tcp_no_delay = true;
+options.keep_alive = true;
+options.listen_backlog = 4096;
+
+server.setSocketOptions(options);
+server.setMaxPendingWriteBytes(4 * 1024 * 1024);
+server.setGracefulShutdownTimeout(5000);
+
+// HTTPS / WSS
+// server.setTLS("server.crt", "server.key");</code></pre></div>
+<div class="stt-note"><b>Signal handling:</b> call <code>blockTerminationSignals()</code> before Reactor or Worker threads are created. A normal shutdown can wait for in-flight requests and pending writes; <code>SIGKILL</code> cannot be caught and therefore cannot trigger graceful shutdown.</div>
+</div>
+
+<div class="stt-section" id="api-reference">
+<h2>API Reference</h2>
+<p>The complete generated API documentation remains available through the main navigation, search box, and the links below.</p>
+<div class="stt-api-links">
+  <a href="annotated.html">Classes and structures<small>Servers, connection handlers, request data, and configuration types</small></a>
+  <a href="namespaces.html">Namespaces<small>Browse network, system, security, and other modules</small></a>
+  <a href="files.html">Files<small>Headers, source files, and definition locations</small></a>
+  <a href="functions.html">Member index<small>Functions, variables, aliases, and types by name</small></a>
+</div>
+</div>
+
+<dl class="section author"><dt>Author</dt><dd>StephenTaam · <a href="mailto:1356597983@qq.com">1356597983@qq.com</a></dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.7.0</dd></dl>
 </div></div><!-- PageDoc -->
 <a href="doxygen_crawl.html"></a>
 </div><!-- contents -->
