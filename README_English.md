@@ -1,165 +1,80 @@
-## STTNet
+# STTNet 0.7.0
 
-## Lightweight High-Performance C++ Network Framework
+**A lightweight, high-performance C++17 network framework for Linux.**
 
-STTNet is a lightweight, high-performance server framework based on the **C++17 standard**.  It utilizes the Reactor event-driven model and epoll for high-concurrency, non-blocking network communication, providing complete **high-performance network communication capabilities**. It supports **TCP/UDP/HTTP/WebSocket and their encrypted variants (TLS+TCP, HTTPS, WSS)**.  It also supports common server-side functionalities such as file operations, time operations, logging, common data processing, JSON data processing, encryption/decryption, signal management, process management, and information security.  It includes built-in features such as a logging system, epoll high-concurrency event-driven model, multi-threading, thread safety, heartbeat monitoring, and exception and signal handling.
+[中文说明](README_Chinese.md) · [Online documentation](https://sttnet.pages.dev/) · [Chinese API](docs/api/html_Chinese/index.html) · [English API](docs/api/html_English/index.html)
 
-Historical case: an older build recorded about 65,000 requests/second and 2–3 ms average latency on a 4-core/4GB development board. This is not a same-machine STTNet 0.7.0 result; run the repository benchmarks on the target Linux host for a meaningful number.
+STTNet is built around Linux `epoll` and a Reactor event-driven architecture. It provides TCP, UDP, HTTP/1.1, WebSocket, TLS, HTTPS, and WSS support while keeping application code centered on small callback-based APIs.
 
-> Author: StephenTaam ([1356597983@qq.com](mailto:1356597983@qq.com))
-> Language: C++17
-> Platform: Linux
-> Dependencies: OpenSSL, JsonCpp, pthread
+It is designed for lightweight API services, gateways, IoT access, real-time communication, game backends, and networking modules embedded in existing C++ applications.
 
----
+## Highlights
 
-## 📦 Core Framework Features
+- C++17 and Linux `epoll`
+- Non-blocking one-loop-per-thread Reactor architecture
+- TCP, UDP, HTTP/1.1, WebSocket, TLS, HTTPS, and WSS
+- WorkerPool dispatch for blocking or expensive application work
+- Bounded per-connection write queues and slow-client backpressure
+- Graceful shutdown, signal handling, logging, JSON, file, time, and utility modules
+- CMake target: `STTNet::sttnet`
+- Installation, `find_package`, `add_subdirectory`, FetchContent, and pkg-config support
 
-* ✅ Based on C++17
-* ✅ Simple and easy to use, clear API
+## Five-minute start
 
-# 🔌 Communication Features
+### 1. Install dependencies
 
-* ✅ Single-owner epoll Reactor plus bounded WorkerPool
-* ✅ TCP, UDP, HTTP, WebSocket support
-* ✅ TLS+TCP, HTTPS and WSS with server-only TLS, optional client certificates, or mTLS
-* ✅ Bounded per-connection write queues, unified EPOLLOUT state, backpressure and graceful drain
-* ✅ Coalesced eventfd wakeups and scatter/gather TCP writes
-* ✅ Supports custom callback registration for flexible request handling
-
-# 🔧 Tools and Service Modules
-
-* ✅ Logging system encapsulation (multi-thread write support, log rotation)
-* ✅ File I/O encapsulation (thread-safe, lock mechanisms)
-* ✅ Time utility wrappers
-* ✅ Numeric utilities, string utilities, JSON data handling
-* ✅ Encryption and decryption utilities
-
-# 🧿 System Enhancements
-
-* ✅ Thread pool support
-* ✅ Exception and signal management
-* ✅ Process management and heartbeat monitoring
-* ✅ User-friendly interface and modular structure
-- ✅ Information security module
----
-
-## 0.6.0 Foundation Upgrade
-
-- Replaced the `maxFD`-sized connection array with sparse active state and lazy receive buffers.
-- Made Reactor and Worker lifecycles joinable; copied async request state and added connection generations.
-- Added bounded per-connection write queues and a Reactor-owned EPOLLOUT/TLS WANT state machine.
-- Hardened HTTP/1.1 and WebSocket parsing, and added CMake, Linux CI, sanitizers, and benchmarks.
-
-## 0.7.0 Performance, Reliability, and Usability
-
-- Added non-blocking ET accept, coalesced eventfd wakeups, `sendmsg+iovec`, bounded workers, write fairness, and richer metrics.
-- Added socket option aggregation, graceful draining, TLS client-auth modes, and safe certificate reload.
-- Added install/export support, `STTNet::sttnet`, `find_package`, FetchContent, and pkg-config integration.
-- Added `headerValue/bodyView`, `sendText/sendJson/redirect`, and standalone HTTP/WebSocket examples.
-
----
-
-## 🧱 Framework Module Structure
-
-```
-stt
-├── file
-│   ├── FileTool / File / LogFile
-│   └── File operation tool + file read and write encapsulation + log module
-├── time
-│   ├── DateTime / Duration
-│   └── Time tools
-├── data
-│   ├── CryptoUtil / BitUtil / RandomUtil / NetworkOrderUtil / PrecisionUtil / HttpStringUtil / WebsocketStringUtil / NumberStringConvertUtil / 
-│       NumberStringConvertUtil / JsonHelper
-│   └── Data processing tools (encryption and decryption, numerical values, strings, Json)
-├── network
-│   ├── TcpServer / UdpServer / HttpServer / WebSocketServer / TcpClient / UdpClient / HttpClient / WebSocketClient
-│   └── Multithreaded epoll network server encapsulation Client communication encapsulation
-├── system
-│   ├── ServerSetting / HBSystem /Process
-│   └── Framework initialization, signal/process/heartbeat management
-├── security
-│   ├── ConnectionLimiter
-│   └── Current limiting module
-```
-
----
-
-## 🚀 Quick Start
-
-# Sample Project `main`
-
-The sample project uses various system and third-party libraries: `jsoncpp`, `OpenSSL`, and `pthread`, and includes the framework module `sttnet.h/.cpp`.
-
-## 🧹 Installing Dependencies
-
-Before compiling the project, ensure the following libraries are installed:
-
-* [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
-* OpenSSL (`libssl`, `libcrypto`)
-* POSIX Threads (`pthread`)
-* g++ compiler (supporting C++17 or higher)
-
-Install these dependencies using the following commands for different Linux distributions:
-
-# 🐧 Ubuntu / Debian (APT-based)
+Ubuntu / Debian:
 
 ```bash
 sudo apt-get update
-sudo apt-get install libjsoncpp-dev libssl-dev build-essential
+sudo apt-get install -y build-essential cmake pkg-config libjsoncpp-dev libssl-dev
 ```
 
-# 🐧 Fedora / RHEL / CentOS (DNF/YUM-based)
+Fedora / RHEL:
 
 ```bash
-sudo yum update
-sudo yum install -y gcc-c++ jsoncpp-devel openssl-devel
+sudo dnf install -y gcc-c++ cmake pkgconf-pkg-config jsoncpp-devel openssl-devel
 ```
 
-# 🐧 Arch / Manjaro
+Arch Linux:
 
 ```bash
-sudo pacman update
-sudo pacman -S --noconfirm jsoncpp openssl base-devel
+sudo pacman -S --needed base-devel cmake pkgconf jsoncpp openssl
 ```
 
-### 🛠️ Compile
+### 2. Download and build
 
 ```bash
-g++ -std=c++17 -o main main.cpp src/sttnet.cpp -ljsoncpp -lssl -lcrypto -lpthread
+git clone https://github.com/StephenTaam/STTNet.git
+cd STTNet
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
+  -DSTTNET_BUILD_EXAMPLE=ON \
+  -DSTTNET_BUILD_TESTS=OFF \
+  -DSTTNET_BUILD_BENCHMARK=OFF
+cmake --build build --parallel
 ```
 
-You may use `make` for the repository example. Real applications should prefer the CMake target integration below.
+### 3. Run the HTTP example
 
-(`main.cpp` is the sample entry demonstrating use of this framework)
-
-### Recommended consumer integration
-
-After installing STTNet, a CMake application only needs:
-
-```cmake
-find_package(STTNet 0.7 CONFIG REQUIRED)
-target_link_libraries(my_server PRIVATE STTNet::sttnet)
+```bash
+./build/examples/sttnet_http_hello
 ```
 
-Vendored source works with the same target:
+In another terminal:
 
-```cmake
-set(STTNET_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(STTNET_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
-add_subdirectory(third_party/STTNet)
-target_link_libraries(my_server PRIVATE STTNet::sttnet)
+```bash
+curl -i http://127.0.0.1:8080/ping
 ```
 
-See [`docs/GETTING_STARTED_English.md`](docs/GETTING_STARTED_English.md) for installation prefixes, FetchContent, pkg-config, workers, and production settings.
+The response body should be:
 
----
+```text
+pong
+```
 
-## 🧪 Sample Code: Starting an HTTP Server
+Press `Ctrl-C` to trigger graceful shutdown.
 
-A typical STTNet HTTP service takes only three steps: create, register a route, and listen:
+## Minimal HTTP server
 
 ```cpp
 #include <sttnet.h>
@@ -168,259 +83,248 @@ int main()
 {
     using namespace stt::network;
     using stt::system::ServerSetting;
-    if(!ServerSetting::blockTerminationSignals()) return 1;
+
+    if (!ServerSetting::blockTerminationSignals())
+        return 1;
 
     HttpServer server;
-    server.setFunction("/ping",[](HttpServerFDHandler &client,
-                                  HttpRequestInformation &) {
-        return client.sendText("pong") ? 1 : -2;
-    });
-    if(!server.startListen(8080)) return 2;
+    server.setFunction("/ping",
+        [](HttpServerFDHandler &client,
+           HttpRequestInformation &) {
+            return client.sendText("pong") ? 1 : -2;
+        });
+
+    if (!server.startListen(8080))
+        return 2;
+
     ServerSetting::waitForTerminationSignal();
     return server.close() ? 0 : 3;
 }
 ```
 
-Run `curl http://127.0.0.1:8080/ping` and receive `pong`. The longer example below also demonstrates worker tasks, WebSocket, and logging.
+The normal flow is simple:
+
+1. Create a server.
+2. Register callbacks.
+3. Start listening.
+
+## Common HTTP operations
+
+```cpp
+server.setFunction("/user",
+    [](HttpServerFDHandler &client,
+       HttpRequestInformation &request) {
+        const std::string_view contentType =
+            request.headerValue("content-type");
+        const std::string_view body = request.bodyView();
+
+        Json::Value response;
+        response["ok"] = true;
+        response["content_type"] = std::string(contentType);
+        response["body_size"] =
+            static_cast<Json::UInt64>(body.size());
+
+        return client.sendJson(response) ? 1 : -2;
+    });
+```
+
+Useful response helpers include:
+
+```cpp
+client.sendText("created", "201 Created");
+client.sendJson(value);
+client.redirect("/login");
+```
+
+A successful send means the response was accepted by the connection's bounded write queue. It does not mean the remote peer has already received it.
+
+## WorkerPool
+
+Reactor callbacks should remain non-blocking. Database access, filesystem work, and external RPC calls can be dispatched to the WorkerPool:
+
+```cpp
+server.setFunction("/slow",
+    [&server](HttpServerFDHandler &client,
+              HttpRequestInformation &request) {
+        server.putTask(
+            [](HttpServerFDHandler &workerClient,
+               HttpRequestInformation &) {
+                return workerClient.sendText("done") ? 1 : -2;
+            },
+            client,
+            request);
+        return 0;
+    });
+```
+
+Callback return values:
+
+| Value | Meaning |
+|---:|---|
+| `1` | Handled successfully |
+| `0` | Work was submitted to the WorkerPool |
+| `-1` | Failed without requesting connection close |
+| `-2` | Failed and close the connection |
+
+## Minimal WebSocket echo server
 
 ```cpp
 #include <sttnet.h>
 
-using namespace std;
-using namespace stt::file;
-using namespace stt::network;
-using namespace stt::system;
-
-/*
- * Global objects (for demo simplicity)
- * 全局对象（Demo 简化写法）
- */
-LogFile* lf = nullptr;
-HttpServer* httpserver = nullptr;
-WebSocketServer* wsserver = nullptr;
-
-int main(int argc, char* argv[])
+int main()
 {
-    /*
-     * Block SIGTERM/SIGINT before creating any worker thread.
-     * Signals are then consumed synchronously on the main thread.
-     */
-    if(!ServerSetting::blockTerminationSignals())
+    using namespace stt::network;
+    using stt::system::ServerSetting;
+
+    if (!ServerSetting::blockTerminationSignals())
         return 1;
 
-    /*
-     * Initialize logfile system
-     * 初始化日志系统（第二个参数指定语言，默认英文）
-     */
-    lf = new LogFile();
-    ServerSetting::init(lf, "Chinese");
+    WebSocketServer server;
+    server.setGlobalSolveFunction(
+        [](WebSocketServerFDHandler &client,
+           WebSocketFDInformation &message) {
+            return client.sendMessage(message.message);
+        });
 
-    /*
-     * Create HTTP server
-     * 创建 HTTP 服务器对象
-     */
-    httpserver = new HttpServer();
+    if (!server.startListen(5050))
+        return 2;
 
-    /*
-     * HTTP: key extraction function
-     * HTTP：从请求中提取 key（用于路由/上下文）
-     */
-    httpserver->setGetKeyFunction(
-        [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
-            inf.ctx["key"] = inf.loc;  // use URL as key
-            return 1;
-        }
-    );
-
-    /*
-     * HTTP: /ping
-     * Simple synchronous response
-     * HTTP：/ping，同步返回
-     */
-    httpserver->setFunction(
-        "/ping",
-        [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
-            k.sendBack("pong");
-            return 1;
-        }
-    );
-
-    /*
-     * HTTP: /async
-     * Demonstrates task dispatch to worker thread
-     * HTTP：/async，演示投递到工作线程池
-     */
-    httpserver->setFunction(
-        "/async",
-        [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
-            httpserver->putTask(
-                [](HttpServerFDHandler& k2, HttpRequestInformation& inf) -> int {
-                    k2.sendBack("async pong");
-                    return 1;
-                },
-                k,
-                inf
-            );
-            return 0;  // handled asynchronously
-        }
-    );
-
-    /*
-     * Start HTTP server
-     * 启动 HTTP 监听（端口 8080，2 个 worker）
-     */
-    httpserver->startListen(8080, 2);
-
-    /*
-     * Create WebSocket server
-     * 创建 WebSocket 服务器
-     */
-    wsserver = new WebSocketServer();
-
-    /*
-     * WebSocket: global fallback handler
-     * WebSocket：全局兜底处理函数
-     */
-    wsserver->setGlobalSolveFunction(
-        [](WebSocketServerFDHandler& k, WebSocketFDInformation& inf) -> bool {
-            return k.sendMessage(inf.message); // echo
-        }
-    );
-
-    /*
-     * WebSocket: key extraction
-     * WebSocket：提取 key
-     */
-    wsserver->setGetKeyFunction(
-        [](WebSocketServerFDHandler&, WebSocketFDInformation& inf) -> int {
-            inf.ctx["key"] = inf.message;
-            return 1;
-        }
-    );
-
-    /*
-     * WebSocket: "ping" command
-     * WebSocket：ping → pong
-     */
-    wsserver->setFunction(
-        "ping",
-        [](WebSocketServerFDHandler& k, WebSocketFDInformation& inf) -> int {
-            k.sendMessage("pong");
-            return 1;
-        }
-    );
-
-    /*
-     * WebSocket heartbreath (mins)
-     * WebSocket 心跳时间(分钟)
-     */
-    wsserver->setTimeOutTime(1);
-
-    /*
-     * Start WebSocket server
-     * 启动 WebSocket 监听（端口 5050）
-     */
-    wsserver->startListen(5050, 2);
-
-    /*
-     * Wait for kill -15/Ctrl-C and clean up in normal thread context.
-     * Never delete server objects from an asynchronous signal handler.
-     */
     ServerSetting::waitForTerminationSignal();
-    delete wsserver;
-    delete httpserver;
-    delete lf;
-    return 0;
+    return server.close() ? 0 : 3;
 }
-
 ```
 
----
+The repository includes runnable examples:
 
-## 📖 Documentation
+- `examples/http_hello.cpp`
+- `examples/websocket_echo.cpp`
 
-- `docs/api/html_Chinese/index.html` 👉 Class and method documentation(Chinese)
-- `docs/api/html_English/index.html` 👉 Class and method documentation(English)
-- [`docs/GETTING_STARTED_English.md`](docs/GETTING_STARTED_English.md) 👉 Integration and production tutorial
-- [`docs/ROADMAP_Chinese.md`](docs/ROADMAP_Chinese.md) 👉 Lightweight backend roadmap
+## Use STTNet in another CMake project
 
----
+### Vendored source
 
-## 📁 Recommended Project Structure
+Recommended layout:
 
-```
-.
-├── src/                 # Source files
-│   ├── sttnet.cpp
-├── include/             # Header files
-│   ├── sttnet.h
-│   ├── sttnet_English.h  # the Header file in English Version
-├── main.cpp             # Sample project entry
-├── server_log           # Log folder generated after successful run
-├── docs/                # Documentation directory
-│   ├── api              #api documentation
-├── README_English.md            # Project description
-├── Makefile             # Build configuration
+```text
+my_server/
+├── CMakeLists.txt
+├── main.cpp
+└── third_party/STTNet/
 ```
 
-## 📄 License
+```cmake
+cmake_minimum_required(VERSION 3.16)
+project(my_server LANGUAGES CXX)
 
-This project is licensed under the MIT License. You are free to use, modify, and distribute it commercially, but please retain the author attribution.
+set(STTNET_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
+set(STTNET_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+add_subdirectory(third_party/STTNet)
 
+add_executable(my_server main.cpp)
+target_link_libraries(my_server PRIVATE STTNet::sttnet)
+```
 
-## 📝 Changelog
+### Installed package
 
-### v0.2.0 - 2025-07-05
+Build and install STTNet:
 
-🚀 Major architecture upgrade:
+```bash
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
+  -DSTTNET_BUILD_EXAMPLE=OFF \
+  -DSTTNET_BUILD_TESTS=OFF
+cmake --build build --parallel
+cmake --install build --prefix "$HOME/.local"
+```
 
-- All server modules refactored to use **non-blocking I/O with epoll edge-triggered mode (EPOLLET)**
-- Introduced **state-machine-based connection handling**
-- Improved performance and clarity under high concurrency
-- Better compatibility with multi-threading and multi-process modules
-- Some APIs are no longer compatible
+Consumer project:
 
-⚠ There is a critical error in the receive buffer for the service class function, please deprecate that version and upgrade to v0.3.1
+```cmake
+find_package(STTNet 0.7 CONFIG REQUIRED)
+add_executable(my_server main.cpp)
+target_link_libraries(my_server PRIVATE STTNet::sttnet)
+```
 
-### v0.3.0 - 2025-07-07
+When using a non-system prefix, configure the consumer with:
 
-- The stt::d ata::JsonHelper::getValue function has been simplified, and the meaning of parameters and return values have been modified, which are no longer compatible with the previous version.
+```bash
+cmake -S . -B build -DCMAKE_PREFIX_PATH="$HOME/.local"
+```
 
-- The return value of stt::d ata::HttpStringUtil::get_split_str has been changed and is no longer compatible with previous versions.
+### FetchContent
 
-⚠ There is a critical error in the receive buffer for the service class function, please deprecate that version and upgrade to v0.3.1
+Pin a release tag or a full commit SHA in production:
 
-### v0.3.1 - 2025-07-07
+```cmake
+include(FetchContent)
 
-fix bug
+set(STTNET_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
+set(STTNET_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 
-### v.0.3.4 - 2025-08-28
-Added information security module and updated network optimization.
+FetchContent_Declare(
+  sttnet_source
+  GIT_REPOSITORY https://github.com/StephenTaam/STTNet.git
+  GIT_TAG        <release-tag-or-full-commit-sha>)
+FetchContent_MakeAvailable(sttnet_source)
 
-### v.0.3.4 - 2025-12-14
-1. The logging system was changed to asynchronous logging to optimize performance.
-2. Minor functionalities were added to the information security module.
-3. Numerous bugs were fixed.
+add_executable(my_server main.cpp)
+target_link_libraries(my_server PRIVATE STTNet::sttnet)
+```
 
-### v.0.4.0 - 2025-12-31
-🚀 Major architecture upgrade:
-- Changed to a true reactor model
+## Production basics
 
-### v.0.4.1 - 2026-01-01
-- Fixed a bug related to TLS connections
+Configure limits and socket behavior before `startListen()`:
 
-### v.0.5.0 - 2026-01-09
-- Upgrade the traffic control module for information security
--Fix the bug in TLS connection: incorrect shutdown method
+```cpp
+ServerSocketOptions options;
+options.tcp_no_delay = true;
+options.keep_alive = true;
+options.listen_backlog = 4096;
+server.setSocketOptions(options);
 
-### v0.6.0 - 2026-07-13
+server.setMaxPendingWriteBytes(4 * 1024 * 1024);
+server.setWriteBudgetPerEvent(256 * 1024);
+server.setMaxPendingWorkerTasks(65536);
+server.setGracefulShutdownTimeout(5000);
+```
 
-- Added sparse connection state, lazy receive buffers, joinable lifecycles, connection generations, and bounded Reactor-owned writes.
-- Hardened HTTP/1.1 and WebSocket protocol handling and added CMake, CI, sanitizers, regression tests, and benchmarks.
+Important lifecycle rules:
 
-### v0.7.0 - 2026-07-13
+- Call `blockTerminationSignals()` before Reactor or Worker threads are created.
+- Wait for `SIGTERM` or `SIGINT` on the main thread with `waitForTerminationSignal()`.
+- Call `close()` for graceful drain.
+- `SIGKILL` cannot be caught and cannot trigger graceful shutdown.
+- Configure TLS, queue limits, socket options, and shutdown timeout before listening.
 
-- Added non-blocking ET accept, coalesced wakeups, batched TCP writes, bounded workers, socket tuning, graceful draining, and expanded metrics.
-- Improved TLS modes/reload and fixed concurrency, lifetime, protocol, signal, TCP/TLS client, and File boundary defects.
-- Added standard CMake packaging, `find_package`/FetchContent/pkg-config, HTTP convenience APIs, runnable examples, and layered tutorials.
-- Source compatibility is retained for common application APIs, but the release is not ABI-compatible; rebuild all consumers.
+## Performance note
+
+An older build recorded about **65,000 requests per second** with **2–3 ms average latency** on a 4-core/4GB development board. This is a historical case, not a fixed result for STTNet 0.7.0 or every machine.
+
+Meaningful performance numbers must come from benchmarks on the target Linux host with the intended kernel, connection pattern, TLS settings, payload size, and business logic.
+
+Benchmark scripts are available under `benchmarks/`.
+
+## Documentation
+
+- [Online documentation](https://sttnet.pages.dev/)
+- [English getting-started guide](docs/GETTING_STARTED_English.md)
+- [Chinese getting-started guide](docs/GETTING_STARTED_Chinese.md)
+- [English API reference](docs/api/html_English/index.html)
+- [Chinese API reference](docs/api/html_Chinese/index.html)
+- [Capability and performance boundaries](docs/CAPABILITY_Chinese.md)
+- [Signal and graceful-shutdown guide](docs/SIGNALS_Chinese.md)
+- [Roadmap](docs/ROADMAP_Chinese.md)
+
+## Requirements
+
+- Linux
+- C++17 compiler
+- CMake 3.16+
+- OpenSSL 1.1.1+
+- JsonCpp
+- pthread
+
+## License
+
+MIT License. See [LICENSE](LICENSE).
+
+Author: StephenTaam · [1356597983@qq.com](mailto:1356597983@qq.com)

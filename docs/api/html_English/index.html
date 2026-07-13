@@ -123,21 +123,37 @@ $(function(){ initResizable(false); });
 
 <div class="stt-section" id="quick-start">
 <h2>Getting Started</h2>
-<h3>Requirements</h3>
-<ul>
-  <li>Linux, because the event loop uses epoll</li>
-  <li>A C++17-capable GCC or Clang compiler</li>
-  <li>CMake 3.16 or newer</li>
-  <li>OpenSSL, JsonCpp, and pthread</li>
-</ul>
+<p>The following Ubuntu / Debian commands take you from a clean checkout to a running HTTP server.</p>
 
-<h3>CMake integration</h3>
-<p>For a system-installed package:</p>
-<div class="stt-code"><pre><code>find_package(STTNet 0.7 CONFIG REQUIRED)
+<h3>1. Install dependencies</h3>
+<div class="stt-code"><pre><code>sudo apt-get update
+sudo apt-get install -y build-essential cmake pkg-config libjsoncpp-dev libssl-dev</code></pre></div>
+
+<h3>2. Download and build</h3>
+<div class="stt-code"><pre><code>git clone https://github.com/StephenTaam/STTNet.git
+cd STTNet
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
+  -DSTTNET_BUILD_EXAMPLE=ON \
+  -DSTTNET_BUILD_TESTS=OFF \
+  -DSTTNET_BUILD_BENCHMARK=OFF
+cmake --build build --parallel</code></pre></div>
+
+<h3>3. Run the example</h3>
+<div class="stt-code"><pre><code>./build/examples/sttnet_http_hello</code></pre></div>
+<p>When the server reports that it is listening, use another terminal:</p>
+<div class="stt-code"><pre><code>curl -i http://127.0.0.1:8080/ping</code></pre></div>
+<p>A <code>pong</code> response confirms that the server is running. Press <code>Ctrl-C</code> for graceful shutdown.</p>
+
+<h3>Use STTNet in your own CMake project</h3>
+<p>When the source is vendored into your project:</p>
+<div class="stt-code"><pre><code>set(STTNET_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
+set(STTNET_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+add_subdirectory(third_party/STTNet)
+
 target_link_libraries(my_server PRIVATE STTNet::sttnet)</code></pre></div>
 
-<p>When STTNet is included as a project subdirectory:</p>
-<div class="stt-code"><pre><code>add_subdirectory(STTNet)
+<p>For a system-installed package:</p>
+<div class="stt-code"><pre><code>find_package(STTNet 0.7 CONFIG REQUIRED)
 target_link_libraries(my_server PRIVATE STTNet::sttnet)</code></pre></div>
 
 <p>Application code includes the public header:</p>

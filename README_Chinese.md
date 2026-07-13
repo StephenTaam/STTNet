@@ -1,172 +1,80 @@
-## STTNet
-## C++ 轻量级高性能网络框架
+# STTNet 0.7.0
 
-STTNet 是一个**C++17标准** 的轻量级高性能服务器框架，采用 Reactor 事件驱动模型与 epoll 实现高并发非阻塞网络通信，具备完整的 **高性能网络通信能力**，支持 **TCP/UDP/HTTP/WebSocket 及其加密变种（TLS+TCP、HTTPS、WSS）**。支持文件操作，时间操作，日志操作，常见的数据处理，json格式的数据处理，加解密，信号管理，进程管理,信息安全等常用服务端功能。并内置了日志系统、epoll高并发模型事件驱动、多线程处理、线程安全、心跳监控、异常和信号处理等功能。
+**面向 Linux 的轻量级高性能 C++17 网络框架。**
 
-历史案例：旧版本曾在 4 核 4G 小型开发板上记录约 6.5 万请求/秒、平均 2–3 ms。该数据不是 0.7.0 的同机复测结果；当前性能请按仓库 benchmark 在目标 Linux 环境复测。
+[English](README_English.md) · [在线手册](https://sttnet.pages.dev/) · [中文 API](docs/api/html_Chinese/index.html) · [English API](docs/api/html_English/index.html)
 
-> 作者：StephenTaam（1356597983@qq.com）
-> 语言：C++17
-> 平台：Linux  
-> 依赖：OpenSSL、JsonCpp、pthread
+STTNet 基于 Linux `epoll` 和 Reactor 事件驱动架构，统一提供 TCP、UDP、HTTP/1.1、WebSocket、TLS、HTTPS 与 WSS 能力。框架负责连接管理、协议解析、事件循环和并发调度，业务代码主要围绕清晰的回调 API 编写。
 
----
+适合轻量 API 服务、网关、IoT 接入、实时通信、游戏服务端，以及嵌入现有 C++ 工程的网络模块。
 
-## 📦 框架核心特性一览
-- ✅ 基于 C++17
-- ✅ 简单易用，接口清晰
-# 🔌 通信功能
-- ✅ 单线程所有权 epoll Reactor + 有界 WorkerPool，高并发处理
-- ✅ TCP、UDP、HTTP、WebSocket 通信支持
-- ✅ 支持 TLS+TCP、HTTPS、WSS，以及单向 TLS/可选客户端证书/mTLS
-- ✅ 支持自定义回调注册函数处理网络请求，灵活处理逻辑
-# 🔧 工具与服务模块
-- ✅ 日志系统封装（支持多线程写入、日志文件切割）
-- ✅ 文件读写封装（线程安全、锁机制）
-- ✅ 时间操作封装
-- ✅ 数值工具、字符串工具、JSON 数据处理
-- ✅ 加解密
-# 🧿 系统增强
-- ✅线程池支持
-- ✅异常与信号管理
-- ✅进程管理和心跳监控机制管理
-- ✅易用的接口与模块化结构
-- ✅ 信息安全模块
+## 主要特点
 
-## 0.6.0 基础架构升级
+- C++17 与 Linux `epoll`
+- 非阻塞 one-loop-per-thread Reactor 架构
+- TCP、UDP、HTTP/1.1、WebSocket、TLS、HTTPS、WSS
+- WorkerPool 支持耗时业务异步投递
+- 每连接有界发送队列与慢客户端背压
+- 优雅退出、信号处理、日志、JSON、文件、时间和常用工具模块
+- 统一 CMake 目标：`STTNet::sttnet`
+- 支持安装、`find_package`、`add_subdirectory`、FetchContent 和 pkg-config
 
-- 连接状态从按 `maxFD` 预分配整张大数组改为稀疏活跃连接表，接收缓冲首次使用时再分配。
-- Reactor 与 Worker 可 join；异步任务持有请求副本和连接代次，修复 fd 复用与断连竞态。
-- 加入每连接有界发送队列与统一 EPOLLOUT/TLS WANT 状态机，实际 socket/SSL 写入只在 Reactor 执行。
-- HTTP/1.1 增加 chunked、trailers、流水线和 request-smuggling 防护；WebSocket 补齐分片、控制帧和 UTF-8 校验。
-- 增加 CMake、Linux CI、ASan/UBSan、并发回归测试与独立 benchmark。
+## 五分钟运行
 
-## 0.7.0 性能与稳定性要点
+### 1. 安装依赖
 
-- 每连接有界发送队列和统一 EPOLLOUT 状态机；Worker 不直接操作 socket/SSL。
-- eventfd/日志唤醒合并、普通 TCP `sendmsg+iovec` 批量写、每轮公平预算。
-- 监听 socket 真正非阻塞；连接数正确限流；Worker 队列有界，慢客户端和突发任务均有背压。
-- SIGTERM/SIGINT 停止接入后排空在途响应；空闲连接增量检查；启动失败可准确反馈。
-- `ServerSocketOptions` 聚合 TCP_NODELAY、keepalive、缓冲、REUSEPORT、DEFER_ACCEPT、FASTOPEN 和 backlog。
-- 新增队列峰值、批量写、唤醒合并、拒绝、超时等指标；API 手册版本同步为 0.7.0。
-- 增加安装导出、`STTNet::sttnet`、`find_package`、FetchContent 与 pkg-config 接入链路。
-- 增加 `headerValue/bodyView` 与 `sendText/sendJson/redirect` 常用 API，以及独立 HTTP/WebSocket 示例。
+Ubuntu / Debian：
 
-常见 HTTPS/WSS 使用 `server.setTLS(cert, key)`；历史四参数版本
-`server.setTLS(cert, key, password, clientCA)` 仍表示强制双向 TLS。需要可选客户端证书时使用
-带 `TLSClientAuthMode` 的五参数重载。
----
-
-## 🧱 框架模块结构
-
-```
-stt
-├── file
-│   ├── FileTool / File / LogFile
-│   └── 文件操作工具 + 文件读写封装 + 日志模块
-├── time
-│   ├── DateTime / Duration
-│   └── 时间工具类
-├── data
-│   ├── CryptoUtil / BitUtil / RandomUtil / NetworkOrderUtil / PrecisionUtil / HttpStringUtil / WebsocketStringUtil / NumberStringConvertUtil / 
-│       NumberStringConvertUtil / JsonHelper
-│   └── 数据处理工具（加解密、数值、字符串、Json）
-├── network
-│   ├── TcpServer / UdpServer / HttpServer / WebSocketServer / TcpClient / UdpClient / HttpClient / WebSocketClient
-│   └── 多线程 epoll 网络服务端封装 客户端通信封装
-├── system
-│   ├── ServerSetting / HBSystem /Process
-│   └── 框架初始化、信号/进程/心跳管理
-├── security
-│   ├── ConnectionLimiter
-│   └── 限流模块
-```
----
-
-## 🚀 快速开始
-
-# 示例项目main
-
-文件中的示例项目，使用依赖多种系统和第三方库: `jsoncpp`、`OpenSSL` 和 `pthread`，包含框架模块 `sttnet.h/.cpp`。
-
-## 🧩 安装依赖
-
-在编译本项目前，请确保系统中已安装以下库：
-- [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
-- OpenSSL (`libssl`, `libcrypto`)
-- POSIX Threads (`pthread`)
-- g++ 编译器（支持 C++17 或以上）
-
-在不同发行版的Linux系统中，你可以通过以下命令安装这些依赖：
-
- # 🐧 Ubuntu / Debian（APT 系统）
 ```bash
 sudo apt-get update
-sudo apt-get install libjsoncpp-dev libssl-dev build-essential
+sudo apt-get install -y build-essential cmake pkg-config libjsoncpp-dev libssl-dev
 ```
 
- # 🐧 Fedora / RHEL / CentOS（DNF/YUM 系统）
-```bash
-sudo yum update
-sudo yum install -y gcc-c++ jsoncpp-devel openssl-devel
-```
-
- # 🐧 Arch / Manjaro
-```bash
-sudo pacman update
-sudo pacman -S --noconfirm jsoncpp openssl base-devel
-```
-
-### 🛠️ 编译
+Fedora / RHEL：
 
 ```bash
-g++ -std=c++17 -o main main.cpp src/sttnet.cpp -ljsoncpp -lssl -lcrypto -lpthread
+sudo dnf install -y gcc-c++ cmake pkgconf-pkg-config jsoncpp-devel openssl-devel
 ```
 
-也可使用 `make` 管理仓库内的示例构建。真实用户项目推荐使用下面的 CMake 目标接入。
-
-（`main.cpp` 是这个文件示例中调用这个框架写的实际应用入口）
-
-### 推荐：在用户项目中引入
-
-安装后的 CMake 项目只需：
-
-```cmake
-find_package(STTNet 0.7 CONFIG REQUIRED)
-target_link_libraries(my_server PRIVATE STTNet::sttnet)
-```
-
-也可把仓库放入 `third_party/STTNet`：
-
-```cmake
-set(STTNET_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(STTNET_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
-add_subdirectory(third_party/STTNet)
-target_link_libraries(my_server PRIVATE STTNet::sttnet)
-```
-
-FetchContent、pkg-config、安装前缀、WorkerPool 与生产配置见 [`docs/GETTING_STARTED_Chinese.md`](docs/GETTING_STARTED_Chinese.md)。
-
-推荐使用 CMake 构建并运行并发回归测试：
+Arch Linux：
 
 ```bash
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+sudo pacman -S --needed base-devel cmake pkgconf jsoncpp openssl
+```
+
+### 2. 下载并构建
+
+```bash
+git clone https://github.com/StephenTaam/STTNet.git
+cd STTNet
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
+  -DSTTNET_BUILD_EXAMPLE=ON \
+  -DSTTNET_BUILD_TESTS=OFF \
+  -DSTTNET_BUILD_BENCHMARK=OFF
 cmake --build build --parallel
-ctest --test-dir build --output-on-failure
 ```
 
-性能与并发优化的设计、验证方法及后续路线见 [`docs/OPTIMIZATION_Chinese.md`](docs/OPTIMIZATION_Chinese.md)。
-服务进程的 SIGTERM/SIGINT/SIGKILL 处理约定见 [`docs/SIGNALS_Chinese.md`](docs/SIGNALS_Chinese.md)。
-能力边界、框架对比与 API/ABI 兼容说明见 [`docs/CAPABILITY_Chinese.md`](docs/CAPABILITY_Chinese.md)。
-从引入依赖到生产配置的完整教程见 [`docs/GETTING_STARTED_Chinese.md`](docs/GETTING_STARTED_Chinese.md)。
-后续“轻量瑞士军刀”功能路线见 [`docs/ROADMAP_Chinese.md`](docs/ROADMAP_Chinese.md)。
-本轮完整改动和可直接使用的 commit 文案见 [`docs/CHANGELOG_2026-07-13_Chinese.md`](docs/CHANGELOG_2026-07-13_Chinese.md)。
+### 3. 启动 HTTP 示例
 
----
+```bash
+./build/examples/sttnet_http_hello
+```
 
-## 🧪 示例代码：启动一个 HTTP 服务
+在另一个终端测试：
 
-STTNet 的常见 HTTP 服务只需要“创建、注册路由、监听”三步：
+```bash
+curl -i http://127.0.0.1:8080/ping
+```
+
+响应正文应为：
+
+```text
+pong
+```
+
+按 `Ctrl-C` 可触发优雅退出。
+
+## 最小 HTTP 服务
 
 ```cpp
 #include <sttnet.h>
@@ -175,268 +83,248 @@ int main()
 {
     using namespace stt::network;
     using stt::system::ServerSetting;
-    if(!ServerSetting::blockTerminationSignals()) return 1;
+
+    if (!ServerSetting::blockTerminationSignals())
+        return 1;
 
     HttpServer server;
-    server.setFunction("/ping",[](HttpServerFDHandler &client,
-                                  HttpRequestInformation &) {
-        return client.sendText("pong") ? 1 : -2;
-    });
-    if(!server.startListen(8080)) return 2;
+    server.setFunction("/ping",
+        [](HttpServerFDHandler &client,
+           HttpRequestInformation &) {
+            return client.sendText("pong") ? 1 : -2;
+        });
+
+    if (!server.startListen(8080))
+        return 2;
+
     ServerSetting::waitForTerminationSignal();
     return server.close() ? 0 : 3;
 }
 ```
 
-运行后执行 `curl http://127.0.0.1:8080/ping` 即可得到 `pong`。下面是同时展示异步任务、WebSocket 和日志的完整示例。
+常见服务只需要三步：
+
+1. 创建 Server。
+2. 注册回调。
+3. 开始监听。
+
+## 常用 HTTP 操作
+
+```cpp
+server.setFunction("/user",
+    [](HttpServerFDHandler &client,
+       HttpRequestInformation &request) {
+        const std::string_view contentType =
+            request.headerValue("content-type");
+        const std::string_view body = request.bodyView();
+
+        Json::Value response;
+        response["ok"] = true;
+        response["content_type"] = std::string(contentType);
+        response["body_size"] =
+            static_cast<Json::UInt64>(body.size());
+
+        return client.sendJson(response) ? 1 : -2;
+    });
+```
+
+常用响应接口：
+
+```cpp
+client.sendText("created", "201 Created");
+client.sendJson(value);
+client.redirect("/login");
+```
+
+发送成功表示响应已经进入该连接的有界发送队列，不表示对端已经收到数据。
+
+## WorkerPool
+
+Reactor 回调不应执行阻塞操作。数据库、磁盘和外部 RPC 等耗时业务可投递到 WorkerPool：
+
+```cpp
+server.setFunction("/slow",
+    [&server](HttpServerFDHandler &client,
+              HttpRequestInformation &request) {
+        server.putTask(
+            [](HttpServerFDHandler &workerClient,
+               HttpRequestInformation &) {
+                return workerClient.sendText("done") ? 1 : -2;
+            },
+            client,
+            request);
+        return 0;
+    });
+```
+
+回调返回值：
+
+| 返回值 | 含义 |
+|---:|---|
+| `1` | 处理成功 |
+| `0` | 已投递 WorkerPool |
+| `-1` | 处理失败，但不要求关闭连接 |
+| `-2` | 处理失败并关闭连接 |
+
+## 最小 WebSocket Echo 服务
 
 ```cpp
 #include <sttnet.h>
 
-using namespace std;
-using namespace stt::file;
-using namespace stt::network;
-using namespace stt::system;
-
-/*
- * Global objects (for demo simplicity)
- * 全局对象（Demo 简化写法）
- */
-LogFile* lf = nullptr;
-HttpServer* httpserver = nullptr;
-WebSocketServer* wsserver = nullptr;
-
-int main(int argc, char* argv[])
+int main()
 {
-    /*
-     * Block SIGTERM/SIGINT before creating any worker thread.
-     * 在创建任何线程前阻塞退出信号。
-     */
-    if(!ServerSetting::blockTerminationSignals())
+    using namespace stt::network;
+    using stt::system::ServerSetting;
+
+    if (!ServerSetting::blockTerminationSignals())
         return 1;
 
-    /*
-     * Initialize logfile system
-     * 初始化日志系统（第二个参数指定语言，默认英文）
-     */
-    lf = new LogFile();
-    ServerSetting::init(lf, "Chinese");
+    WebSocketServer server;
+    server.setGlobalSolveFunction(
+        [](WebSocketServerFDHandler &client,
+           WebSocketFDInformation &message) {
+            return client.sendMessage(message.message);
+        });
 
-    /*
-     * Create HTTP server
-     * 创建 HTTP 服务器对象
-     */
-    httpserver = new HttpServer();
+    if (!server.startListen(5050))
+        return 2;
 
-    /*
-     * HTTP: key extraction function
-     * HTTP：从请求中提取 key（用于路由/上下文）
-     */
-    httpserver->setGetKeyFunction(
-        [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
-            inf.ctx["key"] = inf.loc;  // use URL as key
-            return 1;
-        }
-    );
-
-    /*
-     * HTTP: /ping
-     * Simple synchronous response
-     * HTTP：/ping，同步返回
-     */
-    httpserver->setFunction(
-        "/ping",
-        [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
-            k.sendBack("pong");
-            return 1;
-        }
-    );
-
-    /*
-     * HTTP: /async
-     * Demonstrates task dispatch to worker thread
-     * HTTP：/async，演示投递到工作线程池
-     */
-    httpserver->setFunction(
-        "/async",
-        [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
-            httpserver->putTask(
-                [](HttpServerFDHandler& k2, HttpRequestInformation& inf) -> int {
-                    k2.sendBack("async pong");
-                    return 1;
-                },
-                k,
-                inf
-            );
-            return 0;  // handled asynchronously
-        }
-    );
-
-    /*
-     * Start HTTP server
-     * 启动 HTTP 监听（端口 8080，2 个 worker）
-     */
-    httpserver->startListen(8080, 2);
-
-    /*
-     * Create WebSocket server
-     * 创建 WebSocket 服务器
-     */
-    wsserver = new WebSocketServer();
-
-    /*
-     * WebSocket: global fallback handler
-     * WebSocket：全局兜底处理函数
-     */
-    wsserver->setGlobalSolveFunction(
-        [](WebSocketServerFDHandler& k, WebSocketFDInformation& inf) -> bool {
-            return k.sendMessage(inf.message); // echo
-        }
-    );
-
-    /*
-     * WebSocket: key extraction
-     * WebSocket：提取 key
-     */
-    wsserver->setGetKeyFunction(
-        [](WebSocketServerFDHandler&, WebSocketFDInformation& inf) -> int {
-            inf.ctx["key"] = inf.message;
-            return 1;
-        }
-    );
-
-    /*
-     * WebSocket: "ping" command
-     * WebSocket：ping → pong
-     */
-    wsserver->setFunction(
-        "ping",
-        [](WebSocketServerFDHandler& k, WebSocketFDInformation& inf) -> int {
-            k.sendMessage("pong");
-            return 1;
-        }
-    );
-
-    /*
-     * WebSocket heartbreath (mins)
-     * WebSocket 心跳时间(分钟)
-     */
-    wsserver->setTimeOutTime(1);
-
-    /*
-     * Start WebSocket server
-     * 启动 WebSocket 监听（端口 5050）
-     */
-    wsserver->startListen(5050, 2);
-
-    /*
-     * Wait synchronously; cleanup is performed in normal thread context.
-     * 同步等待 kill -15/Ctrl-C，然后在正常线程上优雅清理。
-     */
     ServerSetting::waitForTerminationSignal();
-    delete wsserver;
-    delete httpserver;
-    delete lf;
-    return 0;
+    return server.close() ? 0 : 3;
 }
-
 ```
 
----
+仓库内包含可直接构建的示例：
 
-## 📖 后续文档
+- `examples/http_hello.cpp`
+- `examples/websocket_echo.cpp`
 
-- `docs/api/html_Chinese/index.html` 👉 类和方法注释说明（中文）
-- `docs/api/html_English/index.html` 👉 类和方法注释说明（英文）
-- [`docs/GETTING_STARTED_Chinese.md`](docs/GETTING_STARTED_Chinese.md) 👉 安装、引入、回调语义和生产配置
-- [`docs/ROADMAP_Chinese.md`](docs/ROADMAP_Chinese.md) 👉 功能取舍与后续路线
+## 接入现有 CMake 项目
 
----
+### 源码放入工程
 
-## 📁 建议项目结构
+推荐目录：
 
-```
-.
-├── src/                 # 源码文件 public.cpp
-    ├── sttnet.cpp
-├── include/             # 头文件 public.h
-    ├── sttnet.h
-    ├── sttnet_English.h  #英文版头文件
-├── main.cpp             # 示例项目
-├── server_log           # 假设启用日志文件系统而且运行成功后会自动生成一个日志文件文件夹
-├── docs/                # 文档目录
-│   ├── api              #api说明文档
-├── README_Chinese.md            #项目说明
-├── Makefile             #makefile管理项目构建
+```text
+my_server/
+├── CMakeLists.txt
+├── main.cpp
+└── third_party/STTNet/
 ```
 
-## 📄 License
+```cmake
+cmake_minimum_required(VERSION 3.16)
+project(my_server LANGUAGES CXX)
 
-本项目采用 MIT License 开源协议，你可以自由使用、修改、商用此项目，但请保留作者署名。
+set(STTNET_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
+set(STTNET_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+add_subdirectory(third_party/STTNet)
 
----
+add_executable(my_server main.cpp)
+target_link_libraries(my_server PRIVATE STTNet::sttnet)
+```
 
+### 安装后使用
 
-### v0.2.0 - 2025-07-05
+构建并安装 STTNet：
 
-🚀 Major architecture upgrade / 架构重大升级：
+```bash
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
+  -DSTTNET_BUILD_EXAMPLE=OFF \
+  -DSTTNET_BUILD_TESTS=OFF
+cmake --build build --parallel
+cmake --install build --prefix "$HOME/.local"
+```
 
-- All server modules refactored to use **non-blocking I/O with epoll edge-triggered mode (EPOLLET)**  
-  所有服务器模块重构为 **非阻塞 I/O + epoll 边缘触发（EPOLLET）模式**
+用户工程：
 
-- Introduced **state-machine-based connection handling**  
-  引入 **基于状态机的连接处理机制**
+```cmake
+find_package(STTNet 0.7 CONFIG REQUIRED)
+add_executable(my_server main.cpp)
+target_link_libraries(my_server PRIVATE STTNet::sttnet)
+```
 
-- Improved performance and clarity under high concurrency  
-  在高并发场景下大幅提升性能与逻辑清晰度
+非系统安装目录可在配置用户工程时指定：
 
-- Better compatibility with multi-threading and multi-process modules  
-  更好地兼容多线程与多进程模块的协同工作
+```bash
+cmake -S . -B build -DCMAKE_PREFIX_PATH="$HOME/.local"
+```
 
-- Some APIs are no longer compatible
-  部分api不再兼容
+### FetchContent
 
-⚠服务类函数的接收缓冲区存在严重错误，请弃用该版本并升级到v0.3.1
+正式项目应固定发布标签或完整 commit SHA：
 
-### v0.3.0 - 2025-07-07
+```cmake
+include(FetchContent)
 
-- 精简了stt::data::JsonHelper::getValue函数，修改了参数意义，返回值等，不再兼容前面的版本。
+set(STTNET_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
+set(STTNET_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 
-- stt::data::HttpStringUtil::get_split_str返回值改变，不再兼容前面的版本。
+FetchContent_Declare(
+  sttnet_source
+  GIT_REPOSITORY https://github.com/StephenTaam/STTNet.git
+  GIT_TAG        <release-tag-or-full-commit-sha>)
+FetchContent_MakeAvailable(sttnet_source)
 
-⚠服务类函数的接收缓冲区存在严重错误，请弃用该版本并升级到v0.3.1
+add_executable(my_server main.cpp)
+target_link_libraries(my_server PRIVATE STTNet::sttnet)
+```
 
-### v0.3.1 - 2025-07-07
+## 生产配置基础
 
-fix bug
+以下配置应在 `startListen()` 之前完成：
 
-### v.0.3.4 - 2025-08-28
-加入信息安全模块，更新了网络优化。
+```cpp
+ServerSocketOptions options;
+options.tcp_no_delay = true;
+options.keep_alive = true;
+options.listen_backlog = 4096;
+server.setSocketOptions(options);
 
-### v.0.3.4 - 2025-12-14
-1，日志系统改为异步日志，优化性能。2，补完信息安全模块的小功能 3，修复大量bug。
+server.setMaxPendingWriteBytes(4 * 1024 * 1024);
+server.setWriteBudgetPerEvent(256 * 1024);
+server.setMaxPendingWorkerTasks(65536);
+server.setGracefulShutdownTimeout(5000);
+```
 
-### v.0.4.0 - 2025-12-31
-🚀 Major architecture upgrade / 架构重大升级：
-- 改成真正的reactor模型
+生命周期注意事项：
 
-### v.0.4.1 - 2026-01-01
--修复TLS连接的bug
+- 在创建 Reactor 或 Worker 线程前调用 `blockTerminationSignals()`。
+- 主线程使用 `waitForTerminationSignal()` 等待 `SIGTERM` 或 `SIGINT`。
+- 收到退出信号后调用 `close()` 执行优雅排空。
+- `SIGKILL` 无法捕获，不能触发优雅退出。
+- TLS、队列限制、Socket 参数和退出超时应在监听前配置。
 
-### v.0.5.0 - 2026-01-09
--升级信息安全的限流模块
--修复TLS连接的bug:错误时候的关闭方式
+## 性能说明
 
-### v0.6.0 - 2026-07-13
+旧版本曾在 4 核 4G 小型开发板上记录约 **6.5 万请求/秒**、平均 **2–3 ms**。这是历史案例，不是 STTNet 0.7.0 在所有机器上的固定结果。
 
-- 稀疏连接表、按需接收缓冲、可 join Reactor/Worker，显著降低启动与空闲连接内存。
-- 每连接有界发送队列、统一 EPOLLOUT/TLS 状态机、连接代次与 Worker 生命周期安全。
-- 重写并加固 HTTP/1.1 与 WebSocket 解析，加入 CMake、CI、Sanitizer 和 benchmark。
+有意义的性能数据应在目标 Linux 机器上，结合实际内核、连接方式、TLS 配置、报文大小和业务逻辑进行测试。
 
-### v0.7.0 - 2026-07-13
+压测脚本位于 `benchmarks/`。
 
-- 修复 ET accept 阻塞、加入 eventfd 唤醒合并、`sendmsg+iovec`、有界 WorkerPool、写入公平性与完整背压指标。
-- 增加 socket 聚合调优、TLS 客户端认证模式/热更新、优雅排空、端口 0、停止后重启和更完整的可观测性。
-- 修复 HTTP/WebSocket/TCP/TLS/File/信号处理中的多个潜在越界、泄漏、竞态和协议正确性问题。
-- 增加标准 CMake 安装包、`find_package`/FetchContent/pkg-config、HTTP 便利 API、可运行示例和分层教程。
-- 常用业务 API 保持源码兼容，但类布局和符号已变化，升级必须完整重新编译。
+## 文档
+
+- [在线手册](https://sttnet.pages.dev/)
+- [中文上手与集成指南](docs/GETTING_STARTED_Chinese.md)
+- [English Getting Started](docs/GETTING_STARTED_English.md)
+- [中文 API 参考](docs/api/html_Chinese/index.html)
+- [English API Reference](docs/api/html_English/index.html)
+- [能力与性能边界](docs/CAPABILITY_Chinese.md)
+- [信号和优雅退出](docs/SIGNALS_Chinese.md)
+- [路线图](docs/ROADMAP_Chinese.md)
+
+## 环境要求
+
+- Linux
+- 支持 C++17 的编译器
+- CMake 3.16+
+- OpenSSL 1.1.1+
+- JsonCpp
+- pthread
+
+## 许可证
+
+MIT License，详见 [LICENSE](LICENSE)。
+
+作者：StephenTaam · [1356597983@qq.com](mailto:1356597983@qq.com)
