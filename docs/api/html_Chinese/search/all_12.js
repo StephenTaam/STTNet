@@ -1,26 +1,8 @@
 var searchData=
 [
-  ['task_0',['Task',['../namespacestt_1_1system.html#aa9b73694f176ef9112e895c15f638900',1,'stt::system']]],
-  ['tcpclient_1',['TcpClient',['../classstt_1_1network_1_1TcpClient.html',1,'stt::network::TcpClient'],['../classstt_1_1network_1_1TcpClient.html#ae028d2eb42d1efd17ff219681e108bb2',1,'stt::network::TcpClient::TcpClient()']]],
-  ['tcpfdhandler_2',['TcpFDHandler',['../classstt_1_1network_1_1TcpFDHandler.html',1,'stt::network']]],
-  ['tcpfdinf_3',['TcpFDInf',['../structstt_1_1network_1_1TcpFDInf.html',1,'stt::network']]],
-  ['tcpinformation_4',['TcpInformation',['../structstt_1_1network_1_1TcpInformation.html',1,'stt::network']]],
-  ['tcpserver_5',['TcpServer',['../classstt_1_1network_1_1TcpServer.html',1,'stt::network::TcpServer'],['../classstt_1_1network_1_1TcpServer.html#a58c35e8c268bdf9a0918f4aa4546f026',1,'stt::network::TcpServer::TcpServer()']]],
-  ['threads_6',['threads',['../structstt_1_1file_1_1FileThreadLock.html#aaa9ef37af886e8ef7cab854472f70106',1,'stt::file::FileThreadLock']]],
-  ['tls_7',['TLS',['../classstt_1_1network_1_1TcpServer.html#a295aa6784cd288fdc9448d6b99d2c212',1,'stt::network::TcpServer']]],
-  ['tls_5fhandshake_5ffailures_8',['tls_handshake_failures',['../structstt_1_1network_1_1ServerMetricsSnapshot.html#a1ea6a2a5e3fd2d33e8b7be494b349cc2',1,'stt::network::ServerMetricsSnapshot']]],
-  ['tls_5fstate_9',['tls_state',['../structstt_1_1network_1_1TcpFDInf.html#abd95aa05d9e5bfde5c217aa1eb10777e',1,'stt::network::TcpFDInf']]],
-  ['tlsstate_10',['TLSState',['../namespacestt_1_1network.html#a2de10f23ed7aa5e5ca07d6fb2a11eaad',1,'stt::network']]],
-  ['tobit_11',['toBit',['../classstt_1_1data_1_1BitUtil.html#adb4b9d5dbccd056dd692c0a00e2dfffa',1,'stt::data::BitUtil::toBit(const std::string &amp;input, char &amp;result)'],['../classstt_1_1data_1_1BitUtil.html#a54eb5ba5d39e221a6fdf257e74108daa',1,'stt::data::BitUtil::toBit(const std::string &amp;input, std::string &amp;result)']]],
-  ['tobool_12',['toBool',['../classstt_1_1data_1_1NumberStringConvertUtil.html#a4b159e43dd935dcceaaa6912b8f7fdf0',1,'stt::data::NumberStringConvertUtil']]],
-  ['todouble_13',['toDouble',['../classstt_1_1data_1_1NumberStringConvertUtil.html#a8dba3148ca68bf12d345eef469321ea9',1,'stt::data::NumberStringConvertUtil']]],
-  ['tofloat_14',['toFloat',['../classstt_1_1data_1_1NumberStringConvertUtil.html#a65928b7e33b2603d9791ec2f5dd9108c',1,'stt::data::NumberStringConvertUtil']]],
-  ['toint_15',['toInt',['../classstt_1_1data_1_1NumberStringConvertUtil.html#a18d7d9bbc85b7e84f98fa42a2cb42760',1,'stt::data::NumberStringConvertUtil']]],
-  ['tojsonarray_16',['toJsonArray',['../classstt_1_1data_1_1JsonHelper.html#a1e94bc57dcef5b5a0bd49d8a23ac5551',1,'stt::data::JsonHelper']]],
-  ['tokenbucket_17',['TokenBucket',['../namespacestt_1_1security.html#a1a50515c0ad2e8b7be34026979b7f53cab117e59052b000439e30df5378b615e0',1,'stt::security']]],
-  ['tokens_18',['tokens',['../structstt_1_1security_1_1RateState.html#a6d59bc81482d4d86395f248d73026577',1,'stt::security::RateState']]],
-  ['tolong_19',['toLong',['../classstt_1_1data_1_1NumberStringConvertUtil.html#a9174ac0c1335f8a096a06496a01a472c',1,'stt::data::NumberStringConvertUtil']]],
-  ['tostring_20',['toString',['../classstt_1_1data_1_1JsonHelper.html#a416fa5e4965944ea9e4e9443170cae5f',1,'stt::data::JsonHelper']]],
-  ['transfer_5fwebsocket_5fkey_21',['transfer_websocket_key',['../classstt_1_1data_1_1WebsocketStringUtil.html#a500fa0b7a38a94def6fbbeebde431efd',1,'stt::data::WebsocketStringUtil::transfer_websocket_key()'],['../classstt_1_1data_1_1EncodingUtil.html#a6ab0a2359c3972e25a573a0af8854df9',1,'stt::data::EncodingUtil::transfer_websocket_key()']]],
-  ['type_22',['type',['../structstt_1_1network_1_1HttpRequestInformation.html#a228b727f99c12c8b54d83a5290fdb0ad',1,'stt::network::HttpRequestInformation']]]
+  ['queue_0',['queue',['../structstt_1_1network_1_1ConnectionWriteState.html#a09950782a41c923cfbf41c89ed94893b',1,'stt::network::ConnectionWriteState']]],
+  ['queued_5fbytes_1',['queued_bytes',['../structstt_1_1network_1_1ConnectionWriteState.html#a1e45f55d7e44542c34ad24bd32b99b3d',1,'stt::network::ConnectionWriteState']]],
+  ['queued_5fwrite_5fbytes_2',['queued_write_bytes',['../structstt_1_1network_1_1ServerMetricsSnapshot.html#a2b7922b4ce40dbebb684ef92ded0e580',1,'stt::network::ServerMetricsSnapshot']]],
+  ['queuedclosefunction_3',['queuedCloseFunction',['../classstt_1_1network_1_1TcpFDHandler.html#a3389ce765cefe14a864866b079869b6b',1,'stt::network::TcpFDHandler']]],
+  ['queuedsendfunction_4',['queuedSendFunction',['../classstt_1_1network_1_1TcpFDHandler.html#a9d4942a39cb7fec6fcb7fd2394bed0c4',1,'stt::network::TcpFDHandler']]]
 ];

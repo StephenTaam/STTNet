@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.7.0</span>
    </div>
   </td>
  </tr>
@@ -108,6 +108,8 @@ Public 属性</h2></td></tr>
 <tr class="separator:a0dd7339e13e01df3a5cb6cffbc6bb13e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6714980d286f25ee65884892f9b4718a" id="r_a6714980d286f25ee65884892f9b4718a"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6714980d286f25ee65884892f9b4718a">closed_connections</a> =0</td></tr>
 <tr class="separator:a6714980d286f25ee65884892f9b4718a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86c62a085843f5b030088f6fe5167a89" id="r_a86c62a085843f5b030088f6fe5167a89"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a86c62a085843f5b030088f6fe5167a89">rejected_connections</a> =0</td></tr>
+<tr class="separator:a86c62a085843f5b030088f6fe5167a89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9527da879c28c885fc7f730026b6ffd4" id="r_a9527da879c28c885fc7f730026b6ffd4"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9527da879c28c885fc7f730026b6ffd4">accept_errors</a> =0</td></tr>
 <tr class="separator:a9527da879c28c885fc7f730026b6ffd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ea6a2a5e3fd2d33e8b7be494b349cc2" id="r_a1ea6a2a5e3fd2d33e8b7be494b349cc2"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ea6a2a5e3fd2d33e8b7be494b349cc2">tls_handshake_failures</a> =0</td></tr>
@@ -120,12 +122,34 @@ Public 属性</h2></td></tr>
 <tr class="separator:a2dd29a2fb2e0d026b6a855386bc6c2cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab8ab47e74ba3ecbe4ea357db3e2cda8" id="r_aab8ab47e74ba3ecbe4ea357db3e2cda8"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab8ab47e74ba3ecbe4ea357db3e2cda8">pending_write_bytes</a> =0</td></tr>
 <tr class="separator:aab8ab47e74ba3ecbe4ea357db3e2cda8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af90f368e204af7122165d00942cc4ab1" id="r_af90f368e204af7122165d00942cc4ab1"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af90f368e204af7122165d00942cc4ab1">peak_pending_write_bytes</a> =0</td></tr>
+<tr class="separator:af90f368e204af7122165d00942cc4ab1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98d410d5f51ac93e246c61a4769fa2a9" id="r_a98d410d5f51ac93e246c61a4769fa2a9"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a98d410d5f51ac93e246c61a4769fa2a9">peak_pending_worker_tasks</a> =0</td></tr>
+<tr class="separator:a98d410d5f51ac93e246c61a4769fa2a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0cc02d3482ad787d796bdd74cc64c8a7" id="r_a0cc02d3482ad787d796bdd74cc64c8a7"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0cc02d3482ad787d796bdd74cc64c8a7">write_overflows</a> =0</td></tr>
 <tr class="separator:a0cc02d3482ad787d796bdd74cc64c8a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96def715cb84d74574d05cf48143351d" id="r_a96def715cb84d74574d05cf48143351d"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a96def715cb84d74574d05cf48143351d">worker_queue_overflows</a> =0</td></tr>
 <tr class="separator:a96def715cb84d74574d05cf48143351d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3208328f8b7762df0eafd749fec617f" id="r_af3208328f8b7762df0eafd749fec617f"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3208328f8b7762df0eafd749fec617f">send_ready_queue_overflows</a> =0</td></tr>
 <tr class="separator:af3208328f8b7762df0eafd749fec617f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a153ae7c1ca947e1c1d33e9e15e9d2fc5" id="r_a153ae7c1ca947e1c1d33e9e15e9d2fc5"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a153ae7c1ca947e1c1d33e9e15e9d2fc5">worker_task_rejections</a> =0</td></tr>
+<tr class="separator:a153ae7c1ca947e1c1d33e9e15e9d2fc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24325864d34b96c8604d7799222f5da4" id="r_a24325864d34b96c8604d7799222f5da4"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24325864d34b96c8604d7799222f5da4">reactor_wakeups</a> =0</td></tr>
+<tr class="separator:a24325864d34b96c8604d7799222f5da4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7f6cdaa94612e3f64038fd08d9aeb4b" id="r_ae7f6cdaa94612e3f64038fd08d9aeb4b"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae7f6cdaa94612e3f64038fd08d9aeb4b">reactor_wakeups_coalesced</a> =0</td></tr>
+<tr class="separator:ae7f6cdaa94612e3f64038fd08d9aeb4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a149fda6514d545de3ad3950d72b1e3af" id="r_a149fda6514d545de3ad3950d72b1e3af"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a149fda6514d545de3ad3950d72b1e3af">write_syscalls</a> =0</td></tr>
+<tr class="separator:a149fda6514d545de3ad3950d72b1e3af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbc5ad8fb031e2289ab7b3b48b284223" id="r_abbc5ad8fb031e2289ab7b3b48b284223"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abbc5ad8fb031e2289ab7b3b48b284223">batched_write_syscalls</a> =0</td></tr>
+<tr class="separator:abbc5ad8fb031e2289ab7b3b48b284223"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a705a3a8d4c7f2313553027b9782e2762" id="r_a705a3a8d4c7f2313553027b9782e2762"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a705a3a8d4c7f2313553027b9782e2762">batched_write_buffers</a> =0</td></tr>
+<tr class="separator:a705a3a8d4c7f2313553027b9782e2762"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab77b3e3d2ad09743ecd52b9fb7063b8b" id="r_ab77b3e3d2ad09743ecd52b9fb7063b8b"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab77b3e3d2ad09743ecd52b9fb7063b8b">idle_timeout_checks</a> =0</td></tr>
+<tr class="separator:ab77b3e3d2ad09743ecd52b9fb7063b8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5da87baad3b536eb45de8b9433326519" id="r_a5da87baad3b536eb45de8b9433326519"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5da87baad3b536eb45de8b9433326519">idle_timeout_closes</a> =0</td></tr>
+<tr class="separator:a5da87baad3b536eb45de8b9433326519"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a5a28c0a161c2a4e95d3e45ae1342de" id="r_a5a5a28c0a161c2a4e95d3e45ae1342de"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5a5a28c0a161c2a4e95d3e45ae1342de">graceful_shutdown_timeouts</a> =0</td></tr>
+<tr class="separator:a5a5a28c0a161c2a4e95d3e45ae1342de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p><a class="el" href="classstt_1_1network_1_1TcpServer.html" title="Tcp服务端类">TcpServer</a> 运行指标的无锁快照。 </p>
@@ -176,6 +200,36 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
+<a id="a705a3a8d4c7f2313553027b9782e2762" name="a705a3a8d4c7f2313553027b9782e2762"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a705a3a8d4c7f2313553027b9782e2762">&#9670;&#160;</a></span>batched_write_buffers</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::batched_write_buffers =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>被批量发送调用覆盖的发送队列数据块总数。 </p>
+
+</div>
+</div>
+<a id="abbc5ad8fb031e2289ab7b3b48b284223" name="abbc5ad8fb031e2289ab7b3b48b284223"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbc5ad8fb031e2289ab7b3b48b284223">&#9670;&#160;</a></span>batched_write_syscalls</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::batched_write_syscalls =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>使用多个 iovec 合并发送的 sendmsg 调用次数。 </p>
+
+</div>
+</div>
 <a id="a6714980d286f25ee65884892f9b4718a" name="a6714980d286f25ee65884892f9b4718a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6714980d286f25ee65884892f9b4718a">&#9670;&#160;</a></span>closed_connections</h2>
 
@@ -191,6 +245,51 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
+<a id="a5a5a28c0a161c2a4e95d3e45ae1342de" name="a5a5a28c0a161c2a4e95d3e45ae1342de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a5a28c0a161c2a4e95d3e45ae1342de">&#9670;&#160;</a></span>graceful_shutdown_timeouts</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::graceful_shutdown_timeouts =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>优雅排空超过配置时限、转为强制关闭的次数。 </p>
+
+</div>
+</div>
+<a id="ab77b3e3d2ad09743ecd52b9fb7063b8b" name="ab77b3e3d2ad09743ecd52b9fb7063b8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab77b3e3d2ad09743ecd52b9fb7063b8b">&#9670;&#160;</a></span>idle_timeout_checks</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::idle_timeout_checks =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>增量空闲连接检查次数。 </p>
+
+</div>
+</div>
+<a id="a5da87baad3b536eb45de8b9433326519" name="a5da87baad3b536eb45de8b9433326519"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5da87baad3b536eb45de8b9433326519">&#9670;&#160;</a></span>idle_timeout_closes</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::idle_timeout_closes =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>因超过空闲超时而关闭的连接数。 </p>
+
+</div>
+</div>
 <a id="a5b86a234c448873ead35f69acd78aa99" name="a5b86a234c448873ead35f69acd78aa99"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5b86a234c448873ead35f69acd78aa99">&#9670;&#160;</a></span>parsed_http_requests</h2>
 
@@ -203,6 +302,36 @@ Public 属性</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>成功完成边界校验和解析的 HTTP 请求数。 </p>
+
+</div>
+</div>
+<a id="a98d410d5f51ac93e246c61a4769fa2a9" name="a98d410d5f51ac93e246c61a4769fa2a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98d410d5f51ac93e246c61a4769fa2a9">&#9670;&#160;</a></span>peak_pending_worker_tasks</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::peak_pending_worker_tasks =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Worker 等待任务数的历史峰值。 </p>
+
+</div>
+</div>
+<a id="af90f368e204af7122165d00942cc4ab1" name="af90f368e204af7122165d00942cc4ab1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af90f368e204af7122165d00942cc4ab1">&#9670;&#160;</a></span>peak_pending_write_bytes</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::peak_pending_write_bytes =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>所有连接待发字节数的历史峰值。 </p>
 
 </div>
 </div>
@@ -233,6 +362,51 @@ Public 属性</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>业务层成功提交到发送队列的累计字节数。 </p>
+
+</div>
+</div>
+<a id="a24325864d34b96c8604d7799222f5da4" name="a24325864d34b96c8604d7799222f5da4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24325864d34b96c8604d7799222f5da4">&#9670;&#160;</a></span>reactor_wakeups</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::reactor_wakeups =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>实际写入 eventfd 的 Reactor 唤醒次数。 </p>
+
+</div>
+</div>
+<a id="ae7f6cdaa94612e3f64038fd08d9aeb4b" name="ae7f6cdaa94612e3f64038fd08d9aeb4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7f6cdaa94612e3f64038fd08d9aeb4b">&#9670;&#160;</a></span>reactor_wakeups_coalesced</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::reactor_wakeups_coalesced =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>被合并、未产生额外系统调用的唤醒次数。 </p>
+
+</div>
+</div>
+<a id="a86c62a085843f5b030088f6fe5167a89" name="a86c62a085843f5b030088f6fe5167a89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86c62a085843f5b030088f6fe5167a89">&#9670;&#160;</a></span>rejected_connections</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::rejected_connections =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>因达到并发连接上限而拒绝的连接总数。 </p>
 
 </div>
 </div>
@@ -296,6 +470,21 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
+<a id="a153ae7c1ca947e1c1d33e9e15e9d2fc5" name="a153ae7c1ca947e1c1d33e9e15e9d2fc5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a153ae7c1ca947e1c1d33e9e15e9d2fc5">&#9670;&#160;</a></span>worker_task_rejections</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::worker_task_rejections =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Worker 任务队列达到上限或停止后拒绝的任务数。 </p>
+
+</div>
+</div>
 <a id="a0cc02d3482ad787d796bdd74cc64c8a7" name="a0cc02d3482ad787d796bdd74cc64c8a7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0cc02d3482ad787d796bdd74cc64c8a7">&#9670;&#160;</a></span>write_overflows</h2>
 
@@ -308,6 +497,21 @@ Public 属性</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>超过每连接发送高水位的次数。 </p>
+
+</div>
+</div>
+<a id="a149fda6514d545de3ad3950d72b1e3af" name="a149fda6514d545de3ad3950d72b1e3af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a149fda6514d545de3ad3950d72b1e3af">&#9670;&#160;</a></span>write_syscalls</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stt::network::ServerMetricsSnapshot::write_syscalls =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Reactor 发起的 socket/TLS 写调用次数。 </p>
 
 </div>
 </div>

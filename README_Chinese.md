@@ -3,7 +3,7 @@
 
 STTNet 是一个**C++17标准** 的轻量级高性能服务器框架，采用 Reactor 事件驱动模型与 epoll 实现高并发非阻塞网络通信，具备完整的 **高性能网络通信能力**，支持 **TCP/UDP/HTTP/WebSocket 及其加密变种（TLS+TCP、HTTPS、WSS）**。支持文件操作，时间操作，日志操作，常见的数据处理，json格式的数据处理，加解密，信号管理，进程管理,信息安全等常用服务端功能。并内置了日志系统、epoll高并发模型事件驱动、多线程处理、线程安全、心跳监控、异常和信号处理等功能。
 
-历史案例：旧版本曾在 4 核 4G 小型开发板上记录约 6.5 万请求/秒、平均 2–3 ms。该数据不是 0.6.0 的同机复测结果；当前性能请按仓库 benchmark 在目标 Linux 环境复测。
+历史案例：旧版本曾在 4 核 4G 小型开发板上记录约 6.5 万请求/秒、平均 2–3 ms。该数据不是 0.7.0 的同机复测结果；当前性能请按仓库 benchmark 在目标 Linux 环境复测。
 
 > 作者：StephenTaam（1356597983@qq.com）
 > 语言：C++17
@@ -16,9 +16,9 @@ STTNet 是一个**C++17标准** 的轻量级高性能服务器框架，采用 Re
 - ✅ 基于 C++17
 - ✅ 简单易用，接口清晰
 # 🔌 通信功能
-- ✅ epoll + 多线程消费者模型，高并发处理
+- ✅ 单线程所有权 epoll Reactor + 有界 WorkerPool，高并发处理
 - ✅ TCP、UDP、HTTP、WebSocket 通信支持
-- ✅ 支持 TLS+TCP、HTTPS、WSS 加密通信
+- ✅ 支持 TLS+TCP、HTTPS、WSS，以及单向 TLS/可选客户端证书/mTLS
 - ✅ 支持自定义回调注册函数处理网络请求，灵活处理逻辑
 # 🔧 工具与服务模块
 - ✅ 日志系统封装（支持多线程写入、日志文件切割）
@@ -32,6 +32,19 @@ STTNet 是一个**C++17标准** 的轻量级高性能服务器框架，采用 Re
 - ✅进程管理和心跳监控机制管理
 - ✅易用的接口与模块化结构
 - ✅ 信息安全模块
+
+## 0.7.0 性能与稳定性要点
+
+- 每连接有界发送队列和统一 EPOLLOUT 状态机；Worker 不直接操作 socket/SSL。
+- eventfd/日志唤醒合并、普通 TCP `sendmsg+iovec` 批量写、每轮公平预算。
+- 监听 socket 真正非阻塞；连接数正确限流；Worker 队列有界，慢客户端和突发任务均有背压。
+- SIGTERM/SIGINT 停止接入后排空在途响应；空闲连接增量检查；启动失败可准确反馈。
+- `ServerSocketOptions` 聚合 TCP_NODELAY、keepalive、缓冲、REUSEPORT、DEFER_ACCEPT、FASTOPEN 和 backlog。
+- 新增队列峰值、批量写、唤醒合并、拒绝、超时等指标；API 手册版本同步为 0.7.0。
+
+常见 HTTPS/WSS 使用 `server.setTLS(cert, key)`；历史四参数版本
+`server.setTLS(cert, key, password, clientCA)` 仍表示强制双向 TLS。需要可选客户端证书时使用
+带 `TLSClientAuthMode` 的五参数重载。
 ---
 
 ## 🧱 框架模块结构
@@ -72,7 +85,7 @@ stt
 - [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
 - OpenSSL (`libssl`, `libcrypto`)
 - POSIX Threads (`pthread`)
-- g++ 编译器（支持 C++11 或以上）
+- g++ 编译器（支持 C++17 或以上）
 
 在不同发行版的Linux系统中，你可以通过以下命令安装这些依赖：
 
@@ -120,6 +133,30 @@ ctest --test-dir build --output-on-failure
 ---
 
 ## 🧪 示例代码：启动一个 HTTP 服务
+
+STTNet 的常见 HTTP 服务只需要“创建、注册路由、监听”三步：
+
+```cpp
+#include "include/sttnet.h"
+
+int main()
+{
+    using namespace stt::network;
+    using stt::system::ServerSetting;
+    if(!ServerSetting::blockTerminationSignals()) return 1;
+
+    HttpServer server;
+    server.setFunction("/ping",[](HttpServerFDHandler &client,
+                                  HttpRequestInformation &) {
+        return client.sendBack("pong") ? 1 : -2;
+    });
+    if(!server.startListen(8080)) return 2;
+    ServerSetting::waitForTerminationSignal();
+    return server.close() ? 0 : 3;
+}
+```
+
+运行后执行 `curl http://127.0.0.1:8080/ping` 即可得到 `pong`。下面是同时展示异步任务、WebSocket 和日志的完整示例。
 
 ```cpp
 #include "include/sttnet.h"

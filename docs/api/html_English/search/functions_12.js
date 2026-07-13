@@ -1,12 +1,9 @@
 var searchData=
 [
-  ['wait_0',['wait',['../classstt_1_1system_1_1csemp.html#a6c2b13239c9ed260d6a35aadb4f7a1df',1,'stt::system::csemp']]],
-  ['waitandquit_1',['waitAndQuit',['../classstt_1_1network_1_1EpollSingle.html#a14fc3ddff2a046c76ae1090a1f254781',1,'stt::network::EpollSingle']]],
-  ['waitforterminationsignal_2',['waitForTerminationSignal',['../classstt_1_1system_1_1ServerSetting.html#ab29db5ce6d185b27c73799eb8dda72e5',1,'stt::system::ServerSetting']]],
-  ['websocketclient_3',['WebSocketClient',['../classstt_1_1network_1_1WebSocketClient.html#a1f1b55114196078359c8a552b54925fc',1,'stt::network::WebSocketClient']]],
-  ['websocketserver_4',['WebSocketServer',['../classstt_1_1network_1_1WebSocketServer.html#a725c81385c1a347fbafb4e3e0483ba27',1,'stt::network::WebSocketServer']]],
-  ['workerpool_5',['WorkerPool',['../classstt_1_1system_1_1WorkerPool.html#a003c31d5de84e37d21464805e21493ac',1,'stt::system::WorkerPool']]],
-  ['write_6',['write',['../classstt_1_1file_1_1File.html#a09f4b50edf2e77bfe6f50ca85503c534',1,'stt::file::File']]],
-  ['writec_7',['writeC',['../classstt_1_1file_1_1File.html#a7a0938542769e9535826a3e68ed1ffc2',1,'stt::file::File']]],
-  ['writelog_8',['writeLog',['../classstt_1_1file_1_1LogFile.html#a881aa4363bf12e4660205ccdc99759f5',1,'stt::file::LogFile']]]
+  ['udpclient_0',['UdpClient',['../classstt_1_1network_1_1UdpClient.html#ae177a67e8f5cefad870caef44025068f',1,'stt::network::UdpClient']]],
+  ['udpserver_1',['UdpServer',['../classstt_1_1network_1_1UdpServer.html#a66c00c29bdfece4fd42f18f2c64dbc92',1,'stt::network::UdpServer']]],
+  ['unbanip_2',['unbanIP',['../classstt_1_1security_1_1ConnectionLimiter.html#afff60c7b0c0ee5a5786b0563e74f2864',1,'stt::security::ConnectionLimiter']]],
+  ['unblockset_3',['unblockSet',['../classstt_1_1network_1_1TcpFDHandler.html#a93726054291d3b786e2d289c808fd3a2',1,'stt::network::TcpFDHandler::unblockSet()'],['../classstt_1_1network_1_1UdpFDHandler.html#a6b8fe53c8470061456837590f7f510fd',1,'stt::network::UdpFDHandler::unblockSet()']]],
+  ['unlockmemory_4',['unlockMemory',['../classstt_1_1file_1_1File.html#a4cdaefafc7c143eab21221c53929a729',1,'stt::file::File']]],
+  ['updateconnectionevents_5',['updateConnectionEvents',['../classstt_1_1network_1_1TcpServer.html#a568f29bb1f1fd63369ca488f79b55d80',1,'stt::network::TcpServer']]]
 ];

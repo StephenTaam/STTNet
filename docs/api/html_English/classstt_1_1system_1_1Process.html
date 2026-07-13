@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.7.0</span>
    </div>
   </td>
  </tr>
@@ -154,9 +154,14 @@ template&lt;class... Args&gt; </div>
 <li>不会修改调用方（父进程）的信号处置。</li>
 <li>定时调度进程退出时，Linux 会向其当前目标子进程发送 SIGTERM，避免孤儿服务。</li>
 </ul>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Args</td><td>可变参数类型（用于传递给目标程序的 argv） </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">Args</td><td>可变参数类型（用于传递给目标程序的 argv） </td></tr>
     <tr><td class="paramname">name</td><td>要执行的程序路径（如 <code>/usr/bin/myapp</code>） </td></tr>
     <tr><td class="paramname">sec</td><td>定时间隔（单位：秒）。若为 -1，则表示只启动一次，不定时。 </td></tr>
     <tr><td class="paramname">args</td><td>启动参数（第一个参数必须是程序名称，即 argv[0]，末尾不需要添加 nullptr） </td></tr>
@@ -215,10 +220,15 @@ template&lt;class Fn, class... Args&gt; </div>
 <li>当 <code>sec == -1</code>，函数仅执行一次；</li>
 <li>否则，会创建一个辅助进程定期重新 fork 并执行该函数。</li>
 </ul>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
     <tr><td class="paramname">Fn</td><td>可调用对象类型（如函数、Lambda） </td></tr>
     <tr><td class="paramname">Args</td><td>可调用对象的参数类型 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
     <tr><td class="paramname">fn</td><td>要执行的函数或可调用对象 </td></tr>
     <tr><td class="paramname">sec</td><td>定时间隔（单位：秒）。若为 -1，则表示只执行一次，不定时。 </td></tr>
     <tr><td class="paramname">args</td><td>要传递给函数的参数 </td></tr>

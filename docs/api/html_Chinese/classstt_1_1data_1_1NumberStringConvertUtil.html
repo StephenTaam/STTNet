@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.7.0</span>
    </div>
   </td>
  </tr>
@@ -164,6 +164,7 @@ $(function(){ initResizable(false); });
   <table class="params">
     <tr><td class="paramname">ori_str</td><td>16进制数字的字符串表示 </td></tr>
     <tr><td class="paramname">result</td><td>保存转化结果的int容器 </td></tr>
+    <tr><td class="paramname">i</td><td>转换失败时写入 result 的默认值（默认为 -1）。 </td></tr>
   </table>
   </dd>
 </dl>
@@ -382,7 +383,7 @@ $(function(){ initResizable(false); });
   <table class="params">
     <tr><td class="paramname">ori_str</td><td>原始string类型数据 </td></tr>
     <tr><td class="paramname">result</td><td>存放结果的int容器 </td></tr>
-    <tr><td class="paramname">i</td><td>如果转化失败 则把result赋值为i(默认为-1) </td></tr>
+    <tr><td class="paramname">i</td><td>如果转化失败，则把 result 赋值为 i（默认为 -1）。 </td></tr>
   </table>
   </dd>
 </dl>

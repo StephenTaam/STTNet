@@ -13,7 +13,7 @@ LogFile* lf = nullptr;
 HttpServer* httpserver = nullptr;
 WebSocketServer* wsserver = nullptr;
 
-int main(int argc, char* argv[])
+int main()
 {
     if(!ServerSetting::blockTerminationSignals())
         return 1;
@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
      * HTTP：从请求中提取 key（用于路由/上下文）
      */
     httpserver->setGetKeyFunction(
-        [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
+        [](HttpServerFDHandler&, HttpRequestInformation& inf) -> int {
             inf.ctx["key"] = inf.loc;  // use URL as key
             return 1;
         }
@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
      */
     httpserver->setFunction(
         "/ping",
-        [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
+        [](HttpServerFDHandler& k, HttpRequestInformation&) -> int {
             k.sendBack("pong");
             return 1;
         }
@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
         "/async",
         [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
             httpserver->putTask(
-                [](HttpServerFDHandler& k, HttpRequestInformation& inf) -> int {
+                [](HttpServerFDHandler& k, HttpRequestInformation&) -> int {
                     return k.sendBack("async pong") ? 1 : -2;
                 },
                 k,
@@ -111,7 +111,7 @@ int main(int argc, char* argv[])
      */
     wsserver->setFunction(
         "ping",
-        [](WebSocketServerFDHandler& k, WebSocketFDInformation& inf) -> int {
+        [](WebSocketServerFDHandler& k, WebSocketFDInformation&) -> int {
             k.sendMessage("pong");
             return 1;
         }

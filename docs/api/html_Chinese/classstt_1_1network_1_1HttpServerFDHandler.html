@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.7.0</span>
    </div>
   </td>
  </tr>
@@ -240,17 +240,13 @@ Public 成员函数</h2></td></tr>
     <tr><td class="paramname">data</td><td>装着响应体的数据的char *容器 </td></tr>
     <tr><td class="paramname">length</td><td>char*容器中的数据长度 </td></tr>
     <tr><td class="paramname">code</td><td>Http响应状态码和状态说明 （默认是 200 OK） </td></tr>
-    <tr><td class="paramname">header</td><td>Http请求头；如果不是用createHeader生成，记得在末尾要加上\r<br  />
-。 </td></tr>
-    <tr><td class="paramname">header1</td><td>HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入\r<br  />
-（不能用createHeader）。（比如可以默认填入keepalive项） </td></tr>
-    <tr><td class="paramname">header_length</td><td>响应头部加起来的最大长度（默认为50) </td></tr>
+    <tr><td class="paramname">header</td><td>Http 响应头；如果不是用 createHeader 生成，末尾应包含 CRLF。 </td></tr>
+    <tr><td class="paramname">header1</td><td>HTTP 响应头附加项；末尾不需要加入 CRLF。 </td></tr>
+    <tr><td class="paramname">header_length</td><td>响应头部长度的预估值，仅用于减少内存扩容；不准确不会影响发送正确性（默认50）。 </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section warning"><dt>警告</dt><dd>预留的空间务必准确 否则可能发送失败 </dd>
-<dd>
-所有char*指向的数据都必须确保\0结尾 \0不计入长度 否则有崩溃风险 </dd></dl>
+<dl class="section warning"><dt>警告</dt><dd>header、code、header1 必须以 \0 结尾；data 按 length 读取，可以包含二进制零字节。 </dd></dl>
 <dl class="section return"><dt>返回</dt><dd>true：发送响应成功 false：发送响应失败 </dd></dl>
 
 </div>
@@ -289,10 +285,8 @@ Public 成员函数</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">data</td><td>装着响应体的数据的string容器 </td></tr>
     <tr><td class="paramname">code</td><td>Http响应状态码和状态说明 （默认是 200 OK） </td></tr>
-    <tr><td class="paramname">header</td><td>Http请求头；如果不是用createHeader生成，记得在末尾要加上\r<br  />
-。 </td></tr>
-    <tr><td class="paramname">header1</td><td>HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入\r<br  />
-（不能用createHeader）。（比如可以默认填入keepalive项） </td></tr>
+    <tr><td class="paramname">header</td><td>Http 响应头；如果不是用 createHeader 生成，末尾应包含 CRLF。 </td></tr>
+    <tr><td class="paramname">header1</td><td>HTTP 响应头附加项；末尾不需要加入 CRLF。 </td></tr>
   </table>
   </dd>
 </dl>

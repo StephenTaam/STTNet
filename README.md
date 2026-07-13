@@ -4,10 +4,10 @@
 
 STTNet is a lightweight, high-performance server framework based on the **C++17 standard**.  It utilizes the Reactor event-driven model and epoll for high-concurrency, non-blocking network communication, providing complete **high-performance network communication capabilities**. It supports **TCP/UDP/HTTP/WebSocket and their encrypted variants (TLS+TCP, HTTPS, WSS)**.  It also supports common server-side functionalities such as file operations, time operations, logging, common data processing, JSON data processing, encryption/decryption, signal management, process management, and information security.  It includes built-in features such as a logging system, epoll high-concurrency event-driven model, multi-threading, thread safety, heartbeat monitoring, and exception and signal handling.
 
-Case: A stress test of an HTTP service program written in this framework on a small development board with 4 cores and 4GB of memory achieved a throughput of 65,000 requests per second and an average latency of 2-3ms.
+Historical case: an older build recorded about 65,000 requests/second and 2–3 ms average latency on a 4-core/4GB development board. This is not a same-machine STTNet 0.7.0 result; run the repository benchmarks on the target Linux host for a meaningful number.
 
 > Author: StephenTaam ([1356597983@qq.com](mailto:1356597983@qq.com))
-> Language: C++11
+> Language: C++17
 > Platform: Linux
 > Dependencies: OpenSSL, JsonCpp, pthread
 
@@ -15,14 +15,16 @@ Case: A stress test of an HTTP service program written in this framework on a sm
 
 ## 📦 Core Framework Features
 
-* ✅ Based on modern C++11 standard
+* ✅ Based on C++17
 * ✅ Simple and easy to use, clear API
 
 # 🔌 Communication Features
 
-* ✅ Epoll + multithreaded consumer model for high-concurrency processing
+* ✅ Single-owner epoll Reactor plus bounded WorkerPool
 * ✅ TCP, UDP, HTTP, WebSocket support
-* ✅ Supports encrypted communication (TLS+TCP, HTTPS, WSS)
+* ✅ TLS+TCP, HTTPS and WSS with server-only TLS, optional client certificates, or mTLS
+* ✅ Bounded per-connection write queues, unified EPOLLOUT state, backpressure and graceful drain
+* ✅ Coalesced eventfd wakeups and scatter/gather TCP writes
 * ✅ Supports custom callback registration for flexible request handling
 
 # 🔧 Tools and Service Modules
@@ -82,7 +84,7 @@ Before compiling the project, ensure the following libraries are installed:
 * [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
 * OpenSSL (`libssl`, `libcrypto`)
 * POSIX Threads (`pthread`)
-* g++ compiler (supporting C++11 or higher)
+* g++ compiler (supporting C++17 or higher)
 
 Install these dependencies using the following commands for different Linux distributions:
 
@@ -110,7 +112,7 @@ sudo pacman -S --noconfirm jsoncpp openssl base-devel
 ### 🛠️ Compile
 
 ```bash
-g++ -std=c++11 -o main main.cpp src/sttnet.cpp -ljsoncpp -lssl -lcrypto -lpthread
+g++ -std=c++17 -o main main.cpp src/sttnet.cpp -ljsoncpp -lssl -lcrypto -lpthread
 
 # Or use `make` to manage the build.
 ```
@@ -120,6 +122,30 @@ g++ -std=c++11 -o main main.cpp src/sttnet.cpp -ljsoncpp -lssl -lcrypto -lpthrea
 ---
 
 ## 🧪 Sample Code: Starting an HTTP Server
+
+A typical STTNet HTTP service takes only three steps: create, register a route, and listen:
+
+```cpp
+#include "include/sttnet.h"
+
+int main()
+{
+    using namespace stt::network;
+    using stt::system::ServerSetting;
+    if(!ServerSetting::blockTerminationSignals()) return 1;
+
+    HttpServer server;
+    server.setFunction("/ping",[](HttpServerFDHandler &client,
+                                  HttpRequestInformation &) {
+        return client.sendBack("pong") ? 1 : -2;
+    });
+    if(!server.startListen(8080)) return 2;
+    ServerSetting::waitForTerminationSignal();
+    return server.close() ? 0 : 3;
+}
+```
+
+Run `curl http://127.0.0.1:8080/ping` and receive `pong`. The longer example below also demonstrates worker tasks, WebSocket, and logging.
 
 ```cpp
 #include "include/sttnet.h"
@@ -140,6 +166,13 @@ WebSocketServer* wsserver = nullptr;
 int main(int argc, char* argv[])
 {
     /*
+     * Block SIGTERM/SIGINT before creating any worker thread.
+     * Signals are then consumed synchronously on the main thread.
+     */
+    if(!ServerSetting::blockTerminationSignals())
+        return 1;
+
+    /*
      * Initialize logfile system
      * 初始化日志系统（第二个参数指定语言，默认英文）
      */
@@ -151,16 +184,6 @@ int main(int argc, char* argv[])
      * 创建 HTTP 服务器对象
      */
     httpserver = new HttpServer();
-
-    /*
-     * Graceful exit on signal 15 (SIGTERM)
-     * 收到 15 号信号时优雅退出
-     */
-    signal(15, [](int) {
-        delete httpserver;
-        delete wsserver;
-        delete lf;
-    });
 
     /*
      * HTTP: key extraction function
@@ -264,10 +287,13 @@ int main(int argc, char* argv[])
     wsserver->startListen(5050, 2);
 
     /*
-     * Block main thread
-     * 阻塞主线程，Reactor 在内部运行
+     * Wait for kill -15/Ctrl-C and clean up in normal thread context.
+     * Never delete server objects from an asynchronous signal handler.
      */
-    pause();
+    ServerSetting::waitForTerminationSignal();
+    delete wsserver;
+    delete httpserver;
+    delete lf;
     return 0;
 }
 
@@ -355,22 +381,22 @@ Added information security module and updated network optimization.
 
 STTNet 是一个**C++17标准** 的轻量级高性能服务器框架，采用 Reactor 事件驱动模型与 epoll 实现高并发非阻塞网络通信，具备完整的 **高性能网络通信能力**，支持 **TCP/UDP/HTTP/WebSocket 及其加密变种（TLS+TCP、HTTPS、WSS）**。支持文件操作，时间操作，日志操作，常见的数据处理，json格式的数据处理，加解密，信号管理，进程管理,信息安全等常用服务端功能。并内置了日志系统、epoll高并发模型事件驱动、多线程处理、线程安全、心跳监控、异常和信号处理等功能。
 
-案例：在4核4G内存的小型开发板上压测这个框架编写的http服务程序，达到了每秒6.5万的吞吐量，时延平均2-3ms。
+历史案例：旧版本曾在 4 核 4G 小型开发板上记录约 6.5 万请求/秒、平均 2–3 ms。该数据不是 0.7.0 的同机复测结果；当前性能请按仓库 benchmark 在目标 Linux 环境复测。
 
 > 作者：StephenTaam（1356597983@qq.com）
-> 语言：C++11  
+> 语言：C++17
 > 平台：Linux  
 > 依赖：OpenSSL、JsonCpp、pthread
 
 ---
 
 ## 📦 框架核心特性一览
-- ✅ 基于C++11现代标准
+- ✅ 基于 C++17
 - ✅ 简单易用，接口清晰
 # 🔌 通信功能
-- ✅ epoll + 多线程消费者模型，高并发处理
+- ✅ 单线程所有权 epoll Reactor + 有界 WorkerPool，高并发处理
 - ✅ TCP、UDP、HTTP、WebSocket 通信支持
-- ✅ 支持 TLS+TCP、HTTPS、WSS 加密通信
+- ✅ 支持 TLS+TCP、HTTPS、WSS，以及单向 TLS/可选客户端证书/mTLS
 - ✅ 支持自定义回调注册函数处理网络请求，灵活处理逻辑
 # 🔧 工具与服务模块
 - ✅ 日志系统封装（支持多线程写入、日志文件切割）
@@ -424,7 +450,7 @@ stt
 - [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
 - OpenSSL (`libssl`, `libcrypto`)
 - POSIX Threads (`pthread`)
-- g++ 编译器（支持 C++11 或以上）
+- g++ 编译器（支持 C++17 或以上）
 
 在不同发行版的Linux系统中，你可以通过以下命令安装这些依赖：
 
@@ -449,7 +475,7 @@ sudo pacman -S --noconfirm jsoncpp openssl base-devel
 ### 🛠️ 编译
 
 ```bash
-g++ -std=c++11 -o main main.cpp src/sttnet.cpp -ljsoncpp -lssl -lcrypto -lpthread
+g++ -std=c++17 -o main main.cpp src/sttnet.cpp -ljsoncpp -lssl -lcrypto -lpthread
 
 或使用 `make` 管理项目构建。
 ```
@@ -459,6 +485,30 @@ g++ -std=c++11 -o main main.cpp src/sttnet.cpp -ljsoncpp -lssl -lcrypto -lpthrea
 ---
 
 ## 🧪 示例代码：启动一个 HTTP 服务
+
+STTNet 的常见 HTTP 服务只需要“创建、注册路由、监听”三步：
+
+```cpp
+#include "include/sttnet.h"
+
+int main()
+{
+    using namespace stt::network;
+    using stt::system::ServerSetting;
+    if(!ServerSetting::blockTerminationSignals()) return 1;
+
+    HttpServer server;
+    server.setFunction("/ping",[](HttpServerFDHandler &client,
+                                  HttpRequestInformation &) {
+        return client.sendBack("pong") ? 1 : -2;
+    });
+    if(!server.startListen(8080)) return 2;
+    ServerSetting::waitForTerminationSignal();
+    return server.close() ? 0 : 3;
+}
+```
+
+运行后执行 `curl http://127.0.0.1:8080/ping` 即可得到 `pong`。下面是同时展示异步任务、WebSocket 和日志的完整示例。
 
 ```cpp
 #include "include/sttnet.h"
@@ -479,6 +529,13 @@ WebSocketServer* wsserver = nullptr;
 int main(int argc, char* argv[])
 {
     /*
+     * Block SIGTERM/SIGINT before creating any worker thread.
+     * 在创建任何线程前阻塞退出信号。
+     */
+    if(!ServerSetting::blockTerminationSignals())
+        return 1;
+
+    /*
      * Initialize logfile system
      * 初始化日志系统（第二个参数指定语言，默认英文）
      */
@@ -490,16 +547,6 @@ int main(int argc, char* argv[])
      * 创建 HTTP 服务器对象
      */
     httpserver = new HttpServer();
-
-    /*
-     * Graceful exit on signal 15 (SIGTERM)
-     * 收到 15 号信号时优雅退出
-     */
-    signal(15, [](int) {
-        delete httpserver;
-        delete wsserver;
-        delete lf;
-    });
 
     /*
      * HTTP: key extraction function
@@ -603,10 +650,13 @@ int main(int argc, char* argv[])
     wsserver->startListen(5050, 2);
 
     /*
-     * Block main thread
-     * 阻塞主线程，Reactor 在内部运行
+     * Wait synchronously; cleanup is performed in normal thread context.
+     * 同步等待 kill -15/Ctrl-C，然后在正常线程上优雅清理。
      */
-    pause();
+    ServerSetting::waitForTerminationSignal();
+    delete wsserver;
+    delete httpserver;
+    delete lf;
     return 0;
 }
 

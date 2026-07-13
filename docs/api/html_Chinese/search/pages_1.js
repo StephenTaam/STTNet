@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['c_20framework_0',['STTNet C++ Framework',['../index.html',1,'']]]
+  ['bug_20列表_0',['Bug 列表',['../bug.html',1,'']]]
 ];

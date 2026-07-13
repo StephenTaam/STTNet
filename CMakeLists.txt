@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(STTNet VERSION 0.6.0 LANGUAGES CXX)
+project(STTNet VERSION 0.7.0 LANGUAGES CXX)
 
 option(STTNET_BUILD_EXAMPLE "Build the example HTTP/WebSocket server" ON)
 option(STTNET_BUILD_TESTS "Build concurrency regression tests" ON)
@@ -42,6 +42,9 @@ if(STTNET_BUILD_TESTS)
   add_executable(sttnet_websocket_tests tests/websocket_tests.cpp)
   target_link_libraries(sttnet_websocket_tests PRIVATE sttnet)
   add_test(NAME sttnet_websocket_tests COMMAND sttnet_websocket_tests)
+  add_executable(sttnet_file_tests tests/file_tests.cpp)
+  target_link_libraries(sttnet_file_tests PRIVATE sttnet)
+  add_test(NAME sttnet_file_tests COMMAND sttnet_file_tests)
 endif()
 
 if(STTNET_BUILD_BENCHMARK)

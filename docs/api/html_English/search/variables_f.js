@@ -1,9 +1,20 @@
 var searchData=
 [
-  ['threads_0',['threads',['../structstt_1_1file_1_1FileThreadLock.html#aaa9ef37af886e8ef7cab854472f70106',1,'stt::file::FileThreadLock']]],
-  ['tls_1',['TLS',['../classstt_1_1network_1_1TcpServer.html#a295aa6784cd288fdc9448d6b99d2c212',1,'stt::network::TcpServer']]],
-  ['tls_5fhandshake_5ffailures_2',['tls_handshake_failures',['../structstt_1_1network_1_1ServerMetricsSnapshot.html#a1ea6a2a5e3fd2d33e8b7be494b349cc2',1,'stt::network::ServerMetricsSnapshot']]],
-  ['tls_5fstate_3',['tls_state',['../structstt_1_1network_1_1TcpFDInf.html#abd95aa05d9e5bfde5c217aa1eb10777e',1,'stt::network::TcpFDInf']]],
-  ['tokens_4',['tokens',['../structstt_1_1security_1_1RateState.html#a6d59bc81482d4d86395f248d73026577',1,'stt::security::RateState']]],
-  ['type_5',['type',['../structstt_1_1network_1_1HttpRequestInformation.html#a228b727f99c12c8b54d83a5290fdb0ad',1,'stt::network::HttpRequestInformation']]]
+  ['reactor_5fwakeups_0',['reactor_wakeups',['../structstt_1_1network_1_1ServerMetricsSnapshot.html#a24325864d34b96c8604d7799222f5da4',1,'stt::network::ServerMetricsSnapshot']]],
+  ['reactor_5fwakeups_5fcoalesced_1',['reactor_wakeups_coalesced',['../structstt_1_1network_1_1ServerMetricsSnapshot.html#ae7f6cdaa94612e3f64038fd08d9aeb4b',1,'stt::network::ServerMetricsSnapshot']]],
+  ['reactorstartupcomplete_2',['reactorStartupComplete',['../classstt_1_1network_1_1TcpServer.html#ae84594ea02b0ed847d583f6c96788944',1,'stt::network::TcpServer']]],
+  ['reactorstartupcv_3',['reactorStartupCV',['../classstt_1_1network_1_1TcpServer.html#a51f6b27c01b4ea75cff88a0a86fd1eab',1,'stt::network::TcpServer']]],
+  ['reactorstartupmutex_4',['reactorStartupMutex',['../classstt_1_1network_1_1TcpServer.html#abb177251484c35ad82a5db7db8229542',1,'stt::network::TcpServer']]],
+  ['reactorstartupsuccess_5',['reactorStartupSuccess',['../classstt_1_1network_1_1TcpServer.html#aa9f36542c580c93384f048d0a08e9c69',1,'stt::network::TcpServer']]],
+  ['reactorthread_6',['reactorThread',['../classstt_1_1network_1_1TcpServer.html#a913abddb615efa8c8b9503ae24982b18',1,'stt::network::TcpServer']]],
+  ['receive_5fbuffer_5fbytes_7',['receive_buffer_bytes',['../structstt_1_1network_1_1ServerSocketOptions.html#a48920a6970a49e4a9d4ed7b4a067dbe7',1,'stt::network::ServerSocketOptions']]],
+  ['recv_5flength_8',['recv_length',['../structstt_1_1network_1_1WebSocketFDInformation.html#a1d9e6b29271923079bc27244a97ab213',1,'stt::network::WebSocketFDInformation']]],
+  ['rejected_5fconnections_9',['rejected_connections',['../structstt_1_1network_1_1ServerMetricsSnapshot.html#a86c62a085843f5b030088f6fe5167a89',1,'stt::network::ServerMetricsSnapshot']]],
+  ['request_10',['request',['../structstt_1_1network_1_1WorkerMessage.html#a74e154d57c2208b593bae46cb3b4e648',1,'stt::network::WorkerMessage']]],
+  ['requestrate_11',['requestRate',['../structstt_1_1security_1_1ConnectionState.html#a235594ec24ebaa125a8409561869f21f',1,'stt::security::ConnectionState']]],
+  ['requestsecs_12',['requestSecs',['../classstt_1_1network_1_1TcpServer.html#aae46831563ecec1dd25306ac3eec78ad',1,'stt::network::TcpServer']]],
+  ['requesttimes_13',['requestTimes',['../classstt_1_1network_1_1TcpServer.html#ae809e4044a03a89ead5535c42e0d6162',1,'stt::network::TcpServer']]],
+  ['response_14',['response',['../structstt_1_1network_1_1WebSocketFDInformation.html#a29b72edd9475c8c94c91affb5bfc7ad1',1,'stt::network::WebSocketFDInformation']]],
+  ['ret_15',['ret',['../structstt_1_1network_1_1WorkerMessage.html#ac7b55b9614c33f6a53eb38a947d0d2ba',1,'stt::network::WorkerMessage']]],
+  ['reuse_5fport_16',['reuse_port',['../structstt_1_1network_1_1ServerSocketOptions.html#aff44013ffec76ad1b7a4d0d265c3929a',1,'stt::network::ServerSocketOptions']]]
 ];

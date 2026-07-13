@@ -6,6 +6,15 @@ using namespace stt::data;
 using namespace stt::network;
 using namespace stt::system;
 
+namespace {
+void recordAtomicMaximum(std::atomic<uint64_t> &target,const uint64_t value) noexcept
+{
+    uint64_t current=target.load(std::memory_order_relaxed);
+    while(current<value&&!target.compare_exchange_weak(
+          current,value,std::memory_order_relaxed,std::memory_order_relaxed)) {}
+}
+}
+
 
             //思路：先从尾到头遍历检查看看哪里的目录是不存在的，边检查边逐级创建
 bool stt::file::FileTool::createDir(const string & ddir,const mode_t &mode)
@@ -105,17 +114,14 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
     {
         bool ok=true;
         if(!isOpen())//检查是否对象打开了文件
-        {
-            cerr<<"没有打开文件"<<endl;
-            return false;
-        }
+            return true;
         //看是否需要unlockmemory
         //如果还是锁住说明是突然关闭，那么理应回退内存，操作失败 
-        unique_lock<mutex> testlock(che,try_to_lock);
-        if(!testlock.owns_lock())//拿不到锁
-        {
-            unlockMemory(true);
-        }
+        if(memoryLockOwnedByCurrentThread())
+            (void)unlockMemory(true);
+        unique_lock<mutex> objectLock(che);
+        if(!isOpen())
+            return true;
 
         //关闭锁注册表
         //if(l1use)
@@ -151,8 +157,6 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
         }
         //清除内存数据
         if(binary)
-            data.clear();
-        else
         {
             if(data_binary!=nullptr)
             {
@@ -164,12 +168,21 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
                 delete[] backUp_binary;
                 backUp_binary=nullptr;
             }
+            size1=0;
+            size2=0;
+            malloced=0;
+        }
+        else
+        {
+            data.clear();
+            backUp.clear();
+            totalLines=0;
         }
         //关闭fd
         //::close(fd);
         //fd=-1;
         //完成
-        flag=false;
+        flag.store(false,std::memory_order_release);
         return ok;
         
     }
@@ -256,27 +269,42 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
 
             fin.seekg(0,ios::beg);
             */
-            if(data_binary!=nullptr)
-                delete[] data_binary;
-            if(backUp_binary!=nullptr)
-                delete[] backUp_binary;
             size=FileTool::get_file_size(fileName);
             fin.open(fileName,ios::binary);
             
             if(multiple_backup==0)
             {
-                malloced=size*multiple;
+                if(size>0&&static_cast<size_t>(multiple)>
+                   std::numeric_limits<size_t>::max()/size)
+                    malloced=size;
+                else
+                    malloced=size*static_cast<size_t>(multiple);
             }
             else
             {
-                malloced=multiple_backup;
+                malloced=std::max(size,multiple_backup);
             }
-            
-            data_binary=new char[malloced];
-            backUp_binary=new char[malloced];
 
-            fin.read(data_binary,size);
-            memcpy(backUp_binary,data_binary,size);
+            char *newData=malloced==0?nullptr:new(std::nothrow) char[malloced];
+            char *newBackup=malloced==0?nullptr:new(std::nothrow) char[malloced];
+            if(malloced>0&&(newData==nullptr||newBackup==nullptr))
+            {
+                delete[] newData;
+                delete[] newBackup;
+                malloced=0;
+                size1=0;
+                size2=0;
+                return;
+            }
+            delete[] data_binary;
+            delete[] backUp_binary;
+            data_binary=newData;
+            backUp_binary=newBackup;
+            if(size>0)
+            {
+                fin.read(data_binary,static_cast<std::streamsize>(size));
+                memcpy(backUp_binary,data_binary,size);
+            }
 
             size1=size;
             size2=size;
@@ -373,8 +401,8 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
         }
         //if(l1use)
         lock2.unlock();
-        flag=true;
-        return flag;
+        flag.store(true,std::memory_order_release);
+        return true;
     }
     string& stt::file::File::read(string &data,const int &linePos,const int &num)
     {
@@ -388,13 +416,13 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
         data="";
         if(!isOpen())
             return data;
-        if(linePos<=this->data.size()&&(linePos+num-1)<=this->data.size())
+        if(linePos>=1&&num>0&&static_cast<size_t>(linePos)<=this->data.size()&&
+           static_cast<size_t>(num)<=this->data.size()-static_cast<size_t>(linePos)+1)
         {
-            int ii=1;
-            while(ii<=num)
+            const size_t first=static_cast<size_t>(linePos-1);
+            for(size_t offset=0;offset<static_cast<size_t>(num);++offset)
             {
-                data+=this->data[linePos-1+ii-1]+"\n";
-                ii++;
+                data+=this->data[first+offset]+"\n";
             }
             if(data!="")
                 data.erase(data.size()-1);
@@ -418,7 +446,7 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
             cerr<<"对象没有打开文件 无法调用函数"<<endl;
             return false;
         }
-        if(this->data.size()<linePos)
+        if(linePos<1||static_cast<size_t>(linePos)>this->data.size())
             return false;
         data=this->data[linePos-1];
         return true;
@@ -475,6 +503,28 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
         if(ii!=fl2.end())
             ii->second.lock.unlock();
     }
+    bool stt::file::File::memoryLockOwnedByCurrentThread()
+    {
+        std::lock_guard<std::mutex> lock(memoryOwnerMutex);
+        return memoryLocked&&memoryLockOwner==std::this_thread::get_id();
+    }
+    void stt::file::File::markMemoryLockOwned()
+    {
+        std::lock_guard<std::mutex> lock(memoryOwnerMutex);
+        memoryLocked=true;
+        memoryLockOwner=std::this_thread::get_id();
+    }
+    void stt::file::File::releaseMemoryLocks()
+    {
+        unlockfl2();
+        fl1.unlock();
+        {
+            std::lock_guard<std::mutex> lock(memoryOwnerMutex);
+            memoryLocked=false;
+            memoryLockOwner=std::thread::id{};
+        }
+        che.unlock();
+    }
     bool stt::file::File::lockMemory()
     {
         //if(fd<0)
@@ -489,9 +539,21 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
         //if(flag_lock)
         //    unlockMemory(true);
         //flag_lock=true;
+        if(memoryLockOwnedByCurrentThread())
+            return false;
         che.lock();
+        if(!isOpen())
+        {
+            che.unlock();
+            return false;
+        }
+        bool fileLockHeld=false;
+        bool memoryLockHeld=false;
+        try
+        {
         //线程上锁
         lockfl2();
+        fileLockHeld=true;
          // 获取文件锁
         //struct flock fl;
         //fl.l_type = F_RDLCK;  // 写入锁
@@ -507,12 +569,25 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
         //}
         //File::fl2.lock();
         fl1.lock();
+        memoryLockHeld=true;
         toMemory();
-        backUp=data;
+        if(!binary)
+            backUp=data;
+        }
+        catch (...)
+        {
+            if(memoryLockHeld) fl1.unlock();
+            if(fileLockHeld) unlockfl2();
+            che.unlock();
+            return false;
+        }
+        markMemoryLockOwned();
         return true;
     }
     bool stt::file::File::unlockMemory(const bool &rec)
     {
+        if(!memoryLockOwnedByCurrentThread())
+            return false;
         //if(!chee.owns_lock())
         //    return false;
         //struct flock fl;
@@ -535,27 +610,23 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
             //}
             //close(fd);
             //fd=-1;
-            unlockfl2();
             if(!binary)
                 data=backUp;
             else
             {
-                memcpy(data_binary,backUp_binary,size2);
+                if(size2>0)
+                    memcpy(data_binary,backUp_binary,size2);
                 size1=size2;
             }
 
             if(rec==false)
             {
-                fl1.unlock();
-                //flag_lock=false;
-                che.unlock();
+                releaseMemoryLocks();
                 return false;
             }
             else
             {
-                fl1.unlock();
-                //flag_lock=false;
-                che.unlock();
+                releaseMemoryLocks();
                 return true;//因为别的原因（导入了参数，而参数来自其他操作）需要回退内存也是返回false
             }
         }
@@ -573,10 +644,7 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
             //}
             //close(fd);
             //fd=-1;
-            unlockfl2();
-            fl1.unlock();
-            //flag_lock=false;
-            che.unlock();
+            releaseMemoryLocks();
             return true;
         }
     }
@@ -587,13 +655,14 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
             cerr<<"对象没有打开文件 无法调用函数"<<endl;
             return -1;
         }
-        if(this->data.size()<linePos)
+        if(linePos<1||static_cast<size_t>(linePos)>this->data.size())
             return -1;
-        for(int pos=linePos;pos<=this->data.size();pos++)
+        for(size_t pos=static_cast<size_t>(linePos);pos<=this->data.size();++pos)
         {
             if(this->data[pos-1].find(targetString)!=string::npos)
             {
-                return pos;
+                return pos<=static_cast<size_t>(std::numeric_limits<int>::max())?
+                    static_cast<int>(pos):-1;
             }
         }
         return -1;
@@ -622,7 +691,7 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
         }
         else
         {
-            if(linePos>this->data.size())
+            if(linePos<0||static_cast<size_t>(linePos)>this->data.size())
             {
                 cerr<<"插入行无法定位"<<endl;
                 return false;
@@ -647,11 +716,13 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
         }
         if(linePos==0)
         {
+            if(this->data.empty())
+                return false;
             this->data.pop_back();
         }
         else
         {
-            if(linePos>this->data.size())
+            if(linePos<0||static_cast<size_t>(linePos)>this->data.size())
             {
                 cerr<<"删除行无法定位"<<endl;
                 return false;
@@ -691,11 +762,13 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
         }
         if(linePos==0)
         {
+            if(this->data.empty())
+                return false;
             this->data[this->data.size()-1]=data;
         }
         else
         {
-            if(linePos>this->data.size())
+            if(linePos<0||static_cast<size_t>(linePos)>this->data.size())
             {
                 cerr<<"修改行无法定位"<<endl;
                 return false;
@@ -752,7 +825,7 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
     bool stt::file::File::readC(char *data,const size_t &pos,const size_t &size)
     {
         //判断是否越界(是否在文件有效范围内)
-        if(pos+1<=size1&&pos+size<=size1)
+        if((data!=nullptr||size==0)&&pos<=size1&&size<=size1-pos)
         {
             //读内存
             memcpy(data,data_binary+pos,size);
@@ -762,13 +835,14 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
     }
     bool stt::file::File::write(const char *data,const size_t &pos,const size_t &size)
     {
-        lockMemory();
+        if(!lockMemory())
+            return false;
         return unlockMemory(!writeC(data,pos,size));
     }
     bool stt::file::File::writeC(const char *data,const size_t &pos,const size_t &size)
     {
         //判断是否越界(有没有超出限制)
-        if(((pos+1)<=malloced)&&((pos+size)<=malloced))
+        if((data!=nullptr||size==0)&&pos<=malloced&&size<=malloced-pos)
         {
             //写内存
             memcpy(data_binary+pos,data,size);
@@ -781,14 +855,16 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
     }
     void stt::file::File::format()
     {
-        lockMemory();
+        if(!lockMemory())
+            return;
         formatC();
         unlockMemory();
     }
     bool stt::file::File::formatC()
     {
         //格式化内存
-        memset(data_binary,0,size1);
+        if(data_binary!=nullptr&&size1>0)
+            memset(data_binary,0,size1);
         //改变size1的值
         size1=0;
         return true;
@@ -1072,7 +1148,6 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
             t3=t1+t2;
         else
             t3=t1-t2;
-        time_t t_tp=chrono::system_clock::to_time_t(t3);
         timePointToStr(t3,result,format2);
         return result;
     }
@@ -1149,7 +1224,12 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
         //{
         //    std::lock_guard<std::mutex> lock(queueMutex);
             if (logQueue.push(data))
-                queueCV.notify_one();
+            {
+                if(!logWakePending.exchange(true,std::memory_order_acq_rel))
+                    queueCV.notify_one();
+            }
+            else
+                droppedLogs.fetch_add(1,std::memory_order_relaxed);
         //}
         //queueCV.notify_all();
         /*
@@ -2210,6 +2290,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     }
     void stt::network::TcpFDHandler::setFD(const int &fd,SSL *ssl,const bool &flag1,const bool &flag2,const int &sec)
     {
+        (void)sec;
         this->fd=fd;
         this->flag1=flag1;
         this->flag2=flag2;
@@ -3031,7 +3112,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             +header+"\r\n";
 
         //发送
-        if(sendData(ss)!=ss.length())
+        const int sentBytes=sendData(ss);
+        if(sentBytes<0||static_cast<size_t>(sentBytes)!=ss.length())
             return false;
         //接收
         string totalRecv="";
@@ -3178,7 +3260,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             +header+"\r\n";
 
         //发送
-        if(k.sendData(ss)!=ss.length())
+        const int sentBytes=k.sendData(ss);
+        if(sentBytes<0||static_cast<size_t>(sentBytes)!=ss.length())
             return false;
         //接收
         string totalRecv="";
@@ -3345,7 +3428,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             +body;
 
         //发送
-        if(sendData(ss)!=ss.length())
+        const int sentBytes=sendData(ss);
+        if(sentBytes<0||static_cast<size_t>(sentBytes)!=ss.length())
             return false;
         //接收
         string totalRecv="";
@@ -3494,7 +3578,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             +body;
 
         //发送
-        if(k.sendData(ss)!=ss.length())
+        const int sentBytes=k.sendData(ss);
+        if(sentBytes<0||static_cast<size_t>(sentBytes)!=ss.length())
             return false;
         //接收
         string totalRecv="";
@@ -3623,11 +3708,192 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         {
             metricWorkerQueueOverflows.fetch_add(1,std::memory_order_relaxed);
             std::lock_guard<std::mutex> lock(overflowFinishMutex);
-            overflowFinishQueue.push(std::move(message));
+            overflowFinishQueue.push_back(std::move(message));
         }
-        const uint64_t one = 1;
-        if (workerEventFD >= 0)
-            (void)::write(workerEventFD, &one, sizeof(one));
+        notifyReactor();
+    }
+
+    void stt::network::TcpServer::notifyReactor() noexcept
+    {
+        if(workerWakePending.exchange(true,std::memory_order_acq_rel))
+        {
+            metricReactorWakeupsCoalesced.fetch_add(1,std::memory_order_relaxed);
+            return;
+        }
+        const int eventFD=workerEventFD.load(std::memory_order_acquire);
+        if(eventFD<0)
+        {
+            workerWakePending.store(false,std::memory_order_release);
+            return;
+        }
+        const uint64_t one=1;
+        ssize_t result=0;
+        do {result=::write(eventFD,&one,sizeof(one));}
+        while(result<0&&errno==EINTR);
+        if(result==static_cast<ssize_t>(sizeof(one)))
+            metricReactorWakeups.fetch_add(1,std::memory_order_relaxed);
+        else if(result<0&&errno!=EAGAIN&&errno!=EWOULDBLOCK)
+            workerWakePending.store(false,std::memory_order_release);
+    }
+
+    void stt::network::TcpServer::reportReactorStartup(const bool success)
+    {
+        {
+            std::lock_guard<std::mutex> lock(reactorStartupMutex);
+            reactorStartupSuccess=success;
+            reactorStartupComplete=true;
+        }
+        reactorStartupCV.notify_all();
+    }
+
+    void stt::network::TcpServer::advanceGracefulDrain()
+    {
+        if(!gracefulDrainRequested.load(std::memory_order_acquire))
+            return;
+        for(auto &entry:clientfd)
+        {
+            TcpFDInf &connection=entry.second;
+            if(connection.fd<0||connection.closing||connection.active_workers>0||
+               !connection.pendindQueue.empty())
+                continue;
+            const auto state=connection.write_state;
+            if(!state)
+            {
+                TcpServer::close(connection.fd);
+                continue;
+            }
+            bool hasPendingWrites=false;
+            {
+                std::lock_guard<std::mutex> lock(state->mutex);
+                if(state->closed)
+                    continue;
+                hasPendingWrites=state->queued_bytes>0;
+                if(hasPendingWrites)
+                    state->close_after_flush=true;
+            }
+            if(hasPendingWrites)
+                publishSendReady(state);
+            else
+                TcpServer::close(connection.fd);
+        }
+        if(metricActiveConnections.load(std::memory_order_acquire)==0)
+            gracefulShutdownCV.notify_all();
+    }
+
+    bool stt::network::TcpServer::hasPendingReactorWork()
+    {
+        if(finishQueue.possibly_nonempty()||sendReadyQueue.possibly_nonempty())
+            return true;
+        {
+            std::lock_guard<std::mutex> lock(overflowFinishMutex);
+            if(!overflowFinishQueue.empty())
+                return true;
+        }
+        std::lock_guard<std::mutex> lock(overflowSendReadyMutex);
+        return !overflowSendReadyQueue.empty();
+    }
+
+    void stt::network::TcpServer::clearReactorQueues()
+    {
+        WorkerMessage discardedMessage;
+        while(finishQueue.pop(discardedMessage)) {}
+        SendReadyMessage discardedSendReady;
+        while(sendReadyQueue.pop(discardedSendReady)) {}
+        {
+            std::lock_guard<std::mutex> lock(overflowFinishMutex);
+            overflowFinishQueue.clear();
+        }
+        {
+            std::lock_guard<std::mutex> lock(overflowSendReadyMutex);
+            overflowSendReadyQueue.clear();
+        }
+        bufferedReadQueue.clear();
+        timeoutCandidates.clear();
+        std::lock_guard<std::mutex> lock(writeRegistryMutex);
+        writeRegistry.clear();
+    }
+
+    size_t stt::network::TcpServer::drainWorkerResults(const size_t budget)
+    {
+        size_t processed=0;
+        WorkerMessage message;
+        const size_t ringBudget=budget-(budget/4);
+        while(processed<ringBudget&&finishQueue.pop(message))
+        {
+            handler_workerevent(std::move(message));
+            ++processed;
+        }
+        std::deque<WorkerMessage> overflow;
+        {
+            std::lock_guard<std::mutex> lock(overflowFinishMutex);
+            while(processed+overflow.size()<budget&&!overflowFinishQueue.empty())
+            {
+                overflow.push_back(std::move(overflowFinishQueue.front()));
+                overflowFinishQueue.pop_front();
+            }
+        }
+        while(!overflow.empty())
+        {
+            handler_workerevent(std::move(overflow.front()));
+            overflow.pop_front();
+            ++processed;
+        }
+        while(processed<budget&&finishQueue.pop(message))
+        {
+            handler_workerevent(std::move(message));
+            ++processed;
+        }
+        return processed;
+    }
+
+    size_t stt::network::TcpServer::drainSendReady(const int &epollFD,const size_t budget)
+    {
+        size_t processed=0;
+        SendReadyMessage message;
+        const size_t ringBudget=budget-(budget/4);
+        while(processed<ringBudget&&sendReadyQueue.pop(message))
+        {
+            handleSendReady(epollFD,std::move(message));
+            ++processed;
+        }
+        std::deque<SendReadyMessage> overflow;
+        {
+            std::lock_guard<std::mutex> lock(overflowSendReadyMutex);
+            while(processed+overflow.size()<budget&&!overflowSendReadyQueue.empty())
+            {
+                overflow.push_back(std::move(overflowSendReadyQueue.front()));
+                overflowSendReadyQueue.pop_front();
+            }
+        }
+        while(!overflow.empty())
+        {
+            handleSendReady(epollFD,std::move(overflow.front()));
+            overflow.pop_front();
+            ++processed;
+        }
+        while(processed<budget&&sendReadyQueue.pop(message))
+        {
+            handleSendReady(epollFD,std::move(message));
+            ++processed;
+        }
+        return processed;
+    }
+
+    void stt::network::TcpServer::drainReactorWork(const int &epollFD)
+    {
+        const int eventFD=workerEventFD.load(std::memory_order_acquire);
+        if(eventFD>=0)
+        {
+            uint64_t value=0;
+            while(::read(eventFD,&value,sizeof(value))==static_cast<ssize_t>(sizeof(value))) {}
+        }
+        drainWorkerResults(workerCompletionBudgetPerWake);
+        drainSendReady(epollFD,sendReadyBudgetPerWake);
+
+        // 先开放下一次门铃，再检查是否有生产者在本轮 drain 尾部提交，避免丢唤醒。
+        workerWakePending.store(false,std::memory_order_release);
+        if(hasPendingReactorWork())
+            notifyReactor();
     }
 
     void stt::network::TcpServer::scheduleBufferedRead(const int &fd,const uint64_t connection)
@@ -3651,11 +3917,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         {
             metricSendReadyQueueOverflows.fetch_add(1,std::memory_order_relaxed);
             std::lock_guard<std::mutex> lock(overflowSendReadyMutex);
-            overflowSendReadyQueue.push(std::move(message));
+            overflowSendReadyQueue.push_back(std::move(message));
         }
-        const uint64_t one=1;
-        if(workerEventFD>=0)
-            (void)::write(workerEventFD,&one,sizeof(one));
+        notifyReactor();
     }
 
     int stt::network::TcpServer::enqueueWrite(const std::shared_ptr<ConnectionWriteState> &state,std::string data)
@@ -3666,6 +3930,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             return -98;
         const int acceptedBytes=static_cast<int>(data.size());
         bool accepted=true;
+        bool shouldNotify=false;
         {
             std::lock_guard<std::mutex> lock(state->mutex);
             if(state->closed||state->close_requested)
@@ -3676,16 +3941,22 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 state->close_requested=true;
                 metricWriteOverflows.fetch_add(1,std::memory_order_relaxed);
                 accepted=false;
+                shouldNotify=true;
             }
             else if(!data.empty())
             {
                 state->queued_bytes+=data.size();
                 state->queue.push_back(std::move(data));
                 metricQueuedWriteBytes.fetch_add(static_cast<uint64_t>(acceptedBytes),std::memory_order_relaxed);
-                metricPendingWriteBytes.fetch_add(static_cast<uint64_t>(acceptedBytes),std::memory_order_relaxed);
+                const uint64_t pending=metricPendingWriteBytes.fetch_add(
+                    static_cast<uint64_t>(acceptedBytes),std::memory_order_relaxed)+
+                    static_cast<uint64_t>(acceptedBytes);
+                recordAtomicMaximum(metricPeakPendingWriteBytes,pending);
+                shouldNotify=true;
             }
         }
-        publishSendReady(state);
+        if(shouldNotify)
+            publishSendReady(state);
         return accepted?acceptedBytes:-101;
     }
 
@@ -3806,13 +4077,37 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 return state->close_after_flush?WriteFlushResult::Error:WriteFlushResult::Drained;
             }
 
-            std::string &front=state->queue.front();
-            const size_t remaining=front.size()-state->front_offset;
-            const size_t allowance=std::min(remaining,writeBudgetPerEvent-sentThisTurn);
-            int result=0;
+            ssize_t result=0;
             if(connection.ssl==nullptr)
             {
-                result=static_cast<int>(::send(connection.fd,front.data()+state->front_offset,allowance,MSG_NOSIGNAL));
+                // 普通 TCP 使用 scatter/gather，一次系统调用覆盖多个排队数据块。
+                constexpr size_t maxBatchBuffers=64;
+                std::array<iovec,maxBatchBuffers> vectors{};
+                size_t vectorCount=0;
+                size_t plannedBytes=0;
+                bool first=true;
+                for(std::string &entry:state->queue)
+                {
+                    const size_t offset=first?state->front_offset:0;
+                    first=false;
+                    if(offset>=entry.size())
+                        continue;
+                    const size_t allowance=std::min(entry.size()-offset,
+                        writeBudgetPerEvent-sentThisTurn-plannedBytes);
+                    vectors[vectorCount].iov_base=const_cast<char*>(entry.data()+offset);
+                    vectors[vectorCount].iov_len=allowance;
+                    ++vectorCount;
+                    plannedBytes+=allowance;
+                    if(vectorCount==maxBatchBuffers||sentThisTurn+plannedBytes>=writeBudgetPerEvent)
+                        break;
+                }
+                if(vectorCount==0)
+                    return WriteFlushResult::Error;
+                msghdr message{};
+                message.msg_iov=vectors.data();
+                message.msg_iovlen=vectorCount;
+                metricWriteSyscalls.fetch_add(1,std::memory_order_relaxed);
+                result=::sendmsg(connection.fd,&message,MSG_NOSIGNAL);
                 if(result<0)
                 {
                     if(errno==EINTR)
@@ -3821,13 +4116,23 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         return WriteFlushResult::WaitWrite;
                     return WriteFlushResult::Error;
                 }
+                if(result>0&&vectorCount>1)
+                {
+                    metricBatchedWriteSyscalls.fetch_add(1,std::memory_order_relaxed);
+                    metricBatchedWriteBuffers.fetch_add(vectorCount,std::memory_order_relaxed);
+                }
             }
             else
             {
+                std::string &front=state->queue.front();
+                const size_t remaining=front.size()-state->front_offset;
+                const size_t allowance=std::min({remaining,writeBudgetPerEvent-sentThisTurn,
+                    static_cast<size_t>(std::numeric_limits<int>::max())});
+                metricWriteSyscalls.fetch_add(1,std::memory_order_relaxed);
                 result=SSL_write(connection.ssl,front.data()+state->front_offset,static_cast<int>(allowance));
                 if(result<=0)
                 {
-                    const int sslError=SSL_get_error(connection.ssl,result);
+                    const int sslError=SSL_get_error(connection.ssl,static_cast<int>(result));
                     if(sslError==SSL_ERROR_WANT_WRITE)
                         return WriteFlushResult::WaitWrite;
                     if(sslError==SSL_ERROR_WANT_READ)
@@ -3839,16 +4144,23 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 return WriteFlushResult::Error;
 
             const size_t written=static_cast<size_t>(result);
-            state->front_offset+=written;
-            state->queued_bytes-=written;
+            size_t remainingWritten=written;
+            while(remainingWritten>0&&!state->queue.empty())
+            {
+                const size_t available=state->queue.front().size()-state->front_offset;
+                const size_t consumed=std::min(available,remainingWritten);
+                state->front_offset+=consumed;
+                state->queued_bytes-=consumed;
+                remainingWritten-=consumed;
+                if(state->front_offset==state->queue.front().size())
+                {
+                    state->queue.pop_front();
+                    state->front_offset=0;
+                }
+            }
             metricSentBytes.fetch_add(written,std::memory_order_relaxed);
             metricPendingWriteBytes.fetch_sub(written,std::memory_order_relaxed);
             sentThisTurn+=written;
-            if(state->front_offset==front.size())
-            {
-                state->queue.pop_front();
-                state->front_offset=0;
-            }
         }
         return WriteFlushResult::Reschedule;
     }
@@ -3894,14 +4206,21 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         ++connectionIt->second.active_workers;
         auto request=std::make_shared<TcpInformation>(inf);
         TcpFDHandler handler=k;
-        if(workpool==nullptr||!workpool->submit([this,handler,request,fun]() mutable ->void
+        const bool submitted=workpool!=nullptr&&workpool->submit(
+            [this,handler,request,fun]() mutable ->void
+            {
+                int ret=-2;
+                try { ret=fun(handler,*request); }
+                catch (...) { ret=-2; }
+                publishWorkerResult({request->fd,request->connection_obj_fd,ret,request});
+            });
+        if(submitted)
+            recordAtomicMaximum(metricPeakPendingWorkerTasks,workpool->peakPendingTasks());
+        else
         {
-            int ret=-2;
-            try { ret=fun(handler,*request); }
-            catch (...) { ret=-2; }
-            publishWorkerResult({request->fd,request->connection_obj_fd,ret,request});
-        }))
+            metricWorkerTaskRejections.fetch_add(1,std::memory_order_relaxed);
             publishWorkerResult({request->fd,request->connection_obj_fd,-2,request});
+        }
     }
     void stt::network::HttpServer::putTask(const std::function<int(HttpServerFDHandler &k,HttpRequestInformation &inf)> &fun,HttpServerFDHandler &k,HttpRequestInformation &inf)
     {
@@ -3912,14 +4231,21 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         auto request=std::make_shared<HttpRequestInformation>(inf);
         ++connectionIt->second.active_workers;
         HttpServerFDHandler handler=k;
-        if(workpool==nullptr||!workpool->submit([this,handler,request,fun]() mutable ->void
+        const bool submitted=workpool!=nullptr&&workpool->submit(
+            [this,handler,request,fun]() mutable ->void
+            {
+                int ret=-2;
+                try { ret=fun(handler,*request); }
+                catch (...) { ret=-2; }
+                publishWorkerResult({request->fd,request->connection_obj_fd,ret,request});
+            });
+        if(submitted)
+            recordAtomicMaximum(metricPeakPendingWorkerTasks,workpool->peakPendingTasks());
+        else
         {
-            int ret=-2;
-            try { ret=fun(handler,*request); }
-            catch (...) { ret=-2; }
-            publishWorkerResult({request->fd,request->connection_obj_fd,ret,request});
-        }))
+            metricWorkerTaskRejections.fetch_add(1,std::memory_order_relaxed);
             publishWorkerResult({request->fd,request->connection_obj_fd,-2,request});
+        }
     }
     void stt::network::WebSocketServer::putTask(const std::function<int(WebSocketServerFDHandler &k,WebSocketFDInformation &inf)> &fun,WebSocketServerFDHandler &k,WebSocketFDInformation &inf)
     {
@@ -3930,95 +4256,111 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         auto request=std::make_shared<WebSocketFDInformation>(inf);
         ++connectionIt->second.active_workers;
         WebSocketServerFDHandler handler=k;
-        if(workpool==nullptr||!workpool->submit([this,handler,request,fun]() mutable ->void
+        const bool submitted=workpool!=nullptr&&workpool->submit(
+            [this,handler,request,fun]() mutable ->void
+            {
+                int ret=-2;
+                try { ret=fun(handler,*request); }
+                catch (...) { ret=-2; }
+                publishWorkerResult({request->fd,request->connection_obj_fd,ret,request});
+            });
+        if(submitted)
+            recordAtomicMaximum(metricPeakPendingWorkerTasks,workpool->peakPendingTasks());
+        else
         {
-            int ret=-2;
-            try { ret=fun(handler,*request); }
-            catch (...) { ret=-2; }
-            publishWorkerResult({request->fd,request->connection_obj_fd,ret,request});
-        }))
+            metricWorkerTaskRejections.fetch_add(1,std::memory_order_relaxed);
             publishWorkerResult({request->fd,request->connection_obj_fd,-2,request});
+        }
     }
-    bool stt::network::TcpServer::setTLS(const char *cacert,const char *key,const char *passwd,const char *ca)
+    bool stt::network::TcpServer::setTLS(const char *cert,const char *key,const char *passwd,const char *ca)
     {
-        if(cacert==nullptr||cacert[0]=='\0'||key==nullptr||key[0]=='\0'||ca==nullptr||ca[0]=='\0')
+        return setTLS(cert,key,passwd,ca,TLSClientAuthMode::Required);
+    }
+
+    bool stt::network::TcpServer::setTLS(const char *cert,const char *key,const char *passwd)
+    {
+        return setTLS(cert,key,passwd,"",TLSClientAuthMode::None);
+    }
+
+    bool stt::network::TcpServer::setTLS(const char *cert,const char *key,const char *passwd,
+                                         const char *ca,const TLSClientAuthMode clientAuth)
+    {
+        if(cert==nullptr||cert[0]=='\0'||key==nullptr||key[0]=='\0')
             return false;
-        if(TLS)
-            redrawTLS();
-        // 初始化
+        const bool verifiesClient=clientAuth!=TLSClientAuthMode::None;
+        if(verifiesClient&&(ca==nullptr||ca[0]=='\0'))
+            return false;
+
         SSLeay_add_ssl_algorithms();
         OpenSSL_add_all_algorithms();
         SSL_load_error_strings();
-        if((ctx = SSL_CTX_new(TLS_server_method())) == NULL)
-        {
-            cerr<<"new ctx wrong"<<endl;
+        SSL_CTX *newContext=SSL_CTX_new(TLS_server_method());
+        if(newContext==nullptr)
             return false;
-        }
 
-        // 要求校验对方证书，这里建议使用SSL_VERIFY_FAIL_IF_NO_PEER_CERT，详见https://blog.csdn.net/u013919153/article/details/78616737
-        //对于服务器端来说如果使用的是SSL_VERIFY_PEER且服务器端没有考虑对方没交证书的情况，会出现只能访问一次，第二次访问就失败的情况。
-        SSL_CTX_set_min_proto_version(ctx, TLS1_2_VERSION);
-        SSL_CTX_set_options(ctx, SSL_OP_NO_COMPRESSION);
-        SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER | SSL_VERIFY_FAIL_IF_NO_PEER_CERT, NULL);
+        const auto fail=[&newContext]() {
+            SSL_CTX_free(newContext);
+            newContext=nullptr;
+            return false;
+        };
+        if(SSL_CTX_set_min_proto_version(newContext,TLS1_2_VERSION)!=1)
+            return fail();
+        SSL_CTX_set_options(newContext,SSL_OP_NO_COMPRESSION);
+#ifdef SSL_MODE_RELEASE_BUFFERS
+        SSL_CTX_set_mode(newContext,SSL_MODE_RELEASE_BUFFERS);
+#endif
+        SSL_CTX_set_session_cache_mode(newContext,SSL_SESS_CACHE_SERVER);
 
-        // 加载CA的证书
-        if(!SSL_CTX_load_verify_locations(ctx, ca, NULL))
-        {
-            cerr<<"load ca wrong"<<endl;
-            SSL_CTX_free(ctx);
-            ctx=nullptr;
-            return false;
-        }
-        // 加载自己的证书
-        if(SSL_CTX_use_certificate_chain_file(ctx, cacert) <= 0)
-        {
-            cerr<<"load cert wrong"<<endl;
-            SSL_CTX_free(ctx);
-            ctx=nullptr;
-            return false;
-        }
-        //assert(SSL_CTX_use_certificate_file(ctx, "cacert.pem", SSL_FILETYPE_PEM) > 0);
-        // 加载自己的私钥
+        int verifyMode=SSL_VERIFY_NONE;
+        if(clientAuth==TLSClientAuthMode::Optional)
+            verifyMode=SSL_VERIFY_PEER;
+        else if(clientAuth==TLSClientAuthMode::Required)
+            verifyMode=SSL_VERIFY_PEER|SSL_VERIFY_FAIL_IF_NO_PEER_CERT;
+        SSL_CTX_set_verify(newContext,verifyMode,nullptr);
+        if(ca!=nullptr&&ca[0]!='\0'&&SSL_CTX_load_verify_locations(newContext,ca,nullptr)!=1)
+            return fail();
+        if(SSL_CTX_use_certificate_chain_file(newContext,cert)<=0)
+            return fail();
         if(passwd!=nullptr&&passwd[0]!='\0')
-            if(passwd!=nullptr&&passwd[0]!='\0')
-                SSL_CTX_set_default_passwd_cb_userdata(ctx, (void*)passwd);
-        if(SSL_CTX_use_PrivateKey_file(ctx, key, SSL_FILETYPE_PEM) <= 0)
-        {
-            cerr<<"load key wrong"<<endl;
-            SSL_CTX_free(ctx);
-            ctx=nullptr;
-            return false;
-        }
+            SSL_CTX_set_default_passwd_cb_userdata(newContext,const_cast<char*>(passwd));
+        const int keyResult=SSL_CTX_use_PrivateKey_file(newContext,key,SSL_FILETYPE_PEM);
+        SSL_CTX_set_default_passwd_cb_userdata(newContext,nullptr);
+        if(keyResult<=0||SSL_CTX_check_private_key(newContext)!=1)
+            return fail();
 
-        // 判定私钥是否正确
-        if(!SSL_CTX_check_private_key(ctx))
+        SSL_CTX *oldContext=nullptr;
         {
-            cerr<<"key wrong"<<endl;
-            SSL_CTX_free(ctx);
-            ctx=nullptr;
-            return false;
+            std::lock_guard<std::mutex> lock(tlsContextMutex);
+            oldContext=ctx;
+            ctx=newContext;
+            TLS=true;
         }
-
-        TLS=true;
+        if(oldContext!=nullptr)
+            SSL_CTX_free(oldContext);
         return true;
     }
+
     void stt::network::TcpServer::redrawTLS()
     {
-        if(TLS)
+        SSL_CTX *oldContext=nullptr;
         {
-            SSL_CTX_free(ctx);
+            std::lock_guard<std::mutex> lock(tlsContextMutex);
+            oldContext=ctx;
             ctx=nullptr;
             TLS=false;
         }
+        if(oldContext!=nullptr)
+            SSL_CTX_free(oldContext);
     }
     bool stt::network::TcpServer::startListen(const int &port,const int &threads)
     {
-        if(threads<=0)
+        std::lock_guard<std::recursive_mutex> lifecycleLock(lifecycleMutex);
+        if(port<0||port>65535||threads<=0)
             return false;
         if(isListen())
         {
             //是否是改变端口的监听？
-            if(this->port==port)
+            if(port==0||this->port==port)
                 return true;
             else
             {
@@ -4032,13 +4374,16 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         //cv=new condition_variable[threads];
         //lq1=new mutex[threads];
         clientfd.clear();
+        timeoutCandidates.clear();
         {
             std::lock_guard<std::mutex> lock(writeRegistryMutex);
             writeRegistry.clear();
         }
         clientfd.reserve(4096);
         //socket准备
-        fd=socket(AF_INET,SOCK_STREAM,0);
+        // The listener itself must be non-blocking when used with edge-triggered
+        // epoll. accept4() flags only affect the returned client socket.
+        fd=socket(AF_INET,SOCK_STREAM|SOCK_NONBLOCK|SOCK_CLOEXEC,0);
         if(fd<0)
         {
             perror("socket");
@@ -4055,7 +4400,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             return false;
         }
 #ifdef SO_REUSEPORT
-        if(setsockopt(fd,SOL_SOCKET,SO_REUSEPORT,&opt,sizeof(opt))<0)
+        if(socketOptions.reuse_port&&setsockopt(fd,SOL_SOCKET,SO_REUSEPORT,&opt,sizeof(opt))<0)
         {
             cerr<<"set SO_REUSEPORT failed"<<endl;
             perror("setsockopt");
@@ -4064,12 +4409,21 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             return false;
         }
 #endif
+#ifdef TCP_DEFER_ACCEPT
+        if(socketOptions.defer_accept_seconds>0)
+            (void)setsockopt(fd,IPPROTO_TCP,TCP_DEFER_ACCEPT,&socketOptions.defer_accept_seconds,
+                             sizeof(socketOptions.defer_accept_seconds));
+#endif
+#ifdef TCP_FASTOPEN
+        if(socketOptions.fast_open_queue>0)
+            (void)setsockopt(fd,IPPROTO_TCP,TCP_FASTOPEN,&socketOptions.fast_open_queue,
+                             sizeof(socketOptions.fast_open_queue));
+#endif
         //bind
         struct sockaddr_in k;
         memset(&k,0,sizeof(k));
         k.sin_family=AF_INET;
         k.sin_port=htons(port);
-        this->port=port;
         k.sin_addr.s_addr=htonl(INADDR_ANY);
         if(::bind(fd,(struct sockaddr*)&k,sizeof(k))!=0)
         {
@@ -4078,8 +4432,15 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             fd=-1;
             return false;
         }
+        sockaddr_in boundAddress{};
+        socklen_t boundAddressLength=sizeof(boundAddress);
+        if(getsockname(fd,reinterpret_cast<sockaddr*>(&boundAddress),&boundAddressLength)==0)
+            this->port=ntohs(boundAddress.sin_port);
+        else
+            this->port=port;
         //listen
-        uint64_t backlog = maxFD / 50;  // 经验值
+        uint64_t backlog=socketOptions.listen_backlog>0?
+            static_cast<uint64_t>(socketOptions.listen_backlog):maxFD/50;
         //backlog = std::clamp(backlog, 128, 4096);
         if(backlog<128)
             backlog=128;
@@ -4090,18 +4451,74 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             perror("listen");
             ::close(fd);
             fd=-1;
+            this->port=-1;
             return false;
         }
         //this->logfile=logfile;
         this->unblock=true;
         
-        workpool=new WorkerPool(threads);
+        try
+        {
+            workpool=new WorkerPool(static_cast<size_t>(threads),maxPendingWorkerTasks);
+        }
+        catch (...)
+        {
+            ::close(fd);
+            fd=-1;
+            this->port=-1;
+            return false;
+        }
         //for(int sj=0;sj<threads;sj++)
         //    thread(&TcpServer::consumer,this,sj).detach();
         flag1.store(true, std::memory_order_release);
         flag2.store(false, std::memory_order_release);
         flag.store(true, std::memory_order_release);
-        reactorThread=thread(&TcpServer::epolll,this,4096);
+        gracefulDrainRequested.store(false,std::memory_order_release);
+        workerWakePending.store(false,std::memory_order_release);
+        {
+            std::lock_guard<std::mutex> lock(reactorStartupMutex);
+            reactorStartupComplete=false;
+            reactorStartupSuccess=false;
+        }
+        try
+        {
+            reactorThread=thread(&TcpServer::epolll,this,4096,fd);
+        }
+        catch (...)
+        {
+            flag1.store(false,std::memory_order_release);
+            flag.store(false,std::memory_order_release);
+            workpool->stop();
+            delete workpool;
+            workpool=nullptr;
+            ::close(fd);
+            fd=-1;
+            this->port=-1;
+            return false;
+        }
+        bool startupSuccess=false;
+        {
+            std::unique_lock<std::mutex> lock(reactorStartupMutex);
+            reactorStartupCV.wait(lock,[this] {return reactorStartupComplete;});
+            startupSuccess=reactorStartupSuccess;
+        }
+        if(!startupSuccess)
+        {
+            flag1.store(false,std::memory_order_release);
+            if(reactorThread.joinable())
+                reactorThread.join();
+            workpool->stop();
+            delete workpool;
+            workpool=nullptr;
+            const int eventFD=workerEventFD.exchange(-1,std::memory_order_acq_rel);
+            if(eventFD>=0) ::close(eventFD);
+            if(fd>=0) ::close(fd);
+            fd=-1;
+            this->port=-1;
+            flag.store(false,std::memory_order_release);
+            flag2.store(true,std::memory_order_release);
+            return false;
+        }
         //flag_detect=true;
         //thread(&security::ConnectionLimiter::connectionDetect,&connectionLimiter).detach();
         //this->consumerNum=threads;
@@ -4111,19 +4528,55 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     }
     bool stt::network::TcpServer::stopListen()
     {
-        if(!isListen()&&!reactorThread.joinable()&&workpool==nullptr&&fd<0)
+        std::lock_guard<std::recursive_mutex> lifecycleLock(lifecycleMutex);
+        if(!isListen()&&!reactorThread.joinable()&&workpool==nullptr&&fd<0&&
+           workerEventFD.load(std::memory_order_acquire)<0)
         {
             return true;
         }
-        flag1.store(false, std::memory_order_release);
-        if(fd>=0)
+        if(reactorThread.joinable()&&reactorThread.get_id()==std::this_thread::get_id())
+        {
+            // Reactor 不能 join 自己；只提交异步停止请求，由拥有 Server 的控制线程随后完成 close()。
+            flag.store(false,std::memory_order_release);
+            gracefulDrainRequested.store(false,std::memory_order_release);
+            flag1.store(false,std::memory_order_release);
+            port=-1;
+            notifyReactor();
+            return false;
+        }
+        flag.store(false,std::memory_order_release);
+        bool gracefulTimedOut=false;
+        const bool canDrain=reactorThread.joinable()&&
+            !flag2.load(std::memory_order_acquire)&&gracefulShutdownTimeoutMs>0;
+        gracefulDrainRequested.store(canDrain,std::memory_order_release);
+        const bool reactorOwnsListener=reactorThread.joinable()&&
+            !flag2.load(std::memory_order_acquire);
+        if(!reactorOwnsListener&&fd>=0)
         {
             shutdown(fd,SHUT_RDWR);
             ::close(fd);
             fd=-1;
         }
+        port=-1;
+        if(canDrain)
+        {
+            notifyReactor();
+            std::unique_lock<std::mutex> lock(gracefulShutdownMutex);
+            const bool drained=gracefulShutdownCV.wait_for(
+                lock,std::chrono::milliseconds(gracefulShutdownTimeoutMs),[this] {
+                    return metricActiveConnections.load(std::memory_order_acquire)==0;
+                });
+            if(!drained)
+            {
+                gracefulTimedOut=true;
+                metricGracefulShutdownTimeouts.fetch_add(1,std::memory_order_relaxed);
+            }
+        }
+        flag1.store(false,std::memory_order_release);
+        notifyReactor();
         if(reactorThread.joinable())
             reactorThread.join();
+        gracefulDrainRequested.store(false,std::memory_order_release);
         // Interrupt blocking socket/TLS operations before joining workers.
         // Resource ownership stays intact until WorkerPool has fully stopped.
         for(auto &entry:clientfd)
@@ -4154,10 +4607,28 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         //}
         if(workpool!=nullptr)
         {
-            workpool->stop();
+            workpool->stop(!gracefulTimedOut);
             delete workpool;
             workpool=nullptr;
         }
+        // Worker 已全部退出；即使发生排空超时，也可以安全完成底层资源释放。
+        for(auto &entry:clientfd)
+        {
+            TcpFDInf &connection=entry.second;
+            if(connection.fd>=0)
+            {
+                connection.active_workers=0;
+                connection.closing=false;
+                TcpServer::close(connection.fd);
+            }
+        }
+        const int eventFD=workerEventFD.exchange(-1,std::memory_order_acq_rel);
+        if(eventFD>=0)
+            ::close(eventFD);
+        workerWakePending.store(false,std::memory_order_release);
+        // stopListen() 本身也允许同一个 Server 对象再次 startListen()。丢弃上一轮
+        // Reactor/Worker 的代次消息，避免重启后处理已经失效的 fd 通知。
+        clearReactorQueues();
         flag.store(false, std::memory_order_release);
         //关闭监听连接的消息活动的线程
         //do
@@ -4168,26 +4639,16 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     }
     bool stt::network::TcpServer::close()
     {
+        std::lock_guard<std::recursive_mutex> lifecycleLock(lifecycleMutex);
  
-        if(isListen()||reactorThread.joinable()||workpool!=nullptr||fd>=0)
+        if(isListen()||reactorThread.joinable()||workpool!=nullptr||fd>=0||
+           workerEventFD.load(std::memory_order_acquire)>=0)
         {
             if(!stopListen())
                 return false;
         }
 
-        WorkerMessage discardedMessage;
-        while(finishQueue.pop(discardedMessage)) {}
-        SendReadyMessage discardedSendReady;
-        while(sendReadyQueue.pop(discardedSendReady)) {}
-        {
-            std::lock_guard<std::mutex> lock(overflowFinishMutex);
-            overflowFinishQueue=std::queue<WorkerMessage>();
-        }
-        {
-            std::lock_guard<std::mutex> lock(overflowSendReadyMutex);
-            overflowSendReadyQueue=std::queue<SendReadyMessage>();
-        }
-        bufferedReadQueue.clear();
+        clearReactorQueues();
   
         //unique_lock<mutex> lock2(lc1);
         //unique_lock<mutex> lock1(ltl1);
@@ -4224,6 +4685,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             ::close(ii);
             metricActiveConnections.fetch_sub(1,std::memory_order_relaxed);
             metricClosedConnections.fetch_add(1,std::memory_order_relaxed);
+            gracefulShutdownCV.notify_all();
             //clientfd[ii].fd=-1;
             //clientfd[ii].pendindQueue.clear();
             delete[] connection.buffer;
@@ -4249,13 +4711,27 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     }
     bool stt::network::TcpServer::close(const int &fd)
     {
+        if(reactorThread.joinable()&&reactorThread.get_id()!=std::this_thread::get_id())
+        {
+            std::shared_ptr<ConnectionWriteState> state;
+            {
+                std::lock_guard<std::mutex> lock(writeRegistryMutex);
+                const auto stateIt=writeRegistry.find(fd);
+                if(stateIt!=writeRegistry.end())
+                    state=stateIt->second.lock();
+            }
+            if(!state)
+                return false;
+            requestQueuedClose(state);
+            return true;
+        }
        
         //unique_lock<mutex> lock2(lc1);
         //unique_lock<mutex> lock1(ltl1);
         //auto ii=clientfd.find(fd);
         
         auto connectionIt=clientfd.find(fd);
-        if(fd<0||static_cast<unsigned long long>(fd)>=maxFD||connectionIt==clientfd.end()||connectionIt->second.fd==-1)
+        if(fd<0||connectionIt==clientfd.end()||connectionIt->second.fd==-1)
         {
             
             return false;
@@ -4304,6 +4780,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             ::close(closedFD);
             metricActiveConnections.fetch_sub(1,std::memory_order_relaxed);
             metricClosedConnections.fetch_add(1,std::memory_order_relaxed);
+            gracefulShutdownCV.notify_all();
 
             onConnectionClosed(closedFD);
             closeFun(closedFD);
@@ -4320,76 +4797,138 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         
         return true;
     }
+
+    void stt::network::TcpServer::applyAcceptedSocketOptions(const int &acceptedFD) const noexcept
+    {
+        const int noDelay=socketOptions.tcp_no_delay?1:0;
+        (void)setsockopt(acceptedFD,IPPROTO_TCP,TCP_NODELAY,&noDelay,sizeof(noDelay));
+        const int keepAlive=socketOptions.keep_alive?1:0;
+        (void)setsockopt(acceptedFD,SOL_SOCKET,SO_KEEPALIVE,&keepAlive,sizeof(keepAlive));
+        if(socketOptions.receive_buffer_bytes>0)
+            (void)setsockopt(acceptedFD,SOL_SOCKET,SO_RCVBUF,&socketOptions.receive_buffer_bytes,
+                             sizeof(socketOptions.receive_buffer_bytes));
+        if(socketOptions.send_buffer_bytes>0)
+            (void)setsockopt(acceptedFD,SOL_SOCKET,SO_SNDBUF,&socketOptions.send_buffer_bytes,
+                             sizeof(socketOptions.send_buffer_bytes));
+#ifdef TCP_KEEPIDLE
+        if(socketOptions.keep_alive&&socketOptions.keep_alive_idle_seconds>0)
+            (void)setsockopt(acceptedFD,IPPROTO_TCP,TCP_KEEPIDLE,&socketOptions.keep_alive_idle_seconds,
+                             sizeof(socketOptions.keep_alive_idle_seconds));
+#endif
+#ifdef TCP_KEEPINTVL
+        if(socketOptions.keep_alive&&socketOptions.keep_alive_interval_seconds>0)
+            (void)setsockopt(acceptedFD,IPPROTO_TCP,TCP_KEEPINTVL,&socketOptions.keep_alive_interval_seconds,
+                             sizeof(socketOptions.keep_alive_interval_seconds));
+#endif
+#ifdef TCP_KEEPCNT
+        if(socketOptions.keep_alive&&socketOptions.keep_alive_probe_count>0)
+            (void)setsockopt(acceptedFD,IPPROTO_TCP,TCP_KEEPCNT,&socketOptions.keep_alive_probe_count,
+                             sizeof(socketOptions.keep_alive_probe_count));
+#endif
+    }
     chrono::high_resolution_clock::time_point start;
     chrono::high_resolution_clock::time_point endd;
     chrono::microseconds duration;
     unsigned long op=0;
     int times=0;
     
-    void stt::network::TcpServer::epolll(const int &evsNum)
+    void stt::network::TcpServer::epolll(const int &evsNum,const int &listenFD)
     {
     
         int epollFD=epoll_create1(EPOLL_CLOEXEC);//创建epoll句柄
         if(epollFD<0)
         {
+            reportReactorStartup(false);
             flag2.store(true, std::memory_order_release);
             flag.store(false, std::memory_order_release);
             return;
         }
         epoll_event ev;//epoll事件的数据结构
-        ev.data.fd=fd;
+        ev.data.fd=listenFD;
         ev.events=EPOLLIN|EPOLLET;//边缘触发
-        if(epoll_ctl(epollFD,EPOLL_CTL_ADD,fd,&ev)<0)
+        if(epoll_ctl(epollFD,EPOLL_CTL_ADD,listenFD,&ev)<0)
         {
             ::close(epollFD);
+            reportReactorStartup(false);
             flag2.store(true, std::memory_order_release);
             flag.store(false, std::memory_order_release);
             return;
         }
 
         //加入worker线程fd
-        workerEventFD = eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
+        const int eventFD=eventfd(0,EFD_NONBLOCK|EFD_CLOEXEC);
+        workerEventFD.store(eventFD,std::memory_order_release);
         ev.events = EPOLLIN;
-        ev.data.fd = workerEventFD;
+        ev.data.fd = eventFD;
 
-        if(workerEventFD<0||epoll_ctl(epollFD, EPOLL_CTL_ADD, workerEventFD, &ev)<0)
+        if(eventFD<0||epoll_ctl(epollFD,EPOLL_CTL_ADD,eventFD,&ev)<0)
         {
-            if(workerEventFD>=0) ::close(workerEventFD);
-            workerEventFD=-1;
+            workerEventFD.store(-1,std::memory_order_release);
+            if(eventFD>=0) ::close(eventFD);
             ::close(epollFD);
+            reportReactorStartup(false);
             flag2.store(true, std::memory_order_release);
             flag.store(false, std::memory_order_release);
             return;
         }
+        if(hasPendingReactorWork())
+            notifyReactor();
 
         //加入时间事件fd
         int hbTimerFD=-1;
+        int securityTimerFD=-1;
+        const auto failTimerSetup=[&]() {
+            if(hbTimerFD>=0) ::close(hbTimerFD);
+            if(securityTimerFD>=0) ::close(securityTimerFD);
+            workerEventFD.store(-1,std::memory_order_release);
+            ::close(eventFD);
+            ::close(epollFD);
+            reportReactorStartup(false);
+            flag.store(false,std::memory_order_release);
+            flag2.store(true,std::memory_order_release);
+        };
         if(serverType==3)//加入websocket心跳时间事件
         {
             hbTimerFD = timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
             itimerspec its{};
             its.it_interval.tv_sec = 30;   // 每 30 秒触发一次
             its.it_value.tv_sec    = 30;   // 首次 30 秒后触发
-            timerfd_settime(hbTimerFD, 0, &its, nullptr);
+            if(hbTimerFD<0||timerfd_settime(hbTimerFD,0,&its,nullptr)<0)
+            {
+                failTimerSetup();
+                return;
+            }
             //丢进epoll
             epoll_event ev;
             ev.data.fd = hbTimerFD;
             ev.events  = EPOLLIN;
-            epoll_ctl(epollFD, EPOLL_CTL_ADD, hbTimerFD, &ev);
+            if(epoll_ctl(epollFD,EPOLL_CTL_ADD,hbTimerFD,&ev)<0)
+            {
+                failTimerSetup();
+                return;
+            }
         }
-        int securityTimerFD=-1;
         if(this->security_open && this->checkFrequency>0)//加入信息安全的时间事件
         {
             securityTimerFD = timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
             itimerspec its{};
-            its.it_interval.tv_sec = this->checkFrequency;   
-            its.it_value.tv_sec    = this->checkFrequency;   
-            timerfd_settime(securityTimerFD, 0, &its, nullptr);
+            // 将一次 O(n) 全表扫描拆成每秒一小批，避免在 Reactor 中制造周期性延迟尖峰。
+            its.it_interval.tv_sec = 1;
+            its.it_value.tv_sec    = 1;
+            if(securityTimerFD<0||timerfd_settime(securityTimerFD,0,&its,nullptr)<0)
+            {
+                failTimerSetup();
+                return;
+            }
             //丢进epoll
             epoll_event ev;
             ev.data.fd = securityTimerFD;
             ev.events  = EPOLLIN;
-            epoll_ctl(epollFD, EPOLL_CTL_ADD, securityTimerFD, &ev);
+            if(epoll_ctl(epollFD,EPOLL_CTL_ADD,securityTimerFD,&ev)<0)
+            {
+                failTimerSetup();
+                return;
+            }
         }
 
 
@@ -4412,7 +4951,24 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
        //cout<<"ok"<<endl;
        
         const int maxEvents=evsNum<64?64:(evsNum>4096?4096:evsNum);
-        std::vector<epoll_event> evs(static_cast<size_t>(maxEvents));//存放epoll返回的事件
+        std::vector<epoll_event> evs;
+        try
+        {
+            evs.resize(static_cast<size_t>(maxEvents));//存放epoll返回的事件
+        }
+        catch (...)
+        {
+            if(hbTimerFD>=0) ::close(hbTimerFD);
+            if(securityTimerFD>=0) ::close(securityTimerFD);
+            workerEventFD.store(-1,std::memory_order_release);
+            ::close(eventFD);
+            ::close(epollFD);
+            reportReactorStartup(false);
+            flag.store(false,std::memory_order_release);
+            flag2.store(true,std::memory_order_release);
+            return;
+        }
+        reportReactorStartup(true);
 
         //用来accept的
         struct sockaddr_in k;
@@ -4427,27 +4983,42 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 stt::system::ServerSetting::logfile->writeLog("tcp server epoll has opened");
         }
         
+        int activeListenFD=listenFD;
+        const auto stopAccepting=[this,epollFD,&activeListenFD]() {
+            if(activeListenFD<0||flag.load(std::memory_order_acquire))
+                return;
+            (void)epoll_ctl(epollFD,EPOLL_CTL_DEL,activeListenFD,nullptr);
+            shutdown(activeListenFD,SHUT_RDWR);
+            ::close(activeListenFD);
+            if(fd==activeListenFD)
+                fd=-1;
+            activeListenFD=-1;
+        };
+
         while(flag1)
         {
+            stopAccepting();
             //监听等待，一秒钟检查一次flag条件是否满足
             int infds=epoll_wait(epollFD,evs.data(),maxEvents,bufferedReadQueue.empty()?1000:0);
             if(infds<=0)//<0失败=0超时
             {
                 if(infds<0&&errno!=EINTR&&flag1.load(std::memory_order_acquire))
                     perror("epoll_wait");
+                advanceGracefulDrain();
                 continue;
             }
             else//有事发生
             {
+                stopAccepting();
                 for(int ii=0;ii<infds;ii++)
                 {
-                    if(evs[ii].data.fd==fd)//有新的连接
+                    if(activeListenFD>=0&&evs[ii].data.fd==activeListenFD)//有新的连接
                     {
                         while(1)
                         {  
 
                             k_len = sizeof(k);
-                            int cfd=accept4(fd,(struct sockaddr*)&k,&k_len,SOCK_NONBLOCK|SOCK_CLOEXEC);
+                            int cfd=accept4(activeListenFD,(struct sockaddr*)&k,&k_len,SOCK_NONBLOCK|SOCK_CLOEXEC);
                             if(cfd<0)
                             {
                                 if(errno==EAGAIN||errno==EWOULDBLOCK)
@@ -4468,8 +5039,9 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 }
                             }
                             string ip(inet_ntoa(k.sin_addr));//获取客户端的ip
-                            if(cfd>=maxFD)
+                            if(metricActiveConnections.load(std::memory_order_relaxed)>=maxFD)
                             {
+                                metricRejectedConnections.fetch_add(1,std::memory_order_relaxed);
                                 ::close(cfd);
                                 if(stt::system::ServerSetting::logfile!=nullptr)
                                 {
@@ -4480,6 +5052,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                 }
                                 continue;
                             }
+                            applyAcceptedSocketOptions(cfd);
                             
                             
                             if(this->security_open)
@@ -4500,30 +5073,27 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             }
                             TcpFDInf &connection=clientfd[cfd];
                             connection=TcpFDInf{};
-                            if(TLS)//加密accept
                             {
-                                ssl=SSL_new(ctx);
-                                if(ssl==nullptr)
+                                // SSL_new() increments the context reference count. Keeping
+                                // this short lock around the snapshot makes certificate reloads
+                                // safe without moving SSL I/O out of the Reactor thread.
+                                std::lock_guard<std::mutex> lock(tlsContextMutex);
+                                ssl=(TLS&&ctx!=nullptr)?SSL_new(ctx):nullptr;
+                                if(TLS&&ssl==nullptr)
                                 {
-                                    cerr<<"new ssl wrong"<<endl;
+                                    if(this->security_open) connectionLimiter.clearIP(ip,cfd);
                                     ::close(cfd);
                                     continue;
                                 }
+                            }
+                            if(ssl!=nullptr)
+                            {
                                 SSL_set_accept_state(ssl);
-                                //关联这个fd和ss
                                 SSL_set_fd(ssl,cfd);
-
-                                connection.tls_state = TLSState::HANDSHAKING;
-                                
-                                //unique_lock<mutex> lock1(ltl1);
-                                //tlsfd.emplace(cfd,ssl);//emplace???erase???
-
+                                connection.tls_state=TLSState::HANDSHAKING;
                             }
                             else
-                            {
-                                ssl=nullptr;
-                                connection.tls_state = TLSState::NONE;
-                            }
+                                connection.tls_state=TLSState::NONE;
                             connection.ssl=ssl;
                             //cout<<"ok"<<endl;
                             //epoll注册
@@ -4559,9 +5129,10 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             connection.write_state->max_queued_bytes=maxPendingWriteBytes;
                             connection.write_interest=false;
                             connection.write_waiting_for_read=false;
+                            if(this->security_open&&this->checkFrequency>0)
+                                timeoutCandidates.push_back({cfd,connection.connection_obj_fd});
                             metricAcceptedConnections.fetch_add(1,std::memory_order_relaxed);
                             metricActiveConnections.fetch_add(1,std::memory_order_relaxed);
-                            if(!TLS)
                             {
                                 std::lock_guard<std::mutex> lock(writeRegistryMutex);
                                 writeRegistry[cfd]=connection.write_state;
@@ -4585,75 +5156,51 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     {
                         uint64_t exp;
                         read(hbTimerFD, &exp, sizeof(exp)); // 必须读，清事件
-                        handleHeartbeat(); 
+                        if(!gracefulDrainRequested.load(std::memory_order_acquire))
+                            handleHeartbeat();
                     }
                     else if(evs[ii].data.fd==securityTimerFD)//信息安全时间事件
                     {
-                       
-                        uint64_t exp;
-                        read(securityTimerFD, &exp, sizeof(exp)); // 必须读，清事件
-                        //遍历判断所有
-                        std::vector<int> timedOutFDs;
-                        for(auto &entry:clientfd)
+                        uint64_t expirations=1;
+                        (void)read(securityTimerFD,&expirations,sizeof(expirations));
+                        const size_t candidateCount=timeoutCandidates.size();
+                        if(candidateCount>0)
                         {
-                            const int i=entry.first;
-                            TcpFDInf &connection=entry.second;
-                            if(connection.fd!=-1)
+                            const size_t scanWindow=static_cast<size_t>(std::max(1,checkFrequency));
+                            const size_t perTick=std::max<size_t>(64,(candidateCount+scanWindow-1)/scanWindow);
+                            const size_t maxRounds=(candidateCount+perTick-1)/perTick;
+                            const size_t rounds=static_cast<size_t>(std::min<uint64_t>(expirations,maxRounds));
+                            const size_t scanBudget=std::min(candidateCount,perTick*std::max<size_t>(1,rounds));
+                            for(size_t scanned=0;scanned<scanBudget;++scanned)
                             {
-                                if(this->connectionLimiter.connectionDetect(connection.ip,i))//超时 是僵尸连接
+                                const SendReadyMessage candidate=timeoutCandidates.front();
+                                timeoutCandidates.pop_front();
+                                auto candidateIt=clientfd.find(candidate.fd);
+                                if(candidateIt==clientfd.end()||candidateIt->second.fd!=candidate.fd||
+                                   candidateIt->second.connection_obj_fd!=candidate.connection_obj_fd)
+                                    continue;
+                                TcpFDInf &connection=candidateIt->second;
+                                metricIdleTimeoutChecks.fetch_add(1,std::memory_order_relaxed);
+                                if(this->connectionLimiter.connectionDetect(connection.ip,candidate.fd))
                                 {
-                                    
+                                    metricIdleTimeoutCloses.fetch_add(1,std::memory_order_relaxed);
                                     if(stt::system::ServerSetting::logfile!=nullptr)
                                     {
                                         if(stt::system::ServerSetting::language=="Chinese")
-                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll:监测到僵尸连接：fd= "+to_string(i)+" 已关闭");
+                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll:监测到僵尸连接：fd= "+to_string(candidate.fd)+" 已关闭");
                                         else
-                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll : has detected a zoombie connection : fd= "+to_string(i)+" and it has been closed");
+                                            stt::system::ServerSetting::logfile->writeLog("tcp server epoll : idle connection timed out: fd= "+to_string(candidate.fd)+" and it has been closed");
                                     }
-                                    timedOutFDs.push_back(i);
-                                    
-                                    
-
-
+                                    close(candidate.fd);
                                 }
+                                else
+                                    timeoutCandidates.push_back(candidate);
                             }
                         }
-                        for(const int timedOutFD:timedOutFDs)
-                            close(timedOutFD);
                     }
-                    else if(evs[ii].data.fd==workerEventFD)//worker事件
+                    else if(evs[ii].data.fd==eventFD)//worker事件
                     {
-                        uint64_t cnt;
-                        read(workerEventFD, &cnt, sizeof(cnt)); // 清门铃
-                        WorkerMessage wm;
-                        // 一口气处理完队列
-                        while(finishQueue.pop(wm))
-                        {
-                            handler_workerevent(std::move(wm));
-                        }
-                        std::queue<WorkerMessage> overflow;
-                        {
-                            std::lock_guard<std::mutex> lock(overflowFinishMutex);
-                            overflow.swap(overflowFinishQueue);
-                        }
-                        while(!overflow.empty())
-                        {
-                            handler_workerevent(std::move(overflow.front()));
-                            overflow.pop();
-                        }
-                        SendReadyMessage sendReady;
-                        while(sendReadyQueue.pop(sendReady))
-                            handleSendReady(epollFD,std::move(sendReady));
-                        std::queue<SendReadyMessage> overflowSendReady;
-                        {
-                            std::lock_guard<std::mutex> lock(overflowSendReadyMutex);
-                            overflowSendReady.swap(overflowSendReadyQueue);
-                        }
-                        while(!overflowSendReady.empty())
-                        {
-                            handleSendReady(epollFD,std::move(overflowSendReady.front()));
-                            overflowSendReady.pop();
-                        }
+                        drainReactorWork(epollFD);
                     }
                     else//有数据上来了
                     {
@@ -4764,7 +5311,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                                     publishSendReady(eventState.write_state);
                             }
 
-                            if(evs[ii].events&EPOLLIN)
+                            if((evs[ii].events&EPOLLIN)&&
+                               !gracefulDrainRequested.load(std::memory_order_acquire))
                             {
                                 //普通数据
                                 if(stt::system::ServerSetting::logfile!=nullptr)
@@ -4808,7 +5356,8 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                     }
                 }
                 size_t continuationBudget=64;
-                while(continuationBudget>0&&!bufferedReadQueue.empty())
+                while(!gracefulDrainRequested.load(std::memory_order_acquire)&&
+                      continuationBudget>0&&!bufferedReadQueue.empty())
                 {
                     const SendReadyMessage continuation=bufferedReadQueue.front();
                     bufferedReadQueue.pop_front();
@@ -4818,12 +5367,23 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                         handler_netevent(continuation.fd);
                     --continuationBudget;
                 }
+                if(gracefulDrainRequested.load(std::memory_order_acquire))
+                    bufferedReadQueue.clear();
+                advanceGracefulDrain();
             }
+        }
+        if(activeListenFD>=0)
+        {
+            (void)epoll_ctl(epollFD,EPOLL_CTL_DEL,activeListenFD,nullptr);
+            shutdown(activeListenFD,SHUT_RDWR);
+            ::close(activeListenFD);
+            if(fd==activeListenFD)
+                fd=-1;
         }
         if(hbTimerFD>=0) ::close(hbTimerFD);
         if(securityTimerFD>=0) ::close(securityTimerFD);
-        if(workerEventFD>=0) ::close(workerEventFD);
-        workerEventFD=-1;
+        // eventFD 的生命周期延长到 WorkerPool 停止之后，避免 Worker 在 Reactor
+        // 退出窗口向已关闭且可能被复用的描述符写入。stopListen() 负责最终关闭。
         ::close(epollFD);
         if(stt::system::ServerSetting::logfile!=nullptr)
         {
@@ -4944,7 +5504,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             else
             {
             //继续做
-            for(;clientfd[fd].FDStatus<ii->second.size();)
+            for(;static_cast<size_t>(clientfd[fd].FDStatus)<ii->second.size();)
             {
                 int rett=ii->second[clientfd[fd].FDStatus](k,inf);
                 clientfd[fd].FDStatus++;
@@ -5516,20 +6076,39 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         result+="\r\n";
         result+=data;
         
-        if(sendData(result)!=result.length())
-        {
+        if(result.size()>static_cast<size_t>(std::numeric_limits<int>::max()))
             return false;
-        }
-        return true;
+        return sendData(result)==static_cast<int>(result.size());
     }
     
     bool stt::network::HttpServerFDHandler::sendBack(const char *data,const size_t &length,const char *header,const char *code,const char *header1,const size_t &header_length)
     {
-        (void)header_length;
         if(data==nullptr||header==nullptr||code==nullptr||header1==nullptr)
             return false;
-        string body(data,length);
-        return sendBack(body,header,code,header1);
+        if(length>static_cast<size_t>(std::numeric_limits<int>::max()))
+            return false;
+        string result;
+        const size_t headerReserve=std::min(header_length,1024UL*1024UL);
+        result.reserve(length+headerReserve+96);
+        result="HTTP/1.1 ";
+        result+=code;
+        result+="\r\nContent-Length: ";
+        result+=to_string(length);
+        result+="\r\n";
+        const auto appendHeader=[&result](const char *value) {
+            if(value[0]=='\0') return;
+            const size_t headerSize=strlen(value);
+            result.append(value,headerSize);
+            if(headerSize<2||memcmp(value+headerSize-2,"\r\n",2)!=0)
+                result+="\r\n";
+        };
+        appendHeader(header1);
+        appendHeader(header);
+        result+="\r\n";
+        result.append(data,length);
+        if(result.size()>static_cast<size_t>(std::numeric_limits<int>::max()))
+            return false;
+        return sendData(result)==static_cast<int>(result.size());
     }
 
     static int parseHttpRequestBuffer(stt::network::TcpFDInf &tcp,
@@ -5566,12 +6145,15 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             while(!value.empty()&&(value.back()==' '||value.back()=='\t')) value.remove_suffix(1);
             return value;
         };
-        const auto lower=[](std::string_view value) {
-            std::string result(value);
-            std::transform(result.begin(),result.end(),result.begin(),[](const unsigned char character) {
-                return static_cast<char>(std::tolower(character));
-            });
-            return result;
+        const auto equalsIgnoreCase=[](const std::string_view left,const std::string_view right) {
+            if(left.size()!=right.size()) return false;
+            for(size_t index=0;index<left.size();++index)
+            {
+                if(std::tolower(static_cast<unsigned char>(left[index]))!=
+                   std::tolower(static_cast<unsigned char>(right[index])))
+                    return false;
+            }
+            return true;
         };
         const auto parseDecimal=[](std::string_view value,size_t &result) {
             if(value.empty()) return false;
@@ -5632,7 +6214,6 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
         bool hasContentLength=false;
         size_t contentLength=0;
         bool hasTransferEncoding=false;
-        std::vector<std::string> transferCodings;
         size_t lineStart=requestLineEnd+2;
         while(lineStart<headerEnd)
         {
@@ -5649,41 +6230,30 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             const std::string_view value=trim(line.substr(colon+1));
             if(!std::all_of(name.begin(),name.end(),isToken)||!validValue(value))
                 return -1;
-            const std::string normalizedName=lower(name);
-            if(normalizedName=="host")
+            if(equalsIgnoreCase(name,"host"))
             {
                 if(hasHost||value.empty()) return -1;
                 hasHost=true;
             }
-            else if(normalizedName=="content-length")
+            else if(equalsIgnoreCase(name,"content-length"))
             {
                 size_t parsedLength=0;
                 if(hasContentLength||!parseDecimal(value,parsedLength)) return -1;
                 hasContentLength=true;
                 contentLength=parsedLength;
             }
-            else if(normalizedName=="transfer-encoding")
+            else if(equalsIgnoreCase(name,"transfer-encoding"))
             {
                 if(hasTransferEncoding) return -1;
                 hasTransferEncoding=true;
-                size_t tokenStart=0;
-                while(tokenStart<=value.size())
-                {
-                    const size_t comma=value.find(',',tokenStart);
-                    const std::string_view coding=trim(value.substr(tokenStart,comma==std::string_view::npos?value.size()-tokenStart:comma-tokenStart));
-                    if(coding.empty()) return -1;
-                    transferCodings.push_back(lower(coding));
-                    if(comma==std::string_view::npos) break;
-                    tokenStart=comma+1;
-                }
+                if(value.find(',')!=std::string_view::npos||!equalsIgnoreCase(trim(value),"chunked"))
+                    return -1;
             }
             lineStart=lineEnd+2;
         }
         if(version=="HTTP/1.1"&&!hasHost)
             return -1;
         if(hasContentLength&&hasTransferEncoding)
-            return -1;
-        if(hasTransferEncoding&&(transferCodings.size()!=1||transferCodings.front()!="chunked"))
             return -1;
 
         size_t consumed=headerBytes;
@@ -6254,7 +6824,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                             else
                                 stt::system::ServerSetting::logfile->writeLog("http server : can not find solve function fd= "+to_string(fd)+" . use global backup slove function.");
                         }
-                        for(;clientfd[fd].FDStatus<globalSolveFun.size();)
+                        for(;static_cast<size_t>(clientfd[fd].FDStatus)<globalSolveFun.size();)
                         {
                             //继续做
                             int rett=globalSolveFun[clientfd[fd].FDStatus](k,inf);
@@ -6301,7 +6871,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             {
             //继续做
             
-            for(;clientfd[fd].FDStatus<ii->second.size();)
+            for(;static_cast<size_t>(clientfd[fd].FDStatus)<ii->second.size();)
             {
                 
                 int rett=ii->second[clientfd[fd].FDStatus](k,inf);
@@ -7239,7 +7809,7 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
             {
             //继续做
             
-            for(;clientfd[fd].FDStatus<ii->second.size();)
+            for(;static_cast<size_t>(clientfd[fd].FDStatus)<ii->second.size();)
             {
                 
                 int rett=ii->second[clientfd[fd].FDStatus](k,inf);
@@ -8009,11 +8579,11 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
                 return this->fc(totalResult,*this);//处理失败epoll会退出
             return true;
         };
-        auto endfc=[this](const int &fd)->void
+        auto endfc=[this](const int &)->void
         {
             this->close1();
         };
-        auto timeoutfc=[this](const int &fd)->bool
+        auto timeoutfc=[this](const int &)->bool
         {
             if(!this->sendMessage("心跳","1001"))
                 return false;
@@ -9596,6 +10166,7 @@ bool stt::system::HBSystem::HBCheck(const int &sec)
                 return errno==EPERM;
             };
             auto sendSignal=[targetPid,processFD](const int signalNumber) {
+                (void)processFD;
 #if defined(__linux__) && defined(SYS_pidfd_send_signal)
                 if(processFD>=0)
                     return static_cast<int>(syscall(SYS_pidfd_send_signal,processFD,signalNumber,nullptr,0));

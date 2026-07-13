@@ -8,5 +8,8 @@ var searchData=
   ['deletelinec_5',['deleteLineC',['../classstt_1_1file_1_1File.html#a2be039e6cfec90046c5dff15db849019',1,'stt::file::File']]],
   ['deletelogbytime_6',['deleteLogByTime',['../classstt_1_1file_1_1LogFile.html#a87014617f8e64d4184ad8ea931dc45e7',1,'stt::file::LogFile']]],
   ['destroy_7',['destroy',['../classstt_1_1system_1_1csemp.html#a20752f9bdab474a2f82f45347cdf65e5',1,'stt::system::csemp']]],
-  ['duration_8',['Duration',['../structstt_1_1time_1_1Duration.html#a204a9b9647a5e72fb37209070b99d987',1,'stt::time::Duration::Duration(long long a, int b, int c, int d, int e)'],['../structstt_1_1time_1_1Duration.html#a45627ddbf58228a5cb2434f5e5320764',1,'stt::time::Duration::Duration()=default']]]
+  ['drainreactorwork_8',['drainReactorWork',['../classstt_1_1network_1_1TcpServer.html#a838d927c9733904f77fdbf5715ed957b',1,'stt::network::TcpServer']]],
+  ['drainsendready_9',['drainSendReady',['../classstt_1_1network_1_1TcpServer.html#aa1273bdc848cb4af7597d455f1fd8a2c',1,'stt::network::TcpServer']]],
+  ['drainworkerresults_10',['drainWorkerResults',['../classstt_1_1network_1_1TcpServer.html#ac4f3a9c95499a1062482fa63e6c1d453',1,'stt::network::TcpServer']]],
+  ['duration_11',['Duration',['../structstt_1_1time_1_1Duration.html#a204a9b9647a5e72fb37209070b99d987',1,'stt::time::Duration::Duration(long long a, int b, int c, int d, int e)'],['../structstt_1_1time_1_1Duration.html#a45627ddbf58228a5cb2434f5e5320764',1,'stt::time::Duration::Duration()=default']]]
 ];

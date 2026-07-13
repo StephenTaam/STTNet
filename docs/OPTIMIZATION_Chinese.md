@@ -4,6 +4,26 @@
 
 ## 已完成
 
+### 0.7.0 并发与生命周期强化
+
+- 修复 ET accept 的关键旧问题：监听 socket 现在本身就是 `SOCK_NONBLOCK | SOCK_CLOEXEC`，不会在取空 accept 队列后把整个 Reactor 卡死。
+- 停止接入由 Reactor 自己执行 `epoll DEL + close`；控制线程只改变状态并通过 eventfd 唤醒，避免跨线程 close 与 accept 之间的 fd 复用竞态。
+- Worker 完成和 send-ready 共用合并门铃：同一轮已有 eventfd 通知时不再重复 write；每轮分别设置完成/发送消息预算，防止突发完成消息饿死网络事件。
+- 普通 TCP 发送使用最多 64 个 `iovec` 的 `sendmsg`；部分写会精确推进多个队列块。TLS 保持 Reactor 内 `SSL_write` 状态机。
+- WorkerPool 增加默认 65536 的有界等待队列、峰值统计和 `stop(drain)`；过载会显式拒绝，退出超时时可丢弃尚未开始的任务。
+- `maxFD` 现在表示真实并发连接上限，不再错误地拿 Linux 数字 fd 与连接数比较；新增拒绝连接指标和端口 0 自动分配支持。
+- 新增 `ServerSocketOptions` 聚合配置：TCP_NODELAY、keepalive 参数、收发缓冲、SO_REUSEPORT、TCP_DEFER_ACCEPT、TCP_FASTOPEN 和 listen backlog。
+- `startListen()` 会等待 Reactor 完成 epoll/eventfd/timerfd 初始化后再返回；任何关键初始化失败均完整回收资源并返回 false。
+- `close()/stopListen()` 默认给在途 Worker 和已排队响应 5 秒排空时间；停止新请求后继续推进写队列，超时才强制回收并计数。
+- 停止完成后统一清空跨线程消息、续读、超时候选与写注册表，支持同一 Server 对象无旧代次污染地再次监听；实际监听端口以原子状态发布。
+- 空闲连接检查从周期性全表扫描改为每秒增量轮转，避免大量长连接下的 O(n) Reactor 停顿尖峰。
+- 普通 HTTPS/WSS、可选客户端证书和强制 mTLS 现在均可配置；SSL_CTX 采用加锁交换实现安全证书热重载，旧会话继续持有原上下文。
+- 异步日志门铃合并，不再每 10ms 空轮询；新增日志丢弃计数。HTTP header 名和 Transfer-Encoding 热路径去除临时小字符串分配。
+- 指标补充连接拒绝、Worker 拒绝、合并唤醒、写系统调用、批量 iovec、空闲检查、优雅退出超时以及待发/Worker 队列峰值。
+- TLS 单次 `SSL_write` 严格限制在 OpenSSL `int` 长度范围内；File 文本行接口补齐零行号、负行号和空文件边界，二进制模式修复关闭泄漏与长度回绕，内存事务增加线程所有权和关闭等待，消除历史 UB。
+
+### 0.6.0 基础重构
+
 - 将按 `maxFD` 一次性构造的连接数组改为稀疏连接表。默认配置不再在启动时构造约一百万个包含字符串、队列和 `std::any` 的对象。
 - Reactor 线程由 `detach()` 改为对象持有并 `join()`，运行标志改为原子变量，关闭过程会等待 Reactor 和 WorkerPool 退出。
 - 异步任务改为持有 handler 和请求信息的副本，不再引用 Reactor 栈变量；完成消息携带连接代次，避免 fd 被复用后把旧结果交给新连接。
@@ -76,5 +96,6 @@ SLOW_CLIENTS=128 CONNECTIONS=2000 THREADS=8 DURATION=60s \
 1. 在多核服务器上增加 `SO_REUSEPORT + 每核独立 Reactor` 模式；连接与 TLS 会话固定归属一个 Reactor，跨 Reactor 仅传递业务消息。
 2. 将当前约万行实现按 `core/reactor`、`protocol/http`、`protocol/websocket`、`tls`、`security` 拆分，并把平台 API 放进独立 backend。
 3. 将 HTTP parser 接入 libFuzzer/AFL corpus，WebSocket 接入 Autobahn Testsuite，并把回归 corpus 放进 CI。
-4. 将安全模块的全表超时扫描改成时间轮或最小堆，避免连接数很高时周期性 O(n) 延迟尖峰。
-5. 增加 `writev`/`sendfile`、请求耗时直方图、限流命中、Prometheus exporter 和 tracing hook。
+4. 将当前增量空闲检查升级为时间轮，并把限流表按 Reactor/哈希分片，进一步压低超大连接规模下的维护成本。
+5. 增加静态文件 `sendfile`、请求耗时直方图、限流命中、Prometheus exporter 和 tracing hook。
+6. 预生成常见 HTTP 响应头，引入小对象/请求 arena，并以同机 perf、火焰图和 allocator 统计决定是否继续池化。

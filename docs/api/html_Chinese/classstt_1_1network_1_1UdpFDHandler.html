@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.7.0</span>
    </div>
   </td>
  </tr>
@@ -400,6 +400,8 @@ Protected 属性</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">data</td><td>指向要发送的数据缓冲区。 </td></tr>
     <tr><td class="paramname">length</td><td>数据长度（字节）。 </td></tr>
+    <tr><td class="paramname">ip</td><td>目标 IPv4/域名。 </td></tr>
+    <tr><td class="paramname">port</td><td>目标 UDP 端口。 </td></tr>
     <tr><td class="paramname">block</td><td>是否以阻塞模式发送（默认 true）。<ul>
 <li>true：会阻塞直到全部数据发送成功除非出错了（无论 socket 是阻塞或非阻塞）；</li>
 <li>false：阻塞与否取决于套接字状态。</li>
@@ -455,6 +457,8 @@ Protected 属性</h2></td></tr>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
     <tr><td class="paramname">data</td><td>要发送的数据内容（std::string 类型）。 </td></tr>
+    <tr><td class="paramname">ip</td><td>目标 IPv4/域名。 </td></tr>
+    <tr><td class="paramname">port</td><td>目标 UDP 端口。 </td></tr>
     <tr><td class="paramname">block</td><td>是否以阻塞模式发送（默认 true）。<ul>
 <li>true：会阻塞直到全部数据发送成功除非出错了（无论 socket 是阻塞或非阻塞）；</li>
 <li>false：阻塞与否取决于套接字状态。</li>

@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.7.0</span>
    </div>
   </td>
  </tr>
@@ -433,7 +433,8 @@ false 修改失败 </dd></dl>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>返回</dt><dd>true:操作成功 false：操作失败 </dd></dl>
+<dl class="section return"><dt>返回</dt><dd>true:操作成功或已经关闭 false：操作失败 </dd></dl>
+<dl class="section note"><dt>注解</dt><dd>可重复调用；若其他线程正在进行内存事务，会等待事务结束后再关闭。 </dd></dl>
 
 </div>
 </div>
@@ -862,6 +863,7 @@ false 删除失败 </dd></dl>
 <dl class="section return"><dt>返回</dt><dd>true 操作成功 </dd>
 <dd>
 false 操作失败 </dd></dl>
+<dl class="section note"><dt>注解</dt><dd>成功后必须由同一线程调用 <a class="el" href="#a4cdaefafc7c143eab21221c53929a729" title="把数据从内存写入磁盘">unlockMemory()</a>；同一线程重复加锁会返回 false。 </dd></dl>
 
 </div>
 </div>
@@ -913,12 +915,13 @@ false 操作失败 </dd></dl>
 <dl class="section return"><dt>返回</dt><dd>true:打开成功 </dd>
 <dd>
 false:打开失败 </dd></dl>
-<dl class="section note"><dt>注解</dt><dd>任何操作都需要先打开文件 </dd></dl>
-<dl class="section warning"><dt>警告</dt><dd>如果二进制模式下预留的空间太小，可能会导致段错误</dd></dl>
+<dl class="section note"><dt>注解</dt><dd>任何操作都需要先打开文件 </dd>
+<dd>
+二进制模式下写入超过预留空间会安全返回 false；空文件如需写入，应通过 size 指定容量。</dd></dl>
 <p>示例代码 1： 文本模式打开和程序同一路径下名为"test"的文件</p>
 <div class="fragment"><div class="line"><a class="code hl_class" href="classstt_1_1file_1_1File.html">File</a> f; </div>
 <div class="line">f.<a class="code hl_function" href="#a00aa9317ef7c1213baadcbd3f3485430">openFile</a>(<span class="stringliteral">&quot;test&quot;</span>);</div>
-<div class="ttc" id="aclassstt_1_1file_1_1File_html"><div class="ttname"><a href="classstt_1_1file_1_1File.html">stt::file::File</a></div><div class="ttdoc">读写磁盘文件的类</div><div class="ttdef"><b>定义</b> sttnet.h:356</div></div>
+<div class="ttc" id="aclassstt_1_1file_1_1File_html"><div class="ttname"><a href="classstt_1_1file_1_1File.html">stt::file::File</a></div><div class="ttdoc">读写磁盘文件的类</div><div class="ttdef"><b>定义</b> sttnet.h:437</div></div>
 <div class="ttc" id="aclassstt_1_1file_1_1File_html_a00aa9317ef7c1213baadcbd3f3485430"><div class="ttname"><a href="#a00aa9317ef7c1213baadcbd3f3485430">stt::file::File::openFile</a></div><div class="ttdeci">bool openFile(const std::string &amp;fileName, const bool &amp;create=true, const int &amp;multiple=0, const size_t &amp;size=0, const mode_t &amp;mode=0666)</div><div class="ttdoc">打开文件</div></div>
 </div><!-- fragment --><p>示例代码 2： 二进制模式下打开和程序同一路径下名为"test"的文件,计划只读</p>
 <div class="fragment"><div class="line"><a class="code hl_class" href="classstt_1_1file_1_1File.html">File</a> f; </div>
@@ -1247,7 +1250,9 @@ false 读取失败 </dd></dl>
 <dl class="section return"><dt>返回</dt><dd>true 操作成功 </dd>
 <dd>
 false 操作失败 </dd></dl>
-<dl class="section note"><dt>注解</dt><dd>如果写入磁盘失败会自动回退操作 </dd></dl>
+<dl class="section note"><dt>注解</dt><dd>如果写入磁盘失败会自动回退操作 </dd>
+<dd>
+只有成功调用 <a class="el" href="#a236fa68305d93a21f1db4397735604aa" title="把数据从磁盘读入内存">lockMemory()</a> 的线程可以解锁；其他线程调用会返回 false。 </dd></dl>
 
 </div>
 </div>

@@ -5,7 +5,7 @@
 标题：
 
 ```text
-perf: unify reactor writes and harden lifecycle/protocol parsing
+perf: 提升网络吞吐并完善优雅退出、CI 与 API 文档
 ```
 
 正文：
@@ -19,10 +19,30 @@ perf: unify reactor writes and harden lifecycle/protocol parsing
 - harden HTTP/1.1 and WebSocket parsing against malformed/smuggling inputs
 - fix TCP/TLS client DNS, blocking connect, CA, SNI and hostname verification
 - add metrics snapshots, Linux CI, sanitizer tests and benchmark tooling
-- update Doxygen/API compatibility, signal and capability documentation
+- make every test assertion execute in Release and fix parser-test buffer leaks
+- update Doxygen/API compatibility, quick-start, signal and capability documentation
 ```
 
 ## 今天完成的全部内容
+
+### 0.7.0 第二阶段：吞吐、过载与可运维性
+
+- 修复监听 socket 在 ET epoll 下仍为阻塞模式的关键问题；监听 fd 现在使用 `NONBLOCK+CLOEXEC`，accept 队列取空后不会卡死 Reactor。
+- 停止接入改为控制线程发请求、Reactor 执行 `epoll DEL/close`，消除 close 与 accept 并发时的 fd 复用窗口。
+- Worker/send-ready 的 eventfd 门铃合并，并分别设置单轮消费预算；高完成率下减少 syscall，同时避免完成队列长期饿死网络事件。
+- 普通 TCP 用最多 64 个 iovec 的 `sendmsg` 合并发送，正确处理跨多个队列块的部分写；新增系统调用与批量率指标。
+- WorkerPool 等待队列有界，支持排空或丢弃未开始任务、安全重复/并发 stop、当前/峰值队列深度；服务端过载拒绝可观测。
+- 真正按活跃连接数执行 `maxFD`，而不是错误比较数字 fd；新增拒绝连接指标、端口 0 自动选择和准确启动失败反馈。
+- 增加 `ServerSocketOptions` 聚合 TCP_NODELAY、keepalive 参数、收发缓冲、REUSEPORT、DEFER_ACCEPT、FASTOPEN 与 backlog。
+- SIGTERM/SIGINT 触发后停止新接入，默认最多 5 秒排空在途 Worker 与发送队列，超时后丢弃未开始任务并强制回收；运行中任务仍需自行返回。
+- 空闲连接从周期 O(n) 全表扫描改为增量轮转；异步日志从定时轮询改为合并唤醒并增加丢弃计数。
+- HTTP header/Transfer-Encoding 匹配去除临时字符串分配；char* 二进制响应不再复制为中间 body 字符串。
+- TLS 服务端新增普通单向 TLS、可选客户端证书和 mTLS 模式；SSL_CTX 加锁交换支持安全证书热重载，并修复上下文析构泄漏。
+- TLS 单轮写入长度按 OpenSSL 的 `int` 上限截断，避免自定义超大写预算发生长度窄化；监听端口状态改为原子发布。
+- MPSC 对可抛异常复制先构造再占 ring slot，避免异常把序列槽永久卡死；WorkerPool 拒绝零工作线程。
+- `stopListen()` 现在清空上一代 Reactor/Worker 通知和连接注册表，同一 Server 对象停止后可安全重新监听；优雅排空期间不再产生新的 WebSocket 心跳消息。
+- 指标新增待发/Worker 队列峰值、拒绝、合并唤醒、批量写、空闲检查和优雅退出超时；benchmark 退出时打印关键数据。
+- 修复 File 文本行 API 对 0/负行号及空文件默认“最后一行”操作的越界 UB；修复二进制关闭分支写反造成的缓冲泄漏及 `pos + size` 回绕越界。File 内存事务增加线程所有权校验，关闭会等待其他线程事务且可重复调用，避免跨线程解锁 UB；新增边界/并发回归测试。全工程通过 `-Wall -Wextra -Wpedantic -Werror` 零告警检查。
 
 ### 1. 连接内存与基础并发模型
 
@@ -96,21 +116,32 @@ perf: unify reactor writes and harden lifecycle/protocol parsing
 - 新增无锁 `ServerMetricsSnapshot`：累计接收/关闭连接、当前连接、accept 错误、TLS 失败、HTTP 请求、排队/已发送/待发字节及各类队列溢出。
 - 新增 CMake（C++17、OpenSSL >= 1.1.1）、Release/ASan+UBSan Linux CI 和 graceful shutdown smoke test。
 - 新增并发、发送顺序、背压、高水位、TCP 客户端、EpollSingle、信号、HTTP parser、WebSocket 协议回归测试。
+- 新增 Server 停止后重启、发送队列峰值和 File 空文件/非法行号边界回归测试。
 - 新增普通 HTTP 压测、慢读客户端压测和大响应端点。
 - Doxygen 规范头、项目版本、所有新增 API 和行为变化已同步；英文兼容头转发到唯一规范声明，避免 ABI 漂移。
+- Doxygen 首页新增可直接复制的 HTTP 与 WebSocket 最小示例，README 同步突出“创建、注册、监听”三步上手，并统一改为安全的同步信号等待与清理。
+- 测试断言改为 Release/`NDEBUG` 下仍始终求值的 `STTNET_CHECK`；`fork`/`sigaction`/`waitpid`/信号等待等必须执行的系统调用先保存结果再检查，修复 Release 信号测试误杀主进程。
+- HTTP/WebSocket 解析测试引入专用 RAII 连接夹具，`setInput` 使用强异常安全的缓冲替换，消除 Sanitizer 报告的最后一段输入缓冲泄漏，不改动生产 `TcpFDInf` 所有权。
 - 新增优化设计、信号语义、能力/性能定位和 API/ABI 兼容说明。
 
 ## 兼容性提醒
 
 - 常用路由、回调、`startListen`、`sendBack`、`sendMessage` 等业务 API 保持不变。
 - 服务端回调里的发送成功现在表示“响应已进入有界队列”，实际网络写由 Reactor 异步完成。
-- 0.6.0 修改了类布局、virtual 函数和部分 C++ 符号，不保证旧二进制 ABI；提交后应完整重新编译所有目标。
+- 0.7.0 修改了类布局、virtual 函数和部分 C++ 符号，不保证旧二进制 ABI；提交后应完整重新编译所有目标。
 - 非法 HTTP/WebSocket 输入现在会更早被拒绝，这属于安全收紧。
 
 ## 本轮验证
 
 - 全量 `src/sttnet.cpp` C++17 语法检查通过。
-- concurrency、signal、HTTP parser、WebSocket 四组回归程序通过。
-- HTTP request-smuggling、流水线、chunked/trailers、header/body 上限测试通过。
-- WebSocket mask、分片、交错控制帧、关闭码、UTF-8 和帧编码测试通过。
-- 仓库配置了 Linux Release 与 ASan/UBSan CI；最终 Linux epoll 集成结果以 CI 为准。
+- concurrency、signal、HTTP parser、WebSocket、File、benchmark 和示例源文件的 C++17 全量语法检查通过。
+- 全工程 `-Wall -Wextra -Wpedantic` 检查零告警，`git diff --check`、Shell 语法和 Python bytecode 检查通过。
+- 使用 `-O3 -DNDEBUG` 直接构建并运行 concurrency、signal、HTTP parser、WebSocket 和 File 五个测试，全部通过；确认 Release 配置下信号调用不会被 `NDEBUG` 删除。
+- 同一组五个测试在 ASan+UBSan 下全部通过；Apple ASan 不支持 LSan `detect_leaks=1`，泄漏检测由 Linux GitHub Actions 最终复核。
+- MPSC 多生产者与 WorkerPool 有界/停止路径在本机完成普通运行及 ASan+UBSan 检查。
+- File 文本/二进制边界、重复关闭和跨线程事务等待在本机完成普通运行及 ASan+UBSan 检查。
+- 新增 HTTP request-smuggling、流水线、chunked/trailers、header/body 上限，以及 WebSocket mask、分片、控制帧、关闭码和 UTF-8 回归用例。
+- 新增真实连接上限、端口 0、停止后重启、增量空闲超时、在途响应排空、外部连接关闭路由和批量写指标 Linux 集成用例。
+- Release 信号回归不再依赖 `assert` 的副作用；HTTP/WebSocket 解析夹具在 ASan/LSan 下自动释放测试输入缓冲。
+- 中英文 Doxygen 已从干净输出目录重新生成，确认首页示例进入 `docs/api` 且没有遗留旧的异步 signal-handler 清理示例。
+- 当前开发机不是 Linux，无法实际运行 epoll/timerfd 集成测试和可信 QPS 压测；仓库已配置 Linux Release 与 ASan/UBSan CI，最终结果以 CI/目标 Linux 主机为准。

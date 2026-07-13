@@ -1,17 +1,16 @@
 var searchData=
 [
-  ['read_0',['read',['../classstt_1_1file_1_1File.html#a95daa74da158ab6dd8dd5e0957624865',1,'stt::file::File::read(std::string &amp;data, const int &amp;linePos, const int &amp;num)'],['../classstt_1_1file_1_1File.html#adbaabcd58ae0db72a4941acf9381066f',1,'stt::file::File::read(char *data, const size_t &amp;pos, const size_t &amp;size)']]],
-  ['readall_1',['readAll',['../classstt_1_1file_1_1File.html#ad5a7981669511b378598153dc54cd50d',1,'stt::file::File']]],
-  ['readallc_2',['readAllC',['../classstt_1_1file_1_1File.html#a57126e58e5affaf0380dbab3a5e7c72c',1,'stt::file::File']]],
-  ['readc_3',['readC',['../classstt_1_1file_1_1File.html#ab755510894fc6fc404247d3bd21ffd52',1,'stt::file::File::readC(std::string &amp;data, const int &amp;linePos, const int &amp;num)'],['../classstt_1_1file_1_1File.html#afd7761aa238c20cdb334313835be9edf',1,'stt::file::File::readC(char *data, const size_t &amp;pos, const size_t &amp;size)']]],
-  ['readline_4',['readLine',['../classstt_1_1file_1_1File.html#ad70ee941c5438da8d7ec5b54652970ce',1,'stt::file::File']]],
-  ['readlinec_5',['readLineC',['../classstt_1_1file_1_1File.html#a2eb2c502b53c69e667481f8e83efe6d5',1,'stt::file::File']]],
-  ['recoverform_6',['recoverForm',['../structstt_1_1time_1_1Duration.html#a867741939eefe81b9760da90bea5df06',1,'stt::time::Duration']]],
-  ['recvdata_7',['recvData',['../classstt_1_1network_1_1TcpFDHandler.html#a9e302132d955321d11fd0198fd93b968',1,'stt::network::TcpFDHandler::recvData(std::string &amp;data, const uint64_t &amp;length)'],['../classstt_1_1network_1_1TcpFDHandler.html#a19b87d7c62b9ea4251cd963e721dcfbb',1,'stt::network::TcpFDHandler::recvData(char *data, const uint64_t &amp;length)'],['../classstt_1_1network_1_1UdpFDHandler.html#a286c2af9fa01db9e9365c5453d97d7eb',1,'stt::network::UdpFDHandler::recvData(std::string &amp;data, const uint64_t &amp;length, std::string &amp;ip, int &amp;port)'],['../classstt_1_1network_1_1UdpFDHandler.html#ad5c9c913ae4b8510abdc5f620fdf0b56',1,'stt::network::UdpFDHandler::recvData(char *data, const uint64_t &amp;length, std::string &amp;ip, int &amp;port)']]],
-  ['recvdatabylength_8',['recvDataByLength',['../classstt_1_1network_1_1TcpFDHandler.html#a4d12a36453b01e460373633ad9b09ed7',1,'stt::network::TcpFDHandler::recvDataByLength(std::string &amp;data, const uint64_t &amp;length, const int &amp;sec=2)'],['../classstt_1_1network_1_1TcpFDHandler.html#a1bf6a148bd15cc6abaa3c6fcae98641e',1,'stt::network::TcpFDHandler::recvDataByLength(char *data, const uint64_t &amp;length, const int &amp;sec=2)']]],
-  ['redrawtls_9',['redrawTLS',['../classstt_1_1network_1_1TcpServer.html#a39d8778843209ebac1af10aae6ba1634',1,'stt::network::TcpServer']]],
-  ['renew_10',['renew',['../classstt_1_1system_1_1HBSystem.html#a645bb7b07ae96a735f8564c0dc92a165',1,'stt::system::HBSystem']]],
-  ['requestcloseafterflush_11',['requestCloseAfterFlush',['../classstt_1_1network_1_1TcpServer.html#aab4f372c454970162035438b1194cb1d',1,'stt::network::TcpServer']]],
-  ['requestqueuedclose_12',['requestQueuedClose',['../classstt_1_1network_1_1TcpServer.html#aeaa7e39221df6adde616e84a73e12d06',1,'stt::network::TcpServer']]],
-  ['resetctx_13',['resetCTX',['../classstt_1_1network_1_1TcpClient.html#ab4f4257567d6aaeebd07225263409445',1,'stt::network::TcpClient']]]
+  ['peakpendingtasks_0',['peakPendingTasks',['../classstt_1_1system_1_1WorkerPool.html#a45faaa8ac966dec52302ed85bd9f2bc8',1,'stt::system::WorkerPool']]],
+  ['pendingtasks_1',['pendingTasks',['../classstt_1_1system_1_1WorkerPool.html#afdea29125d1bef26e1e71869054452d8',1,'stt::system::WorkerPool']]],
+  ['pop_2',['pop',['../classstt_1_1system_1_1MPSCQueue.html#ae8e13c37c8ef183a5f95aa6b0322abcb',1,'stt::system::MPSCQueue']]],
+  ['possibly_5fnonempty_3',['possibly_nonempty',['../classstt_1_1system_1_1MPSCQueue.html#aef5e8957dbd149ef7b89aad107fee8bf',1,'stt::system::MPSCQueue']]],
+  ['post_4',['post',['../classstt_1_1system_1_1csemp.html#a2cb37ba3baf44509ad5aaa94ec994701',1,'stt::system::csemp']]],
+  ['postrequest_5',['postRequest',['../classstt_1_1network_1_1HttpClient.html#ab66e33ef484cea1fc2113fc4c1d7ca84',1,'stt::network::HttpClient']]],
+  ['postrequestfromfd_6',['postRequestFromFD',['../classstt_1_1network_1_1HttpClient.html#ae86481dee255249a2de76e5dc01ad0b1',1,'stt::network::HttpClient']]],
+  ['preparehandler_7',['prepareHandler',['../classstt_1_1network_1_1TcpServer.html#a39d427c9a7484ebfee32847523ccf558',1,'stt::network::TcpServer']]],
+  ['preparequeuedhandler_8',['prepareQueuedHandler',['../classstt_1_1network_1_1TcpServer.html#a9948f8d2cd59e6590a13bc38ffbfd841',1,'stt::network::TcpServer::prepareQueuedHandler(TcpFDHandler &amp;handler, const int &amp;fd)'],['../classstt_1_1network_1_1TcpServer.html#a90ec4c653bcffb8d55c04813ebb91081',1,'stt::network::TcpServer::prepareQueuedHandler(TcpFDHandler &amp;handler, const int &amp;fd, const uint64_t expectedConnection)']]],
+  ['publishsendready_9',['publishSendReady',['../classstt_1_1network_1_1TcpServer.html#abd746054f3db21b33d5ac3b575899e37',1,'stt::network::TcpServer']]],
+  ['publishworkerresult_10',['publishWorkerResult',['../classstt_1_1network_1_1TcpServer.html#af651b877a829e5620d687d405f28331d',1,'stt::network::TcpServer']]],
+  ['push_11',['push',['../classstt_1_1system_1_1MPSCQueue.html#ab6b3c1b463babfc2a4e0424267439593',1,'stt::system::MPSCQueue::push(T &amp;&amp;v) noexcept(std::is_nothrow_move_constructible_v&lt; T &gt;)'],['../classstt_1_1system_1_1MPSCQueue.html#a08e57e9703cd1e0cbecb11b8334a7d69',1,'stt::system::MPSCQueue::push(const T &amp;v)']]],
+  ['puttask_12',['putTask',['../classstt_1_1network_1_1TcpServer.html#a507cdbb0c5d4dbf128c57ab5f11bafb6',1,'stt::network::TcpServer::putTask()'],['../classstt_1_1network_1_1HttpServer.html#a8651cccc70aac419846967a020876b4d',1,'stt::network::HttpServer::putTask()'],['../classstt_1_1network_1_1WebSocketServer.html#a7d4b4dfd861c296a55f13566ef793b37',1,'stt::network::WebSocketServer::putTask()']]]
 ];

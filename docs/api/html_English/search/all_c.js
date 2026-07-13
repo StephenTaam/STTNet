@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['name_0',['name',['../structstt_1_1system_1_1ProcessInf.html#a9838dff90091f0897e9e09a56ca02594',1,'stt::system::ProcessInf']]],
-  ['networkorderutil_1',['NetworkOrderUtil',['../classstt_1_1data_1_1NetworkOrderUtil.html',1,'stt::data']]],
-  ['none_2',['NONE',['../namespacestt_1_1network.html#a2de10f23ed7aa5e5ca07d6fb2a11eaadab50339a10e1de285ac99d4c3990b8693',1,'stt::network']]],
-  ['notification_5fpending_3',['notification_pending',['../structstt_1_1network_1_1ConnectionWriteState.html#abf9df77b53f371dfdfac73b60e9fb514',1,'stt::network::ConnectionWriteState']]],
-  ['numberstringconvertutil_4',['NumberStringConvertUtil',['../classstt_1_1data_1_1NumberStringConvertUtil.html',1,'stt::data']]]
+  ['keep_5falive_0',['keep_alive',['../structstt_1_1network_1_1ServerSocketOptions.html#a4038669dc0fcfd64f27d5fa0680d5ffa',1,'stt::network::ServerSocketOptions']]],
+  ['keep_5falive_5fidle_5fseconds_1',['keep_alive_idle_seconds',['../structstt_1_1network_1_1ServerSocketOptions.html#a90c878eb83b98d0bde1a471562e87d72',1,'stt::network::ServerSocketOptions']]],
+  ['keep_5falive_5finterval_5fseconds_2',['keep_alive_interval_seconds',['../structstt_1_1network_1_1ServerSocketOptions.html#ae9eeebe51175d5221ee5ab47500adf9d',1,'stt::network::ServerSocketOptions']]],
+  ['keep_5falive_5fprobe_5fcount_3',['keep_alive_probe_count',['../structstt_1_1network_1_1ServerSocketOptions.html#a7dc624ea0e44a084059897792cec4c10',1,'stt::network::ServerSocketOptions']]]
 ];

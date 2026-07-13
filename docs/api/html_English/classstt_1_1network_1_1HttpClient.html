@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.7.0</span>
    </div>
   </td>
  </tr>
@@ -244,10 +244,8 @@ Public Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">url</td><td>http/https的完整url（注意需要显式指定端口和路径） 如：https://google.com 要写成https://google.com:443/ (补全:443和/) </td></tr>
-    <tr><td class="paramname">header</td><td>Http请求头；如果不是用createHeader生成，记得在末尾要加上\r<br  />
-。 </td></tr>
-    <tr><td class="paramname">header1</td><td>HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入\r<br  />
-（不能用createHeader）。（默认填入了keepalive项） </td></tr>
+    <tr><td class="paramname">header</td><td>Http 请求头；如果不是用 createHeader 生成，末尾应包含 CRLF。 </td></tr>
+    <tr><td class="paramname">header1</td><td>HTTP 请求头附加项；末尾不需要加入 CRLF（默认 keep-alive）。 </td></tr>
     <tr><td class="paramname">sec</td><td>阻塞超时时间(s) 阻塞超过这个时间就不会再阻塞了 默认为-1 即无限等待 </td></tr>
   </table>
   </dd>
@@ -307,10 +305,8 @@ Public Attributes</h2></td></tr>
     <tr><td class="paramname">fd</td><td>tcp套接字 </td></tr>
     <tr><td class="paramname">ssl</td><td>TLS加密套接字 </td></tr>
     <tr><td class="paramname">url</td><td>http/https的完整url（注意需要显式指定端口和路径） 如：https://google.com 要写成https://google.com:443/ (补全:443和/) </td></tr>
-    <tr><td class="paramname">header</td><td>Http请求头；如果不是用createHeader生成，记得在末尾要加上\r<br  />
-。 </td></tr>
-    <tr><td class="paramname">header1</td><td>HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入\r<br  />
-（不能用createHeader）。（默认填入了keepalive项） </td></tr>
+    <tr><td class="paramname">header</td><td>Http 请求头；如果不是用 createHeader 生成，末尾应包含 CRLF。 </td></tr>
+    <tr><td class="paramname">header1</td><td>HTTP 请求头附加项；末尾不需要加入 CRLF（默认 keep-alive）。 </td></tr>
     <tr><td class="paramname">sec</td><td>阻塞超时时间(s) 阻塞超过这个时间就不会再阻塞了 默认为2s </td></tr>
   </table>
   </dd>
@@ -392,10 +388,8 @@ Public Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">url</td><td>http/https的完整url（注意需要显式指定端口和路径） 如：https://google.com 要写成https://google.com:443/ (补全:443和/) </td></tr>
     <tr><td class="paramname">body</td><td>http请求体 </td></tr>
-    <tr><td class="paramname">header</td><td>Http请求头；如果不是用createHeader生成，记得在末尾要加上\r<br  />
-。 </td></tr>
-    <tr><td class="paramname">header1</td><td>HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入\r<br  />
-（不能用createHeader）。（默认填入了keepalive项） </td></tr>
+    <tr><td class="paramname">header</td><td>Http 请求头；如果不是用 createHeader 生成，末尾应包含 CRLF。 </td></tr>
+    <tr><td class="paramname">header1</td><td>HTTP 请求头附加项；末尾不需要加入 CRLF（默认 keep-alive）。 </td></tr>
     <tr><td class="paramname">sec</td><td>阻塞超时时间(s) 阻塞超过这个时间就不会再阻塞了 默认为-1 即无限等待 </td></tr>
   </table>
   </dd>
@@ -461,10 +455,8 @@ Public Attributes</h2></td></tr>
     <tr><td class="paramname">ssl</td><td>TLS加密套接字 </td></tr>
     <tr><td class="paramname">url</td><td>http/https的完整url（注意需要显式指定端口和路径） 如：https://google.com 要写成https://google.com:443/ (补全:443和/) </td></tr>
     <tr><td class="paramname">body</td><td>http请求体 </td></tr>
-    <tr><td class="paramname">header</td><td>Http请求头；如果不是用createHeader生成，记得在末尾要加上\r<br  />
-。 </td></tr>
-    <tr><td class="paramname">header1</td><td>HTTP请求头的附加项；如果需要，一定要填入一个有效项；末尾不需要加入\r<br  />
-（不能用createHeader）。（默认填入了keepalive项） </td></tr>
+    <tr><td class="paramname">header</td><td>Http 请求头；如果不是用 createHeader 生成，末尾应包含 CRLF。 </td></tr>
+    <tr><td class="paramname">header1</td><td>HTTP 请求头附加项；末尾不需要加入 CRLF（默认 keep-alive）。 </td></tr>
     <tr><td class="paramname">sec</td><td>阻塞超时时间(s) 阻塞超过这个时间就不会再阻塞了 默认为-1 即无限等待 </td></tr>
   </table>
   </dd>

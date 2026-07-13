@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.7.0</span>
    </div>
   </td>
  </tr>
@@ -134,7 +134,7 @@ $(function(){ initResizable(false); });
 <tr class="memdesc:a2ae29bdd3607470f84372c23754195b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">将格式化后的 JSON 字符串去除缩进、空格等变成紧凑格式。  <br /></td></tr>
 <tr class="separator:a2ae29bdd3607470f84372c23754195b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44538681a6fd9919f2dd42ba90da279d" id="r_a44538681a6fd9919f2dd42ba90da279d"><td class="memItemLeft" align="right" valign="top">static std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a44538681a6fd9919f2dd42ba90da279d">jsonToUTF8</a> (const std::string &amp;input, std::string &amp;output)</td></tr>
-<tr class="memdesc:a44538681a6fd9919f2dd42ba90da279d"><td class="mdescLeft">&#160;</td><td class="mdescRight">将 JSON 字符串中的 \uXXXX 转换为 UTF-8 字符。  <br /></td></tr>
+<tr class="memdesc:a44538681a6fd9919f2dd42ba90da279d"><td class="mdescLeft">&#160;</td><td class="mdescRight">将 JSON 字符串中的 Unicode 转义序列转换为 UTF-8 字符。  <br /></td></tr>
 <tr class="separator:a44538681a6fd9919f2dd42ba90da279d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
@@ -166,9 +166,14 @@ template&lt;class T&gt; </div>
 </div><div class="memdoc">
 
 <p>创建只包含一个元素的 JSON 数组字符串。 </p>
+<dl class="tparams"><dt>模板参数</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>任意类型。 </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
-    <tr><td class="paramname">T</td><td>任意类型。 </td></tr>
     <tr><td class="paramname">first</td><td>第一个元素。 </td></tr>
   </table>
   </dd>
@@ -207,10 +212,15 @@ template&lt;class T, class... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>创建多个元素组成的 JSON 数组字符串（递归变参模板）。 </p>
-<dl class="params"><dt>参数</dt><dd>
-  <table class="params">
+<dl class="tparams"><dt>模板参数</dt><dd>
+  <table class="tparams">
     <tr><td class="paramname">T</td><td>第一个元素类型。 </td></tr>
     <tr><td class="paramname">Args</td><td>其余元素类型。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
     <tr><td class="paramname">first</td><td>第一个元素。 </td></tr>
     <tr><td class="paramname">args</td><td>其余元素。 </td></tr>
   </table>
@@ -250,10 +260,15 @@ template&lt;class T1, class T2&gt; </div>
 </div><div class="memdoc">
 
 <p>创建仅包含一个键值对的 JSON 字符串。 </p>
-<dl class="params"><dt>参数</dt><dd>
-  <table class="params">
+<dl class="tparams"><dt>模板参数</dt><dd>
+  <table class="tparams">
     <tr><td class="paramname">T1</td><td>键的类型，通常为 std::string。 </td></tr>
     <tr><td class="paramname">T2</td><td>值的类型，可为任意可被 Json::Value 接收的类型。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
     <tr><td class="paramname">first</td><td>键。 </td></tr>
     <tr><td class="paramname">second</td><td>值。 </td></tr>
   </table>
@@ -298,11 +313,16 @@ template&lt;class T1, class T2, class... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>创建多个键值对组成的 JSON 字符串（递归变参模板）。 </p>
-<dl class="params"><dt>参数</dt><dd>
-  <table class="params">
+<dl class="tparams"><dt>模板参数</dt><dd>
+  <table class="tparams">
     <tr><td class="paramname">T1</td><td>第一个键的类型。 </td></tr>
     <tr><td class="paramname">T2</td><td>第一个值的类型。 </td></tr>
-    <tr><td class="paramname">Args</td><td>其余成对出现的键值参数。 </td></tr>
+    <tr><td class="paramname">Args</td><td>其余成对出现的键值参数类型。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
     <tr><td class="paramname">first</td><td>第一个键。 </td></tr>
     <tr><td class="paramname">second</td><td>第一个值。 </td></tr>
     <tr><td class="paramname">args</td><td>其余键值参数。 </td></tr>
@@ -475,7 +495,7 @@ template&lt;class T1, class T2, class... Args&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>将 JSON 字符串中的 \uXXXX 转换为 UTF-8 字符。 </p>
+<p>将 JSON 字符串中的 Unicode 转义序列转换为 UTF-8 字符。 </p>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
     <tr><td class="paramname">input</td><td>含有 Unicode 编码的 JSON 字符串。 </td></tr>

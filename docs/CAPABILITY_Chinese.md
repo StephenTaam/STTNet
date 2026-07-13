@@ -1,4 +1,4 @@
-# STTNet 0.6.0 能力与性能定位
+# STTNet 0.7.0 能力与性能定位
 
 ## 结论
 
@@ -11,30 +11,35 @@ STTNet 现在适合定位为“Linux 上轻量、可嵌入、以 HTTP/1.1 与 We
 | 能力 | 当前状态 | 说明 |
 |---|---|---|
 | Linux epoll Reactor | 可用 | 每个 Server 一个 Reactor，非阻塞 ET，eventfd 跨线程唤醒 |
-| WorkerPool | 可用 | 固定线程池、排空停止、任务异常隔离、提交失败可见 |
-| TCP / TLS | 可用 | 服务端发送归 Reactor；TLS 最低 1.2；连接代次防 fd 复用串线 |
+| WorkerPool | 可用 | 固定线程池、有界任务背压、可选择排空/丢弃等待任务、任务异常隔离 |
+| TCP / TLS | 可用 | 服务端 I/O 归 Reactor；TLS 最低 1.2；单向 TLS、可选客户端证书和 mTLS；安全热重载 |
 | HTTP/1.1 | 可用 | Content-Length、chunked、trailers、keep-alive、流水线延续解析 |
 | WebSocket | 可用 | 严格握手、mask/opcode/长度校验、分片、ping/pong/close、UTF-8 校验 |
 | UDP | 可用 | 保持数据报边界，使用线程安全地址解析 |
 | 背压 | 可用 | 默认每连接 4 MiB 高水位，超限返回 -101 并淘汰慢客户端 |
 | 写公平性 | 可用 | 默认单连接单轮 256 KiB，预算耗尽后重新调度 |
 | TLS 单线程所有权 | 可用 | Worker 仅提交响应，`send`/`SSL_write`/关闭由 Reactor 统一执行 |
-| 优雅退出 | 可用 | SIGTERM/SIGINT 同步等待；Reactor/Worker 可 join；日志排空 |
-| 运行指标 | 基础可用 | 连接、TLS、HTTP、发送字节、待发字节和队列溢出快照 |
-| 限流 | 可用 | 连接/IP/path 策略；高连接规模下仍有 O(n) 周期扫描优化空间 |
+| 优雅退出 | 可用 | SIGTERM/SIGINT 同步等待；停止接收后排空在途 Worker/响应；超时强制回收 |
+| 运行指标 | 基础可用 | 连接、TLS、HTTP、发送/批量写、队列峰值、唤醒合并、超时和过载快照 |
+| Socket 调优 | 可用 | TCP_NODELAY、keepalive、缓冲、REUSEPORT、DEFER_ACCEPT、FASTOPEN、backlog 聚合配置 |
+| 限流 | 可用 | 连接/IP/path 策略；空闲超时已增量轮转，限流表仍可继续按 Reactor 分片 |
 | HTTP/2 / HTTP/3 | 不支持 | 当前只实现 HTTP/1.1 |
 | 多 Reactor/每核分片 | 不支持 | 单 Server 的网络推进受单 Reactor 核心上限约束 |
-| 零拷贝/sendfile/writev | 不支持 | 大文件和多段响应仍有进一步减少复制/系统调用的空间 |
+| writev/sendmsg | 可用 | 普通 TCP 最多 64 个发送块合并为一次 sendmsg；TLS 仍按 SSL_write 推进 |
+| 零拷贝/sendfile | 不支持 | 静态大文件仍有进一步减少用户态复制的空间 |
 | Prometheus/Tracing | 不支持 | 已有快照指标，但没有 exporter、直方图、trace context |
 
 ## 性能大概处于哪里
 
-本轮没有给出新的绝对 QPS，原因是当前开发环境不是可运行 epoll 的 Linux 压测机，而且跨机器、跨内核参数和跨压测配置的数字没有比较意义。README 中 4 核开发板约 6.5 万请求/秒是旧版本历史记录，不能直接代表 0.6.0，也不能拿它和其他框架公开榜单直接相除。
+本轮没有给出新的绝对 QPS，原因是当前开发环境不是可运行 epoll 的 Linux 压测机，而且跨机器、跨内核参数和跨压测配置的数字没有比较意义。README 中 4 核开发板约 6.5 万请求/秒是旧版本历史记录，不能直接代表 0.7.0，也不能拿它和其他框架公开榜单直接相除。
 
 可以有把握地判断以下趋势：
 
 - 启动和空闲连接内存显著改善：旧实现按 `maxFD` 构造整张连接对象数组；新实现只为活跃连接建状态，接收缓冲从每连接立即 256 KiB 改为首次读取 8 KiB、按需增长。
 - 慢客户端下吞吐和尾延迟会比旧实现稳定：业务线程不再阻塞写 socket/SSL，待发内存有上限，单连接写预算避免大响应长期占用 Reactor。
+- Worker/send-ready 的 eventfd 门铃会合并，普通 TCP 小块响应会用 iovec 批量发送；高完成速率和 WebSocket 小消息场景的系统调用数应明显下降。
+- ET listener 已改为真正的非阻塞 socket；这修复了 accept 队列取空后 Reactor 可能阻塞的旧问题，属于并发能力的正确性修复而不只是微优化。
+- 空闲连接检查已从 Reactor 周期性 O(n) 全表停顿改为按秒增量轮转，连接规模较大时尾延迟更平滑。
 - 多核纯网络上限仍会早于每核独立 Reactor 的框架出现：一个 Server 目前只有一个 Reactor；Worker 可并行计算，但 accept、协议读取、TLS 网络推进和发送仍归一个网络线程。
 - 小型同步 HTTP 路由应明显快于 thread-per-connection 设计，并有机会接近普通异步框架的中高区间；但在没有同机数据前，不应宣称超过 uWebSockets、Drogon 或 TechEmpower 头部实现。
 
@@ -50,7 +55,7 @@ STTNet 现在适合定位为“Linux 上轻量、可嵌入、以 HTTP/1.1 与 We
 
 ## 如何得到可信数字
 
-应在同一台 Linux 裸机或固定 CPU 配额容器中，用相同编译器、`-O3 -DNDEBUG`、内核、连接数、响应体和 keep-alive 参数，对修改前 commit、0.6.0、uWebSockets/Drogon 分别预热后测试至少 3 轮，并同时记录：
+应在同一台 Linux 裸机或固定 CPU 配额容器中，用相同编译器、`-O3 -DNDEBUG`、内核、连接数、响应体和 keep-alive 参数，对修改前 commit、0.7.0、uWebSockets/Drogon 分别预热后测试至少 3 轮，并同时记录：
 
 - Requests/sec、传输吞吐；
 - p50/p95/p99/p999 延迟；
@@ -65,7 +70,7 @@ STTNet 现在适合定位为“Linux 上轻量、可嵌入、以 HTTP/1.1 与 We
 
 常用业务 API 没有被重写：`setFunction`、`setGetKeyFunction`、`putTask`、`startListen`、`sendBack`、`sendMessage` 以及 HTTP/WebSocket 请求结构的常用字段仍然保留。绝大多数应用只需重新编译，不需要修改业务代码。
 
-需要明确的是，0.6.0 不是二进制 ABI 兼容升级，必须重新编译框架和所有依赖它的目标：
+需要明确的是，0.7.0 不是二进制 ABI 兼容升级，必须重新编译框架和所有依赖它的目标：
 
 | 变化 | 源代码影响 | 说明 |
 |---|---|---|
@@ -74,18 +79,23 @@ STTNet 现在适合定位为“Linux 上轻量、可嵌入、以 HTTP/1.1 与 We
 | `WorkerPool::submit` 从 `void` 改为 `bool` | 忽略返回值的旧调用仍可编译 | 停止后提交现在明确返回 false |
 | `TcpServer::close`/析构改为 virtual | 派生类语义更正确 | 类布局/vtable 改变，属于 ABI 变化 |
 | 新增发送配置和 `getMetrics()` | 纯新增 | 不使用则无需改业务代码 |
+| `WorkerPool(size, capacity)` / `stop(drain)` | 源码兼容新增 | 默认任务上限 65536；过载不再无界占用内存 |
+| `ServerSocketOptions` / `getListenPort()` | 纯新增 | 可配置 TCP_NODELAY、keepalive、缓冲、SO_REUSEPORT、backlog，支持端口 0 |
+| `setGracefulShutdownTimeout()` | 纯新增 | close 默认最多等待 5 秒完成网络排空；运行中的用户任务仍需自行返回 |
+| `TLSClientAuthMode` 与 `setTLS` 重载 | 纯新增 | 普通 HTTPS/WSS 不再被迫要求客户端证书；旧四参数版本仍保持强制 mTLS 语义 |
 | `WebSocketClient::getServerPort()` | 行为修复 | 仍返回 string，但现在是端口而不是错误的服务器 IP；新增整数版本 |
 | TCP/TLS 客户端连接 | 行为修复 | 默认阻塞连接、线程安全 DNS、SNI/主机名验证、空 CA 使用系统信任库 |
 | WebSocket 协议校验更严格 | 非法客户端可能被拒绝 | 拒绝未 mask、非法关闭码、非法 UTF-8 和错误 Upgrade 握手 |
+| `File::closeFile()` / 内存事务 | 签名不变、行为收紧 | close 可重复调用；会等待其他线程事务；unlock 必须由加锁线程执行；非法行号改为安全失败 |
 
-Doxygen 的规范声明位于 `include/sttnet.h`；`include/sttnet_English.h` 现在只转发到这一个规范头，避免两套声明再次发生 ABI 漂移。Doxyfile 项目版本已同步为 0.6.0。
+Doxygen 的规范声明位于 `include/sttnet.h`；`include/sttnet_English.h` 现在只转发到这一个规范头，避免两套声明再次发生 ABI 漂移。Doxyfile 项目版本已同步为 0.7.0。
 
 ## 下一批最值得投入的工作
 
 1. `SO_REUSEPORT + 每核独立 Reactor`，把连接和 TLS 会话固定到所属 Reactor。这是继续提高多核吞吐最直接的一步。
 2. 将约万行单实现文件拆为 reactor、http、websocket、tls、security、platform 模块，建立内部接口边界。
 3. HTTP parser 接入 libFuzzer/AFL corpus，WebSocket 接入 Autobahn Testsuite，并将回归 corpus 放进 CI。
-4. 限流与连接超时从周期 O(n) 扫描改为时间轮或分层最小堆。
-5. 增加 `writev`、静态文件 `sendfile`、预生成常用响应头和 arena/pool，继续降低复制与分配。
+4. 将当前增量轮转空闲检查升级为时间轮，并为限流状态增加分片或 Reactor 本地所有权。
+5. 增加静态文件 `sendfile`、预生成常用响应头和 arena/pool，继续降低复制与分配。
 6. 增加请求耗时直方图、限流命中、队列深度高水位、Prometheus exporter 和 trace hook。
 7. 若产品需要现代浏览器/网关场景，再评估 HTTP/2；HTTP/3 建议集成成熟 QUIC 库，不自行实现协议栈。

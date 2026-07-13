@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.7.0</span>
    </div>
   </td>
  </tr>
@@ -199,6 +199,7 @@ Public 成员函数</h2></td></tr>
 <p>构造函数 </p>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
+    <tr><td class="paramname">port</td><td>本地监听端口。 </td></tr>
     <tr><td class="paramname">flag1</td><td>true：设置非阻塞模式 false：设置阻塞模式 （默认为阻塞模式） </td></tr>
     <tr><td class="paramname">sec</td><td>设置阻塞超时时间（秒） （默认为-1 即为无限等待） </td></tr>
     <tr><td class="paramname">flag2</td><td>true：设置SO_REUSEADDR模式 false：不设置SO_REUSEADDR模式 </td></tr>
@@ -268,6 +269,7 @@ Public 成员函数</h2></td></tr>
 <p>销毁原来的套接字，重新创建一个服务端 </p>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
+    <tr><td class="paramname">port</td><td>本地监听端口。 </td></tr>
     <tr><td class="paramname">flag1</td><td>true：设置非阻塞模式 false：设置阻塞模式 （默认为阻塞模式） </td></tr>
     <tr><td class="paramname">sec</td><td>设置阻塞超时时间（秒） （默认为-1 即为无限等待） </td></tr>
     <tr><td class="paramname">flag2</td><td>true：设置SO_REUSEADDR模式 false：不设置SO_REUSEADDR模式 </td></tr>

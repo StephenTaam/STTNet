@@ -1,18 +1,17 @@
 var searchData=
 [
-  ['openfile_0',['openFile',['../classstt_1_1file_1_1File.html#a00aa9317ef7c1213baadcbd3f3485430',1,'stt::file::File::openFile()'],['../classstt_1_1file_1_1LogFile.html#a341a294e5f846b2942d874a482bfa64e',1,'stt::file::LogFile::openFile()']]],
-  ['operator_2b_1',['operator+',['../structstt_1_1time_1_1Duration.html#a1dd579ea9e02cf8e89544cf14de7dce5',1,'stt::time::Duration']]],
-  ['operator_2d_2',['operator-',['../structstt_1_1time_1_1Duration.html#a5e61bfb427eb568c4a8500f491ff6ce3',1,'stt::time::Duration']]],
-  ['operator_3c_3',['operator&lt;',['../structstt_1_1time_1_1Duration.html#a679a3924941b7d6ed256238fa37be26e',1,'stt::time::Duration']]],
-  ['operator_3c_3c_4',['operator&lt;&lt;',['../namespacestt_1_1time.html#a2b5102bdcb5b85e161261fda22074f23',1,'stt::time']]],
-  ['operator_3c_3d_5',['operator&lt;=',['../structstt_1_1time_1_1Duration.html#a04cd0d3f24d7f130d8b5110689836051',1,'stt::time::Duration']]],
-  ['operator_3d_6',['operator=',['../classstt_1_1system_1_1MPSCQueue.html#a088f0514e03d90e84754eb71f2c50265',1,'stt::system::MPSCQueue']]],
-  ['operator_3d_3d_7',['operator==',['../structstt_1_1time_1_1Duration.html#a2e68b1c9d6ffa3be29b4c11da6cfcd7a',1,'stt::time::Duration']]],
-  ['operator_3e_8',['operator&gt;',['../structstt_1_1time_1_1Duration.html#a18a63d08686488be8d3336a3a25da31c',1,'stt::time::Duration']]],
-  ['operator_3e_3d_9',['operator&gt;=',['../structstt_1_1time_1_1Duration.html#a28f25902fc3911b21ffbfb5446e103ac',1,'stt::time::Duration']]],
-  ['overflowed_10',['overflowed',['../structstt_1_1network_1_1ConnectionWriteState.html#a88140647b1ad2f1ddc86e97c53c433cf',1,'stt::network::ConnectionWriteState']]],
-  ['overflowfinishmutex_11',['overflowFinishMutex',['../classstt_1_1network_1_1TcpServer.html#ad1368963145af575cab415c975bda773',1,'stt::network::TcpServer']]],
-  ['overflowfinishqueue_12',['overflowFinishQueue',['../classstt_1_1network_1_1TcpServer.html#a7b12a5de142b425ddcee7404616c046e',1,'stt::network::TcpServer']]],
-  ['overflowsendreadymutex_13',['overflowSendReadyMutex',['../classstt_1_1network_1_1TcpServer.html#ae2c3a0ac282d772ea353d10dfd26d0a5',1,'stt::network::TcpServer']]],
-  ['overflowsendreadyqueue_14',['overflowSendReadyQueue',['../classstt_1_1network_1_1TcpServer.html#a85a371eb404ee09a68868228c2ca237f',1,'stt::network::TcpServer']]]
+  ['l1_0',['l1',['../classstt_1_1file_1_1File.html#ac3829ea1e03d976fdfd70219d4c92442',1,'stt::file::File']]],
+  ['language_1',['language',['../classstt_1_1system_1_1ServerSetting.html#ae7213e81633822abccdbbc0b1773adc6',1,'stt::system::ServerSetting']]],
+  ['lastactivity_2',['lastActivity',['../structstt_1_1security_1_1ConnectionState.html#aa74fb13ed148eba7dd015d2f8dbabe0c',1,'stt::security::ConnectionState']]],
+  ['lastrefill_3',['lastRefill',['../structstt_1_1security_1_1RateState.html#a61d7dd0caaa87393668695cf255209c1',1,'stt::security::RateState']]],
+  ['lasttime_4',['lastTime',['../structstt_1_1security_1_1RateState.html#add4982fe61a3c684ef1ee9d193da96b4',1,'stt::security::RateState::lastTime'],['../structstt_1_1system_1_1ProcessInf.html#a3561bbc5ae0e9069ab368673a9b295e0',1,'stt::system::ProcessInf::lastTime']]],
+  ['lifecyclemutex_5',['lifecycleMutex',['../classstt_1_1network_1_1TcpServer.html#ac7a257bd3727edffaf52eee68967cbd5',1,'stt::network::TcpServer']]],
+  ['list_6',['list',['../classstt_1_1system_1_1HBSystem.html#acb459023388f29e4318e9e3ad1fd2b1d',1,'stt::system::HBSystem']]],
+  ['listen_5fbacklog_7',['listen_backlog',['../structstt_1_1network_1_1ServerSocketOptions.html#afcb04f96a5fac61b07a7dcb6106ec8f3',1,'stt::network::ServerSocketOptions']]],
+  ['loc_8',['loc',['../structstt_1_1file_1_1FileThreadLock.html#aff287b7ad491037ab6ca4f1751b033d8',1,'stt::file::FileThreadLock::loc'],['../structstt_1_1network_1_1HttpRequestInformation.html#a86243a236c17764ccbae1893a4d2ee46',1,'stt::network::HttpRequestInformation::loc']]],
+  ['lock_9',['lock',['../structstt_1_1file_1_1FileThreadLock.html#ab9df2653fe2258409d6144016d4d43bd',1,'stt::file::FileThreadLock']]],
+  ['lockmemory_10',['lockMemory',['../classstt_1_1file_1_1File.html#a236fa68305d93a21f1db4397735604aa',1,'stt::file::File']]],
+  ['locpara_11',['locPara',['../structstt_1_1network_1_1HttpRequestInformation.html#a4bf9b17871ed9aaf349fb44d4a227ee7',1,'stt::network::HttpRequestInformation::locPara'],['../structstt_1_1network_1_1WebSocketFDInformation.html#a97d0c483c33d236c5d2af3504b74857e',1,'stt::network::WebSocketFDInformation::locPara']]],
+  ['logfile_12',['LogFile',['../classstt_1_1file_1_1LogFile.html',1,'stt::file::LogFile'],['../classstt_1_1file_1_1LogFile.html#aa143c00112aa1346eb2a1807d7ead877',1,'stt::file::LogFile::LogFile()']]],
+  ['logfile_13',['logfile',['../classstt_1_1system_1_1ServerSetting.html#aa657090c9fae15e10eaaad26da0224dc',1,'stt::system::ServerSetting']]]
 ];

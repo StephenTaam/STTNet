@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.7.0</span>
    </div>
   </td>
  </tr>
@@ -91,7 +91,7 @@ $(function(){ initResizable(false); });
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#enum-members">Enumerations</a>  </div>
-  <div class="headertitle"><div class="title">stt::network Namespace Reference</div></div>
+  <div class="headertitle"><div class="title">stt::network Namespace Reference<div class="ingroups"><a class="el" href="group__stt.html">STTNet 模块</a></div></div></div>
 </div><!--header-->
 <div class="contents">
 
@@ -123,6 +123,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1ServerMetricsSnapshot.html">ServerMetricsSnapshot</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classstt_1_1network_1_1TcpServer.html" title="Tcp服务端类">TcpServer</a> 运行指标的无锁快照。  <a href="structstt_1_1network_1_1ServerMetricsSnapshot.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1ServerSocketOptions.html">ServerSocketOptions</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">新连接的常用 TCP 套接字调优参数。  <a href="structstt_1_1network_1_1ServerSocketOptions.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstt_1_1network_1_1TcpClient.html">TcpClient</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">tcp协议客户端操作类  <a href="classstt_1_1network_1_1TcpClient.html#details">More...</a><br /></td></tr>
@@ -172,10 +175,48 @@ Enumerations</h2></td></tr>
 , <a class="el" href="#a2de10f23ed7aa5e5ca07d6fb2a11eaadabb1ca97ec761fc37101737ba0aa2e7c5">ERROR</a>
  }</td></tr>
 <tr class="separator:a2de10f23ed7aa5e5ca07d6fb2a11eaad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6170c6fa0cc07241a352c26fbf494eb" id="r_ab6170c6fa0cc07241a352c26fbf494eb"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab6170c6fa0cc07241a352c26fbf494eb">TLSClientAuthMode</a> : uint8_t { <a class="el" href="#ab6170c6fa0cc07241a352c26fbf494eba6adf97f83acf6453d4a6a4b1070f3754">None</a> = 0
+, <a class="el" href="#ab6170c6fa0cc07241a352c26fbf494ebaebb061953c0454b2c8ee7b0ac615ebcd">Optional</a>
+, <a class="el" href="#ab6170c6fa0cc07241a352c26fbf494ebab651efdb98a5d6bd2b3935d0c3f4a5e2">Required</a>
+ }</td></tr>
+<tr class="memdesc:ab6170c6fa0cc07241a352c26fbf494eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">TLS 服务端对客户端证书的校验模式。  <a href="#ab6170c6fa0cc07241a352c26fbf494eb">More...</a><br /></td></tr>
+<tr class="separator:ab6170c6fa0cc07241a352c26fbf494eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>网络框架，协议，通信，io多路复用相关 </p>
 </div><h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="ab6170c6fa0cc07241a352c26fbf494eb" name="ab6170c6fa0cc07241a352c26fbf494eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6170c6fa0cc07241a352c26fbf494eb">&#9670;&#160;</a></span>TLSClientAuthMode</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#ab6170c6fa0cc07241a352c26fbf494eb">stt::network::TLSClientAuthMode</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel strong">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>TLS 服务端对客户端证书的校验模式。 </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ab6170c6fa0cc07241a352c26fbf494eba6adf97f83acf6453d4a6a4b1070f3754" name="ab6170c6fa0cc07241a352c26fbf494eba6adf97f83acf6453d4a6a4b1070f3754"></a>None&#160;</td><td class="fielddoc"><p>不请求客户端证书，适用于普通 HTTPS/WSS。 </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ab6170c6fa0cc07241a352c26fbf494ebaebb061953c0454b2c8ee7b0ac615ebcd" name="ab6170c6fa0cc07241a352c26fbf494ebaebb061953c0454b2c8ee7b0ac615ebcd"></a>Optional&#160;</td><td class="fielddoc"><p>请求并校验客户端证书，但允许客户端不提供。 </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ab6170c6fa0cc07241a352c26fbf494ebab651efdb98a5d6bd2b3935d0c3f4a5e2" name="ab6170c6fa0cc07241a352c26fbf494ebab651efdb98a5d6bd2b3935d0c3f4a5e2"></a>Required&#160;</td><td class="fielddoc"><p>必须提供并通过校验，适用于双向 TLS（mTLS）。 </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 <a id="a2de10f23ed7aa5e5ca07d6fb2a11eaad" name="a2de10f23ed7aa5e5ca07d6fb2a11eaad"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2de10f23ed7aa5e5ca07d6fb2a11eaad">&#9670;&#160;</a></span>TLSState</h2>
 

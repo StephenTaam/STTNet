@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.7.0</span>
    </div>
   </td>
  </tr>
@@ -235,9 +235,14 @@ template&lt;class... Args&gt; </div>
 </div><!-- fragment --><p> 最终生成： </p><div class="fragment"><div class="line">Host: example.com\r\n</div>
 <div class="line">Connection: keep-alive\r\n</div>
 <div class="line">Content-Type: charset=UTF-8\r\n</div>
-</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
+</div><!-- fragment --><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Args</td><td>其余参数类型，需以 (字段名, 字段值) 成对传入。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">Args</td><td>其余参数，需以 (字段名, 字段值) 成对传入。 </td></tr>
     <tr><td class="paramname">first</td><td>当前字段名。 </td></tr>
     <tr><td class="paramname">second</td><td>当前字段值。 </td></tr>
     <tr><td class="paramname">args</td><td>后续的字段名和值（必须为偶数个）。 </td></tr>
@@ -700,7 +705,7 @@ template&lt;class... Args&gt; </div>
 <p>与 <code>get_location_str</code> 类似，但保留 path 之后的所有内容（如参数）。</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">URL。</td><td></td></tr>
+    <tr><td class="paramname">url</td><td>URL。 </td></tr>
     <tr><td class="paramname">locPara</td><td>返回 path+参数部分。 </td></tr>
   </table>
   </dd>
@@ -740,7 +745,7 @@ template&lt;class... Args&gt; </div>
 <p>与 <code>get_location_str</code> 类似，但保留 path 之后的所有内容（如参数）。</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">URL。</td><td></td></tr>
+    <tr><td class="paramname">url</td><td>URL。 </td></tr>
     <tr><td class="paramname">locPara</td><td>返回 path+参数部分。 </td></tr>
   </table>
   </dd>
@@ -780,7 +785,7 @@ template&lt;class... Args&gt; </div>
 <dl class="section note"><dt>Note</dt><dd>可以是完整url 也可以是不太完整的，比如/path?id=123&amp;name=abc</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">URL。</td><td></td></tr>
+    <tr><td class="paramname">url</td><td>URL。 </td></tr>
     <tr><td class="paramname">para</td><td>返回参数部分（形如 "?id=123&amp;name=abc"）。 </td></tr>
   </table>
   </dd>
@@ -820,7 +825,7 @@ template&lt;class... Args&gt; </div>
 <dl class="section note"><dt>Note</dt><dd>可以是完整url 也可以是不太完整的，比如/path?id=123&amp;name=abc</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">URL。</td><td></td></tr>
+    <tr><td class="paramname">url</td><td>URL。 </td></tr>
     <tr><td class="paramname">para</td><td>返回参数部分（形如 "?id=123&amp;name=abc"）。 </td></tr>
   </table>
   </dd>

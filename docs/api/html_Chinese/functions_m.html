@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.7.0</span>
    </div>
   </td>
  </tr>
@@ -92,21 +92,35 @@ $(function(){ initResizable(false); });
 <li>max_queued_bytes&#160;:&#160;<a class="el" href="structstt_1_1network_1_1ConnectionWriteState.html#a43a2427e7ebb77cfe81f757483d2f201">stt::network::ConnectionWriteState</a></li>
 <li>maxFD&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a71937d40d41663b3993e626b95a73ec1">stt::network::TcpServer</a></li>
 <li>maxHttpHeaderBytes&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#ad41eb04872794e75452a13f751545c58">stt::network::TcpServer</a></li>
+<li>maxPendingTasks()&#160;:&#160;<a class="el" href="classstt_1_1system_1_1WorkerPool.html#a95a4be54ed13b6ee3e4a636c23840643">stt::system::WorkerPool</a></li>
+<li>maxPendingWorkerTasks&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#ad3c72db665f22d86f6873cf610e252a2">stt::network::TcpServer</a></li>
 <li>maxPendingWriteBytes&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#ad3819214cd49b1e61ef66c5f6ee3e775">stt::network::TcpServer</a></li>
 <li>message&#160;:&#160;<a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#af531c538a773d596dfce63037f1e6985">stt::network::WebSocketFDInformation</a></li>
 <li>message_type&#160;:&#160;<a class="el" href="structstt_1_1network_1_1WebSocketFDInformation.html#aa9c4f50ef624980430aed039534781c4">stt::network::WebSocketFDInformation</a></li>
 <li>metricAcceptedConnections&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#ab8cd73c25075afe1c48cb5832cfa8126">stt::network::TcpServer</a></li>
 <li>metricAcceptErrors&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#adf31126c44ed9a2f2711e03c44310d6f">stt::network::TcpServer</a></li>
 <li>metricActiveConnections&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a1440f50db3582b95d74837141c993034">stt::network::TcpServer</a></li>
+<li>metricBatchedWriteBuffers&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a6fefec60f1486d447912cc74054e90b4">stt::network::TcpServer</a></li>
+<li>metricBatchedWriteSyscalls&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a4299b0d262465d4eb7333d4e4dac3075">stt::network::TcpServer</a></li>
 <li>metricClosedConnections&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a2218b5976f32c8d04ef5b5c351c99940">stt::network::TcpServer</a></li>
+<li>metricGracefulShutdownTimeouts&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aa054789d5f6e8720295b039d4fa4f182">stt::network::TcpServer</a></li>
+<li>metricIdleTimeoutChecks&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a20056b86b25a23af79bcf755f9b5e96e">stt::network::TcpServer</a></li>
+<li>metricIdleTimeoutCloses&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a76e096bdf3004e3828c4c22fd306b424">stt::network::TcpServer</a></li>
 <li>metricParsedHttpRequests&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#ad70055646c037c629ca0a58d9c5d7635">stt::network::TcpServer</a></li>
+<li>metricPeakPendingWorkerTasks&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#aabb6fcebb524aae5a6a10eaa150d5d85">stt::network::TcpServer</a></li>
+<li>metricPeakPendingWriteBytes&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#ae82fc1d261a8d9e9c62e3fef46760d40">stt::network::TcpServer</a></li>
 <li>metricPendingWriteBytes&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#add437e613213aa80e5eab76b8cee6a10">stt::network::TcpServer</a></li>
 <li>metricQueuedWriteBytes&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a6ed99d0b7517b34937b530cfe9867dcc">stt::network::TcpServer</a></li>
+<li>metricReactorWakeups&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a2f75ee127eee2fe8760ffa31f362a479">stt::network::TcpServer</a></li>
+<li>metricReactorWakeupsCoalesced&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a34c838a7f2f685eba3b2759a601ffe80">stt::network::TcpServer</a></li>
+<li>metricRejectedConnections&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a7e40a2dabda976a441f613814d962fea">stt::network::TcpServer</a></li>
 <li>metricSendReadyQueueOverflows&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a0b239fc67fc28094cf398e3e438f46a2">stt::network::TcpServer</a></li>
 <li>metricSentBytes&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a7826399f54e98256ca27693e9269cad0">stt::network::TcpServer</a></li>
 <li>metricTLSHandshakeFailures&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#ad0231ce8ce3da9d5c45c390fe53869b7">stt::network::TcpServer</a></li>
 <li>metricWorkerQueueOverflows&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a6c1cdbd078edb58858277ad7081ae5dd">stt::network::TcpServer</a></li>
+<li>metricWorkerTaskRejections&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a6669b12d4ce357c7c483ff7b9ec0c3d1">stt::network::TcpServer</a></li>
 <li>metricWriteOverflows&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a83c1156607dae77c6bb97c407859f6b8">stt::network::TcpServer</a></li>
+<li>metricWriteSyscalls&#160;:&#160;<a class="el" href="classstt_1_1network_1_1TcpServer.html#a9b3c47ed58a322b3257fb8acd070c999">stt::network::TcpServer</a></li>
 <li>min&#160;:&#160;<a class="el" href="structstt_1_1time_1_1Duration.html#a5ffc319f80f29cdeff8044e2f9c67a4a">stt::time::Duration</a></li>
 <li>MPSCQueue()&#160;:&#160;<a class="el" href="classstt_1_1system_1_1MPSCQueue.html#a661d13fbd40bd4b263ca8f383069f6ab">stt::system::MPSCQueue&lt; T &gt;</a></li>
 <li>msec&#160;:&#160;<a class="el" href="structstt_1_1time_1_1Duration.html#a21944a542c15678a04340cc29c57d038">stt::time::Duration</a></li>

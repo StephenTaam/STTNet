@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.7.0</span>
    </div>
   </td>
  </tr>
@@ -155,8 +155,11 @@ $(function(){ initResizable(false); });
 <code>#include &lt;cstdio&gt;</code><br />
 <code>#include &lt;deque&gt;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;array&gt;</code><br />
 <code>#include &lt;unordered_set&gt;</code><br />
 <code>#include &lt;cctype&gt;</code><br />
+<code>#include &lt;sys/uio.h&gt;</code><br />
+<code>#include &lt;netinet/tcp.h&gt;</code><br />
 </div>
 <p><a href="sttnet_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -254,6 +257,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1ServerMetricsSnapshot.html">stt::network::ServerMetricsSnapshot</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classstt_1_1network_1_1TcpServer.html" title="Tcp服务端类">TcpServer</a> 运行指标的无锁快照。  <a href="structstt_1_1network_1_1ServerMetricsSnapshot.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1ServerSocketOptions.html">stt::network::ServerSocketOptions</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">新连接的常用 TCP 套接字调优参数。  <a href="structstt_1_1network_1_1ServerSocketOptions.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstt_1_1network_1_1ConnectionWriteState.html">stt::network::ConnectionWriteState</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">单个服务端连接的有界异步发送状态。  <a href="structstt_1_1network_1_1ConnectionWriteState.html#details">More...</a><br /></td></tr>
@@ -381,6 +387,12 @@ Enumerations</h2></td></tr>
 , <a class="el" href="namespacestt_1_1network.html#a2de10f23ed7aa5e5ca07d6fb2a11eaadabb1ca97ec761fc37101737ba0aa2e7c5">stt::network::ERROR</a>
  }</td></tr>
 <tr class="separator:a2de10f23ed7aa5e5ca07d6fb2a11eaad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6170c6fa0cc07241a352c26fbf494eb" id="r_ab6170c6fa0cc07241a352c26fbf494eb"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestt_1_1network.html#ab6170c6fa0cc07241a352c26fbf494eb">stt::network::TLSClientAuthMode</a> : uint8_t { <a class="el" href="namespacestt_1_1network.html#ab6170c6fa0cc07241a352c26fbf494eba6adf97f83acf6453d4a6a4b1070f3754">stt::network::None</a> = 0
+, <a class="el" href="namespacestt_1_1network.html#ab6170c6fa0cc07241a352c26fbf494ebaebb061953c0454b2c8ee7b0ac615ebcd">stt::network::Optional</a>
+, <a class="el" href="namespacestt_1_1network.html#ab6170c6fa0cc07241a352c26fbf494ebab651efdb98a5d6bd2b3935d0c3f4a5e2">stt::network::Required</a>
+ }</td></tr>
+<tr class="memdesc:ab6170c6fa0cc07241a352c26fbf494eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">TLS 服务端对客户端证书的校验模式。  <a href="namespacestt_1_1network.html#ab6170c6fa0cc07241a352c26fbf494eb">More...</a><br /></td></tr>
+<tr class="separator:ab6170c6fa0cc07241a352c26fbf494eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>

@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">STTNet<span id="projectnumber">&#160;0.6.0</span>
+   <div id="projectname">STTNet<span id="projectnumber">&#160;0.7.0</span>
    </div>
   </td>
  </tr>
@@ -94,10 +94,13 @@ $(function(){ initResizable(false); });
 
 <p>成员的完整列表，这些成员属于 <a class="el" href="classstt_1_1system_1_1WorkerPool.html">stt::system::WorkerPool</a>,包括所有继承而来的类成员</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html#a5319067a610fbe82ab0b8554fa12ddc0">stop</a>()</td><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html">stt::system::WorkerPool</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html#ae538362202b5cd5a62e7f58096d9e741">submit</a>(Task task)</td><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html">stt::system::WorkerPool</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html#a003c31d5de84e37d21464805e21493ac">WorkerPool</a>(size_t n)</td><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html">stt::system::WorkerPool</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">explicit</span></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html#a2ef0555151195337247cbb67f82d28e1">~WorkerPool</a>()</td><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html">stt::system::WorkerPool</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html#a95a4be54ed13b6ee3e4a636c23840643">maxPendingTasks</a>() const noexcept</td><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html">stt::system::WorkerPool</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html#a45faaa8ac966dec52302ed85bd9f2bc8">peakPendingTasks</a>() const noexcept</td><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html">stt::system::WorkerPool</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html#afdea29125d1bef26e1e71869054452d8">pendingTasks</a>() const</td><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html">stt::system::WorkerPool</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html#a7e9a52480f6bf3f9bab9498e6116d354">stop</a>(const bool drain=true)</td><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html">stt::system::WorkerPool</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html#ae538362202b5cd5a62e7f58096d9e741">submit</a>(Task task)</td><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html">stt::system::WorkerPool</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html#aadb5784eecba74b1b87682f9b649ac7e">WorkerPool</a>(size_t n, size_t maxPendingTasks=65536)</td><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html">stt::system::WorkerPool</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">explicit</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html#a2ef0555151195337247cbb67f82d28e1">~WorkerPool</a>()</td><td class="entry"><a class="el" href="classstt_1_1system_1_1WorkerPool.html">stt::system::WorkerPool</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
