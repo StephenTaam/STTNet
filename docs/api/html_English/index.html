@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.13.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>STTNet: Getting Started and API Reference</title>
+<title>STTNet: English Documentation</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -19,16 +19,35 @@
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 
 <style type="text/css">
-.stt-hero{padding:30px 34px;margin:0 0 22px;border:1px solid #d7e2f0;border-radius:14px;background:linear-gradient(135deg,#f7fbff 0%,#eef5ff 100%)}
-.stt-hero h2{font-size:28px;margin:0 0 12px;color:#17365d}.stt-hero p{font-size:16px;line-height:1.75;margin:8px 0;color:#334155}
-.stt-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.stt-button{display:inline-block;padding:9px 15px;border-radius:8px;text-decoration:none!important;font-weight:600;background:#2563a9;color:#fff!important;border:1px solid #2563a9}.stt-button.secondary{background:#fff;color:#245b93!important}.stt-button:hover{filter:brightness(.96)}
-.stt-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:18px 0 28px}.stt-card{border:1px solid #d9e2ec;border-radius:12px;padding:18px;background:#fff}.stt-card h3{font-size:18px;margin:0 0 8px;color:#183b56}.stt-card p{margin:0;line-height:1.65;color:#475569}
-.stt-section{margin:30px 0}.stt-section h2{font-size:24px;border-bottom:1px solid #dbe5ef;padding-bottom:8px;color:#17365d}.stt-section h3{font-size:19px;color:#214f7b}.stt-section p,.stt-section li{font-size:15px;line-height:1.75}.stt-code{position:relative;margin:12px 0 20px}.stt-code pre{margin:0;padding:18px;border-radius:10px;background:#172033;color:#eef4ff;overflow:auto;line-height:1.55;font-size:13px}.stt-code code{color:inherit;background:transparent}.stt-note{padding:14px 16px;border-left:4px solid #3b82c4;background:#f2f8fd;border-radius:6px;line-height:1.7}.stt-perf{padding:15px 18px;border:1px solid #ead8a4;background:#fffaf0;border-radius:10px;line-height:1.7}.stt-api-links{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.stt-api-links a{display:block;border:1px solid #d5e0eb;border-radius:10px;padding:15px;text-decoration:none!important;background:#fff;font-weight:600}.stt-api-links small{display:block;margin-top:5px;font-weight:400;color:#64748b;line-height:1.5}
-@media(max-width:900px){.stt-grid{grid-template-columns:1fr}.stt-api-links{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:560px){.stt-hero{padding:22px 18px}.stt-hero h2{font-size:24px}.stt-api-links{grid-template-columns:1fr}.stt-button{width:100%;box-sizing:border-box;text-align:center}}
+.stt-home{max-width:940px;margin:0 auto;padding:12px 22px 40px;color:#263442}
+.stt-hero{text-align:center;padding:30px 18px 32px}
+.stt-hero h2{margin:0 0 10px;font-size:32px;color:#17365d}
+.stt-subtitle{margin:0 auto;max-width:760px;font-size:17px;line-height:1.75;color:#475569}
+.stt-meta{margin:13px 0 0;font-size:14px;color:#64748b}
+.stt-meta a{color:#2768a8}
+.stt-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:20px}
+.stt-button{display:inline-block;padding:10px 17px;border:1px solid #2563a9;border-radius:8px;background:#2563a9;color:#fff!important;text-decoration:none!important;font-weight:600}
+.stt-button.secondary{background:#fff;color:#245b93!important}
+.stt-section{padding:28px 0;border-top:1px solid #e2e8f0}
+.stt-section h2{margin:0 0 10px;font-size:23px;color:#17365d}
+.stt-section h3{margin:25px 0 9px;font-size:18px;color:#214f7b}
+.stt-section p,.stt-section li{font-size:15px;line-height:1.75;color:#415164}
+.stt-code{margin:14px 0 18px;border-radius:10px;overflow:hidden;background:#172033}
+.stt-code-title{padding:8px 14px;background:#101827;color:#aebed2;font-size:13px}
+.stt-code pre{margin:0;padding:17px;overflow:auto;color:#eef4ff;font-size:13px;line-height:1.58}
+.stt-code code{color:inherit;background:transparent}
+.stt-note{margin-top:14px;padding:13px 15px;border-left:4px solid #3b82c4;border-radius:5px;background:#f3f8fd;color:#40546a;line-height:1.7}
+.stt-demo-list{display:grid;grid-template-columns:1fr 1fr;gap:0 28px;margin-top:10px}
+.stt-demo{display:block;padding:12px 0;border-bottom:1px solid #e7edf4;text-decoration:none!important}
+.stt-demo strong{display:block;color:#245b93;font-size:15px}
+.stt-demo span{display:block;margin-top:3px;color:#607084;font-size:13px;line-height:1.5}
+.stt-simple-links{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}
+.stt-simple-links a{padding:8px 12px;border:1px solid #d5e0eb;border-radius:7px;background:#fff;text-decoration:none!important;color:#245b93;font-weight:600}
+.stt-perf{margin-top:15px;font-size:13px;line-height:1.65;color:#64748b}
+@media(max-width:720px){.stt-home{padding:5px 16px 30px}.stt-hero{padding:24px 5px 28px}.stt-hero h2{font-size:27px}.stt-demo-list{grid-template-columns:1fr}.stt-actions{align-items:stretch}.stt-button{width:100%;box-sizing:border-box;text-align:center}.stt-code pre{font-size:12px}}
 </style>
 </head>
-<body><div style="max-width:1100px;margin:16px auto;padding:12px 16px;background:#eef6fc;border-left:4px solid #2468a2;font-family:Arial,sans-serif">Need English explanations first? Open the <a href="../../guide/English/api-quick-reference.html"><strong>English Core API Quick Reference</strong></a>. The complete generated tree below lists every member; some detailed canonical source comments remain Chinese.</div>
+<body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <div id="titlearea">
 <table cellspacing="0" cellpadding="0">
@@ -99,88 +118,120 @@ $(function(){ initResizable(false); });
 </div><!--header-->
 <div class="contents"><div class="textblock">
 
-<div class="stt-hero">
-  <h2>STTNet 0.7.0 English Documentation</h2>
-  <p>The documentation has three layers: the <b>Programming Guide</b> teaches code chapter by chapter, <b>Commented Demos</b> are complete buildable programs, and the <b>API Reference</b> lists every class, function, parameter, and default.</p>
-  <div class="stt-actions">
-    <a class="stt-button" href="../../guide/English/index.html">Start the Programming Guide</a>
-    <a class="stt-button secondary" href="../../guide/English/demos.html">Commented Demos</a>
-    <a class="stt-button secondary" href="#api-reference">API Reference</a>
-    <a class="stt-button secondary" href="../html_Chinese/index.html">中文</a>
-    <a class="stt-button secondary" href="../../index.html">Language Page</a>
+<div class="stt-home">
+  <div class="stt-hero">
+    <h2>STTNet 0.7.0</h2>
+    <p class="stt-subtitle">A lightweight, high-performance C++17 networking framework for Linux. It is built on epoll and the Reactor model and provides HTTP, TCP, UDP, WebSocket, TLS, WorkerPool, logging, and common networking utilities.</p>
+    <div class="stt-actions">
+      <a class="stt-button" href="#quick-start">Run in 5 Minutes</a>
+      <a class="stt-button secondary" href="../../guide/English/index.html">Programming Guide</a>
+      <a class="stt-button secondary" href="#api-reference">API Reference</a>
+    </div>
+    <p class="stt-meta"><a href="../html_Chinese/index.html">中文</a> · <a href="../../index.html">Language Page</a> · <a href="https://github.com/StephenTaam/STTNet">GitHub</a></p>
+    <p class="stt-perf">An older build recorded about 65,000 requests per second with 2–3 ms average latency on a 4-core/4GB device. This is a historical measurement, not a performance guarantee. Benchmark a Release build on the target environment.</p>
   </div>
-</div>
 
-<div class="stt-grid">
-  <div class="stt-card"><h3>Programming Guide</h3><p>Ten sequential chapters from build setup and the first HTTP service to WorkerPool, WebSocket, signals, logging, backpressure, and production checks.</p></div>
-  <div class="stt-card"><h3>Buildable Demos</h3><p>Six fully commented programs covering HTTP, JSON, WorkerPool, WebSocket, signal shutdown, and system settings.</p></div>
-  <div class="stt-card"><h3>API Reference</h3><p>The existing Doxygen class, namespace, file, and member indexes remain available for exact signatures and defaults.</p></div>
-</div>
+  <div class="stt-section" id="quick-start">
+    <h2>Download, Install Dependencies, and Run</h2>
+    <p>The commands below use Ubuntu / Debian. Each comment explains what the next command does.</p>
+    <div class="stt-code">
+      <div class="stt-code-title">Terminal</div>
+      <pre><code># 1. Download the STTNet source code
+git clone https://github.com/StephenTaam/STTNet.git
+cd STTNet
 
-<div class="stt-section">
-<h2>Minimal HTTP Server</h2>
-<div class="stt-code"><pre><code>#include &lt;sttnet.h&gt;
+# 2. Install the compiler, CMake, JsonCpp, and OpenSSL development packages
+sudo apt update
+sudo apt install -y build-essential cmake pkg-config libjsoncpp-dev libssl-dev
+
+# 3. Configure a Release build and enable the runnable examples
+cmake -S . -B build \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DSTTNET_BUILD_EXAMPLE=ON \
+  -DSTTNET_BUILD_TESTS=OFF
+
+# 4. Build STTNet and all examples
+cmake --build build -j
+
+# 5. Start the minimal HTTP example
+./build/examples/sttnet_http_hello
+
+# 6. Open another terminal and verify the route; expected output: pong
+curl http://127.0.0.1:8080/ping</code></pre>
+    </div>
+    <div class="stt-note"><b>Other Linux distributions:</b> install equivalent packages for a C++17 compiler, CMake, pkg-config, JsonCpp development headers, and OpenSSL development headers.</div>
+
+    <h3>What the Minimal HTTP Server Does</h3>
+    <p>It creates a server, registers the <code>/ping</code> route, starts listening, and shuts down normally after Ctrl-C or SIGTERM.</p>
+    <div class="stt-code">
+      <div class="stt-code-title">main.cpp</div>
+      <pre><code>#include &lt;sttnet.h&gt;
+#include &lt;iostream&gt;
 
 int main()
 {
     using namespace stt::network;
     using stt::system::ServerSetting;
 
-    // Block graceful-termination signals before Reactor or Worker threads exist.
+    // Block termination signals before Reactor or Worker threads are created.
+    // The main thread waits for SIGINT / SIGTERM synchronously later.
     if(!ServerSetting::blockTerminationSignals())
         return 1;
 
-    // Create the HTTP server.
+    // HttpServer owns the listener, connections, Reactor, and WorkerPool.
     HttpServer server;
 
-    // Register /ping. Return 1 on success, or -2 to close after send failure.
+    // Register /ping. Return 1 after a successful send.
+    // Return -2 when sending fails and the connection should close.
     server.setFunction("/ping",
         [](HttpServerFDHandler &amp;client, HttpRequestInformation &amp;) {
             return client.sendText("pong") ? 1 : -2;
         });
 
-    // Start listening on port 8080.
+    // Listen on TCP port 8080.
     if(!server.startListen(8080))
         return 2;
 
-    // Wait synchronously for Ctrl-C or SIGTERM.
+    std::cout &lt;&lt; "http://127.0.0.1:8080/ping
+";
+
+    // Wait here until Ctrl-C or SIGTERM is received.
     ServerSetting::waitForTerminationSignal();
 
     // Perform graceful cleanup from normal thread context.
     return server.close() ? 0 : 3;
-}</code></pre></div>
-<div class="stt-note"><b>Continue with the Guide:</b> it explains signal order, callback parameters, callback result values, WorkerPool boundaries, and production settings.</div>
-</div>
+}</code></pre>
+    </div>
+  </div>
 
-<div class="stt-section">
-<h2>Learning Path</h2>
-<div class="stt-api-links">
-  <a href="../../guide/English/02-build.html">Build and Run<small>Dependencies, CMake, execution, curl</small></a>
-  <a href="../../guide/English/03-http.html">HTTP Basics<small>Server, routes, requests, responses</small></a>
-  <a href="../../guide/English/06-workerpool.html">WorkerPool<small>Blocking work, backpressure, results</small></a>
-  <a href="../../guide/English/07-websocket.html">WebSocket<small>Handshake, messages, heartbeat, WSS</small></a>
-  <a href="../../guide/English/08-signals.html">Signals<small>SIGINT, SIGTERM, SIGPIPE, close</small></a>
-  <a href="../../guide/English/09-settings.html">System Settings<small>Logging, sockets, queues, TLS, metrics</small></a>
-  <a href="../../guide/English/demos.html">All Demos<small>Six complete commented programs</small></a>
-  <a href="../../guide/English/10-production.html">Production Checklist<small>Integration, timeouts, load tests, monitoring</small></a>
-</div>
-</div>
+  <div class="stt-section">
+    <h2>More Commented Demos</h2>
+    <p>Every demo includes complete source code, build steps, test commands, and expected results.</p>
+    <div class="stt-demo-list">
+      <a class="stt-demo" href="../../guide/English/demo-http-json.html"><strong>HTTP and JSON</strong><span>Parse request bodies, validate fields, and return JSON.</span></a>
+      <a class="stt-demo" href="../../guide/English/demo-worker-pool.html"><strong>WorkerPool</strong><span>Move database, file, or RPC blocking work out of the Reactor.</span></a>
+      <a class="stt-demo" href="../../guide/English/demo-websocket-echo.html"><strong>WebSocket</strong><span>Handshake checks, text/binary messages, heartbeat, and close.</span></a>
+      <a class="stt-demo" href="../../guide/English/demo-signal-shutdown.html"><strong>Signals and Graceful Shutdown</strong><span>SIGINT, SIGTERM, SIGPIPE, and safe cleanup.</span></a>
+      <a class="stt-demo" href="../../guide/English/demo-system-settings.html"><strong>System Settings</strong><span>Logging, sockets, backpressure, queues, metrics, and timeouts.</span></a>
+      <a class="stt-demo" href="../../guide/English/demos.html"><strong>View All 11 Demos</strong><span>Also covers TCP, UDP, clients, and TLS / HTTPS.</span></a>
+    </div>
+  </div>
 
-<div class="stt-perf"><b>Performance note:</b> an older build recorded about 65,000 requests per second with 2–3 ms average latency on a 4-core/4GB development board. This is a historical case, not a fixed result for every machine or the current release. Benchmark the target Linux environment.</div>
+  <div class="stt-section" id="api-reference">
+    <h2>Learn More or Look Up an API</h2>
+    <p>Use the Programming Guide for a structured explanation. Use the API Reference when you already know which class or function you need.</p>
+    <div class="stt-simple-links">
+      <a href="../../guide/English/index.html">Open the Programming Guide</a>
+      <a href="../../guide/English/api-quick-reference.html">English API Quick Reference</a>
+      <a href="annotated.html">Classes and Structures</a>
+      <a href="namespaces.html">Namespaces</a>
+      <a href="functions.html">Member Index</a>
+      <a href="files.html">Files and Source</a>
+    </div>
+  </div>
 
-<div class="stt-section" id="api-reference">
-<h2>API Reference</h2>
-<p>Use the Doxygen indexes or search box when you need exact signatures, defaults, or member descriptions.</p>
-<div class="stt-api-links">
-  <a href="annotated.html">Classes and Structures<small>Servers, handlers, requests, settings, utilities</small></a>
-  <a href="namespaces.html">Namespaces<small>network, system, security, file, time, and more</small></a>
-  <a href="files.html">Files<small>Declarations, definitions, and source locations</small></a>
-  <a href="functions.html">Member Index<small>Functions, variables, and types by name</small></a>
+  <dl class="section author"><dt>Author</dt><dd>StephenTaam · <a href="mailto:1356597983@qq.com">1356597983@qq.com</a></dd></dl>
 </div>
-</div>
-
-<dl class="section author"><dt>Author</dt><dd>StephenTaam · <a href="mailto:1356597983@qq.com">1356597983@qq.com</a></dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.7.0</dd></dl>
 
 </div></div><!-- PageDoc -->
 <a href="doxygen_crawl.html"></a>
