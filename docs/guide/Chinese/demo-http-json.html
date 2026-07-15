@@ -1,7 +1,6 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Demo：HTTP request and JSON parsing · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
-<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header>
-<div class="layout"><aside class="sidebar"><h3>章节</h3><a class="" href="index.html">指导手册首页</a><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、构建与运行</a><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由与回调返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool</a><a class="" href="07-websocket.html">第 7 章：WebSocket</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS 与 WSS</a><a class="" href="08-signals.html">第 12 章：信号与优雅退出</a><a class="" href="09-settings.html">第 13 章：系统设置与生产配置</a><a class="" href="10-production.html">第 14 章：项目接入与上线检查</a><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>Demo：HTTP request and JSON parsing</h1><p class="lead">完整源码、构建命令、运行步骤、测试方法和预期结果：HTTP request and JSON parsing。</p><h2>1. 这个 Demo 教什么</h2><p>代码中的关键调用都带有注释。请先运行，再修改一个参数或回调观察行为，不要只复制不理解。</p><h2>2. 构建和运行</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>cmake --build build --target sttnet_http_json --parallel
-./build/examples/sttnet_http_json</code></pre></div><h2>3. 测试</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>curl -i -X POST http://127.0.0.1:8081/json -H &#x27;Content-Type: application/json&#x27; --data &#x27;{&quot;name&quot;:&quot;Stephen&quot;}&#x27;</code></pre></div><div class="expected"><strong>预期：</strong>HTTP 201 with a JSON greeting</div><h2>4. 完整源码</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>#include &lt;sttnet.h&gt;
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Demo：HTTP 请求与 JSON · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body><header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header><div class="layout"><aside class="sidebar"><h3>章节目录</h3><a class="" href="index.html">指导手册首页</a><div class="side-group">基础</div><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、依赖、构建与运行</a><div class="side-group">网络服务与客户端</div><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：HTTP 请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由、处理阶段与返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool 与阻塞任务</a><a class="" href="07-websocket.html">第 7 章：WebSocket 服务端</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：HTTP、WebSocket、TCP 与 UDP 客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS、WSS 与 mTLS</a><div class="side-group">数据与工具类</div><a class="" href="12-json.html">第 12 章：JSON 解析与生成</a><a class="" href="13-time.html">第 13 章：时间、时间间隔与计时</a><a class="" href="14-file-log.html">第 14 章：文件与异步日志</a><a class="" href="15-data-tools.html">第 15 章：编码、加密、随机数与数据转换</a><div class="side-group">信息安全</div><a class="" href="16-security.html">第 16 章：连接安全、限流与输入边界</a><div class="side-group">系统与进程</div><a class="" href="08-signals.html">第 17 章：Linux 信号与优雅退出</a><a class="" href="09-settings.html">第 18 章：系统初始化与服务端设置</a><a class="" href="19-process.html">第 19 章：进程拉起、守护、心跳与进程间同步</a><div class="side-group">生产部署</div><a class="" href="10-production.html">第 20 章：项目接入与上线检查</a><div class="side-group">示例与参考</div><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>Demo：HTTP 请求与 JSON</h1><p class="lead">可构建、可运行、可验证，并与仓库 examples 目录中的源码保持一致。</p><h2>1. 学习目标</h2><p>完整源码中的关键调用都有中文注释。先运行原样程序，再修改一个参数观察行为。</p><h2>2. 构建与运行</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>cmake --build build --target sttnet_http_json --parallel
+./build/examples/sttnet_http_json</code></pre></div><h2>3. 验证</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>curl -i -X POST http://127.0.0.1:8081/json -H "Content-Type: application/json" -d '{"name":"Stephen"}'</code></pre></div><div class="expected"><strong>预期：</strong>返回 201 Created 和 JSON 响应。</div><h2>4. 完整源码</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>#include &lt;sttnet.h&gt;
 
 #include &lt;iostream&gt;
 #include &lt;memory&gt;
@@ -12,52 +11,52 @@ int main()
     using namespace stt::network;
     using stt::system::ServerSetting;
 
-    // Block SIGINT/SIGTERM before STTNet creates Reactor or Worker threads.
-    // This lets the main thread perform cleanup in normal C++ context later.
+    // 在 STTNet 创建 Reactor 或 Worker 线程前屏蔽 SIGINT/SIGTERM。
+    // 这样主线程稍后能在正常 C++ 上下文中清理资源。
     if(!ServerSetting::blockTerminationSignals())
     {
-        std::cerr &lt;&lt; &quot;failed to block termination signals\n&quot;;
+        std::cerr &lt;&lt; "failed to block termination signals\n";
         return 1;
     }
 
     HttpServer server;
 
-    // GET /inspect shows how STTNet exposes the parsed HTTP request.
-    server.setFunction(&quot;/inspect&quot;,
+    // GET /inspect 展示如何读取 STTNet 已解析的 HTTP 请求。
+    server.setFunction("/inspect",
         [](HttpServerFDHandler &amp;client, HttpRequestInformation &amp;request) {
-            // headerValue() is case-insensitive and returns a non-owning view.
-            // Copy it before keeping the value beyond this callback.
-            const std::string contentType(request.headerValue(&quot;content-type&quot;));
+            // headerValue() 不区分大小写，并返回非拥有视图。
+            // 如需在回调结束后保存，必须先复制。
+            const std::string contentType(request.headerValue("content-type"));
 
-            // bodyView() works for both Content-Length and chunked request bodies.
+            // bodyView() 同时支持 Content-Length 和 chunked 请求体。
             const std::string body(request.bodyView());
 
             Json::Value response;
-            response[&quot;ok&quot;] = true;
-            response[&quot;method&quot;] = request.type;
-            response[&quot;path&quot;] = request.loc;
-            response[&quot;query&quot;] = request.para;
-            response[&quot;content_type&quot;] = contentType;
-            response[&quot;body&quot;] = body;
+            response["ok"] = true;
+            response["method"] = request.type;
+            response["path"] = request.loc;
+            response["query"] = request.para;
+            response["content_type"] = contentType;
+            response["body"] = body;
 
-            // A successful send means the response was accepted by STTNet&#x27;s
-            // bounded write queue. -2 asks STTNet to close on send failure.
+            // 发送成功表示响应已进入 STTNet 的
+            // 有界发送队列；发送失败时返回 -2 请求关闭连接。
             return client.sendJson(response) ? 1 : -2;
         });
 
-    // POST /json parses a client-supplied JSON body and validates its fields.
-    server.setFunction(&quot;/json&quot;,
+    // POST /json 解析客户端 JSON 请求体并校验字段。
+    server.setFunction("/json",
         [](HttpServerFDHandler &amp;client, HttpRequestInformation &amp;request) {
-            if(request.type != &quot;POST&quot;)
+            if(request.type != "POST")
             {
                 Json::Value error;
-                error[&quot;ok&quot;] = false;
-                error[&quot;error&quot;] = &quot;POST required&quot;;
-                return client.sendJson(error, &quot;405 Method Not Allowed&quot;,
-                    &quot;Allow: POST\r\n&quot;) ? 1 : -2;
+                error["ok"] = false;
+                error["error"] = "POST required";
+                return client.sendJson(error, "405 Method Not Allowed",
+                    "Allow: POST\r\n") ? 1 : -2;
             }
 
-            // JsonCpp&#x27;s CharReader reports syntax errors without throwing.
+            // JsonCpp 的 CharReader 会返回语法错误而不是抛异常。
             const std::string body(request.bodyView());
             Json::CharReaderBuilder builder;
             std::unique_ptr&lt;Json::CharReader&gt; reader(builder.newCharReader());
@@ -68,44 +67,44 @@ int main()
                               &amp;input, &amp;parseError))
             {
                 Json::Value error;
-                error[&quot;ok&quot;] = false;
-                error[&quot;error&quot;] = &quot;invalid JSON&quot;;
-                error[&quot;detail&quot;] = parseError;
-                return client.sendJson(error, &quot;400 Bad Request&quot;) ? 1 : -2;
+                error["ok"] = false;
+                error["error"] = "invalid JSON";
+                error["detail"] = parseError;
+                return client.sendJson(error, "400 Bad Request") ? 1 : -2;
             }
 
-            if(!input.isMember(&quot;name&quot;) || !input[&quot;name&quot;].isString() ||
-               input[&quot;name&quot;].asString().empty())
+            if(!input.isMember("name") || !input["name"].isString() ||
+               input["name"].asString().empty())
             {
                 Json::Value error;
-                error[&quot;ok&quot;] = false;
-                error[&quot;error&quot;] = &quot;field &#x27;name&#x27; must be a non-empty string&quot;;
-                return client.sendJson(error, &quot;422 Unprocessable Entity&quot;) ? 1 : -2;
+                error["ok"] = false;
+                error["error"] = "field 'name' must be a non-empty string";
+                return client.sendJson(error, "422 Unprocessable Entity") ? 1 : -2;
             }
 
             Json::Value response;
-            response[&quot;ok&quot;] = true;
-            response[&quot;message&quot;] = &quot;hello, &quot; + input[&quot;name&quot;].asString();
-            return client.sendJson(response, &quot;201 Created&quot;) ? 1 : -2;
+            response["ok"] = true;
+            response["message"] = "hello, " + input["name"].asString();
+            return client.sendJson(response, "201 Created") ? 1 : -2;
         });
 
-    // The global callback is the fallback for paths without a registered route.
+    // 全局回调负责处理没有注册路由的路径。
     server.setGlobalSolveFunction(
         [](HttpServerFDHandler &amp;client, HttpRequestInformation &amp;) {
             Json::Value error;
-            error[&quot;ok&quot;] = false;
-            error[&quot;error&quot;] = &quot;route not found&quot;;
-            return client.sendJson(error, &quot;404 Not Found&quot;) ? 1 : -2;
+            error["ok"] = false;
+            error["error"] = "route not found";
+            return client.sendJson(error, "404 Not Found") ? 1 : -2;
         });
 
     if(!server.startListen(8081))
     {
-        std::cerr &lt;&lt; &quot;failed to listen on port 8081\n&quot;;
+        std::cerr &lt;&lt; "failed to listen on port 8081\n";
         return 2;
     }
 
-    std::cout &lt;&lt; &quot;HTTP/JSON demo listening on http://127.0.0.1:8081\n&quot;;
+    std::cout &lt;&lt; "HTTP/JSON demo listening on http://127.0.0.1:8081\n";
     ServerSetting::waitForTerminationSignal();
     return server.close() ? 0 : 3;
-}</code></pre></div><div class="pager"><a href="demos.html">← 完整注释 Demo</a><span></span></div></article></main></div>
-<footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>
+}
+</code></pre></div><div class="pager"><a href="demos.html">← 完整注释 Demo</a><span></span></div></article></main></div><footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

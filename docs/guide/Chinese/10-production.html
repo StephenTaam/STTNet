@@ -1,20 +1,31 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第 14 章：项目接入与上线检查 · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
-<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header>
-<div class="layout"><aside class="sidebar"><h3>章节</h3><a class="" href="index.html">指导手册首页</a><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、构建与运行</a><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由与回调返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool</a><a class="" href="07-websocket.html">第 7 章：WebSocket</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS 与 WSS</a><a class="" href="08-signals.html">第 12 章：信号与优雅退出</a><a class="" href="09-settings.html">第 13 章：系统设置与生产配置</a><a class="active" href="10-production.html">第 14 章：项目接入与上线检查</a><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 14 章：项目接入与上线检查</h1><p class="lead">把示例代码变成可维护、可观测、能安全退出的生产服务。</p>
-<h2>1. 项目接入</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>add_subdirectory(third_party/STTNet)
-add_executable(app src/main.cpp)
-target_link_libraries(app PRIVATE STTNet::sttnet)</code></pre></div>
-<h2>2. 推荐目录</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>app/
-├── CMakeLists.txt
-├── src/
-│   ├── main.cpp          # 进程生命周期与 Server 构造
-│   ├── routes.cpp        # 路由注册
-│   ├── handlers.cpp      # 业务处理
-│   └── shutdown.cpp      # 信号和控制线程
-├── config/
-└── third_party/STTNet/</code></pre></div>
-<h2>3. 上线检查</h2><ul class="checklist"><li>所有依赖、编译器和 C++17 ABI 已确认。</li><li><code>ulimit -n</code>、systemd LimitNOFILE 和容器限制与 maxFD 匹配。</li><li>每个数据库、RPC、文件和锁等待都有有限超时。</li><li>Worker 和发送队列都有上限，并监控 rejection/overflow 指标。</li><li>TLS 证书覆盖实际域名，私钥权限最小化，客户端校验未被关闭。</li><li>SIGTERM 能走完优雅退出；超时后也能收敛。</li><li>安全限流参数按真实业务调整，并区分压测环境。</li><li>日志不会无限增长，敏感数据不会写入日志。</li><li>健康检查不执行昂贵业务，也不依赖不稳定外部系统。</li><li>压测包含 keep-alive、慢客户端、大响应和 Worker 队列压力，而不只测空 /ping。</li></ul>
-<h2>4. 性能数据怎么描述</h2><p>历史 6.5 万 QPS、2–3 ms 只能作为特定硬件、内核、连接方式和业务逻辑下的测试结果。公开材料应同时说明环境与方法，不应承诺任意机器、任意处理器都能达到相同数字。</p>
-<h2>5. 下一步查什么</h2><p>指导手册负责建立正确模型。需要完整构造参数、成员函数和错误码时，进入 <a href="../../api/html_Chinese/index.html">中文 API 参考</a>；需要复制完整程序时，进入 <a href="demos.html">注释 Demo</a>。</p>
-<div class="pager"><a href="09-settings.html">← 第 13 章：系统设置与生产配置</a><a href="demos.html">完整注释 Demo →</a></div></article></main></div>
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>第 20 章：项目接入与上线检查 · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>章节目录</h3><a class="" href="index.html">指导手册首页</a><div class="side-group">基础</div><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、依赖、构建与运行</a><div class="side-group">网络服务与客户端</div><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：HTTP 请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由、处理阶段与返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool 与阻塞任务</a><a class="" href="07-websocket.html">第 7 章：WebSocket 服务端</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：HTTP、WebSocket、TCP 与 UDP 客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS、WSS 与 mTLS</a><div class="side-group">数据与工具类</div><a class="" href="12-json.html">第 12 章：JSON 解析与生成</a><a class="" href="13-time.html">第 13 章：时间、时间间隔与计时</a><a class="" href="14-file-log.html">第 14 章：文件与异步日志</a><a class="" href="15-data-tools.html">第 15 章：编码、加密、随机数与数据转换</a><div class="side-group">信息安全</div><a class="" href="16-security.html">第 16 章：连接安全、限流与输入边界</a><div class="side-group">系统与进程</div><a class="" href="08-signals.html">第 17 章：Linux 信号与优雅退出</a><a class="" href="09-settings.html">第 18 章：系统初始化与服务端设置</a><a class="" href="19-process.html">第 19 章：进程拉起、守护、心跳与进程间同步</a><div class="side-group">生产部署</div><a class="active" href="10-production.html">第 20 章：项目接入与上线检查</a><div class="side-group">示例与参考</div><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 20 章：项目接入与上线检查</h1><p class="lead">把能运行的 Demo 变成边界清楚、可观测、能安全退出并便于回滚的生产服务。</p><h2>1. 构建与依赖</h2>
+<p>生产工程应通过 CMake 目标 <code>STTNet::sttnet</code> 接入，不要复制单个源文件。使用 Release 构建，同时保留独立的 Debug/ASan 构建用于回归。</p>
+<div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure</code></pre></div>
+<ul><li>确认 JsonCpp、OpenSSL、pthread 等运行环境依赖可用。</li><li>证书、私钥、日志目录和配置文件不要写死为开发机路径。</li><li>升级 STTNet 前先运行协议互操作测试和业务回归测试。</li></ul>
+<h2>2. 网络与系统资源</h2>
+<p>框架构造参数只是框架容量，不会自动修改 Linux 系统限制。上线前至少核对：</p>
+<div class="table-wrap"><table><thead><tr><th>项目</th><th>要检查的内容</th></tr></thead><tbody>
+<tr><td>文件描述符</td><td><code>ulimit -n</code>、systemd <code>LimitNOFILE</code> 与预期连接数</td></tr>
+<tr><td>监听队列</td><td><code>listen_backlog</code> 与内核 <code>somaxconn</code></td></tr>
+<tr><td>发送背压</td><td>每连接待发送字节、单轮写预算和慢客户端策略</td></tr>
+<tr><td>WorkerPool</td><td>线程数、待执行任务上限、数据库/RPC 自身超时</td></tr>
+<tr><td>HTTP 输入</td><td>Header、Body、上传和业务字段的大小限制</td></tr>
+<tr><td>TLS</td><td>证书有效期、私钥权限、协议版本和 mTLS 策略</td></tr>
+</tbody></table></div>
+<p>相关章节：<a href="09-settings.html">系统初始化与服务端设置</a>、<a href="16-security.html">连接安全与输入边界</a>。</p>
+<h2>3. 数据、日志与秘密信息</h2>
+<ul><li>JSON 解析失败必须返回明确的 4xx，不能继续读取不存在的字段。</li><li>异步日志队列要监控丢弃数量，并确保退出前日志对象仍然存活。</li><li>密码、Token、Cookie、私钥和完整请求体默认不应写入日志。</li><li>Base64 只是编码；SHA-1 和 AES-CBC 的使用边界见数据工具章节。</li><li>所有外部输入都要先做长度、格式和权限检查，再进入 Worker 或业务层。</li></ul>
+<p>相关章节：<a href="12-json.html">JSON</a>、<a href="14-file-log.html">文件与日志</a>、<a href="15-data-tools.html">编码与加密工具</a>。</p>
+<h2>4. 进程生命周期</h2>
+<ol class="steps"><li>在线程创建前屏蔽 <code>SIGINT (2)</code> 与 <code>SIGTERM (15)</code>。</li><li>创建日志、Server、Reactor 和 Worker。</li><li>启动监听并公开健康检查/指标。</li><li>收到终止信号后停止接收新连接，等待在途任务和发送队列。</li><li>在超时内完成正常关闭；外部守护程序最后才使用 <code>SIGKILL (9)</code>。</li></ol>
+<p><code>Process</code> 提供进程拉起与重启，不等于完整 Unix daemonize。生产环境优先使用 systemd、容器编排或专用进程监督器。相关章节：<a href="08-signals.html">Linux 信号</a>、<a href="19-process.html">进程监督与心跳</a>。</p>
+<h2>5. 上线前检查表</h2>
+<div class="checklist"><label><input type="checkbox"/> Release 构建和测试通过</label><label><input type="checkbox"/> 连接数、fd、backlog、Worker 和内存上限已测量</label><label><input type="checkbox"/> 超时、限流、背压和错误响应已验证</label><label><input type="checkbox"/> SIGTERM 优雅退出与超时强退流程已演练</label><label><input type="checkbox"/> 日志、指标、健康检查和告警可用</label><label><input type="checkbox"/> TLS 证书、密钥权限和续期流程已确认</label><label><input type="checkbox"/> 配置兼容、数据迁移和回滚方案已准备</label></div>
+<div class="tip"><strong>发布原则：</strong>先压测最慢的真实业务路径，再看框架空响应 QPS。生产容量由业务逻辑、下游依赖和尾延迟决定。</div><div class="pager"><a href="19-process.html">← 第 19 章：进程拉起、守护、心跳与进程间同步</a><span></span></div></article></main></div>
 <footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

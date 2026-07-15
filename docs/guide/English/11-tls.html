@@ -1,6 +1,8 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chapter 11: TLS, HTTPS, WSS · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
-<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">Chapters</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Commented Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Page</a></nav></header>
-<div class="layout"><aside class="sidebar"><h3>Chapters</h3><a class="" href="index.html">Guide Home</a><a class="" href="01-understand.html">Chapter 1: Understand STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Build, Run</a><a class="" href="03-http.html">Chapter 3: First HTTP Server</a><a class="" href="04-request-response.html">Chapter 4: Requests, JSON, Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing and Callback Results</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool</a><a class="" href="07-websocket.html">Chapter 7: WebSocket</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: Clients</a><a class="active" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS</a><a class="" href="08-signals.html">Chapter 12: Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 13: System and Production Settings</a><a class="" href="10-production.html">Chapter 14: Integration and Production</a><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Chapter 11: TLS, HTTPS, WSS</h1><p class="lead">Configure one-way TLS, mutual TLS, test certificates, client validation, and WSS.</p>
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Chapter 11: TLS, HTTPS, WSS · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">Chapters</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Commented Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Page</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>Contents</h3><a class="" href="index.html">Guide Home</a><div class="side-group">Foundation</div><a class="" href="01-understand.html">Chapter 1: Understanding STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Dependencies, Build, and Run</a><div class="side-group">Network Servers and Clients</div><a class="" href="03-http.html">Chapter 3: Your First HTTP Service</a><a class="" href="04-request-response.html">Chapter 4: HTTP Requests, JSON, and Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing, Processing Stages, and Return Values</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool and Blocking Work</a><a class="" href="07-websocket.html">Chapter 7: WebSocket Server</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: HTTP, WebSocket, TCP, and UDP Clients</a><a class="active" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS, and mTLS</a><div class="side-group">Data and Utility Classes</div><a class="" href="12-json.html">Chapter 12: JSON Parsing and Generation</a><a class="" href="13-time.html">Chapter 13: Time, Duration, and Timing</a><a class="" href="14-file-log.html">Chapter 14: Files and Asynchronous Logging</a><a class="" href="15-data-tools.html">Chapter 15: Encoding, Crypto, Randomness, and Data Conversion</a><div class="side-group">Security</div><a class="" href="16-security.html">Chapter 16: Connection Security, Rate Limiting, and Input Boundaries</a><div class="side-group">System and Processes</div><a class="" href="08-signals.html">Chapter 17: Linux Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 18: System Initialization and Server Settings</a><a class="" href="19-process.html">Chapter 19: Process Supervision, Heartbeats, and IPC Synchronization</a><div class="side-group">Production</div><a class="" href="10-production.html">Chapter 20: Integration and Production Checklist</a><div class="side-group">Examples and Reference</div><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Chapter 11: TLS, HTTPS, WSS</h1><p class="lead">Configure one-way TLS, mutual TLS, test certificates, client validation, and WSS.</p>
 <h2>1. One-way TLS and mutual TLS</h2><div class="table-wrap"><table><thead><tr><th>Mode</th><th>Configuration</th><th>Use</th></tr></thead><tbody><tr><td>Ordinary HTTPS/WSS</td><td>setTLS(cert, key)</td><td>Clients verify the server; the server does not require client certificates.</td></tr><tr><td>Optional client certificate</td><td>five-argument setTLS + Optional</td><td>Validate a certificate when supplied but allow clients without one.</td></tr><tr><td>Required mTLS</td><td>five-argument setTLS + Required</td><td>Every client must present a trusted certificate.</td></tr></tbody></table></div>
 <h2>2. HTTPS demo</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>#include &lt;sttnet.h&gt;
 
@@ -13,7 +15,7 @@ int main(int argc, char **argv)
 
     if(argc != 3)
     {
-        std::cerr &lt;&lt; &quot;usage: &quot; &lt;&lt; argv[0] &lt;&lt; &quot; &lt;server.crt&gt; &lt;server.key&gt;\n&quot;;
+        std::cerr &lt;&lt; "usage: " &lt;&lt; argv[0] &lt;&lt; " &lt;server.crt&gt; &lt;server.key&gt;\n";
         return 1;
     }
 
@@ -27,34 +29,34 @@ int main(int argc, char **argv)
     // client certificate. Use the five-argument overload for explicit mTLS.
     if(!server.setTLS(argv[1], argv[2]))
     {
-        std::cerr &lt;&lt; &quot;failed to load certificate or private key\n&quot;;
+        std::cerr &lt;&lt; "failed to load certificate or private key\n";
         return 3;
     }
 
-    server.setFunction(&quot;/secure&quot;,
+    server.setFunction("/secure",
         [](HttpServerFDHandler &amp;client, HttpRequestInformation &amp;) {
-            return client.sendJson(Json::Value(&quot;TLS is active&quot;)) ? 1 : -2;
+            return client.sendJson(Json::Value("TLS is active")) ? 1 : -2;
         });
 
     if(!server.startListen(8443))
     {
-        std::cerr &lt;&lt; &quot;failed to listen on port 8443\n&quot;;
+        std::cerr &lt;&lt; "failed to listen on port 8443\n";
         return 4;
     }
 
-    std::cout &lt;&lt; &quot;HTTPS demo listening on https://127.0.0.1:8443/secure\n&quot;;
+    std::cout &lt;&lt; "HTTPS demo listening on https://127.0.0.1:8443/secure\n";
     ServerSetting::waitForTerminationSignal();
     return server.close() ? 0 : 5;
 }</code></pre></div>
 <h2>3. Local-only test certificate</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>openssl req -x509 -newkey rsa:2048 -nodes \
   -keyout server.key -out server.crt -days 1 \
-  -subj &#x27;/CN=localhost&#x27; \
-  -addext &#x27;subjectAltName=DNS:localhost,IP:127.0.0.1&#x27;
+  -subj '/CN=localhost' \
+  -addext 'subjectAltName=DNS:localhost,IP:127.0.0.1'
 ./build/examples/sttnet_tls_https server.crt server.key
 curl --cacert server.crt https://localhost:8443/secure</code></pre></div>
 <div class="warning">Do not use a self-signed test certificate in production, and do not hide verification failures with <code>curl -k</code>. Protect the private key and use a certificate covering the actual hostname.</div>
-<h2>4. WSS and mTLS</h2><p>Call <code>setTLS()</code> on WebSocketServer before listening; application callbacks stay unchanged. For required client certificates:</p><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>server.setTLS(&quot;server.crt&quot;, &quot;server.key&quot;, &quot;&quot;,
-              &quot;client-ca.crt&quot;,
+<h2>4. WSS and mTLS</h2><p>Call <code>setTLS()</code> on WebSocketServer before listening; application callbacks stay unchanged. For required client certificates:</p><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>server.setTLS("server.crt", "server.key", "",
+              "client-ca.crt",
               TLSClientAuthMode::Required);</code></pre></div>
-<div class="pager"><a href="10-clients.html">← Chapter 10: Clients</a><a href="08-signals.html">Chapter 12: Signals and Graceful Shutdown →</a></div></article></main></div>
+<div class="pager"><a href="10-clients.html">← Chapter 10: HTTP, WebSocket, TCP, and UDP Clients</a><a href="12-json.html">Chapter 12: JSON Parsing and Generation →</a></div></article></main></div>
 <footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

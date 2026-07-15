@@ -1,6 +1,8 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第 11 章：TLS、HTTPS 与 WSS · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
-<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header>
-<div class="layout"><aside class="sidebar"><h3>章节</h3><a class="" href="index.html">指导手册首页</a><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、构建与运行</a><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由与回调返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool</a><a class="" href="07-websocket.html">第 7 章：WebSocket</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：客户端</a><a class="active" href="11-tls.html">第 11 章：TLS、HTTPS 与 WSS</a><a class="" href="08-signals.html">第 12 章：信号与优雅退出</a><a class="" href="09-settings.html">第 13 章：系统设置与生产配置</a><a class="" href="10-production.html">第 14 章：项目接入与上线检查</a><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 11 章：TLS、HTTPS 与 WSS</h1><p class="lead">正确配置单向 TLS、mTLS、测试证书、客户端校验和 WSS。</p>
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>第 11 章：TLS、HTTPS 与 WSS · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>章节目录</h3><a class="" href="index.html">指导手册首页</a><div class="side-group">基础</div><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、依赖、构建与运行</a><div class="side-group">网络服务与客户端</div><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：HTTP 请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由、处理阶段与返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool 与阻塞任务</a><a class="" href="07-websocket.html">第 7 章：WebSocket 服务端</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：HTTP、WebSocket、TCP 与 UDP 客户端</a><a class="active" href="11-tls.html">第 11 章：TLS、HTTPS、WSS 与 mTLS</a><div class="side-group">数据与工具类</div><a class="" href="12-json.html">第 12 章：JSON 解析与生成</a><a class="" href="13-time.html">第 13 章：时间、时间间隔与计时</a><a class="" href="14-file-log.html">第 14 章：文件与异步日志</a><a class="" href="15-data-tools.html">第 15 章：编码、加密、随机数与数据转换</a><div class="side-group">信息安全</div><a class="" href="16-security.html">第 16 章：连接安全、限流与输入边界</a><div class="side-group">系统与进程</div><a class="" href="08-signals.html">第 17 章：Linux 信号与优雅退出</a><a class="" href="09-settings.html">第 18 章：系统初始化与服务端设置</a><a class="" href="19-process.html">第 19 章：进程拉起、守护、心跳与进程间同步</a><div class="side-group">生产部署</div><a class="" href="10-production.html">第 20 章：项目接入与上线检查</a><div class="side-group">示例与参考</div><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 11 章：TLS、HTTPS 与 WSS</h1><p class="lead">正确配置单向 TLS、mTLS、测试证书、客户端校验和 WSS。</p>
 <h2>1. 普通 TLS 与双向 TLS</h2><div class="table-wrap"><table><thead><tr><th>模式</th><th>服务端配置</th><th>用途</th></tr></thead><tbody><tr><td>普通 HTTPS/WSS</td><td>setTLS(cert, key)</td><td>客户端验证服务端；最常见的网站和 API。</td></tr><tr><td>可选客户端证书</td><td>五参数 setTLS + TLSClientAuthMode::Optional</td><td>有证书则校验，无证书也允许。</td></tr><tr><td>强制 mTLS</td><td>五参数 setTLS + TLSClientAuthMode::Required</td><td>服务端必须验证客户端证书。</td></tr></tbody></table></div>
 <h2>2. HTTPS Demo</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>#include &lt;sttnet.h&gt;
 
@@ -13,7 +15,7 @@ int main(int argc, char **argv)
 
     if(argc != 3)
     {
-        std::cerr &lt;&lt; &quot;usage: &quot; &lt;&lt; argv[0] &lt;&lt; &quot; &lt;server.crt&gt; &lt;server.key&gt;\n&quot;;
+        std::cerr &lt;&lt; "usage: " &lt;&lt; argv[0] &lt;&lt; " &lt;server.crt&gt; &lt;server.key&gt;\n";
         return 1;
     }
 
@@ -22,42 +24,42 @@ int main(int argc, char **argv)
 
     HttpServer server;
 
-    // Configure TLS before startListen(). This is ordinary one-way HTTPS:
-    // clients verify the server certificate; the server does not require a
-    // client certificate. Use the five-argument overload for explicit mTLS.
+    // 必须在 startListen() 前配置 TLS；这里是普通单向 HTTPS：
+    // 客户端验证服务端证书，服务端不要求
+    // 客户端证书；需要 mTLS 时使用五参数重载。
     if(!server.setTLS(argv[1], argv[2]))
     {
-        std::cerr &lt;&lt; &quot;failed to load certificate or private key\n&quot;;
+        std::cerr &lt;&lt; "failed to load certificate or private key\n";
         return 3;
     }
 
-    server.setFunction(&quot;/secure&quot;,
+    server.setFunction("/secure",
         [](HttpServerFDHandler &amp;client, HttpRequestInformation &amp;) {
-            return client.sendJson(Json::Value(&quot;TLS is active&quot;)) ? 1 : -2;
+            return client.sendJson(Json::Value("TLS is active")) ? 1 : -2;
         });
 
     if(!server.startListen(8443))
     {
-        std::cerr &lt;&lt; &quot;failed to listen on port 8443\n&quot;;
+        std::cerr &lt;&lt; "failed to listen on port 8443\n";
         return 4;
     }
 
-    std::cout &lt;&lt; &quot;HTTPS demo listening on https://127.0.0.1:8443/secure\n&quot;;
+    std::cout &lt;&lt; "HTTPS demo listening on https://127.0.0.1:8443/secure\n";
     ServerSetting::waitForTerminationSignal();
     return server.close() ? 0 : 5;
 }</code></pre></div>
 <h2>3. 生成仅用于本地测试的证书</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>openssl req -x509 -newkey rsa:2048 -nodes \
   -keyout server.key -out server.crt -days 1 \
-  -subj &#x27;/CN=localhost&#x27; \
-  -addext &#x27;subjectAltName=DNS:localhost,IP:127.0.0.1&#x27;
+  -subj '/CN=localhost' \
+  -addext 'subjectAltName=DNS:localhost,IP:127.0.0.1'
 
 ./build/examples/sttnet_tls_https server.crt server.key
 curl --cacert server.crt https://localhost:8443/secure</code></pre></div>
 <div class="warning">不要在生产环境使用自签名测试证书，也不要用 <code>curl -k</code> 掩盖证书校验问题。生产证书必须覆盖实际域名并安全保护私钥。</div>
 <h2>4. WSS</h2><p><code>WebSocketServer</code> 继承相同 TLS 配置能力。在 <code>startListen()</code> 前调用 <code>setTLS()</code>，业务回调无需改变，客户端 URL 改为 <code>wss://</code>。</p>
-<h2>5. 客户端证书校验</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>server.setTLS(&quot;server.crt&quot;, &quot;server.key&quot;, &quot;&quot;,
-              &quot;client-ca.crt&quot;,
+<h2>5. 客户端证书校验</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>server.setTLS("server.crt", "server.key", "",
+              "client-ca.crt",
               TLSClientAuthMode::Required);</code></pre></div>
 <p>TLS 配置加载失败必须阻止服务启动。证书热重载只影响后续新连接，已有会话继续使用原上下文。</p>
-<div class="pager"><a href="10-clients.html">← 第 10 章：客户端</a><a href="08-signals.html">第 12 章：信号与优雅退出 →</a></div></article></main></div>
+<div class="pager"><a href="10-clients.html">← 第 10 章：HTTP、WebSocket、TCP 与 UDP 客户端</a><a href="12-json.html">第 12 章：JSON 解析与生成 →</a></div></article></main></div>
 <footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

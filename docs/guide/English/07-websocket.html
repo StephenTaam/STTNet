@@ -1,6 +1,8 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chapter 7: WebSocket · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
-<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">Chapters</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Commented Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Page</a></nav></header>
-<div class="layout"><aside class="sidebar"><h3>Chapters</h3><a class="" href="index.html">Guide Home</a><a class="" href="01-understand.html">Chapter 1: Understand STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Build, Run</a><a class="" href="03-http.html">Chapter 3: First HTTP Server</a><a class="" href="04-request-response.html">Chapter 4: Requests, JSON, Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing and Callback Results</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool</a><a class="active" href="07-websocket.html">Chapter 7: WebSocket</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS</a><a class="" href="08-signals.html">Chapter 12: Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 13: System and Production Settings</a><a class="" href="10-production.html">Chapter 14: Integration and Production</a><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Chapter 7: WebSocket</h1><p class="lead">Handle handshake validation, callback types, text/binary frames, heartbeat, and close behavior.</p>
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Chapter 7: WebSocket · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">Chapters</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Commented Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Page</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>Contents</h3><a class="" href="index.html">Guide Home</a><div class="side-group">Foundation</div><a class="" href="01-understand.html">Chapter 1: Understanding STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Dependencies, Build, and Run</a><div class="side-group">Network Servers and Clients</div><a class="" href="03-http.html">Chapter 3: Your First HTTP Service</a><a class="" href="04-request-response.html">Chapter 4: HTTP Requests, JSON, and Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing, Processing Stages, and Return Values</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool and Blocking Work</a><a class="active" href="07-websocket.html">Chapter 7: WebSocket Server</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: HTTP, WebSocket, TCP, and UDP Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS, and mTLS</a><div class="side-group">Data and Utility Classes</div><a class="" href="12-json.html">Chapter 12: JSON Parsing and Generation</a><a class="" href="13-time.html">Chapter 13: Time, Duration, and Timing</a><a class="" href="14-file-log.html">Chapter 14: Files and Asynchronous Logging</a><a class="" href="15-data-tools.html">Chapter 15: Encoding, Crypto, Randomness, and Data Conversion</a><div class="side-group">Security</div><a class="" href="16-security.html">Chapter 16: Connection Security, Rate Limiting, and Input Boundaries</a><div class="side-group">System and Processes</div><a class="" href="08-signals.html">Chapter 17: Linux Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 18: System Initialization and Server Settings</a><a class="" href="19-process.html">Chapter 19: Process Supervision, Heartbeats, and IPC Synchronization</a><div class="side-group">Production</div><a class="" href="10-production.html">Chapter 20: Integration and Production Checklist</a><div class="side-group">Examples and Reference</div><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Chapter 7: WebSocket</h1><p class="lead">Handle handshake validation, callback types, text/binary frames, heartbeat, and close behavior.</p>
 <h2>1. Lifecycle callbacks</h2><div class="table-wrap"><table><thead><tr><th>Stage</th><th>API</th><th>Result</th></tr></thead><tbody><tr><td>Before handshake</td><td>setJudgeFunction</td><td>bool; false rejects the connection.</td></tr><tr><td>After successful handshake</td><td>setStartFunction</td><td>bool; suitable for a welcome frame.</td></tr><tr><td>Ordinary message</td><td>setGlobalSolveFunction</td><td>bool; false signals failure and close.</td></tr><tr><td>Keyed multi-stage message</td><td>setGetKeyFunction + setFunction</td><td>int with 1/0/-1/-2 flow semantics.</td></tr></tbody></table></div>
 <h2>2. Complete echo demo</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>#include &lt;sttnet.h&gt;
 
@@ -15,7 +17,7 @@ int main()
 
     if(!ServerSetting::blockTerminationSignals())
     {
-        std::cerr &lt;&lt; &quot;failed to block termination signals\n&quot;;
+        std::cerr &lt;&lt; "failed to block termination signals\n";
         return 1;
     }
 
@@ -26,8 +28,8 @@ int main()
     server.setJudgeFunction(
         [](WebSocketFDInformation &amp;connection) {
             const bool correctPath =
-                connection.locPara == &quot;/echo&quot; ||
-                connection.locPara.rfind(&quot;/echo?&quot;, 0) == 0;
+                connection.locPara == "/echo" ||
+                connection.locPara.rfind("/echo?", 0) == 0;
 
             // A real service may also inspect connection.header here, for
             // example with HttpStringUtil::get_value_header().
@@ -41,7 +43,7 @@ int main()
            WebSocketFDInformation &amp;message) {
             // RFC 6455 opcode 1 is text and opcode 2 is binary.
             const std::string frameType =
-                message.message_type == 2 ? &quot;0010&quot; : &quot;0001&quot;;
+                message.message_type == 2 ? "0010" : "0001";
 
             // Echo the payload using the same text/binary frame type.
             return client.sendMessage(message.message, frameType);
@@ -53,22 +55,22 @@ int main()
 
     if(!server.startListen(5050))
     {
-        std::cerr &lt;&lt; &quot;failed to listen on port 5050\n&quot;;
+        std::cerr &lt;&lt; "failed to listen on port 5050\n";
         return 2;
     }
 
-    std::cout &lt;&lt; &quot;WebSocket echo listening on ws://127.0.0.1:5050/echo\n&quot;;
+    std::cout &lt;&lt; "WebSocket echo listening on ws://127.0.0.1:5050/echo\n";
     ServerSetting::waitForTerminationSignal();
     return server.close() ? 0 : 3;
 }</code></pre></div>
 <h2>3. Validate handshake headers</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>server.setJudgeFunction([](WebSocketFDInformation &amp;info) {
     std::string_view token;
     stt::data::HttpStringUtil::get_value_header(
-        std::string_view(info.header), token, &quot;X-Demo-Token&quot;);
-    return info.locPara == &quot;/echo&quot; &amp;&amp; token == &quot;sttnet&quot;;
+        std::string_view(info.header), token, "X-Demo-Token");
+    return info.locPara == "/echo" &amp;&amp; token == "sttnet";
 });</code></pre></div>
 <h2>4. Frame types</h2><ul><li>Opcode 1 is text; send type <code>"0001"</code>.</li><li>Opcode 2 is binary; send type <code>"0010"</code>.</li><li>Ping/Pong is protocol-level liveness, not a complete application presence model.</li><li>Use a WebSocket close frame such as <code>closeFD(fd, 1000, "bye")</code> for protocol-level close.</li></ul>
 <h2>5. Test</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>./build/examples/sttnet_websocket_echo
 websocat ws://127.0.0.1:5050/echo</code></pre></div>
-<div class="pager"><a href="06-workerpool.html">← Chapter 6: WorkerPool</a><a href="08-tcp.html">Chapter 8: Raw TCP →</a></div></article></main></div>
+<div class="pager"><a href="06-workerpool.html">← Chapter 6: WorkerPool and Blocking Work</a><a href="08-tcp.html">Chapter 8: Raw TCP →</a></div></article></main></div>
 <footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

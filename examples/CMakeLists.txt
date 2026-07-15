@@ -30,3 +30,27 @@ target_link_libraries(sttnet_signal_shutdown PRIVATE STTNet::sttnet)
 
 add_executable(sttnet_system_settings system_settings.cpp)
 target_link_libraries(sttnet_system_settings PRIVATE STTNet::sttnet)
+
+add_executable(sttnet_json_tools json_tools.cpp)
+target_link_libraries(sttnet_json_tools PRIVATE STTNet::sttnet)
+
+add_executable(sttnet_time_tools time_tools.cpp)
+target_link_libraries(sttnet_time_tools PRIVATE STTNet::sttnet)
+
+add_executable(sttnet_file_logging file_logging.cpp)
+target_link_libraries(sttnet_file_logging PRIVATE STTNet::sttnet)
+
+add_executable(sttnet_crypto_encoding crypto_encoding.cpp)
+target_link_libraries(sttnet_crypto_encoding PRIVATE STTNet::sttnet)
+
+add_executable(sttnet_data_tools data_tools.cpp)
+target_link_libraries(sttnet_data_tools PRIVATE STTNet::sttnet)
+
+add_executable(sttnet_security_limiter security_limiter.cpp)
+target_link_libraries(sttnet_security_limiter PRIVATE STTNet::sttnet)
+
+add_executable(sttnet_process_supervisor process_supervisor.cpp)
+target_link_libraries(sttnet_process_supervisor PRIVATE STTNet::sttnet)
+
+add_executable(sttnet_protocol_parsing protocol_parsing.cpp)
+target_link_libraries(sttnet_protocol_parsing PRIVATE STTNet::sttnet)

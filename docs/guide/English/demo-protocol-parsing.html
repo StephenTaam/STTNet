@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Demo: Protocol String Parsing Utilities · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body><header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">Contents</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Portal</a></nav></header><div class="layout"><aside class="sidebar"><h3>Contents</h3><a class="" href="index.html">Guide Home</a><div class="side-group">Foundation</div><a class="" href="01-understand.html">Chapter 1: Understanding STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Dependencies, Build, and Run</a><div class="side-group">Network Servers and Clients</div><a class="" href="03-http.html">Chapter 3: Your First HTTP Service</a><a class="" href="04-request-response.html">Chapter 4: HTTP Requests, JSON, and Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing, Processing Stages, and Return Values</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool and Blocking Work</a><a class="" href="07-websocket.html">Chapter 7: WebSocket Server</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: HTTP, WebSocket, TCP, and UDP Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS, and mTLS</a><div class="side-group">Data and Utility Classes</div><a class="" href="12-json.html">Chapter 12: JSON Parsing and Generation</a><a class="" href="13-time.html">Chapter 13: Time, Duration, and Timing</a><a class="" href="14-file-log.html">Chapter 14: Files and Asynchronous Logging</a><a class="" href="15-data-tools.html">Chapter 15: Encoding, Crypto, Randomness, and Data Conversion</a><div class="side-group">Security</div><a class="" href="16-security.html">Chapter 16: Connection Security, Rate Limiting, and Input Boundaries</a><div class="side-group">System and Processes</div><a class="" href="08-signals.html">Chapter 17: Linux Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 18: System Initialization and Server Settings</a><a class="" href="19-process.html">Chapter 19: Process Supervision, Heartbeats, and IPC Synchronization</a><div class="side-group">Production</div><a class="" href="10-production.html">Chapter 20: Integration and Production Checklist</a><div class="side-group">Examples and Reference</div><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Demo: Protocol String Parsing Utilities</h1><p class="lead">Buildable, runnable, verifiable, and synchronized with the repository source.</p><h2>1. Learning goal</h2><p>Key calls are explained with English comments. Run the original first, then change one setting and observe the behavior.</p><h2>2. Build and run</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>cmake --build build --target sttnet_protocol_parsing --parallel
+./build/examples/sttnet_protocol_parsing</code></pre></div><h2>3. Validate</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>./build/examples/sttnet_protocol_parsing</code></pre></div><div class="expected"><strong>Expected: </strong>Prints parsed URL, header, query, and WebSocket Accept values.</div><h2>4. Complete source</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>#include &lt;sttnet.h&gt;
+
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+int main()
+{
+    using stt::data::HttpStringUtil;
+    using stt::data::WebsocketStringUtil;
+
+    const std::string url = "http://127.0.0.1:8080/users?page=2&amp;limit=20";
+
+    std::string ip;
+    int port = 0;
+    std::string locationAndQuery;
+    std::string path;
+    std::string query;
+    std::string page;
+
+    // These helpers perform lightweight string extraction. They do not URL-decode
+    // percent escapes and should not replace a full URI parser for untrusted input.
+    HttpStringUtil::getIP(url, ip);
+    HttpStringUtil::getPort(url, port);
+    HttpStringUtil::getLocPara(url, locationAndQuery);
+    HttpStringUtil::get_location_str(locationAndQuery, path);
+    HttpStringUtil::getPara(locationAndQuery, query);
+    HttpStringUtil::get_value_str(locationAndQuery, page, "page");
+
+    std::cout &lt;&lt; "ip=" &lt;&lt; ip &lt;&lt; '\n'
+              &lt;&lt; "port=" &lt;&lt; port &lt;&lt; '\n'
+              &lt;&lt; "location=" &lt;&lt; locationAndQuery &lt;&lt; '\n'
+              &lt;&lt; "path=" &lt;&lt; path &lt;&lt; '\n'
+              &lt;&lt; "query=" &lt;&lt; query &lt;&lt; '\n'
+              &lt;&lt; "page=" &lt;&lt; page &lt;&lt; '\n';
+
+    const std::string rawHeaders =
+        "Host: example.com\r\n"
+        "Connection: keep-alive\r\n";
+    std::string host;
+
+    // get_value_header() is a low-level, case-sensitive helper. HTTP server users
+    // should normally prefer HttpRequestInformation::headerValue().
+    HttpStringUtil::get_value_header(rawHeaders, host, "Host");
+    std::cout &lt;&lt; "host=" &lt;&lt; host &lt;&lt; '\n';
+
+    // WebsocketStringUtil computes the RFC 6455 Sec-WebSocket-Accept value from
+    // a client key. Applications normally let WebSocketServer handle this step.
+    std::string websocketKey = "dGhlIHNhbXBsZSBub25jZQ==";
+    WebsocketStringUtil::transfer_websocket_key(websocketKey);
+    std::cout &lt;&lt; "websocket_accept=" &lt;&lt; websocketKey &lt;&lt; '\n';
+
+    return 0;
+}
+</code></pre></div><div class="pager"><a href="demos.html">← Fully Commented Demos</a><span></span></div></article></main></div><footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

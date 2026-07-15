@@ -1,6 +1,8 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chapter 10: Clients · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
-<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">Chapters</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Commented Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Page</a></nav></header>
-<div class="layout"><aside class="sidebar"><h3>Chapters</h3><a class="" href="index.html">Guide Home</a><a class="" href="01-understand.html">Chapter 1: Understand STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Build, Run</a><a class="" href="03-http.html">Chapter 3: First HTTP Server</a><a class="" href="04-request-response.html">Chapter 4: Requests, JSON, Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing and Callback Results</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool</a><a class="" href="07-websocket.html">Chapter 7: WebSocket</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="active" href="10-clients.html">Chapter 10: Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS</a><a class="" href="08-signals.html">Chapter 12: Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 13: System and Production Settings</a><a class="" href="10-production.html">Chapter 14: Integration and Production</a><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Chapter 10: Clients</h1><p class="lead">Use HTTP, WebSocket, TCP, and UDP clients without blocking a server Reactor.</p>
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Chapter 10: Clients · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">Chapters</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Commented Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Page</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>Contents</h3><a class="" href="index.html">Guide Home</a><div class="side-group">Foundation</div><a class="" href="01-understand.html">Chapter 1: Understanding STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Dependencies, Build, and Run</a><div class="side-group">Network Servers and Clients</div><a class="" href="03-http.html">Chapter 3: Your First HTTP Service</a><a class="" href="04-request-response.html">Chapter 4: HTTP Requests, JSON, and Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing, Processing Stages, and Return Values</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool and Blocking Work</a><a class="" href="07-websocket.html">Chapter 7: WebSocket Server</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="active" href="10-clients.html">Chapter 10: HTTP, WebSocket, TCP, and UDP Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS, and mTLS</a><div class="side-group">Data and Utility Classes</div><a class="" href="12-json.html">Chapter 12: JSON Parsing and Generation</a><a class="" href="13-time.html">Chapter 13: Time, Duration, and Timing</a><a class="" href="14-file-log.html">Chapter 14: Files and Asynchronous Logging</a><a class="" href="15-data-tools.html">Chapter 15: Encoding, Crypto, Randomness, and Data Conversion</a><div class="side-group">Security</div><a class="" href="16-security.html">Chapter 16: Connection Security, Rate Limiting, and Input Boundaries</a><div class="side-group">System and Processes</div><a class="" href="08-signals.html">Chapter 17: Linux Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 18: System Initialization and Server Settings</a><a class="" href="19-process.html">Chapter 19: Process Supervision, Heartbeats, and IPC Synchronization</a><div class="side-group">Production</div><a class="" href="10-production.html">Chapter 20: Integration and Production Checklist</a><div class="side-group">Examples and Reference</div><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Chapter 10: Clients</h1><p class="lead">Use HTTP, WebSocket, TCP, and UDP clients without blocking a server Reactor.</p>
 <h2>1. Client execution models</h2><div class="table-wrap"><table><thead><tr><th>Client</th><th>Model</th></tr></thead><tbody><tr><td>TcpClient</td><td>Blocking by default; use finite connect/read/write timeouts.</td></tr><tr><td>HttpClient</td><td>Synchronous request; check isReturn() after a successful send.</td></tr><tr><td>WebSocketClient</td><td>Uses an internal listening thread and asynchronous message callback.</td></tr><tr><td>UdpClient</td><td>Direct datagram send/receive in blocking or non-blocking mode.</td></tr></tbody></table></div>
 <div class="warning">Do not perform a blocking HttpClient/TcpClient call in a Server Reactor callback. Put external calls in WorkerPool and enforce finite timeouts.</div>
 <h2>2. HTTP client demo</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>#include &lt;sttnet.h&gt;
@@ -15,22 +17,22 @@ int main()
     // and run it outside an STTNet Reactor callback.
     HttpClient client;
 
-    if(!client.getRequest(&quot;http://127.0.0.1:8080/ping&quot;, &quot;&quot;,
-                          &quot;Connection: close&quot;, 5))
+    if(!client.getRequest("http://127.0.0.1:8080/ping", "",
+                          "Connection: close", 5))
     {
-        std::cerr &lt;&lt; &quot;request could not be sent\n&quot;;
+        std::cerr &lt;&lt; "request could not be sent\n";
         return 1;
     }
 
     // Sending successfully is not the same as receiving a complete response.
     if(!client.isReturn())
     {
-        std::cerr &lt;&lt; &quot;server did not return a complete HTTP response\n&quot;;
+        std::cerr &lt;&lt; "server did not return a complete HTTP response\n";
         return 2;
     }
 
-    std::cout &lt;&lt; &quot;--- response headers ---\n&quot; &lt;&lt; client.header
-              &lt;&lt; &quot;\n--- response body ---\n&quot; &lt;&lt; client.body &lt;&lt; &#x27;\n&#x27;;
+    std::cout &lt;&lt; "--- response headers ---\n" &lt;&lt; client.header
+              &lt;&lt; "\n--- response body ---\n" &lt;&lt; client.body &lt;&lt; '\n';
     return 0;
 }</code></pre></div><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>./build/examples/sttnet_http_hello
 # Another terminal:
@@ -47,33 +49,33 @@ int main()
 
     WebSocketClient client;
 
-    // The callback runs on the client&#x27;s internal listening thread.
+    // The callback runs on the client's internal listening thread.
     client.setFunction(
         [](const std::string &amp;message, WebSocketClient &amp;) {
-            std::cout &lt;&lt; &quot;received: &quot; &lt;&lt; message &lt;&lt; &#x27;\n&#x27;;
+            std::cout &lt;&lt; "received: " &lt;&lt; message &lt;&lt; '\n';
             return true; // false closes the WebSocket connection.
         });
 
-    if(!client.connect(&quot;ws://127.0.0.1:5050/echo&quot;))
+    if(!client.connect("ws://127.0.0.1:5050/echo"))
     {
-        std::cerr &lt;&lt; &quot;WebSocket connection failed\n&quot;;
+        std::cerr &lt;&lt; "WebSocket connection failed\n";
         return 1;
     }
 
-    if(!client.sendMessage(&quot;hello from STTNet client&quot;))
+    if(!client.sendMessage("hello from STTNet client"))
     {
-        std::cerr &lt;&lt; &quot;send failed\n&quot;;
-        client.close(1011, &quot;send failed&quot;);
+        std::cerr &lt;&lt; "send failed\n";
+        client.close(1011, "send failed");
         return 2;
     }
 
     // Give the asynchronous receive callback time to print the echo.
     std::this_thread::sleep_for(std::chrono::seconds(1));
-    client.close(1000, &quot;demo complete&quot;);
+    client.close(1000, "demo complete");
     return 0;
 }</code></pre></div><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>./build/examples/sttnet_websocket_echo
 # Another terminal:
 ./build/examples/sttnet_websocket_client</code></pre></div>
 <h2>4. Complete URLs</h2><p>Client URLs must include protocol, port, and path, for example <code>https://example.com:443/</code> or <code>ws://127.0.0.1:5050/echo</code>. TLS clients validate both the certificate chain and target hostname.</p>
-<div class="pager"><a href="09-udp.html">← Chapter 9: UDP</a><a href="11-tls.html">Chapter 11: TLS, HTTPS, WSS →</a></div></article></main></div>
+<div class="pager"><a href="09-udp.html">← Chapter 9: UDP</a><a href="11-tls.html">Chapter 11: TLS, HTTPS, WSS, and mTLS →</a></div></article></main></div>
 <footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

@@ -1,6 +1,8 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第 4 章：请求、JSON 与响应 · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body>
-<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header>
-<div class="layout"><aside class="sidebar"><h3>章节</h3><a class="" href="index.html">指导手册首页</a><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、构建与运行</a><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="active" href="04-request-response.html">第 4 章：请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由与回调返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool</a><a class="" href="07-websocket.html">第 7 章：WebSocket</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS 与 WSS</a><a class="" href="08-signals.html">第 12 章：信号与优雅退出</a><a class="" href="09-settings.html">第 13 章：系统设置与生产配置</a><a class="" href="10-production.html">第 14 章：项目接入与上线检查</a><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 4 章：请求、JSON 与响应</h1><p class="lead">正确读取 method、path、query、header 和 body，并返回文本、JSON、错误状态与重定向。</p>
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>第 4 章：请求、JSON 与响应 · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>章节目录</h3><a class="" href="index.html">指导手册首页</a><div class="side-group">基础</div><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、依赖、构建与运行</a><div class="side-group">网络服务与客户端</div><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="active" href="04-request-response.html">第 4 章：HTTP 请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由、处理阶段与返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool 与阻塞任务</a><a class="" href="07-websocket.html">第 7 章：WebSocket 服务端</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：HTTP、WebSocket、TCP 与 UDP 客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS、WSS 与 mTLS</a><div class="side-group">数据与工具类</div><a class="" href="12-json.html">第 12 章：JSON 解析与生成</a><a class="" href="13-time.html">第 13 章：时间、时间间隔与计时</a><a class="" href="14-file-log.html">第 14 章：文件与异步日志</a><a class="" href="15-data-tools.html">第 15 章：编码、加密、随机数与数据转换</a><div class="side-group">信息安全</div><a class="" href="16-security.html">第 16 章：连接安全、限流与输入边界</a><div class="side-group">系统与进程</div><a class="" href="08-signals.html">第 17 章：Linux 信号与优雅退出</a><a class="" href="09-settings.html">第 18 章：系统初始化与服务端设置</a><a class="" href="19-process.html">第 19 章：进程拉起、守护、心跳与进程间同步</a><div class="side-group">生产部署</div><a class="" href="10-production.html">第 20 章：项目接入与上线检查</a><div class="side-group">示例与参考</div><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 4 章：请求、JSON 与响应</h1><p class="lead">正确读取 method、path、query、header 和 body，并返回文本、JSON、错误状态与重定向。</p>
 <h2>1. 请求对象包含什么</h2>
 <div class="table-wrap"><table><thead><tr><th>字段/方法</th><th>含义</th></tr></thead><tbody><tr><td><code>type</code></td><td>HTTP method，例如 GET、POST。</td></tr><tr><td><code>locPara</code></td><td>原始 path 与 query，例如 /users?id=7。</td></tr><tr><td><code>loc</code></td><td>仅 path，例如 /users。</td></tr><tr><td><code>para</code></td><td>从问号开始的原始 query 字符串，例如 ?id=7；不会自动 URL decode，也不是键值字典。</td></tr><tr><td><code>header</code></td><td>完整请求头字符串。</td></tr><tr><td><code>headerValue(name)</code></td><td>大小写不敏感读取 header，返回非拥有 string_view。</td></tr><tr><td><code>bodyView()</code></td><td>统一读取 Content-Length 或 chunked body，返回非拥有 string_view。</td></tr></tbody></table></div>
 <h2>2. 视图的生命周期</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>// 只在当前回调里使用可以保留 string_view。
@@ -17,21 +19,21 @@ Json::Value input;
 std::string error;
 
 if(!reader-&gt;parse(body.data(), body.data() + body.size(), &amp;input, &amp;error))
-    return client.sendJson(makeError(&quot;invalid JSON&quot;), &quot;400 Bad Request&quot;) ? 1 : -2;</code></pre></div>
-<h2>4. 常用响应</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>client.sendText(&quot;created&quot;, &quot;201 Created&quot;);
-client.sendJson(value, &quot;200 OK&quot;);
-client.redirect(&quot;/login&quot;, &quot;302 Found&quot;);</code></pre></div>
+    return client.sendJson(makeError("invalid JSON"), "400 Bad Request") ? 1 : -2;</code></pre></div>
+<h2>4. 常用响应</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>client.sendText("created", "201 Created");
+client.sendJson(value, "200 OK");
+client.redirect("/login", "302 Found");</code></pre></div>
 <h2>5. 运行 Demo</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>./build/examples/sttnet_http_json
 
-curl -i &#x27;http://127.0.0.1:8081/inspect?source=guide&#x27; \
-  -H &#x27;Content-Type: text/plain&#x27; --data &#x27;hello&#x27;
+curl -i 'http://127.0.0.1:8081/inspect?source=guide' \
+  -H 'Content-Type: text/plain' --data 'hello'
 
 curl -i -X POST http://127.0.0.1:8081/json \
-  -H &#x27;Content-Type: application/json&#x27; \
-  --data &#x27;{&quot;name&quot;:&quot;Stephen&quot;}&#x27;
+  -H 'Content-Type: application/json' \
+  --data '{"name":"Stephen"}'
 
 # 故意发送错误 JSON
 curl -i -X POST http://127.0.0.1:8081/json \
-  -H &#x27;Content-Type: application/json&#x27; --data &#x27;{bad json}&#x27;</code></pre></div>
-<div class="pager"><a href="03-http.html">← 第 3 章：第一个 HTTP 服务</a><a href="05-routing-callbacks.html">第 5 章：路由与回调返回值 →</a></div></article></main></div>
+  -H 'Content-Type: application/json' --data '{bad json}'</code></pre></div>
+<div class="pager"><a href="03-http.html">← 第 3 章：第一个 HTTP 服务</a><a href="05-routing-callbacks.html">第 5 章：路由、处理阶段与返回值 →</a></div></article></main></div>
 <footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

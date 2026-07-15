@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Demo：数值、随机数与字节序 · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body><header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header><div class="layout"><aside class="sidebar"><h3>章节目录</h3><a class="" href="index.html">指导手册首页</a><div class="side-group">基础</div><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、依赖、构建与运行</a><div class="side-group">网络服务与客户端</div><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：HTTP 请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由、处理阶段与返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool 与阻塞任务</a><a class="" href="07-websocket.html">第 7 章：WebSocket 服务端</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：HTTP、WebSocket、TCP 与 UDP 客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS、WSS 与 mTLS</a><div class="side-group">数据与工具类</div><a class="" href="12-json.html">第 12 章：JSON 解析与生成</a><a class="" href="13-time.html">第 13 章：时间、时间间隔与计时</a><a class="" href="14-file-log.html">第 14 章：文件与异步日志</a><a class="" href="15-data-tools.html">第 15 章：编码、加密、随机数与数据转换</a><div class="side-group">信息安全</div><a class="" href="16-security.html">第 16 章：连接安全、限流与输入边界</a><div class="side-group">系统与进程</div><a class="" href="08-signals.html">第 17 章：Linux 信号与优雅退出</a><a class="" href="09-settings.html">第 18 章：系统初始化与服务端设置</a><a class="" href="19-process.html">第 19 章：进程拉起、守护、心跳与进程间同步</a><div class="side-group">生产部署</div><a class="" href="10-production.html">第 20 章：项目接入与上线检查</a><div class="side-group">示例与参考</div><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>Demo：数值、随机数与字节序</h1><p class="lead">可构建、可运行、可验证，并与仓库 examples 目录中的源码保持一致。</p><h2>1. 学习目标</h2><p>完整源码中的关键调用都有中文注释。先运行原样程序，再修改一个参数观察行为。</p><h2>2. 构建与运行</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>cmake --build build --target sttnet_data_tools --parallel
+./build/examples/sttnet_data_tools</code></pre></div><h2>3. 验证</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>./build/examples/sttnet_data_tools</code></pre></div><div class="expected"><strong>预期：</strong>输出转换、舍入、随机值和字节序交换结果。</div><h2>4. 完整源码</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>#include &lt;sttnet.h&gt;
+
+#include &lt;cstdint&gt;
+#include &lt;iostream&gt;
+
+int main()
+{
+    using namespace stt::data;
+
+    int port = 0;
+    NumberStringConvertUtil::toInt("8080", port);
+    std::cout &lt;&lt; "port: " &lt;&lt; port &lt;&lt; '\n';
+
+    int invalid = 0;
+    NumberStringConvertUtil::toInt("not-a-number", invalid, -1);
+    std::cout &lt;&lt; "invalid fallback: " &lt;&lt; invalid &lt;&lt; '\n';
+
+    double latency = 2.34567;
+    PrecisionUtil::getPreciesDouble(latency, 2);
+    std::cout &lt;&lt; "rounded latency: " &lt;&lt; latency &lt;&lt; " ms\n";
+
+    std::string token;
+    RandomUtil::getRandomStr_base64(token, 24);
+    std::cout &lt;&lt; "display token: " &lt;&lt; token &lt;&lt; '\n';
+
+    // 这个工具会原地交换 8 个字节，面向 64 位
+    // unsigned long 的 STTNet Linux 目标。
+    unsigned long value = 0x0102030405060708UL;
+    NetworkOrderUtil::htonl_ntohl_64(value);
+    std::cout &lt;&lt; "byte-swapped: 0x" &lt;&lt; std::hex &lt;&lt; value &lt;&lt; std::dec &lt;&lt; '\n';
+
+    return 0;
+}
+</code></pre></div><div class="pager"><a href="demos.html">← 完整注释 Demo</a><span></span></div></article></main></div><footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Chapter 12: JSON Parsing and Generation · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body><header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">Contents</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Portal</a></nav></header><div class="layout"><aside class="sidebar"><h3>Contents</h3><a class="" href="index.html">Guide Home</a><div class="side-group">Foundation</div><a class="" href="01-understand.html">Chapter 1: Understanding STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Dependencies, Build, and Run</a><div class="side-group">Network Servers and Clients</div><a class="" href="03-http.html">Chapter 3: Your First HTTP Service</a><a class="" href="04-request-response.html">Chapter 4: HTTP Requests, JSON, and Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing, Processing Stages, and Return Values</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool and Blocking Work</a><a class="" href="07-websocket.html">Chapter 7: WebSocket Server</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: HTTP, WebSocket, TCP, and UDP Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS, and mTLS</a><div class="side-group">Data and Utility Classes</div><a class="active" href="12-json.html">Chapter 12: JSON Parsing and Generation</a><a class="" href="13-time.html">Chapter 13: Time, Duration, and Timing</a><a class="" href="14-file-log.html">Chapter 14: Files and Asynchronous Logging</a><a class="" href="15-data-tools.html">Chapter 15: Encoding, Crypto, Randomness, and Data Conversion</a><div class="side-group">Security</div><a class="" href="16-security.html">Chapter 16: Connection Security, Rate Limiting, and Input Boundaries</a><div class="side-group">System and Processes</div><a class="" href="08-signals.html">Chapter 17: Linux Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 18: System Initialization and Server Settings</a><a class="" href="19-process.html">Chapter 19: Process Supervision, Heartbeats, and IPC Synchronization</a><div class="side-group">Production</div><a class="" href="10-production.html">Chapter 20: Integration and Production Checklist</a><div class="side-group">Examples and Reference</div><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Chapter 12: JSON Parsing and Generation</h1><p class="lead">Separate HTTP body handling from JSON parsing, validation, and generation.</p>
+<h2>1. JSON has two separate layers</h2><p>The HTTP layer receives request bytes and sends responses. JsonCpp and <code>stt::data::JsonHelper</code> parse and generate JSON. A successful <code>bodyView()</code> does not mean the body is valid JSON.</p>
+<div class="table-wrap"><table><thead><tr><th>Tool</th><th>Purpose</th><th>Best use</th></tr></thead><tbody><tr><td><code>Json::Value</code></td><td>Build and inspect objects and arrays</td><td>Structured JSON; preferred approach</td></tr><tr><td><code>JsonHelper::toString</code></td><td>Compact serialization</td><td>HTTP responses and structured log fields</td></tr><tr><td><code>toJsonArray</code></td><td>Parse text into <code>Json::Value</code></td><td>Simple trusted-input paths</td></tr><tr><td><code>getValue</code></td><td>Extract one field or array item</td><td>Small lookups</td></tr><tr><td><code>createJson/createArray</code></td><td>Create small flat values</td><td>Tiny responses, not complex nesting</td></tr></tbody></table></div>
+<h2>2. Recommended server-side parsing</h2>
+<div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>Json::CharReaderBuilder builder;
+Json::Value root;
+std::string errors;
+std::istringstream input(std::string(request.bodyView()));
+
+// Invalid syntax is a client input error; stop before reading fields.
+if(!Json::parseFromStream(builder, input, &amp;root, &amp;errors))
+    return client.sendText("invalid json", "400 Bad Request") ? -1 : -2;
+
+if(!root.isMember("name") || !root["name"].isString())
+    return client.sendText("name is required", "422 Unprocessable Entity") ? -1 : -2;
+
+Json::Value response;
+response["ok"] = true;
+response["name"] = root["name"];
+return client.sendJson(response, "201 Created") ? 1 : -2;</code></pre></div>
+<h2>3. JsonHelper example</h2>
+<div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>Json::Value user;
+user["id"] = 1001;
+user["name"] = "Stephen";
+user["roles"].append("developer");
+
+const std::string text = stt::data::JsonHelper::toString(user);
+const Json::Value parsed = stt::data::JsonHelper::toJsonArray(text);
+std::cout &lt;&lt; parsed["name"].asString() &lt;&lt; std::endl;</code></pre></div>
+<h2>4. Return values and boundaries</h2><ul><li><code>getValue()</code> returns <code>-1</code> on failure, <code>0</code> for a scalar, and <code>1</code> for an object or array.</li><li><code>toJsonArray()</code> reports parse errors to stderr and returns an empty value. In a server endpoint, use <code>Json::parseFromStream</code> when you need a controlled error response.</li><li>Check JSON types before calling accessors.</li><li>Set body-size limits before parsing untrusted JSON.</li></ul>
+<div class="warning"><strong>Do not concatenate JSON manually.</strong> Quotes, backslashes, control characters, and Unicode require escaping.</div><p><a href="demo-json-tools.html">Open the complete JSON utility demo →</a></p>
+<section class="api-related"><h2>Related API Reference</h2><p><a href="../../api/html_English/classstt_1_1data_1_1JsonHelper.html">JsonHelper</a></p></section><div class="pager"><a href="11-tls.html">← Chapter 11: TLS, HTTPS, WSS, and mTLS</a><a href="13-time.html">Chapter 13: Time, Duration, and Timing →</a></div></article></main></div><footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

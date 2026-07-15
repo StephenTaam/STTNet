@@ -10,12 +10,12 @@ STTNet 基于 Linux `epoll` 和 Reactor 事件驱动架构，统一提供 TCP、
 
 ## 文档与示例
 
-- 在线指导手册：`docs/guide/Chinese/index.html`（14 章，从构建到生产部署）
+- 在线指导手册：`docs/guide/Chinese/index.html`（20 章，从构建到生产部署）
 - 完整注释 Demo：`docs/guide/Chinese/demos.html`
 - 中文 API 参考：`docs/api/html_Chinese/index.html`
 - 英文指导手册：`docs/guide/English/index.html`
 
-仓库提供 11 个 CMake 示例目标：HTTP、JSON、WorkerPool、WebSocket、TCP、UDP、HTTP Client、WebSocket Client、TLS、信号退出和系统设置。
+仓库提供 19 个 CMake 示例目标，覆盖网络服务与客户端、JSON、时间、文件、异步日志、数据工具、安全限流、信号、系统设置和进程监督。
 
 ## 主要特点
 
@@ -213,7 +213,7 @@ int main()
 }
 ```
 
-仓库内包含 11 个可直接构建的完整注释示例：
+仓库内包含 19 个可直接构建的完整注释示例：
 
 - `examples/http_hello.cpp`：最小 HTTP 路由、404、信号等待和优雅退出
 - `examples/http_json.cpp`：解析客户端 JSON，处理 400/422/201 响应
@@ -226,6 +226,14 @@ int main()
 - `examples/tls_https.cpp`：加载证书并启动 HTTPS 服务
 - `examples/signal_shutdown.cpp`：信号设置、同步等待和安全关闭
 - `examples/system_settings.cpp`：日志、Socket、背压、Worker 上限和指标
+- `examples/json_tools.cpp`：创建、序列化、解析和校验 JSON
+- `examples/time_tools.cpp`：墙上时间格式化、Duration 运算和单调计时
+- `examples/file_logging.cpp`：目录、文件读写和有界异步日志
+- `examples/crypto_encoding.cpp`：Base64、SHA-1 兼容用途和 AES-CBC 边界
+- `examples/data_tools.cpp`：数值转换、精度工具、随机数和网络字节序
+- `examples/protocol_parsing.cpp`：URL、Header、Query 和 WebSocket 握手字符串工具
+- `examples/security_limiter.cpp`：连接/请求限流与黑名单行为
+- `examples/process_supervisor.cpp`：子进程重启监督和安全终止
 详细的逐章说明见 [`docs/guide/Chinese/index.html`](docs/guide/Chinese/index.html)。
 
 ## 接入现有 CMake 项目

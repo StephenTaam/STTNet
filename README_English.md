@@ -10,12 +10,12 @@ It is designed for lightweight API services, gateways, IoT access, real-time com
 
 ## Documentation and examples
 
-- Programming guide: `docs/guide/English/index.html` (14 chapters, build through production)
+- Programming guide: `docs/guide/English/index.html` (20 chapters, build through production)
 - Fully commented demos: `docs/guide/English/demos.html`
 - English core API quick reference: `docs/guide/English/api-quick-reference.html`
 - Complete generated API tree: `docs/api/html_English/index.html`
 
-The repository includes 11 CMake example targets covering HTTP, JSON, WorkerPool, WebSocket, TCP, UDP, HTTP Client, WebSocket Client, TLS, signals, and system settings.
+The repository includes 19 CMake example targets covering network servers and clients, JSON, time, files, asynchronous logging, data utilities, security limiting, signals, system settings, and process supervision.
 
 ## Highlights
 
@@ -213,7 +213,7 @@ int main()
 }
 ```
 
-The repository includes 11 fully commented, buildable examples:
+The repository includes 19 fully commented, buildable examples:
 
 - `examples/http_hello.cpp`: minimal HTTP route, fallback, signal wait, graceful close
 - `examples/http_json.cpp`: parse client JSON and return 400/422/201 responses
@@ -226,6 +226,14 @@ The repository includes 11 fully commented, buildable examples:
 - `examples/tls_https.cpp`: load a certificate and start HTTPS
 - `examples/signal_shutdown.cpp`: signal setup, synchronous wait, safe close
 - `examples/system_settings.cpp`: logging, sockets, backpressure, Worker limits, metrics
+- `examples/json_tools.cpp`: build, serialize, parse, and validate JSON values
+- `examples/time_tools.cpp`: wall-clock formatting, duration arithmetic, monotonic timing
+- `examples/file_logging.cpp`: directories, file access, and bounded asynchronous logging
+- `examples/crypto_encoding.cpp`: Base64, SHA-1 compatibility, AES-CBC boundaries
+- `examples/data_tools.cpp`: numeric conversion, precision helpers, random values, byte order
+- `examples/protocol_parsing.cpp`: URL, header, query, and WebSocket handshake string helpers
+- `examples/security_limiter.cpp`: connection/request limiting and blacklist behavior
+- `examples/process_supervisor.cpp`: child-process restart supervision and safe termination
 See the chapter-by-chapter [`Programming Guide`](docs/guide/English/index.html).
 
 ## Use STTNet in another CMake project
