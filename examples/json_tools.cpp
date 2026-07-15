@@ -6,32 +6,35 @@ int main()
 {
     using stt::data::JsonHelper;
 
-    // Build a JsonCpp object first. This is the clearest approach for nested data.
-    Json::Value user;
-    user["id"] = 1001;
-    user["name"] = "Stephen";
-    user["online"] = true;
+    // Json::Value is the clearest option for nested data.
+    Json::Value user(Json::objectValue);
+    user["id"]=1001;
+    user["name"]="Stephen";
+    user["online"]=true;
     user["roles"].append("developer");
     user["roles"].append("operator");
 
-    // Convert Json::Value to compact JSON text.
-    const std::string jsonText = JsonHelper::toString(user);
+    const std::string jsonText=JsonHelper::toString(user);
     std::cout << "serialized: " << jsonText << '\n';
 
-    // Parse JSON text back into Json::Value.
-    const Json::Value parsed = JsonHelper::toJsonArray(jsonText);
+    const Json::Value parsed=JsonHelper::toJsonArray(jsonText);
+    if(!parsed.isObject())
+        return 1;
     std::cout << "name: " << parsed["name"].asString() << '\n';
 
-    // createJson() is convenient for small, flat objects.
-    std::cout << "small object: "
-              << JsonHelper::createJson("status", "ok", "count", 3)
-              << '\n';
+    // createJson() preserves booleans as JSON true/false rather than integers.
+    const std::string small=JsonHelper::createJson("status","ok","online",true,"count",3);
+    std::cout << "small object: " << small << '\n';
 
-    // getValue() extracts a field as text. The return code distinguishes failure,
-    // scalar values, and nested JSON values.
+    // jsonAdd() merges object members or appends array elements. Mixing an object
+    // and an array is invalid and returns an empty string.
+    std::cout << "merged object: "
+              << JsonHelper::jsonAdd("{\"a\":1}","{\"b\":2}") << '\n';
+    std::cout << "appended array: "
+              << JsonHelper::jsonAdd("[1]","[2,3]") << '\n';
+
     std::string extracted;
-    const int type = JsonHelper::getValue(jsonText, extracted, "value", "roles");
+    const int type=JsonHelper::getValue(jsonText,extracted,"value","roles");
     std::cout << "roles type=" << type << ", value=" << extracted << '\n';
-
     return 0;
 }

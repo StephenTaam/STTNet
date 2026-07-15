@@ -1,8 +1,8 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Demo: Encoding and crypto · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body><header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">Contents</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Portal</a></nav></header><div class="layout"><aside class="sidebar"><h3>Contents</h3><a class="" href="index.html">Guide Home</a><div class="side-group">Foundation</div><a class="" href="01-understand.html">Chapter 1: Understanding STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Dependencies, Build, and Run</a><div class="side-group">Network Servers and Clients</div><a class="" href="03-http.html">Chapter 3: Your First HTTP Service</a><a class="" href="04-request-response.html">Chapter 4: HTTP Requests, JSON, and Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing, Processing Stages, and Return Values</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool and Blocking Work</a><a class="" href="07-websocket.html">Chapter 7: WebSocket Server</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: HTTP, WebSocket, TCP, and UDP Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS, and mTLS</a><div class="side-group">Data and Utility Classes</div><a class="" href="12-json.html">Chapter 12: JSON Parsing and Generation</a><a class="" href="13-time.html">Chapter 13: Time, Duration, and Timing</a><a class="" href="14-file-log.html">Chapter 14: Files and Asynchronous Logging</a><a class="" href="15-data-tools.html">Chapter 15: Encoding, Crypto, Randomness, and Data Conversion</a><div class="side-group">Security</div><a class="" href="16-security.html">Chapter 16: Connection Security, Rate Limiting, and Input Boundaries</a><div class="side-group">System and Processes</div><a class="" href="08-signals.html">Chapter 17: Linux Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 18: System Initialization and Server Settings</a><a class="" href="19-process.html">Chapter 19: Process Supervision, Heartbeats, and IPC Synchronization</a><div class="side-group">Production</div><a class="" href="10-production.html">Chapter 20: Integration and Production Checklist</a><div class="side-group">Examples and Reference</div><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Demo: Encoding and crypto</h1><p class="lead">Buildable, runnable, verifiable, and synchronized with the repository source.</p><h2>1. Learning goal</h2><p>Key calls are explained with English comments. Run the original first, then change one setting and observe the behavior.</p><h2>2. Build and run</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>cmake --build build --target sttnet_crypto_encoding --parallel
-./build/examples/sttnet_crypto_encoding</code></pre></div><h2>3. Validate</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>./build/examples/sttnet_crypto_encoding</code></pre></div><div class="expected"><strong>Expected: </strong>Base64, SHA-1, and AES-CBC demonstration output</div><h2>4. Complete source</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>#include &lt;sttnet.h&gt;
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Demo: Encoding and crypto · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body><header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">Contents</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Portal</a></nav></header><div class="layout"><aside class="sidebar"><h3>Contents</h3><a class="" href="index.html">Guide Home</a><div class="side-group">Foundation</div><a class="" href="01-understand.html">Chapter 1: Understanding STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Dependencies, Build, and Run</a><div class="side-group">Network Servers and Clients</div><a class="" href="03-http.html">Chapter 3: Your First HTTP Service</a><a class="" href="04-request-response.html">Chapter 4: HTTP Requests, JSON, and Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing, Processing Stages, and Return Values</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool and Blocking Work</a><a class="" href="07-websocket.html">Chapter 7: WebSocket Server</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: HTTP, WebSocket, TCP, and UDP Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS, and mTLS</a><div class="side-group">Data and Utility Classes</div><a class="" href="12-json.html">Chapter 12: JSON Parsing and Generation</a><a class="" href="13-time.html">Chapter 13: Time, Duration, and Timing</a><a class="" href="14-file-log.html">Chapter 14: Files and Asynchronous Logging</a><a class="" href="15-data-tools.html">Chapter 15: Encoding, Crypto, Randomness, and Data Conversion</a><div class="side-group">Security</div><a class="" href="16-security.html">Chapter 16: Connection Security, Rate Limiting, and Input Boundaries</a><div class="side-group">System and Processes</div><a class="" href="08-signals.html">Chapter 17: Linux Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 18: System Initialization and Server Settings</a><a class="" href="19-process.html">Chapter 19: Process Supervision, Heartbeats, and IPC Synchronization</a><div class="side-group">Production</div><a class="" href="10-production.html">Chapter 20: Integration and Production Checklist</a><div class="side-group">Examples and Reference</div><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Demo: Encoding and Cryptography</h1><p class="lead">Demonstrates Base64, SHA-1 compatibility use, and AES-256-CBC APIs that return actual output lengths.</p><h2>1. Learning Goal</h2><p>Important calls are explained in English and match the repository source, CMake target, and current API.</p><h2>2. Build and Run</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>cmake --build build --target sttnet_crypto_encoding --parallel
+./build/examples/sttnet_crypto_encoding</code></pre></div><h2>3. Verify</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>./build/examples/sttnet_crypto_encoding</code></pre></div><div class="expected"><strong>Expected:</strong> Prints Base64 encoding and decoding, SHA-1 hex text, ciphertext length, and the recovered plaintext.</div><h2>4. Complete Source</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>#include &lt;sttnet.h&gt;
 
 #include &lt;array&gt;
-#include &lt;iomanip&gt;
 #include &lt;iostream&gt;
 #include &lt;string&gt;
 #include &lt;vector&gt;
@@ -12,49 +12,48 @@ int main()
     using stt::data::CryptoUtil;
     using stt::data::EncodingUtil;
 
-    const std::string message = &quot;STTNet utility demo&quot;;
+    const std::string message=&quot;STTNet utility demo&quot;;
 
-    // Base64 is an encoding, not encryption. Anyone can decode it.
-    const std::string base64 = EncodingUtil::base64_encode(message);
+    // Base64 is reversible encoding, not encryption. Invalid encoded input is
+    // rejected with an empty result; empty input also produces an empty result.
+    const std::string base64=EncodingUtil::base64_encode(message);
     std::cout &lt;&lt; &quot;base64: &quot; &lt;&lt; base64 &lt;&lt; &#x27;\n&#x27;;
     std::cout &lt;&lt; &quot;decoded: &quot; &lt;&lt; EncodingUtil::base64_decode(base64) &lt;&lt; &#x27;\n&#x27;;
 
-    // SHA-1 is retained for protocol compatibility such as WebSocket handshakes.
-    // Do not use SHA-1 for passwords, signatures, or new security designs.
+    // SHA-1 remains useful for protocol compatibility such as RFC 6455.
+    // Do not use SHA-1 for password storage, signatures, or new security designs.
     std::string sha1Hex;
-    CryptoUtil::sha11(message, sha1Hex);
+    CryptoUtil::sha11(message,sha1Hex);
     std::cout &lt;&lt; &quot;sha1: &quot; &lt;&lt; sha1Hex &lt;&lt; &#x27;\n&#x27;;
 
-    // AES-256-CBC requires a 32-byte key and a 16-byte IV. Fixed values are used
-    // only to keep this demo reproducible; production keys and IVs must be generated
-    // and managed securely, and CBC ciphertext also needs authentication.
-    const std::array&lt;unsigned char, 32&gt; key = {
+    // AES-256-CBC requires a 32-byte key and a 16-byte IV. Fixed values keep
+    // this demo reproducible only. Production IVs must be unpredictable and CBC
+    // ciphertext must be authenticated separately (or replaced by an AEAD mode).
+    const std::array&lt;unsigned char,32&gt; key={
         &#x27;0&#x27;,&#x27;1&#x27;,&#x27;2&#x27;,&#x27;3&#x27;,&#x27;4&#x27;,&#x27;5&#x27;,&#x27;6&#x27;,&#x27;7&#x27;,&#x27;8&#x27;,&#x27;9&#x27;,&#x27;a&#x27;,&#x27;b&#x27;,&#x27;c&#x27;,&#x27;d&#x27;,&#x27;e&#x27;,&#x27;f&#x27;,
-        &#x27;0&#x27;,&#x27;1&#x27;,&#x27;2&#x27;,&#x27;3&#x27;,&#x27;4&#x27;,&#x27;5&#x27;,&#x27;6&#x27;,&#x27;7&#x27;,&#x27;8&#x27;,&#x27;9&#x27;,&#x27;a&#x27;,&#x27;b&#x27;,&#x27;c&#x27;,&#x27;d&#x27;,&#x27;e&#x27;,&#x27;f&#x27;
-    };
-    const std::array&lt;unsigned char, 16&gt; iv = {
-        &#x27;a&#x27;,&#x27;b&#x27;,&#x27;c&#x27;,&#x27;d&#x27;,&#x27;e&#x27;,&#x27;f&#x27;,&#x27;0&#x27;,&#x27;1&#x27;,&#x27;2&#x27;,&#x27;3&#x27;,&#x27;4&#x27;,&#x27;5&#x27;,&#x27;6&#x27;,&#x27;7&#x27;,&#x27;8&#x27;,&#x27;9&#x27;
-    };
+        &#x27;0&#x27;,&#x27;1&#x27;,&#x27;2&#x27;,&#x27;3&#x27;,&#x27;4&#x27;,&#x27;5&#x27;,&#x27;6&#x27;,&#x27;7&#x27;,&#x27;8&#x27;,&#x27;9&#x27;,&#x27;a&#x27;,&#x27;b&#x27;,&#x27;c&#x27;,&#x27;d&#x27;,&#x27;e&#x27;,&#x27;f&#x27;};
+    const std::array&lt;unsigned char,16&gt; iv={
+        &#x27;a&#x27;,&#x27;b&#x27;,&#x27;c&#x27;,&#x27;d&#x27;,&#x27;e&#x27;,&#x27;f&#x27;,&#x27;0&#x27;,&#x27;1&#x27;,&#x27;2&#x27;,&#x27;3&#x27;,&#x27;4&#x27;,&#x27;5&#x27;,&#x27;6&#x27;,&#x27;7&#x27;,&#x27;8&#x27;,&#x27;9&#x27;};
 
-    // PKCS#7 padding makes the ciphertext a whole number of 16-byte blocks.
-    const std::size_t cipherLength = (message.size() / 16 + 1) * 16;
-    std::vector&lt;unsigned char&gt; cipher(cipherLength);
+    // Reserve room for PKCS#7 padding and read the actual output length returned
+    // by the overload. Never reconstruct binary output by guessing its length.
+    std::vector&lt;unsigned char&gt; cipher(message.size()+EVP_MAX_BLOCK_LENGTH);
+    std::size_t cipherLength=0;
     if(!CryptoUtil::encryptSymmetric(
-            reinterpret_cast&lt;const unsigned char *&gt;(message.data()),
-            message.size(), key.data(), iv.data(), cipher.data()))
+           reinterpret_cast&lt;const unsigned char*&gt;(message.data()),message.size(),
+           key.data(),iv.data(),cipher.data(),cipherLength))
         return 1;
 
-    std::vector&lt;unsigned char&gt; plain(cipherLength + 1, 0);
-    if(!CryptoUtil::decryptSymmetric(
-            cipher.data(), cipherLength, key.data(), iv.data(), plain.data()))
+    std::vector&lt;unsigned char&gt; plain(cipherLength);
+    std::size_t plainLength=0;
+    if(!CryptoUtil::decryptSymmetric(cipher.data(),cipherLength,key.data(),iv.data(),
+                                     plain.data(),plainLength))
         return 2;
 
-    // The current helper reports success but not the recovered byte count, so this
-    // demo uses the known original text length when reconstructing the string.
+    std::cout &lt;&lt; &quot;cipher bytes: &quot; &lt;&lt; cipherLength &lt;&lt; &#x27;\n&#x27;;
     std::cout &lt;&lt; &quot;decrypted: &quot;
-              &lt;&lt; std::string(reinterpret_cast&lt;char *&gt;(plain.data()), message.size())
+              &lt;&lt; std::string(reinterpret_cast&lt;char*&gt;(plain.data()),plainLength)
               &lt;&lt; &#x27;\n&#x27;;
-
     return 0;
 }
-</code></pre></div><div class="pager"><a href="demos.html">← Fully Commented Demos</a><span></span></div></article></main></div><footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>
+</code></pre></div><div class="pager"><a href="demos.html">← Fully Commented Demos</a></div></article></main></div><footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

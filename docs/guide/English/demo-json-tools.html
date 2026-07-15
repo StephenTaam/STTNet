@@ -1,5 +1,6 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Demo: JSON utilities · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body><header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">Contents</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Portal</a></nav></header><div class="layout"><aside class="sidebar"><h3>Contents</h3><a class="" href="index.html">Guide Home</a><div class="side-group">Foundation</div><a class="" href="01-understand.html">Chapter 1: Understanding STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Dependencies, Build, and Run</a><div class="side-group">Network Servers and Clients</div><a class="" href="03-http.html">Chapter 3: Your First HTTP Service</a><a class="" href="04-request-response.html">Chapter 4: HTTP Requests, JSON, and Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing, Processing Stages, and Return Values</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool and Blocking Work</a><a class="" href="07-websocket.html">Chapter 7: WebSocket Server</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: HTTP, WebSocket, TCP, and UDP Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS, and mTLS</a><div class="side-group">Data and Utility Classes</div><a class="" href="12-json.html">Chapter 12: JSON Parsing and Generation</a><a class="" href="13-time.html">Chapter 13: Time, Duration, and Timing</a><a class="" href="14-file-log.html">Chapter 14: Files and Asynchronous Logging</a><a class="" href="15-data-tools.html">Chapter 15: Encoding, Crypto, Randomness, and Data Conversion</a><div class="side-group">Security</div><a class="" href="16-security.html">Chapter 16: Connection Security, Rate Limiting, and Input Boundaries</a><div class="side-group">System and Processes</div><a class="" href="08-signals.html">Chapter 17: Linux Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 18: System Initialization and Server Settings</a><a class="" href="19-process.html">Chapter 19: Process Supervision, Heartbeats, and IPC Synchronization</a><div class="side-group">Production</div><a class="" href="10-production.html">Chapter 20: Integration and Production Checklist</a><div class="side-group">Examples and Reference</div><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Demo: JSON utilities</h1><p class="lead">Buildable, runnable, verifiable, and synchronized with the repository source.</p><h2>1. Learning goal</h2><p>Key calls are explained with English comments. Run the original first, then change one setting and observe the behavior.</p><h2>2. Build and run</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>cmake --build build --target sttnet_json_tools --parallel
-./build/examples/sttnet_json_tools</code></pre></div><h2>3. Validate</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>./build/examples/sttnet_json_tools</code></pre></div><div class="expected"><strong>Expected: </strong>Serialized, parsed, and extracted JSON values</div><h2>4. Complete source</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>#include &lt;sttnet.h&gt;
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Demo: JSON utilities · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body><header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">Contents</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Portal</a></nav></header><div class="layout"><aside class="sidebar"><h3>Contents</h3><a class="" href="index.html">Guide Home</a><div class="side-group">Foundation</div><a class="" href="01-understand.html">Chapter 1: Understanding STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Dependencies, Build, and Run</a><div class="side-group">Network Servers and Clients</div><a class="" href="03-http.html">Chapter 3: Your First HTTP Service</a><a class="" href="04-request-response.html">Chapter 4: HTTP Requests, JSON, and Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing, Processing Stages, and Return Values</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool and Blocking Work</a><a class="" href="07-websocket.html">Chapter 7: WebSocket Server</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: HTTP, WebSocket, TCP, and UDP Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS, and mTLS</a><div class="side-group">Data and Utility Classes</div><a class="" href="12-json.html">Chapter 12: JSON Parsing and Generation</a><a class="" href="13-time.html">Chapter 13: Time, Duration, and Timing</a><a class="" href="14-file-log.html">Chapter 14: Files and Asynchronous Logging</a><a class="" href="15-data-tools.html">Chapter 15: Encoding, Crypto, Randomness, and Data Conversion</a><div class="side-group">Security</div><a class="" href="16-security.html">Chapter 16: Connection Security, Rate Limiting, and Input Boundaries</a><div class="side-group">System and Processes</div><a class="" href="08-signals.html">Chapter 17: Linux Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 18: System Initialization and Server Settings</a><a class="" href="19-process.html">Chapter 19: Process Supervision, Heartbeats, and IPC Synchronization</a><div class="side-group">Production</div><a class="" href="10-production.html">Chapter 20: Integration and Production Checklist</a><div class="side-group">Examples and Reference</div><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Demo: JSON Utilities</h1><p class="lead">Demonstrates JSON booleans, object merging, array appending, serialization, and field extraction.</p><h2>1. Learning Goal</h2><p>Important calls are explained in English and match the repository source, CMake target, and current API.</p><h2>2. Build and Run</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>cmake --build build --target sttnet_json_tools --parallel
+./build/examples/sttnet_json_tools</code></pre></div><h2>3. Verify</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>./build/examples/sttnet_json_tools</code></pre></div><div class="expected"><strong>Expected:</strong> Prints a serialized object, the name field, a small object with a real boolean, a merged object, an appended array, and the roles field.</div><h2>4. Complete Source</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>#include &lt;sttnet.h&gt;
 
 #include &lt;iostream&gt;
 
@@ -7,33 +8,36 @@ int main()
 {
     using stt::data::JsonHelper;
 
-    // Build a JsonCpp object first. This is the clearest approach for nested data.
-    Json::Value user;
-    user[&quot;id&quot;] = 1001;
-    user[&quot;name&quot;] = &quot;Stephen&quot;;
-    user[&quot;online&quot;] = true;
+    // Json::Value is the clearest option for nested data.
+    Json::Value user(Json::objectValue);
+    user[&quot;id&quot;]=1001;
+    user[&quot;name&quot;]=&quot;Stephen&quot;;
+    user[&quot;online&quot;]=true;
     user[&quot;roles&quot;].append(&quot;developer&quot;);
     user[&quot;roles&quot;].append(&quot;operator&quot;);
 
-    // Convert Json::Value to compact JSON text.
-    const std::string jsonText = JsonHelper::toString(user);
+    const std::string jsonText=JsonHelper::toString(user);
     std::cout &lt;&lt; &quot;serialized: &quot; &lt;&lt; jsonText &lt;&lt; &#x27;\n&#x27;;
 
-    // Parse JSON text back into Json::Value.
-    const Json::Value parsed = JsonHelper::toJsonArray(jsonText);
+    const Json::Value parsed=JsonHelper::toJsonArray(jsonText);
+    if(!parsed.isObject())
+        return 1;
     std::cout &lt;&lt; &quot;name: &quot; &lt;&lt; parsed[&quot;name&quot;].asString() &lt;&lt; &#x27;\n&#x27;;
 
-    // createJson() is convenient for small, flat objects.
-    std::cout &lt;&lt; &quot;small object: &quot;
-              &lt;&lt; JsonHelper::createJson(&quot;status&quot;, &quot;ok&quot;, &quot;count&quot;, 3)
-              &lt;&lt; &#x27;\n&#x27;;
+    // createJson() preserves booleans as JSON true/false rather than integers.
+    const std::string small=JsonHelper::createJson(&quot;status&quot;,&quot;ok&quot;,&quot;online&quot;,true,&quot;count&quot;,3);
+    std::cout &lt;&lt; &quot;small object: &quot; &lt;&lt; small &lt;&lt; &#x27;\n&#x27;;
 
-    // getValue() extracts a field as text. The return code distinguishes failure,
-    // scalar values, and nested JSON values.
+    // jsonAdd() merges object members or appends array elements. Mixing an object
+    // and an array is invalid and returns an empty string.
+    std::cout &lt;&lt; &quot;merged object: &quot;
+              &lt;&lt; JsonHelper::jsonAdd(&quot;{\&quot;a\&quot;:1}&quot;,&quot;{\&quot;b\&quot;:2}&quot;) &lt;&lt; &#x27;\n&#x27;;
+    std::cout &lt;&lt; &quot;appended array: &quot;
+              &lt;&lt; JsonHelper::jsonAdd(&quot;[1]&quot;,&quot;[2,3]&quot;) &lt;&lt; &#x27;\n&#x27;;
+
     std::string extracted;
-    const int type = JsonHelper::getValue(jsonText, extracted, &quot;value&quot;, &quot;roles&quot;);
+    const int type=JsonHelper::getValue(jsonText,extracted,&quot;value&quot;,&quot;roles&quot;);
     std::cout &lt;&lt; &quot;roles type=&quot; &lt;&lt; type &lt;&lt; &quot;, value=&quot; &lt;&lt; extracted &lt;&lt; &#x27;\n&#x27;;
-
     return 0;
 }
-</code></pre></div><div class="pager"><a href="demos.html">← Fully Commented Demos</a><span></span></div></article></main></div><footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>
+</code></pre></div><div class="pager"><a href="demos.html">← Fully Commented Demos</a></div></article></main></div><footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

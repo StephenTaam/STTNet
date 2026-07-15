@@ -421,8 +421,7 @@ private:
         /**
         * @brief 获取文件大小
         * @param fileName 文件名字（可以填绝对路径也可以填相对路径）
-        * @return >=0 返回文件大小
-        * @return -1 获取文件大小失败
+        * @return 成功时返回文件字节数；失败时返回 std::numeric_limits<size_t>::max()。
         */
         static size_t get_file_size(const std::string &fileName);
     };
@@ -853,333 +852,187 @@ private:
     */
     struct Duration
     {
+        /** 天。 */
+        long long day=0;
+        /** 小时。 */
+        int hour=0;
+        /** 分钟。 */
+        int min=0;
+        /** 秒。 */
+        int sec=0;
+        /** 毫秒。 */
+        int msec=0;
+
         /**
-        * @brief 天
+        * @brief 构造时间间隔，参数顺序为天、小时、分钟、秒、毫秒。
+        * @note 构造函数保留调用者传入的字段；需要规范化时可调用 recoverForm(convertToMsec())。
         */
-        long long day;
-        /**
-        * @brief 时
-        */
-        int hour;
-        /**
-        * @brief 分
-        */
-        int min;
-        /**
-        * @brief 秒
-        */
-        int sec;
-        /**
-        * @brief 毫秒
-        */
-        int msec;
-        /**
-        * @brief 构造函数，传入天，时，分，秒，毫秒
-        */
-        Duration(long long a,int b,int c,int d,int e):day(a),hour(b),min(c),sec(d),msec(e){}
-        Duration()=default;
-        /**
-        * @brief 判断当前时间间隔是否大于另一个时间间隔。
-        * @param b 要比较的另一个 Duration 实例。
-        * @return 如果当前对象大于参数 b，返回 true，否则返回 false。
-        */
-        bool operator>(const Duration &b)
+        constexpr Duration(long long a,int b,int c,int d,int e) noexcept:
+            day(a),hour(b),min(c),sec(d),msec(e){}
+        constexpr Duration() noexcept=default;
+
+        /** @brief 返回统一的无效值，五个字段均为 -1。 */
+        static constexpr Duration invalid() noexcept{return Duration(-1,-1,-1,-1,-1);}
+
+        /** @brief 判断字段是否构成非负时间间隔。 */
+        constexpr bool isValid() const noexcept
         {
-            long long total;
-            total=day*24*60*60*1000+hour*60*60*1000+min*60*1000+sec*1000+msec;
-            long long totalB;
-            totalB=b.day*24*60*60*1000+b.hour*60*60*1000+b.min*60*1000+b.sec*1000+b.msec;
-            if(total>totalB)
-                return true;
-            else
+            return day>=0&&hour>=0&&min>=0&&sec>=0&&msec>=0;
+        }
+
+        /**
+        * @brief 尝试转换为总毫秒数。
+        * @param total 接收总毫秒数。
+        * @return 字段非负且结果未超过 long long 时返回 true。
+        */
+        bool tryConvertToMsec(long long &total) const noexcept
+        {
+            if(!isValid())
+            {
+                total=-1;
                 return false;
-        }
-        /**
-        * @brief 判断当前时间间隔是否小于另一个时间间隔。
-        * @param b 要比较的另一个 Duration 实例。
-        * @return 如果当前对象小于参数 b，返回 true，否则返回 false。
-        */
-        bool operator<(const Duration &b)
-        {
-            long long total;
-            total=day*24*60*60*1000+hour*60*60*1000+min*60*1000+sec*1000+msec;
-            long long totalB;
-            totalB=b.day*24*60*60*1000+b.hour*60*60*1000+b.min*60*1000+b.sec*1000+b.msec;
-            if(total<totalB)
-                return true;
-            else
+            }
+            using Wide=__int128_t;
+            const Wide value=static_cast<Wide>(day)*86400000+
+                static_cast<Wide>(hour)*3600000+
+                static_cast<Wide>(min)*60000+
+                static_cast<Wide>(sec)*1000+
+                static_cast<Wide>(msec);
+            if(value>static_cast<Wide>(std::numeric_limits<long long>::max()))
+            {
+                total=-1;
                 return false;
+            }
+            total=static_cast<long long>(value);
+            return true;
         }
-        /**
-        * @brief 判断当前时间间隔是否等于另一个时间间隔。
-        * @param b 要比较的另一个 Duration 实例。
-        * @return 如果当前对象等于参数 b，返回 true，否则返回 false。
-        */
-        bool operator==(const Duration &b)
+
+        bool operator>(const Duration &b) const noexcept
         {
-            long long total;
-            total=day*24*60*60*1000+hour*60*60*1000+min*60*1000+sec*1000+msec;
-            long long totalB;
-            totalB=b.day*24*60*60*1000+b.hour*60*60*1000+b.min*60*1000+b.sec*1000+b.msec;
-            if(total==totalB)
-                return true;
-            else
-                return false;
+            long long left=0,right=0;
+            return tryConvertToMsec(left)&&b.tryConvertToMsec(right)&&left>right;
         }
-        /**
-        * @brief 判断当前时间间隔是否大于等于另一个时间间隔。
-        * @param b 要比较的另一个 Duration 实例。
-        * @return 如果当前对象大于等于参数 b，返回 true，否则返回 false。
-        */
-        bool operator>=(const Duration &b)
+        bool operator<(const Duration &b) const noexcept
         {
-            long long total;
-            total=day*24*60*60*1000+hour*60*60*1000+min*60*1000+sec*1000+msec;
-            long long totalB;
-            totalB=b.day*24*60*60*1000+b.hour*60*60*1000+b.min*60*1000+b.sec*1000+b.msec;
-            if(total>=totalB)
-                return true;
-            else
-                return false;
+            long long left=0,right=0;
+            return tryConvertToMsec(left)&&b.tryConvertToMsec(right)&&left<right;
         }
-        /**
-        * @brief 判断当前时间间隔是否小于等于另一个时间间隔。
-        * @param b 要比较的另一个 Duration 实例。
-        * @return 如果当前对象小于等于参数 b，返回 true，否则返回 false。
-        */
-        bool operator<=(const Duration &b)
+        bool operator==(const Duration &b) const noexcept
         {
-            long long total;
-            total=day*24*60*60*1000+hour*60*60*1000+min*60*1000+sec*1000+msec;
-            long long totalB;
-            totalB=b.day*24*60*60*1000+b.hour*60*60*1000+b.min*60*1000+b.sec*1000+b.msec;
-            if(total<=totalB)
-                return true;
-            else
-                return false;
+            long long left=0,right=0;
+            if(tryConvertToMsec(left)&&b.tryConvertToMsec(right))
+                return left==right;
+            return day==b.day&&hour==b.hour&&min==b.min&&sec==b.sec&&msec==b.msec;
         }
-        /**
-        * @brief 将两个时间间隔相加。
-        * @param b 要相加的另一个 Duration。
-        * @return 相加后的 Duration。
-        */
-        Duration operator+(const Duration &b)
+        bool operator!=(const Duration &b) const noexcept{return !(*this==b);}
+        bool operator>=(const Duration &b) const noexcept{return *this>b||*this==b;}
+        bool operator<=(const Duration &b) const noexcept{return *this<b||*this==b;}
+
+        /** @brief 相加并规范化；无效输入或溢出返回 Duration::invalid()。 */
+        Duration operator+(const Duration &b) const noexcept
         {
-            long long dayy=day;
-            int hourr=hour;
-            int minn=min;
-            int secc=sec;
-            int msecc=msec;
-
-            msecc+=b.msec;
-            secc+=b.sec;
-            minn+=b.min;
-            hourr+=b.hour;
-            dayy+=b.day;
-
-            if(msecc/1000!=0)
-            {
-                secc+=msecc/1000;
-                msecc=msecc%1000;
-            }
-
-            if(secc/60!=0)
-            {
-                minn+=secc/60;
-                secc=secc%60;
-            }
-
-            if(minn/60!=0)
-            {
-                hourr+=minn/60;
-                minn=minn%60;
-            }
-
-            if(hourr/24!=0)
-            {
-                dayy+=hourr/24;
-                hourr=hourr%24;
-            }
-            return Duration(dayy,hourr,minn,secc,msecc);
+            long long left=0,right=0;
+            if(!tryConvertToMsec(left)||!b.tryConvertToMsec(right)||
+               right>std::numeric_limits<long long>::max()-left)
+                return invalid();
+            Duration result;
+            return result.recoverForm(left+right);
         }
+
         /**
-        * @brief 计算两个时间间隔的差值（当前对象减去参数 b）。
-        * @param b 要减去的另一个 Duration。
-        * @return 差值 Duration。
+        * @brief 当前时间间隔减去 b 并规范化。
+        * @return 无效输入、溢出或结果为负数时返回 Duration::invalid()。
         */
-        Duration operator-(const Duration &b)
+        Duration operator-(const Duration &b) const noexcept
         {
-            long long dayy=day;
-            int hourr=hour;
-            int minn=min;
-            int secc=sec;
-            int msecc=msec;
-
-            msecc=dayy*24*60*60*1000+hourr*60*60*1000+minn*60*1000+secc*1000+msecc-b.day*24*60*60*1000-b.hour*60*60*1000-b.min*60*1000-b.sec*1000-b.msec;
-            secc=0;
-            minn=0;
-            hourr=0;
-            dayy=0;
-
-            if(msecc/1000!=0)
-            {
-                secc+=msecc/1000;
-                msecc=msecc%1000;
-            }
-
-            if(secc/60!=0)
-            {
-                minn+=secc/60;
-                secc=secc%60;
-            }
-
-            if(minn/60!=0)
-            {
-                hourr+=minn/60;
-                minn=minn%60;
-            }
-
-            if(hourr/24!=0)
-            {
-                dayy+=hourr/24;
-                hourr=hourr%24;
-            }
-            return Duration(dayy,hourr,minn,secc,msecc);
+            long long left=0,right=0;
+            if(!tryConvertToMsec(left)||!b.tryConvertToMsec(right)||left<right)
+                return invalid();
+            Duration result;
+            return result.recoverForm(left-right);
         }
-        
-        /**
-        * @brief 将当前时间间隔转换为以“天”为单位的浮点数表示。
-        */
-        double convertToDay()
-        { 
-            long long total;
-            total=hour*60*60*1000+min*60*1000+sec*1000+msec; 
-            double k=day+total/86400000.0000;
-            return k;
-        }
-        /**
-        * @brief 将当前时间间隔转换为以“小时”为单位的浮点数表示。
-        */
-        double convertToHour()
+
+        double convertToDay() const noexcept
         {
-            long long total;
-            total=min*60*1000+sec*1000+msec; 
-            double k=day*24+hour+total/36000000.0000;
-            return k;
+            const long long total=convertToMsec();
+            return total<0?-1.0:static_cast<double>(total)/86400000.0;
         }
-        /**
-        * @brief 将当前时间间隔转换为以“分钟”为单位的浮点数表示。
-        */
-        double convertToMin()
+        double convertToHour() const noexcept
         {
-            long long total;
-            total=sec*1000+msec; 
-            double k=day*24*60+hour*60+min+total/60000.0000;
-            return k;
+            const long long total=convertToMsec();
+            return total<0?-1.0:static_cast<double>(total)/3600000.0;
         }
-        /**
-        * @brief 将当前时间间隔转换为以“秒”为单位的浮点数表示。
-        */
-        double convertToSec()
+        double convertToMin() const noexcept
         {
-            long long total;
-            total=msec; 
-            double k=day*24*60*60+hour*60*60+min*60+sec+total/1000.0000;
-            return k;
+            const long long total=convertToMsec();
+            return total<0?-1.0:static_cast<double>(total)/60000.0;
         }
-        /**
-         * @brief 将当前时间间隔转换为总毫秒数。
-        */
-        long long convertToMsec()
+        double convertToSec() const noexcept
         {
-            long long total;
-            total=day*24*60*60*1000+hour*60*60*1000+min*60*1000+sec*1000+msec;
-            return total;
+            const long long total=convertToMsec();
+            return total<0?-1.0:static_cast<double>(total)/1000.0;
         }
-        /**
-        * @brief 从给定的毫秒数恢复为标准的天-时-分-秒-毫秒格式。
-        * @param t 要恢复的毫秒值。
-        * @return 转换后的 Duration。
-        */
-        Duration recoverForm(const long long &t)
+        /** @brief 转换为总毫秒数；无效或溢出时返回 -1。 */
+        long long convertToMsec() const noexcept
         {
-            msec=t;
-            sec=0;
-            min=0;
-            hour=0;
-            day=0;
+            long long total=0;
+            return tryConvertToMsec(total)?total:-1;
+        }
 
-            if(msec/1000!=0)
+        /**
+        * @brief 用非负总毫秒数重写当前对象并规范化字段。
+        * @param t 总毫秒数。
+        * @return 修改后对象的副本；t 为负数时当前对象被设为 Duration::invalid()。
+        */
+        Duration recoverForm(const long long &t) noexcept
+        {
+            if(t<0)
             {
-                sec+=msec/1000;
-                msec=msec%1000;
+                *this=invalid();
+                return *this;
             }
-
-            if(sec/60!=0)
-            {
-                min+=sec/60;
-                sec=sec%60;
-            }
-
-            if(min/60!=0)
-            {
-                hour+=min/60;
-                min=min%60;
-            }
-
-            if(hour/24!=0)
-            {
-                day+=hour/24;
-                hour=hour%24;
-            }
-            return Duration(day,hour,min,sec,msec);
+            long long remaining=t;
+            day=remaining/86400000;
+            remaining%=86400000;
+            hour=static_cast<int>(remaining/3600000);
+            remaining%=3600000;
+            min=static_cast<int>(remaining/60000);
+            remaining%=60000;
+            sec=static_cast<int>(remaining/1000);
+            msec=static_cast<int>(remaining%1000);
+            return *this;
         }
     };
-    /**
-    * @brief 将 Duration 对象以可读格式输出到流中。
-    *
-    * 该函数用于将 Duration 的各个字段（天、小时、分钟、秒、毫秒）格式化后输出到给定的输出流中。
-    *
-    * @param os 输出流（如 std::cout）。
-    * @param a 要输出的 Duration 对象。
-    * @return 输出流的引用，用于链式输出。
-    *
-    * @note 通常输出格式为类似于 "1d 02:03:04.005" 的人类可读格式（具体取决于实现）。
-    */
     std::ostream& operator<<(std::ostream &os,const Duration &a);
 
     using Milliseconds = std::chrono::duration<uint64_t,std::milli>;
     using Seconds=std::chrono::duration<uint64_t>;
-    /**
-    * @brief 定义ISO8086A这个宏为"yyyy-mm-ddThh:mi:ss"
-    */
+    /** @brief STTNet 历史格式宏：本地时间文本 yyyy-mm-ddThh:mi:ss；不是 ISO 8601 时区时间戳。 */
     #define ISO8086A "yyyy-mm-ddThh:mi:ss"
-    /**
-    * @brief 定义ISO8086B这个宏为"yyyy-mm-ddThh:mi:ss.sss"
-    */
+    /** @brief STTNet 历史格式宏：本地时间文本 yyyy-mm-ddThh:mi:ss.sss；不是 ISO 8601 时区时间戳。 */
     #define ISO8086B "yyyy-mm-ddThh:mi:ss.sss"
 
 
     /**
-    * @brief 时间操作、运算、计时的类
-    * @brief 精确到毫秒
-    * @warning 只有在1970+-292年内的是确保准确的
-    * @bug 只有1970+-292年内确保准确,待优化
+    * @brief 本地时间文本操作与单调计时器。
+    * @note getTime/convertFormat/calculateTime 处理本地时间文本；startTiming/checkTime/endTiming 使用 steady_clock 测量耗时。
+    * @note checkTime()、endTiming() 和 getDt() 都返回 stt::time::Duration。
+    * @warning 时间文本不携带时区信息，不应当作 Unix 时间戳或跨时区协议时间。
     */
     class DateTime
     {
     private:
         static Duration& dTOD(const Milliseconds& d1,Duration &D1);
-        static Milliseconds& DTOd(const Duration &D1,Milliseconds& d1);
+        static bool DTOd(const Duration &D1,Milliseconds& d1);
         static std::string &toPGtimeFormat();
-        static std::chrono::system_clock::time_point strToTimePoint(const std::string &timeStr,const std::string &format=ISO8086A);
+        static bool strToTimePoint(const std::string &timeStr,const std::string &format,std::chrono::system_clock::time_point &result);
         static std::string& timePointToStr(const std::chrono::system_clock::time_point &tp,std::string &timeStr,const std::string &format=ISO8086A);
     public:
         /**
         * @brief 获取当前时间
         * @note 获取当前时间，返回字符串
         * @param timeStr 接收时间的字符串容器
-        * @param format 指定时间字符串的格式 yyyy年 mm月 dd日 hh时 mi分 ss秒 sss毫秒 （默认格式为'yyyy-mm-ddThh:mi:ss',即ISO08086A标准）
+        * @param format 时间文本格式，可使用 yyyy、mm、dd、hh、mi、ss、sss；默认 ISO8086A 是 STTNet 的历史本地时间文本宏，不携带时区。
         * @return 返回timeStr的引用
         */
         static std::string& getTime(std::string &timeStr,const std::string &format=ISO8086A);
@@ -1188,7 +1041,7 @@ private:
         * @note 传入时间字符串的引用修改原字符串
         * @param timeStr 原时间字符串
         * @param oldFormat 原时间字符串格式 （yyyy年 mm月 dd日 hh时 mi分 ss秒 sss毫秒）
-        * @param newFormat 新的时间格式 （默认格式为'yyyy-mm-ddThh:mi:ss',即ISO08086A标准）
+        * @param newFormat 新格式；默认 ISO8086A 是不带毫秒和时区的本地时间文本格式。
         * @return true转化成功false 转化失败
         */
         static bool convertFormat(std::string &timeStr,const std::string &oldFormat,const std::string &newFormat=ISO8086A);
@@ -1197,8 +1050,8 @@ private:
         * @param time1 被减的时间
         * @param time2 减去的时间
         * @param result 一个接收结果的Duration容器
-        * @param format1 time1的时间字符串格式 yyyy年 mm月 dd日 hh时 mi分 ss秒 sss毫秒 （默认格式为'yyyy-mm-ddThh:mi:ss',即ISO08086A标准）
-        * @param format2 time2的时间字符串格式 yyyy年 mm月 dd日 hh时 mi分 ss秒 sss毫秒 （默认格式为'yyyy-mm-ddThh:mi:ss',即ISO08086A标准）
+        * @param format1 time1 的文本格式；默认使用历史宏 ISO8086A。
+        * @param format2 time2 的文本格式；默认使用历史宏 ISO8086A。
         * @return result的引用
         */
         static Duration& calculateTime(const std::string &time1,const std::string &time2,Duration &result,const std::string &format1=ISO8086A,const std::string &format2=ISO8086A);
@@ -1208,8 +1061,8 @@ private:
         * @param time2 参与运算的用Duration表示的一段时间
         * @param result 接收用字符串表示的运算结果的string容器
         * @param am 填入+：加法运算 填入-：减法运算
-        * @param format1 time1的格式 yyyy年 mm月 dd日 hh时 mi分 ss秒 sss毫秒 （默认格式为'yyyy-mm-ddThh:mi:ss',即ISO08086A标准）
-        * @param format2 result的格式 yyyy年 mm月 dd日 hh时 mi分 ss秒 sss毫秒 （默认格式为'yyyy-mm-ddThh:mi:ss',即ISO08086A标准）
+        * @param format1 time1 的文本格式；默认使用历史宏 ISO8086A。
+        * @param format2 result 的文本格式；默认使用历史宏 ISO8086A。
         * @return result的引用
         */
         static std::string& calculateTime(const std::string &time1,const Duration &time2,std::string &result,const std::string &am,const std::string &format1=ISO8086A,const std::string &format2=ISO8086A);
@@ -1218,8 +1071,8 @@ private:
         * @note 时间越往后越大
         * @param time1 参与比较的第一个字符串
         * @param time2 参与比较的第二个字符串
-        * @param format1 time1的字符串格式 yyyy年 mm月 dd日 hh时 mi分 ss秒 sss毫秒 （默认格式为'yyyy-mm-ddThh:mi:ss',即ISO08086A标准）
-        * @param format2 time2的字符串格式 yyyy年 mm月 dd日 hh时 mi分 ss秒 sss毫秒 （默认格式为'yyyy-mm-ddThh:mi:ss',即ISO08086A标准）
+        * @param format1 time1 的文本格式；默认使用历史宏 ISO8086A。
+        * @param format2 time2 的文本格式；默认使用历史宏 ISO8086A。
         * @return true：time1>=time2  false: time1<time2
         */
         static bool compareTime(const std::string &time1,const std::string &time2,const std::string &format1=ISO8086A,const std::string &format2=ISO8086A);
@@ -1250,12 +1103,12 @@ private:
         * @brief 获取上一次计时的时间
         * @return 返回一个Duration记录时间
         */
-        Duration getDt(){return dt;}
+        Duration getDt() const noexcept{return dt;}
         /**
         * @brief 返回本对象计时状态
         * @return true：对象正在计时  false：对象没有开始计时
         */
-        bool isStart(){return flag;}
+        bool isStart() const noexcept{return flag;}
     };
     }
     namespace file
@@ -1336,7 +1189,7 @@ private:
         * @brief 打开一个日志文件
         * @note 不存在则创建（连带目录），默认新建的目录的权限为rwx rwx r-x，默认新建的日志文件权限为rw-，rw-，r--
         * @param fileName 日志文件名（可以用绝对路径也可以用相对路径）
-        * @param timeFormat 日志文件中的时间格式 yyyy年 mm月 dd日 hh时 mi分 ss秒 sss毫秒 （默认格式为'yyyy-mm-ddThh:mi:ss',即ISO08086A标准）
+        * @param timeFormat 日志时间文本格式；默认 ISO8086A 是不带毫秒和时区的 STTNet 历史格式宏。
         * @param contentFormat 日志文件中时间和记录之间的填充格式（默认为"   " 即四个空格）
         * @return true：打开成功  false：打开失败
         */
@@ -1400,27 +1253,39 @@ private:
         {
         public:
             /**
-            * @brief  AES-256-CBC模式对称加密函数
+            * @brief AES-256-CBC 兼容加密接口，不返回实际密文长度。
             * @param before 加密前的数据容器
             * @param length 数据前的数据长度
             * @param passwd 密钥
             * @param iv iv向量
             * @param after 密文的数据容器
             * @return true：加密成功  false：加密失败
-            * @note  AES-256-CBC模式下 密钥为32字节 iv向量为16字节
+            * @note 密钥为 32 字节、IV 为 16 字节。新代码应使用带 outputLength 的重载；CBC 不提供完整性认证。
             */
             static bool encryptSymmetric(const unsigned char *before,const size_t &length,const unsigned char *passwd,const unsigned char *iv,unsigned char *after);
             /**
-            * @brief AES-256-CBC模式对称解密函数
+            * @brief AES-256-CBC 加密，并返回实际密文长度。
+            * @param outputLength 成功时写入实际密文长度；失败时写入 0。
+            * @note after 至少需要 length+EVP_MAX_BLOCK_LENGTH 字节。
+            */
+            static bool encryptSymmetric(const unsigned char *before,const size_t &length,const unsigned char *passwd,const unsigned char *iv,unsigned char *after,size_t &outputLength);
+            /**
+            * @brief AES-256-CBC 兼容解密接口，不返回实际明文长度。
             * @param before 密文的数据容器
             * @param length 密文的数据长度
             * @param passwd 密钥
             * @param iv iv向量
             * @param after 解密后的数据容器
             * @return true：解密成功  false：解密失败
-            * @note  AES-256-CBC模式下 密钥为32字节 iv向量为16字节
+            * @note 密钥为 32 字节、IV 为 16 字节。新代码应使用带 outputLength 的重载；解密结果不会自动追加字符串终止符。
             */
             static bool decryptSymmetric(const unsigned char *before,const size_t &length,const unsigned char *passwd,const unsigned char *iv,unsigned char *after);
+            /**
+            * @brief AES-256-CBC 解密，并返回实际明文长度。
+            * @param outputLength 成功时写入实际明文长度；失败时写入 0。
+            * @note 解密结果是二进制数据，不会自动追加字符串终止符。
+            */
+            static bool decryptSymmetric(const unsigned char *before,const size_t &length,const unsigned char *passwd,const unsigned char *iv,unsigned char *after,size_t &outputLength);
             /**
             * @brief 计算输入字符串的 SHA-1 哈希值（原始二进制形式）。
             *
@@ -1431,7 +1296,7 @@ private:
             * @param result  用于存放输出的 SHA-1 哈希值（二进制形式），长度为 20 字节。
             * @return 返回 result 的引用。
             *
-            * @note 该函数适用于后续加密、签名等处理（例如用于 HMAC 的输入）。
+            * @warning SHA-1 仅保留用于协议兼容，不应再用于密码存储、数字签名或新的安全设计。
             */
             static std::string& sha1(const std::string &ori_str,std::string &result);
             /**
@@ -1444,7 +1309,7 @@ private:
             * @param result  用于存放输出的 SHA-1 哈希值（40 字节的十六进制字符串）。
             * @return 返回 result 的引用。
             *
-            * @note 适用于哈希显示、唯一标识、日志校验等场景。与 sha1 的主要区别是输出格式。
+            * @note 与 sha1 的主要区别仅是输出格式。SHA-1 只建议用于既有协议兼容，不用于安全唯一标识或密码学完整性保护。
             */
 	        static std::string& sha11(const std::string &ori_str,std::string &result);
         };
@@ -1529,24 +1394,25 @@ private:
             */
             static long getRandomNumber(const long &a,const long &b);
             /**
-            * @brief 生成一个规定长度的“Base64 字符集内的伪随机字符串”，并在末尾用 '=' 补齐至符合 Base64 字符串格式
+            * @brief 生成指定长度的 Base64 字符集伪随机文本。
             * @param str 保存生成字符串的容器
             * @param length 需要生成的字符串的长度
             * @return 返回str的引用
+            * @note 结果长度严格等于 length，不保证本身是某段二进制的合法 Base64 编码。
+            * @warning 该接口不用于密钥、Token、IV 等安全随机场景；安全随机请使用 RAND_bytes()。
             */
             static std::string& getRandomStr_base64(std::string &str,const int &length);
             /**
-            * @brief 生成一个 32 位（4 字节）的随机掩码。
+            * @brief 使用 OpenSSL RAND_bytes() 生成 4 字节随机掩码。
             *
-            * 该函数先随机生成一个由 '0' 和 '1' 组成的 32 位字符串（例如："010110..."），
-            * 然后通过内部的 `BitUtil::toBit()` 函数将其转换为对应的 4 字节二进制数据。
+            * 主要用于 WebSocket 客户端帧掩码。生成失败时清空 mask。
             *
-            * 转换结果通过 mask 参数返回，通常用于生成数据包掩码、加密掩码、位图掩码等。
+            * 结果通过 mask 参数返回，主要用于 WebSocket 协议帧掩码。
             *
             * @param mask 用于存放最终生成的 4 字节掩码（二进制字符串形式）。
             * @return 返回 mask 的引用。
             *
-            * @note 内部依赖函数 `BitUtil::toBit(const std::string&, std::string&)`，用于将 32 位二进制字符串压缩为 4 字节。
+            * @note 该随机值适合协议掩码；密钥和长期 Token 仍应建立独立的密钥管理与失败处理。
             */
             static std::string& generateMask_4(std::string &mask);
         };
@@ -1565,7 +1431,7 @@ private:
             * @param data 输入的 64 位无符号整数，按字节反转后返回。
             * @return 反转后的 data 引用。
             *
-            * @note 该实现不依赖平台库函数，适用于不确定机器端序的场景。
+            * @note 该函数始终执行 8 字节反转，并不检测当前机器端序。仅适用于 unsigned long 为 64 位的目标；需要可移植协议字段时优先使用固定宽度整数。
             */
             static unsigned long& htonl_ntohl_64(unsigned long &data);//64位无符号数转化为大/小端序（网络字节序）
         };
@@ -1625,8 +1491,8 @@ private:
             static float& getValidFloat(float &number,const int &bit);
         };
         /**
-        * @brief 负责Http字符串和URL解析
-        * 包括从 URL 或请求报文中提取参数、IP、端口、请求头字段等功能。
+        * @brief 负责 HTTP 字符串和 URL 的轻量提取。
+        * @note 这些函数不是完整 URI/HTTP parser，不执行 URL decode。string_view 重载返回非拥有视图，原始字符串销毁或改变后视图立即失效。
         */
         class HttpStringUtil
         {
@@ -1651,12 +1517,13 @@ private:
             /**
             * @brief 从 URL 查询参数中提取指定 key 的值。
             *
-            * @note url不需要完整也行 例如从 `?id=123&name=abc`提取 `id` 的值和从`http://xxxx/?id=123&name=abc`提取 `id` 的值是一样的。
+            * @note URL 可以不完整；键按 ? 和 & 字段边界匹配，不执行 URL decode。无值和未找到都返回空结果。
             *
             * @param ori_str 原始 URL 字符串。
             * @param str 存储提取结果的字符串。
             * @param name 参数名（key）。
-            * @return 引用，指向结果字符串。
+            * @return 引用，指向结果视图。
+            * @warning 返回的 string_view 不拥有数据，其生命周期不能超过 ori_str 指向的原始字符串。
             */
 	        static std::string_view& get_value_str(const std::string_view& ori_str,std::string_view &str,const std::string& name);
             /**
@@ -1664,28 +1531,29 @@ private:
             *
             * @param ori_str 原始 HTTP 请求头字符串。
             * @param str 提取结果。
-            * @param name 请求头字段名（如 "Host"）。
-            * @return 引用，指向结果字符串。
+            * @param name 请求头字段名（如 "Host"），匹配时不区分大小写。
+            * @return 引用，指向结果视图。
+            * @warning 返回的 string_view 不拥有数据，其生命周期不能超过 ori_str 指向的原始字符串。
             */
 	        static std::string_view& get_value_header(const std::string_view& ori_str,std::string_view &str,const std::string& name);
             /**
-            * @brief 提取 URL 中 path 和 query 部分。
+            * @brief 提取 URL 的 path 部分，不包含 query。
             *
-            * 例如从 `http://abc.com/path?query=123` 或者从/path?query=123 提取 `/path`。
+            * 例如从 `http://abc.com/path?query=123` 或 `/path?query=123` 提取 `/path`。
             *
             * @param ori_str 原始 URL。
             * @param str 返回 path 部分。
-            * @return 引用，指向结果字符串。
+            * @return 引用，指向结果字符串或结果视图。
             */
 	        static std::string_view& get_location_str(const std::string_view& ori_str,std::string_view &str);
             /**
-            * @brief 提取 URL 的 path 部分（不含 query）。
+            * @brief 提取 URL 的 path 与 query 部分。
             *
-            * 与 `get_location_str` 类似，但保留 path 之后的所有内容（如参数）。
+            * 例如从 `http://abc.com/path?query=123` 提取 `/path?query=123`。
             *
             * @param url URL。
-            * @param locPara 返回 path+参数部分。
-            * @return 引用，指向结果字符串。
+            * @param locPara 返回 path+query 部分。
+            * @return 引用，指向结果字符串或结果视图；无 path 时返回空结果。
             */
             static std::string_view& getLocPara(const std::string_view &url,std::string_view &locPara);
             /**
@@ -1719,7 +1587,7 @@ private:
             /**
             * @brief 从 URL 查询参数中提取指定 key 的值。
             *
-            * @note url不需要完整也行 例如从 `?id=123&name=abc`提取 `id` 的值和从`http://xxxx/?id=123&name=abc`提取 `id` 的值是一样的。
+            * @note URL 可以不完整；键按 ? 和 & 字段边界匹配，不执行 URL decode。无值和未找到都返回空结果。
             *
             * @param ori_str 原始 URL 字符串。
             * @param str 存储提取结果的字符串。
@@ -1737,23 +1605,23 @@ private:
             */
 	        static std::string& get_value_header(const std::string& ori_str,std::string &str,const std::string& name);
             /**
-            * @brief 提取 URL 中 path 和 query 部分。
+            * @brief 提取 URL 的 path 部分，不包含 query。
             *
-            * 例如从 `http://abc.com/path?query=123` 或者从/path?query=123 提取 `/path`。
+            * 例如从 `http://abc.com/path?query=123` 或 `/path?query=123` 提取 `/path`。
             *
             * @param ori_str 原始 URL。
             * @param str 返回 path 部分。
-            * @return 引用，指向结果字符串。
+            * @return 引用，指向结果字符串或结果视图。
             */
 	        static std::string& get_location_str(const std::string& ori_str,std::string &str);
             /**
-            * @brief 提取 URL 的 path 部分（不含 query）。
+            * @brief 提取 URL 的 path 与 query 部分。
             *
-            * 与 `get_location_str` 类似，但保留 path 之后的所有内容（如参数）。
+            * 例如从 `http://abc.com/path?query=123` 提取 `/path?query=123`。
             *
             * @param url URL。
-            * @param locPara 返回 path+参数部分。
-            * @return 引用，指向结果字符串。
+            * @param locPara 返回 path+query 部分。
+            * @return 引用，指向结果字符串或结果视图；无 path 时返回空结果。
             */
             static std::string& getLocPara(const std::string &url,std::string &locPara);
             /**
@@ -1802,7 +1670,8 @@ private:
             *
             * 支持多个字段名和值的构造，用法为：
             * @code
-            * std::string headers = createHeader("Host", "example.com", "Connection", "keep-alive,"Content-Type","charset=UTF-8");
+            * std::string headers = createHeader("Host", "example.com",
+             *     "Connection", "keep-alive", "Content-Type", "charset=UTF-8");
             * @endcode
             * 最终生成：
             * @code
@@ -1851,8 +1720,8 @@ private:
         public:
             /**
             * @brief string转化为int类型
-            * @note 不会抛出异常
-            * @param ori_str 原始string类型数据
+            * @note 不会抛出异常；只有整个输入都被成功解析时才算成功。
+            * @param ori_str 原始 string 数据
             * @param result 存放结果的int容器
             * @param i 如果转化失败，则把 result 赋值为 i（默认为 -1）。
             * @return result的引用
@@ -1895,7 +1764,7 @@ private:
 	        static double& toDouble(const std::string&ori_str,double &result,const double &i=-1);
             /**
             * @brief string转化为bool类型
-            * @note 不会抛出异常，true或者True，TRUE返回true，否则返回false
+            * @note 不会抛出异常；仅 true、True、TRUE 返回 true，其他输入均返回 false。该接口没有独立失败状态。
             * @param ori_str 原始string类型数据
             * @param result 存放结果的bool容器
             * @return result的引用
@@ -1909,9 +1778,9 @@ private:
             * @param ori_str 输入的原始字符串（可以包含任意字符，包括不可见字符）。
             * @param result 存放转换后结果的字符串引用。
             * @return 转换后的十六进制字符串 result 的引用。
-            * @bug 有bug待修复
+            * @note 按字节输出小写十六进制；输入可包含不可见字符和高位字节。
             */
-            static std::string& strto16(const std::string &ori_str,std::string &result);//字符串转化为16进制字符串     (暂不需要)(待修复)
+            static std::string& strto16(const std::string &ori_str,std::string &result);
         };
         /**
         * @brief 数据编码解码，掩码处理等
@@ -1922,7 +1791,7 @@ private:
             /**
             * @brief 对字符串进行 Base64 编码。
             *
-            * 使用 OpenSSL 的 BIO 接口对给定字符串进行 Base64 编码，编码过程中不会插入换行符。
+            * 使用 OpenSSL EVP 接口进行 Base64 编码，编码过程中不会插入换行符。
             *
             * @param input 要编码的原始字符串（可以包含任意二进制数据）。
             * @return 编码后的 Base64 字符串。
@@ -1931,10 +1800,11 @@ private:
             /**
             * @brief 对 Base64 编码的字符串进行解码。
             *
-            * 使用 OpenSSL 的 BIO 接口对 Base64 字符串进行解码。该函数不接受带换行符的 Base64 字符串。
+            * 使用 OpenSSL EVP 接口严格解码 Base64。该函数不接受换行、非法字符或错误补位。
             *
             * @param input Base64 编码的字符串。
-            * @return 解码后的原始字符串。
+            * @return 解码后的原始字符串；格式非法时返回空字符串。
+            * @note 空输入本身也会返回空字符串。需要区分“空输入”和“失败”时应在调用前单独检查输入。
             */
 	        static std::string base64_decode(const std::string &input);
             /**
@@ -1950,24 +1820,23 @@ private:
             */
 	        static std::string& transfer_websocket_key(std::string &str);
             /**
-            * @brief 生成一个 32 位（4 字节）的随机掩码。
+            * @brief 使用 OpenSSL RAND_bytes() 生成 4 字节随机掩码。
             *
-            * 该函数先随机生成一个由 '0' 和 '1' 组成的 32 位字符串（例如："010110..."），
-            * 然后通过内部的 `BitUtil::toBit()` 函数将其转换为对应的 4 字节二进制数据。
+            * 主要用于 WebSocket 客户端帧掩码。生成失败时清空 mask。
             *
-            * 转换结果通过 mask 参数返回，通常用于生成数据包掩码、加密掩码、位图掩码等。
+            * 结果通过 mask 参数返回，主要用于 WebSocket 协议帧掩码。
             *
             * @param mask 用于存放最终生成的 4 字节掩码（二进制字符串形式）。
             * @return 返回 mask 的引用。
             *
-            * @note 内部依赖函数 `BitUtil::toBit(const std::string&, std::string&)`，用于将 32 位二进制字符串压缩为 4 字节。
+            * @note 该随机值适合协议掩码；密钥和长期 Token 仍应建立独立的密钥管理与失败处理。
             */
             static std::string& generateMask_4(std::string &mask);
             /**
             * @brief 使用给定的 4 字节掩码对字符串进行异或操作（XOR Masking）。
             *
             * 此函数对输入字符串 data 的每个字节，按顺序与 mask 中的 4 字节循环异或。
-            * 该操作是可逆的，可用于加密或解密 WebSocket 中的掩码数据帧。
+            * 该操作是可逆的，用于应用或移除 WebSocket 帧掩码；XOR 掩码不提供保密性，不能当作加密。
             *
             * @param data 要进行异或处理的数据字符串，处理结果会直接修改该字符串。
             * @param mask 用作掩码的字符串，通常应为至少 4 字节。
@@ -1980,7 +1849,52 @@ private:
         */
         class JsonHelper
         {
-            public:
+        private:
+            template<class T>
+            static void assignJsonValue(Json::Value &slot,T &&value)
+            {
+                using ValueType=std::decay_t<T>;
+                if constexpr (std::is_same_v<ValueType,bool>)
+                    slot=Json::Value(value);
+                else if constexpr (std::is_integral_v<ValueType>&&std::is_signed_v<ValueType>)
+                    slot=Json::Value(static_cast<Json::Int64>(value));
+                else if constexpr (std::is_integral_v<ValueType>&&std::is_unsigned_v<ValueType>)
+                    slot=Json::Value(static_cast<Json::UInt64>(value));
+                else
+                    slot=std::forward<T>(value);
+            }
+
+            template<class Key,class Value>
+            static void appendJsonPairs(Json::Value &root,Key &&key,Value &&value)
+            {
+                assignJsonValue(root[std::string(std::forward<Key>(key))],std::forward<Value>(value));
+            }
+
+            template<class Key,class Value,class... Args>
+            static void appendJsonPairs(Json::Value &root,Key &&key,Value &&value,Args&&... args)
+            {
+                assignJsonValue(root[std::string(std::forward<Key>(key))],std::forward<Value>(value));
+                appendJsonPairs(root,std::forward<Args>(args)...);
+            }
+
+            template<class Value>
+            static void appendJsonArray(Json::Value &root,Value &&value)
+            {
+                Json::Value item;
+                assignJsonValue(item,std::forward<Value>(value));
+                root.append(item);
+            }
+
+            template<class Value,class... Args>
+            static void appendJsonArray(Json::Value &root,Value &&value,Args&&... args)
+            {
+                Json::Value item;
+                assignJsonValue(item,std::forward<Value>(value));
+                root.append(item);
+                appendJsonArray(root,std::forward<Args>(args)...);
+            }
+
+        public:
             /**
             * @brief 提取 JSON 字符串中指定字段的值或嵌套结构。
             * 
@@ -2017,91 +1931,57 @@ private:
             * @return std::string JSON 字符串。
             */
             template<class T1,class T2>
-	        static std::string createJson(T1 first,T2 second)
-	        {
-		        Json::Value root;
-		        //root[first]=second;
-                if constexpr (std::is_integral_v<T2>) {
-                    root[first] = Json::Value(static_cast<Json::Int64>(second));
-                } else {
-                    root[first] = second;
-                }
-		        Json::StreamWriterBuilder builder;
-		        std::string jsonString=Json::writeString(builder,root);
-		        return jsonString;
-	        }
-            /**
-            * @brief 创建多个键值对组成的 JSON 字符串（递归变参模板）。
-            * 
-            * @tparam T1 第一个键的类型。
-            * @tparam T2 第一个值的类型。
-            * @tparam Args 其余成对出现的键值参数类型。
-            * @param first 第一个键。
-            * @param second 第一个值。
-            * @param args 其余键值参数。
-            * @return std::string 拼接完成的 JSON 字符串。
-            */
-             template<class T1,class T2,class... Args>
-	        static std::string createJson(T1 first,T2 second,Args... args)
-	        {
-		        Json::Value root;
-		        //root[first]=second;
-                if constexpr (std::is_integral_v<T2>) {
-                    root[first] = Json::Value(static_cast<Json::Int64>(second));
-                } else {
-                    root[first] = second;
-                }
-		        std::string kk=createJson(args...);
-		        Json::StreamWriterBuilder builder;
-		        std::string jsonString=Json::writeString(builder,root);
-		        jsonString=jsonString.erase(jsonString.length()-2);
-		        kk=kk.substr(1);
-		        return jsonString+","+kk;
+            static std::string createJson(T1 &&first,T2 &&second)
+            {
+                Json::Value root(Json::objectValue);
+                appendJsonPairs(root,std::forward<T1>(first),std::forward<T2>(second));
+                Json::StreamWriterBuilder builder;
+                builder["indentation"]="";
+                return Json::writeString(builder,root);
+            }
 
-	        }
             /**
-            * @brief 创建只包含一个元素的 JSON 数组字符串。
-            * 
-            * @tparam T 任意类型。
-            * @param first 第一个元素。
-            * @return std::string JSON 数组字符串。
+            * @brief 创建多个键值对组成的 JSON 字符串。
+            * @note 参数必须按 key, value 成对传入；布尔值会保持 JSON bool 类型。
             */
-	        template<class T>
-	        static std::string createArray(T first)
-	        {
-		        Json::Value root(Json::arrayValue);
-		        root.append(first);
-		        Json::StreamWriterBuilder builder;
-		        std::string jsonString=Json::writeString(builder,root);
-		        return jsonString;
-	        }
-            /**
-            * @brief 创建多个元素组成的 JSON 数组字符串（递归变参模板）。
-            * 
-            * @tparam T 第一个元素类型。
-            * @tparam Args 其余元素类型。
-            * @param first 第一个元素。
-            * @param args 其余元素。
-            * @return std::string 拼接完成的 JSON 数组字符串。
-            */
+            template<class T1,class T2,class... Args>
+            static std::string createJson(T1 &&first,T2 &&second,Args&&... args)
+            {
+                static_assert(sizeof...(Args)%2==0,"JsonHelper::createJson requires key/value pairs");
+                Json::Value root(Json::objectValue);
+                appendJsonPairs(root,std::forward<T1>(first),std::forward<T2>(second),
+                                std::forward<Args>(args)...);
+                Json::StreamWriterBuilder builder;
+                builder["indentation"]="";
+                return Json::writeString(builder,root);
+            }
+
+            /** @brief 创建只包含一个元素的 JSON 数组字符串。 */
+            template<class T>
+            static std::string createArray(T &&first)
+            {
+                Json::Value root(Json::arrayValue);
+                appendJsonArray(root,std::forward<T>(first));
+                Json::StreamWriterBuilder builder;
+                builder["indentation"]="";
+                return Json::writeString(builder,root);
+            }
+
+            /** @brief 创建多个元素组成的 JSON 数组字符串。 */
             template<class T,class... Args>
-	        static std::string createArray(T first,Args... args)
-	        {
-		        Json::Value root(Json::arrayValue);
-		        root.append(first);
-		        std::string kk=createArray(args...);
-		        Json::StreamWriterBuilder builder;
-		        std::string jsonString=Json::writeString(builder,root);
-		        jsonString=jsonString.erase(jsonString.length()-2);
-		        kk=kk.substr(1);
-		        return jsonString+","+kk;
-
-	        }
+            static std::string createArray(T &&first,Args&&... args)
+            {
+                Json::Value root(Json::arrayValue);
+                appendJsonArray(root,std::forward<T>(first),std::forward<Args>(args)...);
+                Json::StreamWriterBuilder builder;
+                builder["indentation"]="";
+                return Json::writeString(builder,root);
+            }
             /**
-            * @brief 将两个 JSON 字符串拼接为一个有效的 JSON（适用于对象或数组拼接）。
+            * @brief 解析并合并两个 JSON 对象，或连接两个 JSON 数组。
             * @param a 第一个 JSON 字符串。
             * @param b 第二个 JSON 字符串。
-            * @return std::string 拼接后的 JSON 字符串。
+            * @return 合并后的紧凑 JSON；类型不一致或任一输入非法时返回空字符串。
             */
             static std::string jsonAdd(const std::string &a,const std::string &b);
              /**

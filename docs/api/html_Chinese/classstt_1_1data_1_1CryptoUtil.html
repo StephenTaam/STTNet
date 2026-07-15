@@ -116,8 +116,8 @@ $(function(){ initResizable(false); });
 <tr class="separator:a1a7fc5175230815b1afaa57c2497d428"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
-<div class="textblock"><p>负责加密，解密和哈希 </p>
-</div><h2 class="groupheader">成员函数说明</h2>
+<div class="textblock"><p>AES-256-CBC 与 SHA-1 兼容工具。</p><div style="border-left:4px solid #4f6b8a;padding:12px 16px;margin:12px 0;background:rgba(127,127,127,.08)"><strong>0.7.0 新重载：</strong><pre><code>static bool encryptSymmetric(..., unsigned char *after, size_t &amp;outputLength);
+static bool decryptSymmetric(..., unsigned char *after, size_t &amp;outputLength);</code></pre><ul><li>新代码应使用带 <code>outputLength</code> 的重载，不能猜测二进制输出长度。</li><li>AES-CBC 不提供完整性认证；生产协议应额外认证密文或采用 AEAD。</li><li>SHA-1 仅用于既有协议兼容，不用于密码、签名或新的安全设计。</li></ul><p>旧的五参数重载为兼容保留；完整签名以 <code>include/sttnet.h</code> 为准。</p></div></div><h2 class="groupheader">成员函数说明</h2>
 <a id="aefb9a4fe895b15d512d9ae7992da3949" name="aefb9a4fe895b15d512d9ae7992da3949"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aefb9a4fe895b15d512d9ae7992da3949">&#9670;&#160;</a></span>decryptSymmetric()</h2>
 

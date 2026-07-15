@@ -1,8 +1,6 @@
 #include <sttnet.h>
 
-#include <chrono>
 #include <iostream>
-#include <thread>
 
 int main()
 {
@@ -10,39 +8,38 @@ int main()
     using stt::file::FileTool;
     using stt::file::LogFile;
 
-    // FileTool handles simple path-level operations.
-    if(!FileTool::createDir("runtime"))
-        std::cerr << "runtime directory may already exist or could not be created\n";
+    // createDir() returns false when creation fails; an existing directory may
+    // also make it return false, so inspect the path when this matters.
+    (void)FileTool::createDir("runtime");
 
-    // File offers thread-safe text and binary operations. openFile() can create
-    // missing parent directories when create=true.
+    // File provides thread-safe text and binary operations. openFile() can create
+    // missing parent directories when creation is enabled by the API.
     File config;
     if(!config.openFile("runtime/example.conf"))
         return 1;
-
     config.deleteAll();
     config.appendLine("port=8080");
     config.appendLine("workers=4");
-
     std::string all;
     config.readAll(all);
     std::cout << "configuration:\n" << all << '\n';
     config.closeFile();
 
-    // LogFile uses a bounded asynchronous queue. Producers never wait for disk;
-    // when the queue is full, new log records are dropped and counted.
-    LogFile log(8192);
-    if(!log.openFile("runtime/example.log"))
+    // FileTool::copy() now copies raw bytes. It returns false when either file
+    // cannot be opened or when the write does not complete successfully.
+    if(!FileTool::copy("runtime/example.conf","runtime/example.conf.copy"))
         return 2;
 
-    log.writeLog("service started");
-    log.writeLog("configuration loaded");
-
-    // Give the consumer thread a moment in this tiny demo. In a real service,
-    // keep the LogFile alive until all producers have stopped.
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));
-    std::cout << "dropped logs: " << log.getDroppedLogCount() << '\n';
-    log.closeFile();
-
+    // LogFile owns a bounded asynchronous queue. Keep the object alive until all
+    // producer threads have stopped. Its destructor drains queued records before
+    // closing; do not use an arbitrary sleep as a substitute for lifecycle order.
+    {
+        LogFile log(8192);
+        if(!log.openFile("runtime/example.log"))
+            return 3;
+        log.writeLog("service started");
+        log.writeLog("configuration loaded");
+        std::cout << "dropped logs: " << log.getDroppedLogCount() << '\n';
+    }
     return 0;
 }

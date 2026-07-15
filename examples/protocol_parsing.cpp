@@ -8,46 +8,45 @@ int main()
     using stt::data::HttpStringUtil;
     using stt::data::WebsocketStringUtil;
 
-    const std::string url = "http://127.0.0.1:8080/users?page=2&limit=20";
-
+    const std::string url="http://127.0.0.1:8080/users?userid=7&id=42&page=2";
     std::string ip;
-    int port = 0;
+    int port=0;
     std::string locationAndQuery;
     std::string path;
     std::string query;
-    std::string page;
+    std::string id;
 
-    // These helpers perform lightweight string extraction. They do not URL-decode
-    // percent escapes and should not replace a full URI parser for untrusted input.
-    HttpStringUtil::getIP(url, ip);
-    HttpStringUtil::getPort(url, port);
-    HttpStringUtil::getLocPara(url, locationAndQuery);
-    HttpStringUtil::get_location_str(locationAndQuery, path);
-    HttpStringUtil::getPara(locationAndQuery, query);
-    HttpStringUtil::get_value_str(locationAndQuery, page, "page");
+    // These are lightweight extraction helpers. They do not URL-decode percent
+    // escapes and are not a standards-complete URI parser for hostile input.
+    HttpStringUtil::getIP(url,ip);
+    HttpStringUtil::getPort(url,port);
+    HttpStringUtil::getLocPara(url,locationAndQuery);
+    HttpStringUtil::get_location_str(locationAndQuery,path);
+    HttpStringUtil::getPara(locationAndQuery,query);
 
+    // Query keys are matched on field boundaries: "id" does not match "userid".
+    HttpStringUtil::get_value_str(locationAndQuery,id,"id");
     std::cout << "ip=" << ip << '\n'
               << "port=" << port << '\n'
               << "location=" << locationAndQuery << '\n'
               << "path=" << path << '\n'
               << "query=" << query << '\n'
-              << "page=" << page << '\n';
+              << "id=" << id << '\n';
 
-    const std::string rawHeaders =
-        "Host: example.com\r\n"
+    const std::string rawHeaders=
+        "content-type:\tapplication/json\r\n"
         "Connection: keep-alive\r\n";
-    std::string host;
+    std::string contentType;
 
-    // get_value_header() is a low-level, case-sensitive helper. HTTP server users
-    // should normally prefer HttpRequestInformation::headerValue().
-    HttpStringUtil::get_value_header(rawHeaders, host, "Host");
-    std::cout << "host=" << host << '\n';
+    // HTTP field names are case-insensitive. The helper trims optional spaces and
+    // tabs after the colon. Server handlers should normally use headerValue().
+    HttpStringUtil::get_value_header(rawHeaders,contentType,"Content-Type");
+    std::cout << "content-type=" << contentType << '\n';
 
-    // WebsocketStringUtil computes the RFC 6455 Sec-WebSocket-Accept value from
-    // a client key. Applications normally let WebSocketServer handle this step.
-    std::string websocketKey = "dGhlIHNhbXBsZSBub25jZQ==";
+    // This computes RFC 6455 Sec-WebSocket-Accept. Applications normally let the
+    // WebSocket server perform the handshake automatically.
+    std::string websocketKey="dGhlIHNhbXBsZSBub25jZQ==";
     WebsocketStringUtil::transfer_websocket_key(websocketKey);
     std::cout << "websocket_accept=" << websocketKey << '\n';
-
     return 0;
 }

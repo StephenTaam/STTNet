@@ -116,8 +116,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a1a7fc5175230815b1afaa57c2497d428"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>负责加密，解密和哈希 </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+<div class="textblock"><p>AES-256-CBC and SHA-1 compatibility utilities.</p><div style="border-left:4px solid #4f6b8a;padding:12px 16px;margin:12px 0;background:rgba(127,127,127,.08)"><strong>New 0.7.0 overloads:</strong><pre><code>static bool encryptSymmetric(..., unsigned char *after, size_t &amp;outputLength);
+static bool decryptSymmetric(..., unsigned char *after, size_t &amp;outputLength);</code></pre><ul><li>New code should use the <code>outputLength</code> overloads rather than guessing binary lengths.</li><li>AES-CBC does not authenticate ciphertext; add authentication or use an AEAD design.</li><li>SHA-1 is retained only for existing protocol compatibility, not passwords, signatures, or new security designs.</li></ul><p>The five-argument overloads remain for compatibility. See <code>include/sttnet.h</code> for exact signatures.</p></div></div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="aefb9a4fe895b15d512d9ae7992da3949" name="aefb9a4fe895b15d512d9ae7992da3949"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aefb9a4fe895b15d512d9ae7992da3949">&#9670;&#160;</a></span>decryptSymmetric()</h2>
 

@@ -1,25 +1,45 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Chapter 13: Time, Duration, and Timing · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body><header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">Contents</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Portal</a></nav></header><div class="layout"><aside class="sidebar"><h3>Contents</h3><a class="" href="index.html">Guide Home</a><div class="side-group">Foundation</div><a class="" href="01-understand.html">Chapter 1: Understanding STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Dependencies, Build, and Run</a><div class="side-group">Network Servers and Clients</div><a class="" href="03-http.html">Chapter 3: Your First HTTP Service</a><a class="" href="04-request-response.html">Chapter 4: HTTP Requests, JSON, and Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing, Processing Stages, and Return Values</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool and Blocking Work</a><a class="" href="07-websocket.html">Chapter 7: WebSocket Server</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: HTTP, WebSocket, TCP, and UDP Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS, and mTLS</a><div class="side-group">Data and Utility Classes</div><a class="" href="12-json.html">Chapter 12: JSON Parsing and Generation</a><a class="active" href="13-time.html">Chapter 13: Time, Duration, and Timing</a><a class="" href="14-file-log.html">Chapter 14: Files and Asynchronous Logging</a><a class="" href="15-data-tools.html">Chapter 15: Encoding, Crypto, Randomness, and Data Conversion</a><div class="side-group">Security</div><a class="" href="16-security.html">Chapter 16: Connection Security, Rate Limiting, and Input Boundaries</a><div class="side-group">System and Processes</div><a class="" href="08-signals.html">Chapter 17: Linux Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 18: System Initialization and Server Settings</a><a class="" href="19-process.html">Chapter 19: Process Supervision, Heartbeats, and IPC Synchronization</a><div class="side-group">Production</div><a class="" href="10-production.html">Chapter 20: Integration and Production Checklist</a><div class="side-group">Examples and Reference</div><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Chapter 13: Time, Duration, and Timing</h1><p class="lead">Choose wall-clock and monotonic time correctly for formats, intervals, comparison, and latency.</p>
-<h2>1. Separate wall-clock time from duration</h2><p><code>DateTime</code> formats time text and measures elapsed work. <code>Duration</code> represents an interval. Logs and certificate dates use wall-clock time; timeouts and latency use a monotonic clock.</p>
-<h2>2. Current time and format conversion</h2>
-<div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>std::string now;
-DateTime::getTime(now, "yyyy-mm-ddThh:mi:ss.sss");
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Chapter 13: Time, Duration, and Timing · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body><header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">Contents</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Portal</a></nav></header><div class="layout"><aside class="sidebar"><h3>Contents</h3><a class="" href="index.html">Guide Home</a><div class="side-group">Foundation</div><a class="" href="01-understand.html">Chapter 1: Understanding STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Dependencies, Build, and Run</a><div class="side-group">Network Servers and Clients</div><a class="" href="03-http.html">Chapter 3: Your First HTTP Service</a><a class="" href="04-request-response.html">Chapter 4: HTTP Requests, JSON, and Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing, Processing Stages, and Return Values</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool and Blocking Work</a><a class="" href="07-websocket.html">Chapter 7: WebSocket Server</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: HTTP, WebSocket, TCP, and UDP Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS, and mTLS</a><div class="side-group">Data and Utility Classes</div><a class="" href="12-json.html">Chapter 12: JSON Parsing and Generation</a><a class="active" href="13-time.html">Chapter 13: Time, Duration, and Timing</a><a class="" href="14-file-log.html">Chapter 14: Files and Asynchronous Logging</a><a class="" href="15-data-tools.html">Chapter 15: Encoding, Crypto, Randomness, and Data Conversion</a><div class="side-group">Security</div><a class="" href="16-security.html">Chapter 16: Connection Security, Rate Limiting, and Input Boundaries</a><div class="side-group">System and Processes</div><a class="" href="08-signals.html">Chapter 17: Linux Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 18: System Initialization and Server Settings</a><a class="" href="19-process.html">Chapter 19: Process Supervision, Heartbeats, and IPC Synchronization</a><div class="side-group">Production</div><a class="" href="10-production.html">Chapter 20: Integration and Production Checklist</a><div class="side-group">Examples and Reference</div><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Chapter 13: DateTime, Duration, and Timing</h1><p class="lead">Keep local wall-clock text, elapsed intervals, and monotonic timing separate, and use the exact STTNet return types.</p>
+<h2>1. Two different types</h2><div class="table-wrap"><table><thead><tr><th>Type</th><th>Responsibility</th><th>It is not</th></tr></thead><tbody><tr><td><code>stt::time::DateTime</code></td><td>Local time text, format conversion, text arithmetic, and monotonic timing</td><td>A Unix timestamp value type</td></tr><tr><td><code>stt::time::Duration</code></td><td>A non-negative interval with comparison, arithmetic, and unit conversion</td><td>An absolute date or <code>std::chrono::duration</code></td></tr></tbody></table></div>
+<div class="note"><strong>Exact return types:</strong> <code>checkTime()</code>, <code>endTiming()</code>, and <code>getDt()</code> all return <code>stt::time::Duration</code>. Call <code>convertToMsec()</code> only when you actually need an integer number of milliseconds.</div>
+<h2>2. Read local wall-clock text</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>std::string now;
+// getTime() modifies now and returns a reference to it.
+stt::time::DateTime::getTime(now, ISO8086B);
 
 std::string display = now;
-DateTime::convertFormat(
-    display,
-    "yyyy-mm-ddThh:mi:ss.sss",
-    "yyyy/mm/dd hh:mi:ss.sss");</code></pre></div>
-<p>Placeholders are <code>yyyy mm dd hh mi ss sss</code>. Minutes use <code>mi</code> to avoid colliding with month <code>mm</code>.</p>
-<h2>3. Measure elapsed time</h2>
-<div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>DateTime timer;
-timer.startTiming();
+// convertFormat() modifies display in place and returns false on mismatch.
+if(!stt::time::DateTime::convertFormat(
+       display, ISO8086B, "yyyy/mm/dd hh:mi:ss.sss"))
+{
+    // Handle invalid text or format.
+}</code></pre></div><p><code>ISO8086A</code> and <code>ISO8086B</code> are historical STTNet macro names for local text with and without milliseconds. They carry no <code>Z</code> suffix or UTC offset and are not complete ISO 8601 timestamps.</p>
+<h2>3. Construct and convert Duration</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>// Constructor order: day, hour, minute, second, millisecond.
+const stt::time::Duration retryDelay(0, 0, 1, 30, 0);
 
-Duration current = timer.checkTime(); // Read without stopping.
-Duration total = timer.endTiming();   // Stop and return elapsed time.
-std::cout &lt;&lt; total.convertToMsec() &lt;&lt; " ms
-";</code></pre></div>
-<p>The timing API uses <code>steady_clock</code>, so NTP or manual clock changes do not distort elapsed durations. Calling <code>checkTime()</code> or <code>endTiming()</code> before <code>startTiming()</code> returns fields set to <code>-1</code>.</p>
-<h2>4. Duration conversion</h2><p>Use <code>convertToDay/Hour/Min/Sec/Msec</code> for a single unit and <code>recoverForm()</code> to expand milliseconds into fields. Comparison and arithmetic operators are useful for timeout policies.</p>
-<div class="warning"><strong>Do not use formatted wall-clock text for request deadlines.</strong> Do not use a monotonic clock as a public timestamp.</div><p><a href="demo-time-tools.html">Open the complete time utility demo →</a></p>
-<section class="api-related"><h2>Related API Reference</h2><p><a href="../../api/html_English/classstt_1_1time_1_1DateTime.html">DateTime</a> · <a href="../../api/html_English/structstt_1_1time_1_1Duration.html">Duration</a></p></section><div class="pager"><a href="12-json.html">← Chapter 12: JSON Parsing and Generation</a><a href="14-file-log.html">Chapter 14: Files and Asynchronous Logging →</a></div></article></main></div><footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>
+const long long milliseconds = retryDelay.convertToMsec(); // 90000
+const double seconds = retryDelay.convertToSec();           // 90.0</code></pre></div><ul><li>A default-constructed <code>Duration</code> represents zero milliseconds.</li><li>All five fields set to <code>-1</code> represent the invalid sentinel; use <code>isValid()</code>.</li><li>Comparison and arithmetic use total milliseconds. A negative subtraction, invalid input, or overflow produces an invalid value.</li><li><code>recoverForm(totalMs)</code> <strong>modifies the current object</strong> and expands milliseconds into fields.</li></ul>
+<h2>4. Timing returns Duration</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>stt::time::DateTime timer;
+if(!timer.startTiming())
+    return 1;
+
+const stt::time::Duration current = timer.checkTime(); // Keep running.
+const stt::time::Duration total = timer.endTiming();   // Stop and save.
+
+if(total.isValid())
+    std::cout &lt;&lt; total.convertToMsec() &lt;&lt; " ms\n";
+
+const stt::time::Duration saved = timer.getDt();</code></pre></div><p>The timer uses <code>std::chrono::steady_clock</code>, so wall-clock adjustments do not distort elapsed time. Calling <code>checkTime()</code> or <code>endTiming()</code> before <code>startTiming()</code> returns an invalid <code>Duration</code>.</p>
+<h2>5. Subtract local time text</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>stt::time::Duration difference;
+stt::time::DateTime::calculateTime(
+    "2026-07-15T12:01:30.250",
+    "2026-07-15T12:00:00.000",
+    difference,
+    ISO8086B,
+    ISO8086B);
+
+if(!difference.isValid())
+{
+    // Invalid date, format mismatch, or time1 earlier than time2.
+}</code></pre></div><p>This overload writes to and returns a <code>Duration&amp;</code>. The current interval model is non-negative; reverse subtraction returns the invalid sentinel rather than a negative duration.</p>
+<div class="warning"><strong>Do not mix responsibilities.</strong> Use local time text for human-readable logs and monotonic <code>Duration</code> values for deadlines and latency. Cross-machine timestamps should use an explicitly zoned standard representation or Unix time at the application layer.</div>
+<p><a href="demo-time-tools.html">Open the complete time utility demo →</a></p><section class="api-related"><h2>Related API Reference</h2><p><a href="../../api/html_English/classstt_1_1time_1_1DateTime.html">DateTime</a> · <a href="../../api/html_English/structstt_1_1time_1_1Duration.html">Duration</a></p></section><div class="pager"><a href="12-json.html">← Chapter 12: JSON Parsing and Generation</a><a href="14-file-log.html">Chapter 14: Files and Asynchronous Logging →</a></div></article></main></div><footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

@@ -153,8 +153,7 @@ $(function(){ initResizable(false); });
 <tr class="separator:a348649d2263b30a197bc1499747d6d52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
-<div class="textblock"><p>负责Http字符串和URL解析 包括从 URL 或请求报文中提取参数、IP、端口、请求头字段等功能。 </p>
-</div><h2 class="groupheader">成员函数说明</h2>
+<div class="textblock"><p>HTTP 字符串和 URL 的轻量提取工具。</p><div style="border-left:4px solid #4f6b8a;padding:12px 16px;margin:12px 0;background:rgba(127,127,127,.08)"><strong>边界说明：</strong><ul><li>不是完整的 URI/HTTP parser，也不执行 URL decode。</li><li>Query 键按字段边界匹配，<code>id</code> 不会误匹配 <code>userid</code>。</li><li>Header 名匹配不区分大小写。</li><li><code>string_view</code> 重载返回非拥有视图，不能超过原始字符串的生命周期。</li></ul></div></div><h2 class="groupheader">成员函数说明</h2>
 <a id="ad8256f33455b1299cfc1ccf46a7d9ea5" name="ad8256f33455b1299cfc1ccf46a7d9ea5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad8256f33455b1299cfc1ccf46a7d9ea5">&#9670;&#160;</a></span>createHeader() <span class="overload">[1/2]</span></h2>
 

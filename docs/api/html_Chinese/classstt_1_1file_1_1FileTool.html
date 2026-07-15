@@ -126,8 +126,7 @@ $(function(){ initResizable(false); });
 <tr class="separator:acb0e4ae48cbba8a2d2e5f565be018da4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
-<div class="textblock"><p>提供文件操作的静态函数工具类 </p>
-</div><h2 class="groupheader">成员函数说明</h2>
+<div class="textblock"><p>目录创建、文件创建、二进制复制和文件大小查询的静态工具。</p><div style="border-left:4px solid #4f6b8a;padding:12px 16px;margin:12px 0;background:rgba(127,127,127,.08)"><strong>0.7.0 契约：</strong><ul><li><code>copy()</code> 按原始字节复制；打开或写入失败时返回 <code>false</code>，不会自动创建目标父目录。</li><li><code>get_file_size()</code> 返回 <code>size_t</code>；失败值是 <code>std::numeric_limits&lt;size_t&gt;::max()</code>，不是可直接比较的有符号 -1。</li></ul></div></div><h2 class="groupheader">成员函数说明</h2>
 <a id="a655ada567a41ea54a13fe12ee4f603a6" name="a655ada567a41ea54a13fe12ee4f603a6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a655ada567a41ea54a13fe12ee4f603a6">&#9670;&#160;</a></span>copy()</h2>
 

@@ -227,7 +227,7 @@ The repository includes 19 fully commented, buildable examples:
 - `examples/signal_shutdown.cpp`: signal setup, synchronous wait, safe close
 - `examples/system_settings.cpp`: logging, sockets, backpressure, Worker limits, metrics
 - `examples/json_tools.cpp`: build, serialize, parse, and validate JSON values
-- `examples/time_tools.cpp`: wall-clock formatting, duration arithmetic, monotonic timing
+- `examples/time_tools.cpp`: local time text; `checkTime()`, `endTiming()`, and `getDt()` returning `stt::time::Duration`; interval arithmetic and monotonic timing
 - `examples/file_logging.cpp`: directories, file access, and bounded asynchronous logging
 - `examples/crypto_encoding.cpp`: Base64, SHA-1 compatibility, AES-CBC boundaries
 - `examples/data_tools.cpp`: numeric conversion, precision helpers, random values, byte order
@@ -235,6 +235,16 @@ The repository includes 19 fully commented, buildable examples:
 - `examples/security_limiter.cpp`: connection/request limiting and blacklist behavior
 - `examples/process_supervisor.cpp`: child-process restart supervision and safe termination
 See the chapter-by-chapter [`Programming Guide`](docs/guide/English/index.html).
+
+### Build and run the tests
+
+```bash
+cmake -S . -B build -DSTTNET_BUILD_TESTS=ON
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
+```
+
+The seven test targets include protocol interoperability and utility-contract checks. `tests/tool_contract_tests.cpp` locks down the exact `DateTime`/`Duration` return types and behavior, strict number/Base64 parsing, file copying, asynchronous log draining, AES output lengths, and JSON value types.
 
 ## Use STTNet in another CMake project
 

@@ -1,28 +1,49 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>第 13 章：时间、时间间隔与计时 · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body><header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header><div class="layout"><aside class="sidebar"><h3>章节目录</h3><a class="" href="index.html">指导手册首页</a><div class="side-group">基础</div><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、依赖、构建与运行</a><div class="side-group">网络服务与客户端</div><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：HTTP 请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由、处理阶段与返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool 与阻塞任务</a><a class="" href="07-websocket.html">第 7 章：WebSocket 服务端</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：HTTP、WebSocket、TCP 与 UDP 客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS、WSS 与 mTLS</a><div class="side-group">数据与工具类</div><a class="" href="12-json.html">第 12 章：JSON 解析与生成</a><a class="active" href="13-time.html">第 13 章：时间、时间间隔与计时</a><a class="" href="14-file-log.html">第 14 章：文件与异步日志</a><a class="" href="15-data-tools.html">第 15 章：编码、加密、随机数与数据转换</a><div class="side-group">信息安全</div><a class="" href="16-security.html">第 16 章：连接安全、限流与输入边界</a><div class="side-group">系统与进程</div><a class="" href="08-signals.html">第 17 章：Linux 信号与优雅退出</a><a class="" href="09-settings.html">第 18 章：系统初始化与服务端设置</a><a class="" href="19-process.html">第 19 章：进程拉起、守护、心跳与进程间同步</a><div class="side-group">生产部署</div><a class="" href="10-production.html">第 20 章：项目接入与上线检查</a><div class="side-group">示例与参考</div><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 13 章：时间、时间间隔与计时</h1><p class="lead">正确选择墙上时间与单调时间，处理格式、间隔、比较和性能计时。</p>
-<h2>1. 绝对时间与持续时间要分开</h2><p><code>DateTime</code> 处理时间文本、格式转换和计时；<code>Duration</code> 表示两个时间点之间的间隔。日志时间、证书日期属于绝对时间；请求耗时、重试间隔属于持续时间。</p>
-<h2>2. 获取和格式化当前时间</h2>
-<div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>std::string now;
-// 带毫秒的格式，便于日志和性能排查。
-stt::time::DateTime::getTime(now, "yyyy-mm-ddThh:mi:ss.sss");
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>第 13 章：时间、时间间隔与计时 · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body><header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header><div class="layout"><aside class="sidebar"><h3>章节目录</h3><a class="" href="index.html">指导手册首页</a><div class="side-group">基础</div><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、依赖、构建与运行</a><div class="side-group">网络服务与客户端</div><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：HTTP 请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由、处理阶段与返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool 与阻塞任务</a><a class="" href="07-websocket.html">第 7 章：WebSocket 服务端</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：HTTP、WebSocket、TCP 与 UDP 客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS、WSS 与 mTLS</a><div class="side-group">数据与工具类</div><a class="" href="12-json.html">第 12 章：JSON 解析与生成</a><a class="active" href="13-time.html">第 13 章：时间、时间间隔与计时</a><a class="" href="14-file-log.html">第 14 章：文件与异步日志</a><a class="" href="15-data-tools.html">第 15 章：编码、加密、随机数与数据转换</a><div class="side-group">信息安全</div><a class="" href="16-security.html">第 16 章：连接安全、限流与输入边界</a><div class="side-group">系统与进程</div><a class="" href="08-signals.html">第 17 章：Linux 信号与优雅退出</a><a class="" href="09-settings.html">第 18 章：系统初始化与服务端设置</a><a class="" href="19-process.html">第 19 章：进程拉起、守护、心跳与进程间同步</a><div class="side-group">生产部署</div><a class="" href="10-production.html">第 20 章：项目接入与上线检查</a><div class="side-group">示例与参考</div><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 13 章：时间、Duration 与计时</h1><p class="lead">把本地时间文本、时间间隔和单调计时分清楚，并严格按照真实返回类型使用。</p>
+<h2>1. 先分清两个类型</h2><div class="table-wrap"><table><thead><tr><th>类型</th><th>职责</th><th>不是什么</th></tr></thead><tbody><tr><td><code>stt::time::DateTime</code></td><td>获取/转换本地时间文本；进行时间文本运算；使用单调时钟计时</td><td>不是 Unix 时间戳值类型</td></tr><tr><td><code>stt::time::Duration</code></td><td>表示非负时间间隔，并提供比较、加减和单位换算</td><td>不是绝对日期，也不是 <code>std::chrono::duration</code></td></tr></tbody></table></div>
+<div class="note"><strong>最重要的返回类型：</strong><code>checkTime()</code>、<code>endTiming()</code>、<code>getDt()</code> 都返回 <code>stt::time::Duration</code>。需要毫秒时，再调用 <code>Duration::convertToMsec()</code>。</div>
+<h2>2. 获取当前本地时间文本</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>std::string now;
+// getTime() 修改 now，并返回 now 的引用。
+stt::time::DateTime::getTime(now, ISO8086B);
 
 std::string display = now;
-stt::time::DateTime::convertFormat(
-    display,
-    "yyyy-mm-ddThh:mi:ss.sss",
-    "yyyy/mm/dd hh:mi:ss.sss");</code></pre></div>
-<p>格式占位符为 <code>yyyy mm dd hh mi ss sss</code>。<code>mi</code> 表示分钟，避免与月份 <code>mm</code> 冲突。格式字符串必须和输入文本位置对应。</p>
-<h2>3. 用 steady clock 测量耗时</h2>
-<div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>stt::time::DateTime timer;
-timer.startTiming();
+// convertFormat() 原地修改 display；输入与 oldFormat 不匹配时返回 false。
+if(!stt::time::DateTime::convertFormat(
+       display, ISO8086B, "yyyy/mm/dd hh:mi:ss.sss"))
+{
+    // 处理格式错误。
+}</code></pre></div><p><code>ISO8086A</code> 和 <code>ISO8086B</code> 是 STTNet 保留的历史宏名，分别对应不带/带毫秒的本地时间文本。文本没有 <code>Z</code> 或时区偏移，不能当作完整 ISO 8601 时间戳。</p>
+<h2>3. Duration 的构造与换算</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>// 构造参数顺序固定为：天、小时、分钟、秒、毫秒。
+const stt::time::Duration retryDelay(0, 0, 1, 30, 0);
 
-// 执行业务操作……
-stt::time::Duration current = timer.checkTime(); // 查看但不停止
-stt::time::Duration total = timer.endTiming();   // 停止并返回总耗时
-std::cout &lt;&lt; total.convertToMsec() &lt;&lt; " ms
-";</code></pre></div>
-<p><code>startTiming/checkTime/endTiming</code> 内部使用单调时钟，系统时间被 NTP 调整时不会让耗时倒退。未开始就调用 <code>checkTime/endTiming</code> 会返回字段为 <code>-1</code> 的结果。</p>
-<h2>4. Duration 的单位转换</h2><p><code>convertToDay/Hour/Min/Sec/Msec</code> 用于把组合字段转成统一单位；<code>recoverForm()</code> 可把毫秒恢复为日、时、分、秒、毫秒。比较和加减运算适合超时配置与统计。</p>
-<div class="warning"><strong>墙上时间不能替代单调时间。</strong>不要用格式化日期计算请求超时；不要用单调时钟生成对外时间戳。两种时间各有职责。</div>
-<p><a href="demo-time-tools.html">打开完整时间工具 Demo →</a></p>
-<section class="api-related"><h2>对应 API 参考</h2><p><a href="../../api/html_Chinese/classstt_1_1time_1_1DateTime.html">DateTime</a> · <a href="../../api/html_Chinese/structstt_1_1time_1_1Duration.html">Duration</a></p></section><div class="pager"><a href="12-json.html">← 第 12 章：JSON 解析与生成</a><a href="14-file-log.html">第 14 章：文件与异步日志 →</a></div></article></main></div><footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>
+const long long milliseconds = retryDelay.convertToMsec(); // 90000
+const double seconds = retryDelay.convertToSec();           // 90.0</code></pre></div><ul><li>默认构造的 <code>Duration</code> 表示 0 毫秒。</li><li>五个字段全为 <code>-1</code> 表示无效值，可用 <code>isValid()</code> 判断。</li><li>比较和加减按总毫秒计算；负的减法结果、无效输入或溢出返回无效值。</li><li><code>recoverForm(totalMs)</code> 会<strong>修改当前对象</strong>，把总毫秒拆成日、时、分、秒和毫秒。</li></ul>
+<h2>4. 计时返回的是 Duration</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>stt::time::DateTime timer;
+if(!timer.startTiming())
+    return 1;
+
+// 查看当前耗时，但不停止计时。
+const stt::time::Duration current = timer.checkTime();
+
+// 停止计时并返回总耗时；返回值仍然是 Duration。
+const stt::time::Duration total = timer.endTiming();
+
+if(total.isValid())
+    std::cout &lt;&lt; total.convertToMsec() &lt;&lt; " ms\n";
+
+// getDt() 返回上一次 endTiming() 保存的 Duration。
+const stt::time::Duration saved = timer.getDt();</code></pre></div><p>计时内部使用 <code>std::chrono::steady_clock</code>，系统校时不会让耗时倒退。未调用 <code>startTiming()</code> 就执行 <code>checkTime()</code> 或 <code>endTiming()</code>，会返回无效 <code>Duration</code>。</p>
+<h2>5. 两个时间文本相减</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>stt::time::Duration difference;
+stt::time::DateTime::calculateTime(
+    "2026-07-15T12:01:30.250",
+    "2026-07-15T12:00:00.000",
+    difference,
+    ISO8086B,
+    ISO8086B);
+
+if(!difference.isValid())
+{
+    // 日期非法、格式不匹配，或第一个时间早于第二个时间。
+}</code></pre></div><p>这个重载把结果写入 <code>Duration&amp;</code> 并返回该引用。当前模型只表示非负间隔，所以反向相减不会返回负 Duration，而是返回无效值。</p>
+<div class="warning"><strong>职责不要混用。</strong>日志展示使用本地时间文本；超时、延迟、重试间隔使用 <code>Duration</code> 和单调计时。跨机器传输时间应使用带时区的标准格式或 Unix 时间戳，由业务层明确时区。</div>
+<p><a href="demo-time-tools.html">打开完整时间工具 Demo →</a></p><section class="api-related"><h2>对应 API 参考</h2><p><a href="../../api/html_Chinese/classstt_1_1time_1_1DateTime.html">DateTime</a> · <a href="../../api/html_Chinese/structstt_1_1time_1_1Duration.html">Duration</a></p></section><div class="pager"><a href="12-json.html">← 第 12 章：JSON 解析与生成</a><a href="14-file-log.html">第 14 章：文件与异步日志 →</a></div></article></main></div><footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

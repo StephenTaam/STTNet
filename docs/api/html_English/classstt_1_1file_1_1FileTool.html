@@ -126,8 +126,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:acb0e4ae48cbba8a2d2e5f565be018da4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>提供文件操作的静态函数工具类 </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+<div class="textblock"><p>Static helpers for directory creation, file creation, binary copying, and file-size lookup.</p><div style="border-left:4px solid #4f6b8a;padding:12px 16px;margin:12px 0;background:rgba(127,127,127,.08)"><strong>0.7.0 contract:</strong><ul><li><code>copy()</code> copies raw bytes and returns <code>false</code> on open/write failure. It does not create the destination parent directory.</li><li><code>get_file_size()</code> returns <code>size_t</code>; failure is <code>std::numeric_limits&lt;size_t&gt;::max()</code>, not a signed -1 value.</li></ul></div></div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a655ada567a41ea54a13fe12ee4f603a6" name="a655ada567a41ea54a13fe12ee4f603a6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a655ada567a41ea54a13fe12ee4f603a6">&#9670;&#160;</a></span>copy()</h2>
 

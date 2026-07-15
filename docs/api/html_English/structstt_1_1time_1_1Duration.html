@@ -167,13 +167,7 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a21944a542c15678a04340cc29c57d038"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>表示时间间隔的结构体，支持天、小时、分钟、秒和毫秒粒度。 </p>
-<dl class="section note"><dt>Note</dt><dd>1、提供了对时间间隔的基本操作，如加减运算、比较操作、单位转换等。 </dd>
-<dd>
-2、本结构体并不表示绝对时间点，仅用于表示两个时间点之间的差值。 </dd>
-<dd>
-3、内部实现采用多个字段组合，而非统一的时间戳，以提高可读性和可控性。 </dd></dl>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<div class="textblock"><p>STTNet's non-negative elapsed-interval type with day, hour, minute, second, and millisecond fields.</p><div style="border-left:4px solid #4f6b8a;padding:12px 16px;margin:12px 0;background:rgba(127,127,127,.08)"><strong>0.7.0 contract update:</strong><ul><li>Constructor order is <code>(day, hour, min, sec, msec)</code>; default construction represents zero milliseconds.</li><li><code>DateTime::checkTime()</code>, <code>endTiming()</code>, and <code>getDt()</code> all return <code>Duration</code>.</li><li><code>recoverForm(totalMs)</code> modifies the object. Negative, invalid, or overflowing results use the all-minus-one invalid sentinel.</li><li>0.7.0 also provides <code>invalid()</code>, <code>isValid()</code>, and <code>tryConvertToMsec()</code>. See <code>include/sttnet.h</code> for exact signatures.</li></ul></div></div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a204a9b9647a5e72fb37209070b99d987" name="a204a9b9647a5e72fb37209070b99d987"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a204a9b9647a5e72fb37209070b99d987">&#9670;&#160;</a></span>Duration() <span class="overload">[1/2]</span></h2>
 

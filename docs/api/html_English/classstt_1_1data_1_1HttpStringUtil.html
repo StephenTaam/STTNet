@@ -153,8 +153,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a348649d2263b30a197bc1499747d6d52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>负责Http字符串和URL解析 包括从 URL 或请求报文中提取参数、IP、端口、请求头字段等功能。 </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+<div class="textblock"><p>Lightweight HTTP-string and URL extraction helpers.</p><div style="border-left:4px solid #4f6b8a;padding:12px 16px;margin:12px 0;background:rgba(127,127,127,.08)"><strong>Boundaries:</strong><ul><li>These functions are not a complete URI/HTTP parser and do not URL-decode.</li><li>Query keys are matched on field boundaries, so <code>id</code> does not match <code>userid</code>.</li><li>Header-name matching is case-insensitive.</li><li>The <code>string_view</code> overloads return non-owning views that must not outlive the input string.</li></ul></div></div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ad8256f33455b1299cfc1ccf46a7d9ea5" name="ad8256f33455b1299cfc1ccf46a7d9ea5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad8256f33455b1299cfc1ccf46a7d9ea5">&#9670;&#160;</a></span>createHeader() <span class="overload">[1/2]</span></h2>
 

@@ -1,30 +1,31 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>第 14 章：文件与异步日志 · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body><header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header><div class="layout"><aside class="sidebar"><h3>章节目录</h3><a class="" href="index.html">指导手册首页</a><div class="side-group">基础</div><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、依赖、构建与运行</a><div class="side-group">网络服务与客户端</div><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：HTTP 请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由、处理阶段与返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool 与阻塞任务</a><a class="" href="07-websocket.html">第 7 章：WebSocket 服务端</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：HTTP、WebSocket、TCP 与 UDP 客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS、WSS 与 mTLS</a><div class="side-group">数据与工具类</div><a class="" href="12-json.html">第 12 章：JSON 解析与生成</a><a class="" href="13-time.html">第 13 章：时间、时间间隔与计时</a><a class="active" href="14-file-log.html">第 14 章：文件与异步日志</a><a class="" href="15-data-tools.html">第 15 章：编码、加密、随机数与数据转换</a><div class="side-group">信息安全</div><a class="" href="16-security.html">第 16 章：连接安全、限流与输入边界</a><div class="side-group">系统与进程</div><a class="" href="08-signals.html">第 17 章：Linux 信号与优雅退出</a><a class="" href="09-settings.html">第 18 章：系统初始化与服务端设置</a><a class="" href="19-process.html">第 19 章：进程拉起、守护、心跳与进程间同步</a><div class="side-group">生产部署</div><a class="" href="10-production.html">第 20 章：项目接入与上线检查</a><div class="side-group">示例与参考</div><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 14 章：文件与异步日志</h1><p class="lead">从简单文件操作到线程安全内存事务，再到有界异步日志队列。</p>
-<h2>1. 三层文件能力</h2><div class="table-wrap"><table><thead><tr><th>类</th><th>职责</th><th>注意</th></tr></thead><tbody><tr><td><code>FileTool</code></td><td>创建目录/文件、复制、获取大小</td><td>适合一次性路径操作</td></tr><tr><td><code>File</code></td><td>线程安全文本/二进制读写、内存事务</td><td>操作前必须 <code>openFile()</code></td></tr><tr><td><code>LogFile</code></td><td>有界队列 + 独立线程异步写日志</td><td>队列满时丢日志，不阻塞业务线程</td></tr></tbody></table></div>
-<h2>2. 普通文本文件</h2>
-<div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>stt::file::File config;
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>第 14 章：文件与异步日志 · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body><header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header><div class="layout"><aside class="sidebar"><h3>章节目录</h3><a class="" href="index.html">指导手册首页</a><div class="side-group">基础</div><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、依赖、构建与运行</a><div class="side-group">网络服务与客户端</div><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：HTTP 请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由、处理阶段与返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool 与阻塞任务</a><a class="" href="07-websocket.html">第 7 章：WebSocket 服务端</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：HTTP、WebSocket、TCP 与 UDP 客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS、WSS 与 mTLS</a><div class="side-group">数据与工具类</div><a class="" href="12-json.html">第 12 章：JSON 解析与生成</a><a class="" href="13-time.html">第 13 章：时间、时间间隔与计时</a><a class="active" href="14-file-log.html">第 14 章：文件与异步日志</a><a class="" href="15-data-tools.html">第 15 章：编码、加密、随机数与数据转换</a><div class="side-group">信息安全</div><a class="" href="16-security.html">第 16 章：连接安全、限流与输入边界</a><div class="side-group">系统与进程</div><a class="" href="08-signals.html">第 17 章：Linux 信号与优雅退出</a><a class="" href="09-settings.html">第 18 章：系统初始化与服务端设置</a><a class="" href="19-process.html">第 19 章：进程拉起、守护、心跳与进程间同步</a><div class="side-group">生产部署</div><a class="" href="10-production.html">第 20 章：项目接入与上线检查</a><div class="side-group">示例与参考</div><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 14 章：文件与异步日志</h1><p class="lead">区分路径工具、线程安全文件对象和有界异步日志，并正确管理生命周期。</p>
+<h2>1. 三层能力</h2><div class="table-wrap"><table><thead><tr><th>类</th><th>职责</th><th>关键契约</th></tr></thead><tbody><tr><td><code>FileTool</code></td><td>创建目录/文件、二进制复制、获取大小</td><td><code>copy()</code> 不创建目标父目录；任一文件打开或写入失败返回 false</td></tr><tr><td><code>File</code></td><td>线程安全文本/二进制读写和内存事务</td><td>先 <code>openFile()</code>；内存事务必须由同一线程解锁</td></tr><tr><td><code>LogFile</code></td><td>有界队列和独立消费者线程</td><td>队列满时丢弃并计数，不阻塞业务线程</td></tr></tbody></table></div>
+<h2>2. 文件复制保留原始字节</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>if(!stt::file::FileTool::copy(
+       "runtime/source.bin",
+       "runtime/backup/source.bin"))
+{
+    // 目标父目录不存在、文件打不开或写入失败。
+}</code></pre></div><p><code>copy()</code> 按二进制复制，NUL、换行和不可打印字节都会保留。调用前需要保证目标父目录存在。</p>
+<h2>3. File 与内存事务</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>stt::file::File config;
 if(!config.openFile("runtime/app.conf"))
     return 1;
 
 config.deleteAll();
 config.appendLine("port=8080");
 config.appendLine("workers=4");
+config.closeFile();</code></pre></div><p>普通方法自行完成锁定、修改和保存。只有需要在一次锁中执行多步操作时，才使用 <code>lockMemory()</code> 与带 <code>C</code> 后缀的方法，并保证所有退出路径都调用 <code>unlockMemory()</code>。</p>
+<h2>4. 异步日志的正确生命周期</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>{
+    // 容量必须符合 MPSCQueue 的要求（2 的幂）。
+    stt::file::LogFile log(16384);
+    if(!log.openFile("logs/server.log", ISO8086B, "  "))
+        return 1;
 
-std::string content;
-config.readAll(content);
-config.closeFile();</code></pre></div>
-<p>带 <code>C</code> 后缀的方法（例如 <code>appendLineC</code>）用于已经调用 <code>lockMemory()</code> 的内存事务；普通方法会把读取、修改、保存合在一次调用里。复杂批量修改时才使用 <code>lockMemory()/unlockMemory()</code>，并保证由同一线程解锁。</p>
-<h2>3. 异步日志</h2>
-<div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>// 容量必须是 2 的幂。队列越大，能吸收的短时日志突发越多。
-stt::file::LogFile log(16384);
-if(!log.openFile("logs/server.log", "yyyy-mm-ddThh:mi:ss.sss", "  "))
-    return 1;
+    log.writeLog("server started");
+    std::cout &lt;&lt; log.getDroppedLogCount() &lt;&lt; '
+';
 
-log.writeLog("server started");
-log.writeLog("client connected");
-
-// 过载时不会阻塞 Reactor，可通过该指标发现日志丢弃。
-std::cout &lt;&lt; log.getDroppedLogCount() &lt;&lt; std::endl;</code></pre></div>
-<h2>4. 生命周期与性能</h2><ul><li><code>LogFile</code> 必须比所有写日志的线程活得更久。</li><li>不要在每次请求里打开/关闭日志文件。</li><li>热路径日志应控制级别与内容，避免格式化本身成为瓶颈。</li><li>日志中不要记录密码、Token、完整 Cookie、私钥或敏感请求体。</li><li>进程异常崩溃时，队列中尚未落盘的日志可能丢失；关键审计记录需要独立可靠通道。</li></ul>
-<p><a href="demo-file-logging.html">打开完整文件与日志 Demo →</a></p>
-<section class="api-related"><h2>对应 API 参考</h2><p><a href="../../api/html_Chinese/classstt_1_1file_1_1FileTool.html">FileTool</a> · <a href="../../api/html_Chinese/classstt_1_1file_1_1File.html">File</a> · <a href="../../api/html_Chinese/classstt_1_1file_1_1LogFile.html">LogFile</a></p></section><div class="pager"><a href="13-time.html">← 第 13 章：时间、时间间隔与计时</a><a href="15-data-tools.html">第 15 章：编码、加密、随机数与数据转换 →</a></div></article></main></div><footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>
+    // 先停止所有生产者，再离开作用域。
+    // 析构函数会停止消费者并排空已经进入队列的日志。
+}</code></pre></div><ul><li>不要靠 <code>sleep(50ms)</code> 猜日志已经刷完。</li><li><code>LogFile</code> 必须比所有调用 <code>writeLog()</code> 的线程活得更久。</li><li>队列满时写入会被丢弃；通过 <code>getDroppedLogCount()</code> 监控。</li><li><code>deleteLogByTime(start,end)</code> 使用 <code>[start,end)</code> 区间。</li><li>日志不要记录密码、私钥、完整 Token/Cookie 或敏感请求体。</li></ul>
+<p><a href="demo-file-logging.html">打开完整文件与日志 Demo →</a></p><section class="api-related"><h2>对应 API 参考</h2><p><a href="../../api/html_Chinese/classstt_1_1file_1_1FileTool.html">FileTool</a> · <a href="../../api/html_Chinese/classstt_1_1file_1_1File.html">File</a> · <a href="../../api/html_Chinese/classstt_1_1file_1_1LogFile.html">LogFile</a></p></section><div class="pager"><a href="13-time.html">← 第 13 章：时间、Duration 与计时</a><a href="15-data-tools.html">第 15 章：编码、加密、随机数与数据转换 →</a></div></article></main></div><footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

@@ -1,5 +1,6 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Demo: Time utilities · STTNet</title><link rel="stylesheet" href="../guide.css"></head><body><header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button class="nav-toggle" aria-expanded="false">Contents</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Portal</a></nav></header><div class="layout"><aside class="sidebar"><h3>Contents</h3><a class="" href="index.html">Guide Home</a><div class="side-group">Foundation</div><a class="" href="01-understand.html">Chapter 1: Understanding STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Dependencies, Build, and Run</a><div class="side-group">Network Servers and Clients</div><a class="" href="03-http.html">Chapter 3: Your First HTTP Service</a><a class="" href="04-request-response.html">Chapter 4: HTTP Requests, JSON, and Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing, Processing Stages, and Return Values</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool and Blocking Work</a><a class="" href="07-websocket.html">Chapter 7: WebSocket Server</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: HTTP, WebSocket, TCP, and UDP Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS, and mTLS</a><div class="side-group">Data and Utility Classes</div><a class="" href="12-json.html">Chapter 12: JSON Parsing and Generation</a><a class="" href="13-time.html">Chapter 13: Time, Duration, and Timing</a><a class="" href="14-file-log.html">Chapter 14: Files and Asynchronous Logging</a><a class="" href="15-data-tools.html">Chapter 15: Encoding, Crypto, Randomness, and Data Conversion</a><div class="side-group">Security</div><a class="" href="16-security.html">Chapter 16: Connection Security, Rate Limiting, and Input Boundaries</a><div class="side-group">System and Processes</div><a class="" href="08-signals.html">Chapter 17: Linux Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 18: System Initialization and Server Settings</a><a class="" href="19-process.html">Chapter 19: Process Supervision, Heartbeats, and IPC Synchronization</a><div class="side-group">Production</div><a class="" href="10-production.html">Chapter 20: Integration and Production Checklist</a><div class="side-group">Examples and Reference</div><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Demo: Time utilities</h1><p class="lead">Buildable, runnable, verifiable, and synchronized with the repository source.</p><h2>1. Learning goal</h2><p>Key calls are explained with English comments. Run the original first, then change one setting and observe the behavior.</p><h2>2. Build and run</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>cmake --build build --target sttnet_time_tools --parallel
-./build/examples/sttnet_time_tools</code></pre></div><h2>3. Validate</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>./build/examples/sttnet_time_tools</code></pre></div><div class="expected"><strong>Expected: </strong>Current time, converted format, and elapsed milliseconds</div><h2>4. Complete source</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>#include &lt;sttnet.h&gt;
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Demo: Time utilities · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body><header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">Contents</button><nav class="toplinks"><a href="index.html">Guide</a><a href="demos.html">Demos</a><a href="../../api/html_English/index.html">API Reference</a><a href="../Chinese/index.html">中文</a><a href="../../index.html">Language Portal</a></nav></header><div class="layout"><aside class="sidebar"><h3>Contents</h3><a class="" href="index.html">Guide Home</a><div class="side-group">Foundation</div><a class="" href="01-understand.html">Chapter 1: Understanding STTNet</a><a class="" href="02-build.html">Chapter 2: Download, Dependencies, Build, and Run</a><div class="side-group">Network Servers and Clients</div><a class="" href="03-http.html">Chapter 3: Your First HTTP Service</a><a class="" href="04-request-response.html">Chapter 4: HTTP Requests, JSON, and Responses</a><a class="" href="05-routing-callbacks.html">Chapter 5: Routing, Processing Stages, and Return Values</a><a class="" href="06-workerpool.html">Chapter 6: WorkerPool and Blocking Work</a><a class="" href="07-websocket.html">Chapter 7: WebSocket Server</a><a class="" href="08-tcp.html">Chapter 8: Raw TCP</a><a class="" href="09-udp.html">Chapter 9: UDP</a><a class="" href="10-clients.html">Chapter 10: HTTP, WebSocket, TCP, and UDP Clients</a><a class="" href="11-tls.html">Chapter 11: TLS, HTTPS, WSS, and mTLS</a><div class="side-group">Data and Utility Classes</div><a class="" href="12-json.html">Chapter 12: JSON Parsing and Generation</a><a class="" href="13-time.html">Chapter 13: Time, Duration, and Timing</a><a class="" href="14-file-log.html">Chapter 14: Files and Asynchronous Logging</a><a class="" href="15-data-tools.html">Chapter 15: Encoding, Crypto, Randomness, and Data Conversion</a><div class="side-group">Security</div><a class="" href="16-security.html">Chapter 16: Connection Security, Rate Limiting, and Input Boundaries</a><div class="side-group">System and Processes</div><a class="" href="08-signals.html">Chapter 17: Linux Signals and Graceful Shutdown</a><a class="" href="09-settings.html">Chapter 18: System Initialization and Server Settings</a><a class="" href="19-process.html">Chapter 19: Process Supervision, Heartbeats, and IPC Synchronization</a><div class="side-group">Production</div><a class="" href="10-production.html">Chapter 20: Integration and Production Checklist</a><div class="side-group">Examples and Reference</div><a class="" href="demos.html">Fully Commented Demos</a></aside><main class="content"><article class="article"><h1>Demo: DateTime and Duration</h1><p class="lead">Demonstrates local time text, exact Duration return types, time differences, and monotonic timing.</p><h2>1. Learning Goal</h2><p>Important calls are explained in English and match the repository source, CMake target, and current API.</p><h2>2. Build and Run</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>cmake --build build --target sttnet_time_tools --parallel
+./build/examples/sttnet_time_tools</code></pre></div><h2>3. Verify</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>./build/examples/sttnet_time_tools</code></pre></div><div class="expected"><strong>Expected:</strong> Prints local time, a 90-second interval, a 90.25-second difference, two timing results, and a normalized Duration.</div><h2>4. Complete Source</h2><div class="codebox"><button class="copy" data-done="Copied" data-fail="Select and copy">Copy</button><pre><code>#include &lt;sttnet.h&gt;
 
 #include &lt;chrono&gt;
 #include &lt;iostream&gt;
@@ -10,30 +11,53 @@ int main()
     using stt::time::DateTime;
     using stt::time::Duration;
 
-    // Read the current local time using STTNet&#x27;s default ISO-like format.
+    // DateTime::getTime() writes the current local wall-clock time into a string.
+    // It does not return a Unix timestamp or a Duration.
     std::string now;
-    DateTime::getTime(now, &quot;yyyy-mm-ddThh:mi:ss.sss&quot;);
+    DateTime::getTime(now, ISO8086B);
     std::cout &lt;&lt; &quot;now: &quot; &lt;&lt; now &lt;&lt; &#x27;\n&#x27;;
 
-    // Convert the same time text to a display-oriented format.
-    std::string display = now;
-    if(DateTime::convertFormat(display,
-                               &quot;yyyy-mm-ddThh:mi:ss.sss&quot;,
-                               &quot;yyyy/mm/dd hh:mi:ss.sss&quot;))
+    // convertFormat() rearranges text that matches the declared old format.
+    // It modifies the input string and returns false when parsing fails.
+    std::string display=now;
+    if(DateTime::convertFormat(display,ISO8086B,&quot;yyyy/mm/dd hh:mi:ss.sss&quot;))
         std::cout &lt;&lt; &quot;display: &quot; &lt;&lt; display &lt;&lt; &#x27;\n&#x27;;
 
-    // Duration represents an interval, not an absolute wall-clock time.
-    Duration retryDelay(0, 0, 1, 30, 0);
-    std::cout &lt;&lt; &quot;retry delay: &quot; &lt;&lt; retryDelay.convertToSec() &lt;&lt; &quot; seconds\n&quot;;
+    // Duration is STTNet&#x27;s interval type. Constructor order:
+    // day, hour, minute, second, millisecond.
+    const Duration retryDelay(0,0,1,30,0);
+    std::cout &lt;&lt; &quot;retry delay: &quot; &lt;&lt; retryDelay.convertToMsec() &lt;&lt; &quot; ms\n&quot;;
 
-    // DateTime uses steady_clock for elapsed-time measurement, so wall-clock
-    // changes do not distort the result.
+    // calculateTime(time1,time2,...) also returns its result through Duration.
+    Duration difference;
+    DateTime::calculateTime(&quot;2026-07-15T12:01:30.250&quot;,
+                            &quot;2026-07-15T12:00:00.000&quot;,
+                            difference,ISO8086B,ISO8086B);
+    if(difference.isValid())
+        std::cout &lt;&lt; &quot;difference: &quot; &lt;&lt; difference.convertToMsec() &lt;&lt; &quot; ms\n&quot;;
+
+    // startTiming(), checkTime(), and endTiming() use steady_clock. Both read
+    // methods return stt::time::Duration; they do not return an integer.
     DateTime timer;
-    timer.startTiming();
-    std::this_thread::sleep_for(std::chrono::milliseconds(120));
-    Duration elapsed = timer.endTiming();
-    std::cout &lt;&lt; &quot;elapsed: &quot; &lt;&lt; elapsed.convertToMsec() &lt;&lt; &quot; ms\n&quot;;
+    if(!timer.startTiming())
+        return 1;
+    std::this_thread::sleep_for(std::chrono::milliseconds(60));
+    const Duration current=timer.checkTime(); // Read without stopping.
+    std::this_thread::sleep_for(std::chrono::milliseconds(60));
+    const Duration total=timer.endTiming();   // Stop and save the last interval.
 
+    if(!current.isValid()||!total.isValid())
+        return 2;
+    std::cout &lt;&lt; &quot;current: &quot; &lt;&lt; current.convertToMsec() &lt;&lt; &quot; ms\n&quot;;
+    std::cout &lt;&lt; &quot;total: &quot; &lt;&lt; total.convertToMsec() &lt;&lt; &quot; ms\n&quot;;
+    std::cout &lt;&lt; &quot;saved: &quot; &lt;&lt; timer.getDt().convertToMsec() &lt;&lt; &quot; ms\n&quot;;
+
+    // recoverForm() modifies the current Duration object.
+    Duration normalized;
+    normalized.recoverForm(90061001);
+    std::cout &lt;&lt; &quot;normalized: &quot; &lt;&lt; normalized.day &lt;&lt; &quot;d &quot;
+              &lt;&lt; normalized.hour &lt;&lt; &quot;h &quot; &lt;&lt; normalized.min &lt;&lt; &quot;m &quot;
+              &lt;&lt; normalized.sec &lt;&lt; &quot;s &quot; &lt;&lt; normalized.msec &lt;&lt; &quot;ms\n&quot;;
     return 0;
 }
-</code></pre></div><div class="pager"><a href="demos.html">← Fully Commented Demos</a><span></span></div></article></main></div><footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>
+</code></pre></div><div class="pager"><a href="demos.html">← Fully Commented Demos</a></div></article></main></div><footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

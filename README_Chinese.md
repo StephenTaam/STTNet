@@ -227,7 +227,7 @@ int main()
 - `examples/signal_shutdown.cpp`：信号设置、同步等待和安全关闭
 - `examples/system_settings.cpp`：日志、Socket、背压、Worker 上限和指标
 - `examples/json_tools.cpp`：创建、序列化、解析和校验 JSON
-- `examples/time_tools.cpp`：墙上时间格式化、Duration 运算和单调计时
+- `examples/time_tools.cpp`：本地时间文本；`checkTime()`、`endTiming()`、`getDt()` 返回 `stt::time::Duration`；时间间隔运算和单调计时
 - `examples/file_logging.cpp`：目录、文件读写和有界异步日志
 - `examples/crypto_encoding.cpp`：Base64、SHA-1 兼容用途和 AES-CBC 边界
 - `examples/data_tools.cpp`：数值转换、精度工具、随机数和网络字节序
@@ -235,6 +235,16 @@ int main()
 - `examples/security_limiter.cpp`：连接/请求限流与黑名单行为
 - `examples/process_supervisor.cpp`：子进程重启监督和安全终止
 详细的逐章说明见 [`docs/guide/Chinese/index.html`](docs/guide/Chinese/index.html)。
+
+### 构建并运行测试
+
+```bash
+cmake -S . -B build -DSTTNET_BUILD_TESTS=ON
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
+```
+
+目前共有 7 个测试目标，包含协议互操作和工具类契约测试。`tests/tool_contract_tests.cpp` 会锁定 `DateTime`/`Duration` 的准确返回类型与行为，并验证严格数字/Base64 解析、二进制文件复制、异步日志排空、AES 实际输出长度和 JSON 类型。
 
 ## 接入现有 CMake 项目
 

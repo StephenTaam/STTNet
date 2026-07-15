@@ -41,27 +41,24 @@ std::string_view trimHttpWhitespace(std::string_view value) noexcept
     return value;
 }
 
-bool getHttpHeaderValueCaseInsensitive(const std::string &header,const std::string_view name,std::string &value)
+bool getHttpHeaderValueCaseInsensitiveView(const std::string_view header,const std::string_view name,
+                                           std::string_view &value) noexcept
 {
-    value.clear();
-    size_t lineStart=header.find("\r\n");
-    if(lineStart==std::string::npos)
-        return false;
-    lineStart+=2;
+    value={};
+    size_t lineStart=0;
     while(lineStart<header.size())
     {
         size_t lineEnd=header.find("\r\n",lineStart);
-        if(lineEnd==std::string::npos)
+        if(lineEnd==std::string_view::npos)
             lineEnd=header.size();
         if(lineEnd==lineStart)
             break;
-        const std::string_view line(header.data()+lineStart,lineEnd-lineStart);
+        const std::string_view line=header.substr(lineStart,lineEnd-lineStart);
         const size_t colon=line.find(':');
         if(colon!=std::string_view::npos&&
            asciiCaseEqual(trimHttpWhitespace(line.substr(0,colon)),name))
         {
-            const std::string_view fieldValue=trimHttpWhitespace(line.substr(colon+1));
-            value.assign(fieldValue.data(),fieldValue.size());
+            value=trimHttpWhitespace(line.substr(colon+1));
             return true;
         }
         if(lineEnd==header.size())
@@ -69,6 +66,18 @@ bool getHttpHeaderValueCaseInsensitive(const std::string &header,const std::stri
         lineStart=lineEnd+2;
     }
     return false;
+}
+
+bool getHttpHeaderValueCaseInsensitive(const std::string &header,const std::string_view name,std::string &value)
+{
+    std::string_view view;
+    if(!getHttpHeaderValueCaseInsensitiveView(header,name,view))
+    {
+        value.clear();
+        return false;
+    }
+    value.assign(view.data(),view.size());
+    return true;
 }
 
 bool httpHeaderContainsToken(const std::string_view value,const std::string_view expected) noexcept
@@ -167,20 +176,16 @@ bool stt::file::FileTool::createFile(const string &filePath,const mode_t &mode)
     ::close(fd);
     return true;
 }
-bool stt::file::FileTool::copy(const string &a,const string &b)
+bool stt::file::FileTool::copy(const string &sourceFile,const string &objectFile)
 {
-	ifstream a1;
-	ofstream b1;
-	a1.open(a,ios::in);
-	b1.open(b,ios::out);
-//	if(a1.is_open()==false||b1.is_open()==false)
-//		return false;
-	string kk;
-	while(getline(a1,kk))
-	      b1<<kk<<endl;
-	a1.close();
-	b1.close();
-	return true;
+    ifstream source(sourceFile,ios::binary);
+    if(!source.is_open())
+        return false;
+    ofstream target(objectFile,ios::binary|ios::trunc);
+    if(!target.is_open())
+        return false;
+    target<<source.rdbuf();
+    return (source.good()||source.eof())?target.good():false;
 }
     size_t stt::file::FileTool::get_file_size(const string &fileName)
     {
@@ -959,282 +964,306 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
         os<<"day="<<a.day<<" "<<a.hour<<":"<<a.min<<":"<<a.sec<<"."<<a.msec;
         return os;
     }
-    chrono::system_clock::time_point stt::time::DateTime::strToTimePoint(const string &timeStr,const string &format)
-    {
-        //获取毫秒保存
-        string sss;
-        auto pos=format.find(".sss");
-        if(pos==string::npos)
-            sss="000";
-        else
-            sss=timeStr.substr(pos+1,3);
-        //创建一个新的日期和格式字符串的拷贝并且消掉毫秒部分
-        string cformat=format;
-        string ctimeStr=timeStr;
 
-        if(pos!=string::npos)
-        {
-            cformat.replace(pos,4,"");
-            ctimeStr.replace(pos,4,"");
-        }
-
-        //先把yyyy格式转化为gettime接受的形式
-        pos=cformat.find("yyyy");
-        if(pos!=string::npos)
-        {
-            cformat.replace(pos,4,"%Y");
-        }
-        pos=cformat.find("mm");
-        if(pos!=string::npos)
-        {
-            cformat.replace(pos,2,"%m");
-        }
-        pos=cformat.find("dd");
-        if(pos!=string::npos)
-        {
-            cformat.replace(pos,2,"%d");
-        }
-        pos=cformat.find("hh");
-        if(pos!=string::npos)
-        {
-            cformat.replace(pos,2,"%H");
-        }
-        pos=cformat.find("mi");
-        if(pos!=string::npos)
-        {
-            cformat.replace(pos,2,"%M");
-        }
-        pos=cformat.find("ss");
-        if(pos!=string::npos)
-        {
-            cformat.replace(pos,2,"%S");
-        }
-        //开始反向解析日期字符串
-            //先用istringstream和gettime反向解析为tm结构体
-        tm t;
-        istringstream ss(ctimeStr);
-        ss>>get_time(&t,cformat.c_str());
-        if(ss.fail())
-        {
-            cerr<<"fail to parse time string to tm struct"<<endl;
-        }
-        t.tm_isdst = -1; //tm结构体要补完 防止没有初始化导致有时有可能行为不确定
-        //cout<<t.tm_year<<endl;
-        //cout<<t.tm_mon<<endl;
-        //cout<<t.tm_mday<<endl;
-        //cout<<t.tm_hour<<endl;
-        //cout<<t.tm_min<<endl;
-        //cout<<t.tm_sec<<endl;
-            //tm结构体转化为timet
-        //setenv("TZ","UTC0",1);
-        //tzset();//设置时区为utc并且禁用夏令时，调用tzset更新环境变量
-        time_t tt=mktime(&t);
-        //cout<<tt<<endl;
-            //timet转换为chrono::system_clock::time_point
-        chrono::system_clock::time_point tp=chrono::system_clock::from_time_t(tt);
-        
-        //cout<<tp.time_since_epoch().count()<<endl;
-        
-            //检查是否存在毫秒
-        if(sss!="000")
-        {
-            int msec=stoi(sss);
-            tp+=Milliseconds(msec);
-        }
-        //else//为了转化为毫秒精度的chrono::system_clock::time_point,没有就设置为0
-        //{
-        ///    tp+=Milliseconds(0);
-        //}
-        return tp;
-    }
-    string& stt::time::DateTime::timePointToStr(const chrono::system_clock::time_point &tp,string &timeStr,const string &format)
+    bool stt::time::DateTime::strToTimePoint(const string &timeStr,const string &format,
+                                              chrono::system_clock::time_point &result)
     {
-        string cformat=format;
-        //先把yyyy格式转化为puttime接受的形式
-        auto pos=cformat.find("yyyy");
-        if(pos!=string::npos)
+        if(timeStr.size()!=format.size())
+            return false;
+
+        int year=0,month=0,day=0,hour=0,minute=0,second=0,millisecond=0;
+        bool hasYear=false,hasMonth=false,hasDay=false,hasHour=false,hasMinute=false,hasSecond=false;
+
+        const auto readNumber=[&timeStr](const size_t pos,const size_t length,int &value) {
+            if(pos>timeStr.size()||length>timeStr.size()-pos)
+                return false;
+            const char *begin=timeStr.data()+pos;
+            const char *end=begin+length;
+            for(const char *current=begin;current!=end;++current)
+            {
+                if(*current<'0'||*current>'9')
+                    return false;
+            }
+            const auto conversion=from_chars(begin,end,value);
+            return conversion.ec==errc()&&conversion.ptr==end;
+        };
+
+        size_t pos=0;
+        while(pos<format.size())
         {
-            cformat.replace(pos,4,"%Y");
-        }
-        pos=cformat.find("mm");
-        if(pos!=string::npos)
-        {
-            cformat.replace(pos,2,"%m");
-        }
-        pos=cformat.find("dd");
-        if(pos!=string::npos)
-        {
-            cformat.replace(pos,2,"%d");
-        }
-        pos=cformat.find("hh");
-        if(pos!=string::npos)
-        {
-            cformat.replace(pos,2,"%H");
-        }
-        pos=cformat.find("mi");
-        if(pos!=string::npos)
-        {
-            cformat.replace(pos,2,"%M");
-        }
-        pos=cformat.find("ss");
-        if(pos!=string::npos)
-        {
-            cformat.replace(pos,2,"%S");
+            if(format.compare(pos,4,"yyyy")==0)
+            {
+                if(!readNumber(pos,4,year)) return false;
+                hasYear=true;
+                pos+=4;
+            }
+            else if(format.compare(pos,3,"sss")==0)
+            {
+                if(!readNumber(pos,3,millisecond)) return false;
+                pos+=3;
+            }
+            else if(format.compare(pos,2,"mm")==0)
+            {
+                if(!readNumber(pos,2,month)) return false;
+                hasMonth=true;
+                pos+=2;
+            }
+            else if(format.compare(pos,2,"dd")==0)
+            {
+                if(!readNumber(pos,2,day)) return false;
+                hasDay=true;
+                pos+=2;
+            }
+            else if(format.compare(pos,2,"hh")==0)
+            {
+                if(!readNumber(pos,2,hour)) return false;
+                hasHour=true;
+                pos+=2;
+            }
+            else if(format.compare(pos,2,"mi")==0)
+            {
+                if(!readNumber(pos,2,minute)) return false;
+                hasMinute=true;
+                pos+=2;
+            }
+            else if(format.compare(pos,2,"ss")==0)
+            {
+                if(!readNumber(pos,2,second)) return false;
+                hasSecond=true;
+                pos+=2;
+            }
+            else
+            {
+                if(timeStr[pos]!=format[pos])
+                    return false;
+                ++pos;
+            }
         }
 
-        
-        time_t t_tp;
-        t_tp=chrono::system_clock::to_time_t(tp);
-        //to_time_t得到的时间可能处理不了久远的、时间 自己写实现办法 转化为timet
-        //string a="1970-01-01T00:00:00";
-        //chrono::system_clock::time_point b=DateTime::strToTimePoint(a);
-        
-       //cout<<b.time_since_epoch().count()<<endl;
-       //cout<<tp.time_since_epoch().count()<<endl;
+        if(!hasYear||!hasMonth||!hasDay||!hasHour||!hasMinute||!hasSecond||
+           month<1||month>12||day<1||day>31||hour>23||minute>59||second>59||
+           millisecond>999)
+            return false;
 
-          //  s=chrono::duration_cast<chrono::duration<uint64_t>>(b-tp);
-          //  t_tp=0-s.count();
+        tm parsed{};
+        parsed.tm_year=year-1900;
+        parsed.tm_mon=month-1;
+        parsed.tm_mday=day;
+        parsed.tm_hour=hour;
+        parsed.tm_min=minute;
+        parsed.tm_sec=second;
+        parsed.tm_isdst=-1;
+        const time_t value=mktime(&parsed);
 
-        //
+        tm verified{};
+        if(localtime_r(&value,&verified)==nullptr||
+           verified.tm_year!=year-1900||verified.tm_mon!=month-1||verified.tm_mday!=day||
+           verified.tm_hour!=hour||verified.tm_min!=minute||verified.tm_sec!=second)
+            return false;
 
-        tm tm_tp;
-        localtime_r(&t_tp,&tm_tp);
-        ostringstream oss;
-        oss<<put_time(&tm_tp,cformat.c_str());
-        timeStr=oss.str();
-        //检查是否有毫秒
-        pos=timeStr.find("sss");
-        if(pos!=string::npos)
-        {
-            Milliseconds milliseconds=chrono::duration_cast<Milliseconds>(tp.time_since_epoch())%1000;
-            oss.str("");
-            oss<<setfill('0')<<setw(3)<<milliseconds.count();
-            timeStr.replace(pos,3,oss.str());
-        }
-        return timeStr;
-    }
-    string& stt::time::DateTime::getTime(string &timeStr,const string &format)
-    {
-        chrono::time_point<chrono::system_clock> now=chrono::system_clock::now();
-        timePointToStr(now,timeStr,format);
-        return timeStr;
-    }
-    Duration& stt::time::DateTime::dTOD(const Milliseconds& d1,Duration &D1)
-    {
-        uint64_t msec=d1.count();
-        D1.day=msec/(24*60*60*1000);
-        msec=msec%(24*60*60*1000);
-        D1.hour=msec/(60*60*1000);
-        msec=msec%(60*60*1000);
-        D1.min=msec/(60*1000);
-        msec=msec%(60*1000);
-        D1.sec=msec/(1000);
-        msec=msec%(1000);
-        D1.msec=msec;
-        return D1;
-    }
-    Milliseconds& stt::time::DateTime::DTOd(const Duration &D1,Milliseconds& d1)
-    {
-        uint64_t msec=0;
-        msec+=static_cast<uint64_t>(D1.day)*86400000;
-        msec+=static_cast<uint64_t>(D1.hour)*60*60*1000;
-        msec+=static_cast<uint64_t>(D1.min)*60*1000;
-        msec+=static_cast<uint64_t>(D1.sec)*1000;
-        msec+=D1.msec;
-        d1=Milliseconds(msec);
-        return d1;
-    }
-    bool stt::time::DateTime::convertFormat(string &timeStr,const string &oldFormat,const string &newFormat)
-    {
-        string str=newFormat;
-        auto pos1=oldFormat.find("yyyy");
-        auto pos2=str.find("yyyy");
-        if(pos1!=string::npos)//新字符串比起旧的缺失了不要紧 如果新的比起旧的新加了 那就是缺少数据 会导致字符串数据不完整 直接报错就行了
-        {
-            if(pos2!=string::npos)
-                str.replace(pos2,4,timeStr.substr(pos1,4));
-        }
-        else
-            return false;
-        pos1=oldFormat.find("mm");
-        pos2=str.find("mm");
-        if(pos1!=string::npos)
-        {
-            if(pos2!=string::npos)
-                str.replace(pos2,2,timeStr.substr(pos1,2));
-        }
-        else
-            return false;
-        pos1=oldFormat.find("dd");
-        pos2=str.find("dd");
-        if(pos1!=string::npos)
-        {
-            if(pos2!=string::npos)
-                str.replace(pos2,2,timeStr.substr(pos1,2));
-        }
-        else
-            return false;
-        pos1=oldFormat.find("hh");
-        pos2=str.find("hh");
-        if(pos1!=string::npos)
-        {
-            if(pos2!=string::npos)
-                str.replace(pos2,2,timeStr.substr(pos1,2));
-        }
-        else
-            return false;
-        pos1=oldFormat.find("mi");
-        pos2=str.find("mi");
-        if(pos1!=string::npos)
-        {
-            if(pos2!=string::npos)
-                str.replace(pos2,2,timeStr.substr(pos1,2));
-        }
-        else
-            return false;
-        pos1=oldFormat.find("ss");
-        pos2=str.find("ss");
-        if(pos1!=string::npos)
-        {
-            if(pos2!=string::npos)
-                str.replace(pos2,2,timeStr.substr(pos1,2));
-        }
-        else
-            return false;
-        pos1=oldFormat.find("sss");
-        pos2=str.find("sss");
-        if(pos1!=string::npos)
-        {
-            if(pos2!=string::npos)
-                str.replace(pos2,3,timeStr.substr(pos1,3));
-        }
-        else
-            return false;
-        timeStr=str;
+        result=chrono::system_clock::from_time_t(value)+chrono::milliseconds(millisecond);
         return true;
     }
-    Duration& stt::time::DateTime::calculateTime(const string &time1,const string &time2,Duration &result,const string &format1,const string &format2)
+
+    string& stt::time::DateTime::timePointToStr(const chrono::system_clock::time_point &tp,
+                                                 string &timeStr,const string &format)
     {
-        Milliseconds dt;
-        chrono::system_clock::time_point t1=strToTimePoint(time1,format1);
-        chrono::system_clock::time_point t2=strToTimePoint(time2,format2);
-        dt=chrono::duration_cast<Milliseconds>(t1-t2);
-        dTOD(dt,result);
+        const time_t raw=chrono::system_clock::to_time_t(tp);
+        tm local{};
+        if(localtime_r(&raw,&local)==nullptr)
+        {
+            timeStr.clear();
+            return timeStr;
+        }
+
+        long long epochMsec=chrono::duration_cast<chrono::milliseconds>(tp.time_since_epoch()).count();
+        int millisecond=static_cast<int>(epochMsec%1000);
+        if(millisecond<0)
+            millisecond+=1000;
+
+        const auto fixed=[](const int value,const int width) {
+            ostringstream stream;
+            stream<<setfill('0')<<setw(width)<<value;
+            return stream.str();
+        };
+
+        timeStr.clear();
+        timeStr.reserve(format.size()+8);
+        size_t pos=0;
+        while(pos<format.size())
+        {
+            if(format.compare(pos,4,"yyyy")==0)
+            {
+                timeStr+=fixed(local.tm_year+1900,4);
+                pos+=4;
+            }
+            else if(format.compare(pos,3,"sss")==0)
+            {
+                timeStr+=fixed(millisecond,3);
+                pos+=3;
+            }
+            else if(format.compare(pos,2,"mm")==0)
+            {
+                timeStr+=fixed(local.tm_mon+1,2);
+                pos+=2;
+            }
+            else if(format.compare(pos,2,"dd")==0)
+            {
+                timeStr+=fixed(local.tm_mday,2);
+                pos+=2;
+            }
+            else if(format.compare(pos,2,"hh")==0)
+            {
+                timeStr+=fixed(local.tm_hour,2);
+                pos+=2;
+            }
+            else if(format.compare(pos,2,"mi")==0)
+            {
+                timeStr+=fixed(local.tm_min,2);
+                pos+=2;
+            }
+            else if(format.compare(pos,2,"ss")==0)
+            {
+                timeStr+=fixed(local.tm_sec,2);
+                pos+=2;
+            }
+            else
+            {
+                timeStr+=format[pos];
+                ++pos;
+            }
+        }
+        return timeStr;
+    }
+
+    string& stt::time::DateTime::getTime(string &timeStr,const string &format)
+    {
+        return timePointToStr(chrono::system_clock::now(),timeStr,format);
+    }
+
+    Duration& stt::time::DateTime::dTOD(const Milliseconds& d1,Duration &D1)
+    {
+        uint64_t remaining=d1.count();
+        D1.day=static_cast<long long>(remaining/86400000ULL);
+        remaining%=86400000ULL;
+        D1.hour=static_cast<int>(remaining/3600000ULL);
+        remaining%=3600000ULL;
+        D1.min=static_cast<int>(remaining/60000ULL);
+        remaining%=60000ULL;
+        D1.sec=static_cast<int>(remaining/1000ULL);
+        D1.msec=static_cast<int>(remaining%1000ULL);
+        return D1;
+    }
+
+    bool stt::time::DateTime::DTOd(const Duration &D1,Milliseconds& d1)
+    {
+        const long long total=D1.convertToMsec();
+        if(total<0)
+        {
+            d1=Milliseconds(0);
+            return false;
+        }
+        d1=Milliseconds(static_cast<uint64_t>(total));
+        return true;
+    }
+
+    bool stt::time::DateTime::convertFormat(string &timeStr,const string &oldFormat,const string &newFormat)
+    {
+        if(timeStr.size()!=oldFormat.size())
+            return false;
+
+        unordered_map<string,string> values;
+        size_t pos=0;
+        while(pos<oldFormat.size())
+        {
+            string token;
+            if(oldFormat.compare(pos,4,"yyyy")==0) token="yyyy";
+            else if(oldFormat.compare(pos,3,"sss")==0) token="sss";
+            else if(oldFormat.compare(pos,2,"mm")==0) token="mm";
+            else if(oldFormat.compare(pos,2,"dd")==0) token="dd";
+            else if(oldFormat.compare(pos,2,"hh")==0) token="hh";
+            else if(oldFormat.compare(pos,2,"mi")==0) token="mi";
+            else if(oldFormat.compare(pos,2,"ss")==0) token="ss";
+
+            if(!token.empty())
+            {
+                const string value=timeStr.substr(pos,token.size());
+                if(!all_of(value.begin(),value.end(),[](const char ch){return ch>='0'&&ch<='9';}))
+                    return false;
+                values[token]=value;
+                pos+=token.size();
+            }
+            else
+            {
+                if(timeStr[pos]!=oldFormat[pos])
+                    return false;
+                ++pos;
+            }
+        }
+
+        string converted;
+        converted.reserve(newFormat.size());
+        pos=0;
+        while(pos<newFormat.size())
+        {
+            string token;
+            if(newFormat.compare(pos,4,"yyyy")==0) token="yyyy";
+            else if(newFormat.compare(pos,3,"sss")==0) token="sss";
+            else if(newFormat.compare(pos,2,"mm")==0) token="mm";
+            else if(newFormat.compare(pos,2,"dd")==0) token="dd";
+            else if(newFormat.compare(pos,2,"hh")==0) token="hh";
+            else if(newFormat.compare(pos,2,"mi")==0) token="mi";
+            else if(newFormat.compare(pos,2,"ss")==0) token="ss";
+
+            if(!token.empty())
+            {
+                const auto found=values.find(token);
+                if(found==values.end())
+                    return false;
+                converted+=found->second;
+                pos+=token.size();
+            }
+            else
+            {
+                converted+=newFormat[pos];
+                ++pos;
+            }
+        }
+        timeStr=move(converted);
+        return true;
+    }
+
+    Duration& stt::time::DateTime::calculateTime(const string &time1,const string &time2,
+                                                  Duration &result,const string &format1,
+                                                  const string &format2)
+    {
+        chrono::system_clock::time_point first;
+        chrono::system_clock::time_point second;
+        if(!strToTimePoint(time1,format1,first)||!strToTimePoint(time2,format2,second)||first<second)
+        {
+            result=Duration::invalid();
+            return result;
+        }
+        const auto difference=chrono::duration_cast<chrono::milliseconds>(first-second).count();
+        result.recoverForm(difference);
         return result;
     }
-    string& stt::time::DateTime::calculateTime(const string &time1,const Duration &time2,string &result,const string &am,const string &format1,const string &format2)
+
+    string& stt::time::DateTime::calculateTime(const string &time1,const Duration &time2,
+                                                string &result,const string &am,
+                                                const string &format1,const string &format2)
     {
-        chrono::system_clock::time_point t1=strToTimePoint(time1,format1);
-        Milliseconds t2;
-        DTOd(time2,t2);
-        chrono::system_clock::time_point t3;
-        if(am=="+")
-            t3=t1+t2;
-        else
-            t3=t1-t2;
-        timePointToStr(t3,result,format2);
-        return result;
+        chrono::system_clock::time_point first;
+        Milliseconds interval;
+        if(!strToTimePoint(time1,format1,first)||!DTOd(time2,interval)||(am!="+"&&am!="-"))
+        {
+            result.clear();
+            return result;
+        }
+        const auto signedInterval=chrono::milliseconds(static_cast<long long>(interval.count()));
+        return timePointToStr(am=="+"?first+signedInterval:first-signedInterval,result,format2);
     }
+
     bool stt::time::DateTime::startTiming()
     {
         if(isStart())
@@ -1243,15 +1272,12 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
         start=chrono::steady_clock::now();
         return true;
     }
+
     Duration stt::time::DateTime::endTiming()
     {
         if(!isStart())
         {
-            dt.day=-1;
-            dt.hour=-1;
-            dt.min=-1;
-            dt.sec=-1;
-            dt.msec=-1;
+            dt=Duration::invalid();
             return dt;
         }
         end=chrono::steady_clock::now();
@@ -1259,29 +1285,25 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
         flag=false;
         return dt;
     }
+
     Duration stt::time::DateTime::checkTime()
     {
         if(!isStart())
         {
-            dt.day=-1;
-            dt.hour=-1;
-            dt.min=-1;
-            dt.sec=-1;
-            dt.msec=-1;
+            dt=Duration::invalid();
             return dt;
         }
         end=chrono::steady_clock::now();
         dTOD(chrono::duration_cast<Milliseconds>(end-start),dt);
         return dt;
     }
-    bool stt::time::DateTime::compareTime(const string &time1,const string &time2,const string &format1,const string &format2)
+
+    bool stt::time::DateTime::compareTime(const string &time1,const string &time2,
+                                           const string &format1,const string &format2)
     {
-        auto t1=strToTimePoint(time1,format1);
-        auto t2=strToTimePoint(time2,format2);
-        if(t1.time_since_epoch()>=t2.time_since_epoch())
-            return true;
-        else
-            return false;
+        chrono::system_clock::time_point first;
+        chrono::system_clock::time_point second;
+        return strToTimePoint(time1,format1,first)&&strToTimePoint(time2,format2,second)&&first>=second;
     }
 
     stt::file::LogFile::~LogFile()
@@ -1335,104 +1357,108 @@ bool stt::file::FileTool::copy(const string &a,const string &b)
     }
     bool stt::file::LogFile::deleteLogByTime(const string &date1,const string &date2)
     {
-        if(!isOpen())
+        if(!isOpen()||timeFormat.empty()||!lockMemory())
             return false;
+
+        bool ok=true;
         int linePos=1;
         string data;
-        string time;
-        int timeSize=timeFormat.size();
-        if(!lockMemory())
-            return false;
+        const size_t timeSize=timeFormat.size();
         while(readLineC(data,linePos))
         {
-            time=data.substr(0,timeSize);
-            if((date1=="1"||compareTime(time,date1,timeFormat,timeFormat)==true)&&(date2=="2"||compareTime(time,date2,timeFormat,timeFormat)==false))
+            if(data.size()<timeSize)
             {
-                deleteLineC(linePos);
-                unlockMemory(false);
-                linePos--;
+                ++linePos;
+                continue;
             }
-            linePos++;
+            const string time=data.substr(0,timeSize);
+            const bool afterStart=date1=="1"||compareTime(time,date1,timeFormat,timeFormat);
+            const bool beforeEnd=date2=="2"||!compareTime(time,date2,timeFormat,timeFormat);
+            if(afterStart&&beforeEnd)
+            {
+                if(!deleteLineC(linePos))
+                {
+                    ok=false;
+                    break;
+                }
+                continue;
+            }
+            ++linePos;
         }
-        //if(chee.owns_lock())
-        //    unlockMemory(true);
-        unique_lock<mutex> testlock(che,try_to_lock);
-        if(!testlock.owns_lock())
-            unlockMemory(true);
-        
+        return unlockMemory(!ok)&&ok;
+    }
+
+    bool stt::data::CryptoUtil::encryptSymmetric(const unsigned char *before,const size_t &length,
+                                                   const unsigned char *passwd,const unsigned char *iv,
+                                                   unsigned char *after)
+    {
+        size_t outputLength=0;
+        return encryptSymmetric(before,length,passwd,iv,after,outputLength);
+    }
+
+    bool stt::data::CryptoUtil::encryptSymmetric(const unsigned char *before,const size_t &length,
+                                                   const unsigned char *passwd,const unsigned char *iv,
+                                                   unsigned char *after,size_t &outputLength)
+    {
+        outputLength=0;
+        if(before==nullptr||passwd==nullptr||iv==nullptr||after==nullptr||
+           length>static_cast<size_t>(std::numeric_limits<int>::max()))
+            return false;
+        EVP_CIPHER_CTX *ctx=EVP_CIPHER_CTX_new();
+        if(ctx==nullptr)
+            return false;
+        int written=0;
+        int finalWritten=0;
+        const bool ok=EVP_EncryptInit_ex(ctx,EVP_aes_256_cbc(),nullptr,passwd,iv)==1&&
+            EVP_EncryptUpdate(ctx,after,&written,before,static_cast<int>(length))==1&&
+            EVP_EncryptFinal_ex(ctx,after+written,&finalWritten)==1;
+        EVP_CIPHER_CTX_free(ctx);
+        if(!ok)
+            return false;
+        outputLength=static_cast<size_t>(written+finalWritten);
         return true;
     }
-    
-    bool stt::data::CryptoUtil::encryptSymmetric(const unsigned char *before,const size_t &length,const unsigned char *passwd,const unsigned char *iv,unsigned char *after)
+
+    bool stt::data::CryptoUtil::decryptSymmetric(const unsigned char *before,const size_t &length,
+                                                   const unsigned char *passwd,const unsigned char *iv,
+                                                   unsigned char *after)
     {
-        EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
-        if (!ctx) return false;
-        int len;
-        int ciphertext_len;
-        // 初始化加密操作
-        if (1 != EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), nullptr, passwd, iv)) 
-        {
-            EVP_CIPHER_CTX_free(ctx);
-            return false;
-        }
-        // 加密数据
-        if (1 != EVP_EncryptUpdate(ctx, after, &len, before, length))
-        {
-            EVP_CIPHER_CTX_free(ctx);
-            return false;
-        }
-        ciphertext_len = len;
-        // 加密完成
-        if (1 != EVP_EncryptFinal_ex(ctx, after + len, &len)) 
-        {
-            EVP_CIPHER_CTX_free(ctx);
-            return false;
-        }
-        ciphertext_len += len;
-        EVP_CIPHER_CTX_free(ctx);
-        return ciphertext_len;
+        size_t outputLength=0;
+        return decryptSymmetric(before,length,passwd,iv,after,outputLength);
     }
-    bool stt::data::CryptoUtil::decryptSymmetric(const unsigned char *before,const size_t &length,const unsigned char *passwd,const unsigned char *iv,unsigned char *after)
+
+    bool stt::data::CryptoUtil::decryptSymmetric(const unsigned char *before,const size_t &length,
+                                                   const unsigned char *passwd,const unsigned char *iv,
+                                                   unsigned char *after,size_t &outputLength)
     {
-        EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
-        if (!ctx) return false;
-
-        int len;
-        int plaintext_len;
-
-        // 初始化解密操作
-        if (1 != EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), nullptr, passwd, iv)) 
-        {
-            EVP_CIPHER_CTX_free(ctx);
+        outputLength=0;
+        if(before==nullptr||passwd==nullptr||iv==nullptr||after==nullptr||
+           length>static_cast<size_t>(std::numeric_limits<int>::max()))
             return false;
-        }
-
-        // 解密数据
-        if (1 != EVP_DecryptUpdate(ctx, after, &len, before, length)) 
-        {
-            EVP_CIPHER_CTX_free(ctx);
+        EVP_CIPHER_CTX *ctx=EVP_CIPHER_CTX_new();
+        if(ctx==nullptr)
             return false;
-        }
-        plaintext_len = len;
-
-        // 解密完成
-        if (1 != EVP_DecryptFinal_ex(ctx, after + len, &len)) 
-        {
-            EVP_CIPHER_CTX_free(ctx);
-            return false;
-        }
-        plaintext_len += len;
-
+        int written=0;
+        int finalWritten=0;
+        const bool ok=EVP_DecryptInit_ex(ctx,EVP_aes_256_cbc(),nullptr,passwd,iv)==1&&
+            EVP_DecryptUpdate(ctx,after,&written,before,static_cast<int>(length))==1&&
+            EVP_DecryptFinal_ex(ctx,after+written,&finalWritten)==1;
         EVP_CIPHER_CTX_free(ctx);
-        return plaintext_len;
+        if(!ok)
+            return false;
+        outputLength=static_cast<size_t>(written+finalWritten);
+        return true;
     }
+
 string& stt::data::CryptoUtil::sha1(const string &ori_str,string &result)
 {
 	unsigned char hash[SHA_DIGEST_LENGTH];
 	SHA1((unsigned char*)ori_str.c_str(),ori_str.length(),hash);
     char hash1[SHA_DIGEST_LENGTH];
     for(int i=0;i<SHA_DIGEST_LENGTH;i++)
+    {
         hash1[i]=static_cast<char>(hash[i]);
+    }
 	result.assign(hash1,SHA_DIGEST_LENGTH);
 	return result;
 }
@@ -1488,113 +1514,90 @@ char& stt::data::BitUtil::bitOutput_bit(char input,const int pos,char &result)
 unsigned long& stt::data::BitUtil::bitStrToNumber(const string &input,unsigned long &result)
 {
     result=0;
-    int mul=input.length()-1;
-    for(const char &cc:input)
+    if(input.empty()||input.size()>std::numeric_limits<unsigned long>::digits)
+        return result;
+    for(const char bit:input)
     {
-        if(cc=='1')
-            result+=pow(2,mul);
-        mul--;
+        if(bit!='0'&&bit!='1')
+        {
+            result=0;
+            return result;
+        }
+        result=(result<<1U)|static_cast<unsigned long>(bit-'0');
     }
     return result;
 }
 unsigned long& stt::data::BitUtil::bitToNumber(const string &input,unsigned long &result)
 {
-    string rr;
-    bitOutput(input,rr);
-    result=bitStrToNumber(rr,result);
-    return result;
+    if(input.size()>sizeof(unsigned long))
+    {
+        result=0;
+        return result;
+    }
+    string bits;
+    bitOutput(input,bits);
+    return bitStrToNumber(bits,result);
 }
 char& stt::data::BitUtil::toBit(const string &input,char &result)
 {
-    int pos=0;
-    result='z'-122;
-    unsigned char cc;
-    for(const char &ii:input)
-    {
-        if(ii=='1')
-        {
-            cc='z'+6;
-            cc=cc>>(pos%8);
-            result=result|cc;
-        }
-        pos++;
-    }
+    result=0;
+    if(input.empty()||input.size()>8||
+       !all_of(input.begin(),input.end(),[](const char bit){return bit=='0'||bit=='1';}))
+        return result;
+    unsigned char value=0;
+    for(const char bit:input)
+        value=static_cast<unsigned char>((value<<1U)|static_cast<unsigned char>(bit-'0'));
+    if(input.size()<8)
+        value=static_cast<unsigned char>(value<<(8-input.size()));
+    result=static_cast<char>(value);
     return result;
 }
 string& stt::data::BitUtil::toBit(const string &input,string &result)
 {
     result.clear();
-    int pos=0;
-    char bb='z'-122;
-    unsigned char cc;
-    for(const char &ii:input)
+    if(input.empty()||input.size()%8!=0||
+       !all_of(input.begin(),input.end(),[](const char bit){return bit=='0'||bit=='1';}))
+        return result;
+    result.reserve(input.size()/8);
+    for(size_t offset=0;offset<input.size();offset+=8)
     {
-        if(ii=='1')
-        {
-            cc='z'+6;
-            cc=cc>>pos;
-            bb=bb|cc;
-        }
-        pos++;
-        if(pos==8)
-        {
-            pos=0;
-            result+=bb;
-            bb='z'-122;
-        }
+        unsigned char value=0;
+        for(size_t index=0;index<8;++index)
+            value=static_cast<unsigned char>((value<<1U)|static_cast<unsigned char>(input[offset+index]-'0'));
+        result.push_back(static_cast<char>(value));
     }
     return result;
 }
     long stt::data::RandomUtil::getRandomNumber(const long &a,const long &b)
     {
+        const long low=min(a,b);
+        const long high=max(a,b);
         random_device rd;
         mt19937_64 generator(rd());
-        uniform_int_distribution<long long> dist(a,b);
-        return dist(generator);
+        uniform_int_distribution<long> distribution(low,high);
+        return distribution(generator);
     }
     string& stt::data::RandomUtil::getRandomStr_base64(string &str,const int &length)
     {
+        static constexpr string_view characters="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/";
         str.clear();
-		// 定义包含可能字符的字符串
-    	const string characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/";
-
-    	// 设置随机数引擎和分布
-    	random_device rd;
-    	mt19937 generator(rd());
-    	uniform_int_distribution<int> distribution(0, characters.size() - 1);
-
-    	// 生成随机字符串
-    	
-    	for (int i = 1; i <=length-length%4; i++) //长度为randomNumber
-		{
-        	str += characters[distribution(generator)];
-    	}
-        for(int i=1;i<=length%4;i++)
-        {
-            str+='=';
-        }
+        if(length<=0)
+            return str;
+        random_device rd;
+        mt19937 generator(rd());
+        uniform_int_distribution<size_t> distribution(0,characters.size()-1);
+        str.reserve(static_cast<size_t>(length));
+        for(int index=0;index<length;++index)
+            str.push_back(characters[distribution(generator)]);
         return str;
     }
-string& stt::data::RandomUtil::generateMask_4(string &mask)
-{
-    mask.clear();
-		// 定义包含可能字符的字符串
-    	const string characters = "01";
-        string bitStr;
-    	// 设置随机数引擎和分布
-    	random_device rd;
-    	mt19937 generator(rd());
-    	uniform_int_distribution<int> distribution(0, characters.size() - 1);
-
-    	// 生成随机字符串
-    	
-    	for (int i = 1; i <=32; i++) //长度为randomNumber
-		{
-        	bitStr += characters[distribution(generator)];
-    	}
-        BitUtil::toBit(bitStr,mask);
+    string& stt::data::RandomUtil::generateMask_4(string &mask)
+    {
+        mask.assign(4,'\0');
+        if(RAND_bytes(reinterpret_cast<unsigned char*>(mask.data()),4)!=1)
+            mask.clear();
         return mask;
-}
+    }
 unsigned long& stt::data::NetworkOrderUtil::htonl_ntohl_64(unsigned long &data)
 {
     char swi;
@@ -1685,44 +1688,43 @@ unsigned long& stt::data::NetworkOrderUtil::htonl_ntohl_64(unsigned long &data)
         //return str;
         return bb;
     }
-    string_view& stt::data::HttpStringUtil::get_value_header(const string_view& ori_str,string_view &str,const string& name)
+    string_view& stt::data::HttpStringUtil::get_value_header(const string_view& ori_str,
+                                                                string_view &str,const string& name)
     {
-        size_t ii=ori_str.find(name);
-	    if(ii==string::npos)
-	    {
-		    str="";
-		    return str;
-	    }
-		    get_split_str(ori_str,str,name+": ","\r\n");
-		    //del_space_str(str);
-		    return str;
+        if(!getHttpHeaderValueCaseInsensitiveView(ori_str,name,str))
+            str={};
+        return str;
     }
-    string_view& stt::data::HttpStringUtil::get_value_str(const string_view& ori_str,string_view &str,const string& name)
-{
-    size_t ii=ori_str.find("?");
-    if(ii==string::npos)
-        ii=0;
-	ii=ori_str.find(name+"=",ii);
-	if(ii==string::npos)
-	{
-		str="";
-		return str;
-	}
-	//分两种情况，可能是最后一个，或者不是最后一个。&分隔开很关键
-	if(ori_str.find("&",ii)==string::npos)//最后一个
-	{
-		ii=ori_str.find("=",ii);
-		str=ori_str.substr(ii+1,ori_str.length()-ii-1);
-		//del_space_str(str);//去掉空格
-		return str;
-	}
-	else
-	{
-		get_split_str(ori_str,str,name+"=","&");
-		//del_space_str(str);
-		return str;
-	}
-}
+    string_view& stt::data::HttpStringUtil::get_value_str(const string_view& ori_str,
+                                                           string_view &str,const string& name)
+    {
+        str={};
+        if(name.empty())
+            return str;
+        size_t queryStart=ori_str.find('?');
+        queryStart=queryStart==string_view::npos?0:queryStart+1;
+        const size_t fragment=ori_str.find('#',queryStart);
+        const size_t queryEnd=fragment==string_view::npos?ori_str.size():fragment;
+        size_t fieldStart=queryStart;
+        while(fieldStart<=queryEnd)
+        {
+            size_t fieldEnd=ori_str.find('&',fieldStart);
+            if(fieldEnd==string_view::npos||fieldEnd>queryEnd)
+                fieldEnd=queryEnd;
+            const string_view field=ori_str.substr(fieldStart,fieldEnd-fieldStart);
+            const size_t equal=field.find('=');
+            const string_view key=field.substr(0,equal);
+            if(key==name)
+            {
+                str=equal==string_view::npos?string_view{}:field.substr(equal+1);
+                return str;
+            }
+            if(fieldEnd==queryEnd)
+                break;
+            fieldStart=fieldEnd+1;
+        }
+        return str;
+    }
     string_view& stt::data::HttpStringUtil::get_location_str(const string_view& ori_str,string_view &str)
 {
 	auto pos1=ori_str.find("://");
@@ -1806,42 +1808,18 @@ unsigned long& stt::data::NetworkOrderUtil::htonl_ntohl_64(unsigned long &data)
     }
     string& stt::data::HttpStringUtil::get_value_header(const string& ori_str,string &str,const string& name)
     {
-        size_t ii=ori_str.find(name);
-	    if(ii==string::npos)
-	    {
-		    str="";
-		    return str;
-	    }
-		    get_split_str(ori_str,str,name+": ","\r\n");
-		    //del_space_str(str);
-		    return str;
+        string_view value;
+        get_value_header(string_view(ori_str),value,name);
+        str.assign(value.data(),value.size());
+        return str;
     }
     string& stt::data::HttpStringUtil::get_value_str(const string& ori_str,string &str,const string& name)
-{
-    size_t ii=ori_str.find("?");
-    if(ii==string::npos)
-        ii=0;
-	ii=ori_str.find(name+"=",ii);
-	if(ii==string::npos)
-	{
-		str="";
-		return str;
-	}
-	//分两种情况，可能是最后一个，或者不是最后一个。&分隔开很关键
-	if(ori_str.find("&",ii)==string::npos)//最后一个
-	{
-		ii=ori_str.find("=",ii);
-		str=ori_str.substr(ii+1,ori_str.length()-ii-1);
-		//del_space_str(str);//去掉空格
-		return str;
-	}
-	else
-	{
-		get_split_str(ori_str,str,name+"=","&");
-		//del_space_str(str);
-		return str;
-	}
-}
+    {
+        string_view value;
+        get_value_str(string_view(ori_str),value,name);
+        str.assign(value.data(),value.size());
+        return str;
+    }
     string& stt::data::HttpStringUtil::get_location_str(const string& ori_str,string &str)
 {
 	auto pos1=ori_str.find("://");
@@ -1911,92 +1889,41 @@ string& stt::data::WebsocketStringUtil::transfer_websocket_key(string &str)
     str=EncodingUtil::base64_encode(b);
     return str;
 }
-    int& stt::data::NumberStringConvertUtil::toInt(const string_view&ori_str,int &result,const int &i)
+    int& stt::data::NumberStringConvertUtil::toInt(const string_view& ori_str,int &result,const int &fallback)
     {
-        /*
-        try
-        {
-            result=stoi(ori_str);
-        }
-        catch(...)
-        {
-            result=i;
-            return result;
-        }
-        return result;
-        */
-        if(from_chars(ori_str.data(),ori_str.data()+ori_str.length(),result).ec!=errc())
-            result=i;
+        const auto conversion=from_chars(ori_str.data(),ori_str.data()+ori_str.size(),result);
+        if(ori_str.empty()||conversion.ec!=errc()||conversion.ptr!=ori_str.data()+ori_str.size())
+            result=fallback;
         return result;
     }
-	long& stt::data::NumberStringConvertUtil::toLong(const string_view&ori_str,long &result,const long &i)
+    long& stt::data::NumberStringConvertUtil::toLong(const string_view& ori_str,long &result,const long &fallback)
     {
-        /*
-        try
-        {
-            result=stol(ori_str);
-        }
-        catch(...)
-        {
-            result=i;
-            return result;
-        }
-        return result;
-        */
-        if(from_chars(ori_str.data(),ori_str.data()+ori_str.length(),result).ec!=errc())
-            result=i;
+        const auto conversion=from_chars(ori_str.data(),ori_str.data()+ori_str.size(),result);
+        if(ori_str.empty()||conversion.ec!=errc()||conversion.ptr!=ori_str.data()+ori_str.size())
+            result=fallback;
         return result;
     }
-	float& stt::data::NumberStringConvertUtil::toFloat(const string&ori_str,float &result,const float &i)
+    float& stt::data::NumberStringConvertUtil::toFloat(const string& ori_str,float &result,const float &fallback)
     {
-        
-        try
-        {
-            result=stof(ori_str);
-        }
-        catch(...)
-        {
-            result=i;
-            return result;
-        }
+        const auto conversion=from_chars(ori_str.data(),ori_str.data()+ori_str.size(),result,chars_format::general);
+        if(ori_str.empty()||conversion.ec!=errc()||conversion.ptr!=ori_str.data()+ori_str.size()||!isfinite(result))
+            result=fallback;
         return result;
-        
     }
-	double& stt::data::NumberStringConvertUtil::toDouble(const string&ori_str,double &result,const double &i)
+    double& stt::data::NumberStringConvertUtil::toDouble(const string& ori_str,double &result,const double &fallback)
     {
-        
-        try
-        {
-            result=stod(ori_str);
-        }
-        catch(...)
-        {
-            result=i;
-            return result;
-        }
+        const auto conversion=from_chars(ori_str.data(),ori_str.data()+ori_str.size(),result,chars_format::general);
+        if(ori_str.empty()||conversion.ec!=errc()||conversion.ptr!=ori_str.data()+ori_str.size()||!isfinite(result))
+            result=fallback;
         return result;
+    }
+    bool& stt::data::NumberStringConvertUtil::toBool(const string_view& ori_str,bool &result)
+    {
+        result=ori_str=="true"||ori_str=="TRUE"||ori_str=="True";
+        return result;
+    }
 
-    }
-    bool& stt::data::NumberStringConvertUtil::toBool(const string_view&ori_str,bool &result)
-    {
-        
-        if(ori_str=="true"||ori_str=="TRUE"||ori_str=="True")
-        {
-            result=true;
-            return result;
-        }
-        else
-        {
-            result=false;
-            return result;
-        }
 
-    }
-    
-    
-    
-    
-    
 string& stt::data::NumberStringConvertUtil::strto16(const string &ori_str,string &result)//字符串转化为16进制字符串
 {
     static constexpr char hex[]="0123456789abcdef";
@@ -2009,104 +1936,74 @@ string& stt::data::NumberStringConvertUtil::strto16(const string &ori_str,string
     }
     return result;
 }
-    int& stt::data::NumberStringConvertUtil::str16toInt(const string_view&ori_str,int &result,const int &i)
+    int& stt::data::NumberStringConvertUtil::str16toInt(const string_view& ori_str,int &result,const int &fallback)
     {
-        int bit=ori_str.length()-1;
-        result=0;
-        for(auto &ii:ori_str)
-        {
-            if(ii=='0')
-                result+=0*pow(16,bit);
-            else if(ii=='1')
-                result+=1*pow(16,bit);
-            else if(ii=='2')
-                result+=2*pow(16,bit);
-            else if(ii=='3')
-                result+=3*pow(16,bit);
-            else if(ii=='4')
-                result+=4*pow(16,bit);
-            else if(ii=='5')
-                result+=5*pow(16,bit);
-            else if(ii=='6')
-                result+=6*pow(16,bit);
-            else if(ii=='7')
-                result+=7*pow(16,bit);
-            else if(ii=='8')
-                result+=8*pow(16,bit);
-            else if(ii=='9')
-                result+=9*pow(16,bit);
-            else if(ii=='a'||ii=='A')
-                result+=10*pow(16,bit);
-            else if(ii=='b'||ii=='B')
-                result+=11*pow(16,bit);
-            else if(ii=='c'||ii=='C')
-                result+=12*pow(16,bit);
-            else if(ii=='d'||ii=='D')
-                result+=13*pow(16,bit);
-            else if(ii=='e'||ii=='E')
-                result+=14*pow(16,bit);
-            else if(ii=='f'||ii=='F')
-                result+=15*pow(16,bit);
-            else
-            {
-                result=i;
-                break;
-            }
-            bit--;
-        }
+        const auto conversion=from_chars(ori_str.data(),ori_str.data()+ori_str.size(),result,16);
+        if(ori_str.empty()||conversion.ec!=errc()||conversion.ptr!=ori_str.data()+ori_str.size())
+            result=fallback;
         return result;
     }
-    // Function to encode a string using Base64
-std::string stt::data::EncodingUtil::base64_encode(const std::string &input) {
-    BIO *bio, *b64;
-    BUF_MEM *bufferPtr;
-
-    b64 = BIO_new(BIO_f_base64());
-    bio = BIO_new(BIO_s_mem());
-    bio = BIO_push(b64, bio);
-
-    BIO_set_flags(bio, BIO_FLAGS_BASE64_NO_NL); // Ignore newlines
-    BIO_write(bio, input.c_str(), input.length());
-    BIO_flush(bio);
-    BIO_get_mem_ptr(bio, &bufferPtr);
-
-    std::string encoded_data(bufferPtr->data, bufferPtr->length);
-    BIO_free_all(bio);
-    return encoded_data;
-}
-
-// Function to decode a Base64 encoded string
-std::string stt::data::EncodingUtil::base64_decode(const std::string &input) {
-    BIO *bio, *b64;
-    char *buffer = (char *)malloc(input.length());
-    memset(buffer, 0, input.length());
-
-    b64 = BIO_new(BIO_f_base64());
-    bio = BIO_new_mem_buf(input.c_str(), input.length());
-    bio = BIO_push(b64, bio);
-
-    BIO_set_flags(bio, BIO_FLAGS_BASE64_NO_NL); // Ignore newlines
-    int decoded_length = BIO_read(bio, buffer, input.length());
-    std::string decoded_data(buffer, decoded_length);
-    BIO_free_all(bio);
-    free(buffer);
-
-    return decoded_data;
-}
-
-
-
-string& stt::data::EncodingUtil::maskCalculate(string &data,const string &mask)
-{
-    const char *m=mask.data();
-    int ii=0;
-    for(char &cc:data)
+    // Base64 编码；输入可以包含任意二进制字节。
+    std::string stt::data::EncodingUtil::base64_encode(const std::string &input)
     {
-        cc=cc^m[ii%4];
-        ii++;
+        if(input.empty())
+            return {};
+        const size_t outputSize=4*((input.size()+2)/3);
+        string output(outputSize,'\0');
+        const int written=EVP_EncodeBlock(reinterpret_cast<unsigned char*>(output.data()),
+            reinterpret_cast<const unsigned char*>(input.data()),static_cast<int>(input.size()));
+        if(written<0)
+            return {};
+        output.resize(static_cast<size_t>(written));
+        return output;
     }
-    return data;
-}
+
+    // 严格 Base64 解码；格式非法时返回空字符串。
+    std::string stt::data::EncodingUtil::base64_decode(const std::string &input)
+    {
+        if(input.empty())
+            return {};
+        if(input.size()%4!=0||input.size()>static_cast<size_t>(std::numeric_limits<int>::max()))
+            return {};
+        size_t padding=0;
+        if(input.back()=='=') ++padding;
+        if(input.size()>1&&input[input.size()-2]=='=') ++padding;
+        for(size_t index=0;index<input.size();++index)
+        {
+            const unsigned char ch=static_cast<unsigned char>(input[index]);
+            const bool alphabet=(ch>='A'&&ch<='Z')||(ch>='a'&&ch<='z')||
+                                (ch>='0'&&ch<='9')||ch=='+'||ch=='/';
+            if(alphabet)
+            {
+                if(index>=input.size()-padding)
+                    return {};
+            }
+            else if(ch=='=')
+            {
+                if(index<input.size()-padding)
+                    return {};
+            }
+            else
+                return {};
+        }
+        string output((input.size()/4)*3,'\0');
+        const int decoded=EVP_DecodeBlock(reinterpret_cast<unsigned char*>(output.data()),
+            reinterpret_cast<const unsigned char*>(input.data()),static_cast<int>(input.size()));
+        if(decoded<0||static_cast<size_t>(decoded)<padding)
+            return {};
+        output.resize(static_cast<size_t>(decoded)-padding);
+        return output;
+    }
+
+    string& stt::data::EncodingUtil::maskCalculate(string &data,const string &mask)
+    {
+        if(mask.size()<4)
+            return data;
+        for(size_t index=0;index<data.size();++index)
+            data[index]=static_cast<char>(static_cast<unsigned char>(data[index])^
+                                          static_cast<unsigned char>(mask[index%4]));
+        return data;
+    }
 string& stt::data::EncodingUtil::transfer_websocket_key(string &str)
 {
     str=str+"258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
@@ -2117,23 +2014,10 @@ string& stt::data::EncodingUtil::transfer_websocket_key(string &str)
 }
 string& stt::data::EncodingUtil::generateMask_4(string &mask)
 {
-    mask.clear();
-		// 定义包含可能字符的字符串
-    	const string characters = "01";
-        string bitStr;
-    	// 设置随机数引擎和分布
-    	random_device rd;
-    	mt19937 generator(rd());
-    	uniform_int_distribution<int> distribution(0, characters.size() - 1);
-
-    	// 生成随机字符串
-    	
-    	for (int i = 1; i <=32; i++) //长度为randomNumber
-		{
-        	bitStr += characters[distribution(generator)];
-    	}
-        BitUtil::toBit(bitStr,mask);
-        return mask;
+    mask.assign(4,'\0');
+    if(RAND_bytes(reinterpret_cast<unsigned char*>(mask.data()),4)!=1)
+        mask.clear();
+    return mask;
 }
     int stt::data::JsonHelper::getValue(const string &oriStr,string &result,const string &type,const string &name,const int &num)
     {
@@ -2218,12 +2102,31 @@ string& stt::data::EncodingUtil::generateMask_4(string &mask)
     }
     string stt::data::JsonHelper::jsonAdd(const string &a,const string &b)
     {
-        string result=a;
-        result.erase(a.length()-2);
-        if(a.length()>3)
-            result+=",";
-        result+=b.substr(1);
-        return result;
+        Json::CharReaderBuilder reader;
+        Json::Value first;
+        Json::Value second;
+        string errors;
+        istringstream firstStream(a);
+        if(!Json::parseFromStream(reader,firstStream,&first,&errors))
+            return {};
+        errors.clear();
+        istringstream secondStream(b);
+        if(!Json::parseFromStream(reader,secondStream,&second,&errors))
+            return {};
+
+        if(first.isObject()&&second.isObject())
+        {
+            for(const string &name:second.getMemberNames())
+                first[name]=second[name];
+        }
+        else if(first.isArray()&&second.isArray())
+        {
+            for(const Json::Value &value:second)
+                first.append(value);
+        }
+        else
+            return {};
+        return toString(first);
     }
     string& stt::data::JsonHelper::jsonFormatify(const string &a,string &b)
     {
