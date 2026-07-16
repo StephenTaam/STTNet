@@ -48,7 +48,7 @@ int main()
     std::cout << "banned: " << std::boolalpha << limiter.isBanned(ip) << '\n';
     limiter.unbanIP(ip);
 
-    // Every successfully registered fd must be removed when the connection closes.
+    // Each successfully registered fd is removed when the connection closes.
     limiter.clearIP(ip, fd);
     return 0;
 }

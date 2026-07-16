@@ -24,14 +24,14 @@ int main()
     server.setFunction("/slow",
         [&server](HttpServerFDHandler &client,
                   HttpRequestInformation &request) {
-            // Reactor callbacks must return quickly. Put database calls,
-            // filesystem access, RPC, sleeping, and unpredictable lock waits
-            // in the WorkerPool instead of blocking the network event loop.
+            // Reactor callbacks are non-blocking execution points. Database calls,
+            // filesystem access, RPC, sleeping, and unpredictable lock waits belong
+            // in the WorkerPool rather than the network event loop.
             server.putTask(
                 [](HttpServerFDHandler &workerClient,
                    HttpRequestInformation &workerRequest) {
                     // client/request are safe snapshots supplied by STTNet.
-                    // Do not capture references to the outer callback here.
+                    // Outer callback references may be invalid when the Worker executes.
                     std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
                     const std::string result =

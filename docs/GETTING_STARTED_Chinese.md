@@ -1,16 +1,16 @@
-# STTNet 0.7.0 上手与集成指南
+# STTNet 0.7.0 构建与集成说明
 
 STTNet 面向 Linux 和 C++17。最短路径是：安装依赖、把 `STTNet::sttnet` 链接到目标、包含 `<sttnet.h>`、注册回调并监听。
 
-## 1. 选择接入方式
+## 1. 接入方式
 
 | 场景 | 推荐方式 | 特点 |
 |---|---|---|
 | 应用仓库内已经放入 STTNet 源码 | `add_subdirectory` | 最直接，跟随应用一起编译 |
-| 希望 CMake 自动获取固定版本 | `FetchContent` | 无需手工安装，必须固定 tag 或 commit |
+| CMake 自动获取固定版本 | `FetchContent` | 由 CMake 获取源码；生产依赖使用固定 tag 或 commit |
 | 多个应用共享同一份框架 | 安装后 `find_package` | 最标准，构建速度快，适合系统镜像/SDK |
 | 非 CMake 工程 | `pkg-config` | 自动给出 include、库和依赖参数 |
-| 临时试验 | 直接编译源码 | 简单，但不建议长期维护 |
+| 临时验证 | 直接编译源码 | 步骤简单，不适合作为长期集成方式 |
 
 无论使用哪一种方式，应用代码都统一链接目标 `STTNet::sttnet`。
 
@@ -91,7 +91,7 @@ target_link_libraries(my_server PRIVATE STTNet::sttnet)
 
 ## 5. 方式 C：FetchContent
 
-正式项目必须固定发布 tag 或完整 commit，不要长期跟踪移动分支：
+正式项目以发布 tag 或完整 commit 作为固定版本来源；移动分支会使依赖内容随时间变化：
 
 ```cmake
 include(FetchContent)
@@ -194,7 +194,7 @@ server.setFunction("/slow",[&server](auto &client,auto &request) {
 });
 ```
 
-不要在 Worker 中保存回调引用到任务返回以后；框架会复制 handler 和请求，并用连接代次避免 fd 复用串线。
+Worker 任务持有外层回调引用会产生悬空引用风险；框架会复制 handler 和请求，并用连接代次避免 fd 复用串线。
 
 ## 10. WebSocket Echo
 
@@ -226,13 +226,13 @@ server.setMaxPendingWorkerTasks(65536);
 server.setGracefulShutdownTimeout(5000);
 ```
 
-- 在创建任何线程前调用 `blockTerminationSignals()`。
-- 在主线程调用 `waitForTerminationSignal()`；不要从异步 signal handler 删除服务对象。
+- `blockTerminationSignals()` 的调用时机位于所有线程创建之前。
+- 主线程通过 `waitForTerminationSignal()` 同步等待；异步 signal handler 不承担服务对象析构。
 - `kill -15`/Ctrl-C 可以优雅退出；`kill -9` 无法捕获，只能依赖操作系统回收资源。
-- HTTPS/WSS 使用 `setTLS(cert, key, password)`；需要 mTLS 时再显式配置 CA 和客户端证书模式。
-- 根据真实 Linux 机器的 p99、RSS、队列峰值和慢客户端压测调整参数。
+- HTTPS/WSS 由 `setTLS(cert, key, password)` 配置；mTLS 额外包含 CA 与客户端证书模式。
+- 参数取值以目标 Linux 环境的 p99、RSS、队列峰值和慢客户端压测为依据。
 
-## 12. 下一步
+## 12. 相关文档
 
 - API 手册：`docs/api/html_Chinese/index.html`
 - 信号与退出：[`SIGNALS_Chinese.md`](SIGNALS_Chinese.md)

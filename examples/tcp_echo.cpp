@@ -21,7 +21,7 @@ int main()
     EchoTcpServer server;
 
     // Raw TCP is a byte stream: one callback is one received chunk, not
-    // necessarily one complete application message. Real protocols must add
+    // necessarily one complete application message. Real protocols add
     // framing such as a fixed header, a length prefix, or a delimiter.
     server.setGlobalSolveFunction(
         [](TcpFDHandler &client, TcpInformation &info) {

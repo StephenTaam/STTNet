@@ -1,13 +1,13 @@
-# STTNet 0.7.0 Getting Started and Integration
+# STTNet 0.7.0 Build and Integration
 
 STTNet targets Linux and C++17. The normal workflow is to link `STTNet::sttnet`, include `<sttnet.h>`, register callbacks, and start listening.
 
-## 1. Choose an integration method
+## 1. Integration Methods
 
 | Scenario | Recommended method |
 |---|---|
 | STTNet source is vendored in your repository | `add_subdirectory` |
-| CMake should fetch a pinned version | `FetchContent` |
+| CMake-managed pinned version | `FetchContent` |
 | Several applications share one installation | install + `find_package` |
 | A non-CMake build system is used | `pkg-config` |
 
@@ -55,11 +55,11 @@ add_executable(my_server main.cpp)
 target_link_libraries(my_server PRIVATE STTNet::sttnet)
 ```
 
-Examples, tests, and STTNet install rules default to off when consumed as a subproject. Set `STTNET_ENABLE_INSTALL=ON` explicitly if a superproject should install STTNet as well.
+Examples, tests, and STTNet install rules default to off when consumed as a subproject. `STTNET_ENABLE_INSTALL=ON` enables STTNet installation rules inside a superproject.
 
 ## 5. FetchContent
 
-Pin a release tag or a full commit SHA in production:
+Production integration uses a release tag or a full commit SHA as the fixed source revision:
 
 ```cmake
 include(FetchContent)
@@ -107,7 +107,7 @@ int main()
 }
 ```
 
-Run `curl -i http://127.0.0.1:8080/ping`, then stop the process with `kill -15 <pid>` or Ctrl-C.
+A request can be sent with `curl -i http://127.0.0.1:8080/ping`; `kill -15 <pid>` or Ctrl-C enters the graceful shutdown path.
 
 ## 8. Common HTTP operations
 
@@ -122,7 +122,7 @@ client.sendJson(value);
 client.redirect("/login");
 ```
 
-A successful send means the complete response was accepted by the bounded per-connection queue; it does not mean that the peer has received it. Stop producing data if enqueueing fails or `sendData` returns `-101`.
+A successful send means the complete response was accepted by the bounded per-connection queue; it does not mean that the peer has received it. Enqueue failure or a `sendData` result of `-101` means the connection has crossed its send boundary and no further response data can be accepted.
 
 ## 9. Callback results and workers
 
@@ -130,10 +130,10 @@ Callback results are `1` for success, `0` for work submitted to the WorkerPool, 
 
 ## 10. Graceful production lifecycle
 
-- Call `blockTerminationSignals()` before creating worker or Reactor threads.
-- Wait with `waitForTerminationSignal()` on the main thread and then call `close()`.
-- Never delete servers from an asynchronous signal handler.
+- `blockTerminationSignals()` runs before Worker or Reactor thread creation.
+- The main thread waits through `waitForTerminationSignal()` and then calls `close()`.
+- Server destruction remains outside asynchronous signal handlers.
 - SIGTERM and SIGINT can be graceful; SIGKILL cannot be caught.
-- Configure socket options, write/worker queue limits, TLS, and graceful timeout before `startListen()`.
+- Socket options, write/Worker queue limits, TLS, and graceful timeout are configured before `startListen()`.
 
 See [`SIGNALS_Chinese.md`](SIGNALS_Chinese.md), [`CAPABILITY_Chinese.md`](CAPABILITY_Chinese.md), and [`ROADMAP_Chinese.md`](ROADMAP_Chinese.md) for lifecycle, performance boundaries, and planned capabilities.

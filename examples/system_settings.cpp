@@ -7,7 +7,7 @@ int main()
     using namespace stt::network;
     using stt::system::ServerSetting;
 
-    // Signal blocking must happen before the logger, Reactor, or Worker threads exist.
+    // Signal blocking occurs before the logger, Reactor, or Worker threads are created.
     if(!ServerSetting::blockTerminationSignals())
     {
         std::cerr << "failed to block termination signals\n";

@@ -72,7 +72,7 @@ STTNet 现在适合定位为“Linux 上轻量、可嵌入、以 HTTP/1.1 与 We
 
 常用业务 API 没有被重写：`setFunction`、`setGetKeyFunction`、`putTask`、`startListen`、`sendBack`、`sendMessage` 以及 HTTP/WebSocket 请求结构的常用字段仍然保留。绝大多数应用只需重新编译，不需要修改业务代码。
 
-需要明确的是，0.7.0 不是二进制 ABI 兼容升级，必须重新编译框架和所有依赖它的目标：
+0.7.0 不是二进制 ABI 兼容升级，因此升级过程包含框架与所有依赖目标的重新编译：
 
 | 变化 | 源代码影响 | 说明 |
 |---|---|---|
@@ -88,7 +88,7 @@ STTNet 现在适合定位为“Linux 上轻量、可嵌入、以 HTTP/1.1 与 We
 | `WebSocketClient::getServerPort()` | 行为修复 | 仍返回 string，但现在是端口而不是错误的服务器 IP；新增整数版本 |
 | TCP/TLS 客户端连接 | 行为修复 | 默认阻塞连接、线程安全 DNS、SNI/主机名验证、空 CA 使用系统信任库 |
 | WebSocket 协议校验更严格 | 非法客户端可能被拒绝 | 拒绝未 mask、非法关闭码、非法 UTF-8 和错误 Upgrade 握手 |
-| `File::closeFile()` / 内存事务 | 签名不变、行为收紧 | close 可重复调用；会等待其他线程事务；unlock 必须由加锁线程执行；非法行号改为安全失败 |
+| `File::closeFile()` / 内存事务 | 签名不变、行为收紧 | close 可重复调用；会等待其他线程事务；unlock 仅允许由加锁线程执行；非法行号改为安全失败 |
 | HTTP 请求/响应便利 API | 纯新增 | `headerValue/bodyView/sendText/sendJson/redirect`，旧代码不需修改 |
 | `JsonHelper::toString()` | 行为修复 | 序列化完整 Json::Value；字符串标量现在包含合法 JSON 引号 |
 

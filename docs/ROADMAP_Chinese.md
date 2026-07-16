@@ -24,7 +24,7 @@ STTNet 的目标不是把 ORM、模板引擎、服务注册、消息队列和所
 
 ## P0：下一批最值得实现
 
-| 能力 | 用户价值 | 建议实现边界 |
+| 能力 | 用户价值 | 实现边界 |
 |---|---|---|
 | HTTP method router、路径参数、路由组 | REST API 不再手写 method/path 分发 | 基数树或紧凑 trie；保持现有 `setFunction` 兼容 |
 | Middleware/过滤器链 | 统一做鉴权、CORS、访问日志、request-id | before/after hook；明确同步/Worker 边界 |
@@ -37,13 +37,13 @@ STTNet 的目标不是把 ORM、模板引擎、服务注册、消息队列和所
 
 1. `SO_REUSEPORT + 每核 Reactor`：连接、TLS 会话和协议状态固定到所属 Reactor；避免共享连接表成为新瓶颈。
 2. 时间轮：替代剩余的连接/限流周期维护扫描。
-3. 常见响应头模板、小对象 arena 与 buffer pool：必须由 Linux perf/allocator 数据证明收益后再合入。
+3. 常见响应头模板、小对象 arena 与 buffer pool：合入条件为 Linux perf/allocator 数据能够证明收益。
 4. TLS session、证书热更新指标和握手限速：降低 TLS 洪泛与重复握手成本。
 5. 客户端连接池、DNS 缓存与明确超时/取消模型：让 STTNet 也适合轻量网关和反向代理。
 
 ## P1-B：架构拆分
 
-当前单头、单实现便于复制，但不利于长期维护。建议保持公共 `<sttnet.h>` 不变，内部逐步拆为：
+当前单头、单实现便于复制，但不利于长期维护。公共 `<sttnet.h>` 保持不变，内部可逐步拆为：
 
 ```text
 src/core/          reactor、connection、worker、backpressure

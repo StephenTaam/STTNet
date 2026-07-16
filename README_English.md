@@ -75,7 +75,7 @@ In another terminal:
 curl -i http://127.0.0.1:8080/ping
 ```
 
-The response body should be:
+The response body is:
 
 ```text
 pong
@@ -156,7 +156,7 @@ A successful send means the response was accepted by the connection's bounded wr
 
 ## WorkerPool
 
-Reactor callbacks should remain non-blocking. Database access, filesystem work, and external RPC calls can be dispatched to the WorkerPool:
+Reactor callbacks remain non-blocking. Database access, filesystem work, and external RPC calls can be dispatched to the WorkerPool:
 
 ```cpp
 server.setFunction("/slow",
@@ -346,7 +346,7 @@ Important lifecycle rules:
 
 An older build recorded about **65,000 requests per second** with **2–3 ms average latency** on a 4-core/4GB development board. This is a historical case, not a fixed result for STTNet 0.7.0 or every machine.
 
-Meaningful performance numbers must come from benchmarks on the target Linux host with the intended kernel, connection pattern, TLS settings, payload size, and business logic.
+Meaningful performance numbers come from benchmarks on the target Linux host with the intended kernel, connection pattern, TLS settings, payload size, and business logic.
 
 Benchmark scripts are available under `benchmarks/`.
 

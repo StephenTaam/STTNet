@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>第 7 章：WebSocket · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body>
-<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header>
-<div class="layout"><aside class="sidebar"><h3>章节目录</h3><a class="" href="index.html">指导手册首页</a><div class="side-group">基础</div><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、依赖、构建与运行</a><div class="side-group">网络服务与客户端</div><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：HTTP 请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由、处理阶段与返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool 与阻塞任务</a><a class="active" href="07-websocket.html">第 7 章：WebSocket 服务端</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：HTTP、WebSocket、TCP 与 UDP 客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS、WSS 与 mTLS</a><div class="side-group">数据与工具类</div><a class="" href="12-json.html">第 12 章：JSON 解析与生成</a><a class="" href="13-time.html">第 13 章：时间、时间间隔与计时</a><a class="" href="14-file-log.html">第 14 章：文件与异步日志</a><a class="" href="15-data-tools.html">第 15 章：编码、加密、随机数与数据转换</a><div class="side-group">信息安全</div><a class="" href="16-security.html">第 16 章：连接安全、限流与输入边界</a><div class="side-group">系统与进程</div><a class="" href="08-signals.html">第 17 章：Linux 信号与优雅退出</a><a class="" href="09-settings.html">第 18 章：系统初始化与服务端设置</a><a class="" href="19-process.html">第 19 章：进程拉起、守护、心跳与进程间同步</a><div class="side-group">生产部署</div><a class="" href="10-production.html">第 20 章：项目接入与上线检查</a><div class="side-group">示例与参考</div><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 7 章：WebSocket</h1><p class="lead">理解握手检查、回调类型、文本/二进制帧、心跳和关闭流程。</p>
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">章节目录</button><nav class="toplinks"><a href="index.html">编程手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>章节目录</h3><a class="" href="index.html">手册首页</a><div class="side-group">基础</div><a class="" href="01-understand.html">第 1 章：运行模型与核心对象</a><a class="" href="02-build.html">第 2 章：下载、依赖、构建与运行</a><div class="side-group">网络服务与客户端</div><a class="" href="03-http.html">第 3 章：HTTP 服务基础</a><a class="" href="04-request-response.html">第 4 章：HTTP 请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由、处理阶段与返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool 与阻塞任务</a><a class="active" href="07-websocket.html">第 7 章：WebSocket 服务端</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="" href="10-clients.html">第 10 章：HTTP、WebSocket、TCP 与 UDP 客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS、WSS 与 mTLS</a><div class="side-group">数据与工具类</div><a class="" href="12-json.html">第 12 章：JSON 解析与生成</a><a class="" href="13-time.html">第 13 章：时间、时间间隔与计时</a><a class="" href="14-file-log.html">第 14 章：文件与异步日志</a><a class="" href="15-data-tools.html">第 15 章：编码、加密、随机数与数据转换</a><div class="side-group">信息安全</div><a class="" href="16-security.html">第 16 章：连接安全、限流与输入边界</a><div class="side-group">系统与进程</div><a class="" href="08-signals.html">第 17 章：Linux 信号与优雅退出</a><a class="" href="09-settings.html">第 18 章：系统初始化与服务端设置</a><a class="" href="19-process.html">第 19 章：进程拉起、守护、心跳与进程间同步</a><div class="side-group">生产部署</div><a class="" href="10-production.html">第 20 章：项目接入与上线检查</a><div class="side-group">示例与参考</div><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 7 章：WebSocket</h1><p class="lead">本章介绍 WebSocket 握手检查、回调类型、文本/二进制帧、心跳和关闭流程。</p>
 <h2>1. WebSocket 生命周期</h2>
-<div class="table-wrap"><table><thead><tr><th>阶段</th><th>接口</th><th>返回值</th></tr></thead><tbody><tr><td>握手前检查</td><td>setJudgeFunction</td><td>bool；false 拒绝连接。</td></tr><tr><td>握手成功初始化</td><td>setStartFunction</td><td>bool；可发送欢迎消息。</td></tr><tr><td>普通消息处理</td><td>setGlobalSolveFunction</td><td>bool；false 表示失败并关闭。</td></tr><tr><td>按 key 多阶段处理</td><td>setGetKeyFunction + setFunction</td><td>int；使用 1/0/-1/-2 流程语义。</td></tr></tbody></table></div>
-<h2>2. 完整 Echo Demo</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>#include &lt;sttnet.h&gt;
+<div class="table-wrap"><table><thead><tr><th>阶段</th><th>接口</th><th>返回值</th></tr></thead><tbody><tr><td>握手前检查</td><td>setJudgeFunction</td><td>bool；false 拒绝连接。</td></tr><tr><td>握手成功初始化</td><td>setStartFunction</td><td>bool；可发送欢迎消息。</td></tr><tr><td>普通消息处理</td><td>setGlobalSolveFunction</td><td>bool；false 表示失败并关闭。</td></tr><tr><td>按 key 多阶段处理</td><td>setGetKeyFunction + setFunction</td><td>int；返回值采用 1/0/-1/-2 流程语义。</td></tr></tbody></table></div>
+<h2>2. 完整 Echo Demo</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="复制未完成">复制</button><pre><code>#include &lt;sttnet.h&gt;
 
 #include &lt;iostream&gt;
 #include &lt;string_view&gt;
@@ -23,7 +23,7 @@ int main()
 
     WebSocketServer server;
 
-    // 接受 WebSocket 握手前先检查 HTTP Upgrade 请求。
+    // 握手判定函数检查 HTTP Upgrade 请求。
     // 本 Demo 只接受 /echo 和可选查询参数。
     server.setJudgeFunction(
         [](WebSocketFDInformation &amp;connection) {
@@ -63,20 +63,20 @@ int main()
     ServerSetting::waitForTerminationSignal();
     return server.close() ? 0 : 3;
 }</code></pre></div>
-<h2>3. 检查握手 Header</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>server.setJudgeFunction([](WebSocketFDInformation &amp;info) {
+<h2>3. 握手 Header 校验</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="复制未完成">复制</button><pre><code>server.setJudgeFunction([](WebSocketFDInformation &amp;info) {
     std::string_view token;
     stt::data::HttpStringUtil::get_value_header(
         std::string_view(info.header), token, "X-Demo-Token");
     return info.locPara == "/echo" &amp;&amp; token == "sttnet";
 });</code></pre></div>
 <p>生产环境通常会校验 path、Origin、认证 token 或 Cookie。拒绝时返回 false，框架不会继续握手。</p>
-<h2>4. 文本、二进制和控制帧</h2><ul><li><code>message_type == 1</code> 通常是文本帧，发送类型使用 <code>"0001"</code>。</li><li><code>message_type == 2</code> 是二进制帧，发送类型使用 <code>"0010"</code>。</li><li>Ping/Pong 属于协议控制帧，不应替代业务层“用户在线”心跳。</li><li>需要关闭时使用协议级关闭帧，例如 <code>server.closeFD(fd, 1000, "bye")</code>。</li></ul>
-<h2>5. 测试</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>./build/examples/sttnet_websocket_echo
+<h2>4. 文本、二进制和控制帧</h2><ul><li><code>message_type == 1</code> 通常是文本帧，发送类型使用 <code>"0001"</code>。</li><li><code>message_type == 2</code> 是二进制帧，发送类型使用 <code>"0010"</code>。</li><li>Ping/Pong 属于协议控制帧，不应替代业务层“用户在线”心跳。</li><li>协议级关闭由关闭帧完成，例如 <code>server.closeFD(fd, 1000, "bye")</code>。</li></ul>
+<h2>5. 测试</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="复制未完成">复制</button><pre><code>./build/examples/sttnet_websocket_echo
 
 # 安装 websocat 后：
 websocat ws://127.0.0.1:5050/echo
 # 输入 hello，服务端应原样回显。</code></pre></div>
-<p>浏览器控制台也可以测试：</p><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>const ws = new WebSocket("ws://127.0.0.1:5050/echo");
+<p>浏览器控制台也可以测试：</p><div class="codebox"><button class="copy" data-done="已复制" data-fail="复制未完成">复制</button><pre><code>const ws = new WebSocket("ws://127.0.0.1:5050/echo");
 ws.onmessage = e =&gt; console.log(e.data);
 ws.onopen = () =&gt; ws.send("hello");</code></pre></div>
 <div class="pager"><a href="06-workerpool.html">← 第 6 章：WorkerPool 与阻塞任务</a><a href="08-tcp.html">第 8 章：原始 TCP →</a></div></article></main></div>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>第 10 章：客户端 · STTNet</title><link href="../guide.css" rel="stylesheet"/></head><body>
-<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">章节目录</button><nav class="toplinks"><a href="index.html">指导手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header>
-<div class="layout"><aside class="sidebar"><h3>章节目录</h3><a class="" href="index.html">指导手册首页</a><div class="side-group">基础</div><a class="" href="01-understand.html">第 1 章：理解 STTNet</a><a class="" href="02-build.html">第 2 章：下载、依赖、构建与运行</a><div class="side-group">网络服务与客户端</div><a class="" href="03-http.html">第 3 章：第一个 HTTP 服务</a><a class="" href="04-request-response.html">第 4 章：HTTP 请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由、处理阶段与返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool 与阻塞任务</a><a class="" href="07-websocket.html">第 7 章：WebSocket 服务端</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="active" href="10-clients.html">第 10 章：HTTP、WebSocket、TCP 与 UDP 客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS、WSS 与 mTLS</a><div class="side-group">数据与工具类</div><a class="" href="12-json.html">第 12 章：JSON 解析与生成</a><a class="" href="13-time.html">第 13 章：时间、时间间隔与计时</a><a class="" href="14-file-log.html">第 14 章：文件与异步日志</a><a class="" href="15-data-tools.html">第 15 章：编码、加密、随机数与数据转换</a><div class="side-group">信息安全</div><a class="" href="16-security.html">第 16 章：连接安全、限流与输入边界</a><div class="side-group">系统与进程</div><a class="" href="08-signals.html">第 17 章：Linux 信号与优雅退出</a><a class="" href="09-settings.html">第 18 章：系统初始化与服务端设置</a><a class="" href="19-process.html">第 19 章：进程拉起、守护、心跳与进程间同步</a><div class="side-group">生产部署</div><a class="" href="10-production.html">第 20 章：项目接入与上线检查</a><div class="side-group">示例与参考</div><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 10 章：客户端</h1><p class="lead">使用 HTTP、WebSocket、TCP 和 UDP 客户端，并避免把阻塞客户端放进 Reactor。</p>
-<h2>1. 客户端是同步还是异步</h2><div class="table-wrap"><table><thead><tr><th>客户端</th><th>模型</th></tr></thead><tbody><tr><td>TcpClient</td><td>默认阻塞；连接、发送、接收都应设置合理超时。</td></tr><tr><td>HttpClient</td><td>同步请求；发送成功后还要检查 isReturn()。</td></tr><tr><td>WebSocketClient</td><td>连接和发送接口配合内部监听线程，消息回调异步执行。</td></tr><tr><td>UdpClient</td><td>直接发送/接收 datagram，可选择阻塞或非阻塞。</td></tr></tbody></table></div>
-<div class="warning">不要在 Server 的 Reactor 回调里直接执行阻塞 HttpClient/TcpClient 请求。需要调用外部服务时，把它放入 WorkerPool，并设置有限超时。</div>
-<h2>2. HTTP Client Demo</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>#include &lt;sttnet.h&gt;
+<header class="topbar"><a class="brand" href="index.html">STTNet 0.7.0</a><button aria-expanded="false" class="nav-toggle">章节目录</button><nav class="toplinks"><a href="index.html">编程手册</a><a href="demos.html">注释 Demo</a><a href="../../api/html_Chinese/index.html">API 参考</a><a href="../English/index.html">English</a><a href="../../index.html">语言入口</a></nav></header>
+<div class="layout"><aside class="sidebar"><h3>章节目录</h3><a class="" href="index.html">手册首页</a><div class="side-group">基础</div><a class="" href="01-understand.html">第 1 章：运行模型与核心对象</a><a class="" href="02-build.html">第 2 章：下载、依赖、构建与运行</a><div class="side-group">网络服务与客户端</div><a class="" href="03-http.html">第 3 章：HTTP 服务基础</a><a class="" href="04-request-response.html">第 4 章：HTTP 请求、JSON 与响应</a><a class="" href="05-routing-callbacks.html">第 5 章：路由、处理阶段与返回值</a><a class="" href="06-workerpool.html">第 6 章：WorkerPool 与阻塞任务</a><a class="" href="07-websocket.html">第 7 章：WebSocket 服务端</a><a class="" href="08-tcp.html">第 8 章：原始 TCP</a><a class="" href="09-udp.html">第 9 章：UDP</a><a class="active" href="10-clients.html">第 10 章：HTTP、WebSocket、TCP 与 UDP 客户端</a><a class="" href="11-tls.html">第 11 章：TLS、HTTPS、WSS 与 mTLS</a><div class="side-group">数据与工具类</div><a class="" href="12-json.html">第 12 章：JSON 解析与生成</a><a class="" href="13-time.html">第 13 章：时间、时间间隔与计时</a><a class="" href="14-file-log.html">第 14 章：文件与异步日志</a><a class="" href="15-data-tools.html">第 15 章：编码、加密、随机数与数据转换</a><div class="side-group">信息安全</div><a class="" href="16-security.html">第 16 章：连接安全、限流与输入边界</a><div class="side-group">系统与进程</div><a class="" href="08-signals.html">第 17 章：Linux 信号与优雅退出</a><a class="" href="09-settings.html">第 18 章：系统初始化与服务端设置</a><a class="" href="19-process.html">第 19 章：进程拉起、守护、心跳与进程间同步</a><div class="side-group">生产部署</div><a class="" href="10-production.html">第 20 章：项目接入与上线检查</a><div class="side-group">示例与参考</div><a class="" href="demos.html">完整注释 Demo</a></aside><main class="content"><article class="article"><h1>第 10 章：客户端</h1><p class="lead">本章介绍 HTTP、WebSocket、TCP 和 UDP 客户端的调用模型，以及它们与服务端 Reactor 的线程边界。</p>
+<h2>1. 客户端是同步还是异步</h2><div class="table-wrap"><table><thead><tr><th>客户端</th><th>模型</th></tr></thead><tbody><tr><td>TcpClient</td><td>默认阻塞；连接、发送、接收都应设置合理超时。</td></tr><tr><td>HttpClient</td><td>同步请求；发送成功仅表示请求已写出，<code>isReturn()</code> 表示是否获得有效响应。</td></tr><tr><td>WebSocketClient</td><td>连接和发送接口配合内部监听线程，消息回调异步执行。</td></tr><tr><td>UdpClient</td><td>直接发送/接收 datagram，可选择阻塞或非阻塞。</td></tr></tbody></table></div>
+<div class="warning">阻塞式 HttpClient/TcpClient 请求会暂停 Server 的 Reactor。外部服务调用适合放入 WorkerPool，并配置有限超时。</div>
+<h2>2. HTTP Client Demo</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="复制未完成">复制</button><pre><code>#include &lt;sttnet.h&gt;
 
 #include &lt;iostream&gt;
 
@@ -12,8 +12,8 @@ int main()
 {
     using stt::network::HttpClient;
 
-    // HttpClient 是同步客户端；生产环境必须使用有限超时，
-    // 并且不要在 STTNet Reactor 回调中执行。
+    // HttpClient 是同步客户端；生产环境为连接和读取设置有限超时，
+    // 调用发生在 WorkerPool 等非 Reactor 上下文中。
     HttpClient client;
 
     if(!client.getRequest("http://127.0.0.1:8080/ping", "",
@@ -34,10 +34,10 @@ int main()
               &lt;&lt; "\n--- response body ---\n" &lt;&lt; client.body &lt;&lt; '\n';
     return 0;
 }</code></pre></div>
-<p>先运行 <code>sttnet_http_hello</code>，再运行客户端：</p><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>./build/examples/sttnet_http_hello
+<p>HTTP Client Demo 需要一个正在运行的 <code>sttnet_http_hello</code> 服务端：</p><div class="codebox"><button class="copy" data-done="已复制" data-fail="复制未完成">复制</button><pre><code>./build/examples/sttnet_http_hello
 # 另一终端
 ./build/examples/sttnet_http_client</code></pre></div>
-<h2>3. WebSocket Client Demo</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>#include &lt;sttnet.h&gt;
+<h2>3. WebSocket Client Demo</h2><div class="codebox"><button class="copy" data-done="已复制" data-fail="复制未完成">复制</button><pre><code>#include &lt;sttnet.h&gt;
 
 #include &lt;chrono&gt;
 #include &lt;iostream&gt;
@@ -74,9 +74,9 @@ int main()
     client.close(1000, "demo complete");
     return 0;
 }</code></pre></div>
-<p>先运行 WebSocket 服务，再运行客户端：</p><div class="codebox"><button class="copy" data-done="已复制" data-fail="请手动复制">复制</button><pre><code>./build/examples/sttnet_websocket_echo
+<p>WebSocket Client Demo 需要一个正在运行的 WebSocket 服务端：</p><div class="codebox"><button class="copy" data-done="已复制" data-fail="复制未完成">复制</button><pre><code>./build/examples/sttnet_websocket_echo
 # 另一终端
 ./build/examples/sttnet_websocket_client</code></pre></div>
-<h2>4. URL 必须完整</h2><p>客户端 URL 要显式包含协议、端口和路径，例如 <code>https://example.com:443/</code>、<code>ws://127.0.0.1:5050/echo</code>。TLS 客户端会进行证书链和主机名校验。</p>
+<h2>4. URL 组成</h2><p>客户端 URL 要显式包含协议、端口和路径，例如 <code>https://example.com:443/</code>、<code>ws://127.0.0.1:5050/echo</code>。TLS 客户端会进行证书链和主机名校验。</p>
 <div class="pager"><a href="09-udp.html">← 第 9 章：UDP</a><a href="11-tls.html">第 11 章：TLS、HTTPS、WSS 与 mTLS →</a></div></article></main></div>
 <footer class="footer">STTNet 0.7.0 · C++17 · Linux</footer><script src="../guide.js"></script></body></html>

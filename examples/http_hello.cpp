@@ -22,7 +22,7 @@ int main()
     server.setFunction("/ping",
         [](HttpServerFDHandler &client, HttpRequestInformation &) {
             // Return 1 when the request was handled successfully.
-            // Return -2 when sending failed and the connection should be closed.
+            // -2 reports send failure and requests connection closure.
             return client.sendText("pong") ? 1 : -2;
         });
 

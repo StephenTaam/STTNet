@@ -32,7 +32,7 @@ int main()
 
     // LogFile owns a bounded asynchronous queue. Keep the object alive until all
     // producer threads have stopped. Its destructor drains queued records before
-    // closing; do not use an arbitrary sleep as a substitute for lifecycle order.
+    // closing; an arbitrary sleep does not provide the same lifecycle guarantee.
     {
         LogFile log(8192);
         if(!log.openFile("runtime/example.log"))

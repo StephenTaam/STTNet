@@ -104,10 +104,22 @@ void testStrictNumberConversion()
     stt::data::NumberStringConvertUtil::str16toInt("7fg",hexadecimal,-1);
     STTNET_CHECK(hexadecimal==-1);
 
+    float singlePrecision=0;
+    stt::data::NumberStringConvertUtil::toFloat("1.25",singlePrecision,-1.0F);
+    STTNET_CHECK(std::abs(singlePrecision-1.25F)<0.0001F);
+    stt::data::NumberStringConvertUtil::toFloat("1.25ms",singlePrecision,-1.0F);
+    STTNET_CHECK(singlePrecision==-1.0F);
+
     double decimal=0;
     stt::data::NumberStringConvertUtil::toDouble("2.5",decimal,-1.0);
     STTNET_CHECK(std::abs(decimal-2.5)<0.0001);
     stt::data::NumberStringConvertUtil::toDouble("2.5ms",decimal,-1.0);
+    STTNET_CHECK(decimal==-1.0);
+    stt::data::NumberStringConvertUtil::toDouble(" 2.5",decimal,-1.0);
+    STTNET_CHECK(decimal==-1.0);
+    stt::data::NumberStringConvertUtil::toDouble("nan",decimal,-1.0);
+    STTNET_CHECK(decimal==-1.0);
+    stt::data::NumberStringConvertUtil::toDouble("1e9999",decimal,-1.0);
     STTNET_CHECK(decimal==-1.0);
 
     bool boolean=false;

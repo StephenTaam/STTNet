@@ -1,5 +1,6 @@
 #include"../include/sttnet.h"
 #include <openssl/rand.h>
+#include <cerrno>
 using namespace std;
 using namespace stt::file;
 using namespace stt::time;
@@ -1905,16 +1906,38 @@ string& stt::data::WebsocketStringUtil::transfer_websocket_key(string &str)
     }
     float& stt::data::NumberStringConvertUtil::toFloat(const string& ori_str,float &result,const float &fallback)
     {
-        const auto conversion=from_chars(ori_str.data(),ori_str.data()+ori_str.size(),result,chars_format::general);
-        if(ori_str.empty()||conversion.ec!=errc()||conversion.ptr!=ori_str.data()+ori_str.size()||!isfinite(result))
+        // Floating-point std::from_chars is not available in some C++17 libstdc++ versions.
+        // strtof is used here with strict full-input validation for wider compiler compatibility.
+        if(ori_str.empty()||std::isspace(static_cast<unsigned char>(ori_str.front())))
+        {
             result=fallback;
+            return result;
+        }
+        char *end=nullptr;
+        errno=0;
+        const float converted=std::strtof(ori_str.c_str(),&end);
+        if(errno==ERANGE||end==ori_str.c_str()||end!=ori_str.c_str()+ori_str.size()||!std::isfinite(converted))
+            result=fallback;
+        else
+            result=converted;
         return result;
     }
     double& stt::data::NumberStringConvertUtil::toDouble(const string& ori_str,double &result,const double &fallback)
     {
-        const auto conversion=from_chars(ori_str.data(),ori_str.data()+ori_str.size(),result,chars_format::general);
-        if(ori_str.empty()||conversion.ec!=errc()||conversion.ptr!=ori_str.data()+ori_str.size()||!isfinite(result))
+        // Floating-point std::from_chars is not available in some C++17 libstdc++ versions.
+        // strtod is used here with strict full-input validation for wider compiler compatibility.
+        if(ori_str.empty()||std::isspace(static_cast<unsigned char>(ori_str.front())))
+        {
             result=fallback;
+            return result;
+        }
+        char *end=nullptr;
+        errno=0;
+        const double converted=std::strtod(ori_str.c_str(),&end);
+        if(errno==ERANGE||end==ori_str.c_str()||end!=ori_str.c_str()+ori_str.size()||!std::isfinite(converted))
+            result=fallback;
+        else
+            result=converted;
         return result;
     }
     bool& stt::data::NumberStringConvertUtil::toBool(const string_view& ori_str,bool &result)

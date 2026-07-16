@@ -39,7 +39,7 @@ int main()
     std::string contentType;
 
     // HTTP field names are case-insensitive. The helper trims optional spaces and
-    // tabs after the colon. Server handlers should normally use headerValue().
+    // tabs after the colon. Server handlers normally use headerValue().
     HttpStringUtil::get_value_header(rawHeaders,contentType,"Content-Type");
     std::cout << "content-type=" << contentType << '\n';
 

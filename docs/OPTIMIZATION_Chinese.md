@@ -1,6 +1,6 @@
 # STTNet 优化与审计说明
 
-本轮优化集中在网络热路径、并发正确性和可验证性。吞吐量必须在 Linux 上用相同硬件、内核参数、编译器和压测参数做前后对照；本文件不使用未经复测的 QPS 数字。
+本轮优化集中在网络热路径、并发正确性和可验证性。吞吐量对比基于相同 Linux 硬件、内核参数、编译器和压测参数；本文件不使用未经复测的 QPS 数字。
 
 ## 已完成
 
@@ -91,7 +91,7 @@ SLOW_CLIENTS=128 CONNECTIONS=2000 THREADS=8 DURATION=60s \
   bash benchmarks/run_slow_clients.sh
 ```
 
-## 下一阶段建议
+## 后续优化方向
 
 1. 在多核服务器上增加 `SO_REUSEPORT + 每核独立 Reactor` 模式；连接与 TLS 会话固定归属一个 Reactor，跨 Reactor 仅传递业务消息。
 2. 将当前约万行实现按 `core/reactor`、`protocol/http`、`protocol/websocket`、`tls`、`security` 拆分，并把平台 API 放进独立 backend。

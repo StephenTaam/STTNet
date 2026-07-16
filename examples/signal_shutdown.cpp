@@ -50,6 +50,6 @@ int main()
               << (receivedSignal == SIGINT ? "SIGINT" : "SIGTERM")
               << ", starting graceful shutdown\n";
 
-    // Never delete or close the server inside an asynchronous signal handler.
+    // Server destruction and close operations run in normal thread context, not in an asynchronous signal handler.
     return server.close() ? 0 : 4;
 }

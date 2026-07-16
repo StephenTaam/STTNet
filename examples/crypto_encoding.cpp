@@ -19,14 +19,14 @@ int main()
     std::cout << "decoded: " << EncodingUtil::base64_decode(base64) << '\n';
 
     // SHA-1 remains useful for protocol compatibility such as RFC 6455.
-    // Do not use SHA-1 for password storage, signatures, or new security designs.
+    // SHA-1 is retained for compatibility and is not suitable for password storage, signatures, or new security designs.
     std::string sha1Hex;
     CryptoUtil::sha11(message,sha1Hex);
     std::cout << "sha1: " << sha1Hex << '\n';
 
     // AES-256-CBC requires a 32-byte key and a 16-byte IV. Fixed values keep
-    // this demo reproducible only. Production IVs must be unpredictable and CBC
-    // ciphertext must be authenticated separately (or replaced by an AEAD mode).
+    // this demo reproducible only. Production IVs are unpredictable, and CBC
+    // ciphertext also needs authentication (or an AEAD mode).
     const std::array<unsigned char,32> key={
         '0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f',
         '0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
@@ -34,7 +34,7 @@ int main()
         'a','b','c','d','e','f','0','1','2','3','4','5','6','7','8','9'};
 
     // Reserve room for PKCS#7 padding and read the actual output length returned
-    // by the overload. Never reconstruct binary output by guessing its length.
+    // by the overload. Binary output length comes from the API rather than inference.
     std::vector<unsigned char> cipher(message.size()+EVP_MAX_BLOCK_LENGTH);
     std::size_t cipherLength=0;
     if(!CryptoUtil::encryptSymmetric(
