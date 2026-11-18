@@ -3552,7 +3552,7 @@ private:
         //virtual void consumer(const int &threadID);
         virtual void handler_netevent(const int &fd);
         virtual void handler_workerevent(WorkerMessage message);
-        virtual void handleHeartbeat()=0;
+        virtual void handleHeartbeat(){}
         virtual void onConnectionClosed(const int &fd) {(void)fd;}
     protected:
         enum class WriteFlushResult { Drained, WaitWrite, WaitRead, Reschedule, Error };
@@ -4537,6 +4537,23 @@ private:
         */
         ~UdpServer(){close();}
     };
+
+    struct ServerNode
+    {
+        std::string ip;
+        int port;
+    };
+    class RPC
+    {
+    private:
+        TcpServer server;
+        
+        TcpClient client;
+        std::unordered_map<std::string,ServerNode> nodeMessage;
+    public:
+        
+    };
+
     }
     /**
     * @namespace stt::system
@@ -5141,6 +5158,13 @@ private:
     
 }
 
+namespace math
+{
+    class Martix
+    {
+        std::vector<std::vector<int>> data;
+    };
+}
 
 #endif
 
